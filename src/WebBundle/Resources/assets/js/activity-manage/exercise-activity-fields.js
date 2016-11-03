@@ -1,4 +1,4 @@
-class Testpaper {
+class Exercise {
 	constructor($form) {
 		this.$element = $form;
 		this._setValidateRule();
@@ -63,40 +63,54 @@ class Testpaper {
   }
 
   _inItStep2form() {
-    var  $step2_form = this.$element;
+    var  $step2_form = $("#step2-form");
     var validator = $step2_form.validate({
         onkeyup: false,
         rules: {
-            mediaId: {
-              required: true,
-              digits:true
-            },
-            limitedTime:{
-            	required:true,
-            	digits:true
-            },
             title: {
+              required:true,
+              maxlength:30
+            },
+            itemCount: {
+              required: true,
+              positiveInteger:true
+            },
+            range:{
             	required:true,
-            	maxlength:30
             },
-            startTime:{
-            	required:function(){
-            		return ($('[name="doTimes"]').val() == 1) && ($('[name="startTimeCheck"]').val() == 1);
-            	},
-            	DateAndTime:true
+            difficulty:{
+            	required:true
             },
-            redoInterval:{
-            	required:function(){
-            		return $('[name="doTimes"]').val() == 1;
-            	},
-            	arithmeticFloat:true,
-            	max:1000000000
+            'questionTypes[]':{
+              required:true
             }
         },
         messages: {
-            title: "请输入标题",
+            title: {
+              required: "请输入标题",
+              maxlength: "标题不要超过30个字符"
+            },
+            range: "题目来源",
+            difficulty: "请选择难易程度",
+            'questionTypes[]': "请选择题型"
         }
     });
+
+    /*if (validator.form()) {
+      $('input[namae="checkQuestion"]').rules('add',{
+        required:true,
+        remote:{
+          url: $('input[namae="checkQuestion"]').data('checkUrl'),     
+          type: 'post',               
+          dataType: 'json',           
+          data: $step2_form.serialize(),
+          success:function(response){
+            console.log(response);
+          }
+        }
+      })
+    }*/
+
     $step2_form.data('validator',validator);
   }
 
@@ -105,32 +119,23 @@ class Testpaper {
     var validator = $step3_form.validate({
         onkeyup: false,
         rules: {
-            'condition_detail': {
+            finishCondition: {
                 required: true,
             },
         },
         messages: {
-            condition_detail: "请输完成条件",
+            finishCondition: "请输完成条件",
         }
     });
     $step3_form.data('validator',validator);
   }
 
   _setValidateRule() {
-  	$.validator.addMethod("arithmeticFloat",function(value,element){  
-		  return this.optional( element ) || /^[0-9]+(\.[0-9]?)?$/.test(value);
-		}, $.validator.format("必须为正数，保留一位小数"));
-
     $.validator.addMethod("positiveInteger",function(value,element){  
 		  return this.optional( element ) || /^[1-9]\d*$/.test(value);
 		}, $.validator.format("必须为正整数"));
 
-		$.validator.addMethod("DateAndTime",function(value,element){  
-			let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
-		  return this.optional( element ) || reg.test(value);
-		}, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
-
   }
 }
 
-new Testpaper($('#step2-form'));
+new Exercise($('#step2-form'));

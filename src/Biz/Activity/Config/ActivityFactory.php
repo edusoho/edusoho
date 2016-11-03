@@ -4,6 +4,7 @@ namespace Biz\Activity\Config;
 
 use Biz\TextActivity\TextActivity;
 use Codeages\Biz\Framework\Context\Biz;
+use Biz\ExerciseActivity\ExerciseActivity;
 use Biz\HomeworkActivity\HomeworkActivity;
 use Biz\TestpaperActivity\TestpaperActivity;
 
@@ -25,6 +26,7 @@ class ActivityFactory
         return array(
             'text'      => new TextActivity($biz),
             'testpaper' => new TestpaperActivity($biz),
+            'exercise'  => new ExerciseActivity($biz),
             'homework'  => new HomeworkActivity($biz)
         );
     }

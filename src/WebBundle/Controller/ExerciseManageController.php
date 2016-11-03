@@ -65,12 +65,12 @@ class ExerciseManageController extends BaseController
 
     public function buildCheckAction(Request $request, $courseId, $lessonId)
     {
-        list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
+        //list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
 
         $fields = $request->request->all();
 
         $fields['courseId']                   = $course['id'];
-        $fields['lessonId']                   = $lesson['id'];
+        $fields['lessonId']                   = 0;
         $fields['excludeUnvalidatedMaterial'] = 1;
 
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);

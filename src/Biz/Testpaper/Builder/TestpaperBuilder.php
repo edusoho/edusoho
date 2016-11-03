@@ -33,7 +33,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $testpaper;
     }
 
-    protected function filterFields($fields)
+    public function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
             throw new \InvalidArgumentException('Testpaper field is invalid');

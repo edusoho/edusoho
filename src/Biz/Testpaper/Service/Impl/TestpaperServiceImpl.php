@@ -150,10 +150,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
         }
 
-        $argument  = $fields;
-        $fields    = $this->filterTestpaperFields($fields, 'update');
+        $argument = $fields;
+
+        $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
+        $fields           = $testpaperBuilder->filterFields($fields, 'update');
+
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
+
         $this->dispatchEvent("testpaper.update", array('argument' => $argument, 'testpaper' => $testpaper));
+
         return $testpaper;
     }
 
@@ -220,7 +225,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'status' => 'open'
         );
         $testpaper = $this->updateTestpaper($id, $testpaper);
-        $this->dispatchEvent("testpaper.publish", $testpaper);
+
+        $this->dispatchEvent('testpaper.publish', $testpaper);
+
         return $testpaper;
     }
 
@@ -240,16 +247,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'status' => 'closed'
         );
         $testpaper = $this->updateTestpaper($id, $testpaper);
-        $this->dispatchEvent("testpaper.close", $testpaper);
+
+        $this->dispatchEvent('testpaper.close', $testpaper);
+
         return $testpaper;
     }
 
     public function deleteTestpaper($id)
     {
         $testpaper = $this->getTestpaper($id);
-        $this->getTestpaperDao()->deleteTestpaper($id);
-        $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
-        $this->dispatchEvent("testpaper.delete", $testpaper);
+        $result    = $this->getTestpaperDao()->delete($id);
+        $this->deleteTestpaperItemByTestId($id);
+
+        $this->dispatchEvent('testpaper.delete', $testpaper);
+
+        return $result;
     }
 
     public function deleteTestpaperItemByTestId($testpaperId)
