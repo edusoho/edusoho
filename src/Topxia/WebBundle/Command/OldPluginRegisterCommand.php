@@ -9,11 +9,11 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\PluginUtil;
 use Topxia\System;
 
-class PluginRegisterCommand extends BaseCommand
+class OldPluginRegisterCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('plugin:register')
+        $this->setName('old-plugin:register')
             ->addArgument('code', InputArgument::REQUIRED, '插件编码')
             ->setDescription('注册插件到EduSoho');
     }

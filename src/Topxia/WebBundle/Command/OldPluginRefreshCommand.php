@@ -8,12 +8,12 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\PluginUtil;
 
-class PluginRefreshCommand extends BaseCommand
+class OldPluginRefreshCommand extends BaseCommand
 {
 
     protected function configure()
     {
-        $this->setName ( 'plugin:refresh' );
+        $this->setName ( 'old-plugin:refresh' );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
