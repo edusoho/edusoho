@@ -130,10 +130,8 @@ class Editor {
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
             this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
-            var $from2 =  this.$iframe_body.find("#step2-form");
-            $from2.data('validator', validator); 
-            var $from3 =  this.$iframe_body.find("#step3-form");
-            $from3.data('validator', validator); 
+            this.$iframe_body.find("#step2-form").data('validator', validator)
+            this.$iframe_body.find("#step3-form").data('validator', validator); 
         });
     }
 
