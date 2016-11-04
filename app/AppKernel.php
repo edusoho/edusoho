@@ -161,10 +161,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
     }
 
-    protected function bootPlugins()
+    public function getCacheDir()
     {
-        foreach ($this->plugins as $plugin) {
-            
-        }
+        $theme = $this->pluginConfigurationManager->getActiveThemeName();
+        $theme = empty($theme) ? '' : ucfirst(str_replace('-', '_', $theme));
+        return $this->rootDir.'/cache/'.$this->environment.'/'.$theme;
     }
 }

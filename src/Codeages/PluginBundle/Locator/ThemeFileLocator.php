@@ -55,9 +55,11 @@ class ThemeFileLocator extends BaseFileLocator
 
         foreach ($bundles as $bundle) {
             $lookupFiles = array();
-            $lookupFiles[] = sprintf('%s/views/%s/%s', $themeDir, $bundle->getName(), substr($overridePath, 7));
-            // @todo this will remove in future.
-            $lookupFiles[] = sprintf('%s/%s/%s', $themeDir, $bundle->getName(), substr($overridePath, 1));
+            if ($themeDir) {
+                $lookupFiles[] = sprintf('%s/views/%s/%s', $themeDir, $bundle->getName(), substr($overridePath, 7));
+                // @todo this will remove in future.
+                $lookupFiles[] = sprintf('%s/%s/%s', $themeDir, $bundle->getName(), substr($overridePath, 1));
+            }
             $lookupFiles[] = $dir.'/'.$bundle->getName().$overridePath;
 
             foreach($lookupFiles as $file) {
