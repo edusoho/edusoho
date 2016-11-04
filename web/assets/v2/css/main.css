@@ -6968,12 +6968,18 @@ textarea {
 }
 .tabs-wrapper .tabs-group .title {
   float: left;
-  padding: 15px 12px;
+  padding: 15px 0;
+  width: 100px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 .tabs-wrapper .tabs-group .content {
   list-style: none;
   padding: 0;
-  margin: 0 0 0 55px;
+  margin: 0 0 0 100px;
 }
 .tabs-wrapper .tabs-group .content > li {
   float: left;
