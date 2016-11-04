@@ -1,12 +1,12 @@
 {% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 
-{% block title %}{{'头像'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'头像设置'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'avatar' %}
 {% set script_controller = 'settings/avatar' %}
 
 {% block main %}
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'头像'|trans}}{% endblock %}
+    {% block heading %}{{'头像设置'|trans}}{% endblock %}
     {% block body %}
 
       {% if fromCourse %}
