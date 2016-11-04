@@ -90,7 +90,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'endTime'
         ));
 
-        $fields['fromUserId'] = $this->getCurrentUser()->getId();
+        if (isset($fields['startTime']) && isset($fields['length'])) {
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
 
         $activity = $this->getActivityDao()->create($fields);
 
@@ -124,6 +126,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'startTime',
             'endTime'
         ));
+
+        if (isset($fields['startTime']) && isset($fields['length'])) {
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
 
         return $this->getActivityDao()->update($id, $fields);
     }

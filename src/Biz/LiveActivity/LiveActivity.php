@@ -42,7 +42,7 @@ class LiveActivity extends Activity
 
     public function get($targetId)
     {
-        // return $this->getLiveActivityService()->getActivityDetail($targetId);
+        return $this->getLiveActivityService()->getLiveActivity($targetId);
     }
 
     public function delete($targetId)
