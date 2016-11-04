@@ -7,14 +7,14 @@
       <label for="startTime">{{ '直播开始时间'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <input id="startTime" class="form-control width-input width-input-large" type="text" name="startTime" value={{ activity.startTime|default('') }}></div>
+      <input id="startTime" class="form-control width-input width-input-large" type="text" name="startTime" value="{{ activity.startTime|default('') }}"></div>
   </div>
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="length">{{ '直播时长'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <input id="length" class="form-control width-input width-input-large" type="text" name="length" value={{ activity.length|default('') }}>分钟
+      <input id="length" class="form-control width-input width-input-large" type="text" name="length" value="{{ activity.length|default('') }}">分钟
     </div>
   </div>
   <div class="form-group">

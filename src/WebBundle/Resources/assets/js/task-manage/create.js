@@ -87,7 +87,7 @@ class Editor {
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                location.reload();
+                // location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
@@ -106,6 +106,10 @@ class Editor {
     }
 
     _getLength() {
+        let lenEle = this.$iframe_body.find('#step2-form').find('#length');
+        if(lenEle.length > 0){
+            return lenEle.val();
+        }
         let postData = this.$iframe_body.find('#step2-form').serializeArray()
         let minute = 0;
         let second = 0;
