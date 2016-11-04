@@ -29,7 +29,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $activity = $this->getActivityService()->createActivity($fields);
 
         $fields['activityId']    = $activity['id'];
-        $fields['createdUserId'] = $this->getCurrentUser()->getId();
+        $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
 
         $fields = ArrayToolkit::parts($fields, array(

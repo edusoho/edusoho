@@ -18,9 +18,9 @@ class LiveActivityController extends BaseController implements ActivityActionInt
         if (isset($activity['endTime'])) {
             $activity['endTimeFormat'] = date($format, $activity['endTime']);
         }
-        $activity['nowDate']   = time();
+        $activity['nowDate'] = time();
+        //FIXME 应当判断是否是当前任务的teacher
         $activity['isTeacher'] = $this->getUser()->isTeacher();
-        // var_dump($activity);exit();
         return $this->render('WebBundle:LiveActivity:show.html.twig', array(
             'activity' => $activity
         ));

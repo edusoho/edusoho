@@ -20,7 +20,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     {
         //创建直播室
         $speaker = $this->getUserService()->getUser($activity['fromUserId']);
-        $speaker = $speaker ? $speaker['nickname'] : $this->getServiceKernel()->trans('老师');
+        if (empty($speaker)) {
+            throw new \RuntimeException($this->getServiceKernel()->trans('教师不存在！'));
+        }
+
+        $speaker = $speaker['nickname'];
 
         $liveLogo    = $this->getSettingService()->get('course');
         $liveLogoUrl = "";
@@ -36,7 +40,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'startTime'   => $activity['startTime'].'',
             'endTime'     => ($activity['startTime'] + $activity['length'] * 60).'',
             'authUrl'     => $activity['_base_url'].'/live/auth',
-            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseSetId'],
+            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl
         ));
 
@@ -67,7 +71,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'summary'  => $fields['remark'],
             'title'    => $fields['title'],
             'authUrl'  => $fields['_base_url'].'/live/auth',
-            'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseSetId']
+            'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
         );
 
         if (array_key_exists('startTime', $fields)) {
@@ -92,8 +96,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             return;
         }
 
-        $result = $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
         $this->getLiveActivityDao()->delete($id);
+        $result = $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
     }
 
     protected function getLiveActivityDao()
@@ -118,7 +122,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function getEdusohoLiveClient()
     {
-        if ($this->client == null) {
+        if (empty($this->client)) {
             $this->client = new EdusohoLiveClient();
         }
         return $this->client;
