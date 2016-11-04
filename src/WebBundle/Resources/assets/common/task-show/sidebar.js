@@ -1,4 +1,4 @@
-import NotePlugin from '../plugins/note/plugin';
+import NotePlugin from './plugins/note/plugin';
 
 class SideBar {
   constructor(option) {

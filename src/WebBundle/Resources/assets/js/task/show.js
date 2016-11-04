@@ -1,8 +1,8 @@
-import SideBar from './sidebar.js'
+import SideBar from '../../common/task-show/sidebar';
+
 class TaskShow {
-  constructor(name) {
-    this.name = name;
-    // this.init();
+  constructor() {
+    this.init();
   }
 
   init() {
@@ -27,12 +27,7 @@ class TaskShow {
   }
 }
 
-
-for(var i = 0 ; i< 10; i++) {
-  var person = new TaskShow('name'+i);
-  person.init();
-  console.log(person);
-}
+new TaskShow();
 
 
 

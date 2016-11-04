@@ -4,4 +4,4 @@ class BasePlugin {
   }
 }
 
-export default BasePlugin
+export default BasePlugin;
