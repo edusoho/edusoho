@@ -1,0 +1,49 @@
+.tabs-wrapper {
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  .tabs-group {
+    padding: 0 60px 0 15px;
+    position: relative;
+    overflow-y: hidden;
+    .title {
+      float: left;
+      padding: 15px 12px;
+
+    }
+    .content {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0 55px;
+      > li {
+        float: left;
+        padding: 10px 12px;
+        > a {
+          display: block;
+          padding: 5px 10px;
+          border: none;
+          border-radius: 4px;
+          color: @gray;
+          .es-transition;
+        }
+        &:hover, &:focus, &.active {
+          > a {
+            background-color: lighten(@brand-primary, 10%);
+            color: #ffffff;
+          }
+        }
+      }
+    }
+    .tabs-toggle {
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    + .tabs-group {
+      border-top: 1px solid @border-color;
+    }
+  }
+}
