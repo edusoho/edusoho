@@ -14,6 +14,7 @@ return array(
         '/^\/api\/course\/\d+\/lessons$/'
     ),
     'POST' => array(
+        '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
         '/^\/api\/users\/bind_login$/'
     )

@@ -47,6 +47,7 @@ class Courses extends BaseResource
             $orderBy = 'hitNum';
         } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
+            $conditions['recommended'] = 1;
         } else {
             $orderBy = 'createdTime';
         }
