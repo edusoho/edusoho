@@ -1,63 +1,50 @@
 <script type="text/javascript">
-  var script = '{{ script()|join(',') }}';
-  var script_array = script.split(",");
-  script_array.map(function(val, index){
-    if(!new RegExp('http://').test(val)) {
-      var asset = "{{ asset('build/', 'webpack') }}";
-      //@ TODO 需要拼接到symfony生成的版本号之前
-      script_array[index] = asset.split('?')[0] + val;
-    }
-  });
+  "use strict";
+  var paths = [
+    {% for path in script() %}
+    {% if path starts with 'http://' %}
+    "{{ path }}",
+    {% else %}
+    "{{ asset('build/' ~ path, 'webpack') }}",
+    {% endif %}
+    {% endfor %}
+  ];
 
-  var Loader = (function() {
-    var load_cursor = 0;
-    var load_queue;
-    var loadFinished = function() {
-      load_cursor ++;
-      if (load_cursor < load_queue.length) {
-        loadScript();
+  var Loader = (function () {
+    var loadScript = function (paths, index) {
+      var path = paths[index];
+      if(path === undefined){
+        return;
       }
-    }
-    function loadError (oError) {
-      console.error("The script " + oError.target.src + " is not accessible.");
-    }
-
-    var loadScript = function() {
-      var url = load_queue[load_cursor];
       var script = document.createElement('script');
       script.type = "text/javascript";
 
-      if (script.readyState){  //IE
-          script.onreadystatechange = function(){
-              if (script.readyState == "loaded" ||
-                      script.readyState == "complete"){
-                  script.onreadystatechange = null;
-                  loadFinished();
-              }
-          };
+      if (script.readyState) {  //IE
+        script.onreadystatechange = function () {
+          if (script.readyState == "loaded" || script.readyState == "complete") {
+            script.onreadystatechange = null;
+            loadScript(paths, index + 1);
+          }
+        };
       } else {  //Others
-          script.onload = function(){
-              loadFinished();
-          };
+        script.onload = function () {
+          loadScript(paths, index + 1);
+        };
       }
 
-      script.onerror = loadError;
+      script.onerror = function (error) {
+        console.error("The script " + error.target.src + " is not accessible.");
+      };
 
-      script.src = url+'?'+'time='+Date.parse(new Date());
+      script.src = path;
       document.body.appendChild(script);
     };
 
-    var loadMultiScript = function(url_array) {
-      load_cursor = 0;
-      load_queue = url_array;
-      loadScript();
-    }
-
     return {
-      load: loadMultiScript,
+      load: loadScript,
     };
-    
+
   })();
 
-  Loader.load(script_array);
+  Loader.load(paths, 0);
 </script>

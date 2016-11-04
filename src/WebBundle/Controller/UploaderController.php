@@ -5,6 +5,7 @@ namespace WebBundle\Controller;
 
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\File\UploadFileService;
@@ -26,7 +27,15 @@ class UploaderController extends BaseController
         $params = array_merge($request->query->all(), $params);
 
         $result                    = $this->getUploadFileService()->initUpload($params);
+        $result['authUrl']  = $this->generateUrl('uploader_auth_v2', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         return $this->createJsonpResponse($result, $request->query->get('callback'));
+    }
+
+    public function authAction(Request $request)
+    {
+        $params = $request->query->all();
+        $auth   = $this->getUploadFileService()->getUploadAuth($params);
+        return $this->createJsonpResponse($auth, $request->query->get('callback'));
     }
 
     public function finishedAction(Request $request)

@@ -6,9 +6,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class MaterialLibChoose {
 
-    constructor($container, mediaType) {
+    constructor($container) {
         this.container = $container;
-        this.mediaType = mediaType;
         this.loadShareingContacts = false;
         this._init();
         this._initEvent();
@@ -24,7 +23,7 @@ class MaterialLibChoose {
         $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $('.js-choose-trigger').on('click',this._open)
+        $('.js-choose-trigger').on('click', this._open)
     }
 
     _loadList() {
@@ -33,6 +32,7 @@ class MaterialLibChoose {
         let params = {};
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
+        params.type = $('input[name=type]').val();
         $('.js-material-list').load(url, params, function () {
             $parentiframe.height($parentiframe.contents().find('body').height());
         })
@@ -142,8 +142,15 @@ class MaterialLibChoose {
     _onChange(file) {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
-        $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
+        this._fillMinuteAndSecond(file.length);
+    }
+
+    _fillMinuteAndSecond(fileLength) {
+        let minute = parseInt(fileLength / 60);
+        let second = Math.round(fileLength % 60);
+        $("#minute").val(minute);
+        $("#second").val(second);
     }
 
     _getUrlParameter(url, param) {
@@ -166,4 +173,4 @@ class MaterialLibChoose {
 }
 
 
-new MaterialLibChoose($('#chooser-material-panel'), 'video');
+new MaterialLibChoose($('#chooser-material-panel'));

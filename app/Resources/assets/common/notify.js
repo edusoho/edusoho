@@ -1,3 +1,5 @@
+import 'bootstrap-notify';
+
 const notify = (level, message) => {
   $.notify({
     message: message
