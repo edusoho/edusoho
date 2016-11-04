@@ -4,6 +4,8 @@ namespace Biz\HomeworkActivity;
 
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class HomeworkActivity extends Activity
 {
@@ -33,46 +35,51 @@ class HomeworkActivity extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperActivityService()->getActivity($targetId);
+        return $this->getTestpaperService()->getTestpaper($targetId);
     }
 
     public function create($fields)
     {
-        /*$fields = $this->filterFields($fields);
+        $fields = $this->filterFields($fields);
 
-    return $this->getTestpaperActivityService()->createActivity($fields);*/
+        return $this->getTestpaperService()->buildTestpaper($fields, 'homework');
     }
 
     public function update($targetId, $fields)
     {
-        /*$activity = $this->get($targetId);
+        $homework = $this->get($targetId);
 
-    if (!$activity) {
-    throw new ResourceNotFoundException('testpaperActivity', $targetId);
-    }
+        if (!$exercise) {
+            throw new ResourceNotFoundException('HomeworkActivity', $targetId);
+        }
 
-    $fields = $this->filterFields($fields);
+        $fields = $this->filterFields($fields);
 
-    return $this->getTestpaperActivityService()->updateActivity($activity['id'], $fields);*/
+        return $this->getTestpaperService()->updateTestpaper($homework['id'], $fields);
     }
 
     public function delete($targetId)
     {
-        //return $this->getTestpaperActivityService()->deleteActivity($targetId);
+        return $this->getTestpaperService()->deleteTestpaper($targetId);
     }
 
     protected function filterFields($fields)
     {
+        if (!ArrayToolkit::requireds($fields, array(
+            'questionIds',
+            'finishCondition',
+            'finisheScore'))
+        ) {
+            throw new InvalidArgumentException('homework fields is invalid');
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
-            'mediaId',
-            'doTimes',
-            'redoInterval',
-            'limitedTime',
-            'checkType',
+            'title',
+            'description',
+            'questionIds',
             'finishCondition',
             'finisheScore',
-            'requireCredit',
-            'testMode'
+            'fromCourseId'
         ));
 
         $finishCondition = array();
@@ -88,11 +95,15 @@ class HomeworkActivity extends Activity
 
         $fields['finishCondition'] = $finishCondition;
 
+        $fields['courseId'] = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
+        $fields['lessonId'] = 0;
+        $fields['name']     = empty($fields['title']) ? '' : $fields['title'];
+
         return $fields;
     }
 
-    protected function getTestpaperActivityService()
+    protected function getTestpaperService()
     {
-        return $this->getBiz()->service('TestpaperActivity:TestpaperActivityService');
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 }

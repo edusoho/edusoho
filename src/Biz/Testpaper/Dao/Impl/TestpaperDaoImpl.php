@@ -48,7 +48,8 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
         $declares['conditions'] = array(
             'courseId = :courseId',
             'courseId IN (:courseIds)',
-            'status = :status'
+            'status = :status',
+            'type = :type'
         );
 
         $declares['serializes'] = array(

@@ -185,7 +185,7 @@ class HomeworkManageController extends BaseController
         }
 
         if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+            $conditions['stem'] = trim($conditions['keyword']);
         }
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];

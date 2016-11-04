@@ -26,10 +26,7 @@ class Testpaper {
     var mediaId = $this.find('option:selected').val();
     
     if (mediaId != 0) {
-        this.$element.find('#activity-title').val($this.find('option:selected').text());
-        this._getItemsTable($this.data('getTestpaperItems'), mediaId);
-    } else {
-        this.$element.find('#activity-title').val('');
+      this._getItemsTable($this.data('getTestpaperItems'), mediaId);
     }
   }
 
@@ -37,6 +34,9 @@ class Testpaper {
   	$.post(url, {testpaperId:testpaperId},function(html){
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
+      
+      var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+      $parentiframe.height($parentiframe.contents().find('body').height());
     });
   }
 
@@ -62,6 +62,15 @@ class Testpaper {
     }
   }
 
+  _dateTimePicker() {
+    let $starttime = $('input[name="startTime"]');
+    $starttime.datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh",
+    });
+    $starttime.datetimepicker('setStartDate',new Date());
+  }
+
   _inItStep2form() {
     var  $step2_form = this.$element;
     var validator = $step2_form.validate({
@@ -75,13 +84,9 @@ class Testpaper {
             	required:true,
             	digits:true
             },
-            title: {
-            	required:true,
-            	maxlength:30
-            },
             startTime:{
             	required:function(){
-            		return ($('[name="doTimes"]').val() == 1) && ($('[name="startTimeCheck"]').val() == 1);
+            		return ($('[name="doTimes"]').val() == 1) && ($('[name="testMode"]').val() == 'realTime');
             	},
             	DateAndTime:true
             },
@@ -94,7 +99,9 @@ class Testpaper {
             }
         },
         messages: {
-            title: "请输入标题",
+            redoInterval: {
+              max: "最大值不能超过1000000000"
+            },
         }
     });
     $step2_form.data('validator',validator);
@@ -103,15 +110,19 @@ class Testpaper {
   _inItStep3form() {
     var $step3_form = $("#step3-form");
     var validator = $step3_form.validate({
-        onkeyup: false,
-        rules: {
-            'condition_detail': {
-                required: true,
-            },
-        },
-        messages: {
-            condition_detail: "请输完成条件",
-        }
+      onkeyup: false,
+      rules: {
+          checkType: {
+            required: true,
+          },
+          finishCondition:{
+            required:true
+          }
+      },
+      messages: {
+          checkType: "考评方式",
+          finishCondition: "请选择完成条件"
+      }
     });
     $step3_form.data('validator',validator);
   }

@@ -49,7 +49,7 @@ class ExerciseActivity extends Activity
         $exercise = $this->get($targetId);
 
         if (!$exercise) {
-            throw new ResourceNotFoundException('testpaperActivity', $targetId);
+            throw new ResourceNotFoundException('ExerciseActivity', $targetId);
         }
 
         $fields = $this->filterFields($fields);

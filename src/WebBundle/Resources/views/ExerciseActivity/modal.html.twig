@@ -4,12 +4,6 @@
 
 {% block activity_content %}
   <form id="#step2-form" class="form-horizontal lesson-form" method="post">
-    <div class="form-group">
-      <div class="col-xs-2 control-label"><label for="activity-title">{{'标题'|trans}}</label></div>
-      <div class="col-xs-9 controls">
-        <input id="activity-title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}">
-      </div>
-    </div>
 
     <div class="form-group">
       <label for="questionCount" class="col-xs-2 control-label">{{'题目个数'|trans}}</label>

@@ -7,11 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $id, $courseId)
     {
     }
 
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id, $courseId)
     {
         $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -63,7 +63,8 @@ class TestpaperActivityController extends BaseController implements ActivityActi
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'   => 'open'
+            'status'   => 'open',
+            'type'     => 'testpaper'
         );
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(

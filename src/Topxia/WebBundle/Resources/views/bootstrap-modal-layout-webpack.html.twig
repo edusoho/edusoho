@@ -10,9 +10,11 @@
     </div>
     <div class="modal-body">{% block body %}{% endblock %}</div>
     {% if not hide_footer|default(false) %}
-      <div class="modal-footer">{% block footer %}{% endblock %}</div>
+      <div class="modal-footer">{% block footer %}{% endblock %}
+      {% include 'TopxiaWebBundle::js_loader_async.html.twig' %}
+      </div>
     {% endif %}
-    {% include 'TopxiaWebBundle::js_loader_async.html.twig' %}
+    
   </div>
 </div>
 

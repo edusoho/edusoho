@@ -31,7 +31,37 @@ course_task_trigger:
   defaults: { _controller: WebBundle:Task:trigger }
   methods: [POST]
 
-<<<<<<< HEAD
+media_materiallib_choose:
+    path: /media/materiallib/choose
+    defaults: { _controller: WebBundle:MediaProccess:materialChoose }
+
+media_materiallib_contacts:
+    path: /media/materiallib/contacts
+    defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
+
+media_corusefile_choose:
+    path: /media/corusefile/{courseId}/choose
+    defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
+
+media_video_import:
+    path: /media/course/{courseId}/import
+    defaults: { _controller: WebBundle:MediaProccess:import }
+
+uploader_auth_v2:
+    path:  /uploader/v2/auth
+    defaults: { _controller: WebBundle:Uploader:auth }
+    methods: [GET]
+
+uploader_init_v2:
+  path:  /uploader/v2/init
+  defaults: { _controller: WebBundle:Uploader:init }
+  methods: [GET]
+
+uploader_finished_v2:
+  path:  /uploader/v2/finished
+  defaults: { _controller: WebBundle:Uploader:finished }
+  methods: [GET]
+
 #testpaper
 course_manage_testpaper:
   path: /testpaper2/course/{courseId}/manage/testpaper
@@ -98,36 +128,3 @@ course_manage_exercise_check:
     pattern:  /course/{courseId}/manage/exercise/check
     defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
 
-
-=======
-media_materiallib_choose:
-    path: /media/materiallib/choose
-    defaults: { _controller: WebBundle:MediaProccess:materialChoose }
-
-media_materiallib_contacts:
-    path: /media/materiallib/contacts
-    defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
-
-media_corusefile_choose:
-    path: /media/corusefile/{courseId}/choose
-    defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
-
-media_video_import:
-    path: /media/course/{courseId}/import
-    defaults: { _controller: WebBundle:MediaProccess:import }
-
-uploader_auth_v2:
-    path:  /uploader/v2/auth
-    defaults: { _controller: WebBundle:Uploader:auth }
-    methods: [GET]
-
-uploader_init_v2:
-  path:  /uploader/v2/init
-  defaults: { _controller: WebBundle:Uploader:init }
-  methods: [GET]
-
-uploader_finished_v2:
-  path:  /uploader/v2/finished
-  defaults: { _controller: WebBundle:Uploader:finished }
-  methods: [GET]
->>>>>>> feature/course2.0-activity

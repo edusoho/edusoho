@@ -30,8 +30,8 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     public function filterFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'excludeIds'))) {
-            throw new \InvalidArgumentException('Testpaper field is invalid');
+        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionIds'))) {
+            throw new \InvalidArgumentException('homework field is invalid');
         }
 
         $filtedFields = array();
@@ -41,9 +41,10 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         $filtedFields['type']            = 'homework';
         $filtedFields['passedCondition'] = empty($fields['correctPercent']) ? array() : $fields['correctPercent'];
         $filtedFields['description']     = empty($fields['description']) ? '' : $fields['description'];
+        $filtedFields['name']            = empty($fields['name']) ? '' : $fields['name'];
 
-        $excludeIds              = explode(',', $fields['excludeIds']);
-        $excludeIds['itemCount'] = count($excludeIds);
+        $questionIds             = explode(',', $fields['questionIds']);
+        $excludeIds['itemCount'] = count($questionIds);
 
         $filtedFields['status']  = 'open';
         $filtedFields['pattern'] = 'questionType';
@@ -53,30 +54,31 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     protected function createQuestionItems($homeworkId, $questionIds)
     {
-        if (empty($questionIds)) {
-            return array();
-        }
+        $homeworkItems = array();
+        $index         = 1;
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $homeworkItems = array();
-        $seq           = 1;
+        foreach ($questions as $key => $question) {
+            $questionsSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
 
-        foreach ($questions as $question) {
-            $questionsSub = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
-            $item        = $this->makeItem($homeworkId, $question);
-            $item['seq'] = $seq++;
-
-            $homeworkItems[] = $this->getTestpaperService()->createTestpaperItem($item);
+            $items['seq']          = $index++;
+            $items['questionId']   = $questionId;
+            $items['questionType'] = $question['type'];
+            $items['testId']       = $homeworkId;
+            $items['parentId']     = 0;
+            $homeworkItems[]       = $this->getTestpaperService()->createTestpaperItem($items);
 
             if (!empty($questionsSub)) {
                 $i = 1;
 
-                foreach ($questionsSub as $key => $question) {
-                    $item            = $this->makeItem($homeworkId, $question);
-                    $item['seq']     = $seq++;
-                    $homeworkItems[] = $this->getTestpaperService()->createTestpaperItem($item);
+                foreach ($questionsSubs as $key => $questionSub) {
+                    $items['seq']          = $i++;
+                    $items['questionId']   = $questionSub['id'];
+                    $items['questionType'] = $questionSub['type'];
+                    $items['testId']       = $homeworkId;
+                    $items['parentId']     = $questionSub['parentId'];
+                    $homeworkItems[]       = $this->getTestpaperService()->createTestpaperItem($items);
                 }
             }
         }

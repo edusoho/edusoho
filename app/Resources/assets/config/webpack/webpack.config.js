@@ -105,7 +105,7 @@ config.module.loaders.push({
 });
 
 if (__DEV__) {
-  config.devtool = 'cheap-module-eval-source-map';
+  config.devtool = 'source-map';//cheap-module-eval-source-map
 } else {
   if (!__DEBUG__) { //debug mode not compress
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({

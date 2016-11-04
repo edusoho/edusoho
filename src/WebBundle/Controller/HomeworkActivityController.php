@@ -7,11 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $id, $courseId)
     {
     }
 
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id, $courseId)
     {
         $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -42,20 +42,8 @@ class HomeworkActivityController extends BaseController implements ActivityActio
 
     public function createAction(Request $request, $courseId)
     {
-        $testpapers = $this->findCourseTestpapers($courseId);
-
-        $testpaperNames = array();
-        foreach ($testpapers as $testpaper) {
-            $testpaperNames[$testpaper['id']] = $testpaper['name'];
-        }
-
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
-        return $this->render('WebBundle:TestpaperActivity:modal.html.twig', array(
-            'testpapers'     => $testpapers,
-            'testpaperNames' => $testpaperNames,
-            'features'       => $features,
-            'courseId'       => $courseId
+        return $this->render('WebBundle:HomeworkActivity:modal.html.twig', array(
+            'courseId' => $courseId
         ));
     }
 
