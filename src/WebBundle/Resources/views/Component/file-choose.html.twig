@@ -18,6 +18,11 @@
       <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-import-panel">导入网络视频</a>
       </li>
     {% endif %}
+    {% if mediaType == 'download' %}
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-link-panel">网络连接</a>
+      </li>
+    {% endif %}
+
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
@@ -36,8 +41,13 @@
         {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
       </div>
     {% endif %}
+    {% if mediaType == 'download' %}
+      <div class="tab-pane" id="chooser-link-panel">
+        {% include 'WebBundle:Component/Parts:import-link.html.twig' %}
+      </div>
+    {% endif %}
   </div>
 </div>
 <div class="col-xs-offset-2 col-xs-9">
-  <input id="media" type="hidden" name="media" value="{{ activity.ext.media|default(null)|json_encode }}">
+  <input id="media" type="hidden" name="media" value="">
 </div>

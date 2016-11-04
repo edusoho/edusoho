@@ -83,7 +83,7 @@ class Editor {
                 {name: 'mediaType', value: this.type},
                 {name: 'length', value: length}
             ]);
-
+        console.log('form submit');
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');

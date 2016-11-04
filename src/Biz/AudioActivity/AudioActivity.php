@@ -30,8 +30,6 @@ class AudioActivity extends Activity
     public function update($targetId, $fields)
     {
         $videoActivity      = $this->getAudioExt($fields);
-        $existVideoActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
-        $videoActivity      = array_merge($existVideoActivity, $videoActivity);
         $videoActivity      = $this->getAudioActivityDao()->update($fields['mediaId'], $videoActivity);
         return $videoActivity;
     }

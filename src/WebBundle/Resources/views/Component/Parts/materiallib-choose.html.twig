@@ -31,7 +31,7 @@
 <input type="hidden" name="sourceFrom" value="my">
 <input type="hidden" name="page" value="1">
 <input type="hidden" name="currentUserId" value="">
-<input type="hidden" name="type" value="{{ mediaType }}">
+<input type="hidden" name="type" value="{{ fileType|default('')  }}">
 <div class="js-material-list">
   <div class="empty">资源加载中...</div>
 </div>
