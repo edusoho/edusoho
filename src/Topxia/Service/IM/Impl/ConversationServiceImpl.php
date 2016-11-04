@@ -134,6 +134,25 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->deleteConversationByTargetIdAndTargetType($targetId, $targetType);
     }
 
+    public function removeConversation($convNo)
+    {
+        $conv = $this->getConversation($convNo);
+        if (empty($conv)) {
+            return true;
+        }
+        $this->deleteMembersByTargetIdAndTargetType($conv['targetId'], $conv['targetType']);
+        $this->deleteConversationByTargetIdAndTargetType($conv['targetId'], $conv['targetType']);
+
+        //TODO 如何删除会话？
+        // $res = $this->createImApi()->post("/conversations/{$convNo}/members", array('clients' => $clients));
+
+        // if (isset($res['success'])) {
+        //     return true;
+        // }
+
+        return false;
+    }
+
     public function getMember($id)
     {
         return $this->getConversationMemberDao()->getMember($id);
