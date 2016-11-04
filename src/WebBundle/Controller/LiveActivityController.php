@@ -11,7 +11,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
     public function showAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $format   = 'Y-m-d H:i'; //Y-m-d H:i
+        $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
         }
@@ -106,7 +106,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
     //int to datetime
     protected function formatTimeFields($fields)
     {
-        $format = 'Y-m-d'; //Y-m-d H:i
+        $format = 'Y-m-d H:i';
         if (isset($fields['startTime'])) {
             $fields['startTime'] = date($format, $fields['startTime']);
         }
