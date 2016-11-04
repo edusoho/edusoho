@@ -143,6 +143,4 @@ class LiveShow {
     }
 }
 
-setTimeout(function(){
-	new LiveShow();	
-}, 1000);
+new LiveShow();	
