@@ -93,14 +93,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         ksort($conditions);
 
-        $key = 'search';
+        $keys = 'search';
         foreach ($conditions as $key => $value) {
-            $key = $key.":{$key}:{$value}";
+            $keys = $keys.":{$key}:{$value}";
         }
-        $key = "{$key}:orderBy:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+        $keys = "{$keys}:orderBy:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
         $that = $this;
 
-        return $this->fetchCached($key, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
+        return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
             $that->filterStartLimit($start, $limit);
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('*')
@@ -120,13 +120,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         ksort($conditions);
 
-        $key = 'count';
+        $keys = 'count';
         foreach ($conditions as $key => $value) {
-            $key = $key.":{$key}:{$value}";
+            $keys = $keys.":{$key}:{$value}";
         }
         $that = $this;
 
-        return $this->fetchCached($key, $conditions, function ($conditions) use ($that) {
+        return $this->fetchCached($keys, $conditions, function ($conditions) use ($that) {
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('COUNT(id)');
             return $builder->execute()->fetchColumn(0);
