@@ -15,6 +15,9 @@ define(function(require, exports, module) {
                 if( 50 != cheight){
                     $(this).find('.js-tabs-toggle').removeClass('hidden');
                 }
+                else {
+                     $(this).find('.js-tabs-toggle').addClass('hidden');
+                }
             });
         }
         tabsToggleInit();
