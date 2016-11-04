@@ -294,7 +294,7 @@ class ClassroomManageController extends BaseController
 
         $reason = array(
             'type'     => 'other',
-            'note'     => '手动移除',
+            'note'     => $user['nickname'].'手动移除',
             'operator' => $user['id']
         );
         $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
