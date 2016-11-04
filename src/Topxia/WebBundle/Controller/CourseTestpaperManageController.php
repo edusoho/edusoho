@@ -51,7 +51,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -92,7 +92,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->createJsonResponse(array());
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -320,7 +320,7 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $courseId, 'testpaperId' => $testpaperId)));
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
