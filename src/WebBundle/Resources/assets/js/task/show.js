@@ -1,15 +1,39 @@
+import SideBar from './sidebar.js'
 class TaskShow {
-    constructor(props) {
-        this.initPlugin();
-    }
+  constructor(name) {
+    this.name = name;
+    // this.init();
+  }
 
-    initPlugin() {
-        $('[data-toggle="tooltip"]').tooltip();
+  init() {
+    this._initPlugin();
+    this._sidebar();
+  }
 
-        $('#task-group').perfectScrollbar({wheelSpeed:50});
-        $("#task-group").scrollTop(30);
-        $("#task-group").perfectScrollbar('update');
-    }
+  _initPlugin() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover',
+    });
+  }
+
+  _sidebar() {
+    var sideBar = new SideBar({
+      element:'.dashboard-sidebar-content',
+      activePlugins:["note"],
+      courseId: 1,
+    });
+  }
 }
 
-new TaskShow();
+
+for(var i = 0 ; i< 10; i++) {
+  var person = new TaskShow('name'+i);
+  person.init();
+  console.log(person);
+}
+
+
+
+
