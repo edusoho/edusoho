@@ -50,8 +50,6 @@ $resources = array(
     'Playlist',
     'IM/MeLogin',
     'IM/Conversations',
-    'IM/MyConversation',
-    'IM/MyConversations',
     'CourseThread',
     'CourseThreads',
     'CourseThreadPost',
@@ -62,10 +60,14 @@ $resources = array(
     'ClassRoomThreads',
     'ThreadPosts',
     'ThreadPost',
+    'Setting',
     'OpenCourse',
     'OpenCourses',
     'OpenCourse/Lesson',
-    'OpenCourse/Lessons'
+    'OpenCourse/Lessons',
+    'IM/MePush',
+    'IM/Member',
+    'IM/MemberSync'
 );
 
 foreach ($resources as $res) {

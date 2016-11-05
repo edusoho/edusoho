@@ -40,6 +40,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if (empty($course)) {
                 throw $this->createServiceException($this->getKernel()->trans('课程不存在，操作失败。'));
             }
+
+            if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
+                throw $this->createServiceException($this->getKernel()->trans('该课程已经超过购买截止日期，不允许购买'));
+            }
+
             if ($course['approval'] && $user['approvalStatus'] != 'approved') {
                 throw $this->createServiceException($this->getKernel()->trans('该课程需要实名认证，你还没有实名认证，不可购买。'));
             }

@@ -296,12 +296,10 @@ define(function(require, exports, module) {
             var second = length - minute * 60;
             var hour = length / 3600;
             var multiple = Math.ceil(hour / 0.5)*0.5;
-            var suggestHour = hour > multiple ? (multiple+0.5) : multiple;
 
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
 
-            $("#lesson-suggest-period-field").val(suggestHour);
         }
 
         var $content = $("#lesson-content-field");

@@ -48,7 +48,7 @@ class UserController extends BaseController
                 0,
                 $profilesCount
             );
-            $userIds       = ArrayToolkit::column($userProfiles, 'id');
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
@@ -99,7 +99,7 @@ class UserController extends BaseController
         $roles = $this->getRoleService()->searchRoles(array(), 'created', 0, PHP_INT_MAX);
 
         $roleDicts = array();
-        foreach ($roles as $key => $role) {
+        foreach ($roles as $role) {
             $roleDicts[$role['code']] = $role['name'];
         }
         return $roleDicts;
@@ -107,31 +107,31 @@ class UserController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
-        $email = $request->query->get('value');
-        $email = str_replace('!', '.', $email);
+        $email                  = $request->query->get('value');
+        $email                  = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile = $request->query->get('value');
-        $mobile = str_replace('!', '.', $mobile);
+        $mobile                 = $request->query->get('value');
+        $mobile                 = str_replace('!', '.', $mobile);
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
         return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname = $request->query->get('value');
+        $nickname               = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
         return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile = $request->query->get('value');
-        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile          = $request->query->get('value');
+        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
@@ -282,9 +282,9 @@ class UserController extends BaseController
             if (!empty($roles)) {
                 $roleSet          = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
                 $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
-                $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
+                $roleNames        = $this->getRoleNames($roles, $rolesByIndexCode);
 
-                $message          = array(
+                $message = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
                     'role'     => implode(',', $roleNames)
@@ -313,7 +313,7 @@ class UserController extends BaseController
         $userRoleDict  = $userRoleDict->getDict();
         $roleDictCodes = array_keys($userRoleDict);
 
-        foreach ($roles as $key => $role) {
+        foreach ($roles as $role) {
             if (in_array($role, $roleDictCodes)) {
                 $roleNames[] = $userRoleDict[$role];
             } elseif ($role == 'ROLE_BACKEND') {
@@ -385,7 +385,7 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
@@ -437,11 +437,11 @@ class UserController extends BaseController
                     'siteurl'   => $site['url']
                 )
             );
-            $mail        = MailFactory::create($mailOptions);
+            $mail = MailFactory::create($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -477,7 +477,7 @@ class UserController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -486,8 +486,7 @@ class UserController extends BaseController
 
     public function changePasswordAction(Request $request, $userId)
     {
-        $currentUser = $this->getCurrentUser();
-        $user        = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();

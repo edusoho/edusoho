@@ -127,6 +127,14 @@ classroom_review_create:
     pattern:  /classroom/{id}/review/create
     defaults: { _controller: ClassroomBundle:Classroom/Review:create }
 
+classroom_review_post:
+    pattern:  /classroom/{id}/review/{reviewId}/post
+    defaults: { _controller: ClassroomBundle:Classroom/Review:post }
+
+classroom_review_delete:
+    pattern:  /classroom/review/{reviewId}/delete
+    defaults: { _controller: ClassroomBundle:Classroom/Review:delete }
+
 classroom_introductions:
     pattern:  /classroom/{id}/introduction
     defaults: { _controller: ClassroomBundle:Classroom:introduction }

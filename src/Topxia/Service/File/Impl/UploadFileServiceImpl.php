@@ -254,7 +254,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    public function moveFile($targetType, $targetId, $originalFile = null, $data)
+    public function moveFile($targetType, $targetId, $originalFile = null, $data = array())
     {
         return $this->getFileImplementor('local')->moveFile($targetType, $targetId, $originalFile, $data);
     }

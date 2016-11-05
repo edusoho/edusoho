@@ -5,6 +5,8 @@ interface UserService
 {
     public function getUser($id, $lock = false);
 
+    public function getSimpleUser($id);
+
     public function getUserByNickname($nickname);
 
     //根据用户名/邮箱/手机号精确查找用户
@@ -14,6 +16,12 @@ interface UserService
 
     public function getUserCountByMobileNotEmpty();
 
+    public function countUserHasMobile($isVerified=false);
+
+    public function findUsersHasMobile($start, $limit, $isVerified=false);
+
+    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false);
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);

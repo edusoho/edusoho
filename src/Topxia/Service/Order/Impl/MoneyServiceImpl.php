@@ -1,32 +1,37 @@
 <?php
 namespace Topxia\Service\Order\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\MoneyService;
-use Topxia\Common\ArrayToolkit;
 
 class MoneyServiceImpl extends BaseService implements MoneyService
 {
-
-	public function searchMoneyRecordsCount($conditions)
-    {	
-    	$conditions = array_filter($conditions);
+    public function searchMoneyRecordsCount($conditions)
+    {
+        $conditions = array_filter($conditions);
         return $this->getMoneyRecordsDao()->searchMoneyRecordsCount($conditions);
     }
 
     public function searchMoneyRecords($conditions, $sort, $start, $limit)
     {
-        $orderBy = array();
-        if ($sort == 'latest') {
-            $orderBy =  array('transactionTime', 'DESC');
+        $orderBy = $this->checkOrderBy($sort);
+
+        $conditions   = array_filter($conditions);
+        $moneyRecords = $this->getMoneyRecordsDao()->searchMoneyRecords($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($moneyRecords, 'id');
+    }
+
+    protected function checkOrderBy($sort)
+    {
+        if (is_array($sort)) {
+            $orderBy = $sort;
         } else {
             $orderBy = array('transactionTime', 'DESC');
         }
 
-        $conditions = array_filter($conditions);
-        $moneyRecords = $this->getMoneyRecordsDao()->searchMoneyRecords($conditions, $orderBy, $start, $limit);
-
-        return ArrayToolkit::index($moneyRecords, 'id');
+        return $orderBy;
     }
 
     protected function getMoneyRecordsDao()

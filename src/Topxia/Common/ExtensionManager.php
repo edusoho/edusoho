@@ -5,6 +5,7 @@ namespace Topxia\Common;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
 use Topxia\Common\ExtensionalBundle;
+use Topxia\Service\Common\ServiceKernel;
 
 class ExtensionManager
 {

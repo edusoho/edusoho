@@ -194,16 +194,18 @@ define(function(require, exports, module) {
             });
         },
 
-        _afterLoadLesson: function(lessonId) {
+        _afterLoadLesson: function(lesson) {
             if (this._counter && this._counter.timerId) {
                 clearInterval(this._counter.timerId);
             }
 
             var self = this;
-            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
-            this._counter.setTimerId(setInterval(function() {
-                self._counter.execute()
-            }, 1000));
+            if (lesson.type != 'live') {
+                this._counter = new Counter(self, this.get('courseId'), lesson.id, this.get('watchLimit'));
+                this._counter.setTimerId(setInterval(function() {
+                    self._counter.execute()
+                }, 1000));
+            }
         },
 
         _onChangeLessonId: function(id) {
@@ -540,6 +542,9 @@ define(function(require, exports, module) {
                         $("#lesson-testpaper-content").perfectScrollbar('update');
 
                     } else {
+                        if (iID) {
+                            clearInterval(iID);
+                        }
                         $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
                             if (result.error) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
@@ -562,12 +567,9 @@ define(function(require, exports, module) {
                                     html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
+                                    
                                     if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
                                         
-                                        if (iID) {
-                                            clearInterval(iID);
-                                        }
-
                                         function generateTestHtml() {
                                             var now = parseInt(new Date().getTime()/1000),
                                                 day=0,
@@ -727,7 +729,7 @@ define(function(require, exports, module) {
 
                 that._toolbar.set('lesson', lesson);
                 that._startLesson();
-                that._afterLoadLesson(id);
+                that._afterLoadLesson(lesson);
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {

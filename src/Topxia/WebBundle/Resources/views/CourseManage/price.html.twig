@@ -48,6 +48,19 @@
           </div>
         {% endif %}
 
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '购买截止日期'|trans }}</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('enableBuyExpiryTime', {1:'是'|trans, 0:'否'|trans}, course.buyExpiryTime|default(0) > 0) }}
+          </div>
+        </div>
+
+        <div class="form-group {% if not course.buyExpiryTime %}hide{% endif %}" id="buyExpiryTime">
+          <div class="col-md-8 controls col-md-offset-2">
+            <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" {% if course.buyExpiryTime %} value="{{ course.buyExpiryTime|date('Y-m-d') }}" {% endif %}>
+          </div>
+        </div>
+
         {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           <div class="form-group">
             <label class="col-md-2 control-label">{{'会员课程设置'|trans}}</label>

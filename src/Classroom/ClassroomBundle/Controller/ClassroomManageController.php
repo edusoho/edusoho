@@ -293,8 +293,9 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
         $reason = array(
-            'type' => 'other',
-            'note' => '手动移除'
+            'type'     => 'other',
+            'note'     => '手动移除',
+            'operator' => $user['id']
         );
         $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
@@ -315,6 +316,7 @@ class ClassroomManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
+
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
@@ -340,7 +342,8 @@ class ClassroomManageController extends BaseController
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
                 'payment'    => 'outside',
-                'snPrefix'   => 'CR'
+                'snPrefix'   => 'CR',
+                'totalPrice' => $classroom['price']
             ));
 
             $this->getOrderService()->payOrder(array(
@@ -356,13 +359,13 @@ class ClassroomManageController extends BaseController
             );
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-            $member  = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $user    = $this->getCurrentUser();
-            $message = array(
+            $member      = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+            $currentUser = $this->getCurrentUser();
+            $message     = array(
                 'classroomId'    => $classroom['id'],
                 'classroomTitle' => $classroom['title'],
-                'userId'         => $user['id'],
-                'userName'       => $user['nickname'],
+                'userId'         => $currentUser['id'],
+                'userName'       => $currentUser['nickname'],
                 'type'           => 'create');
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);

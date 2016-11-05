@@ -35,8 +35,9 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($email));
+            $sql    = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
+            $result = $that->getConnection()->fetchAssoc($sql, array($email));
+            return $result;
         }
 
         );
@@ -56,7 +57,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function getCountByMobileNotEmpty()
     {
-        $sql = "SELECT COUNT(u.id) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` LIKE '1%'";
+        $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != ''";
         return $this->getConnection()->fetchColumn($sql, array(), 0);
     }
 
@@ -201,8 +202,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             }
         }
 
-        if(isset($conditions['likeOrgCode'])){
-            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
             unset($conditions['orgCode']);
         }
 

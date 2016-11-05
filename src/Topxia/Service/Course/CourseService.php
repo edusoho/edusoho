@@ -245,6 +245,8 @@ interface CourseService
 
     public function searchMemberCount($conditions);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
     public function findWillOverdueCourses();
 
     public function getCourseMember($courseId, $userId);
@@ -284,6 +286,8 @@ interface CourseService
     public function deleteMemberByCourseIdAndRole($courseId, $role);
 
     public function deleteMemberByCourseId($courseId);
+
+    public function findUserJoinedCourseIds($userId, $joinedType = 'course');
 
     /**
      * 成为学员，即加入课程的学习
@@ -397,5 +401,7 @@ interface CourseService
     public function searchCourseLessonReplayCount($conditions);
 
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
+
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 
 }

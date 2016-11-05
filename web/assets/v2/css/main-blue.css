@@ -1867,6 +1867,39 @@ select:-webkit-autofill {
   white-space: nowrap;
   word-wrap: normal;
 }
+.modal-live-remind .modal-body {
+  padding: 40px;
+}
+.modal-live-remind .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.modal-live-remind .media-left img {
+  width: 160px;
+  max-width: 160px;
+}
+.modal-live-remind .media-body h4 {
+  color: #313131;
+  font-size: 16px;
+}
+.modal-live-remind .media-body p {
+  color: #919191;
+  font-size: 12px;
+}
+.modal-live-remind .live-countdown {
+  font-size: 22px;
+  color: #313131;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.modal-live-remind .live-countdown span {
+  color: #ff8a0c;
+  font-size: 40px;
+}
+.modal-live-remind .btn {
+  width: 300px;
+}
 .navbar {
   margin-bottom: 0;
   z-index: 99;
@@ -12543,26 +12576,31 @@ textarea {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
   25% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   50% {
     box-shadow: 0 0 5px #2db7f5;
     width: 6px;
     margin-left: -3px;
+    left: 3px;
   }
   75% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   100% {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
 }
 @-moz-keyframes boxshow {
@@ -12571,26 +12609,31 @@ textarea {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
   25% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   50% {
     box-shadow: 0 0 5px #2db7f5;
     width: 6px;
     margin-left: -3px;
+    left: 3px;
   }
   75% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   100% {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
 }
 @keyframes boxshow {
@@ -12598,331 +12641,404 @@ textarea {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
   25% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   50% {
     box-shadow: 0 0 5px #2db7f5;
     width: 6px;
     margin-left: -3px;
+    left: 3px;
   }
   75% {
     box-shadow: 0 0 10px #2db7f5;
     width: 7px;
     margin-left: -3.5px;
+    left: 3.5px;
   }
   100% {
     box-shadow: 0 0 15px #2db7f5;
     width: 8px;
     margin-left: -4px;
+    left: 4px;
   }
 }
-.marker-modal .question-heading {
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  color: #000;
-  font-size: 18px;
-  border-bottom: 1px solid #f1f1f1;
-}
-.marker-modal .question-body {
-  max-height: 300px;
-  overflow: auto;
-  margin-bottom: 15px;
-}
-.marker-modal .question-footer {
-  padding: 15px 0;
-}
-.marker-modal .question-choices {
-  padding-left: 10px;
-}
-.marker-modal .question-choices li {
-  padding: 10px 0 10px 50px;
+.marker-manage {
   position: relative;
-  line-height: 30px;
+  min-width: 1200px;
+  height: 100%;
+  background-color: #313131;
+  overflow: hidden;
 }
-.marker-modal .question-choices li:hover {
-  background-color: transparent;
-}
-.marker-modal .question-choices li p {
-  margin-bottom: 0;
-  display: inline-block;
-  margin-right: 10px;
-}
-.marker-modal .type-check {
-  position: absolute;
-  left: 0;
-  top: 10px;
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  background-color: #f1f1f1;
-  color: #616161;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-}
-.marker-modal .type-check.active {
-  background-color: #0081e6;
-  color: #fff;
-}
-.marker-modal .type-check.correct {
-  background-color: #70d445;
-  color: #fff;
-}
-.marker-modal .type-check.error {
-  background-color: #e83d2c;
-  color: #fff;
-}
-.marker-modal .answer-title {
-  font-size: 12px;
-  color: #919191;
-}
-.marker-modal .fill-answer {
-  position: relative;
-  padding: 10px 15px;
-  color: #313131;
-  background-color: #fafafa;
-  margin-bottom: 10px;
-  min-height: 40px;
-}
-.marker-modal .fill-answer.correct,
-.marker-modal .fill-answer.error {
-  color: #fff;
-  padding-right: 50px;
-}
-.marker-modal .fill-answer.correct {
-  background-color: #70d445;
-}
-.marker-modal .fill-answer.error {
-  background-color: #e83d2c;
-}
-.marker-modal .fill-answer .type {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
-.marker-modal .fill-answer p {
-  margin-bottom: 0;
-}
-.marker-modal .answer-progress {
-  float: left;
-  width: 350px;
-  margin-left: 10px;
-}
-.marker-modal .answer-progress .progress {
-  float: left;
-  width: 300px;
-  height: 10px;
-  margin-bottom: 0;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-.marker-modal .answer-progress .num {
-  float: right;
-  margin-top: -3px;
-  font-size: 12px;
-  color: #919191;
-}
-.question-manage.slideing {
+.marker-manage.slideing {
   -moz-user-select: none;
   -khtml-user-select: none;
   user-select: none;
   cursor: move!important;
 }
-.question-manage {
-  background-color: #eeeeee;
-}
-.question-manage .breadcrumb {
+.marker-manage .nav.nav-tabs.nav-tabs-edit {
   margin-bottom: 0;
-  line-height: 60px;
-  background-color: #eeeeee;
-  padding: 0 20px;
+  border-bottom: none;
+  background-color: #313131;
 }
-.question-manage .lesson-dashboard {
-  background-color: #eeeeee;
-  top: 60px;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li a {
+  color: #919191;
+  font-size: 14px;
+  padding: 20px 15px;
 }
-.question-manage .lesson-dashboard .toolbar {
-  background-color: #eeeeee;
-  border: 0;
-  width: 490px;
-  padding-right: 20px;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li a i:hover {
+  color: #ff8a0c;
+  cursor: pointer;
 }
-@media (max-width: 991px) {
-  .question-manage .lesson-dashboard .toolbar {
-    width: 350px;
-  }
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li:hover > a,
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.active > a {
+  background-color: #414141;
+  color: #f5f5f5;
+  border-color: transparent;
 }
-.question-manage .lesson-dashboard .dashboard-body {
-  top: 0;
-  bottom: 30%;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static .border {
+  border-left: 1px solid #919191;
+  padding-left: 15px;
 }
-.question-manage .lesson-dashboard .dashboard-content {
-  right: 510px;
-}
-@media (max-width: 991px) and (min-width: 768px) {
-  .question-manage .lesson-dashboard .dashboard-content {
-    right: 370px;
-  }
-}
-@media (max-width: 767px) {
-  .question-manage .lesson-dashboard .dashboard-content {
-    right: 20px;
-  }
-}
-.question-manage .lesson-dashboard .mask {
-  display: none;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  bottom: 30%;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover {
   background-color: transparent;
 }
-.question-manage .lesson-list {
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover > a {
+  background-color: transparent;
+  color: #919191;
+}
+.marker-manage .nav.nav-tabs.nav-tabs-edit .highlight {
+  border-bottom: none;
+}
+.marker-manage .nav.nav-pills.nav-pills-difficulty {
+  display: inline-block;
+  vertical-align: middle;
+}
+.marker-manage .nav.nav-pills.nav-pills-difficulty > li {
+  margin-right: 10px;
+}
+.marker-manage .nav.nav-pills.nav-pills-difficulty > li.active > a {
+  background-color: #0081e6;
+  color: #fff;
+}
+.marker-manage .nav.nav-pills.nav-pills-difficulty > li > a {
+  background-color: #262626;
+  color: #ccc;
+  font-size: 12px;
+  padding: 0 15px;
+}
+.marker-manage .breadcrumb li.active {
+  color: #fff;
+}
+.marker-manage .lesson-list {
   border: 0;
   margin: 0;
+  overflow: auto;
+  padding-right: 15px;
 }
-.question-manage .lesson-list .item-lesson {
-  margin: 0 0 10px;
-  cursor: pointer;
-  line-height: 46px;
-}
-.question-manage .lesson-list .item-lesson .before {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-}
-.question-manage .question-menu {
+.marker-manage .lesson-list .item-lesson {
   position: relative;
-  height: 90%;
-}
-.question-manage .question-menu .list-title {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #e1e1e1;
-}
-.question-manage .question-menu .list-title .row {
-  margin: 0;
-}
-.question-manage .question-menu .list-title .content {
-  padding-left: 0;
-  text-align: center;
-}
-@media (max-width: 991px) {
-  .question-manage .question-menu .list-title .content {
-    display: none;
-  }
-}
-.question-manage .question-menu .lesson-list {
-  min-height: 100px;
-}
-.question-manage .question-menu .lesson-list .item-lesson .title .idname,
-.question-manage .question-menu .lesson-list .item-lesson .title .number,
-.question-manage .question-menu .lesson-list .item-lesson .title .icon-close {
-  display: none;
-}
-.question-manage .question-menu .lesson-list .item-lesson .content {
-  text-align: center;
-  padding-left: 0;
-}
-@media (max-width: 991px) {
-  .question-manage .question-menu .lesson-list .item-lesson .content {
-    display: none;
-  }
-}
-.question-manage .question-menu .lesson-list .item-lesson .content.not-add {
-  display: inline-block;
-}
-.question-manage .question-menu .lesson-list .item-lesson .content.have-add {
-  display: none;
-}
-.question-manage .question-menu .lesson-list .item-lesson.dragged {
-  background-color: #feffeb;
-  background-color: rgba(254, 255, 235, 0.9);
-  width: 150px!important;
-  overflow: hidden;
-}
-.question-manage .question-menu .lesson-list .item-lesson.dragged .title {
-  width: 100%;
-}
-.question-manage .question-menu .lesson-list .item-lesson.dragged .content {
-  display: none;
-}
-.question-manage .question-menu .lesson-list .item-lesson.disdrag {
-  background-color: #f1f1f1;
-  cursor: default;
-  color: #919191;
-  border: 1px dashed  #e1e1e1;
-}
-.question-manage .question-menu .lesson-list .item-lesson.disdrag a {
-  color: #919191;
-  cursor: default;
-}
-.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.not-add {
-  display: none;
-}
-.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.have-add {
-  display: inline-block;
-}
-.question-manage .question-menu .lesson-list .placeholder {
-  background-color: #f1f1f1;
-  border: 1px dashed  #e1e1e1;
-  margin-bottom: 10px;
-  line-height: 46px;
-  height: 46px;
-  padding: 0 10px;
-  color: #919191;
-}
-.question-manage .question-menu .lesson-list .placeholder .remask {
-  display: none;
-}
-.question-manage .question-menu .lesson-list .pagination {
-  position: absolute;
-  bottom: -5px;
-  left: 0;
+  background-color: transparent;
+  border: none;
+  line-height: 40px;
   margin-bottom: 0;
+  margin-left: 0;
+  cursor: move;
 }
-.question-manage .editbox {
+.marker-manage .lesson-list .item-lesson .btn-preview {
+  top: 0;
+  right: 0;
+  color: #919191;
+}
+.marker-manage .lesson-list .item-lesson .btn-preview:hover {
+  color: #0081e6;
+}
+.marker-manage .lesson-list .item-lesson .sqe-number {
+  display: none;
+}
+.marker-manage .lesson-list .item-lesson .icon-drag {
+  vertical-align: middle;
+  margin-right: 10px;
+  font-size: 16px;
+}
+.marker-manage .lesson-list .item-lesson .question-remove {
+  position: absolute;
+  top: 12px;
+  right: 5px;
+}
+.marker-manage .lesson-list .item-lesson .info {
+  display: inline-block;
+  max-width: 60%;
+  vertical-align: middle;
+}
+.marker-manage .lesson-list .item-lesson.dragged {
+  border: 1px dashed #919191;
+  position: absolute;
+  width: 220px!important;
+  padding-left: 15px;
+}
+.marker-manage .lesson-list .item-lesson.dragged .btn-preview {
+  display: none;
+}
+.marker-manage .lesson-list .item-lesson.disdragg {
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  cursor: default;
+}
+.marker-manage .lesson-list .placeholder {
+  position: relative;
+}
+.marker-manage .lesson-list .more-questions {
+  position: absolute;
+  right: 15px;
+  bottom: -15px;
+  left: 0;
+  text-align: right;
+  color: #919191;
+  font-size: 12px;
+}
+.marker-manage .lesson-list .more-questions .loading {
+  display: none;
+}
+.marker-manage .lesson-list .more-questions .loading img {
+  height: 30px;
+  margin-right: 10px;
+}
+.marker-manage .lesson-list .more-questions.loading .loading {
+  display: inline;
+}
+.marker-manage .lesson-list .more-questions a {
+  color: #919191;
+}
+.marker-manage .lesson-list .more-questions a:hover {
+  color: #0081e6;
+}
+.marker-manage-content {
+  height: 100%;
+  padding-bottom: 160px;
+}
+.marker-manage-content .manage-player-body {
+  position: relative;
+  padding-top: 60px;
+  float: left;
+  height: 100%;
+  width: 70%;
+}
+.marker-manage-content .manage-player-body .manage-player-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 70%;
+  height: 60px;
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link {
+  float: left;
+  font-size: 16px;
+  color: #fff;
+  line-height: 60px;
+  margin-right: 20px;
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link i {
+  font-size: 16px;
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link:hover {
+  color: #0081e6;
+}
+.marker-manage-content .manage-player-body .manage-player-content {
+  height: 100%;
+}
+.marker-manage-content .manage-player-body .mask {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  background-color: transparent;
+}
+.marker-manage-content .manage-edit-body {
+  position: relative;
+  float: left;
+  width: 30%;
+  height: 100%;
+  background-color: #414141;
+  color: #f5f5f5;
+}
+.marker-manage-content .manage-edit-body .btn-preview {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+}
+.marker-manage-content .manage-edit-body .tab-pane {
+  padding: 30px 0 30px 20px;
+  position: relative;
+}
+.marker-manage-content .manage-edit-body .btn-search {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  padding: 9px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  color: #616161;
+}
+.marker-manage-content .manage-edit-body .btn-search:focus {
+  outline: none;
+}
+.marker-manage-content .manage-edit-body .question-difficulty {
+  padding-bottom: 30px;
+}
+.marker-manage-content .manage-edit-body .question-remask {
+  padding-top: 24px;
+  border-top: 1px solid #616161;
+  color: #919191;
+  margin-bottom: 12px;
+}
+.marker-manage-content .manage-edit-body .question-remask .remask-icon {
+  color: #ff8a0c;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.marker-manage-content .editbox {
   position: absolute;
   left: 0;
   right: 0;
+  height: 160px;
   bottom: 0;
-  top: 70%;
-  height: 20%;
   background-color: #313131;
 }
-.question-manage .editbox .remask {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  visibility: visible;
-  width: 300px;
-  margin-top: -10px;
-  margin-left: -150px;
-  text-align: center;
-}
-.question-manage .editbox .scalebox {
-  position: relative;
-  height: 20px;
-  z-index: 2;
-}
-.question-manage .editbox .scalebox .scale {
-  position: absolute;
-  display: block;
+.marker-manage-content .editbox .lesson-list {
   height: 100%;
-  width: 1px;
-  background-color: #fff;
-  z-index: 1;
+  background-color: #414141;
+  padding: 0 160px 0 20px;
 }
-.question-manage .editbox .scalebox .scale .scale-details {
+.marker-manage-content .editbox .lesson-list.highlight {
+  border: 1px dashed #2db7f5;
+  background-color: transparent;
+  background-color: rgba(45, 183, 245, 0.3);
+}
+.marker-manage-content .editbox .lesson-list .btn-preview {
+  display: none;
+}
+.marker-manage-content .editbox .lesson-list .placeholder {
+  border-color: transparent;
+}
+.marker-manage-content .editbox .scale-content {
+  height: 111px;
+  padding-top: 10px;
+  border-top: 1px solid #292929;
+}
+.marker-manage-content .editbox .scalebox {
+  position: relative;
+  height: 21px;
+  border-bottom: 1px solid #404040;
+}
+.marker-manage-content .editbox .scalebox .lesson-list {
+  height: auto;
+  padding: 0;
+  background-color: transparent;
+  overflow: visible;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson {
+  padding: 0 10px;
+  margin-bottom: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson:hover {
+  background-color: #0081e6;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson .title {
+  display: none;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson .info {
+  max-width: 150px;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson .sqe-number {
+  display: inline;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder {
+  height: 10px;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder:after {
+  content: "";
+  border: 5px solid;
+  border-color: transparent transparent transparent #0081e6;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.marker-manage-content .editbox .scalebox .scale {
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: 1;
+  padding-left: 5px;
+  color: #fff;
+  height: 20px;
+  line-height: 20px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-red .line {
+  top: 0;
+  height: 160px;
+  border-color: #e83d2c;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-red .scale-details {
+  visibility: visible;
+  font-size: 12px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue {
+  cursor: pointer;
+  height: 100px;
+  top: 32px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue .line {
+  height: 100px;
+  border-color: #2db7f5;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover {
+  width: 8px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .line,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover .line {
+  border-color: transparent;
+  background-color: rgba(45, 183, 245, 0.5);
+  -moz-animation: boxshow 1s ease infinite;
+  -webkit-animation: boxshow 1s ease infinite;
+  animation: boxshow 1s ease infinite;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .scale-details,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .line {
+  -moz-animation: boxshow 0 ease infinite;
+  -webkit-animation: boxshow 0 ease infinite;
+  animation: boxshow 0 ease infinite;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-white .line {
+  height: 106px;
+  top: 26px;
+  border-color: #fff;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-white .line i {
+  position: absolute;
+  left: -8.5px;
+  top: -13.5px;
+}
+.marker-manage-content .editbox .scalebox .scale .scale-details {
   position: absolute;
   left: 0;
   bottom: 100%;
@@ -12933,156 +13049,295 @@ textarea {
   text-align: center;
   color: #fff;
 }
-.question-manage .editbox .scalebox .scale.red,
-.question-manage .editbox .scalebox .scale.blue {
-  left: 0;
-  bottom: 100%;
-  height: 100%;
-  top: -58px;
-  background-color: #ed634a;
-}
-@media (max-width: 1297px) {
-  .question-manage .editbox .scalebox .scale.red,
-  .question-manage .editbox .scalebox .scale.blue {
-    top: -40px;
-  }
-}
-.question-manage .editbox .scalebox .scale.white {
-  height: 80%;
-  opacity: 0.6;
-  filter: alpha(opacity=60);
-}
-.question-manage .editbox .scalebox .scale.white .scale-details {
-  visibility: visible;
-  background-color: transparent;
-  bottom: -20px;
-}
-.question-manage .editbox .scalebox .scale.blue {
-  background-color: #2db7f5;
-  height: 78px;
-}
-@media (max-width: 1297px) {
-  .question-manage .editbox .scalebox .scale.blue {
-    height: 60px;
-  }
-}
-.question-manage .editbox .scalebox .scale.blue:hover {
-  background-color: #2db7f5;
-  background-color: rgba(45, 183, 245, 0);
-}
-.question-manage .editbox .scalebox .scale.blue:hover .border {
-  background-color: #2db7f5;
-  background-color: rgba(45, 183, 245, 0.5);
-  -moz-animation: boxshow 1s ease infinite;
-  -webkit-animation: boxshow 1s ease infinite;
-  animation: boxshow 1s ease infinite;
-}
-.question-manage .editbox .scalebox .scale.blue:hover .scale-details {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  visibility: visible;
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.question-manage .editbox .scalebox .scale.blue .border {
+.marker-manage-content .editbox .scalebox .scale .line {
   position: absolute;
-  width: 8px;
-  margin-left: -4px;
-  height: 100%;
+  top: 0;
+  left: 0;
+  height: 25px;
+  border-left: 1px solid #616161;
+}
+.marker-manage-content .editbox .scalebox .scale .line.line-dashed {
+  top: 32px;
+  height: 100px;
+  border-left: 1px dashed #a3a3a3;
+}
+.marker-manage-content .editbox .scalebox .scale .scale-time {
+  display: inline-block;
+  font-size: 12px;
+  -webkit-transform: scale(0.83);
+}
+.marker-manage .introjs-nextbutton.introjs-fullbutton,
+.marker-manage .introjs-button.introjs-skipbutton {
+  background: transparent;
+  border-color: transparent;
+  color: #919191;
+  margin: 0;
+  padding-right: 0;
   cursor: pointer;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  visibility: hidden;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  background-color: transparent;
-  width: 220px;
-  margin-left: -110px;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 1;
+.marker-manage .introjs-nextbutton.introjs-fullbutton:hover,
+.marker-manage .introjs-button.introjs-skipbutton:hover,
+.marker-manage .introjs-nextbutton.introjs-fullbutton:focus,
+.marker-manage .introjs-button.introjs-skipbutton:focus {
+  background: transparent;
+  border-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list {
-  min-height: 40px;
-  height: auto;
-  margin: 0;
+.marker-manage .introjs-overlay {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson {
+.marker-manage .introjs-fixedTooltip {
   background-color: transparent;
   border: none;
-  margin-bottom: 0;
-  text-align: left;
-  height: 46px;
-  overflow: hidden;
+  box-shadow: none;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson:hover {
-  background-color: #0081e6;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title {
-  position: relative;
-  width: 100%;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before {
-  width: 180px;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before .number {
-  display: inline;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .icon-close {
-  display: inline;
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  color: #fff;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-close,
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content,
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-drag {
+.marker-manage .introjs-helperNumberLayer,
+.marker-manage .introjs-skipbutton {
   display: none;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .placeholder {
-  background-color: #f1f1f1;
-  background-color: rgba(255, 255, 255, 0.5);
+.marker-manage .introjs-helperLayer {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: transparent;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details.visible {
+.marker-manage .introjs-arrow.top-middle {
+  margin-left: 0;
+}
+.marker-manage .introjs-tooltip {
+  text-align: justify;
+  font-size: 12px;
+  color: #313131;
+  padding: 15px;
+}
+.marker-manage .introjs-tooltip .title {
+  color: #919191;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.marker-manage .introjs-tooltip .remask {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.marker-manage .intro-img {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  color: #fff;
+  font-size: 20px;
+}
+.marker-manage .intro-img img {
+  display: block;
+  margin-left: 70px;
+}
+.show-introhelp {
+  position: relative;
+}
+.show-introhelp .introhelp-icon-help {
+  position: relative;
+  color: #ff8a0c;
+  z-index: 9999999!important;
+}
+.show-introhelp .introhelp-icon-drag {
+  position: relative;
+  color: #fff;
+  z-index: 9999999!important;
+}
+.show-introhelp .popover {
+  display: none;
+  font-size: 12px;
+  color: #313131;
+}
+.show-introhelp .popover .title {
+  color: #919191;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 10px;
+}
+.show-introhelp .popover.bottom {
+  top: 18px;
+  left: -92px;
+}
+.show-introhelp .popover.left {
+  left: -230px;
+  top: 90px;
+}
+.show-introhelp .introhelp-img {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #fff;
+  font-size: 14px;
+}
+.show-introhelp .introhelp-img img {
+  display: block;
+  margin-left: 50px;
+}
+.show-introhelp .close-introhelp {
+  float: right;
+  color: #919191;
+  cursor: pointer;
+}
+.show-introhelp.show .popover {
+  display: block;
+}
+.introhelp-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  background-color: #000;
+}
+.marker-preview {
+  height: 100%;
+  background-color: #f1f4f6;
+}
+.marker-preview .marker-preview-content {
+  position: relative;
+  height: 100%;
+  padding-top: 20px;
+  color: #313131;
+  text-align: center;
+}
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content {
+    padding-top: 10px;
+  }
+}
+.marker-preview .marker-preview-content .title {
+  font-size: 20px;
+  line-height: 1;
+}
+.marker-preview .marker-preview-content .marker-preview-player {
+  position: absolute;
+  left: 120px;
+  right: 120px;
+  top: 60px;
+  bottom: 20px;
+}
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content .marker-preview-player {
+    bottom: 10px;
+    top: 40px;
+  }
+}
+.mark-questions-modal {
+  width: 756px;
+}
+.mark-questions-modal .modal-header {
+  position: relative;
+  padding: 20px 30px;
+  color: #fff;
+  border-color: #fff;
+  border-bottom: 1px solid #F5F8FA;
+}
+.mark-questions-modal .modal-header .close {
+  margin-top: -25px;
   opacity: 1;
   filter: alpha(opacity=100);
-  visibility: visible;
+  font-size: 26px;
+  color: #616161;
 }
-.question-manage .editbox .scalebox .scale.blue.show {
-  background-color: transparent;
+.mark-questions-modal .modal-title {
+  font-size: 18px;
+  line-height: 18px;
+  text-align: left;
+  color: #313131;
 }
-.question-manage .editbox .scalebox .scale.blue.show .border {
-  background-color: rgba(45, 183, 245, 0.5);
-  -moz-animation: boxshow 1s ease infinite;
-  -webkit-animation: boxshow 1s ease infinite;
-  animation: boxshow 1s ease infinite;
+.mark-questions-modal .modal-content {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
-.question-manage .editbox .lesson-list {
-  z-index: 1;
-  height: 100%;
-  margin-top: -20px;
+.mark-questions-modal .modal-body {
+  padding: 15px 30px;
 }
-.question-manage .editbox .lesson-list .placeholder {
-  height: 100%;
-  position: relative;
-  background-color: #2db7f5;
-  background-color: rgba(45, 183, 245, 0.5);
-  border: 1px dashed #2db7f5;
-  color: #2db7f5;
-  text-align: center;
+.mark-questions-modal .topic-bottom {
+  padding-bottom: 20px;
+  font-size: 14px;
+  color: #fff;
+  color: #616161;
+  line-height: 40px;
+  text-align: left;
+  background-color: #F5F8FA;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.mark-questions-modal .topic-bottom .topic-bottom-info {
+  line-height: 34px;
+  padding: 20px 30px 0;
+  color: #919191;
+}
+.mark-questions-modal .topic-bottom .topic-bottom-info .btn {
+  float: right;
+  margin-left: 20px;
+}
+.mark-questions-modal .popup-topic {
+  padding: 0;
   margin: 0;
+  height: 300px;
+  overflow: auto;
+  list-style-type: none;
 }
-.question-manage .editbox .lesson-list .placeholder .sub-remask {
-  display: none;
+.mark-questions-modal .popup-topic img {
+  max-width: 100%;
+  vertical-align: top;
 }
-.ballon-video-player .vjs-marker.bg-primary {
-  background-color: #0081e6 !important;
+.mark-questions-modal .popup-topic p {
+  margin-bottom: 0;
+}
+.mark-questions-modal .popup-topic .title {
+  margin-bottom: 14px;
+  line-height: 30px;
+  font-size: 18px;
+  color: #313131;
+}
+.mark-questions-modal .popup-topic .list {
+  padding: 10px 0 10px 40px;
+  line-height: 30px;
+  cursor: pointer;
+  cursor: default;
+  position: relative;
+}
+.mark-questions-modal .popup-topic .list .num {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 1px solid #c1c1c1;
+  color: #c1c1c1;
+  font-size: 14px;
+  text-align: center;
+  line-height: 22px;
+}
+.mark-questions-modal .popup-topic.topic-resolve .list {
+  min-height: 200px;
+  padding: 20px;
+  margin-bottom: 15px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  cursor: default;
+  background-color: #f5f8fa;
+}
+.mark-questions-modal .question-stem-fill-blank {
+  color: #313131;
 }
 .user-center-header {
   position: relative;
@@ -14951,4 +15206,7 @@ textarea {
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;
+}
+html {
+  height: 100%;
 }

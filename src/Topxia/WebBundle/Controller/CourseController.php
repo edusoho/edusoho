@@ -44,11 +44,7 @@ class CourseController extends CourseBaseController
                 $priceType = $coinSetting["price_type"];
             }
 
-            if ($priceType == 'RMB') {
-                $conditions['price'] = '0.00';
-            } else {
-                $conditions['price'] = '0.00';
-            }
+            $conditions['price'] = '0.00';
         }
 
         if ($filter['type'] == 'live') {
@@ -337,7 +333,15 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
+
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        if (!array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN'), $user['roles'])) {
+            if ($course['status'] == 'closed' && $member == null) {
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
+            }
+        }     
 
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

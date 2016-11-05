@@ -19,16 +19,19 @@ class KernelResponseListener
             return;
         }
 
-        $request      = $event->getRequest();
-        $currentUser  = $this->getUserService()->getCurrentUser();
-        
-        $user_agent   = $request->server->get('HTTP_USER_AGENT');
-        $_target_path = $request->getPathInfo();
+        $request     = $event->getRequest();
+        $currentUser = $this->getUserService()->getCurrentUser();
+
+        $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
+        if (!$isActiveUser) {
+            $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
+        }
 
         $auth = $this->getSettingService()->get('auth');
 
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])
-            && isset($auth['fill_userinfo_after_login']) && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])) {
+            && isset($auth['fill_userinfo_after_login']) && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])
+        ) {
             $whiteList = array(
                 '/fill/userinfo', '/login', '/logout', '/login_check', '/register/mobile/check',
                 '/register/email/check', '/login/bind/weixinmob/newset',
@@ -44,7 +47,8 @@ class KernelResponseListener
             );
 
             if (in_array($request->getPathInfo(), $whiteList) || strstr($request->getPathInfo(), '/admin')
-                || strstr($request->getPathInfo(), '/register/submited') || strstr($request->getPathInfo(), '/mapi_v2')) {
+                || strstr($request->getPathInfo(), '/register/submited') || strstr($request->getPathInfo(), '/mapi_v2')
+            ) {
                 return;
             }
 
@@ -138,4 +142,13 @@ class KernelResponseListener
     {
         return ServiceKernel::instance()->createService('User.UserService');
     }
+
+    /**
+     * @return UserActiveServiceImpl
+     */
+    private function getUserActiveLogService()
+    {
+        return $this->getServiceKernel()->createService('User.UserActiveService');
+    }
+
 }
