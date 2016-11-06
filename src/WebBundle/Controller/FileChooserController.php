@@ -19,7 +19,7 @@ use Topxia\Component\MediaParser\ParserProxy;
  */
 use Topxia\Service\File\UploadFileService;
 
-class MediaProccessController extends BaseController
+class FileChooserController extends BaseController
 {
 
     public function materialChooseAction(Request $request)
@@ -29,13 +29,11 @@ class MediaProccessController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
-        $currentUserId = $currentUser['id'];
-        $conditions    = $request->request->all();
+        $conditions    = $request->query->all();
 
-        $request->query->set('page', $conditions['page']);
 
         $conditions['status']        = 'ok';
-        $conditions['currentUserId'] = $currentUserId;
+        $conditions['currentUserId'] = $currentUser['id'];;
 
         $conditions['noTargetType'] = 'attachment';
         if (!empty($conditions['keyword'])) {
@@ -60,7 +58,7 @@ class MediaProccessController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
@@ -120,7 +118,7 @@ class MediaProccessController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator

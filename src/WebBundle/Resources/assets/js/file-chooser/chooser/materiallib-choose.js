@@ -20,8 +20,8 @@ class MaterialLibChoose extends Chooser {
 
     _initEvent() {
         $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
-        $(this.container).on('change', '.js-file-owner', this._fileterByFileOwner)
-        $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
+        $(this.container).on('change', '.js-file-owner', this._filterByFileOwner)
+        $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
         $('.js-choose-trigger').on('click', this._open)
@@ -30,22 +30,25 @@ class MaterialLibChoose extends Chooser {
     _loadList() {
         let url = $('.js-browser-search').data('url');
         let $parentIframe = this.$parentiframe;
-        let params = {};
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-        params.type = $('input[name=type]').val();
-        $('.js-material-list').load(url, params, function () {
-            $parentIframe.height($parentIframe.contents().find('body').height());
-        })
+        $.get(url, this._getParams(), function (html) {
+            $('.js-material-list').html(html);
+            $parentiframe.height($parentiframe.contents().find('body').height());
+        });
+    }
 
+    _getParams() {
+        let params = {};
+        $('.js-material-lib-search-form input[type=hidden]').each(function (input) {
+            params[$(this).attr('name')] = $(this).val();
+        });
+        return params;
     }
 
     _paginationList(event) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        let $that = $(event.currentTarget);
 
-        let page = this._getUrlParameter($that.attr('href'), 'page');
+        let page = this._getUrlParameter($(event.currentTarget).attr('href'), 'page');
         $('input[name=page]').val(page);
         this._loadList();
     }
@@ -55,6 +58,7 @@ class MaterialLibChoose extends Chooser {
         var type = $(that).data('type');
         $(that).addClass('active').siblings().removeClass('active');
         $('input[name=sourceFrom]').val(type);
+        $('input[name=page]').val(1);
         switch (type) {
             case 'my' :
                 $('.js-file-name-group').removeClass('hidden');
@@ -93,31 +97,15 @@ class MaterialLibChoose extends Chooser {
     }
 
 
-    _fileterByFileName() {
-        let keyword = $('.js-file-name').val();
-
-        let params = {};
-        params.keyword = keyword
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-
-        let url = $('.js-browser-search').data('url');
-        $('.js-material-list').load(url, params, function () {
-            console.log('page is reloading')
-        })
+    _filterByFileName() {
+        $('input[name=keyword]').val($('.js-file-name').val());
+        this._loadList();
     }
 
-    _fileterByFileOwner() {
-        let params = {};
-        params.keyword = $('.js-file-name').val();
+    _filterByFileOwner() {
         params.currentUserId = $('.js-file-owner option:selected').val();
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-
-        let url = $('.js-browser-search').data('url');
-        $('.js-material-list').load(url, params, function () {
-            console.log('page is reloading')
-        })
+        $('input[name=currentUserId]').val(currentUserId);
+        this._loadList();
     }
 
     _onSelectFile(event) {

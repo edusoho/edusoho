@@ -1,4 +1,4 @@
-{% do script(['web/component/file-choose.js']) %}
+{% do script(['web/file-chooser/file-choose.js']) %}
 <div class="file-chooser-bar {% if not  activity.ext.media|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ activity.ext.media.name|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
@@ -26,24 +26,24 @@
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
-      {% include 'WebBundle:Component/Parts:upload-file.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' %}
     </div>
 
     <div class="tab-pane" id="chooser-material-panel">
-      {% include 'WebBundle:Component/Parts:materiallib-choose.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:materiallib-choose.html.twig' %}
     </div>
 
     <div class="tab-pane" id="chooser-course-panel">
-      {% include 'WebBundle:Component/Parts:course-file-choose.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:course-file-choose.html.twig' %}
     </div>
     {% if mediaType == 'video' %}
       <div class="tab-pane" id="chooser-import-panel">
-        {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
+        {% include 'WebBundle:FileChooser/Parts:import-video.html.twig' %}
       </div>
     {% endif %}
     {% if mediaType == 'download' %}
       <div class="tab-pane" id="chooser-link-panel">
-        {% include 'WebBundle:Component/Parts:import-link.html.twig' %}
+        {% include 'WebBundle:FileChooser/Parts:import-link.html.twig' %}
       </div>
     {% endif %}
   </div>
