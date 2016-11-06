@@ -19,7 +19,7 @@ use Topxia\Component\MediaParser\ParserProxy;
  */
 use Topxia\Service\File\UploadFileService;
 
-class MediaProccessController extends BaseController
+class FileChooserController extends BaseController
 {
 
     public function materialChooseAction(Request $request)
@@ -60,7 +60,7 @@ class MediaProccessController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
@@ -120,7 +120,7 @@ class MediaProccessController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
