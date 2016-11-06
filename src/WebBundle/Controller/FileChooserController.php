@@ -29,13 +29,11 @@ class FileChooserController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
-        $currentUserId = $currentUser['id'];
-        $conditions    = $request->request->all();
+        $conditions    = $request->query->all();
 
-        $request->query->set('page', $conditions['page']);
 
         $conditions['status']        = 'ok';
-        $conditions['currentUserId'] = $currentUserId;
+        $conditions['currentUserId'] = $currentUser['id'];;
 
         $conditions['noTargetType'] = 'attachment';
         if (!empty($conditions['keyword'])) {
