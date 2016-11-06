@@ -2,7 +2,7 @@
  * Created by Simon on 31/10/2016.
  */
 
-import Chooser from './chooser';
+import Chooser from '../../../common/chooser';
 
 class CourseFileChoose extends Chooser {
 

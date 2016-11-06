@@ -2,17 +2,18 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+import Chooser from '../../../common/chooser';
 
-class FileImport {
+class FileImport extends Chooser {
     constructor(container) {
+        super();
         this.container = container;
         this.initEvent();
     }
 
     initEvent() {
         $(this.container).on('click', '.js-video-import', this._onImport.bind(this));
-        $('.js-choose-trigger').on('click',this._open)
+        $('.js-choose-trigger').on('click', this._open)
     }
 
 
@@ -51,19 +52,6 @@ class FileImport {
         });
 
         return;
-    }
-
-
-    _close() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
-        $('.file-chooser-main').addClass('hidden');
-        $('.file-chooser-bar').removeClass('hidden');
-    }
-
-    _open() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
-        $('.file-chooser-bar').addClass('hidden');
-        $('.file-chooser-main').removeClass('hidden');
     }
 
     _onChange(file) {

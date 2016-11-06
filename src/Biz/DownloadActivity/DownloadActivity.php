@@ -41,8 +41,19 @@ class DownloadActivity extends Activity
      */
     public function create($fields)
     {
-        $ext = $this->parseDownloadActivityExt($fields);
-        $ext = $this->getDownloadActivityDao()->create($ext);
+        $materials = json_decode($fields['materials'], true);
+        $that      = $this;
+        $ext       = $this->getConnection()->transactional(function () use ($materials, $that) {
+            //1. created ext
+            $downloadExtension = $this->parseDownloadExtension($materials);
+            $downloadExtension = $this->getDownloadActivityDao()->create($downloadExtension);
+            //2. created file
+            $files = $this->parseDownloadFiles($downloadExtension, $materials);
+            foreach ($files as $file) {
+                $that->getDownloadFileDao()->create($file);
+            }
+            return $downloadExtension;
+        });
         return $ext;
     }
 
@@ -69,14 +80,41 @@ class DownloadActivity extends Activity
      */
     public function get($id)
     {
-        return $this->getDownloadActivityDao()->get($id);
+        $downloadActivity               = $this->getDownloadActivityDao()->get($id);
+        $downloadActivity['materials'] = $this->getDownloadFileDao()->findFilesByDownloadActivityId($downloadActivity['id']);
+        return $downloadActivity;
+    }
+
+    protected function parseDownloadExtension($materials)
+    {
+        return array('mediaCount' => count($materials));
+    }
+
+    protected function parseDownloadFiles($downloadExtension, $materials)
+    {
+        $files = array();
+        $extId = $downloadExtension['id'];
+        array_walk($materials, function ($material) use ($extId, &$files) {
+            $file = array(
+                'downloadActivityId' => $extId,
+                'title'              => $material['name'],
+                'fileId'             => intval($material['id']),
+                'fileSize'           => $material['size'],
+            );
+            if ($material['source'] == "link") {
+                $file['link'] = $material['link'];
+            }
+            $files[] = $file;
+        });
+        return $files;
     }
 
     protected function parseDownloadActivityExt($fields)
     {
-        $ext        = array();
-        $materials  = json_decode($fields['materials'], true);
-        $materials  = ArrayToolkit::index($materials, 'id');
+        $ext = array();
+
+        var_dump($fields);
+        $materials  = ArrayToolkit::index($fields, 'id');
         $fileMedias = array_filter(array_keys($materials), function ($id) {
             return $id > 0;
         });
@@ -100,6 +138,16 @@ class DownloadActivity extends Activity
     protected function getDownloadActivityDao()
     {
         return $this->getBiz()->dao('DownloadActivity:DownloadActivityDao');
+    }
+
+    protected function getDownloadFileDao()
+    {
+        return $this->getBiz()->dao('DownloadActivity:DownloadFileDao');
+    }
+
+    protected function getConnection()
+    {
+        return $this->getBiz()->offsetGet('db');
     }
 
 

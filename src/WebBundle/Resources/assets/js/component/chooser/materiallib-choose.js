@@ -2,11 +2,12 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+import Chooser from '../../../common/chooser';
 
-class MaterialLibChoose {
+class MaterialLibChoose extends Chooser {
 
     constructor($container) {
+        super();
         this.container = $container;
         this.loadShareingContacts = false;
         this._init();
@@ -28,13 +29,13 @@ class MaterialLibChoose {
 
     _loadList() {
         let url = $('.js-browser-search').data('url');
-
+        let $parentIframe = this.$parentiframe;
         let params = {};
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
         params.type = $('input[name=type]').val();
         $('.js-material-list').load(url, params, function () {
-            $parentiframe.height($parentiframe.contents().find('body').height());
+            $parentIframe.height($parentIframe.contents().find('body').height());
         })
 
     }
@@ -52,7 +53,6 @@ class MaterialLibChoose {
     _switchFileSource(event) {
         let that = event.currentTarget;
         var type = $(that).data('type');
-        console.log('type', type)
         $(that).addClass('active').siblings().removeClass('active');
         $('input[name=sourceFrom]').val(type);
         switch (type) {
@@ -118,18 +118,6 @@ class MaterialLibChoose {
         $('.js-material-list').load(url, params, function () {
             console.log('page is reloading')
         })
-    }
-
-    _close() {
-        $('.file-chooser-main').addClass('hidden');
-        $('.file-chooser-bar').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
-    }
-
-    _open() {
-        $('.file-chooser-bar').addClass('hidden');
-        $('.file-chooser-main').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _onSelectFile(event) {

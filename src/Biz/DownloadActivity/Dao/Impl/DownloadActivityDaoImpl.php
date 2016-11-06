@@ -18,6 +18,7 @@ class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivity
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('media' => 'json', 'linkMedias' => 'json', 'fileMediaIds' => 'json'),
         );
     }
