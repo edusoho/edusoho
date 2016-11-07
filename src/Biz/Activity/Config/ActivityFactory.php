@@ -7,6 +7,7 @@ use Biz\LiveActivity\LiveActivity;
 use Biz\PptActivity\PptActivity;
 use Biz\TextActivity\TextActivity;
 use Biz\VideoActivity\VideoActivity;
+use Biz\DocActivity\DocActivity;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\DiscussActivity\DiscussActivity;
 
@@ -31,7 +32,8 @@ class ActivityFactory
             'live'  => new LiveActivity($biz),
             'discuss' => new DiscussActivity($biz),
             'ppt' => new PptActivity($biz),
-            'flash' => new FlashActivity($biz)
+            'flash' => new FlashActivity($biz),
+            'doc' => new DocActivity($biz)
         );
     }
 }
