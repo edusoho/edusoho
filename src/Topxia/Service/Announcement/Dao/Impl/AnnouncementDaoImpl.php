@@ -10,14 +10,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
-        ksort($conditions);
-        
-        $keys = 'search';
-        foreach ($conditions as $key => $value) {
-            $keys = $keys.":{$key}:{$value}";
-        }
-
-        $keys = $keys.":{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
 
         $that = $this;
 
