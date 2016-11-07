@@ -1,4 +1,4 @@
-import './vendor.less'; 
+import './vendor.less';
 //先用es原来的全局样式，因为要考虑主题等
 
 import 'jquery';
