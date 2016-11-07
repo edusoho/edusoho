@@ -30,15 +30,34 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getLateMonthLearndData($courseId)
     {
         $students = $this->getCourseService()->findCourseStudents($courseId, 0, PHP_INT_MAX);
-        $late30Days = array();
-        for ($i = 0; $i < 30; $i++) {
-            $day = date("m-d", strtotime('-'. $i .' days'));
-            $late30Days[$day]['day'] = $day;
+        $late30DaysStat = array();
+        for ($i = 29; $i >= 0; $i--) {
+            $day = date('m-d', strtotime('-'. $i .' days'));
+            $late30DaysStat[$day]['day'] = $day;
+            $late30DaysStat[$day]['studentNum'] = 0;
+            $late30DaysStat[$day]['finishedNum'] = 0;
+            $late30DaysStat[$day]['finishedRate'] = 0;
         }
 
         foreach ($students as $student) {
+            $student['createdDay'] = date('m-d', $student['createdTime']);
+            $student['finishedDay'] = date('m-d', $student['finishedTime']);
+            foreach ($late30DaysStat as $day => &$stat) {
+                if (strtotime($student['createdDay']) <= strtotime($day)) {
+                    $stat['studentNum']++;
+                }
 
+                if ($student['finishedTime'] > 0 && strtotime($student['finishedDay']) <= strtotime($day)) {
+                    $stat['finishedNum']++;
+                }
+            }
         }
+
+        foreach ($late30DaysStat as $day => &$stat) {
+            $stat['finishedRate'] = round($stat['finishedNum']/$stat['studentNum'], 3) * 100;
+        }
+
+        return $late30DaysStat;
     }
 
     protected function getCourseService()

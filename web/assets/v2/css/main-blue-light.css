@@ -9858,6 +9858,9 @@ textarea {
   color: #333;
   margin-top: 0;
 }
+.dashboard-panel .course-dashboard-footer {
+  margin-top: 90px;
+}
 .class-bg-layer {
   position: absolute;
   top: 5px;
