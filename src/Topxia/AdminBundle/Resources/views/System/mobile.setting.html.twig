@@ -28,7 +28,10 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, mobile.enabled) }}
-      <div class="help-block">{{'开启后，网站首页顶部导航会出现客户端入口'|trans}}<a href="{{path('admin_operation_mobile')}}">{{'常规设置点这里'|trans}}</a></div>
+      <div class="help-block">1.开启后，可免费使用阔知学堂APP，如需定制专属APP，可联系<a target="_blank" href="http://www.edusoho.com">官网</a>客服</div>
+      <div class="help-block">2.开启后，可将<a target="_blank" href="域名/mobile">移动端首页</a>（域名/mobile）地址添加到网站顶部导航中</div>
+      <div class="help-block">3.登录二维码：系统自动生成，可在移动端首页查看，APP扫描后可快捷登录，在登录账号的情况下，请勿随意分享该二维码</div>
+      <div class="help-block">4.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="{{ path('admin_setting_mobile') }}">这里</a>进行设置</div>
     </div>
   </div>
   
