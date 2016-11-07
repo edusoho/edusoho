@@ -25,7 +25,7 @@ class AnnouncementsDataTag extends BaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $currentTime = time();
-        $currentTime = $currentTime - $currentTime%900;
+        // $currentTime = $currentTime - $currentTime%900;
         
         $conditions = array(
             'targetType' => $arguments['targetType'],
