@@ -1,3 +1,5 @@
+import loadAnimation from 'common/load-animation'
+
 class Editor {
     constructor($modal) {
         this.$element = $modal;
@@ -123,17 +125,19 @@ class Editor {
 
     _initIframe() {
         let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
-        let validator = {};
-        this.$task_manage_content.html(html); 
+        this.$task_manage_content.html(html).show(); 
         this.$frame = $('#'+this.iframe_name);
-        this.$frame.load(()=>{
+        let loadiframe = (a) => {
+           
+            let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
             this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
             this.$iframe_body.find("#step2-form").data('validator', validator)
             this.$iframe_body.find("#step3-form").data('validator', validator); 
-        });
+        };
+        this.$frame.load(loadAnimation(loadiframe,this.$task_manage_content));
     }
 
     _inItStep1form() {
