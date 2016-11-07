@@ -51,9 +51,9 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
     public function findApps($start, $limit)
     {
         $that = $this;
+        $this->filterStartLimit($start, $limit);
 
         return $this->fetchCached("apps:{$start}:{$limit}", $start, $limit, function ($start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $sql = "SELECT * FROM {$that->getTable()} ORDER BY installedTime DESC LIMIT {$start}, {$limit}";
             return $that->getConnection()->fetchAll($sql);       
         });
