@@ -58,10 +58,11 @@ class Editor {
         this.contentUrl = $this.data('contentUrl');
         ( this.type !== type ) ? this.loaded = false : this.loaded = true;
         this.type = type;
-        _renderNext(true);
+        this._renderNext(true);
     }
 
     _onSave() {
+        console.log("_onSave");
         if (!this._validator(this.step)) {
             return;
         }
@@ -157,7 +158,7 @@ class Editor {
         let validator = null;
         if (step === 1) {
             validator = $("#step1-form").data('validator');
-        } else if (this.loaded) {
+        } else if (this.$iframe_body) {
             var $from = this.$iframe_body.find("#step" + step + "-form");
             validator = this.iframe_jQuery.data($from[0], 'validator');
         }
@@ -195,7 +196,7 @@ class Editor {
     }
 
     _rendStepIframe(step) {
-        if (!this.loaded) {
+        if (!this.$iframe_body) {
             return;
         }
         (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');
