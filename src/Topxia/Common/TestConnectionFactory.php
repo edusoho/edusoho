@@ -2,9 +2,7 @@
 namespace Topxia\Common;
 
 use Topxia\Service\Common\ConnectionFactory;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\TestCaseConnection;
-use Doctrine\DBAL\DriverManager;
 
 class TestConnectionFactory implements ConnectionFactory
 {
@@ -20,17 +18,7 @@ class TestConnectionFactory implements ConnectionFactory
     {
         if(empty($this->connection)){
 
-            $connection = DriverManager::getConnection(array(
-                'wrapperClass' => 'Topxia\\Service\\Common\\Connection',
-                'driver'       => ServiceKernel::instance()->getParameter('database_driver'),
-                'charset'      => 'utf8',
-                'host' => ServiceKernel::instance()->getParameter('database_host'),
-                'port' => ServiceKernel::instance()->getParameter('database_port'),
-                'dbname' => ServiceKernel::instance()->getParameter('database_name'),
-                'user' => ServiceKernel::instance()->getParameter('database_user'),
-                'password' => ServiceKernel::instance()->getParameter('database_password'),
-            ));
-
+            $connection = $this->container->get('database_connection');
             $connection = new TestCaseConnection($connection);
             
             $connection->exec('SET NAMES UTF8');
