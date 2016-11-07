@@ -57,16 +57,15 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
     public function searchNotifications($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $builder = $this->createNotificationQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         
-        $that = $this;
         $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         
-        return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $builder = $that->createNotificationQueryBuilder($conditions)
-                ->select('*')
-                ->orderBy($orderBy[0], $orderBy[1])
-                ->setFirstResult($start)
-                ->setMaxResults($limit);
+        return $this->fetchCached($keys, $builder, function ($builder) {
             return $builder->execute()->fetchAll() ? : array();
         });
     }

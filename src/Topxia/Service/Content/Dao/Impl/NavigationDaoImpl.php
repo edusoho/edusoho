@@ -105,12 +105,10 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
     public function searchNavigationCount($conditions)
     {
         $keys = $this->generateKeyWhenCount($conditions);
-        $that = $this;
-
-        return $this->fetchCached($keys, $conditions, function ($conditions) use ($that) {
-
-            $builder = $that->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createSearchQueryBuilder($conditions)
                 ->select('COUNT(id)');
+
+        return $this->fetchCached($keys, $builder, function ($builder) {
             return $builder->execute()->fetchColumn(0);
         });
     }
@@ -120,15 +118,13 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         $this->filterStartLimit($start, $limit);
         
         $key = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
-        $that = $this;
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
-        return $this->fetchCached($key, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $builder = $that->_createSearchQueryBuilder($conditions)
-                ->select('*')
-                ->orderBy($orderBy[0], $orderBy[1])
-                ->setFirstResult($start)
-                ->setMaxResults($limit);
-
+        return $this->fetchCached($key, $builder, function ($builder) {
             return $builder->execute()->fetchAll() ?: array();
         });
     }

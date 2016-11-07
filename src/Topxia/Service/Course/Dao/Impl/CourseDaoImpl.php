@@ -94,31 +94,26 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->filterStartLimit($start, $limit);
 
         $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
-        $that = $this;
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        if ($orderBy[0] == 'recommendedSeq') {
+            $builder->addOrderBy('recommendedTime', 'DESC');
+        }
 
-        return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $builder = $that->_createSearchQueryBuilder($conditions)
-                ->select('*')
-                ->orderBy($orderBy[0], $orderBy[1])
-                ->setFirstResult($start)
-                ->setMaxResults($limit);
-
-            if ($orderBy[0] == 'recommendedSeq') {
-                $builder->addOrderBy('recommendedTime', 'DESC');
-            }
-
+        return $this->fetchCached($keys, $builder, function ($builder) {
             return $builder->execute()->fetchAll() ?: array();
         });
     }
 
     public function searchCourseCount($conditions)
     {
-
         $keys = $this->generateKeyWhenCount($conditions);
-        $that = $this;
-        return $this->fetchCached($keys, $conditions, function ($conditions) use ($that) {
-            $builder = $that->_createSearchQueryBuilder($conditions)
-                ->select('COUNT(id)');
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $this->fetchCached($keys, $builder, function ($builder) {
             return $builder->execute()->fetchColumn(0);
         });
     }
