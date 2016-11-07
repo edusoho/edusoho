@@ -104,13 +104,10 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function searchNavigationCount($conditions)
     {
-        $key = 'count';
-        foreach ($conditions as $key => $value) {
-            $key = $key.":{$key}:{$value}";
-        }
-
+        $keys = $this->generateKeyWhenCount($conditions);
         $that = $this;
-        return $this->fetchCached($key, $conditions, function ($conditions) use ($that) {
+
+        return $this->fetchCached($keys, $conditions, function ($conditions) use ($that) {
 
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('COUNT(id)');

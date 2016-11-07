@@ -306,4 +306,13 @@ abstract class BaseDao
 
         return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
     }
+
+    protected function generateKeyWhenCount($conditions)
+    {
+        $keys = 'count';
+        foreach ($conditions as $key => $value) {
+            $keys = $key.":{$key}:{$value}";
+        }
+        return $keys;
+    }
 }

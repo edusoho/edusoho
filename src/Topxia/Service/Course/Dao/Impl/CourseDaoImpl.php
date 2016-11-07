@@ -112,14 +112,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function searchCourseCount($conditions)
     {
-        ksort($conditions);
 
-        $keys = 'count';
-        foreach ($conditions as $key => $value) {
-            $keys = $keys.":{$key}:{$value}";
-        }
+        $keys = $this->generateKeyWhenCount($conditions);
         $that = $this;
-
         return $this->fetchCached($keys, $conditions, function ($conditions) use ($that) {
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('COUNT(id)');
