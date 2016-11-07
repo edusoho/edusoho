@@ -60,6 +60,18 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $late30DaysStat;
     }
 
+    public function getCourseLessonLearnStat($courseId)
+    {
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        foreach ($lessons as $lessonId => &$lesson) {
+            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'status' => 'finished'));
+            $lesson['learnNum'] = $this->getCourseService()->findLearnsCountByLessonId($lessonId);
+            $lesson['finishedRate'] = round($lesson['finishedNum']/$lesson['learnNum'], 3) * 100;
+        }
+
+        return $lessons;
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
