@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}{{'分享教学资料'|trans}}{% endblock %}
+{% block title %}{{'分享资料'|trans}}{% endblock %}
 {% block body %}
 
 <form id="share-materials-form" class="form-horizontal" method="post"
 	action="{{ path('material_lib_save_sharing') }}">
 
 	<div class="row form-group">
-		<label class="col-md-3 control-label">{{'分享教学资料给'|trans}}</label>
+		<label class="col-md-3 control-label">{{'分享资料给'|trans}}</label>
 		<div class="col-md-8 controls">
 			<div class="select2-container select2-container-multi width-full"
 				id="target-teachers-input" placeholder="{{'输入用户名'|trans}}"></div>
