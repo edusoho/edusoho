@@ -3,6 +3,7 @@ namespace Topxia\Common;
 
 use Topxia\Service\Common\ConnectionFactory;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\TestCaseConnection;
 use Doctrine\DBAL\DriverManager;
 
 class TestConnectionFactory implements ConnectionFactory
