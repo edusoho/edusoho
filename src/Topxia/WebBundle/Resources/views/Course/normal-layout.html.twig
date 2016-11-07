@@ -12,7 +12,7 @@
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
 {% block top_content %}
-  {% cache 'course/' ~ course.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 6000 %}
+  {% cache 'course/' ~ course.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 600 %}
     {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
   {% endcache %}
 {% endblock %}
@@ -29,7 +29,7 @@
 
       <section class="es-section">
 
-        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id ~ '/normal-nav' 6000 %}
+        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id ~ '/normal-nav' 600 %}
           {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% endcache %}
 
@@ -45,26 +45,26 @@
     <div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
         {% if member|default(null) %}
-          {% cache 'course/' ~ course.id ~ '/sidebar/belongClassrooms/for/member' 6000 %}
+          {% cache 'course/' ~ course.id ~ '/sidebar/belongClassrooms/for/member' 600 %}
             {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
           {% endcache %}
         {% endif %}
 
         {% if course.parentId == 0 %}
-          {% cache 'course/' ~ course.id ~ '/not/classroom/course/sidebar/recommendClassrooms' 6000 %}
+          {% cache 'course/' ~ course.id ~ '/not/classroom/course/sidebar/recommendClassrooms' 600 %}
             {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
           {% endcache %}
         {% endif %}
 
-        {% cache 'course/' ~ course.id ~ '/sidebar/teachers' 6000 %}
+        {% cache 'course/' ~ course.id ~ '/sidebar/teachers' 600 %}
           {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
         {% endcache %}
 
-        {% cache 'course/' ~ course.id ~ '/sidebar/students' 6000 %}
+        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
           {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
         {% endcache %}
         
-        {% cache 'course/' ~ course.id ~ '/sidebar/statuses' 6000 %}
+        {% cache 'course/' ~ course.id ~ '/sidebar/statuses' 600 %}
           {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
         {% endcache %}
 

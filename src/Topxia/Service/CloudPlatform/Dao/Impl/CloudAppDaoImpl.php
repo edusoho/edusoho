@@ -31,13 +31,15 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
 
     public function findAppsByCodes(array $codes)
     {
+        $codes = array_unique($codes);
+
         if (empty($codes)) { 
             return array(); 
         }
 
         $that = $this;
         sort($codes);
-        $key = 'codes:'.implode(":", $codes);
+        $key = 'codes:'.implode("-", $codes);
         return $this->fetchCached($key, $codes, function ($codes) use ($that) {
             $marks = str_repeat('?,', count($codes) - 1) . '?';
             $sql ="SELECT * FROM {$that->getTable()} WHERE code IN ({$marks});";

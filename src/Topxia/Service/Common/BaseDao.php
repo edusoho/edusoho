@@ -288,4 +288,22 @@ abstract class BaseDao
         }
         return false;
     }
+
+    protected function generateKeyWhenSearch($conditions, $orderBy, $start, $limit)
+    {
+        $keys = 'search';
+
+        if(!empty($conditions)) {
+            ksort($conditions);
+            foreach ($conditions as $key => $value) {
+                if(is_array($value)) {
+                    $keys .= ":{$key}:".implode('-', $value);
+                } else {
+                    $keys .= ":{$key}:{$value}";
+                }
+            }
+        }
+
+        return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+    }
 }

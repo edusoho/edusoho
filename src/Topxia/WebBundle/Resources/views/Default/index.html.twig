@@ -16,7 +16,7 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
-    {% cache 'jianmo/home/top/banner' 6000 %}
+    {% cache 'jianmo/home/top/banner' 600 %}
       {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}
     {% for config in themeConfig.blocks.left|default([]) %}
@@ -31,7 +31,7 @@
          {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
       {% elseif code != 'footer-link'%}
         {% if code != 'course-grid-with-condition-index'%}
-          {% cache 'jianmo/default/' ~ code 6000 %}
+          {% cache 'jianmo/default/' ~ code 600 %}
             {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
           {% endcache %}
         {% else %}

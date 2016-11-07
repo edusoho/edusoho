@@ -120,13 +120,7 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
-        $key = 'search';
-        foreach ($conditions as $key => $value) {
-            $key = $key.":{$key}:{$value}";
-        }
-
-        $key = $key.":{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
-
+        $key = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $that = $this;
 
         return $this->fetchCached($key, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
