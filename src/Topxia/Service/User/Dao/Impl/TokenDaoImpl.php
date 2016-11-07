@@ -37,21 +37,18 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     public function addToken(array $token)
     {
         $token    = $this->createSerializer()->serialize($token, $this->serializeFields);
-        $redis = $this->getRedis();
-        $that = $this;
-        if($redis) {
-            return $this->fetchCached("token:{$token['token']}", $token, function ($token) use ($that) {
-                return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : array();
-            });
-        } else {
-            $affected = $this->getConnection()->insert($this->table, $token);
-            if ($affected <= 0) {
-                throw $this->createDaoException('Insert token error.');
-            }
-
-            $token = $this->getToken($this->getConnection()->lastInsertId());
-            $this->flushCache($token);
+        $affected = $this->getConnection()->insert($this->table, $token);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert token error.');
         }
+
+        $token = $this->getToken($this->getConnection()->lastInsertId());
+        
+        $this->incrVersions(array(
+            "{$this->table}:version:userId:{$token['userId']}",
+            "{$this->table}:version:type:{$token['type']}"
+        ));
+        
         return $token;
     }
 
