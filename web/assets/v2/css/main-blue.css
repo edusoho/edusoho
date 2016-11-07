@@ -9707,6 +9707,7 @@ textarea {
 }
 .lesson-list .item-lesson {
   margin-left: 20px;
+  cursor: move;
 }
 .lesson-list .item-line {
   border-bottom: 2px solid #ccc;
