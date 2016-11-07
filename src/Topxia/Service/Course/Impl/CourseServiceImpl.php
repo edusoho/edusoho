@@ -5,11 +5,11 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
-use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {

@@ -11,7 +11,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $task     = $this->tryLearnTask($courseId, $id);
-        $tasks    = $this->getCourseTasks($courseId);
+        $tasks    = $this->getTaskService()->findDetailedTasksByCourseId($courseId, $this->getUser()->getId());
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->render('WebBundle:Task:show.html.twig', array(
@@ -64,7 +64,7 @@ class TaskController extends BaseController
         return $task;
     }
 
-    protected function getCourseTasks($courseId)
+    protected function findDetailedTasksByCourseId($courseId)
     {
         //列举course下的所有tasks，并：
         //1. 标记任务的进度（course_task_result.status: ''=未开始，start=进行中，finish=已完成 ）

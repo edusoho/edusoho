@@ -89,6 +89,45 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseId($courseId);
     }
 
+    public function findDetailedTasksByCourseId($courseId, $userId)
+    {
+        //列举course下的所有tasks，并：
+        //1. 标记任务的进度（course_task_result.status: ''=未开始，start=进行中，finish=已完成 ）
+        //2. 如果有length的需表达其长度，目前主要是视频（hh:ii:ss）
+        //3. 标记活动的类型（icon + name）
+        $tasks = $this->findTasksByCourseId($courseId);
+        if (empty($tasks)) {
+            return $tasks;
+        }
+        $taskResults = $this->findTaskResultsByCourseId($courseId, $userId);
+        if (!empty($taskResults)) {
+            foreach ($taskResults as $tr) {
+                foreach ($tasks as $tk => $t) {
+                    if ($tr['courseTaskId'] != $t['id']) {
+                        continue;
+                    }
+                    if (!isset($t['task_result']) || !$t['task_result']['status'] == 'finish') {
+                        $tasks[$tk]['task_result'] = $tr;
+                        break;
+                    }
+                }
+            }
+        }
+        $activityConfigs = $this->getActivityService()->getActivityTypes();
+        $activities      = $this->getActivityService()->getActivities(array_column($tasks, 'activityId'));
+        $activityMap     = array();
+        foreach ($activities as $act) {
+            $activityMap[$act['id']] = $act;
+        }
+        foreach ($tasks as $tk => $t) {
+            $act                         = $activityMap[$t['activityId']];
+            $config                      = $activityConfigs[$act['mediaType']];
+            $tasks[$tk]['activity_meta'] = array_merge($config->getMetas(), array('length' => $this->formatActivityLength($act['length'])));
+        }
+
+        return $tasks;
+    }
+
     public function findTaskResultsByCourseId($courseId, $userId)
     {
         return $this->getTaskResultDao()->findByCourseId($courseId, $userId);
@@ -115,6 +154,17 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function canManageCourse($courseId)
     {
         return true;
+    }
+
+    protected function formatActivityLength($len)
+    {
+        if (empty($len) || $len == 0) {
+            return null;
+        }
+        $h = floor($len / 60);
+        $m = fmod($len, 60);
+        //TODO 目前没考虑秒
+        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':00';
     }
 
     protected function invalidTask($task)
