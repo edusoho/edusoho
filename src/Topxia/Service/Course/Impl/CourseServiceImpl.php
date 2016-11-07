@@ -5,11 +5,11 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
-use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -1146,18 +1146,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createLessonByFileId($courseId, $fileId)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
-        
+
         if (empty($file)) {
             throw $this->createServiceException($this->getKernel()->trans('文件不存在，添加/编辑课时失败！'));
         }
 
         $lessonFileds = array(
-            'courseId'      => $courseId,
-            'title'         => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
-            'type'          => $file['type'],
-            'media'         => array('source' => 'self', 'id' => $fileId, 'name' => $file['filename']),
-            'mediaId'       => $fileId,
-            'length'        => $file['length'],
+            'courseId' => $courseId,
+            'title'    => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
+            'type'     => $file['type'],
+            'media'    => array('source' => 'self', 'id' => $fileId, 'name' => $file['filename']),
+            'mediaId'  => $fileId,
+            'length'   => $file['length']
         );
 
         return $this->createLesson($lessonFileds);

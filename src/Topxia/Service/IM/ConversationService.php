@@ -20,8 +20,6 @@ interface ConversationService
 
     public function deleteConversationByTargetIdAndTargetType($targetId, $targetType);
 
-    public function removeConversation($convNo);
-
     /*
      * im_member
      */

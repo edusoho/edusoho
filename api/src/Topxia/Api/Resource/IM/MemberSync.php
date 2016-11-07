@@ -54,21 +54,21 @@ class MemberSync extends BaseResource
         $count   = $this->getCourseService()->findUserLearnCourseCount($user['id']);
         $courses = $this->getCourseService()->findUserLearnCourses($user['id'], 0, $count);
 
-        $courseIds = ArrayToolkit::column($courses, 'courseId');
-        $courseMap = ArrayToolkit::index($courses, 'courseId');
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseMap = ArrayToolkit::index($courses, 'id');
 
         return $this->syncTargetConversations($user, $courseMap, 'course')
-        && $this->syncCourseConversationMembers($user, $courseIds);
+         & $this->syncCourseConversationMembers($user, $courseIds);
     }
 
     protected function syncClassroomConversations($user)
     {
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
         $classrooms   = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-        $classroomMap = ArrayToolkit::index($classrooms, 'classroomId');
+        $classroomMap = ArrayToolkit::index($classrooms, 'id');
 
         return $this->syncTargetConversations($user, $classroomMap, 'classroom')
-        && $this->syncClassroomConversationMember($user, $classroomIds);
+         & $this->syncClassroomConversationMembers($user, $classroomIds);
     }
 
     protected function syncCourseConversationMembers($user, $courseIds)
@@ -88,7 +88,7 @@ class MemberSync extends BaseResource
         return true;
     }
 
-    protected function syncClassroomConversationMember($user, $classroomIds)
+    protected function syncClassroomConversationMembers($user, $classroomIds)
     {
         $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'classroom');
 
@@ -114,32 +114,27 @@ class MemberSync extends BaseResource
             }
             return;
         }
+        $params = array(
+            'targetIds'   => array_keys($targetMap),
+            'targetTypes' => array($targetType.'-push')
+        );
+        $count          = $this->getConversationService()->searchConversationCount($params);
+        $targetConvs    = $this->getConversationService()->searchConversations($params, array('createdTime', 'asc'), 0, $count);
+        $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
+        foreach ($targetMap as $csKey => $csVal) {
+            if (!isset($targetConvsMap[$csKey])) {
+                $this->getConversationService()->createConversation('推送：'.$targetMap[$csKey]['title'], $targetType.'-push', $csKey, array($user));
+            }
+        }
         $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
         foreach ($targetMap as $csKey => $csVal) {
             if (!isset($userConvsMap[$csKey])) {
-                $this->getConversationService()->joinConversation($userConvsMap[$csKey]['convNo'], $user['id']);
+                $this->getConversationService()->joinConversation($targetConvsMap[$csKey]['no'], $user['id']);
             }
         }
         foreach ($userConvsMap as $ucKey => $ucVal) {
             if (!isset($targetMap[$ucKey])) {
                 $this->getConversationService()->quitConversation($userConvsMap[$ucKey]['convNo'], $user['id']);
-            }
-        }
-
-        $targetConvs = $this->getConversationService()->searchConversations(array(
-            'targetIds'   => array_keys($targetMap),
-            'targetTypes' => array($targetType.'-push')
-        ));
-        $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
-
-        foreach ($targetConvsMap as $convKey => $convVal) {
-            if (!isset($targetMap[$convKey])) {
-                $conv = $this->getConversationService()->createConversation('推送：'.$targetsMap[$convKey]['title'], $targetType.'-push', $convKey, array($user));
-            }
-        }
-        foreach ($targetMap as $csKey => $csVal) {
-            if (!isset($targetConvsMap[$csKey])) {
-                $this->getConversationService()->removeConversation($targetConvsMap[$csKey]['convNo']);
             }
         }
 
