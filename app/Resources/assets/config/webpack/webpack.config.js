@@ -4,12 +4,14 @@ import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
 const bundleEntry = appConfig.bundleEntry;
 const libEntry = appConfig.libEntry;
 const nodeModulesDir = appConfig.nodeModulesDir;
+
 
 let entries = libEntry;
 let webpackPlugins = [];
@@ -86,6 +88,8 @@ let config = {
       filename: "chunk-manifest.json",
       manifestVariable: "webpackManifest"
     }),
+
+    new CopyWebpackPlugin(appConfig.onlyCopys),
 
     // new FixModuleIdAndChunkIdPlugin(),
   ].concat(webpackPlugins),
