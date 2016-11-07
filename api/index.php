@@ -4,7 +4,7 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
 
-use Doctrine\DBAL\DriverManager;
+// use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -27,15 +27,15 @@ if (API_ENV == 'prod') {
 $paramaters         = include __DIR__.'/config/paramaters.php';
 $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
-$connection = DriverManager::getConnection(array(
-    'wrapperClass' => 'Topxia\Service\Common\Connection',
-    'dbname'       => $paramaters['database_name'],
-    'user'         => $paramaters['database_user'],
-    'password'     => $paramaters['database_password'],
-    'host'         => $paramaters['database_host'],
-    'driver'       => $paramaters['database_driver'],
-    'charset'      => 'utf8'
-));
+// $connection = DriverManager::getConnection(array(
+//     'wrapperClass' => 'Topxia\Service\Common\Connection',
+//     'dbname'       => $paramaters['database_name'],
+//     'user'         => $paramaters['database_user'],
+//     'password'     => $paramaters['database_password'],
+//     'host'         => $paramaters['database_host'],
+//     'driver'       => $paramaters['database_driver'],
+//     'charset'      => 'utf8'
+// ));
 
 
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
