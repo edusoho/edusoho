@@ -38,8 +38,8 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
     public function findNotificationsByUserId($userId, $start, $limit)
     {
         $that = $this;
+        $this->filterStartLimit($start, $limit);
         return $this->fetchCached("userId:{$userId}:start:{$start}:limit:{$limit}", $userId, $start, $limit, function ($userId, $start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
             return $that->getConnection()->fetchAll($sql, array($userId));
         });
@@ -56,11 +56,12 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
 
     public function searchNotifications($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+        
         $that = $this;
         $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         
         return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $builder = $that->createNotificationQueryBuilder($conditions)
                 ->select('*')
                 ->orderBy($orderBy[0], $orderBy[1])

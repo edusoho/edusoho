@@ -91,11 +91,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+
         $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $that = $this;
 
         return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('*')
                 ->orderBy($orderBy[0], $orderBy[1])

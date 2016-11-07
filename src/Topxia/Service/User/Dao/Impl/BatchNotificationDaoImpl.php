@@ -60,12 +60,12 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
 
     public function searchBatchNotifications($conditions, $orderBy, $start, $limit)
     {
-        $that = $this;
+        $this->filterStartLimit($start, $limit);
 
+        $that = $this;
         $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
 
         return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
 
             if (isset($conditions['content'])) {
                 $conditions['content'] = "%{$conditions['content']}%";

@@ -93,10 +93,10 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function findNavigations($start, $limit)
     {
-        $that = $this;
+        $this->filterStartLimit($start, $limit);
 
+        $that = $this;
         return $this->fetchCached("order_by:sequence:asc:start:{$start}:limit:{$limit}", $start, $limit, function ($start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $sql = "SELECT * FROM {$that->getTable()} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
             return $that->getConnection()->fetchAll($sql, array());
         });
@@ -117,11 +117,12 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+        
         $key = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $that = $this;
 
         return $this->fetchCached($key, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
-            $that->filterStartLimit($start, $limit);
             $builder = $that->_createSearchQueryBuilder($conditions)
                 ->select('*')
                 ->orderBy($orderBy[0], $orderBy[1])
