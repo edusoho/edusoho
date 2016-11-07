@@ -58,7 +58,7 @@ class Editor {
         this.contentUrl = $this.data('contentUrl');
         ( this.type !== type ) ? this.loaded = false : this.loaded = true;
         this.type = type;
-        $("#course-tasks-next").removeAttr('disabled');
+        _renderNext(true);
     }
 
     _onSave() {
@@ -203,7 +203,8 @@ class Editor {
     }
 
     _renderStep(step) {
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('done').siblings().removeClass('done');
+        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
+        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
     }
 
     _renderContent(step) {
@@ -212,7 +213,7 @@ class Editor {
     }
 
     _renderNext(show) {
-        show ? $("#course-tasks-next").removeClass('hidden') : $("#course-tasks-next").addClass('hidden');
+        show ? $("#course-tasks-next").removeClass('hidden').removeAttr("disabled") : $("#course-tasks-next").addClass('hidden');
     }
 
     _renderPrev(show) {
