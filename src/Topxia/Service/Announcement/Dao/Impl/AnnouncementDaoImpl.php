@@ -10,16 +10,22 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
 
-        $builder = $this->createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+        $that = $this;
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
+            $that->filterStartLimit($start, $limit);
+            $orderBy = $that->checkOrderBy($orderBy, array('createdTime'));
+
+            $builder = $that->createSearchQueryBuilder($conditions)
+                ->select('*')
+                ->orderBy($orderBy[0], $orderBy[1])
+                ->setFirstResult($start)
+                ->setMaxResults($limit);
+
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     public function searchAnnouncementsCount($conditions)

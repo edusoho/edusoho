@@ -11,8 +11,11 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
 
     public function getBatchNotification($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function addBatchNotification($batchNotification)
@@ -22,7 +25,7 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert batchNotification error.');
         }
-
+        $this->clearCache();
         return $this->getBatchNotification($this->getConnection()->lastInsertId());
     }
 
@@ -43,37 +46,46 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
 
     public function deleteBatchNotification($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCache();
+        return $result;
     }
 
     public function updateBatchNotification($id, $batchNotification)
     {
         $this->getConnection()->update($this->table, $batchNotification, array('id' => $id));
+        $this->clearCache();
         return $this->getBatchNotification($id);
     }
 
     public function searchBatchNotifications($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
+        $that = $this;
 
-        if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
-        }
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
 
-        if (empty($orderBy)) {
-            $orderBy = array(
-                'createdTime',
-                'DESC'
-            );
-        }
+        return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
+            $that->filterStartLimit($start, $limit);
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit)
-                        ->orderBy($orderBy[0], $orderBy[1]);
+            if (isset($conditions['content'])) {
+                $conditions['content'] = "%{$conditions['content']}%";
+            }
 
-        return $builder->execute()->fetchAll() ?: array();
+            if (empty($orderBy)) {
+                $orderBy = array(
+                    'createdTime',
+                    'DESC'
+                );
+            }
+
+            $builder = $that->_createSearchQueryBuilder($conditions)
+                            ->select('*')
+                            ->setFirstResult($start)
+                            ->setMaxResults($limit)
+                            ->orderBy($orderBy[0], $orderBy[1]);
+
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     protected function _createSearchQueryBuilder($conditions)
