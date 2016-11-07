@@ -31,7 +31,7 @@ class SideBar {
     let html = '';
     $.each(this.activePlugins, (i,name)=>{
       let plugin = this.plugins[name];
-      html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><span class="' + plugin.iconClass + '"> </span>' + plugin.name + '</a></li>'
+      html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><p class="' + plugin.iconClass + '"> </p>' + plugin.name + '</a></li>'
     });
     $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]',(event)=>{
       let $this = $(event.currentTarget);

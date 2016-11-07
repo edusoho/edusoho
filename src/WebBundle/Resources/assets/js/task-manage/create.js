@@ -58,7 +58,7 @@ class Editor {
         this.contentUrl = $this.data('contentUrl');
         ( this.type !== type ) ? this.loaded = false : this.loaded = true;
         this.type = type;
-        this._renderNext(true);
+        $("#course-tasks-next").removeAttr('disabled');
     }
 
     _onSave() {
@@ -212,7 +212,7 @@ class Editor {
     }
 
     _renderNext(show) {
-        show ? $("#course-tasks-next").removeAttr('disabled') : $("#course-tasks-next").attr('disabled', 'disabled');
+        show ? $("#course-tasks-next").removeClass('hidden') : $("#course-tasks-next").addClass('hidden');
     }
 
     _renderPrev(show) {
