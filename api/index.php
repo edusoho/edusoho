@@ -17,6 +17,7 @@ use Symfony\Component\Debug\Debug;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
+use Topxia\Common\AppConnectionFactory;
 
 if (API_ENV == 'prod') {
     ErrorHandler::register(0);
@@ -39,8 +40,7 @@ $connection = DriverManager::getConnection(array(
 
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
-$serviceKernel->setConnection($connection);
-$serviceKernel->getConnection()->exec('SET NAMES UTF8');
+$serviceKernel->setConnectionFactory(new AppConnectionFactory($kernel->getContainer()));
 
 include __DIR__.'/src/functions.php';
 
