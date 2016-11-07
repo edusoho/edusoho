@@ -19,12 +19,14 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity  = $this->getActivityService()->getActivity($id);
+        $materials = array();
 
-       /* var_dump($activity);
-        {"size":39884539,"length":0,"source":"self","status":"none","name":"Whats New in macOS Sierra Beta 3.mp4","id":206}
-        {"source":"link","id":"http://x7.edusoho.com/course/462/manage/lesson","name":"http://x7.edusoho.com/course/462/manage/lesson","link":"http://x7.edusoho.com/course/462/manage/lesson"}*/
-
+        foreach ($activity['ext']['materials'] as $media) {
+            $id             = empty($media['fileId']) ? $media['link'] : $media['fileId'];
+            $materials[$id] = array('id' => $media['fileId'], 'size' => $media['fileSize'], 'name' => $media['title'], 'link' => $media['link']);
+        }
+        $activity['ext']['materials'] = $materials;
         return $this->render('WebBundle:DownLoadActivity:modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId

@@ -1,4 +1,3 @@
-{% do script(['web/file-chooser/file-choose.js']) %}
 <div class="file-chooser-bar {% if not  activity.ext.media|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ activity.ext.media.name|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
@@ -47,7 +46,4 @@
       </div>
     {% endif %}
   </div>
-</div>
-<div class="col-xs-offset-2 col-xs-9">
-  <input id="media" type="hidden" name="media" value="">
 </div>

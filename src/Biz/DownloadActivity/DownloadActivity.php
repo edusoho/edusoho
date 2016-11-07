@@ -35,7 +35,6 @@ class DownloadActivity extends Activity
         );
     }
 
-
     /**
      * @inheritdoc
      */
@@ -45,14 +44,14 @@ class DownloadActivity extends Activity
         $that      = $this;
         $ext       = $this->getConnection()->transactional(function () use ($materials, $that) {
             //1. created ext
-            $downloadExtension = $this->parseDownloadExtension($materials);
-            $downloadExtension = $this->getDownloadActivityDao()->create($downloadExtension);
+            $downloadActivity = $this->parseDownloadExtension($materials);
+            $downloadActivity = $this->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
-            $files = $this->parseDownloadFiles($downloadExtension, $materials);
+            $files = $this->parseDownloadFiles($downloadActivity['id'], $materials);
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }
-            return $downloadExtension;
+            return $downloadActivity;
         });
         return $ext;
     }
@@ -62,10 +61,39 @@ class DownloadActivity extends Activity
      */
     public function update($id, $fields)
     {
-        $ext = $this->parseDownloadActivityExt($fields);
-        $ext = $this->getDownloadActivityDao()->update($id, $ext);
-        return $ext;
+        $materials = json_decode($fields['materials'], true);
+
+        $existMaterials = $this->getDownloadFileDao()->findByDownloadActivityId($id);
+        $existMaterials = ArrayToolkit::index($existMaterials, 'indicate');
+
+        $downloadActivity = $this->getDownloadActivityDao()->get($id);
+
+        $that = $this;
+
+        $files = $this->parseDownloadFiles($id, $materials);
+
+        $dropMaterials   = array_diff_key($existMaterials, $files);
+        $addMaterials    = array_diff_key($files, $existMaterials);
+        $updateMaterials = array_intersect_key($existMaterials, $files);
+
+
+        $this->getConnection()->transactional(function () use ($id, $dropMaterials, $addMaterials, $updateMaterials, $that) {
+
+            foreach ($dropMaterials as $material) {
+                $that->getDownloadFileDao()->delete($material['id']);
+            }
+
+            foreach ($addMaterials as $material) {
+                $that->getDownloadFileDao()->create($material);
+            }
+
+            foreach ($updateMaterials as $material) {
+                $that->getDownloadFileDao()->update($material['id'], $material);
+            }
+        });
+        return $downloadActivity;
     }
+
 
     /**
      * @inheritdoc
@@ -80,8 +108,8 @@ class DownloadActivity extends Activity
      */
     public function get($id)
     {
-        $downloadActivity               = $this->getDownloadActivityDao()->get($id);
-        $downloadActivity['materials'] = $this->getDownloadFileDao()->findFilesByDownloadActivityId($downloadActivity['id']);
+        $downloadActivity              = $this->getDownloadActivityDao()->get($id);
+        $downloadActivity['materials'] = $this->getDownloadFileDao()->findByActivityId($downloadActivity['id']);
         return $downloadActivity;
     }
 
@@ -90,49 +118,24 @@ class DownloadActivity extends Activity
         return array('mediaCount' => count($materials));
     }
 
-    protected function parseDownloadFiles($downloadExtension, $materials)
+    protected function parseDownloadFiles($downloadActivityId, $materials)
     {
         $files = array();
-        $extId = $downloadExtension['id'];
-        array_walk($materials, function ($material) use ($extId, &$files) {
+        array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
             $file = array(
-                'downloadActivityId' => $extId,
-                'title'              => $material['name'],
-                'fileId'             => intval($material['id']),
-                'fileSize'           => $material['size'],
+                'downloadActivityId' => $downloadActivityId,
+                'title'      => $material['name'],
+                'fileId'     => intval($material['id']),
+                'fileSize'   => $material['size'],
+                'indicate'   => intval($material['id']),
             );
-            if ($material['source'] == "link") {
-                $file['link'] = $material['link'];
+            if (intval($material['id']) == 0) {
+                $file['link']     = $material['link'];
+                $file['indicate'] = $file['link'];
             }
-            $files[] = $file;
+            $files[$file['indicate']] = $file;
         });
         return $files;
-    }
-
-    protected function parseDownloadActivityExt($fields)
-    {
-        $ext = array();
-
-        var_dump($fields);
-        $materials  = ArrayToolkit::index($fields, 'id');
-        $fileMedias = array_filter(array_keys($materials), function ($id) {
-            return $id > 0;
-        });
-
-        $ext['fileMediaCount'] = count($fileMedias);
-        $ext['mediaCount']     = count(array_keys($materials));
-        $ext['media']          = $materials;//array_reverse($materials);
-
-        array_walk($materials, function ($material, $key) use (&$ext) {
-            if (empty(intval($material['id']))) {
-                $ext['linkMedias'][] = $material['link'];
-            } else {
-                $ext['fileMediaIds'][] = $material['id'];
-            }
-        });
-
-        return $ext;
-
     }
 
     protected function getDownloadActivityDao()

@@ -12,5 +12,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface DownloadFileDao extends GeneralDaoInterface
 {
-    public function findFilesByDownloadActivityId($DownloadActivityId);
+    public function findByDownloadActivityId($DownloadActivityId);
+
 }

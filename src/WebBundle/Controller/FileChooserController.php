@@ -87,7 +87,7 @@ class FileChooserController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
-            2
+            10
         );
 
         $files = $this->getUploadFileService()->searchFiles(

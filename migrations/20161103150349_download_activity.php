@@ -32,6 +32,7 @@ class DownloadActivity extends Migration
               `createdTime` int(10) unsigned NOT NULL ,
               `updatedTime` int(10) unsigned NOT NULL ,
               `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
+              `indicate` varchar(1024) DEFAULT '' COMMENT '资料唯一标示',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;"
         );

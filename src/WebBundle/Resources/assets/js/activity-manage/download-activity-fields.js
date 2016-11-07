@@ -1,7 +1,7 @@
 /**
  * Created by Simon on 03/11/2016.
  */
-
+import  {materialLibChoose, fileImport, courseFileChoose} from '../../common/file-choose';
 jQuery.validator.addMethod("url", function (value, element) {
     return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
@@ -36,7 +36,6 @@ $('#step2-form').on('click', '.close.delete-btn', function () {
         $("#materials").val(JSON.stringify(items));
     }
     $parent.remove();
-
 })
 
 $('#step2-form').on('click', '.js-download-material-add', function () {
@@ -45,14 +44,14 @@ $('#step2-form').on('click', '.js-download-material-add', function () {
             source: 'link',
             id: $("#link").val(),
             name: $("#link").val(),
-            link: $("#link").val()
+            link: $("#link").val(),
+            size: 0
         };
         $("#media").val(JSON.stringify(data));
         console.log('link', $("#media").val());
     }
 
     let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-
 
     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
 
@@ -65,11 +64,13 @@ $('#step2-form').on('click', '.js-download-material-add', function () {
 
     if (!isEmpty(items) && items[media.id]) {
         console.log('已存在该资源')
+        $("#media").val(null);
         return;
     }
 
     items[media.id] = media;
     $("#materials").val(JSON.stringify(items));
+
     $("#media").val(null);
     $('#link').val(null);
 
@@ -109,3 +110,16 @@ function open() {
 function isEmpty(obj) {
     return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
 }
+const fileSelect = file => {
+    $("input[name=media]").val(JSON.stringify(file));
+    console.log('action triggered', file);
+}
+/*function fileSelect(file) {
+ console.log('action triggered', file);
+ return file;
+ }*/
+
+
+materialLibChoose.on('materialLibChoose:select', fileSelect);
+fileImport.on('videoImportChoose:select', fileSelect);
+courseFileChoose.on('courseFileChoose:select', fileSelect);

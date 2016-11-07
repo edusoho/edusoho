@@ -1,4 +1,5 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+{% do script([ 'web/activity-manage/download-activity-fields.js']) %}
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('download') %}
@@ -12,10 +13,10 @@
               <button class="close delete-btn" type="button" title="{{ '删除'|trans }}"
                       data-url="">&times;</button>
               {% if media.link|default(null) %}
-                <a href="{{ media.id }}" target="_blank">{{ media.title }}</a>
+                <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
                 <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
               {% else %}
-                <a href="{{ media.link }}" target="_blank">{{ media.title }}</a>
+                <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
               {% endif %}
             </li>
 
@@ -47,7 +48,7 @@
       <label for="media" class="style">{{ '选择文件'|trans }}</label>
     </div>
 
-    {% include 'WebBundle:Component:file-choose.html.twig' %}
+    {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
   </div>
   <div class="form-group">
     <div class="col-xs-2 control-label"></div>
@@ -56,9 +57,9 @@
     </div>
   </div>
   <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
-  <input id="materials" class="form-control" type="hidden" name="materials"
-      {% if activity.ext.media|default(null) %} value="{{ activity.ext.media|default(null)|json_encode }}" {% endif %} >
-  {% do script([ 'web/activity-manage/download-activity-fields.js']) %}
+  <input id="materials" class="form-control" type="text" name="materials"
+      {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
+  <input id="media" type="text" name="media" value="">
 {% endblock %}
 
 {% block activity_finish %}

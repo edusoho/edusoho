@@ -1,11 +1,27 @@
 /**
  * Created by Simon on 31/10/2016.
  */
+import MaterialLibChoose from '../../common/chooser/materiallib-choose';
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+import FileImport from '../../common/chooser/import-video';
+
+import CourseFileChoose from '../../common/chooser/coursefile-choose';
+
+var $parentIframe = $(window.parent.document).find('#task-manage-content-iframe');
+
+/*
+var materialLibChoose = new MaterialLibChoose($('#chooser-course-panel'));
+
+var fileImport = new FileImport($('#chooser-import-panel'));
+
+var courseFileChoose = new CourseFileChoose($('#chooser-material-panel'));
+*/
+
 $("#material a").click(function (e) {
     e.preventDefault();
     $(this).tab('show')
-    $parentiframe.height($parentiframe.contents().find('body').height());
+    $parentIframe.height($parentIframe.contents().find('body').height());
 });
 
+
+//export  {MaterialLibChoose, FileImport, CourseFileChoose} ;
