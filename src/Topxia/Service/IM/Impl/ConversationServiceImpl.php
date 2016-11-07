@@ -143,7 +143,6 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $this->deleteMembersByTargetIdAndTargetType($conv['targetId'], $conv['targetType']);
         $this->deleteConversationByTargetIdAndTargetType($conv['targetId'], $conv['targetType']);
 
-        //不需要删除云端会话
         return true;
     }
 
