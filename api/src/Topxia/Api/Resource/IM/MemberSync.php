@@ -63,11 +63,11 @@ class MemberSync extends BaseResource
 
     protected function syncClassroomConversations($user)
     {
-        // $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
-        // $classrooms   = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
+        $classrooms   = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
-        // $this->syncTargetConversations($user, $classrooms, 'classroom');
-        // $this->syncClassroomConversationMembers($user, $classroomIds);
+        $this->syncTargetConversations($user, $classrooms, 'classroom');
+        $this->syncClassroomConversationMembers($user, $classroomIds);
     }
 
     protected function syncCourseConversationMembers($user, $courseIds)
