@@ -1,5 +1,4 @@
-
-{% cache 'announcements-block:' ~ 'targetType:' ~ targetType ~ ':targetId:' ~ targetId %}
+{% cache 'announcements-block/targetType/' ~ targetType ~ '/targetId/' ~ targetId 600 %}
   {% set announcements = data('Announcements',{targetType:targetType, targetId:targetId, count:10}) %}
   {% if announcements %}
     <div class="alert alert-warning announcements aside-notice" role="alert">
