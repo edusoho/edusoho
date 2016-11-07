@@ -34,6 +34,7 @@ class Live {
         $starttime.datetimepicker({
             format: 'yyyy-mm-dd hh:ii',
             language:"zh",
+            autoclose: true
         });
         $starttime.datetimepicker('setStartDate',new Date());
     }

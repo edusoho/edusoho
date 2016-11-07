@@ -6,13 +6,14 @@ class Text{
     Init() {
         this._inItStep2form();
         $('#condition-select').on('change',event=>this._change(event));
-        // var editor = CKEDITOR.replace('text-content-field', {
-        //     toolbar: 'Full',
-        //     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
-        //     filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
-        //     allowedContent: true,
-        //     height: 300
-        // });
+
+        var editor = CKEDITOR.replace('text-content-field', {
+            toolbar: 'Full',
+            filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
+            allowedContent: true,
+            height: 300
+        });
     }
 
     _change(event) {
