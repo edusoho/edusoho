@@ -99,39 +99,47 @@ class MemberSync extends BaseResource
         }
     }
 
-    protected function syncTargetConversations($user, $targets, $targetType)
+    protected function joinConversations($targetIds, $targets)
     {
         $targetMap = ArrayToolkit::index($targets, 'id');
-        $userConvs = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
-        if (empty($targetMap)) {
-            foreach ($userConvs as $uc) {
-                $this->getConversationService()->quitConversation($uc['convNo'], $user['id']);
-            }
-            return;
-        }
-        $params = array(
-            'targetIds'   => array_keys($targetMap),
+        $params    = array(
+            'targetIds'   => $targetIds,
             'targetTypes' => array($targetType.'-push')
         );
-        $count          = $this->getConversationService()->searchConversationCount($params);
-        $targetConvs    = $this->getConversationService()->searchConversations($params, array('createdTime', 'asc'), 0, $count);
+        $count       = $this->getConversationService()->searchConversationCount($params);
+        $targetConvs = $this->getConversationService()->searchConversations($params, array('createdTime', 'asc'), 0, $count);
+
         $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
-        foreach ($targetMap as $id => $target) {
-            if (!isset($targetConvsMap[$id])) {
+        $targetConvIds  = ArrayToolkit::column($targetConvs, 'targetId');
+
+        $toCreate = array_diff($targetIds, $targetConvIds);
+
+        foreach ($targetIds as $id) {
+            if (array_key_exists($toCreate, $id)) {
                 $this->getConversationService()->createConversation('推送：'.$targetMap[$id]['title'], $targetType.'-push', $id, array($user));
-            }
-        }
-        $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
-        foreach ($targetMap as $id => $target) {
-            if (!isset($userConvsMap[$id])) {
+            } else {
                 $this->getConversationService()->joinConversation($targetConvsMap[$id]['no'], $user['id']);
             }
         }
-        foreach ($userConvsMap as $id => $uesrConv) {
-            if (!isset($targetMap[$id])) {
-                $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
-            }
+    }
+
+    protected function quitConversations($targetIds, $userConvs)
+    {
+        $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
+        foreach ($targetIds as $id) {
+            $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
         }
+    }
+
+    protected function syncTargetConversations($user, $targets, $targetType)
+    {
+        $userConvs = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
+
+        $targetIds   = ArrayToolkit::column($targets, 'id');
+        $userConvIds = ArrayToolkit::column($userConvs, 'targetId');
+
+        $this->joinConversations(array_diff($targetIds, $userConvIds), $targets);
+        $this->quitConversations(array_diff($userConvIds, $targetIds), $userConvs);
     }
 
     protected function getConversationService()
