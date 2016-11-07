@@ -21,18 +21,37 @@ class MemberConversationSync extends BaseResource
 
         $user = $this->getCurrentUser();
 
-        //TODO
         //1. 同步用户的班级会话
         //2. 同步用户的课程会话
         $this->syncClassroomConversations($user);
         $this->syncCourseConversations($user);
-        //返回信息如何约定？
-        return true;
+        //确保加入全局会话
+        return $this->joinGlobalConversation($user);
     }
 
     public function filter($res)
     {
         return $res;
+    }
+
+    protected function joinGlobalConversation($user)
+    {
+        $conv = $this->getConversationService()->getConversationByTarget(0, 'global');
+        if (!$conv) {
+            return $this->error('700007', '全站会话未创建');
+        }
+
+        $convMember = $this->getConversationService()->getMemberByConvNoAndUserId($conv['no'], $user['id']);
+        if ($convMember) {
+            return array('convNo' => $convMember['convNo']);
+        }
+
+        try {
+            $convMember = $this->getConversationService()->joinConversation($conv['no'], $user['id']);
+            return array('convNo' => $convMember['convNo']);
+        } catch (\Exception $e) {
+            return $this->error($e->getCode(), $e->getMessage());
+        }
     }
 
     protected function syncCourseConversations($user)
@@ -57,72 +76,13 @@ class MemberConversationSync extends BaseResource
         $coursesMap = ArrayToolkit::index($courses, 'id');
         return $this->syncTargetConversations($user, $coursesMap, 'course');
 
-        // $coursesMap = ArrayToolkit::index($courses, 'id');
-        // if (empty($coursesMap)) {
-        //     return;
-        // }
-
-        // $courseConvs = $this->getConversationService()->searchConversations(array(
-        //     'targetIds'   => ArrayToolkit::column($courses, 'id'),
-        //     'targetTypes' => array('course-push')
-        // ));
-        // $courseConvsMap = ArrayToolkit::index($courseConvs, 'targetId');
-
-        // foreach ($courseConvsMap as $convKey => $convVal) {
-        //     if (!isset($coursesMap[$convKey])) {
-        //         //local & cloud, course & member
-        //         $conv = $this->getConversationService()->createConversation($coursesMap[$convKey]['title'], 'course-push', $convKey, array($user));
-        //     }
-        // }
-        // foreach ($courses as $csKey => $csVal) {
-        //     if (!isset($courseConvsMap[$csKey])) {
-        //         //删除会话及会话下所有members
-        //         $this->getConversationService()->removeConversation($courseConvsMap[$csKey]['convNo']);
-        //     }
-        // }
-
-        // $userConvs    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course-push');
-        // $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
-        // foreach ($courses as $csKey => $csVal) {
-        //     if (!isset($userConvsMap[$csKey])) {
-        //         //local & cloud   add member
-        //         $this->getConversationService()->joinConversation($courseConvsMap[$ucKey]['convNo'], $user['id']);
-        //     }
-        // }
-        // foreach ($userConvsMap as $ucKey => $ucVal) {
-        //     if (!isset($courses[$ucKey])) {
-        //         //local & cloud   delete member
-        //         $this->getConversationService()->quitConversation($userConvsMap[$csKey]['convNo'], $user['id']);
-        //     }
-        // }
-
-        // $userConvs2    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course');
-        // $userConvs2Map = ArrayToolkit::index($userConvs2, 'targetId');
-        // foreach ($courses as $csKey => $csVal) {
-        //     if (!isset($userConvs2Map[$csKey])) {
-        //         //local & cloud   add member
-        //         $this->getConversationService()->joinConversation($courseConvs2Map[$ucKey]['convNo'], $user['id']);
-        //     }
-        // }
-        // foreach ($userConvs2Map as $ucKey => $ucVal) {
-        //     if (!isset($courses[$ucKey])) {
-        //         //local & cloud   delete member
-        //         $this->getConversationService()->quitConversation($userConvs2Map[$csKey]['convNo'], $user['id']);
-        //     }
-        // }
-
         return true;
     }
 
     protected function syncClassroomConversations($user)
     {
-        //1. a: get classrooms of user
-        //2. get conversations of classrooms (targetType=classroom-push)(im_conversation)
-        //3. if none, new conv(im_conversation) & add user to conv(im_member)
-        //4. b: get conversations of user with classroom-push (im_member),
-        //5. compare a & b, if b not in a, del b; if a not in b, add user to b;
         //
-        // 代码参见 syncCourseConversations
+        // 逻辑参见 syncCourseConversations
         //
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id'], 0, 1000);
         return $this->syncTargetConversations($user, $classroomIds, 'classroom');
@@ -136,51 +96,46 @@ class MemberConversationSync extends BaseResource
             return;
         }
 
-        $courseConvs = $this->getConversationService()->searchConversations(array(
+        $targetConvs = $this->getConversationService()->searchConversations(array(
             'targetIds'   => $targetIds,
-            'targetTypes' => array('course-push')
+            'targetTypes' => array($targetType.'-push')
         ));
-        $courseConvsMap = ArrayToolkit::index($courseConvs, 'targetId');
+        $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
 
-        foreach ($courseConvsMap as $convKey => $convVal) {
+        foreach ($targetConvsMap as $convKey => $convVal) {
             if (!isset($targetsMap[$convKey])) {
-                //local & cloud, course & member
-                $conv = $this->getConversationService()->createConversation($targetsMap[$convKey]['title'], 'course-push', $convKey, array($user));
+                $conv = $this->getConversationService()->createConversation($targetsMap[$convKey]['title'], $targetType.'-push', $convKey, array($user));
             }
         }
-        foreach ($courses as $csKey => $csVal) {
-            if (!isset($courseConvsMap[$csKey])) {
+        foreach ($targets as $csKey => $csVal) {
+            if (!isset($targetConvsMap[$csKey])) {
                 //删除会话及会话下所有members
-                $this->getConversationService()->removeConversation($courseConvsMap[$csKey]['convNo']);
+                $this->getConversationService()->removeConversation($targetConvsMap[$csKey]['convNo']);
             }
         }
 
-        $userConvs    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course-push');
+        $userConvs    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
         $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
-        foreach ($courses as $csKey => $csVal) {
+        foreach ($targets as $csKey => $csVal) {
             if (!isset($userConvsMap[$csKey])) {
-                //local & cloud   add member
-                $this->getConversationService()->joinConversation($courseConvsMap[$ucKey]['convNo'], $user['id']);
+                $this->getConversationService()->joinConversation($targetConvsMap[$ucKey]['convNo'], $user['id']);
             }
         }
         foreach ($userConvsMap as $ucKey => $ucVal) {
-            if (!isset($courses[$ucKey])) {
-                //local & cloud   delete member
+            if (!isset($targets[$ucKey])) {
                 $this->getConversationService()->quitConversation($userConvsMap[$csKey]['convNo'], $user['id']);
             }
         }
 
-        $userConvs2    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course');
+        $userConvs2    = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'target');
         $userConvs2Map = ArrayToolkit::index($userConvs2, 'targetId');
-        foreach ($courses as $csKey => $csVal) {
+        foreach ($targets as $csKey => $csVal) {
             if (!isset($userConvs2Map[$csKey])) {
-                //local & cloud   add member
-                $this->getConversationService()->joinConversation($courseConvs2Map[$ucKey]['convNo'], $user['id']);
+                $this->getConversationService()->joinConversation($targetConvs2Map[$ucKey]['convNo'], $user['id']);
             }
         }
         foreach ($userConvs2Map as $ucKey => $ucVal) {
-            if (!isset($courses[$ucKey])) {
-                //local & cloud   delete member
+            if (!isset($targets[$ucKey])) {
                 $this->getConversationService()->quitConversation($userConvs2Map[$csKey]['convNo'], $user['id']);
             }
         }

@@ -100,7 +100,8 @@ $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 $app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
 $app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
 $app->post(_u('/im/members'), 'res.IM/Member:post');
-$app->post(_u('/im/sync'), 'res.IM/MemberSync:post');
+// $app->post(_u('/im/sync'), 'res.IM/MemberSync:post');
+$app->post(_u('/im/sync'), 'res.IM/MemberConversationSync:post');
 $app->post(_u('/im/me/push'), 'res.IM/MePush:post');
 
 $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
