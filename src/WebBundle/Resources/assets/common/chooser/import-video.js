@@ -4,7 +4,7 @@
 
 import Chooser from '../chooser';
 
-class FileImport extends Chooser {
+class VideoImport extends Chooser {
     constructor(container) {
         super();
         this.container = container;
@@ -64,5 +64,5 @@ class FileImport extends Chooser {
     }
 }
 
-export default FileImport;
-//new FileImport($('#chooser-import-panel'));
+export default VideoImport;
+//new VideoImport($('#import-video-panel'));

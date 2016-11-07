@@ -1,7 +1,7 @@
 /**
  * Created by Simon on 03/11/2016.
  */
-import  {materialLibChoose, fileImport, courseFileChoose} from '../../common/file-choose';
+import  {materialLibChoose, videoImport, courseFileChoose} from '../../common/file-choose';
 jQuery.validator.addMethod("url", function (value, element) {
     return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
@@ -121,5 +121,5 @@ const fileSelect = file => {
 
 
 materialLibChoose.on('materialLibChoose:select', fileSelect);
-fileImport.on('videoImportChoose:select', fileSelect);
+videoImport.on('videoImportChoose:select', fileSelect);
 courseFileChoose.on('courseFileChoose:select', fileSelect);

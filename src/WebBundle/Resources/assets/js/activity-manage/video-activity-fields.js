@@ -1,5 +1,5 @@
 //import  FileChooser from '../../common/file-choose';
-import  {materialLibChoose, fileImport, courseFileChoose} from '../../common/file-choose';
+import  {materialLibChoose, videoImport, courseFileChoose} from '../../common/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -49,7 +49,7 @@ const action = data => {
 
 
 materialLibChoose.on('materialLibChoose:select', action);
-fileImport.on('videoImportChoose:select', action);
+videoImport.on('videoImportChoose:select', action);
 courseFileChoose.on('courseFileChoose:select', action);
 /*
 

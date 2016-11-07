@@ -14,11 +14,11 @@
     <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
     <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
     {% if mediaType == 'video' %}
-      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-import-panel">导入网络视频</a>
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#import-video-panel">导入网络视频</a>
       </li>
     {% endif %}
     {% if mediaType == 'download' %}
-      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-link-panel">网络连接</a>
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#import-link-panel">网络连接</a>
       </li>
     {% endif %}
 
@@ -36,12 +36,12 @@
       {% include 'WebBundle:FileChooser/Parts:course-file-choose.html.twig' %}
     </div>
     {% if mediaType == 'video' %}
-      <div class="tab-pane" id="chooser-import-panel">
+      <div class="tab-pane" id="import-video-panel">
         {% include 'WebBundle:FileChooser/Parts:import-video.html.twig' %}
       </div>
     {% endif %}
     {% if mediaType == 'download' %}
-      <div class="tab-pane" id="chooser-link-panel">
+      <div class="tab-pane" id="import-link-panel">
         {% include 'WebBundle:FileChooser/Parts:import-link.html.twig' %}
       </div>
     {% endif %}

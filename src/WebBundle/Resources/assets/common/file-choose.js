@@ -2,15 +2,15 @@
  * Created by Simon on 31/10/2016.
  */
 import MaterialLibChoose from '../common/chooser/materiallib-choose';
-import FileImport from '../common/chooser/import-video';
+import VideoImport from '../common/chooser/import-video';
 import CourseFileChoose from '../common/chooser/coursefile-choose';
 import Emitter from 'es6-event-emitter';
 
 const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
-const fileImport = new FileImport($('#chooser-import-panel'));
+const videoImport = new VideoImport($('#import-video-panel'));
 const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
 
-export  {materialLibChoose, fileImport, courseFileChoose}
+export  {materialLibChoose, videoImport, courseFileChoose}
 /*class FileChooser extends Emitter {
 
  constructor() {
