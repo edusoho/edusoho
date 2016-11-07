@@ -53,20 +53,17 @@ class MemberSync extends BaseResource
 
     protected function syncCourseConversations($user)
     {
-        $count     = $this->getCourseService()->findUserLearnCourseCount($user['id']);
-        $courses   = $this->getCourseService()->findUserLearnCourses($user['id'], 0, $count);
-        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseIds = $this->getCourseService()->findUserJoinedCourseIds($user['id']);
 
-        $this->syncTargetConversations($user, $courses, 'course');
+        $this->syncTargetConversations($user, ArrayToolkit::column($courseIds, 'courseId'), 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
     }
 
     protected function syncClassroomConversations($user)
     {
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
-        $classrooms   = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
-        $this->syncTargetConversations($user, $classrooms, 'classroom');
+        $this->syncTargetConversations($user, $classroomIds, 'classroom');
         $this->syncClassroomConversationMembers($user, $classroomIds);
     }
 
@@ -100,21 +97,19 @@ class MemberSync extends BaseResource
         }
     }
 
-    protected function syncTargetConversations($user, $targets, $targetType)
+    protected function syncTargetConversations($user, $targetIds, $targetType)
     {
         $userConvs = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
 
-        $targetIds   = ArrayToolkit::column($targets, 'id');
         $userConvIds = ArrayToolkit::column($userConvs, 'targetId');
 
-        $this->joinConversations(array_diff($targetIds, $userConvIds), $targets, $targetType, $user);
+        $this->joinConversations(array_diff($targetIds, $userConvIds), $targetType, $user);
         $this->quitConversations(array_diff($userConvIds, $targetIds), $userConvs, $user);
     }
 
-    protected function joinConversations($targetIds, $targets, $targetType, $user)
+    protected function joinConversations($targetIds, $targetType, $user)
     {
-        $targetMap = ArrayToolkit::index($targets, 'id');
-        $params    = array(
+        $params = array(
             'targetIds'   => $targetIds,
             'targetTypes' => array($targetType.'-push')
         );
@@ -132,8 +127,11 @@ class MemberSync extends BaseResource
                 if (++$cnt > MAX_CREATION_PER_TIME) {
                     break; // 防止请求过于频繁造成服务器压力过大
                 }
-                $this->getConversationService()->createConversation('推送：'.$targetMap[$id]['title'], $targetType.'-push', $id, array($user));
+                $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));
             } else {
+                if (!isset($targetConvsMap[$id])) {
+                    continue;
+                }
                 $this->getConversationService()->joinConversation($targetConvsMap[$id]['no'], $user['id']);
             }
         }
@@ -145,6 +143,16 @@ class MemberSync extends BaseResource
         foreach ($targetIds as $id) {
             $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
         }
+    }
+
+    protected function getTargetTitle($id, $targetType)
+    {
+        if ($targetType == 'course') {
+            $course = $this->getCourseService()->getCourse($id);
+            return $course['title'];
+        }
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        return $classroom['title'];
     }
 
     protected function getConversationService()
