@@ -182,11 +182,6 @@ attachment_list:
     defaults: { _controller: TopxiaWebBundle:Attachment:list }
     methods: [GET]
 
-attachment_item_show:
-    path: /attachment/file/{fileId}/show
-    defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
-    methods: [GET]
-
 attachment_preview:
     path: /attachment/{id}/preview
     defaults: { _controller: TopxiaWebBundle:Attachment:preview }
@@ -339,6 +334,10 @@ live_classroom_url:
 live_classroom_replay_url:
     path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
+
+live_classroom_es_replay_play_url:
+    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
 
 live_course_manage_replay:
     path:  /livecourse/{id}/manage/replay
@@ -817,6 +816,14 @@ course_manage_lesson:
 course_manage_lesson_create:
     path:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+course_manage_lesson_batch_modal:
+    pattern:  /course/{id}/manage/lesson/batch/modal
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
+
+course_manage_lesson_create_from_file:
+    pattern:  /course/{id}/manage/lesson/create/from/file
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
 
 course_manage_lesson_file_status:
     path:  /course/{id}/manage/lesson/fileStatus
