@@ -111,7 +111,6 @@
           </div>
         </li>
         {% for task in tasks %}
-          {{dump(task)}}
           {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:task} %}
           }
         {% endfor %}
