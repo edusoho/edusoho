@@ -194,7 +194,35 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function dataAction($id)
+    public function courseDashboardAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $summary = $this->getCourseReportService()->summary($id);
+        $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:course.html.twig', array(
+            'course' => $course,
+            'summary' => $summary,
+            'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
+            'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
+            'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
+            'days' => array_keys($lateMonthLearndData)
+        ));
+    }
+
+    public function lessonDashboardAction(Request $request, $id)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
+        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson.html.twig', array(
+            'lessonTitles' => ArrayToolkit::column($lessonStat, 'title'),
+            'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
+            'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
+            'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),
+        ));
+    }
+
+    public function lessonlearnDashboardAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -235,49 +263,13 @@ class CourseManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson-learn.html.twig', array(
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
             'noteCount'     => $noteCount,
             'questionCount' => $questionCount,
             'lessons'       => $lessons
-        ));
-    }
-
-    public function courseDashboardAction($id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $summary = $this->getCourseReportService()->summary($id);
-        $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
-
-        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:course.html.twig', array(
-            'course' => $course,
-            'summary' => $summary,
-            'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
-            'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
-            'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
-            'days' => array_keys($lateMonthLearndData)
-        ));
-    }
-
-    public function lessonDashboardAction(Request $request, $id)
-    {
-        $this->getCourseService()->tryManageCourse($id);
-        $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
-        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson.html.twig', array(
-            'lessonTitles' => ArrayToolkit::column($lessonStat, 'title'),
-            'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
-            'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
-            'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),
-        ));
-    }
-
-    public function lessonlearnDashboardAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson-learn.html.twig', array(
-            'course' => $course
         ));
     }
 

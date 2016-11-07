@@ -693,10 +693,6 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
-course_manage_data:
-    pattern:  /course/{id}/manage/data
-    defaults: { _controller: TopxiaWebBundle:CourseManage:data }
-
 course_manage_course_dashboard:
     pattern:  /course/{id}/manage/course/dashboard
     defaults: { _controller: TopxiaWebBundle:CourseManage:courseDashboard }
