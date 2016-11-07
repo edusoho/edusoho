@@ -489,6 +489,19 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    /**
+     * [playESLiveReplayAction 播放ES直播回放]
+     */
+    public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+
+        $globalId = empty($result['resourceNo']) ? 0 : $result['resourceNo'];
+
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $globalId));
+    }
+
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
