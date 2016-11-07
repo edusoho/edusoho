@@ -7,6 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -30,6 +31,7 @@ class CodeagesPluginExtension extends Extension
 
         $this->loadDicts($bundles, $container);
         $this->loadSlots($bundles, $container);
+
     }
 
     public function loadDicts($bundles, $container)
