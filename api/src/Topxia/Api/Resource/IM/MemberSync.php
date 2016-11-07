@@ -18,11 +18,9 @@ class MemberSync extends BaseResource
 
         $user = $this->getCurrentUser();
 
-        //1. 同步用户的班级会话
-        //2. 同步用户的课程会话
         $this->syncClassroomConversations($user);
         $this->syncCourseConversations($user);
-        //确保加入全局会话
+
         return $this->joinGlobalConversation($user);
     }
 
@@ -53,15 +51,6 @@ class MemberSync extends BaseResource
 
     protected function syncCourseConversations($user)
     {
-        //1. a: get courses of user
-        //2. c: get conversations of courses (targetType=course-push)(im_conversation)
-        //3. if c not in a, new conv(im_conversation) & add user to conv(im_member); if a not in c, delete conv & delete user from conv;
-        //4. b: get conversations of user with course-push (im_member),
-        //5. compare a & b, if b not in a, del b; if a not in b, add user to b;
-        //
-        // check : 确保下面所有的操作都是同时操作【本地数据库】和【远程服务器】
-        //
-        //
         $courses    = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1000);
         $coursesMap = ArrayToolkit::index($courses, 'id');
         return $this->syncTargetConversations($user, $coursesMap, 'course');
@@ -71,9 +60,6 @@ class MemberSync extends BaseResource
 
     protected function syncClassroomConversations($user)
     {
-        //
-        // 逻辑参见 syncCourseConversations
-        //
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id'], 0, 1000);
         return $this->syncTargetConversations($user, $classroomIds, 'classroom');
 
