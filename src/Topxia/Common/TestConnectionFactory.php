@@ -5,7 +5,7 @@ use Topxia\Service\Common\ConnectionFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Doctrine\DBAL\DriverManager;
 
-class AppConnectionFactory implements ConnectionFactory
+class TestConnectionFactory implements ConnectionFactory
 {
     protected $container;
     protected $connection;
@@ -30,6 +30,8 @@ class AppConnectionFactory implements ConnectionFactory
                 'password' => ServiceKernel::instance()->getParameter('database_password'),
             ));
 
+            $connection = new TestCaseConnection($connection);
+            
             $connection->exec('SET NAMES UTF8');
             $this->connection = $connection;
         }
