@@ -37,7 +37,6 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table)
             ->andWhere('id = :id');
-            ->andWhere('name = :name');
 
         return $builder;
     }
