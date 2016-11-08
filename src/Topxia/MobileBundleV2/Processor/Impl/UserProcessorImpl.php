@@ -466,6 +466,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $nickname    = $this->getParam('nickname');
         $phoneNumber = $this->getParam('phone');
         $smsCode     = $this->getParam('smsCode');
+        $registeredWay = $this->getParam('registeredWay');
+
+        if (empty($registeredWay) || !in_array(strtolower($registeredWay), array('ios', 'android'))) {
+            $registeredWay = $this->guessDeviceFromUserAgent($this->request->headers->get("user-agent"));
+        }
 
         $result = array('meta' => null);
 
@@ -503,6 +508,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     $registTypeName => $email,
                     'nickname'      => $nickname,
                     'password'      => $password,
+                    'registeredWay' => $registeredWay,
                     'createdIp'     => $this->request->getClientIp()
                 ));
             } catch (\Exception $e) {
@@ -525,6 +531,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                             $registTypeName => $sessionField['to'],
                             'nickname'      => $nickname,
                             'password'      => $password,
+                            'registeredWay' => $registeredWay,
                             'createdIp'     => $this->request->getClientIp()
                         ));
                     } catch (\Exception $e) {
