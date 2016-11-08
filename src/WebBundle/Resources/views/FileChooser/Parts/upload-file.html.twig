@@ -1,4 +1,3 @@
-{% do script(['http://localhost:12345/sdk.js', 'web/component/chooser/file-upload.js']) %}
 {% set targetType = 'courseactivity' %}
 {% set token = uploader_token(targetType, courseId, 'private') %}
 {% set storageSetting = setting('storage') %}

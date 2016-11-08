@@ -46,8 +46,6 @@ class VideoActivity extends Activity
     public function update($activityId, $fields)
     {
         $videoActivity      = $this->getVideoExt($fields);
-        $existVideoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
-        $videoActivity = array_merge($existVideoActivity, $videoActivity);
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
         return $videoActivity;
     }

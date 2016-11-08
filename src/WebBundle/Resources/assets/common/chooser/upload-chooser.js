@@ -1,5 +1,8 @@
-class UploaderChooser {
+import Emitter from 'es6-event-emitter';
+
+export default class UploaderChooser extends Emitter{
   constructor() {
+    super();
     this.element = $('#chooser-upload-panel');
     this._sdk = undefined;
     this._initSdk()
@@ -54,6 +57,8 @@ class UploaderChooser {
       $('[data-role="placeholder"]').html(name);
     };
 
+    this.trigger('select', file);
+
     let placeMediaAttr = (file) => {
       if (file.length !== 0 && file.length !== undefined) {
         let $minute = $('#minute');
@@ -89,5 +94,3 @@ class UploaderChooser {
     this._sdk = undefined;
   }
 }
-
-let uploaderChooser = new UploaderChooser();

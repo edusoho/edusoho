@@ -1,3 +1,5 @@
+import FileChooser from '../../common/file-choose';
+
 let onConditionTimeType = () => {
 
   var $step3_form = $("#step3-form");
@@ -26,10 +28,15 @@ let onConditionTimeType = () => {
 
 let $select = $('#condition-select');
 
-console.log($select.children('option:selected').val());
 if($select.children('option:selected').val() === 'time') {
   onConditionTimeType();
 }
+
+let fileChooser = new FileChooser();
+
+fileChooser.on('select', (file) => {
+  $('.hidden-data').find('#mediaId').val(file.id);
+});
 
 $select.on('change', event => {
   let conditionsType = $(event.currentTarget).children('option:selected').val();

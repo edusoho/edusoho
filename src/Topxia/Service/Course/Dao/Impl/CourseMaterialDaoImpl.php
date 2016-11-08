@@ -35,17 +35,17 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
-        if(empty($courseIds)){
+        if (empty($courseIds)) {
             return array();
         }
-       
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
-       
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
         $parmaters = array_merge(array($copyId), $courseIds);
 
-        $sql ="SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
-        
-        return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
+        $sql = "SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->getConnection()->fetchAll($sql, $parmaters) ?: array();
     }
 
     public function deleteMaterial($id)
@@ -102,7 +102,6 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
             ->groupBy('fileId')
             ->setFirstResult($start)
             ->setMaxResults($limit);
-
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -121,7 +120,6 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-
             ->from($this->table, $this->table)
             ->andWhere('id = :id')
             ->andWhere('courseId = :courseId')

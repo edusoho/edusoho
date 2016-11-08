@@ -1,4 +1,3 @@
-{% do script(['web/component/file-choose.js']) %}
 <div class="file-chooser-bar {% if not  activity.ext.media|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ activity.ext.media.name|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
@@ -15,28 +14,36 @@
     <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
     <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
     {% if mediaType == 'video' %}
-      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-import-panel">导入网络视频</a>
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#import-video-panel">导入网络视频</a>
       </li>
     {% endif %}
+    {% if mediaType == 'download' %}
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#import-link-panel">网络连接</a>
+      </li>
+    {% endif %}
+
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
-      {% include 'WebBundle:Component/Parts:upload-file.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' %}
     </div>
 
     <div class="tab-pane" id="chooser-material-panel">
-      {% include 'WebBundle:Component/Parts:materiallib-choose.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:materiallib-choose.html.twig' %}
     </div>
 
     <div class="tab-pane" id="chooser-course-panel">
-      {% include 'WebBundle:Component/Parts:course-file-choose.html.twig' %}
+      {% include 'WebBundle:FileChooser/Parts:course-file-choose.html.twig' %}
     </div>
-
-    <div class="tab-pane" id="chooser-import-panel">
-      {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
-    </div>
+    {% if mediaType == 'video' %}
+      <div class="tab-pane" id="import-video-panel">
+        {% include 'WebBundle:FileChooser/Parts:import-video.html.twig' %}
+      </div>
+    {% endif %}
+    {% if mediaType == 'download' %}
+      <div class="tab-pane" id="import-link-panel">
+        {% include 'WebBundle:FileChooser/Parts:import-link.html.twig' %}
+      </div>
+    {% endif %}
   </div>
-</div>
-<div class="col-xs-offset-2 col-xs-9">
-  <input id="media" type="hidden" name="media" value="{{ activity.ext.media|default(null)|json_encode }}">
 </div>

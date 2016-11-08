@@ -40,9 +40,6 @@ class PptActivity extends Activity
             'finishDetail'
         ));
 
-        $media          = $this->parseMedia($fields['media']);
-        $ppt['mediaId'] = $media['id'];
-
         $biz                  = $this->getBiz();
         $ppt['createdUserId'] = $biz['user']['id'];
         $ppt['createdTime']   = time();
@@ -59,8 +56,6 @@ class PptActivity extends Activity
             'finishDetail',
         ));
 
-        $media                       = $this->parseMedia($fields['media']);
-        $updateFields['mediaId']     = $media['id'];
         $updateFields['updatedTime'] = time();
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
@@ -73,12 +68,6 @@ class PptActivity extends Activity
     public function get($targetId)
     {
         return $this->getPptActivityDao()->get($targetId);
-    }
-
-    protected function parseMedia($media)
-    {
-        $media = json_decode($media, JSON_OBJECT_AS_ARRAY);
-        return $media;
     }
 
     /**

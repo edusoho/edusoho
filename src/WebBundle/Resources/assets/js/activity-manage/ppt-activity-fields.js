@@ -1,13 +1,6 @@
-$('#condition-select').on('change', event => {
-  "use strict";
-  let conditionsType = $(event.currentTarget).children('option:selected').val();
+import FileChooser from '../../common/file-choose';
 
-  let $conditionsDetail = $("#condition-group");
-  if(conditionsType !== 'detail'){
-    $conditionsDetail.addClass('hidden');
-    return;
-  }
-
+let onConditionTimeType = () => {
   var $step3_form = $("#step3-form");
   let validator = $step3_form.validate({
     onkeyup: false,
@@ -25,5 +18,29 @@ $('#condition-select').on('change', event => {
     }
   });
   $step3_form.data('validator', validator);
+  let $conditionsDetail = $("#condition-group");
   $conditionsDetail.removeClass('hidden');
+};
+
+let $select = $('#condition-select');
+
+if($select.children('option:selected').val() === 'time'){
+  onConditionTimeType();
+}
+
+let fileChooser = new FileChooser();
+
+fileChooser.on('select', (file) => {
+  $('.hidden-data').find('#mediaId').val(file.id);
+});
+
+$select.on('change', event => {
+  let conditionsType = $(event.currentTarget).children('option:selected').val();
+
+  let $conditionsDetail = $("#condition-group");
+  if(conditionsType !== 'time'){
+    $conditionsDetail.addClass('hidden');
+  }else {
+    onConditionTimeType();
+  }
 });

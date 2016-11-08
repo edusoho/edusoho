@@ -1,13 +1,15 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script(['web/activity-manage/flash-activity-fields.js']) %}
+{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/flash-activity-fields.js']) %}
 {% set mediaType = 'flash' %}
 {% block activity_content %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="media" class="style">Flash</label>
     </div>
-
-    {% include 'WebBundle:Component:file-choose.html.twig' %}
+    <div class="hidden-data">
+      <input type="hidden" value="{{ flash.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
+    </div>
+    {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
   </div>
 {% endblock %}
 
@@ -29,7 +31,8 @@
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
-      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ flash.finishDetail|default(1) }}">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail"
+             value="{{ flash.finishDetail|default(1) }}">
     </div>
 
     <div class="col-xs-4 controls">
