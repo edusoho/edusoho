@@ -29,9 +29,7 @@ class Version20161107203611 extends AbstractMigration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签组表';
         ");
 
-        // $this->addSql("ALTER TABLE tag ADD `groupId` int(10) NOT NULL DEFAULT '0' COMMENT '所属标签组的ID'");
-
-        // $this->addSql("ALTER TABLE classroom ADD `tags` text NOT NULL COMMENT '被打上的标签'");
+        $this->addSql("ALTER TABLE classroom ADD `tags` text NOT NULL COMMENT '被打上的标签'");
 
         $this->addSql("
             DROP TABLE IF EXISTS `tag_group_tag`;
