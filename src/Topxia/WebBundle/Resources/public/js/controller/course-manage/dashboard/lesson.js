@@ -54,6 +54,7 @@ define(function(require, exports, module) {
                 {
                     name: '完成人数',
                     type: 'bar',
+                    stack: '总量',
                     label: {
                         normal: {
                             show: true,
@@ -70,6 +71,7 @@ define(function(require, exports, module) {
                 {
                     name: '学习人数',
                     type: 'bar',
+                    stack: '总量',
                     label: {
                         normal: {
                             show: true,

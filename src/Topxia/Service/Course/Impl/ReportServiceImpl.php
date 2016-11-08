@@ -32,29 +32,35 @@ class ReportServiceImpl extends BaseService implements ReportService
         $students = $this->getCourseService()->findCourseStudents($courseId, 0, PHP_INT_MAX);
         $late30DaysStat = array();
         for ($i = 29; $i >= 0; $i--) {
-            $day = date('m-d', strtotime('-'. $i .' days'));
-            $late30DaysStat[$day]['day'] = $day;
+            $day = date('Y-m-d', strtotime('-'. $i .' days'));
+            $late30DaysStat[$day]['day'] = date('m-d', strtotime('-'. $i .' days'));
             $late30DaysStat[$day]['studentNum'] = 0;
             $late30DaysStat[$day]['finishedNum'] = 0;
             $late30DaysStat[$day]['finishedRate'] = 0;
         }
 
         foreach ($students as $student) {
-            $student['createdDay'] = date('m-d', $student['createdTime']);
-            $student['finishedDay'] = date('m-d', $student['finishedTime']);
+            $student['createdDay'] = date('Y-m-d', $student['createdTime']);
+            $student['finishedDay'] = date('Y-m-d', $student['finishedTime']);
+         
             foreach ($late30DaysStat as $day => &$stat) {
-                if (strtotime($student['createdDay']) <= strtotime($day)) {
+                if ($student['createdDay'] == $day || strtotime($student['createdDay']) < strtotime(date('Y-m-d', strtotime('- 29 days')))) {
                     $stat['studentNum']++;
                 }
 
-                if ($student['finishedTime'] > 0 && strtotime($student['finishedDay']) <= strtotime($day)) {
+                if ($student['isLearned'] && $student['finishedTime'] > 0 && ($student['finishedDay'] == $day ||  strtotime($student['finishedDay']) < strtotime(date('Y-m-d', strtotime('- 29 days'))))) {
                     $stat['finishedNum']++;
                 }
             }
         }
 
         foreach ($late30DaysStat as $day => &$stat) {
-            $stat['finishedRate'] = round($stat['finishedNum']/$stat['studentNum'], 3) * 100;
+            if ($stat['studentNum']) {
+                $stat['finishedRate'] = round($stat['finishedNum']/$stat['studentNum'], 3) * 100;
+            } else {
+                $stat['studentNum'] = 0;
+            }
+            
         }
 
         return $late30DaysStat;

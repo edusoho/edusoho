@@ -11,18 +11,13 @@ define(function(require, exports, module) {
                 trigger: 'axis'
             },
             legend: {
-                data: ['学员数', '完课数', '完课率']
+                data: ['学员数', '完成数', '完课率']
             },
             grid: {
                 left: '3%',
                 right: '4%',
                 bottom: '3%',
                 containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
             },
             xAxis: {
                 type: 'category',
@@ -36,7 +31,7 @@ define(function(require, exports, module) {
                     minInterval: 1
                 },
                 {
-                    name: '百分比',
+                    name: '完课率',
                     type: 'value',
                     max: 100
                 }
@@ -46,18 +41,33 @@ define(function(require, exports, module) {
                     name:'学员数',
                     type:'line',
                     yAxisIndex: 0,
+                    itemStyle: {
+                        normal: {
+                            color: '#ffc107'
+                        }
+                    },
                     data:$container.data('studentNum')
                 },
                 {
-                    name:'完课数',
+                    name:'完成数',
                     type:'line',
                     yAxisIndex: 0,
+                    itemStyle: {
+                        normal: {
+                            color: '#4caf50'
+                        }
+                    },
                     data:$container.data('finishedNum')
                 },
                 {
                     name:'完课率',
                     type:'line',
                     yAxisIndex: 1,
+                    itemStyle: {
+                        normal: {
+                            color: '#2196f3'
+                        }
+                    },
                     data:$container.data('finishedRate')
                 }
             ],

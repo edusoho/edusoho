@@ -206,7 +206,7 @@ class CourseManageController extends BaseController
             'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
             'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
             'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
-            'days' => array_keys($lateMonthLearndData)
+            'days' => ArrayToolkit::column($lateMonthLearndData, 'day')
         ));
     }
 
