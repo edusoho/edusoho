@@ -5,6 +5,7 @@ namespace Biz\Activity\Config;
 
 use Biz\AudioActivity\AudioActivity;
 use Biz\DiscussActivity\DiscussActivity;
+use Biz\DocActivity\DocActivity;
 use Biz\DownloadActivity\DownloadActivity;
 use Biz\FlashActivity\FlashActivity;
 use Biz\LiveActivity\LiveActivity;
@@ -38,6 +39,7 @@ class ActivityFactory
             'download' => new DownloadActivity($biz),
             'flash'    => new FlashActivity($biz),
             'ppt'      => new PptActivity($biz),
+            'doc'      => new DocActivity($biz)
         );
     }
 }
