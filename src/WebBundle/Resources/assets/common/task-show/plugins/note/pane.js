@@ -16,14 +16,14 @@ class NotePane {
         lessonId: toolbar.taskId,
     }, (html)=>{
         this.$element.html(html);
-        // var editorHeight = $("#lesson-note-plugin-form .note-content").height() - 50;
+        var editorHeight = $("#lesson-note-plugin-form .note-content").height() - 50;
 
-        // // group: 'default'
-        // var editor = CKEDITOR.replace('note_content', {
-        //     toolbar: 'Simple',
-        //     filebrowserImageUploadUrl: $('#note_content').data('imageUploadUrl'),
-        //     height: editorHeight
-        // });
+        // group: 'default'
+        var editor = CKEDITOR.replace('note_content', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#note_content').data('imageUploadUrl'),
+            height: editorHeight
+        });
 
         // editor.focusManager.focus();
         // pane.set('editor', editor);

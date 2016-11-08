@@ -64,7 +64,6 @@ class Editor {
     }
 
     _onSave() {
-        console.log("_onSave");
         if (!this._validator(this.step)) {
             return;
         }
@@ -87,10 +86,11 @@ class Editor {
                 {name: 'length', value: length}
             ]);
 
+            console.log(this.$iframe_body.find('#step2-form').serializeArray());
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                location.reload();
+                // location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
@@ -128,7 +128,6 @@ class Editor {
         this.$task_manage_content.html(html).show(); 
         this.$frame = $('#'+this.iframe_name);
         let loadiframe = (a) => {
-           
             let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');

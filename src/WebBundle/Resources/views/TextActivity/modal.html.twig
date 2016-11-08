@@ -7,8 +7,7 @@
       <label for="text-content-field" class="style1">{{ '内容'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <textarea class="form-control" id="text-content-field" name="content"data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
-    >{{ activity.content|default('') }}</textarea>
+      <textarea class="form-control text-content-field" id="text-content-field" name="content"data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" >{{ activity.content|default('') }}</textarea>
     </div>
   </div>
 {% endblock %}
