@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -16,20 +17,20 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+            return;
+        }
 
-        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
-            $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+        $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+        if (isset($blacklistIps['ips'])) {
+            $blacklistIps = $blacklistIps['ips'];
 
-            if (isset($blacklistIps['ips'])) {
-                $blacklistIps = $blacklistIps['ips'];
-
-                if (in_array($request->getClientIp(), $blacklistIps)) {
-                    throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
-                }
+            if (in_array($request->getClientIp(), $blacklistIps)) {
+                throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
             }
         }
 
-        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
+        if ($request->getMethod() === 'POST') {
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }
@@ -69,14 +70,20 @@ class KernelRequestListener
                         'goto'     => '',
                         'duration' => 0
                     ));
-
+                    $response->setStatusCode(403);
                     $event->setResponse($response);
                 }
             }
         }
     }
-            protected function getServiceKernel()
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

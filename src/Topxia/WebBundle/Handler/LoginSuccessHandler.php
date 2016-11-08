@@ -18,20 +18,14 @@ class LoginSuccessHandler
     private $securityContext;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-
-    /**
      * Constructor
      *
      * @param SecurityContext $securityContext
      * @param Doctrine        $doctrine
      */
-    public function __construct(SecurityContext $securityContext, Doctrine $doctrine)
+    public function __construct(SecurityContext $securityContext)
     {
         $this->securityContext = $securityContext;
-        $this->em              = $doctrine->getManager();
     }
 
     /**

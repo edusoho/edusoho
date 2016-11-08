@@ -15,7 +15,7 @@
   <table id="announcement-table" class="table table-striped">
     <thead>
     <tr>
-      <th width="25%">{{'公告信息'|trans}}</th>
+      <th width="25%">{{'公告内容'|trans}}</th>
       {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>{{'发布时间'|trans}}</th>
       <th>{{'结束时间'|trans}}</th>
@@ -66,6 +66,9 @@
   {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'announcement', formId:'announcement-table'} %}
   {% if not announcements %}
     <div class="empty">{{'暂无公告'|trans}}</div>
+    <div class="alert alert-info">
+      1.公告将显示在网站首页顶部导航上方<br>2.最多可显示3条最新的进行中的通告
+    </div>
   {% endif %}
 
   {{ admin_macro.paginator(paginator) }}

@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Course\CourseService;
+use Topxia\Service\Course\ThreadService;
+use Topxia\Service\Order\OrderService;
+use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
@@ -155,26 +159,21 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->searchUserCount(array());
 
-        $todayCourseMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
-        $totalCourseMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
-
+        $todayCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
         $todayClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
+
+        $totalCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
         $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
 
-        $todayVipNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'vip', "status" => "paid"));
-        $totalVipNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'vip', "status" => "paid"));
+        $todayVipNum = 0;
+        $totalVipNum = 0;
+        if ($this->isPluginInstalled('vip')) {
+            $todayVipNum = $this->getVipService()->searchMembersCount(array("boughtTimeLessThan" => $todayTimeStart, "boughtTimeMoreThan" => $todayTimeEnd, "boughtType" => 'new'));
+            $totalVipNum = $this->getVipService()->searchMembersCount(array());
+        }
 
-
-        $todayThreadNum         = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNumLargerThan' => 0));
-        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
-        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array());
-
-        $publishedCourseNum = $this->getCourseService()->searchCourseCount(array("status" => 'published'));
-        $totalCourseNum     = $this->getCourseService()->searchCourseCount(array());
-
-
-        $publishedClassroomNum = $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'));
-        $totalClassroomNum     = $this->getClassroomService()->searchClassroomsCount(array());
+        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
+        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array('postNum' => 0, 'type' => 'question'));
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'onlineCount' => $onlineCount,
@@ -192,16 +191,8 @@ class DefaultController extends BaseController
             'todayVipNum' => $todayVipNum,
             'totalVipNum' => $totalVipNum,
 
-            'todayThreadNum'         => $todayThreadNum,
             'todayThreadUnAnswerNum' => $todayThreadUnAnswerNum,
             'totalThreadNum'         => $totalThreadNum,
-
-            'publishedCourseNum' => $publishedCourseNum,
-            'totalCourseNum'     => $totalCourseNum,
-
-            'publishedClassroomNum' => $publishedClassroomNum,
-            'totalClassroomNum'     => $totalClassroomNum
-
         ));
     }
 
@@ -302,7 +293,7 @@ class DefaultController extends BaseController
         $days      = $this->getDaysDiff($period);
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
-        $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0), 'courseId', 0, 10);
+        $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseId', 0, 10);
         $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
         $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses      = ArrayToolkit::index($courses, 'id');
@@ -328,25 +319,9 @@ class DefaultController extends BaseController
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {
-        $questions = $this->getThreadService()->searchThreads(array('type' => 'question'), 'createdNotStick', 0, 5);
+        $questions = $this->getThreadService()->searchThreads(array('type' => 'question', 'postNum' => 0), 'createdNotStick', 0, 10);
 
-        $unPostedQuestion = array();
-
-        foreach ($questions as $key => $value) {
-            if ($value['postNum'] == 0) {
-                $unPostedQuestion[] = $value;
-            } else {
-                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
-                $userPostsNum   = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'], $value['id']);
-
-                if ($userPostsNum == $threadPostsNum) {
-                    $unPostedQuestion[] = $value;
-                }
-            }
-        }
-
-        $questions = $unPostedQuestion;
-        $courses   = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
 
         return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions' => $questions,
@@ -371,6 +346,14 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function cloudSearchRankingAction(Request $request)
+    {
+        $api           = CloudAPIFactory::create('root');
+        $result        = $api->get('/search/words/ranking', array());
+        $searchRanking = isset($result['items']) ? $result['items'] : array();
+        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('searchRankings' => $searchRanking));
     }
 
 
@@ -522,16 +505,25 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -570,19 +562,26 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
     }
 
-    private function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }
 
-
-    private function getUserActiveService()
+    protected function getUserActiveService()
     {
         return $this->createService('User.UserActiveService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('Vip:Vip.VipService');
+    }
+
+    protected function isPluginInstalled($name)
+    {
+        return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
     }
 }
