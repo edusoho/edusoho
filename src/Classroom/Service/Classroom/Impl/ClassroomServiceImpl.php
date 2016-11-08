@@ -950,7 +950,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    private function _prepareClassroomConditions($conditions)
+    protected function _prepareClassroomConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === 0 || !empty($value)) {

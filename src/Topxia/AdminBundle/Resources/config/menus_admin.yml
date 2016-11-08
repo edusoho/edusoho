@@ -347,7 +347,7 @@ admin:
                             router_name: admin_article
                             children:
                                 admin_operation_article_create:
-                                    name: '添加资讯'
+                                    name: '添加栏目'
                                     router_name: admin_article_create
                                     group: topBtn
                         admin_operation_article_category:
@@ -356,15 +356,15 @@ admin:
                             router_name: admin_article_category
                             children:
                                 admin_operation_category_create:
-                                    name: '新建栏目'
+                                    name: '添加栏目'
                                     router_name: admin_article_category_create
                                     mode: modal
                                     group: topBtn
                 admin_operation_group:
-                    name: 小组管理
+                    name: 小组话题管理
                     children:
                         admin_operation_group_manage:
-                            name: 小组管理
+                            name: 小组话题管理
                             disable: true
                             router_name: admin_group
                             children:
@@ -498,7 +498,7 @@ admin:
                     name: 虚拟币管理
                     children:
                         admin_coin_user_records:
-                            name: 记录
+                            name: 虚拟币管理
                             disable: true
                             router_name: admin_coin_user_records
                 admin_course_refunds:
