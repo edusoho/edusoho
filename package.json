@@ -57,7 +57,8 @@
     "jquery-validation": "^1.15.1",
     "moment": "^2.15.1",
     "reset.css": "^2.0.2",
-    "respond.js": "^1.4.2"
+    "respond.js": "^1.4.2",
+    "es6-event-emitter": "^1.5.2"
   },
   "scripts": {
     "start": "npm run dev",

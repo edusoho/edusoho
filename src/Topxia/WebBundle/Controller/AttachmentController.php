@@ -49,15 +49,6 @@ class AttachmentController extends BaseController
         ));
     }
 
-    public function fileShowAction(Request $request, $fileId)
-    {
-        $file       = $this->getUploadFileService()->getFile($fileId);
-        $attachment = array('file' => $file);
-        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
-            'attachment' => $attachment
-        ));
-    }
-
     public function previewAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
@@ -107,15 +98,18 @@ class AttachmentController extends BaseController
         ));
     }
 
-    public function deleteAction(Request $request, $id)
+     public function deleteAction(Request $request, $id)
     {
         $previewType = $request->query->get('type', 'attachment');
         if ($previewType == 'attachment') {
             $this->getUploadFileService()->deleteUseFile($id);
         } else {
-            $this->getUploadFileService()->deleteFile($id);
+            if ($this->getUploadFileService()->canManageFile($id)) {
+                $this->getUploadFileService()->deleteFile($id);
+            } else {
+                throw $this->createAccessDeniedException('opteration forbiddened');
+            }
         }
-
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 

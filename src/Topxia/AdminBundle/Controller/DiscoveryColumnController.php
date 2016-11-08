@@ -63,12 +63,6 @@ class DiscoveryColumnController extends BaseController
                 $conditions['status']   = 'published';
                 $courses                = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
 
-                if ($discoveryColumn['orderType'] == 'recommend' && count($courses) < $discoveryColumn['showCount']) {
-                    $conditions['recommended'] = 0;
-                    $unrecommendCourses        = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount'] - count($courses));
-                    $courses                   = array_merge($courses, $unrecommendCourses);
-                }
-
                 $discoveryColumns[$key]['count'] = count($courses);
             }
         }

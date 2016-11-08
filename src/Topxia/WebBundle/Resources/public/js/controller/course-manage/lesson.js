@@ -75,7 +75,7 @@ define(function(require, exports, module) {
         $list.on('click', '.delete-chapter-btn', function(e) {
             var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 
-            if (!confirm(Translator.trans('您真的要删除该%chapter_name%%part_name%吗？',{fchapter_name:chapter_name,part_name:part_name}))) {
+            if (!confirm(Translator.trans('您真的要删除该%chapter_name%%part_name%吗？',{chapter_name:chapter_name,part_name:part_name}))) {
                 return ;
             }
             var $btn = $(e.currentTarget);
@@ -92,10 +92,13 @@ define(function(require, exports, module) {
             }
             $.post($(this).data('url'), function(html) {
                 if(html.error){
-                    if(html.error.code == 10019)
+                    if(html.code == 10019) {
                         Notify.danger(Translator.trans('录制失败，直播时您没有进行录制！'));
-                    else
+                    } else if(html.code == 1403) {
+                        Notify.danger(Translator.trans('尚未生成回放文件!'));
+                    } else {
                         Notify.danger(Translator.trans('录制失败！'));
+                    }
                 }else{
                     var id = '#' + $(html).attr('id');
                     $(id).replaceWith(html);
