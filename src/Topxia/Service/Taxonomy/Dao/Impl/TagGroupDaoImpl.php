@@ -55,14 +55,9 @@ class TagGroupDaoImpl extends BaseDao implements TagGroupDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
-        if (isset($conditions['scope'])) {
-            $conditions['scope'] = "%{$conditions['scope']}%";
-        }
-
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table)
-            ->andWhere('name = :name')
-            ->andWhere('scope LIKE :scope');
+            ->andWhere('name = :name');
 
         return $builder;
     }
