@@ -53,7 +53,7 @@ class MemberSync extends BaseResource
 
     protected function syncCourseConversations($user)
     {
-        $courseIds = $this->getCourseService()->findUserJoinedCourseIds($user['id']);
+        $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
 
         $this->syncTargetConversations($user, ArrayToolkit::column($courseIds, 'courseId'), 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
