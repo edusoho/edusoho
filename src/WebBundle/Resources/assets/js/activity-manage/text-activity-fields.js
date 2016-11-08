@@ -1,18 +1,43 @@
 class Text{
     constructor(props) {
-        this.Init();
+        this._init();
     }
 
-    Init() {
-        this._inItStep2form();
+    _init() {
         $('#condition-select').on('change',event=>this._change(event));
-        // var editor = CKEDITOR.replace('text-content-field', {
-        //     toolbar: 'Full',
-        //     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
-        //     filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
-        //     allowedContent: true,
-        //     height: 300
-        // });
+        this._inItStep2form();
+        this._initEditorContent();
+    }
+
+    _initEditorContent() {
+        var editor = CKEDITOR.replace('text-content-field', {
+            toolbar: 'Full',
+            filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
+            allowedContent: true,
+            height: 200
+        });
+        editor.on('instanceReady', function (e) { 
+            var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+            $parentiframe.height($parentiframe.contents().find('body').height());
+        });
+
+        editor.on( 'change', () => {    
+            $('[name="content"]').val(editor.getData());
+        });
+    }
+
+    _getEditorContent(editor){
+        editor.updateElement();
+        var z = editor.getData();
+        var x = editor.getData().match(/<embed[\s\S]*?\/>/g);
+        if (x) {
+            for (var i = x.length - 1; i >= 0; i--) {
+               var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+               var z =  z.replace(x[i],y);
+            };
+        }
+        return z;
     }
 
     _change(event) {
@@ -31,9 +56,11 @@ class Text{
         validator = $step2_form.validate({
             onkeyup: false,
             rules: {
+                title:'required',
                 content: 'required',
             },
             messages: {
+                title:'请输入标题',
                 content:"请输入内容"
             }
         });
@@ -48,6 +75,7 @@ class Text{
                 'condition_detail': {
                     required: true,
                     digits:true,
+                    max:300,
                 },
 
             },

@@ -50,7 +50,9 @@ define(function(require, exports, module) {
 
 			var html = '';
 			$.each(toolbar.get('activePlugins'), function(i, name){
+
 				var plugin = toolbar.get('plugins')[name];
+				console.log(plugin.noactive );
 				if (plugin.noactive == undefined) {
 					plugin.noactive = false;
 				}
