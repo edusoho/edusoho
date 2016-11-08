@@ -20,4 +20,25 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
 
         );
     }
+
+        public function search($conditions, $order, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table)
+            ->andWhere('name = :name');
+
+        return $builder;
+    }
+
 }

@@ -11,20 +11,9 @@ class TagGroupServiceImpl extends BaseService implements TagService
         'name', 'scope', 'tagNum'
     );
 
-    private $allowConditions = array(
-        'name', 'scope', 'tagNum', 'createdTime', 'updatedTime'
-    );
-
     public function get($id)
     {
         return $this->getTagGroupDao()->get($id);
-    }
-
-    public function search($conditions, $order, $start, $limit)
-    {
-        $this->fieterConditions($conditions);
-
-        return $this->getTagGroupDao()->search($conditions, $order, $start, $limit);
     }
 
     public function create($fields)
@@ -61,11 +50,6 @@ class TagGroupServiceImpl extends BaseService implements TagService
 
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
         return $this->getTagGroupDao()->update($id, $fields);
-    }
-
-    protected function fieterConditions($conditions)
-    {
-        return ArrayToolkit::parts($conditions, $this->allowConditions);
     }
 
     protected function fieterFields($fields)
