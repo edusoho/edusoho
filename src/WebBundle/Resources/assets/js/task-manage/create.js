@@ -53,7 +53,7 @@ class Editor {
     }
 
     _onSetType(event) {
-        const $this = $(event.currentTarget).addClass('active');
+        let $this = $(event.currentTarget).addClass('active');
         $this.siblings().removeClass('active');
         let type = $this.data('type');
         $('[name="mediaType"]').val(type);
@@ -63,10 +63,12 @@ class Editor {
         this._renderNext(true);
     }
 
-    _onSave() {
+    _onSave(event) {
         if (!this._validator(this.step)) {
             return;
         }
+
+        let $this = $(event.currentTarget).attr('disabled','disabled');
         let length = this._getLength();
         let postData = $('.js-hidden-data')
             .map((index, node) => {
@@ -90,7 +92,7 @@ class Editor {
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                // location.reload();
+                location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
