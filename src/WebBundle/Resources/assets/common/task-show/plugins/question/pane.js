@@ -1,7 +1,7 @@
 class QuestionPane {
-    constructor() {
-        this.dataInitialized = false;
-    }
+  constructor() {
+    this.dataInitialized = false;
+  }
 }
 
 
