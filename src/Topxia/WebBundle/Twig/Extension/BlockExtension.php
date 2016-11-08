@@ -36,7 +36,7 @@ class BlockExtension extends \Twig_Extension
         $env = $this->container->getParameter('kernel.environment');
 
         if ($env == 'prod') {
-            $content = $block['content'];
+            $content = isset($block['content']) ? $block['content'] : '';
         } else {
             $content = BlockToolkit::render($block, $this->container);
         }

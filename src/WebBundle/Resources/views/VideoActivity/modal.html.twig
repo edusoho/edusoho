@@ -1,6 +1,6 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 
-{% do script([ 'web/activity-manage/video-activity-fields.js']) %}
+{% do script(['http://localhost:12345/sdk.js','web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('video') %}
   <div class="form-group">
@@ -20,7 +20,6 @@
     <div class="col-xs-2 control-label">
       <label for="media" class="style">{{ '视频'|trans }}</label>
     </div>
-
     {% include 'WebBundle:FileChooser:file-choose.html.twig'with {mediaType: mediaType,fileType:'video',file: activity.ext.file|default(null) } %}
   </div>
   <div class="form-group for-video-type" id="lesson-length-form-group">

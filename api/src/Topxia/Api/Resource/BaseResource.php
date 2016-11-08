@@ -56,6 +56,24 @@ abstract class BaseResource
         return $requestData;
     }
 
+    protected function guessDeviceFromUserAgent($userAgent)
+    {
+        $userAgent = strtolower($userAgent);
+
+        $ios = array("iphone", "ipad", "ipod");
+        foreach ($ios as $keyword) {
+            if (strpos($userAgent, $keyword) > -1) {
+                return 'ios';
+            }
+        }
+
+        if (strpos($userAgent, "Android") > -1) {
+            return 'android';
+        }
+
+        return 'unknown';
+    }
+
     protected function error($code, $message)
     {
         return array('error' => array(

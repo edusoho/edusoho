@@ -13,7 +13,7 @@ class Users extends BaseResource
         $conditions = $request->query->all();
 
         if (empty($conditions)) {
-            // return array();
+            return array();
         }
 
         // @deprecated 兼容老接口，即将去除
@@ -43,6 +43,10 @@ class Users extends BaseResource
 
         if (!ArrayToolkit::requireds($fields, array('email', 'nickname', 'password'))) {
             return array('message' => '缺少必填字段');
+        }
+
+        if (empty($fields['registeredWay']) || !in_array(strtolower($fields['registeredWay']), array('ios', 'android'))) {
+            $fields['registeredWay'] = $this->guessDeviceFromUserAgent($request->headers->get("user-agent"));
         }
 
         $ip = $request->getClientIp();

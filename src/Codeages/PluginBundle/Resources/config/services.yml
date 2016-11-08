@@ -29,8 +29,19 @@ services:
 
     codeages_plugin.dict_twig_extension:
         class: Codeages\PluginBundle\Twig\DictExtension
-        public: false
+        public: true
         arguments:
             - "@codeages_plugin.dict_collector"
         tags:
             - { name: twig.extension }
+
+    codeages_plugin.theme.file_locator:
+        class:          Codeages\PluginBundle\Locator\ThemeFileLocator
+        arguments:      ['@kernel', '%kernel.root_dir%/Resources']
+
+    codeages_plugin.theme.templating.locator:
+        class:          "%templating.locator.class%"
+        arguments:      ['@codeages_plugin.theme.file_locator', '%kernel.cache_dir%']
+
+    templating.locator:
+        alias:          codeages_plugin.theme.templating.locator

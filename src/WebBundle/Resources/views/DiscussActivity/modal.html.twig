@@ -13,14 +13,12 @@
   </div>
 {% endblock %}
 
-
 {% block activity_finish %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <span>发表或者回复一个话题</span>
-      {#<input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}></div>#}
+      <p class="form-control-static">发表或者回复一个话题</p>
   </div>
 {% endblock %}

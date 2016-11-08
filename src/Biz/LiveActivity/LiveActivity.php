@@ -10,7 +10,7 @@ class LiveActivity extends Activity
     {
         return array(
             'name' => '直播',
-            'icon' => 'es-icon es-icon-graphicclass'
+            'icon' => 'es-icon es-icon-videocam'
         );
     }
 
@@ -42,7 +42,7 @@ class LiveActivity extends Activity
 
     public function get($targetId)
     {
-        // return $this->getLiveActivityService()->getActivityDetail($targetId);
+        return $this->getLiveActivityService()->getLiveActivity($targetId);
     }
 
     public function delete($targetId)

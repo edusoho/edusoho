@@ -9,7 +9,8 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 
 function _inItStep2form() {
     var $step1_form = $('#step2-form');
-    var validator = $step1_form.validate({
+    var validator = $step1_form.data('validator', validator);
+    validator = $step1_form.validate({
         onkeyup: false,
         ignore: "",
         rules: {
@@ -30,7 +31,7 @@ function _inItStep2form() {
             media: "请选择或者上传视频"
         }
     });
-    $step1_form.data('validator', validator);
+    
 }
 
 _inItStep2form();

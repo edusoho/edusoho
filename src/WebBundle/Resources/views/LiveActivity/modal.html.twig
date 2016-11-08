@@ -1,27 +1,27 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script(['libs/bootstrap-datepicker.js','web/activity-manage/live-activity-fields.js']) %}
+{% do script(['libs/bootstrap-datetimepicker.js','web/activity-manage/live-activity-fields.js']) %}
 
 {% block activity_content %}
   <div class="form-group expiry-day-js">
-    <div class="col-sm-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="startTime">{{ '直播开始时间'|trans }}</label>
     </div>
-    <div class="col-sm-9 controls">
+    <div class="col-xs-9 controls">
       <input id="startTime" class="form-control width-input width-input-large" type="text" name="startTime" value={{ activity.startTime|default('') }}></div>
   </div>
   <div class="form-group">
-    <div class="col-sm-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="length">{{ '直播时长'|trans }}</label>
     </div>
-    <div class="col-sm-9 controls">
+    <div class="col-xs-9 controls">
       <input id="length" class="form-control width-input width-input-large" type="text" name="length" value={{ activity.length|default('') }}>分钟
     </div>
   </div>
   <div class="form-group">
-    <div class="col-sm-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="remark" class="style1">{{ '直播说明'|trans }}</label>
     </div>
-    <div class="col-sm-9 controls">
+    <div class="col-xs-9 controls">
       <textarea class="form-control" id="remark" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
     >{{ activity.remark|default('') }}</textarea>
     </div>
@@ -31,11 +31,11 @@
 
 {% block activity_finish %}
   <div class="form-group">
-    <div class="col-sm-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-sm-9 controls">
-      <span>进入观看过直播</span>
+    <div class="col-xs-9 controls">
+      <p class="form-control-static">进入观看过直播</p>
     </div>
   </div>
 {% endblock %}

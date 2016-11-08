@@ -4,18 +4,22 @@ namespace Biz\Activity\Config;
 
 
 use Biz\AudioActivity\AudioActivity;
+use Biz\DiscussActivity\DiscussActivity;
+use Biz\DocActivity\DocActivity;
 use Biz\DownloadActivity\DownloadActivity;
+use Biz\FlashActivity\FlashActivity;
 use Biz\LiveActivity\LiveActivity;
+use Biz\PptActivity\PptActivity;
 use Biz\TextActivity\TextActivity;
 use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\DiscussActivity\DiscussActivity;
 
 class ActivityFactory
 {
     /**
      * @param  Biz $biz
-     * @param  $type
+     * @param      $type
+     *
      * @return Activity
      */
     final public static function create(Biz $biz, $type)
@@ -32,7 +36,10 @@ class ActivityFactory
             'audio'    => new AudioActivity($biz),
             'live'     => new LiveActivity($biz),
             'discuss'  => new DiscussActivity($biz),
-            'download' => new DownloadActivity($biz)
+            'download' => new DownloadActivity($biz),
+            'flash'    => new FlashActivity($biz),
+            'ppt'      => new PptActivity($biz),
+            'doc'      => new DocActivity($biz)
         );
     }
 }
