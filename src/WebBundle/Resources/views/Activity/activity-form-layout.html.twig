@@ -10,12 +10,12 @@
           <div class="col-xs-2 control-label">
           <label for="title">{{ '标题'|trans }}</label>
           </div>
-          <div class="col-xs-9 controls">
+          <div class="col-xs-10 controls">
             <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} >
           </div>
         </div>
         <div class="form-group">
-          <div class="col-xs-9 col-xs-offset-2 controls">
+          <div class="col-xs-10 col-xs-offset-2 controls">
             <input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
             <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>
           </div>

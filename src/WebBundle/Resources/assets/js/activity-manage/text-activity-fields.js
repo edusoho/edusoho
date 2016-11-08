@@ -15,7 +15,7 @@ class Text{
             filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
             allowedContent: true,
-            height: 300
+            height: 200
         });
         editor.on('instanceReady', function (e) { 
             var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
@@ -75,6 +75,7 @@ class Text{
                 'condition_detail': {
                     required: true,
                     digits:true,
+                    max:300,
                 },
 
             },
