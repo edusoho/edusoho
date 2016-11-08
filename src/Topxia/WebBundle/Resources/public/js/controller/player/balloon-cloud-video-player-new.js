@@ -21,7 +21,8 @@ define(function(require, exports, module) {
                 disableResolutionSwitcher:false
             },
             enablePlaybackRates: false,
-            videoHeaderLength: 0
+            videoHeaderLength: 0,
+            subtitles: ''
         },
 
         events: {},
@@ -96,6 +97,12 @@ define(function(require, exports, module) {
                         userId : statsInfo.userId,
                         userName : statsInfo.userName
                     }
+                });
+            }
+
+            if(self.get('subtitles') != '' ) {
+                extConfig = $.extend(extConfig, {
+                    subtitles: self.get('subtitles')
                 });
             }
 

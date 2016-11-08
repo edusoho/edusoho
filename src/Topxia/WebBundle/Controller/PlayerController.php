@@ -40,6 +40,10 @@ class PlayerController extends BaseController
                     $api    = CloudAPIFactory::create("leaf");
                     $result = $api->get("/resources/{$file['globalId']}/player");
 
+                    if (isset($result['subtitles'])) {
+                        $context['subtitles'] = $result['subtitles'];
+                    }
+
                     // 临时修复手机浏览器端视频不能播放的问题
                     if ($agentInWhiteList) {
                         $context['hideQuestion'] = 1; //手机浏览器不弹题

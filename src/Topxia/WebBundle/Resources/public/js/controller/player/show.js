@@ -34,6 +34,7 @@ define(function(require, exports, module) {
         var disableVolumeButton = videoHtml.data('disableVolumeButton');
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
+        var subtitles = $.parseJSON(videoHtml.data('subtitles'));
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
@@ -77,7 +78,8 @@ define(function(require, exports, module) {
                     userId : userId,
                     userName : userName
                 },
-                videoHeaderLength: videoHeaderLength
+                videoHeaderLength: videoHeaderLength,
+                subtitles: subtitles
             }
         );
 
