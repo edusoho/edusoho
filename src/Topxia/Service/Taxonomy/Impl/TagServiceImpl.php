@@ -122,7 +122,7 @@ class TagServiceImpl extends BaseService implements TagService
     {   
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
-        $fields = $this->fieterTagGroupFields($fields);
+        $fields = $this->filterTagGroupFields($fields);
 
         $fields['createdTime'] = time();
 
@@ -192,7 +192,7 @@ class TagServiceImpl extends BaseService implements TagService
             $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
         }
 
-        $fields = $this->fieterTagGroupFields($fields);
+        $fields = $this->filterTagGroupFields($fields);
 
         $fields['updatedTime'] = time();
         
@@ -237,7 +237,7 @@ class TagServiceImpl extends BaseService implements TagService
     }
 
 
-    protected function fieterTagGroupFields($fields)
+    protected function filterTagGroupFields($fields)
     {
         return ArrayToolkit::parts($fields, $this->allowFields);
     }
