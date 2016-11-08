@@ -10,6 +10,4 @@ interface TagGroupDao
     public function delete($id);
 
     public function update($id, $fields);
-
-    public function search($conditions, $order, $start, $limit);
 }
