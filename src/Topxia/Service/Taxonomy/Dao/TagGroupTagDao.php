@@ -3,7 +3,7 @@ namespace Topxia\Service\Taxonomy\Dao;
 
 interface TagGroupTagDao
 {
-    public function getTagGroupByGroupId($groupId);
+    public function get($id);
 
     public function create($fields);
 

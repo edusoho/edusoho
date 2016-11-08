@@ -9,10 +9,10 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
 {
     protected $table = 'tag_group_tag';
 
-    public function getTagGroupByGroupId($groupId)
+    public function get($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE groupId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($groupId));
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
     public function create($fields)
@@ -23,7 +23,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
             throw $this->createDaoException('Insert tagGroup error.');
         }
         $this->clearCached();
-        return $this->getTagGroupByGroupId($this->getConnection()->lastInsertId());
+        return $this->get($this->getConnection()->lastInsertId());
 
     }
 
@@ -43,7 +43,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
     {
         $this->getConnection->update($this->table, $fieleds, array('groupId' => $groupId));
         $this->clearCached();
-        return $this->getTagGroupByGroupId($groupId);
+        return $this->get($groupId);
     }
 
     public function delete($groupId)
