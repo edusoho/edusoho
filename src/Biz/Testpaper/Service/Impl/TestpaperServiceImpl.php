@@ -37,9 +37,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
     }
 
-    public function searchTestpapers($conditions, $sort, $start, $limit)
+    public function searchTestpapers($conditions, $orderBy, $start, $limit)
     {
-        return $this->getTestpaperDao()->search($conditions, $sort, $start, $limit);
+        return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchTestpaperCount($conditions)
@@ -70,6 +70,20 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         return $this->getTestpaperItemDao()->delete($id);
     }
+
+    public function searchItems($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getTestpaperItemDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchItemCount($conditions)
+    {
+        return $this->getTestpaperItemDao()->count($conditions);
+    }
+
+    /**
+     * testpaper_item_result
+     */
 
     public function createItemResult($fields)
     {
@@ -153,7 +167,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $argument = $fields;
 
         $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
-        $fields           = $testpaperBuilder->filterFields($fields, 'update');
+        $fields           = $testpaperBuilder->filterFields($fields);
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 

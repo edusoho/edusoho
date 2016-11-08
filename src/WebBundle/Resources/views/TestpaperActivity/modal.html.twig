@@ -53,9 +53,12 @@
         {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
 
         <label class="starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
-          <input class="form-control width-input width-input-large" type="text" name="startTime" value="{{ activity.startTime|default("now"|date('Y-m-d H:i'))|date('Y-m-d H:i') }}">
+          <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% endif %}">
         </label>
-        <div class="help-block"></div>
+        <label class="endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
+          - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
+          <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}">
+        </label>
       </div>
     </div>
 

@@ -11,10 +11,12 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 {
     public function build($fields)
     {
-        $questionIds = explode(',', $fields['excludeIds']);
-
-        $fields   = $this->filterFields($fields);
-        $homework = $this->getTestpaperService()->createTestpaper($fields);
+        if (empty($fields['questionIds'])) {
+            throw new \InvalidArgumentException('homework field is invalid');
+        }
+        $questionIds = $fields['questionIds'];
+        $fields      = $this->filterFields($fields);
+        $homework    = $this->getTestpaperService()->createTestpaper($fields);
 
         $this->createQuestionItems($homework['id'], $questionIds);
 
@@ -30,7 +32,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     public function filterFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionIds'))) {
+        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
             throw new \InvalidArgumentException('homework field is invalid');
         }
 
@@ -39,12 +41,13 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         $filtedFields['courseId']        = $fields['courseId'];
         $filtedFields['lessonId']        = $fields['lessonId'];
         $filtedFields['type']            = 'homework';
-        $filtedFields['passedCondition'] = empty($fields['correctPercent']) ? array() : $fields['correctPercent'];
+        $filtedFields['passedCondition'] = empty($fields['passedCondition']) ? array() : $fields['correctPercent'];
         $filtedFields['description']     = empty($fields['description']) ? '' : $fields['description'];
         $filtedFields['name']            = empty($fields['name']) ? '' : $fields['name'];
 
-        $questionIds             = explode(',', $fields['questionIds']);
-        $excludeIds['itemCount'] = count($questionIds);
+        if (!empty($fields['questionIds'])) {
+            $filtedFields['itemCount'] = count($fields['questionIds']);
+        }
 
         $filtedFields['status']  = 'open';
         $filtedFields['pattern'] = 'questionType';
@@ -63,7 +66,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
             $questionsSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
 
             $items['seq']          = $index++;
-            $items['questionId']   = $questionId;
+            $items['questionId']   = $question['id'];
             $items['questionType'] = $question['type'];
             $items['testId']       = $homeworkId;
             $items['parentId']     = 0;

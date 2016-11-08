@@ -2,6 +2,8 @@
 
 namespace WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,30 +15,25 @@ class HomeworkActivityController extends BaseController implements ActivityActio
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity          = $this->getActivityService()->getActivity($id);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $activity = $this->getActivityService()->getActivity($id);
 
-        if ($testpaperActivity) {
-            $testpaperActivity['testpaperMediaId'] = $testpaperActivity['mediaId'];
-            unset($testpaperActivity['mediaId']);
-        }
-        $activity = array_merge($activity, $testpaperActivity);
+        $homeworkActivity = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
-        $testpapers = $this->findCourseTestpapers($activity['fromCourseId']);
+        $activity = array_merge($activity, $homeworkActivity);
 
-        $testpaperNames = array();
-        foreach ($testpapers as $testpaper) {
-            $testpaperNames[$testpaper['id']] = $testpaper['name'];
-        }
+        $questionItems = $this->getTestpaperService()->searchItems(
+            array('testId' => $activity['mediaId']),
+            array('id' => 'DESC'),
+            0, PHP_INT_MAX
+        );
 
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($questionItems, 'questionId'));
 
-        return $this->render('WebBundle:TestpaperActivity:modal.html.twig', array(
-            'activity'       => $activity,
-            'testpapers'     => $testpapers,
-            'testpaperNames' => $testpaperNames,
-            'features'       => $features,
-            'courseId'       => $activity['fromCourseId']
+        return $this->render('WebBundle:HomeworkActivity:modal.html.twig', array(
+            'activity'      => $activity,
+            'courseId'      => $activity['fromCourseId'],
+            'questionItems' => $questionItems,
+            'questions'     => $questions
         ));
     }
 
@@ -77,8 +74,13 @@ class HomeworkActivityController extends BaseController implements ActivityActio
         return $this->createService('Testpaper:TestpaperService');
     }
 
-    protected function getTestpaperActivityService()
+    protected function getQuestionService()
     {
-        return $this->createService('TestpaperActivity:TestpaperActivityService');
+        return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

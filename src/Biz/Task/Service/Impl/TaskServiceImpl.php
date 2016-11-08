@@ -86,14 +86,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             'createdUserId'
         ));
 
-        if (!empty($fields['startTime']) && $fields['startTime'] != 0) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-
-        if (!empty($fields['endTime']) && $fields['endTime'] != 0) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
-
         return $fields;
     }
 

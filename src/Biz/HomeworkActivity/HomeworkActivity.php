@@ -49,7 +49,7 @@ class HomeworkActivity extends Activity
     {
         $homework = $this->get($targetId);
 
-        if (!$exercise) {
+        if (!$homework) {
             throw new ResourceNotFoundException('HomeworkActivity', $targetId);
         }
 
@@ -66,9 +66,8 @@ class HomeworkActivity extends Activity
     protected function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array(
-            'questionIds',
             'finishCondition',
-            'finisheScore'))
+            'finishScore'))
         ) {
             throw new InvalidArgumentException('homework fields is invalid');
         }

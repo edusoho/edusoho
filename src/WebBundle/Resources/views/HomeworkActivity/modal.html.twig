@@ -3,59 +3,61 @@
 {% do script(['web/activity-manage/homework-activity-fields.js'], 300) %}
 
 {% block activity_content %}
-  <form id="step2-form" class="form-horizontal lesson-form" method="post">
+  <form id="step2-form" class="form-horizontal homework-activity-form" method="post">
 
     <div class="form-group">
       <div class="col-xs-2 control-label"><label>作业说明</label></div>
       <div class="col-xs-8 controls">
-        <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ homework.description|default('') }}</textarea>
+        <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.description|default('') }}</textarea>
       </div>
     </div>
 
-    <div class="clearfix mbm">
-      <button  id="picker_homework_items" data-url="{{ path('course_manage_homework_question_picker',{courseId:courseId}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"　><span class="glyphicon glyphicon-plus"  ></span> 选择题目</button>
-    </div>
-
-    <table class="table table-striped table-hover tab-content" id="homework-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th><input type="checkbox" data-role="batch-select"></th>
-          <th>题号</th>
-          <th width="40%">题干</th>
-          <th>类型</th>
-          <th>难度</th>
-          <th width="25%">操作</th>
-        </tr>
-      </thead>
-      <tbody id="homework-table-tbody" >
-      {% if questions|default(null) %}
-        {% for key,homeworkItem in homeworkItems %}
-          {% set questionId = homeworkItem.questionId %}
-          {% set question = questions[questionId] %}
-          {% include 'WebBundle:HomeworkActivity:question-tr.html.twig'%}
-        {% endfor %}
-      {% endif %}
-      </tbody>
-    </table>
-
-    <div class="form-group hidden">
-      <label class="col-xs-2 control-label"></label>
-      <div class="col-xs-9 controls">
-        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />
+    {% if not activity|default(null) %}
+      <div class="clearfix mbm">
+        <button  id="picker_homework_items" data-url="{{ path('course_manage_question_picker',{courseId:courseId}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"　><span class="glyphicon glyphicon-plus"  ></span> 选择题目</button>
       </div>
-    </div>
 
-    <div>
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-      <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目">删除</button>
-    </div>
-    <div id="homework_items_help" class="help-block" style="display:none;">请选择题目</div>
-    
-    <div class="form-group">
-      <div class="col-xs-12 controls correctPercentDiv"></div>
-      <div class="help-block col-xs-12 correct_percent_help"></div>
-    </div>
+      <table class="table table-striped table-hover tab-content" id="question-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th><input type="checkbox" data-role="batch-select"></th>
+            <th>题号</th>
+            <th width="40%">题干</th>
+            <th>类型</th>
+            <th>难度</th>
+            <th width="25%">操作</th>
+          </tr>
+        </thead>
+        <tbody id="question-table-tbody" >
+        {% if questions|default(null) %}
+          {% for key,questionItem in questionItems %}
+            {% set questionId = questionItem.questionId %}
+            {% set question = questions[questionId] %}
+            {% include 'WebBundle:QuestionManage:question-tr.html.twig'%}
+          {% endfor %}
+        {% endif %}
+        </tbody>
+      </table>
+
+      <div class="form-group hidden">
+        <label class="col-xs-2 control-label"></label>
+        <div class="col-xs-9 controls">
+          <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />
+        </div>
+      </div>
+
+      <div>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目">删除</button>
+      </div>
+      <div id="homework_items_help" class="help-block" style="display:none;">请选择题目</div>
+      
+      <div class="form-group">
+        <div class="col-xs-12 controls correctPercentDiv"></div>
+        <div class="help-block col-xs-12 correct_percent_help"></div>
+      </div>
+    {% endif %}
 
     <div class="form-group">
       <div class="col-xs-8 controls">

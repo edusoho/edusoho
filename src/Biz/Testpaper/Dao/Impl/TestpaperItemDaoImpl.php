@@ -112,6 +112,10 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
             'parentId > :parentId'
         );
 
+        $declares['orderbys'] = array(
+            'id'
+        );
+
         return $declares;
     }
 }

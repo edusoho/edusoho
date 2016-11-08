@@ -150,12 +150,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ));
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
-        if (isset($fields['startTime']) && $fields['startTime'] != 0) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-        if (isset($fields['endTime']) && $fields['startTime'] != 0) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
 
         return $fields;
     }

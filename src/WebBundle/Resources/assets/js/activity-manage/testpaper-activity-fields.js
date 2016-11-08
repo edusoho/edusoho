@@ -8,6 +8,7 @@ class Testpaper {
 
   _init() {
     this._inItStep2form();
+    this._dateTimePicker();
 
     let testpaperId = $('#testpaper-media').find('option:selected').val();
     if (testpaperId != 0) {
@@ -19,6 +20,7 @@ class Testpaper {
   	$('#testpaper-media').on('change', event=>this._changeTestpaper(event));
   	$('input[name=doTimes]').on('change', event=>this._showRedoInterval(event));
   	$('input[name="testMode"]').on('change',event=>this._startTimeCheck(event))
+    $('input[name="limitedTime"]').on('blur',event=>this._changeEndTime(event))
   }
 
   _changeTestpaper(event) {
@@ -64,11 +66,48 @@ class Testpaper {
 
   _dateTimePicker() {
     let $starttime = $('input[name="startTime"]');
+    var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+
     $starttime.datetimepicker({
+        autoclose: true,
         format: 'yyyy-mm-dd hh:ii',
         language:"zh",
+        minView: 'hour'
+    })
+    .on('show', function(ev){
+      $parentiframe.height($parentiframe.contents().find('body').height()+260);
+    })
+    .on('hide', function(ev){
+      $parentiframe.height($parentiframe.contents().find('body').height());
+    })
+    .on('changeDate', function(ev){
+      let date = ev.date.valueOf();
+      let limitedTime = $('input[name="limitedTime"]').val();
+      if (limitedTime != 0) {
+        let endTime = new Date(date + limitedTime * 60 * 1000);
+        let endDate = endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' 
+                      + endTime.getDate() + ' ' + endTime.getHours() + ':' + endTime.getMinutes();  
+        $('#starttime-show').html(endDate);
+        $('.endtime-input').show();
+        $('input[name="endTime"]').val(endDate);
+      }
     });
+
     $starttime.datetimepicker('setStartDate',new Date());
+  }
+
+  _changeEndTime() {
+    let $this = $(event.currentTarget);
+    let limitedTime = $this.val();
+    let startTime = $('input[name="startTime"]').val();
+
+    if (startTime != '') {
+      let endTime = new Date(Date.parse(startTime) + limitedTime * 60 * 1000);
+      let endDate = endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' 
+                    + endTime.getDate() + ' ' + endTime.getHours() + ':' + endTime.getMinutes();  
+      $('#starttime-show').html(endDate);
+      $('input[name="endTime"]').val(endDate);
+    }
   }
 
   _inItStep2form() {
@@ -86,19 +125,22 @@ class Testpaper {
             },
             startTime:{
             	required:function(){
-            		return ($('[name="doTimes"]').val() == 1) && ($('[name="testMode"]').val() == 'realTime');
+            		return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
             	},
             	DateAndTime:true
             },
             redoInterval:{
             	required:function(){
-            		return $('[name="doTimes"]').val() == 1;
+            		return $('[name="doTimes"]:checked').val() == 1;
             	},
             	arithmeticFloat:true,
             	max:1000000000
             }
         },
         messages: {
+            startTime: {
+              required:"请选择考试的开始时间"
+            },
             redoInterval: {
               max: "最大值不能超过1000000000"
             },

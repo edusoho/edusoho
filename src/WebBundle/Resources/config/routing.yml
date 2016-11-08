@@ -109,12 +109,9 @@ course_manage_homework_create:
   path: /course/{courseId}/manage/lesson/{lessonId}/homework/create
   defaults: { _controller: WebBundle:HomeworkManage:create }
 
-course_manage_homework_question_picker:
-  pattern: /course/{courseId}/manage/question/picker
-  defaults: { _controller: WebBundle:HomeworkManage:questionPicker }
 
 course_manage_homework_question_picked:
-  pattern: /course/{courseId}/manage/question/picked
+  path: /course/{courseId}/manage/question/picked
   defaults: { _controller: WebBundle:HomeworkManage:questionPicked }
 
 
@@ -125,6 +122,15 @@ course_manage_exercise_create:
 
 #todo 与homework_check合并
 course_manage_exercise_check:
-    pattern:  /course/{courseId}/manage/exercise/check
-    defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
+  path:  /course/{courseId}/manage/exercise/check
+  defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
+
+#question
+course_manage_question_picker:
+  path: /course/{courseId}/manage/question/picker
+  defaults: { _controller: WebBundle:QuestionManage:questionPicker }
+
+course_manage_question_picked:
+  path:  /course/{courseId}/manage/question/{questionId}/picked
+  defaults: { _controller: WebBundle:QuestionManage:PickedQuestion }
 

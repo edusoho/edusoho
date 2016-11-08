@@ -1,8 +1,8 @@
- <tr id="homework-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
+ <tr id="question-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
   <td><span class="glyphicon glyphicon-resize-vertical sort-handle"></span></td>
   <td>
-    <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
-    <input type="hidden" name="questionId[]" value="{{ question.id }}">
+    <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" checked="checked">
+    <input type="hidden" name="questionIds[]" value="{{ question.id }}">
   </td>
   <td class="seq">{{ homeworkItem.seq|default(' ') }}</td>
   <td>
@@ -10,7 +10,7 @@
     {{question['stem']|plain_text(40) }}
     <div class="text-muted text-sm">
       从属：
-      {% if question.target == 'course-' ~ course.id %}
+      {% if question.target == 'course-' ~ courseId %}
         本课程
       {% else %}
         {{ targets[question.target].simple_name|default('--') }}
@@ -29,9 +29,9 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}" class="notMoveHandle btn btn-default btn-sm">预览</a>
+        <a data-url="{{ path('course_manage_question_preview', {courseId:courseId, id:question.id, isNew:true }) }}" class="notMoveHandle btn btn-default btn-sm question-preview">预览</a>
         <a href="javascript:" class="notMoveHandle btn btn-default btn-sm item-delete-btn">删除</a>
-        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="pick-item" data-url="{{ path('course_manage_homework_question_picker', {courseId:course.id, replace:question.id }) }}" >替换</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="pick-item" data-url="{{ path('course_manage_question_picker', {courseId:courseId, replace:question.id }) }}" >替换</a>
       {% endif %}
     </div>
   </td>

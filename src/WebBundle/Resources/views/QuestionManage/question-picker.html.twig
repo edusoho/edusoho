@@ -9,7 +9,7 @@
 
 {% block body %}
 <div id="question-picker-body">
-  <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_manage_homework_question_picker', {courseId:course.id}) }}" novalidate>
+  <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_manage_question_picker', {courseId:course.id}) }}" novalidate>
     <div class="form-group">
       <select class="form-control" name="target" style="width:200px;height:32px;">
         {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
@@ -40,7 +40,7 @@
     </thead>
     <tbody>
       {% for question in questions if (question.type != 'material' or question.subCount > 0) %}
-        {% include 'WebBundle:HomeworkManage:question-pick-tr.html.twig' %}
+        {% include 'WebBundle:QuestionManage:question-pick-tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:course.id}) }}">创建题目</a></div></td></tr>
       {% endfor %}
