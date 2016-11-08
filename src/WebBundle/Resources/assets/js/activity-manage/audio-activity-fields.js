@@ -42,5 +42,5 @@ const action = data => {
     console.log('action triggered', data);
 }
 
-fileChooser.on('fileChooser:select', action);
+fileChooser.on('select', action);
 

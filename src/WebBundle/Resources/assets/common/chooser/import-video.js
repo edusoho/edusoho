@@ -58,11 +58,9 @@ class VideoImport extends Chooser {
         this._close();
         var value = file ? JSON.stringify(file) : '';
         console.log('begin videoImportChoose:select');
-        this.trigger('videoImportChoose:select', file);
-      //  $('[name="media"]').val(value);
+        this.trigger('select', file);
         $('[data-role="placeholder"]').html(file.name);
     }
 }
 
 export default VideoImport;
-//new VideoImport($('#import-video-panel'));

@@ -114,23 +114,8 @@ class MaterialLibChoose extends Chooser {
         $('[data-role="placeholder"]').html(file.name);
 
         console.log('begin materialLibChoose:select');
-        this.('select', file);
-       // this._onChange(file);
+        this.trigger('select', file);
         this._close();
-    }
-
-    _onChange(file) {
-        var value = file ? JSON.stringify(file) : '';
-        $('[name="media"]').val(value);
-        $('[data-role="placeholder"]').html(file.name);
-        this._fillMtriggerinuteAndSecond(file.length);
-    }
-
-    _fillMinuteAndSecond(fileLength) {
-        let minute = parseInt(fileLength / 60);
-        let second = Math.round(fileLength % 60);
-        $("#minute").val(minute);
-        $("#second").val(second);
     }
 
     _getUrlParameter(url, param) {

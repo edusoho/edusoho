@@ -121,4 +121,4 @@ const fileChooser = new FileChooser();
 //     console.log('action triggered', data);
 // }
 
-fileChooser.on('fileChooser:select', fileSelect);
+fileChooser.on('select', fileSelect);
