@@ -105,6 +105,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('headTeacherId = :headTeacherId')
             ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
