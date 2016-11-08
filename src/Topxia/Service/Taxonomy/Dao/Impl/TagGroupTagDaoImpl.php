@@ -11,10 +11,14 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
 
     public function findTagsByGroupId($groupId)
     {
+
+        $sql = "SELECT * FROM {$this->table} WHERE gr";
+
+
         $that = $this;
 
         return $this->fetchCached("groupId:{$groupId}", $groupId, function ($groupId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE groupId = ? ORDER BY weight ASC";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE groupId = ?";
             return $that->getConnection()->fetchAll($sql, array($groupId)) ?: array();
         }
 
