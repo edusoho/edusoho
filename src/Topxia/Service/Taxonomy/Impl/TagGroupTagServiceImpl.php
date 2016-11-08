@@ -20,7 +20,7 @@ class TagGroupTagServiceImpl extends BaseService implements TagGroupTagService
     {
         $this->fieterConditions($conditions);
 
-        return $this->getTagGroupDao()->search($conditions, $order, $start, $limit);
+        return $this->getTagGroupTagDao()->search($conditions, $order, $start, $limit);
     }
 
     protected function fieterConditions($conditions)
