@@ -71,6 +71,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->findTagsByNames($names);
     }
 
+    public function findTagsByGroupId($groupId)
+    {
+        return $this->getTagGroupTagDao()->findTagsByGroupId($groupId);
+    }
+
     public function isTagNameAvalieable($name, $exclude = null)
     {
         if (empty($name)) {
@@ -160,6 +165,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
+    protected function getTagGroupTagDao()
+    {
+        $this->createDao('Taxonomy.TagGroupTag');
+    }
+    
     protected function getTagDao()
     {
         return $this->createDao('Taxonomy.TagDao');

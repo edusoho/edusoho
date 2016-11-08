@@ -21,6 +21,8 @@ interface TagService
 
     public function findTagsByNames(array $names);
 
+    public function findTagsByGroupId($groupId);
+
     public function isTagNameAvalieable($name, $exclude = null);
 
     public function addTag(array $tag);
