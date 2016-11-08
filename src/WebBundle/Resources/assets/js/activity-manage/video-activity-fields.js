@@ -48,5 +48,5 @@ const onSelectFile = file => {
     console.log('action triggered', onSelectFile);
 }
 
-fileChooser.on('fileChooser:select', onSelectFile);
+fileChooser.on('select', onSelectFile);
 
