@@ -49,7 +49,6 @@ class CourseFileChoose extends Chooser {
         var value = file ? JSON.stringify(file) : '';
         console.log('begin courseFileChoose:select');
         this.trigger('select', file);
-      //  $('[name="media"]').val(value);
         $('[data-role="placeholder"]').html(file.name);
 
         this._fillMinuteAndSecond(file.length);
