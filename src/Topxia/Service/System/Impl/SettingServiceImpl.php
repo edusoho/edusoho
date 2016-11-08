@@ -19,7 +19,7 @@ class SettingServiceImpl extends BaseService implements SettingService
             'value' => serialize($value)
         );
         $this->getSettingDao()->addSetting($setting);
-        $this->clearCache();
+        $this->clearCached();
     }
 
     public function get($name, $default = array())
@@ -55,7 +55,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     public function delete($name)
     {
         $this->getSettingDao()->deleteSettingByName($name);
-        $this->clearCache();
+        $this->clearCached();
     }
 
     public function setByNamespace($namespace, $name, $value)
@@ -67,13 +67,13 @@ class SettingServiceImpl extends BaseService implements SettingService
             'value'     => serialize($value)
         );
         $this->getSettingDao()->addSetting($setting);
-        $this->clearCache();
+        $this->clearCached();
     }
 
     public function deleteByNamespaceAndName($namespace, $name)
     {
         $this->getSettingDao()->deleteByNamespaceAndName($namespace, $name);
-        $this->clearCache();
+        $this->clearCached();
     }
 
     protected function clearCache()
