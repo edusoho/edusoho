@@ -76,7 +76,7 @@ class TagDaoImpl extends BaseDao implements TagDao
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
-
+    
     public function searchTags($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

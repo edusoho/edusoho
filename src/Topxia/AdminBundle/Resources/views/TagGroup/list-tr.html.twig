@@ -1,10 +1,10 @@
-<tr id="tagGroup-tr-{{ groupId }}">
+<tr id="tagGroup-tr-{{ tagGroup.id }}">
   <td>{{ tagGroup.id }}</td>
   <td>{{ tagGroup.name }}</td>
   <td>{{ tagGroup.scope }}</td>
   <td>{{ tagGroup.tagNum }}</td>
   <td>{{ tagGroup.createdTime }}</td>
   <td>
-    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {groupId: groupId}) }}" data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</button>
+    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {groupId: tagGroup.id}) }}" data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</button>
   </td>
 </tr>

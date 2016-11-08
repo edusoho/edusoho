@@ -7,9 +7,18 @@ use Topxia\Service\Taxonomy\TagService;
 
 class TagServiceImpl extends BaseService implements TagService
 {
+    private $allowFields = array(
+        'name', 'scope', 'tagNum'
+    );
+
     public function getTag($id)
     {
         return $this->getTagDao()->getTag($id);
+    }
+
+    public function getTagGroup($id)
+    {
+        return $this->getTagGroupDao()->get($id);
     }
 
     public function getTagByName($name)
@@ -34,6 +43,11 @@ class TagServiceImpl extends BaseService implements TagService
     public function getAllTagCount()
     {
         return $this->getTagDao()->findAllTagsCount();
+    }
+
+    public function findTagGroups()
+    {
+        return $this->getTagGroupDao()->findTagGroups();
     }
 
     public function searchTags($conditions, $start, $limit)
@@ -71,6 +85,15 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->findTagsByNames($names);
     }
 
+    public function findTagsByGroupId($groupId)
+    {
+        $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
+
+        $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
+
+        return $this->findTagsByIds($tagIds);
+    }
+
     public function isTagNameAvalieable($name, $exclude = null)
     {
         if (empty($name)) {
@@ -98,6 +121,28 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 
         return $tag;
+    }
+
+    public function addTagGroup($fields)
+    {   
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
+        $fields = $this->filterTagGroupFields($fields);
+
+        $fields['createdTime'] = time();
+
+        $tagGroup = $this->getTagGroupDao()->create($fields);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagGroupTagDao()->create(array(
+                'tagId'      => $tagId,
+                'groupId'     => $tagGroup['id'],
+            ));
+        }
+
+        $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
+
+        return $tagGroup;
     }
 
     protected function setTagOrg($tag)
@@ -136,11 +181,47 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->updateTag($id, $fields);
     }
 
+    public function updateTagGroup($id, $fields)
+    {
+        $tagGroup = $this->getTagGroupDao()->get($id);
+
+        if (empty($tagGroup)) {
+            throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
+        }
+
+        $this->getTagGroupTagDao()->deleteByGroupId($id);
+
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+        }
+
+        $fields = $this->filterTagGroupFields($fields);
+
+        $fields['updatedTime'] = time();
+        
+        $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
+
+        $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
+
+        return $updatedTagGroup;
+    }
+
     public function deleteTag($id)
     {
         $this->getTagDao()->deleteTag($id);
         $this->dispatchEvent("tag.delete", array('tagId' => $id));
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
+    }
+
+    public function deleteTagGroup($id)
+    {
+        $this->getTagGroupDao()->delete($id);
+
+        $this->getTagGroupTagDao()->deleteByGroupId($id);
+
+        $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
     protected function filterTagFields(&$tag, $relatedTag = null)
@@ -160,9 +241,25 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
+
+    protected function filterTagGroupFields($fields)
+    {
+        return ArrayToolkit::parts($fields, $this->allowFields);
+    }
+
+    protected function getTagGroupTagDao()
+    {
+        return $this->createDao('Taxonomy.TagGroupTagDao');
+    }
+    
     protected function getTagDao()
     {
         return $this->createDao('Taxonomy.TagDao');
+    }
+
+    protected function getTagGroupDao()
+    {
+        return $this->createDao('Taxonomy.TagGroupDao');
     }
 
     protected function getLogService()
