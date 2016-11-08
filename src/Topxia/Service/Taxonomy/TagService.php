@@ -5,6 +5,8 @@ interface TagService
 {
     public function getTag($id);
 
+    public function getTagGroup($id);
+
     public function getTagByName($name);
 
     public function getTagByLikeName($name);
@@ -27,7 +29,13 @@ interface TagService
 
     public function addTag(array $tag);
 
+    public function addTagGroup($fields);
+
     public function updateTag($id, array $fields);
 
+    public function updateTagGroup($id, $fields);
+
     public function deleteTag($id);
+
+    public function deleteTagGroup($id);
 }
