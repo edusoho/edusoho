@@ -17,6 +17,7 @@ class Version20161108141257 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+        $this->addSql("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
     }
 
     /**
