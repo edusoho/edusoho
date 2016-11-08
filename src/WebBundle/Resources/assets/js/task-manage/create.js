@@ -1,3 +1,5 @@
+import loadAnimation from 'common/load-animation'
+
 class Editor {
     constructor($modal) {
         this.$element = $modal;
@@ -17,16 +19,17 @@ class Editor {
     }
 
     _initEvent() {
-        $(this.$element).on('click', '#course-tasks-next', event=>this._onNext(event));
-        $(this.$element).on('click', '#course-tasks-prev', event=>this._onPrev(event));
+        $('#course-tasks-submit').click(event=>this._onSave(event));
+        $('#course-tasks-next').click(event=>this._onNext(event));
+        $('#course-tasks-prev').click(event=>this._onPrev(event));
         if (this.mode != 'edit') {
-            $(this.$element).on('click', '.js-course-tasks-item', event=>this._onSetType(event));
+            $('.js-course-tasks-item').click(event=>this._onSetType(event));
         }
-        $(this.$element).on('click', '#course-tasks-submit', event=>this._onSave(event));
     }
 
     _init() {
         this._inItStep1form();
+        this._renderContent(this.step);
         if (this.mode == 'edit') {
             this.contentUrl = this.$task_manage_type.data('editorStep2Url');
             this.step = 2;
@@ -51,20 +54,22 @@ class Editor {
     }
 
     _onSetType(event) {
-        const $this = $(event.currentTarget).addClass('active');
+        let $this = $(event.currentTarget).addClass('active');
         $this.siblings().removeClass('active');
         let type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
-        ( this.type !== type ) ? this.loaded = false : this.loaded = true;
+        this.type !== type  ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
     }
 
-    _onSave() {
+    _onSave(event) {
         if (!this._validator(this.step)) {
             return;
         }
+
+        let $this = $(event.currentTarget).attr('disabled','disabled');
         let length = this._getLength();
         let postData = $('.js-hidden-data')
             .map((index, node) => {
@@ -83,7 +88,6 @@ class Editor {
                 {name: 'mediaType', value: this.type},
                 {name: 'length', value: length}
             ]);
-
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
@@ -100,7 +104,6 @@ class Editor {
         this._rendStepIframe(this.step);
         this._rendButton(this.step);
         if (this.step == 2 && !this.loaded) {
-            this.loaded = true;
             this._initIframe();
         }
     }
@@ -126,17 +129,19 @@ class Editor {
 
     _initIframe() {
         let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
-        let validator = {};
-        this.$task_manage_content.html(html); 
+        this.$task_manage_content.html(html).show(); 
         this.$frame = $('#'+this.iframe_name);
-        this.$frame.load(()=>{
+        let loadiframe = () => {
+            this.loaded = true;
+            let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
             this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
-            this.$iframe_body.find("#step2-form").data('validator', validator)
+            this.$iframe_body.find("#step2-form").data('validator', validator);
             this.$iframe_body.find("#step3-form").data('validator', validator); 
-        });
+        };
+        this.$frame.load(loadAnimation(loadiframe,this.$task_manage_content));
     }
 
     _inItStep1form() {
@@ -144,14 +149,12 @@ class Editor {
         let validator = $step1_form.validate({
             onkeyup: false,
             rules: {
-                title: {
+                mediaType: {
                     required: true,
                 },
-                content: 'required',
             },
             messages: {
-                title: "请输入标题",
-                content: "请输入内容"
+                mediaType: "请选择分类",
             }
         });
         $step1_form.data('validator', validator);
@@ -165,8 +168,9 @@ class Editor {
             var $from = this.$iframe_body.find("#step" + step + "-form");
             validator = this.iframe_jQuery.data($from[0], 'validator');
         }
+
         if (validator && !validator.form()) {
-            this.$frame ? this.$frame.height(this.$iframe_body.height()) : "";
+            this.loaded ? this.$frame.height(this.$iframe_body.height()) : "";
             return false;
         }
         return true;
@@ -178,13 +182,10 @@ class Editor {
             this._rendSubmit(false);
             this._renderNext(true);
         } else if (step === 2) {
-            if (this.mode != 'edit') {
-                this._rendSubmit(true);
-                this._renderPrev(true);
-                this._renderNext(true);
-                return;
+            this._renderPrev(true);
+            if (this.mode === 'edit') {
+                this._renderPrev(false);
             }
-            this._renderPrev(false);
             if (!this.loaded) {
                 this._rendSubmit(false);
                 this._renderNext(false);
@@ -207,16 +208,17 @@ class Editor {
     }
 
     _renderStep(step) {
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('done').siblings().removeClass('done');
+        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
+        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
     }
 
     _renderContent(step) {
-        (step === 1 ) ? this.$task_manage_type.show() : this.$task_manage_type.hide();
-        (step !== 1 ) ? this.$task_manage_content.show() : this.$task_manage_content.hide();
+        (step === 1 ) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
+        (step !== 1 ) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
     }
 
     _renderNext(show) {
-        show ? $("#course-tasks-next").removeAttr('disabled') : $("#course-tasks-next").attr('disabled', 'disabled');
+        show ? $("#course-tasks-next").removeClass('hidden').removeAttr("disabled") : $("#course-tasks-next").addClass('hidden');
     }
 
     _renderPrev(show) {
