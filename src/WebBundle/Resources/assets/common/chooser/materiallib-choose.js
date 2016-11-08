@@ -114,7 +114,7 @@ class MaterialLibChoose extends Chooser {
         $('[data-role="placeholder"]').html(file.name);
 
         console.log('begin materialLibChoose:select');
-        this.trigger('materialLibChoose:select', file);
+        this.('select', file);
        // this._onChange(file);
         this._close();
     }
@@ -123,7 +123,7 @@ class MaterialLibChoose extends Chooser {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
         $('[data-role="placeholder"]').html(file.name);
-        this._fillMinuteAndSecond(file.length);
+        this._fillMtriggerinuteAndSecond(file.length);
     }
 
     _fillMinuteAndSecond(fileLength) {

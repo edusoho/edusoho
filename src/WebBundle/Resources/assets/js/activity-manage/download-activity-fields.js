@@ -1,7 +1,7 @@
 /**
  * Created by Simon on 03/11/2016.
  */
-import  {materialLibChoose, videoImport, courseFileChoose} from '../../common/file-choose';
+import  FileChooser from '../../common/file-choose';
 jQuery.validator.addMethod("url", function (value, element) {
     return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
@@ -114,12 +114,11 @@ const fileSelect = file => {
     $("input[name=media]").val(JSON.stringify(file));
     console.log('action triggered', file);
 }
-/*function fileSelect(file) {
- console.log('action triggered', file);
- return file;
- }*/
 
+const fileChooser = new FileChooser();
 
-materialLibChoose.on('materialLibChoose:select', fileSelect);
-videoImport.on('videoImportChoose:select', fileSelect);
-courseFileChoose.on('courseFileChoose:select', fileSelect);
+// const action = data => {
+//     console.log('action triggered', data);
+// }
+
+fileChooser.on('fileChooser:select', fileSelect);

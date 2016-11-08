@@ -1,5 +1,4 @@
-//import  FileChooser from '../../common/file-choose';
-import  {materialLibChoose, videoImport, courseFileChoose} from '../../common/file-choose';
+import  FileChooser from '../../common/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -35,29 +34,19 @@ function _inItStep2form() {
 }
 
 _inItStep2form();
-//
-// const fileChooser = new FileChooser();
-// fileChooser.initFileChooser();
-// fileChooser.on('fileChooser:select1', action);
-// fileChooser.on('fileChooser:select', action);
 
+const fileChooser = new FileChooser();
 
-const action = data => {
-    console.log('action triggered', data);
+const onSelectFile = file => {
+    if (file.length) {
+        let minute = parseInt(file.length / 60);
+        let second = Math.round(file.length % 60);
+        $("#minute").val(minute);
+        $("#second").val(second);
+    }
+
+    console.log('action triggered', onSelectFile);
 }
 
+fileChooser.on('fileChooser:select', onSelectFile);
 
-
-materialLibChoose.on('materialLibChoose:select', action);
-videoImport.on('videoImportChoose:select', action);
-courseFileChoose.on('courseFileChoose:select', action);
-/*
-
-
- const materialLibChoose = new MaterialLibChoose($('#chooser-course-panel'));
-
- var fileImport = new FileImport($('#chooser-import-panel'));
-
- var courseFileChoose = new CourseFileChoose($('#chooser-material-panel'));
-
- */

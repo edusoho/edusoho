@@ -6,49 +6,30 @@ import VideoImport from '../common/chooser/import-video';
 import CourseFileChoose from '../common/chooser/coursefile-choose';
 import Emitter from 'es6-event-emitter';
 
-const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
-const videoImport = new VideoImport($('#import-video-panel'));
-const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
+class FileChooser extends Emitter {
 
-export  {materialLibChoose, videoImport, courseFileChoose}
-/*class FileChooser extends Emitter {
+    constructor() {
+        super();
+        this.initFileChooser();
+    }
 
- constructor() {
- super();
- //  this.initFileChooser();
- }
+    initFileChooser() {
+        const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
+        const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
+        const videoImport = new VideoImport($('#import-video-panel'));
 
- initFileChooser() {
- const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
- const fileImport = new FileImport($('#chooser-import-panel'));
- const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
+        materialLibChoose.on('materialLibChoose:select', this.fileSelect2.bind(this));
+        courseFileChoose.on('courseFileChoose:select', this.fileSelect2.bind(this));
+        videoImport.on('videoImportChoose:select', this.fileSelect2.bind(this));
+    }
 
- materialLibChoose.on('materialLibChoose:select', this.fileSelect1);
- fileImport.on('videoImportChoose:select', this.fileSelect2);
- courseFileChoose.on('courseFileChoose:select', this.fileSelect3);
- }
+    fileSelect2(file) {
+        console.log('filechooser2', this)
+        this.trigger('fileChooser:select', file);
+    }
 
- fileSelect1(file) {
- console.log('filechooser1')
- this.trigger('fileChooser:select1', file);
- }
-
- fileSelect2(file) {
- console.log('filechooser2')
- this.trigger('fileChooser:select', file);
- }
-
- fileSelect3(file) {
- console.log('filechooser3')
- this.trigger('fileChooser:select', file);
- }
-
- }
- //
- // this.trigger('courseFileChoose:select', file);
- // this.trigger('videoImportChoose:select', file);
- // this.trigger('materialLibChoose:select', file);
- export default FileChooser ;*/
+}
+export default FileChooser ;
 
 $("#material a").click(function (e) {
     e.preventDefault();
