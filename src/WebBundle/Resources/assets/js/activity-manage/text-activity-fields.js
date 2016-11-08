@@ -18,13 +18,11 @@ class Text{
             height: 300
         });
         editor.on('instanceReady', function (e) { 
-            // console.log(editor.getData());
             var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
             $parentiframe.height($parentiframe.contents().find('body').height());
         });
 
         editor.on( 'change', () => {    
-            // this._getEditorContent(editor);
             $('[name="content"]').val(editor.getData());
         });
     }
