@@ -212,10 +212,11 @@ class CourseManageController extends BaseController
 
     public function lessonDashboardAction(Request $request, $id)
     {
-        $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
         $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
         return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson.html.twig', array(
-            'lessonTitles' => ArrayToolkit::column($lessonStat, 'title'),
+            'course' => $course,
+            'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
             'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
             'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
             'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),

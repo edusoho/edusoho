@@ -6,6 +6,6 @@
 
 {% block dashboard %}
   
-  <div id="lesson-dashboard-container" style="min-height:400px;" data-titles="{{ lessonTitles|json_encode }}" data-learn-num="{{ learnNum|json_encode }}" data-finished-num="{{ finishedNum|json_encode }}" data-finished-rate="{{ finishedRate|json_encode }}"></div>
+  <div id="lesson-dashboard-container" data-lesson-num="{{ lessonTitles|length }}" data-titles="{{ lessonTitles|json_encode }}" data-learn-num="{{ learnNum|json_encode }}" data-finished-num="{{ finishedNum|json_encode }}" data-finished-rate="{{ finishedRate|json_encode }}"></div>
 
 {% endblock %}

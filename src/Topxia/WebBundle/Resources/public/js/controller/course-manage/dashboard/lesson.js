@@ -9,12 +9,26 @@ define(function(require, exports, module) {
         option = {
             tooltip : {
                 trigger: 'axis',
+                formatter: function(params) {
+                    var rate = 0;
+
+                    //求完成率
+                    if (params[1].value > 0) {
+                        rate = (params[0].value/params[1].value).toFixed(3) * 100;
+                    }
+
+                    var html = params[0].name + '</br>';
+                    html += '完成人数 : '+params[0].value+'</br>';
+                    html += '学习人数 : '+params[1].value+'</br>';
+                    html += '完成率 : '+rate+'%';
+                    return html;
+                },
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                     type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 }
             },
             legend: {
-                data: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎']
+                data: ['完成人数', '学习人数']
             },
             grid: {
                 left: '3%',
@@ -23,79 +37,77 @@ define(function(require, exports, module) {
                 containLabel: true
             },
             xAxis:  {
-                type: 'value'
+                type: 'value',
+                minInterval: 1
             },
-            yAxis: {
-                type: 'category',
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-            },
+            yAxis: [
+                {
+                    name: '课时',
+                    type: 'category',
+                    axisLabel: {
+                        margin: 15
+                    },
+                    data: $container.data('titles')
+                }
+            ],
             series: [
                 {
-                    name: '直接访问',
+                    name: '完成人数',
                     type: 'bar',
-                    stack: '总量',
                     label: {
                         normal: {
                             show: true,
                             position: 'insideRight'
                         }
                     },
-                    data: [320, 302, 301, 334, 390, 330, 320]
+                    itemStyle: {
+                        normal: {
+                            color: '#090'
+                        }
+                    },
+                    data: $container.data('finishedNum')
                 },
                 {
-                    name: '邮件营销',
+                    name: '学习人数',
                     type: 'bar',
-                    stack: '总量',
                     label: {
                         normal: {
                             show: true,
                             position: 'insideRight'
                         }
                     },
-                    data: [120, 132, 101, 134, 90, 230, 210]
-                },
-                {
-                    name: '联盟广告',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
+                    itemStyle: {
                         normal: {
-                            show: true,
-                            position: 'insideRight'
+                            color: '#668ed6'
                         }
                     },
-                    data: [220, 182, 191, 234, 290, 330, 310]
-                },
-                {
-                    name: '视频广告',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [150, 212, 201, 154, 190, 330, 410]
-                },
-                {
-                    name: '搜索引擎',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [820, 832, 901, 934, 1290, 1330, 1320]
+                    data: $container.data('learnNum')
                 }
             ]
         };
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-        
+
+        resetContainerHeight();
+
+        function resetContainerHeight(){
+            var height = calcContainerHeight($container);
+            $container.height(height);
+            myChart.resize();
+        }
+
+        function calcContainerHeight($container)
+        {
+            var length = $container.data('lesson-num');
+            var maxHeight = 30 * length;
+
+            if (maxHeight < 400) {
+                return 400;
+            } else {
+                return maxHeight;
+            }
+        }
     };
 
 });
