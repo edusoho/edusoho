@@ -115,10 +115,10 @@ class TagServiceImpl extends BaseService implements TagService
     }
 
     public function addTagGroup($fields)
-    {
-        $tagIds = $fieled['tagIds'];
+    {   
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
-        $this->fieterFields($fields);
+        $fields = $this->fieterTagGroupFields($fields);
 
         $fields['createdTime'] = time();
 
@@ -128,7 +128,6 @@ class TagServiceImpl extends BaseService implements TagService
             $this->getTagGroupTagDao()->create(array(
                 'tagId'      => $tagId,
                 'groupId'     => $tagGroup['id'],
-                'createdTime' => $fields['createdTime'],
             ));
 
             $this->getTagDao()->updateTag($tagId, array('groupId' => $tagGroup['id']));
@@ -177,25 +176,25 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function updateTagGroup($id, $fields)
     {
-
-        $tagGroup = $this->get($id);
-
-        $tagIds = $fields['tarIds'];
+        $tagGroup = $this->getTagGroupDao()->get($id);
 
         if (empty($tagGroup)) {
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
-        $this->fieterTagGroupFields($fields);
+
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
+        $fields = $this->fieterTagGroupFields($fields);
 
         $fields['updatedTime'] = time();
 
-        if (isset($tagIds)) {
-            foreach ($tarIds as $tarId) {
-                $this->getTagGroupTagDao()->create(array('groupId'=> $id, 'tagId' => $tagId, 'createdTime' => $fields['updatedTime']));
+        $this->getTagGroupTagDao()->delete($id);
 
-                $this->getTagDao()->updateTag($tagId, array('groupId' => $id, 'createdTime'=>$fields['updatedTime']));
-            }
+        foreach ($tagIds as $tagId) {
+            $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+
+            $this->getTagDao()->updateTag($tagId, array('groupId' => $id, 'createdTime' => $fields['updatedTime']));
         }
 
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
@@ -249,7 +248,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getTagGroupTagDao()
     {
-        $this->createDao('Taxonomy.TagGroupTag');
+        return $this->createDao('Taxonomy.TagGroupTagDao');
     }
     
     protected function getTagDao()
@@ -259,7 +258,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getTagGroupDao()
     {
-        $this->createDao('Taxonomy.TagGroupDao');
+        return $this->createDao('Taxonomy.TagGroupDao');
     }
 
     protected function getLogService()

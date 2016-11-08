@@ -92,7 +92,7 @@ class TagServiceTest extends BaseTestCase
         ));
 
         $foundTagGroup = $this->getTagService()->getTagGroup($tagGroup['id']);
-        $this->assertArrayEquals('测试标签组', $foundTagGroup['name']);
+        $this->assertEquals('测试标签组', $foundTagGroup['name']);
     }
 
     public function testGetTagWithNotExistTagId()
@@ -328,7 +328,7 @@ class TagServiceTest extends BaseTestCase
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
 
         $this->getTagService()->deleteTagGroup($tagGroup['id']);
-        $this->assertNull($this->getTagService()->deleteTag($tag['id']));
+        $this->assertNull($this->getTagService()->deleteTag($tagGroup['id']));
     }
 
     protected function getTagService()

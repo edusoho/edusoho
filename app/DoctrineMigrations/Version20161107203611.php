@@ -31,14 +31,14 @@ class Version20161107203611 extends AbstractMigration
 
         $this->addSql("ALTER TABLE classroom ADD `tags` text NOT NULL COMMENT '被打上的标签'");
 
+        $this->addSql("ALTER TABLE tag ADD `groupId` INT(10) NOT NULL DEFAULT '0' COMMENT '所属标签组'");
+
         $this->addSql("
             DROP TABLE IF EXISTS `tag_group_tag`;
             CREATE TABLE `tag_group_tag` (
                 `id` int(10) NOT NULL AUTO_INCREMENT,
                 `tagId` int(10) NOT NULL DEFAULT '0' COMMENT '标签ID',
                 `groupId` int(10) NOT NULL DEFAULT '0' COMMENT '标签组ID',
-                `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
-                `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签组跟标签的中间表';
         ");
