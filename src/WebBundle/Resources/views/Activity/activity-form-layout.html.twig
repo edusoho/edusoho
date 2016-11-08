@@ -16,8 +16,8 @@
         </div>
         <div class="form-group">
           <div class="col-xs-10 col-xs-offset-2 controls">
-            <input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
-            <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>
+            <p><input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
+              <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span></p>
           </div>
         </div>
         {% block activity_content %}
