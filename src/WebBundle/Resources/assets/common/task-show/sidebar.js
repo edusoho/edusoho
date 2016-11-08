@@ -1,4 +1,5 @@
 import NotePlugin from './plugins/note/plugin';
+import QuestionPlugin from './plugins/question/plugin';
 
 class SideBar {
   constructor(option) {
@@ -17,6 +18,7 @@ class SideBar {
   _init() {
     this.taskId= 1;//@TODO 获取当前任务的ID
     this._registerPlugin(new NotePlugin(this));
+    // this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
   }
 

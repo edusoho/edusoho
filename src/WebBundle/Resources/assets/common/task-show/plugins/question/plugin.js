@@ -1,7 +1,7 @@
 import BasePlugin from '../base-plugin';
-import QuestionPane from '../pane';
+import QuestionPane from './pane';
 
-class QuestionPlugin  {
+class QuestionPlugin extends BasePlugin  {
   constructor(props) {
     super(props);
     this.code= 'question';

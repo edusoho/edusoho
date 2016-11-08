@@ -1,7 +1,116 @@
+import ThreadShowWidget from '../../common/ThreadShowWidget'
+
 class QuestionPane {
-  constructor() {
+  constructor(option) {
+    this.$element = option.element;
     this.dataInitialized = false;
+    this.createFormId = 'lesson-question-plugin-form';
+    this.editor = null;
+    this.createFormElement = null;
+    this.plugin= option.plugin;
+    this._init();
   }
+  _init() {
+    $('.expand-form-trigger').focusin(event=>this.expandForm(event));
+    $('.collapse-form-btn').click(event=>this.collapseForm(event));
+    $('.show-question-item').click(event=>this.showItem(event));
+    $('.back-to-list').click(event=>this.backToList(event));
+  }
+  showList() {
+    let toolbar = this.plugin.toolbar;
+    $.get(this.get('plugin').api.init, {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
+        this._dataInitialized = true;
+        this.element.html(html);
+        this.createFormElement = $('#' + this.createFormId);
+        this._showListPane();
+        this._showWidget = new ThreadShowWidget({
+            element: $('[data-role=show-pane]')
+        });
+    });
+  }
+  show() {
+    this.plugin.toolbar.showPane(this.plugin.code);
+    this.showList();
+  }
+  expandForm() {
+    let $form = this.createFormElement;
+    if ($form.hasClass('form-expanded')) {
+        return ;
+    }
+    $form.addClass('form-expanded');
+
+    var editor = CKEDITOR.replace('question_content', {
+        toolbar: 'Simple',
+        filebrowserImageUploadUrl: $('#question_content').data('imageUploadUrl')
+    });
+
+    this.editor = editor;
+
+    let validator = $form.validate({
+      onkeyup: false,
+      rules: {
+          'question[title]': {
+            required: true,
+          },
+          length: {
+            required: true,
+            digits: true,
+            max: 300
+          },
+          remark: {
+            maxlength: 1000
+          },
+      },
+    });
+
+    if(validator.form()) {
+      $.post($form.attr('action'), $form.serialize(), function(html) {
+        pane.$('[data-role=list]').prepend(html);
+        pane.$('.empty-item').remove();
+        pane.collapseForm();
+      }).error(function(response){
+        var response = $.parseJSON(response.responseText);
+        Notify.danger(response.error.message);
+      });
+    }
+    this.createFormElement.find('.detail-form-group').removeClass('hide');
+  }
+  collapseForm() {
+    this.createFormElement.removeClass('form-expanded');
+    if (this.editor) {
+      this.editor.destroy();
+    }
+    // Validator.query(this.createFormElement).destroy();
+    this.clearForm();
+    this.createFormElement.find('.detail-form-group').addClass('hide');
+  }
+  clearForm() {
+    this.createFormElement.find('input[type=text],textarea').each(function(){
+        $(this).val('');
+    });
+  }
+  showItem(e) {
+    let toolbar = this.plugin.toolbar,
+      $thread = $(e.currentTarget);
+    $.get(pane.get('plugin').api.show, {courseId:toolbar.courseId, id:$thread.data('id')}, (html) => {
+      this._showItemPane().html(html);
+      this._showWidget.trigger('reload');
+    });
+  }
+  backToList(e) {
+    this.showList();
+  }
+  _showListPane() {
+      this.$('[data-role=show-pane]').hide();
+      this.$('[data-role=list-pane]').show();
+      $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
+      return $('[data-role=list-pane]');
+  }
+  _showItemPane() {
+      $('[data-role=list-pane]').hide();
+      return $('[data-role=show-pane]').show();
+  }
+
 }
 
 
