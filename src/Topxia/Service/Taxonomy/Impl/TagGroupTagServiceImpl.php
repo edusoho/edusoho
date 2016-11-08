@@ -16,18 +16,11 @@ class TagGroupTagServiceImpl extends BaseService implements TagGroupTagService
         return $this->getTagGroupTagDao()->findTagsByGroupId($groupId);
     }
 
-    public function search($conditions, $order, $start, $limit)
-    {
-        $this->fieterConditions($conditions);
-
-        return $this->getTagGroupTagDao()->search($conditions, $order, $start, $limit);
-    }
-
     protected function fieterConditions($conditions)
     {
         return ArrayToolkit::parts($conditions, $this->allowConditions);
     }
-        
+
     protected function getTagGroupTagDao()
     {
         $this->createDao('Taxonomy.TagGroupTag');
