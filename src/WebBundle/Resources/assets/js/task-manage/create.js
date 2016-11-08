@@ -134,7 +134,7 @@ class Editor {
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
             this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
-            this.$iframe_body.find("#step2-form").data('validator', validator)
+            this.$iframe_body.find("#step2-form").data('validator', validator);
             this.$iframe_body.find("#step3-form").data('validator', validator); 
         };
         this.$frame.load(loadAnimation(loadiframe,this.$task_manage_content));
@@ -145,14 +145,12 @@ class Editor {
         let validator = $step1_form.validate({
             onkeyup: false,
             rules: {
-                title: {
+                mediaType: {
                     required: true,
                 },
-                content: 'required',
             },
             messages: {
-                title: "请输入标题",
-                content: "请输入内容"
+                mediaType: "请选择分类",
             }
         });
         $step1_form.data('validator', validator);

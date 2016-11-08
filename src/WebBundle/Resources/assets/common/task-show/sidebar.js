@@ -1,5 +1,5 @@
 import NotePlugin from './plugins/note/plugin';
-import QuestionPlugin from './plugins/question/plugin';
+// import QuestionPlugin from './plugins/question/plugin';
 
 class SideBar {
   constructor(option) {
