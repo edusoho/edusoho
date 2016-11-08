@@ -35,21 +35,18 @@ class FlashActivity extends Activity
 
     public function create($fields)
     {
-        $ppt = ArrayToolkit::parts($fields, array(
+        $flash = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
             'finishDetail'
         ));
 
-        $media          = $this->parseMedia($fields['media']);
-        $ppt['mediaId'] = $media['id'];
-
         $biz                  = $this->getBiz();
-        $ppt['createdUserId'] = $biz['user']['id'];
-        $ppt['createdTime']   = time();
+        $flash['createdUserId'] = $biz['user']['id'];
+        $flash['createdTime']   = time();
 
-        $ppt = $this->getFlashActivityDao()->create($ppt);
-        return $ppt;
+        $flash = $this->getFlashActivityDao()->create($flash);
+        return $flash;
     }
 
     public function update($targetId, $fields)
@@ -60,8 +57,6 @@ class FlashActivity extends Activity
             'finishDetail',
         ));
 
-        $media                       = $this->parseMedia($fields['media']);
-        $updateFields['mediaId']     = $media['id'];
         $updateFields['updatedTime'] = time();
         return $this->getFlashActivityDao()->update($targetId, $updateFields);
     }
@@ -74,12 +69,6 @@ class FlashActivity extends Activity
     public function get($targetId)
     {
         return $this->getFlashActivityDao()->get($targetId);
-    }
-
-    protected function parseMedia($media)
-    {
-        $media = json_decode($media, JSON_OBJECT_AS_ARRAY);
-        return $media;
     }
 
     /**

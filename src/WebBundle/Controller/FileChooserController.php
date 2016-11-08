@@ -19,7 +19,7 @@ use Topxia\Component\MediaParser\ParserProxy;
  */
 use Topxia\Service\File\UploadFileService;
 
-class MediaProccessController extends BaseController
+class FileChooserController extends BaseController
 {
 
     public function materialChooseAction(Request $request)
@@ -29,20 +29,8 @@ class MediaProccessController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
-        $currentUserId = $currentUser['id'];
-        $conditions    = $request->request->all();
-
-        $request->query->set('page', $conditions['page']);
-
-        $conditions['status']        = 'ok';
-        $conditions['currentUserId'] = $currentUserId;
-
-        $conditions['noTargetType'] = 'attachment';
-        if (!empty($conditions['keyword'])) {
-            $conditions['filename'] = $conditions['keyword'];
-            unset($conditions['keyword']);
-        }
-
+        $conditions = $request->query->all();
+        $conditions = $this->filterMaterialConditions($conditions, $currentUser);
 
         $paginator = new Paginator(
             $request,
@@ -56,11 +44,10 @@ class MediaProccessController extends BaseController
             $paginator->getPerPageCount()
         );
 
-
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
@@ -84,30 +71,23 @@ class MediaProccessController extends BaseController
 
     public function CourseFileChooseAction(Request $request, $courseId)
     {
-        $conditions = array();
-        $type       = $request->query->get('type');
-        if (!empty($type)) {
-            $conditions['type'] = $type;
+        $currentUser = $this->getUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
-        $courseType = $request->query->get('courseType');
-        $courseType = empty($courseType) ? 'course' : $courseType;
+        $query           = $request->query->all();
+        $courseMaterials = $this->findCourseMaterials($request, $courseId);
 
-        $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
-            array(
-                'courseId' => $courseId,
-                'type'     => $courseType
-            ),
-            array('createdTime', 'DESC'),
-            0,
-            PHP_INT_MAX
-        );
+        $conditions         = array();
+        $conditions['ids']  = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
+        $conditions['type'] = empty($query['type']) ? null : $query['type'];
 
-        $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
-        $paginator         = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
-            20
+            10
         );
 
         $files = $this->getUploadFileService()->searchFiles(
@@ -120,13 +100,14 @@ class MediaProccessController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:Component/Widget:choose-table.html.twig', array(
+        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
         ));
 
     }
+
 
     public function importAction(Request $request)
     {
@@ -136,6 +117,37 @@ class MediaProccessController extends BaseController
         $item  = $proxy->parseItem($url);
 
         return $this->createJsonResponse($item);
+    }
+
+    protected function filterMaterialConditions($conditions, $currentUser)
+    {
+        $conditions['status']        = 'ok';
+        $conditions['currentUserId'] = $currentUser['id'];;
+
+        $conditions['noTargetType'] = 'attachment';
+        if (!empty($conditions['keyword'])) {
+            $conditions['filename'] = $conditions['keyword'];
+            unset($conditions['keyword']);
+        }
+
+        return $conditions;
+    }
+
+    protected function findCourseMaterials($request, $courseId)
+    {
+        $query      = $request->query->all();
+        $conditions = array(
+            'type'     => empty($query['courseType']) ? null : $query['courseType'],
+            'courseId' => $courseId
+        );
+
+        $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+        return $courseMaterials;
     }
 
     /**

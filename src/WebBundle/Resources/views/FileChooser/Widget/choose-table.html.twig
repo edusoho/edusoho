@@ -10,14 +10,15 @@
   </thead>
   <tbody>
   {% for file in files %}
-    <tr id="material-table-tr-{{ file.id }}"  class="file-browser-item"
+    <tr id="material-table-tr-{{ file.id }}" class="file-browser-item"
         data-id="{{ file.id }}"
         data-name="{{ file.filename }}"
         data-status="{{ file.convertStatus }}"
         data-source="self"
         data-length="{{ file.length }}"
+        data-size="{{ file.fileSize }}"
     >
-      <td >
+      <td>
         {{ file.filename }}
       </td>
       <td>

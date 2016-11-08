@@ -1,8 +1,9 @@
-{% do script(['web/component/chooser/materiallib-choose.js']) %}
+{#{% do script(['web/file-chooser/chooser/materiallib-choose.js']) %}#}
 <div class="btn-group">
   <a type="button" class="btn btn-default btn-sm js-material-type active"
      data-type="my">{{ '来自上传'|trans }}</a>
-  <a type="button" class="btn btn-default btn-sm js-material-type" data-type="sharing" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">{{ '来自分享'|trans }}</a>
+  <a type="button" class="btn btn-default btn-sm js-material-type" data-type="sharing"
+     data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">{{ '来自分享'|trans }}</a>
   <a type="button" class="btn btn-default btn-sm js-material-type" data-type="public">{{ '公共资料'|trans }}</a>
   <a type="button" class="btn btn-default btn-sm js-material-type" data-type="favorite">{{ '我的收藏'|trans }}</a>
 </div>
@@ -27,10 +28,13 @@
     </span>
   </div>
 </div>
-<input type="hidden" name="sourceFrom" value="my">
-<input type="hidden" name="page" value="1">
-<input type="hidden" name="currentUserId" value="">
-<input type="hidden" name="type" value="{{ mediaType }}">
+<div class="js-material-lib-search-form">
+  <input type="hidden" name="sourceFrom" value="my">
+  <input type="hidden" name="page" value="1">
+  <input type="hidden" name="currentUserId">
+  <input type="hidden" name="type" value="{{ fileType|default('')  }}">
+  <input type="hidden" name="keyword">
+</div>
 <div class="js-material-list">
   <div class="empty">资源加载中...</div>
 </div>

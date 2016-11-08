@@ -1,11 +1,13 @@
 /**
  * Created by Simon on 31/10/2016.
  */
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 
-class CourseFileChoose {
+import Chooser from '../chooser';
+
+class CourseFileChoose extends Chooser {
 
     constructor($container) {
+        super();
         this.container = $container;
         this._init();
         this._initEvent();
@@ -19,7 +21,7 @@ class CourseFileChoose {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $('.js-choose-trigger').on('click', this._open)
+        $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
@@ -36,18 +38,6 @@ class CourseFileChoose {
     }
 
 
-    _close() {
-        $('.file-chooser-main').addClass('hidden');
-        $('.file-chooser-bar').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
-    }
-
-    _open() {
-        $('.file-chooser-bar').addClass('hidden');
-        $('.file-chooser-main').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
-    }
-
     _onSelectFile(event) {
         var $that = $(event.currentTarget);
         var file = $that.data();
@@ -57,8 +47,11 @@ class CourseFileChoose {
 
     _onChange(file) {
         var value = file ? JSON.stringify(file) : '';
-        $('[name="media"]').val(value);
+        console.log('begin courseFileChoose:select');
+        this.trigger('select', file);
+      //  $('[name="media"]').val(value);
         $('[data-role="placeholder"]').html(file.name);
+
         this._fillMinuteAndSecond(file.length);
     }
 
@@ -71,5 +64,5 @@ class CourseFileChoose {
 
 }
 
+export default CourseFileChoose;
 
-new CourseFileChoose($('#chooser-course-panel'));

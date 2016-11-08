@@ -1,13 +1,16 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script(['web/activity-manage/doc-activity-fields.js']) %}
+{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/doc-activity-fields.js']) %}
 {% set mediaType = 'document' %}
 {% block activity_content %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="media" class="style">文档</label>
     </div>
+    <div class="hidden-data">
+      <input type="hidden" value="{{ doc.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
+    </div>
     <div id="file-choose-type" class="hidden" data-type="doc"></div>
-    {% include 'WebBundle:Component:file-choose.html.twig' %}
+    {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
   </div>
 {% endblock %}
 

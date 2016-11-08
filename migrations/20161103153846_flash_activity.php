@@ -15,7 +15,7 @@ class FlashActivity extends Migration
         CREATE TABLE IF NOT EXISTS `flash_activity` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `mediaId` int(11) NOT NULL,
-          `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, detail',
+          `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
           `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
           `createdTime` int(10) NOT NULL,
           `createdUserId` int(11) NOT NULL,
