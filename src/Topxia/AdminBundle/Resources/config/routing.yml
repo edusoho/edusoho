@@ -238,6 +238,18 @@ admin_tag_delete:
     methods:  [POST]
     permissions: [admin_course_tag_manage]
 
+admin_tag_group:
+    pattern: /tag/group
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:index }
+
+admin_tag_group_create:
+    pattern: /tag/group/create
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
+
+admin_tag_group_update:
+    pattern: /tag/group/{$groupId}/update
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
+
 admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
