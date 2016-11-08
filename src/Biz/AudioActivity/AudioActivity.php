@@ -10,6 +10,8 @@ namespace Biz\AudioActivity;
 
 use Biz\Activity\Config\Activity;
 use Biz\AudioActivity\Dao\AudioActivityDao;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Common\ServiceKernel;
 
 class AudioActivity extends Activity
 {
@@ -19,9 +21,12 @@ class AudioActivity extends Activity
      */
     public function create($fields)
     {
-        $videoActivity = $this->getAudioExt($fields);
-        $videoActivity = $this->getAudioActivityDao()->create($videoActivity);
-        return $videoActivity;
+        $audioActivity = $fields['ext'];
+        if (empty($audioActivity)) {
+            throw new InvalidArgumentException();
+        }
+        $audioActivity = $this->getAudioActivityDao()->create($audioActivity);
+        return $audioActivity;
     }
 
     /**
@@ -29,9 +34,14 @@ class AudioActivity extends Activity
      */
     public function update($targetId, $fields)
     {
-        $videoActivity      = $this->getAudioExt($fields);
-        $videoActivity      = $this->getAudioActivityDao()->update($fields['mediaId'], $videoActivity);
-        return $videoActivity;
+        $audioActivityFields = $fields['ext'];
+
+        $audioActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
+        if (empty($audioActivity)) {
+            throw  new ResourceNotFoundException();
+        }
+        $audioActivity = $this->getAudioActivityDao()->update($fields['mediaId'], $audioActivityFields);
+        return $audioActivity;
     }
 
     /**
@@ -47,7 +57,9 @@ class AudioActivity extends Activity
      */
     public function get($id)
     {
-        return $this->getAudioActivityDao()->get($id);
+        $audioActivity         = $this->getAudioActivityDao()->get($id);
+        $audioActivity['file'] = $this->getUploadFileService()->getFile($audioActivity['mediaId']);
+        return $audioActivity;
     }
 
     public function registerActions()
@@ -75,20 +87,19 @@ class AudioActivity extends Activity
         );
     }
 
-    protected function getAudioExt($fields)
-    {
-        $media = json_decode($fields['media'], true);
-        return array(
-            'mediaId' => $media['id'],
-            'media'   => $media
-        );
-    }
-
     /**
      * @return AudioActivityDao
      */
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao("AudioActivity:AudioActivityDao");
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 }
