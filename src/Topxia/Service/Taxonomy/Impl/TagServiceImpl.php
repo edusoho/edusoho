@@ -116,11 +116,23 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTagGroup($fields)
     {
+        $tagIds = $fieled['tagIds'];
+
         $this->fieterFields($fields);
 
         $fields['createdTime'] = time();
 
         $tagGroup = $this->getTagGroupDao()->create($fields);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagGroupTagDao()->create(array(
+                'tagId'      => $tagId,
+                'groupId'     => $tagGroup['id'],
+                'createdTime' => $fields['createdTime'],
+            ));
+
+            $this->getTagDao()->updateTag($tagId, array('groupId' => $tagGroup['id']));
+        }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
 
@@ -168,6 +180,8 @@ class TagServiceImpl extends BaseService implements TagService
 
         $tagGroup = $this->get($id);
 
+        $tagIds = $fields['tarIds'];
+
         if (empty($tagGroup)) {
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
@@ -175,6 +189,14 @@ class TagServiceImpl extends BaseService implements TagService
         $this->fieterTagGroupFields($fields);
 
         $fields['updatedTime'] = time();
+
+        if (isset($tagIds)) {
+            foreach ($tarIds as $tarId) {
+                $this->getTagGroupTagDao()->create(array('groupId'=> $id, 'tagId' => $tagId, 'createdTime' => $fields['updatedTime']));
+
+                $this->getTagDao()->updateTag($tagId, array('groupId' => $id, 'createdTime'=>$fields['updatedTime']));
+            }
+        }
 
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
         return $this->getTagGroupDao()->update($id, $fields);
@@ -190,6 +212,15 @@ class TagServiceImpl extends BaseService implements TagService
     public function deleteTagGroup($id)
     {
         $this->getTagGroupDao()->delete($id);
+
+        $tags = $this->findTagsByGroupId($id);
+
+        $this->getTagGroupTagDao()->delete($id);
+
+        foreach ($tags as $tag) {
+            $this->getTagDao()->updateTag($tag['id'], array('groupId' => ''));
+        }
+
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
