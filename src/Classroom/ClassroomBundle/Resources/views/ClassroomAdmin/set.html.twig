@@ -29,7 +29,8 @@
       </div>
       <div class="controls col-md-7 radios">
         {{ radios('discount_buy', {1:'是'|trans, 0:'否'|trans}, setting('classroom').discount_buy|default(1)) }}
-        <div class="help-block">{{'学员在购买班级之前，如果已经购买了某个课程，班级价格将会扣除该课程的售价'|trans}}</div>
+        <div class="help-block"><p>1.开启后，学员在购买班级之前，如果已经购买了某个课程，班级价格将会等比扣除该课程的售价</p>
+<p>2.折价示例：ABCD四个课程每门标价25元，打包在班级销售，班级标价50元课程总价值100元，班级售价50元，相当于每门课程在班级内都打了5折；如果之前买了A课程，付了25元，A课程在班级内的价值就是12.5元；现在买班级就需要再付50-12.5=37.5元，这就是折价。</div>
       </div>
     </div>
 
