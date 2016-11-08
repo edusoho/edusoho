@@ -275,7 +275,7 @@ define(function(require, exports, module) {
 					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
 				} else if(data.useable == "yes"){
 					$('[role=no-use-coupon-code]').hide();
-					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('优惠券可用，您当前使用的是')+((data['type']=='discount')? (Translator.trans('打%rate%折'),{rate:data['rate']}) : (Translator.trans('抵价%rate%元',{rate:data['rate']})))+Translator.trans('的优惠券'));
+					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('优惠券可用，您当前使用的是')+((data['type']=='discount')? (Translator.trans('打%rate%折',{rate:data['rate']})) : (Translator.trans('抵价%rate%元',{rate:data['rate']})))+Translator.trans('的优惠券'));
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 					$('[role="coupon-code-verified"]').val(couponCode.val());
 				}

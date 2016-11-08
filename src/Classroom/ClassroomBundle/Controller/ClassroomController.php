@@ -63,10 +63,22 @@ class ClassroomController extends BaseController
             }
         }
 
-        $orderBy = !isset($conditions['orderBy']) ? 'createdTime' : $conditions['orderBy'];
-        unset($conditions['orderBy']);
+        $classroomSetting = $this->getSettingService()->get('classroom');
 
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
+        if (!isset($classroomSetting['explore_default_orderBy'])) {
+            $classroomSetting['explore_default_orderBy'] = 'createdTime';
+        }
+
+        $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
+        
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $orderBy = array($orderBy, 'asc');
+        } else {
+            $orderBy = array($orderBy, 'desc');
+        }
+
+        unset($conditions['orderBy']);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -76,7 +88,7 @@ class ClassroomController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array($orderBy, 'desc'),
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -110,7 +122,7 @@ class ClassroomController extends BaseController
             'categoryParent'           => $categoryParent,
             'filter'                   => $filter,
             'levels'                   => $levels,
-            'orderBy'                  => $orderBy
+            'orderBy'                  => $orderBy[0]
         ));
     }
 
