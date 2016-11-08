@@ -3,7 +3,6 @@
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('download') %}
-  {% set fileType = '' %}
   <div class="form-group">
     <div class="form-group">
       <div class="col-md-10 col-md-offset-1  controls">
@@ -48,7 +47,7 @@
       <label for="media" class="style">{{ '选择文件'|trans }}</label>
     </div>
 
-    {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+    {% include 'WebBundle:FileChooser:file-choose.html.twig'with {mediaType: mediaType,fileType:'',file: null } %}
   </div>
   <div class="form-group">
     <div class="col-xs-2 control-label"></div>
@@ -59,7 +58,7 @@
   <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
   <input id="materials" class="form-control" type="text" name="materials"
       {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
-  <input id="media" type="text" name="media" value="">
+  <input id="media" type="hidden" name="media" value="">
 {% endblock %}
 
 {% block activity_finish %}

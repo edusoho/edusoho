@@ -25,7 +25,7 @@ class DownloadFileDaoImpl extends GeneralDaoImpl implements DownloadFileDao
 
     public function findByDownloadActivityId($downloadActivityId)
     {
-        $sql = "SELECT * FROM `download_file` WHERE `activityId` = ?";
+        $sql = "SELECT * FROM `download_file` WHERE `downloadActivityId` = ?";
         return $this->db()->fetchAll($sql, array($downloadActivityId));
     }
 
