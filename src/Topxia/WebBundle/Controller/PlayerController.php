@@ -300,6 +300,7 @@ class PlayerController extends BaseController
 
     public function localMediaAction(Request $request, $id, $token)
     {
+
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
@@ -315,6 +316,7 @@ class PlayerController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
@@ -323,7 +325,6 @@ class PlayerController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-
         return $response;
     }
 

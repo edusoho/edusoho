@@ -9,8 +9,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 
 function _inItStep2form() {
     var $step1_form = $('#step2-form');
-    var validator = $step1_form.data('validator', validator);
-    validator = $step1_form.validate({
+    var validator = $step1_form.validate({
         onkeyup: false,
         ignore: "",
         rules: {
@@ -31,23 +30,17 @@ function _inItStep2form() {
             media: "请选择或者上传视频"
         }
     });
-    
+    $step1_form.data('validator', validator);
 }
 
 _inItStep2form();
 
+
 const fileChooser = new FileChooser();
 
-const onSelectFile = file => {
-    if (file.length) {
-        let minute = parseInt(file.length / 60);
-        let second = Math.round(file.length % 60);
-        $("#minute").val(minute);
-        $("#second").val(second);
-    }
-
-    console.log('action triggered', onSelectFile);
+const action = data => {
+    console.log('action triggered', data);
 }
 
-fileChooser.on('fileChooser:select', onSelectFile);
+fileChooser.on('fileChooser:select', action);
 

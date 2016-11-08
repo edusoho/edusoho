@@ -1,4 +1,6 @@
-class UploaderChooser {
+import Emitter from 'es6-event-emitter';
+
+class UploaderChooser extends Emitter{
   constructor() {
     this.element = $('#chooser-upload-panel');
     this._sdk = undefined;

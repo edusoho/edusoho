@@ -2,8 +2,8 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
-  {% set mediaType = activity.mediaType|default('video') %}
-  {% set fileType = 'video' %}
+  {% set mediaType = activity.mediaType|default('audio') %}
+  {% set fileType = 'audio' %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
@@ -19,13 +19,13 @@
 
   <div class="form-group">
     <div class="col-xs-2 control-label">
-      <label for="media" class="style">{{ '视频'|trans }}</label>
+      <label for="media" class="style">{{ '音频'|trans }}</label>
     </div>
     {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
   </div>
   <div class="form-group for-video-type" id="lesson-length-form-group">
     <div class="col-xs-2 control-label for-video-type">
-      <label>{{ '视频时长'|trans }}</label>
+      <label>{{ '音频时长'|trans }}</label>
     </div>
     <div class="col-xs-9">
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
@@ -35,15 +35,16 @@
              value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
     </div>
   </div>
-{% endblock %}
 
+
+{% endblock %}
 {% block activity_finish %}
   <div class=" form-group">
     <div class="col-xs-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-9">
-      <p class="form-control-static">观看到最后</p>
+      <p class="form-control-static">听完课时</p>
     </div>
   </div>
 {% endblock %}

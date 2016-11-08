@@ -2,11 +2,12 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+import Chooser from '../chooser';
 
-class MaterialLibChoose {
+class MaterialLibChoose extends Chooser {
 
     constructor($container) {
+        super();
         this.container = $container;
         this.loadShareingContacts = false;
         this._init();
@@ -19,32 +20,35 @@ class MaterialLibChoose {
 
     _initEvent() {
         $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
-        $(this.container).on('change', '.js-file-owner', this._fileterByFileOwner)
-        $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
+        $(this.container).on('change', '.js-file-owner', this._filterByFileOwner)
+        $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $('.js-choose-trigger').on('click', this._open)
+        $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
         let url = $('.js-browser-search').data('url');
+        let $iframe = this.$parentiframe;
+        $.get(url, this._getParams(), function (html) {
+            $('.js-material-list').html(html);
+            $iframe.height($iframe.contents().find('body').height());
+        });
+    }
 
+    _getParams() {
         let params = {};
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-        params.type = $('input[name=type]').val();
-        $('.js-material-list').load(url, params, function () {
-            $parentiframe.height($parentiframe.contents().find('body').height());
-        })
-
+        $('.js-material-lib-search-form input[type=hidden]').each(function (input) {
+            params[$(this).attr('name')] = $(this).val();
+        });
+        return params;
     }
 
     _paginationList(event) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        let $that = $(event.currentTarget);
 
-        let page = this._getUrlParameter($that.attr('href'), 'page');
+        let page = this._getUrlParameter($(event.currentTarget).attr('href'), 'page');
         $('input[name=page]').val(page);
         this._loadList();
     }
@@ -52,9 +56,9 @@ class MaterialLibChoose {
     _switchFileSource(event) {
         let that = event.currentTarget;
         var type = $(that).data('type');
-        console.log('type', type)
         $(that).addClass('active').siblings().removeClass('active');
         $('input[name=sourceFrom]').val(type);
+        $('input[name=page]').val(1);
         switch (type) {
             case 'my' :
                 $('.js-file-name-group').removeClass('hidden');
@@ -93,49 +97,25 @@ class MaterialLibChoose {
     }
 
 
-    _fileterByFileName() {
-        let keyword = $('.js-file-name').val();
-
-        let params = {};
-        params.keyword = keyword
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-
-        let url = $('.js-browser-search').data('url');
-        $('.js-material-list').load(url, params, function () {
-            console.log('page is reloading')
-        })
+    _filterByFileName() {
+        $('input[name=keyword]').val($('.js-file-name').val());
+        this._loadList();
     }
 
-    _fileterByFileOwner() {
-        let params = {};
-        params.keyword = $('.js-file-name').val();
+    _filterByFileOwner() {
         params.currentUserId = $('.js-file-owner option:selected').val();
-        params.sourceFrom = $('input[name=sourceFrom]').val();
-        params.page = $('input[name=page]').val();
-
-        let url = $('.js-browser-search').data('url');
-        $('.js-material-list').load(url, params, function () {
-            console.log('page is reloading')
-        })
-    }
-
-    _close() {
-        $('.file-chooser-main').addClass('hidden');
-        $('.file-chooser-bar').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
-    }
-
-    _open() {
-        $('.file-chooser-bar').addClass('hidden');
-        $('.file-chooser-main').removeClass('hidden');
-        $parentiframe.height($parentiframe.contents().find('body').height());
+        $('input[name=currentUserId]').val(currentUserId);
+        this._loadList();
     }
 
     _onSelectFile(event) {
         var $that = $(event.currentTarget);
         var file = $that.data();
-        this._onChange(file);
+        $('[data-role="placeholder"]').html(file.name);
+
+        console.log('begin materialLibChoose:select');
+        this.('select', file);
+       // this._onChange(file);
         this._close();
     }
 
@@ -143,7 +123,7 @@ class MaterialLibChoose {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
         $('[data-role="placeholder"]').html(file.name);
-        this._fillMinuteAndSecond(file.length);
+        this._fillMtriggerinuteAndSecond(file.length);
     }
 
     _fillMinuteAndSecond(fileLength) {
@@ -172,5 +152,4 @@ class MaterialLibChoose {
 
 }
 
-
-new MaterialLibChoose($('#chooser-material-panel'));
+export  default  MaterialLibChoose;

@@ -6,7 +6,6 @@ namespace WebBundle\Controller;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class BaseController extends Controller

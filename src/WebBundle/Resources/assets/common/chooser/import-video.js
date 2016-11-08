@@ -2,17 +2,18 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+import Chooser from '../chooser';
 
-class FileImport {
+class VideoImport extends Chooser {
     constructor(container) {
+        super();
         this.container = container;
         this.initEvent();
     }
 
     initEvent() {
         $(this.container).on('click', '.js-video-import', this._onImport.bind(this));
-        $('.js-choose-trigger').on('click',this._open)
+        $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
 
@@ -53,25 +54,15 @@ class FileImport {
         return;
     }
 
-
-    _close() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
-        $('.file-chooser-main').addClass('hidden');
-        $('.file-chooser-bar').removeClass('hidden');
-    }
-
-    _open() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
-        $('.file-chooser-bar').addClass('hidden');
-        $('.file-chooser-main').removeClass('hidden');
-    }
-
     _onChange(file) {
         this._close();
         var value = file ? JSON.stringify(file) : '';
-        $('[name="media"]').val(value);
+        console.log('begin videoImportChoose:select');
+        this.trigger('videoImportChoose:select', file);
+      //  $('[name="media"]').val(value);
         $('[data-role="placeholder"]').html(file.name);
     }
 }
 
-new FileImport($('#chooser-import-panel'));
+export default VideoImport;
+//new VideoImport($('#import-video-panel'));
