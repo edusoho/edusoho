@@ -19,16 +19,17 @@ class Editor {
     }
 
     _initEvent() {
-        $(this.$element).on('click', '#course-tasks-next', event=>this._onNext(event));
-        $(this.$element).on('click', '#course-tasks-prev', event=>this._onPrev(event));
+        $('#course-tasks-submit').click(event=>this._onSave(event));
+        $('#course-tasks-next').click(event=>this._onNext(event));
+        $('#course-tasks-prev').click(event=>this._onPrev(event));
         if (this.mode != 'edit') {
-            $(this.$element).on('click', '.js-course-tasks-item', event=>this._onSetType(event));
+            $('.js-course-tasks-item').click(event=>this._onSetType(event));
         }
-        $(this.$element).on('click', '#course-tasks-submit', event=>this._onSave(event));
     }
 
     _init() {
         this._inItStep1form();
+        this._renderContent(this.step);
         if (this.mode == 'edit') {
             this.contentUrl = this.$task_manage_type.data('editorStep2Url');
             this.step = 2;
@@ -58,7 +59,7 @@ class Editor {
         let type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
-        ( this.type !== type ) ? this.loaded = false : this.loaded = true;
+        this.type !== type  ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
     }
@@ -87,8 +88,6 @@ class Editor {
                 {name: 'mediaType', value: this.type},
                 {name: 'length', value: length}
             ]);
-
-            console.log(this.$iframe_body.find('#step2-form').serializeArray());
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
@@ -105,7 +104,6 @@ class Editor {
         this._rendStepIframe(this.step);
         this._rendButton(this.step);
         if (this.step == 2 && !this.loaded) {
-            this.loaded = true;
             this._initIframe();
         }
     }
@@ -129,7 +127,8 @@ class Editor {
         let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
         this.$task_manage_content.html(html).show(); 
         this.$frame = $('#'+this.iframe_name);
-        let loadiframe = (a) => {
+        let loadiframe = () => {
+            this.loaded = true;
             let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
@@ -163,12 +162,13 @@ class Editor {
         let validator = null;
         if (step === 1) {
             validator = $("#step1-form").data('validator');
-        } else if (this.$iframe_body) {
+        } else if (this.loaded) {
             var $from = this.$iframe_body.find("#step" + step + "-form");
             validator = this.iframe_jQuery.data($from[0], 'validator');
         }
+
         if (validator && !validator.form()) {
-            this.$frame ? this.$frame.height(this.$iframe_body.height()) : "";
+            this.loaded ? this.$frame.height(this.$iframe_body.height()) : "";
             return false;
         }
         return true;
@@ -180,13 +180,10 @@ class Editor {
             this._rendSubmit(false);
             this._renderNext(true);
         } else if (step === 2) {
-            if (this.mode != 'edit') {
-                this._rendSubmit(true);
-                this._renderPrev(true);
-                this._renderNext(true);
-                return;
+            this._renderPrev(true);
+            if (this.mode === 'edit') {
+                this._renderPrev(false);
             }
-            this._renderPrev(false);
             if (!this.loaded) {
                 this._rendSubmit(false);
                 this._renderNext(false);
@@ -201,7 +198,7 @@ class Editor {
     }
 
     _rendStepIframe(step) {
-        if (!this.$iframe_body) {
+        if (!this.loaded) {
             return;
         }
         (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');
@@ -214,8 +211,8 @@ class Editor {
     }
 
     _renderContent(step) {
-        (step === 1 ) ? this.$task_manage_type.show() : this.$task_manage_type.hide();
-        (step !== 1 ) ? this.$task_manage_content.show() : this.$task_manage_content.hide();
+        (step === 1 ) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
+        (step !== 1 ) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
     }
 
     _renderNext(show) {
