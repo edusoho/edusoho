@@ -27,7 +27,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
 
     }
 
-    public function findTagsByGroupId($groupId)
+    public function findTagRelationsByGroupId($groupId)
     {
         $that = $this;
 
@@ -46,7 +46,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
         return $this->get($groupId);
     }
 
-    public function delete($groupId)
+    public function deleteByGroupId($groupId)
     {
         $result = $this->getConnection()->delete($this->table, array('groupId' => $groupId));
         $this->clearCached();

@@ -7,9 +7,9 @@ interface TagGroupTagDao
 
     public function create($fields);
 
-    public function findTagsByGroupId($groupId);
+    public function findTagRelationsByGroupId($groupId);
 
     public function update($groupId, $fields);
 
-    public function delete($groupId);
+    public function deleteByGroupId($groupId);
 }

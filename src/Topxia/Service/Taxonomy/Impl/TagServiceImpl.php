@@ -82,7 +82,11 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagsByGroupId($groupId)
     {
-        return $this->getTagGroupTagDao()->findTagsByGroupId($groupId);
+        $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
+
+        $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
+
+        return $this->findTagsByIds($tagIds);
     }
 
     public function isTagNameAvalieable($name, $exclude = null)
@@ -129,8 +133,6 @@ class TagServiceImpl extends BaseService implements TagService
                 'tagId'      => $tagId,
                 'groupId'     => $tagGroup['id'],
             ));
-
-            $this->getTagDao()->updateTag($tagId, array('groupId' => $tagGroup['id']));
         }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
@@ -182,23 +184,23 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
+        $this->getTagGroupTagDao()->deleteByGroupId($id);
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+        }
 
         $fields = $this->fieterTagGroupFields($fields);
 
         $fields['updatedTime'] = time();
-
-        $this->getTagGroupTagDao()->delete($id);
-
-        foreach ($tagIds as $tagId) {
-            $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
-
-            $this->getTagDao()->updateTag($tagId, array('groupId' => $id, 'createdTime' => $fields['updatedTime']));
-        }
+        
+        $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
 
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
-        return $this->getTagGroupDao()->update($id, $fields);
+
+        return $updatedTagGroup;
     }
 
     public function deleteTag($id)
@@ -212,13 +214,7 @@ class TagServiceImpl extends BaseService implements TagService
     {
         $this->getTagGroupDao()->delete($id);
 
-        $tags = $this->findTagsByGroupId($id);
-
-        $this->getTagGroupTagDao()->delete($id);
-
-        foreach ($tags as $tag) {
-            $this->getTagDao()->updateTag($tag['id'], array('groupId' => ''));
-        }
+        $this->getTagGroupTagDao()->deleteByGroupId($id);
 
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
