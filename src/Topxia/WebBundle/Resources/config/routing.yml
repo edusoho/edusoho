@@ -286,6 +286,10 @@ player_local_media:
     pattern: /player/{id}/file/{token}
     defaults: { _controller: TopxiaWebBundle:Player:localMedia}
 
+player_subtitle:
+    pattern: /player/subtitle/{fileId}
+    defaults: { _controller: TopxiaWebBundle:Player:subtitle}
+
 hls_stream:
     pattern: /hls/{id}/stream/{level}/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:stream}

@@ -325,6 +325,29 @@ class PlayerController extends BaseController
         return $response;
     }
 
+    public function subtitleAction(Request $request, $fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file["type"] != "subtitle") {
+            throw $this->createAccessDeniedException();
+        }
+
+        // todo token
+
+        $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id']);
+        $subtitle = array(
+            'name' => $file['filename'],
+            'url' => $downloadFile['url']
+        );
+
+        return $this->createJsonResponse($subtitle);
+    }
+
     protected function isHiddenVideoHeader($isHidden = false)
     {
         $storage = $this->setting("storage");

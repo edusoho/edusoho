@@ -891,7 +891,7 @@ class FileToolkit
         } elseif (in_array($extension, array('swf'))) {
             return 'flash';
         } elseif (in_array($extension, array('srt'))) {
-            return 'caption';
+            return 'subtitle';
         } else {
             return 'other';
         }
