@@ -47,9 +47,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagGroups()
     {   
-        $tagGroups = $this->getTagGroupDao()->findTagGroups();
-
-        return $tagGroups;
+        return $this->getTagGroupDao()->findTagGroups();
     }
 
     public function searchTags($conditions, $start, $limit)
@@ -154,18 +152,6 @@ class TagServiceImpl extends BaseService implements TagService
         $fields = $this->filterTagGroupFields($fields);
 
         $fields['createdTime'] = time();
-
-        if (isset($fields['scope'])) {
-            foreach ($fields['scope'] as &$scope) {
-                if ($scope == 'classroom') {
-                    $scope = '班级筛选';
-                }
-
-                if ($scope == 'course') {
-                    $scope = '课程筛选';
-                }
-            }
-        }
 
         $tagGroup = $this->getTagGroupDao()->create($fields);
 
