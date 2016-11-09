@@ -25,10 +25,13 @@ define(function(require, exports, module) {
             var $html = $(html);
             if ($table.find( '#' +  $html.attr('id')).length > 0) {
                 $('#' + $html.attr('id')).replaceWith($html);
-                Notify.success(Translator.trans('标签更新成功！'));
+                Notify.success(Translator.trans('标签组更新成功！'));
             } else {
+                if ($('.empty')) {
+                  $('.empty').remove();
+                }
                 $table.find('tbody').prepend(html);
-                Notify.success(Translator.trans('标签添加成功!'));
+                Notify.success(Translator.trans('标签组添加成功!'));
             }
             $modal.modal('hide');
         });
@@ -41,20 +44,16 @@ define(function(require, exports, module) {
         rule: 'remote'
     });
 
-    $modal.find('.delete-tag-group').on('click', function() {
-      if (!confirm(Translator.trans('真的要删除该标签吗？'))) {
-          return ;
-      }
+        $modal.find('.delete-tag-group').on('click', function() {
+          if (!confirm(Translator.trans('真的要删除该标签组吗？'))) {
+              return ;
+          }
 
-      var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
-      $.post($(this).data('url'), function(html) {
-        if (html) {
-          $modal.modal('hide');
-          $table.find(trId).remove();
-        } else {
-          Notify.danger(Translator.trans('标签组下面存在标签，不能删除。'));
-        }
-      });
+          var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
+          $.post($(this).data('url'), function(html) {
+              $modal.modal('hide');
+              $table.find(trId).remove();
+          });
 
     });
 

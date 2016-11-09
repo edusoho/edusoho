@@ -15,6 +15,10 @@ interface TagService
 
     public function findTagGroups();
 
+    public function findTagsByGroupId($groupId);
+
+    public function findTagGroupsByTagIds($tagIds);
+
     public function getAllTagCount();
 
     public function searchTags($conditions, $start, $limit);
@@ -24,8 +28,6 @@ interface TagService
     public function findTagsByIds(array $ids);
 
     public function findTagsByNames(array $names);
-
-    public function findTagsByGroupId($groupId);
 
     public function isTagNameAvalieable($name, $exclude = null);
 

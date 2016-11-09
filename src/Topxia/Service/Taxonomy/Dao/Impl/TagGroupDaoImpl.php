@@ -34,6 +34,18 @@ class TagGroupDaoImpl extends BaseDao implements TagGroupDao
         return $tagGroups ? $this->createSerializer()->unserializes($tagGroups, $this->serializeFields) : array();
     }
 
+    public function findTagGroupsByGroupIds($groupIds)
+    {
+        if(empty($groupIds)){
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($groupIds) - 1) . '?';
+
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $groupIds);
+    }
+
     public function create($fields)
     {   
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
