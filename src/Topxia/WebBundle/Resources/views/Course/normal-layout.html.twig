@@ -29,7 +29,7 @@
 
       <section class="es-section">
 
-        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id ~ '/normal-nav' 600 %}
+        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id|default(0) ~ '/normal-nav' 600 %}
           {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% endcache %}
 
