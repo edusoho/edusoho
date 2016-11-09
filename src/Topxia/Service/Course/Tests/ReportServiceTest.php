@@ -15,7 +15,8 @@ class ReportServiceTest extends BaseTestCase
             'noteNum' => 2,
             'finishedNum' => 100,//完成人数
             'askNum' => 20,
-            'discussionNum' => 20
+            'discussionNum' => 20,
+            'finishedRate' => 10000,
         );
         $this->mock('Course.CourseService', array(
             array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
@@ -46,8 +47,6 @@ class ReportServiceTest extends BaseTestCase
         $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData(1);
 
         $this->assertCount(30, $lateMonthLearndData);
-        $this->assertEquals(1, array_pop($lateMonthLearndData)['studentNum']);
-        $this->assertEquals(1, array_pop($lateMonthLearndData)['finishedNum']);
     }
 
     public function testGetCourseLessonLearnStat()
