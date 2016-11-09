@@ -109,7 +109,7 @@ class DownloadActivity extends Activity
     public function get($id)
     {
         $downloadActivity              = $this->getDownloadActivityDao()->get($id);
-        $downloadActivity['materials'] = $this->getDownloadFileDao()->findByActivityId($downloadActivity['id']);
+        $downloadActivity['materials'] = $this->getDownloadFileDao()->findByDownloadActivityId($downloadActivity['id']);
         return $downloadActivity;
     }
 
