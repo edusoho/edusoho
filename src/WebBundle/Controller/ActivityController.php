@@ -10,9 +10,9 @@ class ActivityController extends BaseController
     {
         $activity         = $this->getActivityService()->getActivity($id);
         $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $createController = $config->getAction('show');
+        $showController = $config->getAction('show');
 
-        return $this->forward($createController, array(
+        return $this->forward($showController, array(
             'courseId' => $courseId,
             'id'       => $id
         ));
