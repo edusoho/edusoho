@@ -9,18 +9,19 @@ define(function(require,exports,module){
     var $textTrackDisplay = $('.text-track-overview');
     initHeight();
 
+    var videoNo = $(window.frames['viewerIframe'].document).find('#lesson-video-content').data('file-global-id');
     var handler = $('#uploader')
     var uploader = new UploaderSDK({
         initUrl:handler.data('initUrl'),
         finishUrl:handler.data('finishUrl'),
         id:'uploader',
         ui:'simple',
+        videoNo:videoNo
     })
     uploader.on('file.finish', function (file) {
       console.log('事件触发：', file)
     });
 
-    var captions = new Subtitle();
     var select = Object.create(TrackSelect);
     select.init('track-select');
     select.on('valuechange',function(value){
@@ -30,6 +31,7 @@ define(function(require,exports,module){
         $textTrackDisplay.html();
     })
 
+    var captions = new Subtitle();
     // Get the file 、parse it 、display it;
     function handleData(data)
     {
