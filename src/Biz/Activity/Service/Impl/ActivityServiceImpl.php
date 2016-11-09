@@ -151,6 +151,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
 
+        if (isset($fields['startTime']) && isset($fields['length'])) {
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
+
         return $fields;
     }
 

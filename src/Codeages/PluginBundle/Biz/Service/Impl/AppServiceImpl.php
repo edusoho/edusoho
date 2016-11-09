@@ -26,38 +26,20 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->findByType('plugin', 0, $total);
     }
 
-    public function installPlugin($code)
+    public function registerPlugin($plugin)
     {
-        $code = ucfirst($code);
-
-        $exist = $this->getAppByCode($code);
-        if ($exist) {
-            throw new \RuntimeException("Plugin `{$code}` is already installed.");
-        }
-
-        $metaFile = $this->biz['plugin.directory'] . DIRECTORY_SEPARATOR . "{$code}Plugin" . DIRECTORY_SEPARATOR . 'plugin.json';
-        if (!file_exists($metaFile)) {
-            throw new \RuntimeException('Plugin meta file(plugin.json) is not exist.');
-        }
-
-        $meta = json_decode(file_get_contents($metaFile), true);
-
-        if ($meta['code'] !== $code) {
-            throw new \RuntimeException("Plugin meta code value `{$meta['code']}` is invalid, please keep this value equal to `{$code}`.");
-        }
-
         $app = array();
 
         $app['type'] = 'plugin';
-        $app['code'] = $meta['code'];
-        $app['name'] = $meta['name'];
-        $app['description'] = $meta['description'];
-        $app['author'] = $meta['author'];
-        $app['version'] = $meta['version'];
+        $app['code'] = $plugin['code'];
+        $app['name'] = $plugin['name'];
+        $app['description'] = $plugin['description'];
+        $app['author'] = $plugin['author'];
+        $app['version'] = $plugin['version'];
 
         $app = $this->getAppDao()->create($app);
 
-        $this->rebuildPlugins();
+        return $app;
     }
 
     public function removePlugin($code)
@@ -70,25 +52,6 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         $this->getAppDao()->delete($app['id']);
-
-        $this->rebuildPlugins();
-    }
-
-    public function rebuildPlugins()
-    {
-        $plugins = $this->findAllPlugins();
-
-        $config = array();
-        foreach ($plugins as $plugin) {
-            $config[] = array(
-                'code' => $plugin['code'],
-                'version' => $plugin['version'],
-                'type' => $plugin['type'],
-            );
-        }
-
-        $content = "<?php \n return " . var_export($config, true) . ";";
-        file_put_contents($this->biz['plugin.config_file'], $content);
     }
 
     protected function getAppDao()

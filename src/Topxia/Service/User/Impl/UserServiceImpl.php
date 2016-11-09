@@ -613,7 +613,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (!$this->isEmailAvaliable($registration['email'])) {
             throw new UnexpectedValueException('Email已存在');
         }
-
+        
         $user = array();
 
         if (isset($registration['verifiedMobile'])) {
@@ -633,6 +633,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user['createdTime'] = time();
+        $user['registeredWay'] = isset($registration['registeredWay']) ? $registration['registeredWay'] : '';
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
 

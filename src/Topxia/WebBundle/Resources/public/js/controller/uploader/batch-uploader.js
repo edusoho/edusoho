@@ -130,6 +130,7 @@ define(function(require, exports, module) {
                 pick: this.element.find('.file-pick-btn') ,
                 threads: 1,
                 chunkRetry: 5,
+                isBatchUploader: true,
                 formData: {
 
                 }
@@ -405,6 +406,11 @@ define(function(require, exports, module) {
                 'after-send-file': 'finishupload',
             }, {
                 preupload: function(file) {
+                    //不是批量上传组件的uploader直接退出
+                    if (!('isBatchUploader' in this.owner.options)) {
+                        return;
+                    }
+
                     var deferred = WebUploader.Deferred();
                     file.uploaderWidget.trigger('preupload', file);
                     file.uploaderWidget._makeFileHash(file).done(function(hash) {
@@ -462,6 +468,11 @@ define(function(require, exports, module) {
                 },
 
                 checkchunk: function(block) {
+                    //不是批量上传组件的uploader直接退出
+                    if (!('isBatchUploader' in this.owner.options)) {
+                        return;
+                    }
+
                     var deferred = WebUploader.Deferred();
                     var key = 'file_' + block.file.hash;
                     var resumedChunk = store.get(key);
@@ -478,6 +489,11 @@ define(function(require, exports, module) {
                 },
 
                 finishupload: function(file, ret, hds) {
+                    //不是批量上传组件的uploader直接退出
+                    if (!('isBatchUploader' in this.owner.options)) {
+                        return;
+                    }
+
                     var deferred = WebUploader.Deferred();
                     var key = 'file_' + file.hash;
                     var uploader = this.owner;

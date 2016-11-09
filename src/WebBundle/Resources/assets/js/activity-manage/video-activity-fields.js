@@ -1,3 +1,4 @@
+import  FileChooser from '../../common/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -34,3 +35,25 @@ function _inItStep2form() {
 }
 
 _inItStep2form();
+
+const fileChooser = new FileChooser();
+
+const onSelectFile = file => {
+    if (file.length) {
+        let minute = parseInt(file.length / 60);
+        let second = Math.round(file.length % 60);
+        $("#minute").val(minute);
+        $("#second").val(second);
+    }
+    $("#ext_mediaSource").val(file.source);
+    if (file.source == 'self') {
+        $("#ext_mediaId").val(file.id);
+        $("#ext_mediaUri").val('');
+    } else {
+        $("#ext_mediaId").val('');
+        $("#ext_mediaUri").val(file.uri);
+    }
+}
+
+fileChooser.on('select', onSelectFile);
+

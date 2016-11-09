@@ -15,9 +15,10 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
 
         if ($request->isMethod('POST')) {
-            $task              = $request->request->all();
-            $task['_base_url'] = $request->getSchemeAndHttpHost();
-            $savedTask         = $this->getTaskService()->createTask($this->parseTimeFields($task));
+            $task               = $request->request->all();
+            $task['_base_url']  = $request->getSchemeAndHttpHost();
+            $task['fromUserId'] = $this->getUser()->getId();
+            $savedTask          = $this->getTaskService()->createTask($this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 
@@ -43,8 +44,9 @@ class TaskManageController extends BaseController
             // unset($task['fromCourseSetId']);
             // unset($task['fromCourseId']);
 
-            $task['_base_url'] = $request->getSchemeAndHttpHost();
-            $savedTask         = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+            $task['_base_url']  = $request->getSchemeAndHttpHost();
+            $task['fromUserId'] = $this->getUser()->getId();
+            $savedTask          = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 
@@ -100,7 +102,8 @@ class TaskManageController extends BaseController
     {
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
         $course      = $this->tryManageCourse($courseId);
-        $tasks       = $this->getTaskService()->findTasksByCourseId($courseId);
+        $tasks       = $this->getTaskService()->findDetailedTasksByCourseId($courseId, $this->getUser()->getId());
+        // $tasks       = $this->getTaskService()->findTasksByCourseId($courseId);
         return $this->render('WebBundle:TaskManage:list.html.twig', array(
             'tasks'  => $tasks,
             'course' => $course,

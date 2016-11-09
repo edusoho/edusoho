@@ -161,6 +161,7 @@ class CourseMaterialManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
