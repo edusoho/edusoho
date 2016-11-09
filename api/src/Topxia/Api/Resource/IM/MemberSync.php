@@ -11,6 +11,7 @@ class MemberSync extends BaseResource
 {
     /*每次请求允许创建的最大会话数量*/
     const MAX_CREATION_PER_TIME = 20;
+
     public function post(Application $app, Request $request)
     {
         $setting = $this->getSettingservice()->get('app_im', array());
@@ -124,8 +125,9 @@ class MemberSync extends BaseResource
         $cnt = 0;
         foreach ($targetIds as $id) {
             if (array_key_exists($id, $toCreate)) {
+                // 防止请求过于频繁造成服务器压力过大
                 if (++$cnt > MAX_CREATION_PER_TIME) {
-                    break; // 防止请求过于频繁造成服务器压力过大
+                    break;
                 }
                 $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));
             } else {

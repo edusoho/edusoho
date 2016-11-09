@@ -733,7 +733,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return mb_substr($text, 0, $count, 'utf-8');
     }
 
-    //FIXME 该方法不合理，method name是通用的，但内容不通用
     protected function createJob($lesson)
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
@@ -753,7 +752,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function createLiveJob($lesson)
     {
         if ($lesson['type'] == 'live') {
-            //FIXME 以下代码需要优化，避免重复代码
             $startJob = array(
                 'name'            => "LiveCourseStartNotifyJob",
                 'cycle'           => 'once',
