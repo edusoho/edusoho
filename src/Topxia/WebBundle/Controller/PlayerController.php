@@ -63,6 +63,7 @@ class PlayerController extends BaseController
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
+
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
@@ -329,29 +330,6 @@ class PlayerController extends BaseController
         }
 
         return $response;
-    }
-
-    public function subtitleAction(Request $request, $fileId)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file["type"] != "subtitle") {
-            throw $this->createAccessDeniedException();
-        }
-
-        // todo token
-
-        $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id']);
-        $subtitle = array(
-            'name' => $file['filename'],
-            'url' => $downloadFile['url']
-        );
-
-        return $this->createJsonResponse($subtitle);
     }
 
     protected function isHiddenVideoHeader($isHidden = false)

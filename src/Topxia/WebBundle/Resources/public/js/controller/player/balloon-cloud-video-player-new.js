@@ -106,6 +106,8 @@ define(function(require, exports, module) {
                 });
             }
 
+            console.log(extConfig);
+
             var player = new VideoPlayerSDK($.extend({
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),

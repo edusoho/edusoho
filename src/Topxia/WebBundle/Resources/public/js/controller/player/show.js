@@ -36,13 +36,15 @@ define(function(require, exports, module) {
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
         var subtitlesData = videoHtml.data('subtitles');
         var subtitles = [];
-        for (var i in subtitlesData) {
-            var item = {
-                label: subtitlesData[i].name,
-                src: subtitlesData[i].url,
-                default: ("default" in subtitlesData[i]) ? subtitlesData[i].default : false
+        if (subtitlesData) {
+            for (var i in subtitlesData) {
+                var item = {
+                    label: subtitlesData[i].name,
+                    src: subtitlesData[i].url,
+                    default: ("default" in subtitlesData[i]) ? subtitlesData[i].default : false
+                }
+                subtitles.push(item);
             }
-            subtitles.push(item);
         }
 
         // set first item to default if no default

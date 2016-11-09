@@ -211,17 +211,6 @@ class QuestionMarkerController extends BaseController
         ));
     }
 
-    public function textTrackAction(Request $request, $courseId, $lessonId)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        return $this->render('TopxiaWebBundle:Marker:text-track.html.twig', array(
-            'course'        => $course,
-            'lesson'        => $lesson
-        ));
-    }
-
     public function searchAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -334,6 +323,11 @@ class QuestionMarkerController extends BaseController
     protected function getMarkerService()
     {
         return $this->getServiceKernel()->createService('Marker.MarkerService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 
     protected function getQuestionMarkerResultService()
