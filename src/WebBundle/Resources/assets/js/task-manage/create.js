@@ -72,27 +72,13 @@ class Editor {
 
         let $this = $(event.currentTarget).attr('disabled','disabled');
         let length = this._getLength();
-        let postData = $('.js-hidden-data')
-            .map((index, node) => {
-                let name = $(node).attr('name');
-                let value = $(node).val();
-                return {name: name, value: value}
-            })
-            .filter((index, obj) => {
-                return obj.value !== '' || obj.value !== null;
-            })
-            .get()
-            .concat($('#step1-form').serializeArray())
+        let postData = $('#step1-form').serializeArray()
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
-            .concat(this.$iframe_body.find("#step3-form").serializeArray())
-            .concat([
-                {name: 'mediaType', value: this.type},
-                {name: 'length', value: length}
-            ]);
+            .concat(this.$iframe_body.find("#step3-form").serializeArray());
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                // location.reload();
+                location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
