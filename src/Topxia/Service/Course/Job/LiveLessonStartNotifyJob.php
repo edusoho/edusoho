@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 
 class LiveLessonStartNotifyJob implements Job
 {
@@ -15,29 +16,28 @@ class LiveLessonStartNotifyJob implements Job
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
             $lesson['course'] = $course;
-            $message = "您报名的课程$lesson['title']，即将于".date('H:i', $lesson['startTime'])."开始直播，马上前往直播教室准备学习吧!";
-            $convNo = $this->getConversationService()->getConversationByTarget($lesson['courseId'], 'course-push');
-
-            $from = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $targetId
+            $message          = "您报名的课程".$lesson['title']."，即将于".date('H:i', $lesson['startTime'])."开始直播，马上前往直播教室准备学习吧!";
+            $convNo           = $this->getConversationService()->getConversationByTarget($lesson['courseId'], 'course-push');
+            $from             = array(
+                'type' => 'lesson',
+                'id'   => $targetId
             );
             $to = array(
-               'type'   => 'all',
-               'convNo' => $convNo 
+                'type' => 'lesson',
+                'id'   => 'all'
             );
             $body = array(
-                'message'  => $message,
+                'type'     => 'live_start',
                 'courseId' => $lesson['courseId'],
-                'lessonId' => $targetId
+                'lessonId' => $targetId,
+                'message'  => $message
             );
-            
-            return $this->pushIM($form, $to, $body);
-        }   
+
+            return $this->pushIM($from, $to, $body, $convNo);
+        }
     }
 
-    //FIXME 该方法和PushMessageEventSubscriber的一样，最好抽提出来
-    protected function pushIM($from, $to, $body)
+    protected function pushIM($from, $to, $body, $convNo = '')
     {
         $setting = $this->getSettingService()->get('app_im', array());
         if (empty($setting['enabled'])) {
@@ -55,13 +55,12 @@ class LiveLessonStartNotifyJob implements Job
                 's' => $from,
                 'd' => $to
             ),
-            'convNo'   => empty($to['convNo']) ? '' : $to['convNo']
+            'convNo'   => $convNo
         );
 
         if ($to['type'] == 'user') {
             $params['toId'] = $to['id'];
         }
-
         if (empty($params['convNo'])) {
             return;
         }
@@ -92,6 +91,11 @@ class LiveLessonStartNotifyJob implements Job
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getServiceKernel()
