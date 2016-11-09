@@ -1,9 +1,13 @@
-<tr id="tagGroup-tr-{{ tagGroup.id }}">
+<tr id="tag-group-tr-{{ tagGroup.id }}">
   <td>{{ tagGroup.id }}</td>
   <td>{{ tagGroup.name }}</td>
-  <td>{{ tagGroup.scope }}</td>
+  <td>
+    {% for scope in tagGroup.scope %}
+      {{ scope|default(null) }}
+    {% endfor %}
+  </td>
   <td>{{ tagGroup.tagNum }}</td>
-  <td>{{ tagGroup.createdTime }}</td>
+  <td>{{ tagGroup.createdTime|date('Y-m-d H:i') }}</td>
   <td>
     <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {groupId: tagGroup.id}) }}" data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</button>
   </td>

@@ -247,7 +247,7 @@ admin_tag_group_create:
     defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
 
 admin_tag_group_update:
-    pattern: /tag/group/{$groupId}/update
+    pattern: /tag/group/{groupId}/update
     defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
 
 admin_user:
