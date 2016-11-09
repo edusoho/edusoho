@@ -3,7 +3,11 @@
   <td>{{ tagGroup.name }}</td>
   <td>
     {% for scope in tagGroup.scope %}
-      {{ scope|default(null) }}
+      {% if scope == 'classroom' %}
+        班级列表筛选
+      {% elseif scope == 'course'%}
+        课程列表筛选
+      {% endif %}
     {% endfor %}
   </td>
   <td>{{ tagGroup.tagNum }}</td>
