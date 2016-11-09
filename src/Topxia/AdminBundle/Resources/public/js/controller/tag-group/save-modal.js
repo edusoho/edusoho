@@ -3,6 +3,9 @@ define(function(require, exports, module) {
   var Notify = require('common/bootstrap-notify');
   require('common/validator-rules').inject(Validator);
 
+  require('jquery.select2-css');
+  require('jquery.select2');
+
   exports.run = function() {
     var $form = $('#tag-group-form');
     var $modal = $form.parents('.modal');
@@ -38,21 +41,78 @@ define(function(require, exports, module) {
         rule: 'remote'
     });
 
-        $modal.find('.delete-tag-group').on('click', function() {
-            if (!confirm(Translator.trans('真的要删除该标签吗？'))) {
-                return ;
+    $modal.find('.delete-tag-group').on('click', function() {
+      if (!confirm(Translator.trans('真的要删除该标签吗？'))) {
+          return ;
+      }
+
+      var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
+      $.post($(this).data('url'), function(html) {
+        if (html) {
+          $modal.modal('hide');
+          $table.find(trId).remove();
+        } else {
+          Notify.danger(Translator.trans('标签组下面存在标签，不能删除。'));
+        }
+      });
+
+    });
+
+
+    var $tagContainer = $('#tags');
+    $tagContainer.select2({
+        ajax: {
+            url: $tagContainer.data('url') + '#',
+            dataType: 'json',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    q: term,
+                    page_limit: 10
+                };
+            },
+            results: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+
+                    results.push({
+                        id: item.name,
+                        name: item.name
+                    });
+                });
+
+                return {
+                    results: results
+                };
+
             }
-
-            var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
-            $.post($(this).data('url'), function(html) {
-              if (html) {
-                $modal.modal('hide');
-                $table.find(trId).remove();
-              } else {
-                Notify.danger(Translator.trans('标签组下面存在标签，不能删除。'));
-              }
+        },
+        initSelection: function (element, callback) {
+            var data = [];
+            $(element.val().split(",")).each(function () {
+                data.push({
+                    id: this,
+                    name: this
+                });
             });
-
-        });
+            callback(data);
+        },
+        formatSelection: function (item) {
+            return item.name;
+        },
+        formatResult: function (item) {
+            return item.name;
+        },
+        width: 'off',
+        multiple: true,
+        maximumSelectionSize: 20,
+        placeholder: Translator.trans('请输入标签'),
+        width: 'off',
+        multiple: true,
+        createSearchChoice: function () {
+            return null;
+        },
+        maximumSelectionSize: 20
+    });
   };
 });
