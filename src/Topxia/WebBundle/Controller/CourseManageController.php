@@ -200,7 +200,7 @@ class CourseManageController extends BaseController
         $summary = $this->getCourseReportService()->summary($id);
         $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
 
-        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:course.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:course.html.twig', array(
             'course' => $course,
             'summary' => $summary,
             'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
@@ -214,7 +214,7 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
-        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson.html.twig', array(
             'course' => $course,
             'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
             'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
@@ -264,7 +264,7 @@ class CourseManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson-learn.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:besson-learn.html.twig', array(
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
