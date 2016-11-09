@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Common\ArrayToolkit;
 
 class TagController extends BaseController
 {
@@ -13,18 +14,16 @@ class TagController extends BaseController
         $paginator = new Paginator($request, $total, 20);
         $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        foreach ($tags as &$tag) {
-            if (empty($tag['groupId'])) {
-                $tag['tagGroupName'] = '';
-            } else {
-                $tagGroup = $this->getTagService()->getTagGroup($tag['groupId']);
-                $tag['tagGroupName'] = $tagGroup['name'];
-            }
-        }
+        $tagIds = ArrayToolkit::column($tags, 'id');
+
+        $tagGroups = $this->getTagService()->findTagGroupsByTagIds($tagIds);
+
+        $tagGroups = ArrayToolkit::index($tagGroups, 'tagId');
 
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
-            'tags'      => $tags,
-            'paginator' => $paginator
+            'tags'         => $tags,
+            'paginator'    => $paginator,
+            'tagGroups' => $tagGroups
         ));
     }
 

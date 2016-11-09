@@ -156,6 +156,12 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $tagGroups = $this->getTagService()->findTagGroups();
+
+        foreach ($tagGroups as &$tagGroup) {
+            $tagGroup['tags'] = $this->getTagService()->findTagsByGroupId($tagGroup['id']);
+        }
+
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
