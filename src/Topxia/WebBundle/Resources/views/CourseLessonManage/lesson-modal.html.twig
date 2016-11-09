@@ -32,12 +32,12 @@
     <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
     <div class="col-md-9 controls">
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}
+            <label style="display: inline-block;"><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}
               <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-free-lesson-data-popover"></span>
               <div class="popover-content hidden">
                 <div class="popover-item">
