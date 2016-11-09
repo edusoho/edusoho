@@ -4,8 +4,8 @@ namespace Topxia\Service\Notification;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface
 {
@@ -65,7 +65,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'group.thread.post.create'  => 'onThreadPostCreate',
             'group.thread.post.delete'  => 'onThreadPostDelete',
 
-            'announcement.create'       => 'onAnnouncementCreate',
+            'announcement.create'       => 'onAnnouncementCreate'
 
             //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
@@ -218,6 +218,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
             $this->createJob($lesson);
+            $this->createLiveJob($lesson);
         }
 
         $this->pushCloud('lesson.create', $lesson);
@@ -232,13 +233,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
             $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
             if ($jobs) {
                 $this->deleteJob($jobs);
             }
-
             if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
+            }
+
+            $liveJobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('live_lesson', $lesson['id']);
+            if ($liveJobs) {
+                $this->deleteJob($liveJobs);
+            }
+            if ($lesson['status'] == 'published') {
+                $this->createLiveJob($lesson);
             }
         }
 
@@ -308,21 +315,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
         $article['app']       = $articleApp;
 
-        $imSetting         = $this->getSettingService()->get('app_im', array());
-        $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-        $article = $this->convertArticle($article);
+        $imSetting            = $this->getSettingService()->get('app_im', array());
+        $article['convNo']    = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+        $article              = $this->convertArticle($article);
         $article['_noPushIM'] = 1;
 
         $this->pushCloud('article.create', $article);
 
-        $from       = array(
-            'id'    => $article['app']['id'],
-            'type'  => $article['app']['code'],
+        $from = array(
+            'id'   => $article['app']['id'],
+            'type' => $article['app']['code']
         );
 
         $to = array(
-            'type' => 'global',
-            'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
+            'type'   => 'global',
+            'convNo' => empty($article['convNo']) ? '' : $article['convNo']
         );
 
         $body = array(
@@ -362,24 +369,24 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onThreadCreate(ServiceEvent $event)
     {
-        $thread = $event->getSubject();
-        $thread = $this->convertThread($thread, $event->getName());
+        $thread              = $event->getSubject();
+        $thread              = $this->convertThread($thread, $event->getName());
         $thread['_noPushIM'] = 1;
 
         $this->pushCloud('thread.create', $thread);
 
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-            return ;
+            return;
         }
 
-        $from   = array(
-            'type'  => $thread['target']['type'],
-            'id'    => $thread['target']['id'],
+        $from = array(
+            'type' => $thread['target']['type'],
+            'id'   => $thread['target']['id']
         );
 
-        $to   = array(
-            'type' => 'user',
-            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
+        $to = array(
+            'type'   => 'user',
+            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo']
         );
 
         $body = array(
@@ -389,7 +396,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'lessonId'            => $thread['relationId'],
             'questionCreatedTime' => $thread['createdTime'],
             'questionTitle'       => $thread['title'],
-            'title' => "{$thread['target']['title']} 有新问题",
+            'title'               => "{$thread['target']['title']} 有新问题"
         );
 
         $results = array();
@@ -398,7 +405,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             if ($i >= 3) {
                 break;
             }
-            $to['id'] = $teacherId;
+            $to['id']  = $teacherId;
             $results[] = $this->pushIM($from, $to, $body);
         }
     }
@@ -450,17 +457,17 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onThreadPostCreate(ServiceEvent $event)
     {
-        $post = $event->getSubject();
-        $post = $this->convertThreadPost($post, $event->getName());
+        $post              = $event->getSubject();
+        $post              = $this->convertThreadPost($post, $event->getName());
         $post['_noPushIM'] = 1;
         $this->pushCloud('thread_post.create', $post);
 
         if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
-            return ;
+            return;
         }
 
         if ($post['thread']['type'] != 'question') {
-            return ;
+            return;
         }
 
         foreach ($post['target']['teacherIds'] as $teacherId) {
@@ -468,15 +475,15 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 continue;
             }
 
-            $from   = array(
-                'type'  => $post['target']['type'],
-                'id'    => $post['target']['id'],
+            $from = array(
+                'type' => $post['target']['type'],
+                'id'   => $post['target']['id']
             );
 
-            $to   = array(
-                'type' => 'user',
-                'id' => $post['thread']['userId'],
-                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
+            $to = array(
+                'type'   => 'user',
+                'id'     => $post['thread']['userId'],
+                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo']
             );
 
             $body = array(
@@ -487,12 +494,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'questionCreatedTime' => $post['thread']['createdTime'],
                 'questionTitle'       => $post['thread']['title'],
                 'postContent'         => $post['content'],
-                'title' => "{$post['thread']['title']} 有新回复",
+                'title'               => "{$post['thread']['title']} 有新回复"
             );
 
             $this->pushIM($from, $to, $body);
         }
-
     }
 
     public function onThreadPostUpdate(ServiceEvent $event)
@@ -543,31 +549,30 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $announcement = $event->getSubject();
 
-        $target                 = $this->getTarget($announcement['targetType'], $announcement['targetId']);
-        $announcement['target'] = $target;
+        $target                    = $this->getTarget($announcement['targetType'], $announcement['targetId']);
+        $announcement['target']    = $target;
         $announcement['_noPushIM'] = 1;
 
         $this->pushCloud('announcement.create', $announcement);
 
         $from = array(
-            'type'  => $target['type'],
-            'id'    => $target['id'],
+            'type' => $target['type'],
+            'id'   => $target['id']
         );
 
         $to = array(
-            'type' => $target['type'],
-            'id'   => $target['id'],
-            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
+            'type'   => $target['type'],
+            'id'     => $target['id'],
+            'convNo' => empty($target['convNo']) ? '' : $target['convNo']
         );
 
         $body = array(
-            'id'   => $announcement['id'],
-            'type' => 'announcement.create',
-            'title' => $this->plainText($announcement['content'], 50),
+            'id'    => $announcement['id'],
+            'type'  => 'announcement.create',
+            'title' => $this->plainText($announcement['content'], 50)
         );
 
         $this->pushIM($from, $to, $body);
-
     }
 
     public function onOpenCourseCreate(ServiceEvent $event)
@@ -604,7 +609,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $mobileSetting = $this->getSettingService()->get('mobile');
         if ($lesson['status'] === 'published' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            $this->LiveOpenCreateJob($lesson);
+            $this->createLiveOpenJob($lesson);
         }
     }
 
@@ -637,7 +642,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             if ($lesson['status'] == 'published') {
-                $this->LiveOpenCreateJob($lesson);
+                $this->createLiveOpenJob($lesson);
             }
         }
     }
@@ -652,7 +657,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $target['title']      = $course['title'];
                 $target['image']      = $this->getFileUrl($course['smallPicture']);
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
-                $conv                 = $this->getConversationService()->getConversationByTarget($id, 'course');
+                $conv                 = $this->getConversationService()->getConversationByTarget($id, 'course-push');
                 $target['convNo']     = empty($conv) ? '' : $conv['no'];
                 break;
             case 'lesson':
@@ -744,7 +749,23 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function LiveOpenCreateJob($lesson)
+    protected function createLiveJob($lesson)
+    {
+        if ($lesson['type'] == 'live') {
+            $startJob = array(
+                'name'            => "LiveCourseStartNotifyJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 10 * 60,
+                'jobClass'        => 'Topxia\\Service\\Course\\Job\\LiveLessonStartNotifyJob',
+                'jobParams'       => '',
+                'targetType'      => 'live_lesson',
+                'targetId'        => $lesson['id']
+            );
+            $this->getCrontabService()->createJob($startJob);
+        }
+    }
+
+    protected function createLiveOpenJob($lesson)
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
@@ -835,21 +856,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $setting = $this->getSettingService()->get('app_im', array());
         if (empty($setting['enabled'])) {
-            return ;
+            return;
         }
 
         $params = array(
-            'fromId' => 0,
+            'fromId'   => 0,
             'fromName' => '系统消息',
-            'toName' => '全部',
-            'body' => array(
+            'toName'   => '全部',
+            'body'     => array(
                 'v' => 1,
                 't' => 'push',
                 'b' => $body,
                 's' => $from,
-                'd' => $to,
+                'd' => $to
             ),
-            'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
+            'convNo'   => empty($to['convNo']) ? '' : $to['convNo']
         );
 
         if ($to['type'] == 'user') {
@@ -857,11 +878,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         if (empty($params['convNo'])) {
-            return ;
+            return;
         }
 
         try {
-            $api = IMAPIFactory::create();
+            $api    = IMAPIFactory::create();
             $result = $api->post('/push', $params);
 
             $setting = $this->getSettingService()->get('developer', array());
@@ -869,7 +890,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 IMAPIFactory::getLogger()->debug('API RESULT', !is_array($result) ? array() : $result);
             }
         } catch (\Exception $e) {
-            IMAPIFactory::getLogger()->warning('API REQUEST ERROR:' . $e->getMessage());
+            IMAPIFactory::getLogger()->warning('API REQUEST ERROR:'.$e->getMessage());
         }
     }
 }

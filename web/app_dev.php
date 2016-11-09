@@ -55,7 +55,7 @@ $serviceKernel->setTranslatorEnabled(true);
 $serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-$serviceKernel->setConnectionFactory(new AppConnectionFactory($kernel->getContainer()));
+$serviceKernel->setConnectionFactory(new AppConnectionFactory());
 
 $currentUser = new CurrentUser();
 $currentUser->fromArray(array(

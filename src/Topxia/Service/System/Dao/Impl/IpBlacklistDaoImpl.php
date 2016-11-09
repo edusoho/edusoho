@@ -47,7 +47,7 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert fields error.');
         }
-        $this->clearCache();
+        $this->clearCached();
         return $this->getIp($this->getConnection()->lastInsertId());
     }
 
@@ -56,14 +56,14 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
         $counter = (int) $counter;
         $sql = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
         $result = $this->getConnection()->executeQuery($sql, array($counter, $id));
-        $this->clearCache();
+        $this->clearCached();
         return $result;
     }
 
     public function deleteIp($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $result;
     }
 

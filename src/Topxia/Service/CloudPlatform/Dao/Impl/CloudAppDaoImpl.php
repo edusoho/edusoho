@@ -75,21 +75,21 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert App error.');
         }
-        $this->clearCache();
+        $this->clearCached();
         return $this->getApp($this->getConnection()->lastInsertId());
     }
 
     public function updateApp($id,$app)
     {
         $this->getConnection()->update($this->table, $app, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $this->getApp($id);
     }
 
 	public function deleteApp($id)
 	{
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $result;
 	}
 }

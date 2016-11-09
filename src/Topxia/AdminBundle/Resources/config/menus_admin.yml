@@ -701,7 +701,7 @@ admin:
                             name: 小组
                             disable: true
                         admin_invite_set:
-                            name: '邀请码设置'
+                            name: '邀请注册设置'
                             disable: true
                 admin_setting_finance:
                     name: 账务设置
