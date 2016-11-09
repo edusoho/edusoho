@@ -4,7 +4,7 @@ import 'jquery';
 import 'bootstrap';
 import 'bootstrap-notify';
 
-// import 'common/bootstrap-modal-hack';
+import 'common/bootstrap-modal-hack';
 
 
 
@@ -14,20 +14,20 @@ $(document).ajaxSend(function(a, b, c) {
   }
 });
 
-$('#modal').on('show.bs.modal', function (e) {
-  let url = $(e.relatedTarget).data('url');
-  let $this = $(this);
+// $('#modal').on('show.bs.modal', function (e) {
+//   let url = $(e.relatedTarget).data('url');
+//   let $this = $(this);
 
-  if(!$this.html()) {
-    localStorage.removeItem("modalUrl");
-  }
+//   if(!$this.html()) {
+//     localStorage.removeItem("modalUrl");
+//   }
   
-  if(localStorage.getItem("modalUrl") != url ) {
-    $this.empty().load(url);
-    localStorage.setItem("modalUrl",url);
-  }
+//   if(localStorage.getItem("modalUrl") != url ) {
+//     $this.empty().load(url);
+//     localStorage.setItem("modalUrl",url);
+//   }
 
-})
+// })
 
 // $('#modal').on('show.bs.modal', function (e) {
 //   $(this).load($(e.relatedTarget).data('url'));

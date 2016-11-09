@@ -62,6 +62,7 @@ class Editor {
         this.type !== type  ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
+        console.log("type");
     }
 
     _onSave(event) {
