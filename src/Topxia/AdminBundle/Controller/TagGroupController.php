@@ -38,8 +38,15 @@ class TagGroupController extends BaseController
     public function updateAction(Request $request, $groupId)
     {   
         if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
 
+            $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
+            
+            return $this->render('TopxiaAdminBundle:TagGroup:list-tr.html.twig', array(
+                'tagGroup' => $tagGroup
+            ));    
         }
+
         $tagGroup = $this->getTagService()->getTagGroup($groupId);
 
         return $this->render('TopxiaAdminBundle:TagGroup:tag-group-modal.html.twig', array(

@@ -209,6 +209,12 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
+        $tagGroup = $this->getTagGroupDao()->findTagGroupByName($fields['name']);
+
+        if ($tagGroup && $tagGroup['id'] != $id) {
+            throw $this->createServiceException("标签组名字已存在，请重新填写");   
+        }
+
         $this->getTagGroupTagDao()->deleteByGroupId($id);
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
