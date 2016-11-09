@@ -1,12 +1,10 @@
-import './vendor.less'; 
-//先用es原来的全局样式，因为要考虑主题等
+import './vendor.less'; //先用es原来的全局样式，因为要考虑主题等
 
 import 'jquery';
 import 'bootstrap';
 import 'bootstrap-notify';
-// require('bootstrap-datepicker-webpack');
 
-
+import 'common/bootstrap-modal-hack';
 
 
 
@@ -17,5 +15,17 @@ $(document).ajaxSend(function(a, b, c) {
 });
 
 $('#modal').on('show.bs.modal', function (e) {
-  $(this).load($(e.relatedTarget).data('url'));
-})
+  let url = $(e.relatedTarget).data('url');
+  let $this = $(this);
+
+  if(!$this.html()) {
+    localStorage.removeItem("modalUrl");
+  }
+  
+  if(localStorage.getItem("modalUrl") != url ) {
+    $this.empty().load(url);
+    localStorage.setItem("modalUrl",url);
+  }
+
+});
+

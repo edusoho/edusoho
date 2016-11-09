@@ -18,6 +18,7 @@ const currentDir = path.resolve(__dirname);
 const globalAssetsDir = path.resolve(currentDir, '../');
 const rootDir = path.resolve(currentDir, '../../../../');
 const srcDir = path.resolve(rootDir, 'src');
+const nodeModulesDir = path.resolve(rootDir, 'node_modules');
 
 let assetsSrcDirs = [globalAssetsDir];
 let bundleEntry = {};
@@ -37,7 +38,7 @@ let bundleEntry = {};
    */
 parameters.registeredBundles.forEach((bundle) => {
   const bundleAssetsDir = `${srcDir}/${bundle}/Resources/assets`;
-  console.log(bundleAssetsDir);
+  // console.log(bundleAssetsDir);
 
   const bundleName = bundle.replace('Bundle', '').replace('/', '').toLowerCase();
 
@@ -62,6 +63,18 @@ for (let key in parameters.libs) {
   });
 }
 
+let onlyCopys = [];
+let copyitem = {};
+parameters.onlyCopys.forEach((item) => {
+  copyitem = {
+    from : `${nodeModulesDir}/${item.name}`,
+    to: `${libEntryPrefix}${item.name}`,
+    ignore: item.ignore
+  }
+  onlyCopys.push(copyitem);
+})
+
+
 let config = {
 
   // Environment
@@ -75,7 +88,7 @@ let config = {
   libsDir: path.resolve(globalAssetsDir, 'libs'),
   commonDir: path.resolve(globalAssetsDir, 'common'),
   assetsSrcDirs: assetsSrcDirs,
-  nodeModulesDir: path.resolve(rootDir, 'node_modules'),
+  nodeModulesDir: nodeModulesDir,
 
   // Webpack
   bundleEntry: bundleEntry,
@@ -85,6 +98,7 @@ let config = {
     publicPath: parameters.output.publicPath,
   },
   noParseDeps: parameters.noParseDeps || [],
+  onlyCopys: onlyCopys || []
 };
 
 export default config;

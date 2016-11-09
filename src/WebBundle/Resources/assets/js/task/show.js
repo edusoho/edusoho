@@ -1,15 +1,34 @@
+import SideBar from '../../common/task-show/sidebar';
+
 class TaskShow {
-    constructor(props) {
-        this.initPlugin();
-    }
+  constructor() {
+    this.init();
+  }
 
-    initPlugin() {
-        $('[data-toggle="tooltip"]').tooltip();
+  init() {
+    this._initPlugin();
+    this._sidebar();
+  }
 
-        $('#task-group').perfectScrollbar({wheelSpeed:50});
-        $("#task-group").scrollTop(30);
-        $("#task-group").perfectScrollbar('update');
-    }
+  _initPlugin() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover',
+    });
+  }
+
+  _sidebar() {
+    var sideBar = new SideBar({
+      element:'.dashboard-sidebar-content',
+      activePlugins:["note"],
+      courseId: 1,
+    });
+  }
 }
 
 new TaskShow();
+
+
+
+

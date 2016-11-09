@@ -13,7 +13,9 @@ class LiveShow {
 
 	    var courseId = live_activity_data.courseId;
 	    var activityId = live_activity_data.id;
+
 	    var $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
+	    
 	    var iID;
 	    if (iID) {
 	        clearInterval(iID);
@@ -58,10 +60,10 @@ class LiveShow {
 	            $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
 	            var url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
 	            if (live_activity_data.isTeacher) {
-	                $countDown = $replayGuid;
-	                $countDown += "<p>"+Translator.trans('还剩') + hours + Translator.trans('小时') + minutes + Translator.trans('分钟') + seconds + Translator.trans('秒')+"&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+	                $countDown = $replayGuid + $countDown;
+	                $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
 	            } else {
-	                $countDown = "<p>"+Translator.trans('还剩') + hours + Translator.trans('小时') + minutes + Translator.trans('分钟') + seconds + Translator.trans('秒')+"&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+	                $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
 	            }
 	        };
 	        if (startLeftSeconds <= 0) {
@@ -103,43 +105,28 @@ class LiveShow {
 	            }
 	        };
 	        var $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + live_activity_data.summary + '</div>' + '<br>' + $countDown;
-	        console.log($content);
 	        $("#lesson-live-content").find('.lesson-content-text-body').html($content);
 
 	        intervalSecond++;
 	    }
 
 	    generateHtml();
-	    var millisecond = 0;
 	    if (live_activity_data.endTime > live_activity_data.nowDate) {
-	        millisecond = 1000;
+	    	iID = setInterval(generateHtml, 1000);
 	    }
-	    iID = setInterval(generateHtml, millisecond);
 
 	    $("#lesson-live-content").show();
-	    // $("#lesson-live-content").perfectScrollbar({
-	    //     wheelSpeed: 50
-	    // });
 	    $("#lesson-live-content").scrollTop(0);
-	    // $("#lesson-live-content").perfectScrollbar('update');
     }
 
     _getCountDown(days, hours, minutes, seconds) {
-        var $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + days + "</strong>"+Translator.trans('天')+"<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
+        var content = Translator.trans('还剩: ');
+        content += days ? "<strong class='text-info'>" + days + "</strong>"+Translator.trans('天') : "";
+        content += hours ? "<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时'): "";
+        content += minutes ? "<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟') : "";
+        content += seconds ? "<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒') : "";
 
-        if (days == 0) {
-            $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
-        };
-
-        if (hours == 0 && days != 0) {
-            $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + days + "</strong>"+Translator.trans('天')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
-        };
-
-        if (hours == 0 && days == 0) {
-            $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
-        };
-
-        return $countDown;          
+        return content;          
     }
 }
 
