@@ -7,13 +7,7 @@ use Doctrine\DBAL\DriverManager;
 
 class AppConnectionFactory implements ConnectionFactory
 {
-    protected $container;
     protected $connection;
-
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
 
     public function getConnection()
     {

@@ -50,7 +50,7 @@
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'上传'|trans}}</a>
         <button class="btn btn-default" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
-        <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。'|trans}}</p>
+        <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,'|trans}}<a href="{{ path('homepage') }}" target="_blank">点击查看</a></p>
         <input type="hidden" name="logo" value="{{ site.logo }}">
       </div>
     </div>
