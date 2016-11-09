@@ -49,12 +49,19 @@ class ReportServiceImpl extends BaseService implements ReportService
             $student['finishedDay'] = date('Y-m-d', $student['finishedTime']);
          
             foreach ($late30DaysStat as $day => &$stat) {
-                if ($student['createdDay'] == $day || strtotime($student['createdDay']) < strtotime(date('Y-m-d', strtotime('- 29 days')))) {
+                //小于30天以后的，是一个累积值，所有天数都要+1
+                if (strtotime($student['createdDay']) < strtotime(date('Y-m-d', strtotime('- 29 days')))) {
+                    $stat['studentNum']++;
+                } else if (strtotime($student['createdDay']) <= strtotime($day)) {
                     $stat['studentNum']++;
                 }
 
-                if ($student['isLearned'] && $student['finishedTime'] > 0 && ($student['finishedDay'] == $day ||  strtotime($student['finishedDay']) < strtotime(date('Y-m-d', strtotime('- 29 days'))))) {
-                    $stat['finishedNum']++;
+                if ($student['isLearned'] && $student['finishedTime'] > 0) {
+                    if (strtotime($student['finishedDay']) < strtotime(date('Y-m-d', strtotime('- 29 days')))) {
+                        $stat['finishedNum']++;
+                    } else if (strtotime($student['finishedDay']) <= strtotime($day)) {
+                        $stat['finishedNum']++;
+                    }
                 }
             }
         }
