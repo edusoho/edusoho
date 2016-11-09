@@ -264,7 +264,7 @@ class CourseManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:besson-learn.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson-learn.html.twig', array(
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
