@@ -66,6 +66,6 @@ define(function(require,exports,module){
         var tabHeight = $('.nav-tabs-edit').height();
         var textTrackTitleHeight = $('.text-track-title').height();
         var selctHeight = $('.js-texttrack-select').height();
-        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selctHeight - 60).show();
+        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selctHeight - 100).show();
     }
 })
