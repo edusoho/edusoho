@@ -45,6 +45,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->findAllTagsCount();
     }
 
+    public function findTagGroups()
+    {   
+        return $this->getTagGroupDao()->findTagGroups();
+    }
+
     public function searchTags($conditions, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
@@ -104,10 +109,24 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag ? false : true;
     }
 
+    public function isTagGroupNameAvalieable($name, $exclude = null)
+    {
+        if (empty($name)) {
+            return false;
+        }
+
+        if ($name == $exclude) {
+            return true;
+        }
+
+        $tag = $this->getTagGroupDao()->findTagGroupByName($name);
+
+        return $tag ? false : true;
+    }
+
     public function addTag(array $tag)
     {
         $tag = ArrayToolkit::parts($tag, array('name'));
-
         $tag                = $this->filterTagFields($tag);
         $tag['createdTime'] = time();
         $tag                = $this->setTagOrg($tag);
@@ -120,6 +139,14 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTagGroup($fields)
     {   
+        if (empty($fields['name'])) {
+            throw $this->createServiceException("标签组名字未填写，请添加");
+        }
+
+        if ($this->getTagGroupDao()->findTagGroupByName($fields['name'])) {
+            throw $this->createServiceException("标签组名字已存在，请重新填写");   
+        }
+
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $fields = $this->filterTagGroupFields($fields);
@@ -195,23 +222,42 @@ class TagServiceImpl extends BaseService implements TagService
         $fields = $this->filterTagGroupFields($fields);
 
         $fields['updatedTime'] = time();
-        
+
         $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
 
-        $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
+        $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$updatedTagGroup['name']}(#{$id})");
 
         return $updatedTagGroup;
     }
 
     public function deleteTag($id)
     {
+        $tag = $this->getTag($id);
+
+        if (!empty($tag['groupId'])) {
+            $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tag['groupId'], $id);
+
+            $tagGroup = $this->getTagGroup($tag['groupId']);
+
+            $tagNum = $tagGroup['tagNum'] - 1;
+
+            $this->updateTagGroup($tag['groupId'], array('tagNum' => $tagNum));
+        }
+
         $this->getTagDao()->deleteTag($id);
+
         $this->dispatchEvent("tag.delete", array('tagId' => $id));
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
     public function deleteTagGroup($id)
     {
+        $tagGroup = $this->getTagGroup($id);
+
+        if ($tagGroup['tagNum']) {
+            return false;
+        }
+
         $this->getTagGroupDao()->delete($id);
 
         $this->getTagGroupTagDao()->deleteByGroupId($id);

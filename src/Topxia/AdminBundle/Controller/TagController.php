@@ -12,6 +12,16 @@ class TagController extends BaseController
         $total     = $this->getTagService()->searchTagCount($conditions = array());
         $paginator = new Paginator($request, $total, 20);
         $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        foreach ($tags as &$tag) {
+            if (empty($tag['groupId'])) {
+                $tag['tagGroupName'] = '';
+            } else {
+                $tagGroup = $this->getTagService()->getTagGroup($tag['groupId']);
+                $tag['tagGroupName'] = $tagGroup['name'];
+            }
+        }
+
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
             'tags'      => $tags,
             'paginator' => $paginator
@@ -22,6 +32,7 @@ class TagController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->addTag($request->request->all());
+
             return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
         }
 

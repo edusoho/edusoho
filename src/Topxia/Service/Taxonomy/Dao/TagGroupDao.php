@@ -5,6 +5,10 @@ interface TagGroupDao
 {
     public function get($id);
 
+    public function findTagGroupByName($name);
+
+    public function findTagGroups();
+
     public function create($fields);
 
     public function delete($id);
