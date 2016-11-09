@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
-use Biz\Activity\Service\ActivityService;
 use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -91,10 +90,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findDetailedTasksByCourseId($courseId, $userId)
     {
-        //列举course下的所有tasks，并：
-        //1. 标记任务的进度（course_task_result.status: ''=未开始，start=进行中，finish=已完成 ）
-        //2. 如果有length的需表达其长度，目前主要是视频（hh:ii:ss）
-        //3. 标记活动的类型（icon + name）
+        if ($this->getCourseService()->isCourseStudent($courseId, $userId)) {
+            return array();
+        }
         $tasks = $this->findTasksByCourseId($courseId);
         if (empty($tasks)) {
             return $tasks;
@@ -180,11 +178,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
-    /**
-     * @return ActivityService
-     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 }
