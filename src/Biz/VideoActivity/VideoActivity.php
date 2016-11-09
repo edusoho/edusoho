@@ -7,6 +7,9 @@ use Biz\Activity\Config\Activity;
 use Biz\VideoActivity\Dao\VideoActivityDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Common\NotFoundException;
+use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivity extends Activity
 {
@@ -37,7 +40,10 @@ class VideoActivity extends Activity
 
     public function create($fields)
     {
-        $videoActivity    = $this->getVideoExt($fields);
+        $videoActivity = $fields['ext'];
+        if (empty($videoActivity)) {
+            throw new InvalidArgumentException();
+        }
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
         return $videoActivity;
     }
@@ -45,46 +51,26 @@ class VideoActivity extends Activity
 
     public function update($activityId, $fields)
     {
-        $videoActivity      = $this->getVideoExt($fields);
-        $existVideoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
-        $videoActivity = array_merge($existVideoActivity, $videoActivity);
-        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
+        $videoActivityFields = $fields['ext'];
+
+        $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
+        if (empty($videoActivity)) {
+            throw new ResourceNotFoundException();
+        }
+        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivityFields);
         return $videoActivity;
     }
 
     public function get($id)
     {
-        return $this->getVideoActivityDao()->get($id);
+        $videoActivity         = $this->getVideoActivityDao()->get($id);
+        $videoActivity['file'] = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+        return $videoActivity;
     }
 
     public function delete($id)
     {
         return $this->getVideoActivityDao()->delete($id);
-    }
-
-
-    protected function getVideoExt($fields)
-    {
-        $media = json_decode($fields['media'], true);
-        return array(
-            'mediaSource' => $media['source'],
-            'mediaId'     => empty($media['id']) ? null : $media['id'],
-            'mediaUri'    => empty($media['uri']) ? null : $media['uri'],
-            'media'       => $media
-        );
-    }
-
-    protected function getVideoLength($fields)
-    {
-        $length = 0;
-        if (isset($fields['minute']) && $fields['minute'] > 0) {
-            $length += $fields['minute'] * 60;
-        }
-        if (!isset($fields['second'])) {
-            throw new InvalidArgumentException($message = 'lack of necessary fields');
-        }
-        $length += $fields['second'];
-        return $length;
     }
 
     /**
@@ -93,5 +79,13 @@ class VideoActivity extends Activity
     protected function getVideoActivityDao()
     {
         return $this->getBiz()->dao('VideoActivity:VideoActivityDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 }

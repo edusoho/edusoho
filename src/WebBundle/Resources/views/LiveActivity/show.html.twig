@@ -1,4 +1,4 @@
-{% extends 'WebBundle:Component:content-layout.html.twig' %}
+{% extends 'WebBundle:Activity:content-layout.html.twig' %}
 {# {% do script(['libs/perfect-scrollbar.js', 'web/task/show.js']) %} #}
 {% do script(['web/task/live-show.js']) %}
 {% block content %} 
@@ -34,7 +34,7 @@
 		liveId: '{{activity.ext.liveId}}',
 		liveProvider: '{{activity.ext.liveProvider}}',
 		isTeacher: !!{{activity.isTeacher}},
-		replayStatus: 'videoGenerated', //
+		replayStatus: null, //'videoGenerated'
 		liveMediaError: null,
 		replays: null,
 		summary: '{{activity.remark}}',

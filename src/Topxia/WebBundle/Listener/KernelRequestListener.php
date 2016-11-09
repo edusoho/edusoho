@@ -70,7 +70,7 @@ class KernelRequestListener
                         'goto'     => '',
                         'duration' => 0
                     ));
-
+                    $response->setStatusCode(403);
                     $event->setResponse($response);
                 }
             }
