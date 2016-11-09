@@ -609,7 +609,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $mobileSetting = $this->getSettingService()->get('mobile');
         if ($lesson['status'] === 'published' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            $this->LiveOpenCreateJob($lesson);
+            $this->createLiveOpenJob($lesson);
         }
     }
 
@@ -642,7 +642,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             if ($lesson['status'] == 'published') {
-                $this->LiveOpenCreateJob($lesson);
+                $this->createLiveOpenJob($lesson);
             }
         }
     }
@@ -765,7 +765,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function LiveOpenCreateJob($lesson)
+    protected function createLiveOpenJob($lesson)
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
