@@ -229,7 +229,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $sql
-            = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
+        = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
             ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
@@ -297,7 +297,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
-    public function findUserJoinedCourseIds($userId, $joinedType)
+    public function findMembersByUserIdAndJoinType($userId, $joinedType)
     {
         $that = $this;
 

@@ -2222,7 +2222,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        $courseIds = $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
         return ArrayToolkit::column($courseIds, 'courseId');
     }
 
