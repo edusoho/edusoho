@@ -2220,15 +2220,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->deleteMembersByCourseId($courseId);
     }
 
-    /*
-     * @deprecated
-     * @see #findMembersByUserIdAndJoinType($userId, $joinType)
-     */
-    public function findUserJoinedCourseIds($userId, $joinedType = 'course')
-    {
-        return $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
-    }
-
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
         $courseIds = $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);

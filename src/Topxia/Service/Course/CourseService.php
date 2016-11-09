@@ -289,8 +289,6 @@ interface CourseService
 
     public function deleteMemberByCourseId($courseId);
 
-    public function findUserJoinedCourseIds($userId, $joinedType = 'course');
-
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course');
 
     /**
