@@ -62,6 +62,7 @@ class Editor {
         this.type !== type  ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
+        console.log("type");
     }
 
     _onSave(event) {
@@ -88,7 +89,6 @@ class Editor {
                 {name: 'mediaType', value: this.type},
                 {name: 'length', value: length}
             ]);
-            
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
