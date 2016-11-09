@@ -6,52 +6,32 @@ define(function(require,exports,module){
     require('new-uploader');
     require('subtitle');
 
-
-    (function(){
-        if(!Array.prototype.last){
-            Array.prototype.last = function(){
-                var length = this.length;
-                return this[length-1];
-            }
-        }
-    })();
-
     var $textTrackDisplay = $('.text-track-overview');
     initHeight();
 
+    var videoNo = $(window.frames['viewerIframe'].document).find('#lesson-video-content').data('file-global-id');
     var handler = $('#uploader')
     var uploader = new UploaderSDK({
         initUrl:handler.data('initUrl'),
         finishUrl:handler.data('finishUrl'),
         id:'uploader',
         ui:'simple',
+        videoNo:videoNo
     })
+    uploader.on('file.finish', function (file) {
+      console.log('事件触发：', file)
+    });
 
-    // var events = ['start', 'pause', 'file.remove', 'file.pause', 'file.resume', 'file.finish'];
-
-
-        uploader.on('file.finish', function (file) {
-          console.log('事件触发：', file)
-        });
-
-    
-
-    var captions = new Subtitle();
     var select = Object.create(TrackSelect);
     select.init('track-select');
     select.on('valuechange',function(value){
-        getTextTrack(value.src);
+        $.get(value.src,handleData);
     })
-    // handler.on('click',function(){
-    //     uploadeFile();
-    // })
-    
-    // Get the Text Track file according to the file uri;
-    function getTextTrack(src)
-    {
-        $.get(src,{},handleData);
-    }
+    select.on('optionempty',function(){
+        $textTrackDisplay.html();
+    })
 
+    var captions = new Subtitle();
     // Get the file 、parse it 、display it;
     function handleData(data)
     {
@@ -81,20 +61,11 @@ define(function(require,exports,module){
         })
     }
 
-    function uploadeFile()
-    {
-        select.addOption({
-            label:'haha',
-            src:'http://esc1a1b7gz-pub.upcdn.edusoho.net/captions_eng_chs_srt'
-        })
-    }
-
     function initHeight(){
         var height = $('.manage-edit-body').height();
         var tabHeight = $('.nav-tabs-edit').height();
         var textTrackTitleHeight = $('.text-track-title').height();
         var selctHeight = $('.js-texttrack-select').height();
-        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selctHeight - 60).show();
+        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selctHeight - 100).show();
     }
-
 })

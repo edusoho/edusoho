@@ -14,21 +14,8 @@
     </div>
   </div>
   <div class="text-track-list">
-    <form class="form-horizontal js-texttrack-select mrl" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      <div class="form-group text-track-select-form-group">
-        <div class="mtl ptm phm">
-          <select class="form-control js-track-select hidden" id="track-select" name="target" >
-            无字幕文件
-            <option value="http://esc1a1b7gz-pub.upcdn.edusoho.net/captions_eng_srt">captions_eng_srt</option>
-            <option value="http://esc1a1b7gz-pub.upcdn.edusoho.net/captions_chs_srt">captions_chs_srt</option>
-            <option value="http://esc1a1b7gz-pub.upcdn.edusoho.net/captions_eng_chs_srt">captions_eng_chs_srt</option>
-          </select>
-        </div>
-      </div>
-    </form>
-    <div class="text-track-overview mrl">
-    </div>
+    <div class="mrl mtl" id="track-select"></div>
+    <div class="text-track-overview mrl"></div>
   </div>
 </div>
 <script type="text/javascript">app.load('marker/text-track')</script>

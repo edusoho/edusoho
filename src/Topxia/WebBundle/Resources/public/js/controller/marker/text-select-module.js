@@ -1,27 +1,21 @@
 define(function(require,exports,module){
     var Select = {
         init:function(id){
-            if(!$('#'+id).length){
+            this.$el = $('#'+id);
+            if(!this.$el.length){
                 throw new Error('id 不存在');
             }
-            this.$dataDom = undefined;
-            this.$parentDom = undefined;
-            this.value = {};
             this.eventManager = {};
-            this.$options = [];
-            this.$dataDom = $('#'+id);
-            this.$dataDom.hide();
+            this.options = this.fetchOption();
+            this.value = this.options[0];
             this.initParent();
             this.initEvent();
         },
         initParent:function(){
             var _self = this;
             $documentFragment = $(document.createDocumentFragment());
-            this.$dataDom.find('option').each(function(){
-                _self.$options.push($(this));
-            });
             $documentFragment.append(this.templete());
-            this.$dataDom.before($documentFragment);
+            this.$el.append($documentFragment);
             this.$parentDom = $('.track-select-parent');
             this.$list = $('.track-selcet-list');
             this.$dataShow = this.$parentDom.find('.data-show');
@@ -38,30 +32,27 @@ define(function(require,exports,module){
             .delegate('.select-item','click',function(){
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
-                var label = $(this).find('.value').html();
+                var name = $(this).find('.value').html();
                 var src = $(this).find('.value').attr('src');
-                _self.setValue({label:label,src:src});
+                _self.setValue({name:name,src:src});
                 _self.handleClose();
             })
             this.$showBox.on('click',this.toggle.bind(this));
             this.on('valuechange',function(){
-                this.$dataDom.val(this.value);
-                this.$dataShow.html(this.value.label);
-                this.$dataShow.attr('title',this.value.label);
+                this.$dataShow.html(this.value.name);
+                this.$dataShow.attr('title',this.value.name);
             });
             this.on('listchange',function(){
-                this.$options.map(function($option){
-                    console.log($option.html())
-                })
                 this.$list.html(this.getOptionsStr());
                 this.setValue(this.getDefaultOption())
-            })
+            });
+            this.on('optionempty',this.handleOptionEmpty.bind(this))
         },
         templete:function(){
             return ''+
                 '<div class="track-select-parent">'+
                     '<div class="track-select-show">'+
-                        '<div class="data-show" title="'+ this.getDefaultOption() +'">'+ this.getDefaultOption() +'</div>'+
+                        '<div class="data-show" title="'+ this.getDefaultOption().name +'">'+ this.getDefaultOption().name +'</div>'+
                         '<span class="track-selcet-open-arrow">'+
                             '<i class="es-icon es-icon-keyboardarrowdown"></i>'+
                         '</span>'+
@@ -74,23 +65,42 @@ define(function(require,exports,module){
                     '</ul>'+
                 '</div>';
         },
+        fetchOption(){
+            return [
+                {
+                    name:'vavda',
+                    src:'/assets/textTrack/jixieshi.srt'
+                },
+                {
+                    name:'cdavavfa',
+                    src:'/assets/textTrack/jixieshi.srt'
+                }
+            ]
+        },
         getDefaultOption() {
-            if(this.$options.length){
-                return this.$options[0].html();
+            if(this.options.length){
+                return this.options[0];
             }else{
                 this.open ? this.handleClose() : '';
-                return '无字幕';
+                return false;
             }
         },
         getOptionsStr:function(){
+            if(!this.options){
+                this.trigger('optionempty');
+            }
             var optionsStr = '';
-            this.$options.map(function($option,index){
-                optionsStr += '<li class="select-item"><div class="value" title="'+ $option.html() +'" src="'+$option.val()+'">'+$option.html()+'</div><i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i></li>';
+            this.options.map(function(option,index){
+                optionsStr += '<li class="select-item"><div class="value" title="'+ option.name +'" src="'+option.src+'">'+option.name+'</div><i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i></li>';
             })
             return optionsStr;
         },
         setValue:function(value){
-            if(this.value.label !== value.label){
+            if(!value){
+                this.$dataShow.html('无字幕');
+                return;
+            }
+            if(this.value.name !== value.name){
                 this.value = value;
                 this.trigger('valuechange',this.value);
             }
@@ -102,7 +112,7 @@ define(function(require,exports,module){
             this.open ? this.handleClose() : this.handleOpen();
         },
         handleOpen:function(){
-            if(!this.$options.length) return;
+            if(!this.options.length) return;
             this.open = true;
             this.$open.hide();
             this.$close.show();
@@ -119,9 +129,12 @@ define(function(require,exports,module){
         handleDelete:function(e){
             var el = e.target;
             $(el).parent().remove();
-            this.$options.splice($(el).data('index'),1);
-            this.trigger('listchange',this.$options);
+            this.options.splice($(el).data('index'),1);
+            this.trigger('listchange',this.options);
             e.stopPropagation();
+        },
+        handleOptionEmpty(){
+            this.$dataShow.html('无字幕');
         },
         on:function(event,fn){
             if(!this.eventManager[event]){
@@ -136,11 +149,6 @@ define(function(require,exports,module){
                     fn(data);
                 });
             }
-        },
-        addOption:function(value){
-            optionStr = '<option value="'+value.src+'">'+value.label+'</option>';
-            this.$options.push($(optionStr));
-            this.trigger('listchange',this.$options);
         }
     }
     module.exports = Select;
