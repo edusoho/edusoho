@@ -22,8 +22,13 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary['noteNum'] = $course['noteNum'];
         $summary['askNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'discussion'));
-        $summary['finishedNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'isLearned' => 1));
+        $summary['finishedNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'isLearned' => 1 , 'role' => 'student'));
 
+        if ($summary['studentNum']) {
+            $summary['finishedRate'] = round($summary['finishedNum']/$summary['studentNum'], 3) * 100;
+        } else {
+            $summary['finishedRate'] = 0;
+        }
         return $summary;
     }
 
