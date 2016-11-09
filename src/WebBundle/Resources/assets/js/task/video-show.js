@@ -62,13 +62,9 @@
 import  swfobject from 'swfobject';
 let activity = $('.dashboard-body').data('activity');
 console.log(activity.ext)
-$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+$("#video-content").html('<div id="lesson-swf-player"></div>');
 swfobject.embedSWF(activity.ext.mediaUri,
     'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
         wmode: 'opaque',
         allowFullScreen: 'true'
     });
-// swfobject.test.swf("http://player.youku.com/player.php/sid/XMTgwOTg4NDM4OA==/v.swf", "lesson-swf-player", '100%', '100%', "9.0.0", "expressInstall.swf",{
-//     wmode: 'opaque',
-//     allowFullScreen: 'true'
-// });
