@@ -130,7 +130,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
     {
         $ids = array_filter(array_unique($ids));
 
-        if (empty($ids) || array_intersect($ids, array(0)) == array(0)) {
+        if (empty($ids)) {
             return array();
         }
 
@@ -139,7 +139,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->fetchCached("ids:{$idsKey}", $ids, function ($ids) use ($that) {
             $marks = str_repeat('?,', count($ids) - 1).'?';
             $sql   = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
-            return $that->getConnection()->fetchAll($sql, $ids) ?: array();
+            return $that->getConnection()->fetchAll($sql, array_values($ids)) ?: array();
         });
     }
 
