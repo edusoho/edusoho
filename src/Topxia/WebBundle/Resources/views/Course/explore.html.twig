@@ -32,7 +32,7 @@
   {% set price = filter.price|default('all')%}
   {% set orderBy = orderBy|default('latest')%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{categories:categories})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{categories:categories|default(''), category:category|default(''), tags:tags|default(''), tag:tag|default('')})) }}
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
       <li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %}active{% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %}active{% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">{{'推荐'|trans}}</a></li>
