@@ -5,7 +5,7 @@ const searchEntries = (entryPath, filenamePrefix = '') => {
   let files = {};
 
   entryPath = entryPath.replace(/\/$/, '');
-  glob.sync(entryPath + '/**/*.{js,jsx}').forEach((file) => {
+  glob.sync(entryPath + '/**/index.{js,jsx}').forEach((file) => {
     const entryName = filenamePrefix + file.replace(entryPath + '/', '').replace(file.substring(file.lastIndexOf('.')), '');
     files[entryName] = file;
   });

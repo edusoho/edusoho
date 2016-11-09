@@ -48,7 +48,7 @@
   {% block head_scripts %}{% endblock %}
 
 </head>
-<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+<body class="es-main-green {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
 
 {% block body %}
   <div class="es-wrap">
