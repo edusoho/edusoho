@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskServiceImpl extends BaseService implements TaskService
