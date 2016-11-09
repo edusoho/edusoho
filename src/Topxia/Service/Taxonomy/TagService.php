@@ -29,6 +29,8 @@ interface TagService
 
     public function isTagNameAvalieable($name, $exclude = null);
 
+    public function isTagGroupNameAvalieable($name, $exclude = null);
+
     public function addTag(array $tag);
 
     public function addTagGroup($fields);

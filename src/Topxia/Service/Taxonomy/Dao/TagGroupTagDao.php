@@ -12,4 +12,6 @@ interface TagGroupTagDao
     public function update($groupId, $fields);
 
     public function deleteByGroupId($groupId);
+
+    public function deleteByGroupIdAndTagId($groupId, $tagId);
 }

@@ -17,14 +17,14 @@ class TagGroupDaoImpl extends BaseDao implements TagGroupDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $tagGroup = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        return $tagGroup ? $this->createSerializer()->unserialize($tagGroup, $this->serializeFields) : null;
+        return $tagGroup ? $this->createSerializer()->unserialize($tagGroup, $this->serializeFields) : array();
     }
 
     public function findTagGroupByName($name)
     {        
         $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
         $tagGroup = $this->getConnection()->fetchAssoc($sql, array($name)) ?: null;
-        return $tagGroup ? $this->createSerializer()->unserialize($tagGroup, $this->serializeFields) : null;
+        return $tagGroup ? $this->createSerializer()->unserialize($tagGroup, $this->serializeFields) : array();
     }
 
     public function findTagGroups()
