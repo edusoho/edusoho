@@ -6,6 +6,8 @@ interface TaskService
 {
     public function getTask($id);
 
+    public function getTaskByCourseIdAndActivityId($courseId, $activity);
+
     public function createTask($task);
 
     public function updateTask($id, $fields);

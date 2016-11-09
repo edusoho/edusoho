@@ -11,7 +11,7 @@ use Topxia\Service\File\UploadFileService;
 
 class PptActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $taskId,$courseId)
     {
         // TODO: Implement showAction() method.
     }

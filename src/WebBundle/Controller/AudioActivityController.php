@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AudioActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $taskId, $courseId)
     {
         // TODO: Implement showAction() method.
     }

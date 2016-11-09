@@ -13,12 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $taskId, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-
-        return $this->render('WebBundle:VideoActivity:show.html.twig',array(
-            'activity'=>$activity
+        $activity         = $this->getActivityService()->getActivity($id);
+        $activity['courseId'] = $courseId;
+        $activity['taskId']   = $taskId;
+        return $this->render('WebBundle:VideoActivity:show.html.twig', array(
+            'activity' => $activity,
         ));
     }
 
@@ -55,6 +56,11 @@ class VideoActivityController extends BaseController implements ActivityActionIn
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
 

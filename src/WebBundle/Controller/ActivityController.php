@@ -2,18 +2,20 @@
 namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $taskId, $courseId)
     {
-        $activity         = $this->getActivityService()->getActivity($id);
-        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $activity       = $this->getActivityService()->getActivity($id);
+        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $showController = $config->getAction('show');
 
         return $this->forward($showController, array(
             'courseId' => $courseId,
+            'taskId'   => $taskId,
             'id'       => $id
         ));
     }
@@ -50,5 +52,13 @@ class ActivityController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

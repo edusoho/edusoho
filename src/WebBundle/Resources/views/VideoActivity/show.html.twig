@@ -4,8 +4,11 @@
 
 
 {% block content %}
-  <div class="dashboard-body" data-activity="{{ activity|json_encode }}">
+  <div class="dashboard-body">
     <div class="lesson-content" id="video-content" data-role="lesson-content"
+         data-course-id="{{ activity.courseId }}"
+         data-task-id="{{ activity.taskId }}"
+         data-media="{{ activity.ext|json_encode }}"
         {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
           data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
         {% endif %}
@@ -15,7 +18,7 @@
          data-user-id="{{ app.user.id }}"
          data-balloon-player="1"
     >
-    <div class="watermarkEmbedded"></div>
+      <div class="watermarkEmbedded"></div>
     </div>
   </div>
 {% endblock %}

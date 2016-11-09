@@ -16,6 +16,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->get($id);
     }
 
+    public function getTaskByCourseIdAndActivityId($courseId, $activity)
+    {
+        return $this->getTaskDao()->getByCourseIdAndActivityId($courseId, $activity);
+    }
+
     public function createTask($fields)
     {
         if ($this->invalidTask($fields)) {
