@@ -12,7 +12,6 @@
   <div class="item-content text-overflow">
     <i class="es-icon es-icon-importexport mrm"></i><i class="es-icon es-icon-videoclass mrm"></i><span class="label label-success mrm">选修</span>{{task.title}}<span class="color-gray">（12:02）</span>
   </div>
-
   <div class="item-actions">
   <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
   <a class="btn btn-gray" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}" target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
