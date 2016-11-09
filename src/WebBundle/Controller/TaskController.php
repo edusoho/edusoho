@@ -1,7 +1,6 @@
 <?php
 namespace WebBundle\Controller;
 
-use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,9 +67,6 @@ class TaskController extends BaseController
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
-    /**
-     * @return TaskService
-     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
