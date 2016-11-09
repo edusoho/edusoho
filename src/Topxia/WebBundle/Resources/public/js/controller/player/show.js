@@ -34,7 +34,7 @@ define(function(require, exports, module) {
         var disableVolumeButton = videoHtml.data('disableVolumeButton');
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
-        var subtitlesData = $.parseJSON(videoHtml.data('subtitles'));
+        var subtitlesData = videoHtml.data('subtitles');
         var subtitles = [];
         for (var i in subtitlesData) {
             var item = {

@@ -6,16 +6,6 @@ define(function(require,exports,module){
     require('new-uploader');
     require('subtitle');
 
-
-    (function(){
-        if(!Array.prototype.last){
-            Array.prototype.last = function(){
-                var length = this.length;
-                return this[length-1];
-            }
-        }
-    })();
-
     var $textTrackDisplay = $('.text-track-overview');
     initHeight();
 
@@ -26,31 +16,19 @@ define(function(require,exports,module){
         id:'uploader',
         ui:'simple',
     })
-
-    // var events = ['start', 'pause', 'file.remove', 'file.pause', 'file.resume', 'file.finish'];
-
-
-        uploader.on('file.finish', function (file) {
-          console.log('事件触发：', file)
-        });
-
-    
+    uploader.on('file.finish', function (file) {
+      console.log('事件触发：', file)
+    });
 
     var captions = new Subtitle();
     var select = Object.create(TrackSelect);
     select.init('track-select');
     select.on('valuechange',function(value){
-        getTextTrack(value.src);
+        $.get(value.src,handleData);
     })
-    // handler.on('click',function(){
-    //     uploadeFile();
-    // })
-    
-    // Get the Text Track file according to the file uri;
-    function getTextTrack(src)
-    {
-        $.get(src,{},handleData);
-    }
+    select.on('optionempty',function(){
+        $textTrackDisplay.html();
+    })
 
     // Get the file 、parse it 、display it;
     function handleData(data)
@@ -81,14 +59,6 @@ define(function(require,exports,module){
         })
     }
 
-    function uploadeFile()
-    {
-        select.addOption({
-            label:'haha',
-            src:'http://esc1a1b7gz-pub.upcdn.edusoho.net/captions_eng_chs_srt'
-        })
-    }
-
     function initHeight(){
         var height = $('.manage-edit-body').height();
         var tabHeight = $('.nav-tabs-edit').height();
@@ -96,5 +66,4 @@ define(function(require,exports,module){
         var selctHeight = $('.js-texttrack-select').height();
         $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selctHeight - 60).show();
     }
-
 })
