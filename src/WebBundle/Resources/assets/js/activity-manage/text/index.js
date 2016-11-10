@@ -19,7 +19,8 @@ class Text{
         });
         editor.on('instanceReady', function (e) { 
             var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-            $parentiframe.height($parentiframe.contents().find('body').height());
+      
+            // $parentiframe.height($parentiframe.contents().find('body').height());
         });
 
         editor.on( 'change', () => {    
