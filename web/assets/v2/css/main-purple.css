@@ -13409,7 +13409,7 @@ textarea {
   white-space: nowrap;
   text-overflow: ellipsis;
   min-height: 32px;
-  padding-right: 110px;
+  padding-right: 20px;
 }
 .track-select-parent .track-select-show .track-selcet-open-arrow,
 .track-select-parent .track-select-show .track-selcet-close-arrow {
@@ -13438,7 +13438,7 @@ textarea {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-right: 20px;
+  padding-right: 110px;
 }
 .track-select-parent .track-selcet-list li .convertStatus {
   position: absolute;
