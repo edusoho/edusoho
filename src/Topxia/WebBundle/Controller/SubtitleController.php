@@ -46,9 +46,9 @@ class SubtitleController extends BaseController
         $this->getCourseService()->tryManageCourse($courseId);
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
-
+        
         return $this->createJsonResponse(array(
-            'subtitles' => array_values($subtitles)
+            'subtitles' => $subtitles
         ));
     }
 
