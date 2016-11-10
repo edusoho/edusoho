@@ -154,7 +154,7 @@ define(function(require,exports,module){
             doing:'正在转码',
             success:'转码成功',
             error:'转码失败',
-            none:'转码失败'
+            none:''
         }
     }
     module.exports = Select;
