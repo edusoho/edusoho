@@ -60,7 +60,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         foreach ($lessons as $lessonId => &$lesson) {
-            $lesson['alias'] = '课时'.$lesson['seq'];
+            $lesson['alias'] = '课时'.$lesson['number'];
             $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'status' => 'finished'));
             $lesson['learnNum'] = $this->getCourseService()->findLearnsCountByLessonId($lessonId);
 
