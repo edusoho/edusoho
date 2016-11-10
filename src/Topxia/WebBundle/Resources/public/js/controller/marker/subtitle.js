@@ -14,7 +14,7 @@ define(function(require,exports,module){
         var textTrackTitleHeight = $('.text-track-title').height();
         var selectorHeight = $('#track-select').height();
         $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selectorHeight - 100).show();
-    })()
+    })();
 
     //选择框组件实例
     var select = Object.create(Select);
@@ -24,17 +24,15 @@ define(function(require,exports,module){
             $textTrackDisplay.html('当前无字幕');
             return;
         }
-        $.ajax(data.url).done(function(data){
-            showSubtitleContent(data)
-        })
-    })
+        $.get(data.url, showSubtitleContent);
+    });
     select.on('deleteoption',function(data){
         $.post('/subtitle/'+data.id+'/delete?courseId='+courseId,function(data){
             if(data){
                 Notify.success(Translator.trans('删除字幕成功'));
             }
-        })
-    })
+        });
+    });
     
     //初始获取字幕列表
     var videoNo = $(window.frames['viewerIframe'].document).find('#lesson-video-content').data('file-global-id');
@@ -84,6 +82,7 @@ define(function(require,exports,module){
     var captions = new Subtitle();
     function showSubtitleContent(data)
     {
+        console.log(data);
         captions.parse(data);
         var subtitleArray = captions.getSubtitles({
             duration:true,
