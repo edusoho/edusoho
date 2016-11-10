@@ -1,16 +1,19 @@
-{#<li class="task-item">
-	{{task.title}} 
-	<a class='delete-task' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
-
-	<a >修改</a>
-
-	<a href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}" target="_blank">进入学习</a>
-</li>#}
-
-<li class="task-manage-item clearfix ">
+<li class="task-manage-item drag clearfix " id="task-{{task.id}}">
   <div class="item-line"></div>
   <div class="item-content text-overflow">
-    <i class="es-icon es-icon-importexport mrm"></i><i class="es-icon es-icon-videoclass mrm"></i><span class="label label-success mrm">选修</span>{{task.title}}<span class="color-gray">（12:02）</span>
+    <i class="es-icon {{task['activity_meta']['icon']}} mrm"></i>
+    {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
+    {{task.title}}
+    {% if task['activity_meta']['mediaType'] is same as('live') %}
+      {% if task['activity_meta']['finished'] %}
+        <span class="color-gray mls">已结束</span>
+      {% else %}
+        <span class="color-success mls">
+        {{ task['activity_meta']['startTime']|date('Y-n-j H:i'|trans) }} ~ {{ task['activity_meta']['endTime']|date('H:i'|trans) }}</span>
+      {% endif %}
+    {% else %}
+      {% if task['activity_meta']['length'] %}<span class="color-gray mls">（{{task['activity_meta']['length'] | default('')}}）</span>{% endif %}
+    {% endif %}
   </div>
   <div class="item-actions">
   <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
