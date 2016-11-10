@@ -76,8 +76,8 @@ class ReportServiceTest extends BaseTestCase
     public function testGetCourseLessonLearnStat()
     {
         $fakeLessons = array(
-            array('number' => 1),
-            array('number' => 2)
+            array('number' => 1, 'id' => 1),
+            array('number' => 2, 'id' => 2)
         );
         $this->mock('Course.CourseService', array(
             array('functionName' => 'getCourseLessons', 'runTimes' => 1, 'returnValue' => $fakeLessons),

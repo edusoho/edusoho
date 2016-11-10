@@ -60,12 +60,15 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getCourseLessonLearnStat($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        usort($lessons, function ($lesson1, $lesson2) {
+            return $lesson1['number'] < $lesson2['number'];
+        });
         $teachers = $this->getCourseService()->findCourseTeachers($courseId);
         $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
-        foreach ($lessons as $lessonId => &$lesson) {
+        foreach ($lessons as &$lesson) {
             $lesson['alias'] = '课时'.$lesson['number'];
-            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
-            $lesson['learnNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
+            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
+            $lesson['learnNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
 
             if ($lesson['learnNum']) {
                 $lesson['finishedRate'] = round($lesson['finishedNum']/$lesson['learnNum'], 3) * 100;
