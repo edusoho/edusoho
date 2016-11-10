@@ -17,12 +17,21 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($data);
     }
 
-    public function treeNavAction(Request $request, $categories, $category, $tags, $tag)
+
+    //$category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest'
+    public function treeNavAction(Request $request, $tagGroups, $tag, $categories, $category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
-        
+        // list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
+        var_dump($tagGroups);exit();
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            'categories' => $categories,
-            'tags' => $tags
+        //     'rootCategories' => $rootCategories,
+        //     'categories' => $categories,
+        //     'category' => $category,
+        //     'path' => $path,
+        //     'activeIds' => $activeIds,
+        //     'filter' => $filter,
+        //     'orderBy' => $orderBy,
+            'categories' => $categories
         ));
     }
 

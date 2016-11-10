@@ -50,26 +50,21 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagGroupDao()->findTagGroups();
     }
 
-    public function findTagGroupsByTagIds($tagIds)
+    public function findTagRelationsByTagIds($tagIds)
     {
         $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByTagIds($tagIds);
 
-        $tagRelations = ArrayToolkit::index($tagRelations, 'groupId');
-
-        $groupIds = ArrayToolkit::column($tagRelations, 'groupId');
-
-        $groups = $this->getTagGroupDao()->findTagGroupsByGroupIds($groupIds);
-
-        foreach ($groups as &$group) {
-            $group['tagId'] = $tagRelations[$group['id']]['tagId'];
+        foreach ($tagRelations as &$tagRelation) {
+            $tagGroup = $this->getTagGroup($tagRelation['groupId']);
+            $tagRelation['name'] = $tagGroup['name'];
         }
 
-        return $groups;
+        return ArrayToolkit::index($tagRelations, 'tagId');
     }
 
     public function findTagsByGroupId($groupId)
     {
-        $tagRelaTagtions = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
+        $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
 
         $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
 

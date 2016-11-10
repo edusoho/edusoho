@@ -16,14 +16,12 @@ class TagController extends BaseController
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
-        $tagGroups = $this->getTagService()->findTagGroupsByTagIds($tagIds);
-
-        $tagGroups = ArrayToolkit::index($tagGroups, 'tagId');
+        $tagRelations = $this->getTagService()->findTagRelationsByTagIds($tagIds);
 
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
             'tags'         => $tags,
             'paginator'    => $paginator,
-            'tagGroups' => $tagGroups
+            'tagRelations' => $tagRelations
         ));
     }
 

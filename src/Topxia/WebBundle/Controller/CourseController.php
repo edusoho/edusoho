@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
-    public function exploreAction(Request $request, $category)
+    public function exploreAction(Request $request, $category, $tag)
     {
         $conditions    = $request->query->all();
         $categoryArray = array();
@@ -156,6 +156,13 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $tagGroups = $this->getTagService()->findTagGroups();
+
+        foreach ($tagGroups as &$tagGroup) {
+            $tags = $this->getTagService()->findTagsByGroupId($tagGroup['id']);
+            $tagGroup['subs'] = $tags;
+        }
+
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
@@ -169,7 +176,9 @@ class CourseController extends CourseBaseController
             'group'                    => $group,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
-            'levels'                   => $levels
+            'levels'                   => $levels,
+            'tagGroups'                => $tagGroups,
+            'tag'                      => $tag
         ));
     }
 
