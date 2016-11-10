@@ -48,10 +48,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             $late30DaysStat[$day]['discussionNum'] = $before30DaysData['discussionNum'];
         }
 
+        //隐藏笔记、提问、讨论的历史数据
         $this->countStudentsData($lateMonthData['students'], $late30DaysStat);
-        $this->countNotesData($lateMonthData['notes'], $late30DaysStat);
-        $this->countAsksData($lateMonthData['asks'], $late30DaysStat);
-        $this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
+        //$this->countNotesData($lateMonthData['notes'], $late30DaysStat);
+        //$this->countAsksData($lateMonthData['asks'], $late30DaysStat);
+        //$this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
 
         return $late30DaysStat;
     }

@@ -112,8 +112,8 @@ define(function(require, exports, module) {
             var length = $container.data('lesson-num');
             var maxHeight = 30 * length;
 
-            if (maxHeight < 400) {
-                return 400;
+            if (maxHeight < 200) {
+                return 200;
             } else {
                 return maxHeight;
             }

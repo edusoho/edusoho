@@ -97,7 +97,7 @@ define(function(require, exports, module) {
             html += circle2+params[1].seriesName+' : '+params[1].value+'</br>';
             html += circle3+params[2].seriesName+' : '+params[2].value+'%</br>';
 
-            changeSummary(params[0].dataIndex);
+            //changeSummary(params[0].dataIndex);
             return html;
         }
 
