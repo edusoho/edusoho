@@ -16,6 +16,8 @@ define(function (require, exports, module) {
                 initIntro();
             } else {
                 initDrag();
+                $('#step-1').removeClass('introhelp-icon-help');
+
             }
             Cookie.set("MARK-MANGE-GUIDE", 'true', {expires: 360, path: "/"});
         });

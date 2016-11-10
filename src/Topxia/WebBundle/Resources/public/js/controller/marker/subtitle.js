@@ -82,8 +82,15 @@ define(function(require,exports,module){
     var captions = new Subtitle();
     function showSubtitleContent(data)
     {
-        console.log(data);
-        captions.parse(data);
+        try{
+            captions.parse(data);
+        }
+        catch(e){
+            Notify.danger(Translator.trans('当前字幕解析出错，请删除重新上传！'));
+            $textTrackDisplay.html('当前字幕解析出错，请删除重新上传！');
+            return;
+        }
+        
         var subtitleArray = captions.getSubtitles({
             duration:true,
             timeFormat:'ms'
