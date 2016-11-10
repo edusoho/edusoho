@@ -148,7 +148,7 @@
           {% if  file.storage|default(null) == 'cloud' %}
           <li class="mark-manage" style="display:none;">
             <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
-            <span class="glyphicon glyphicon-list prs"></span>{{'视频管理'|trans}}
+            <span class="glyphicon glyphicon-list prs"></span>{{'弹题管理'|trans}}
             </a>
           </li>
           <li class="divider mark-manage-divider" style="display:none;"></li>

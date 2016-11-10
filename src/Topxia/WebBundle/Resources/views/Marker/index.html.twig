@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
-{% block title %}{{'视频管理'|trans}}{% endblock %}
+{% block title %}{{'弹题管理'|trans}}{% endblock %}
 
 {% set script_controller = 'marker/index' %}
 {% set bodyClass="marker-manage" %}
@@ -14,7 +14,9 @@
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
         <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
-        <li role="presentation" class=""><a href="#text-track" aria-controls="text-track" role="tab" data-toggle="tab">字幕</a></li>
+        <li role="presentation" class="" style="display: none">
+          <a href="#text-track" aria-controls="text-track" role="tab" data-toggle="tab">字幕</a>
+        </li>
         <li class="static" role="presentation">
           <a>
             <!-- border show-introhelp-->
