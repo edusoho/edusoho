@@ -33,6 +33,19 @@ class CourseController extends CourseBaseController
 
         unset($conditions['tag']);
 
+        $category = $this->getCategoryService()->getCategoryByCode($category);
+
+        if (isset($category['parentId'])) {
+            $subcategory = $category;
+            
+        }
+
+        $subcategories = $this->getCategoryService()->findAllCategoriesByParentId($category['id']);
+
+        // if ($category['parentId'] == 0) {
+        //     $categorySubs = $this->getCategoryService()->findAllCategoriesByParentId($category['parentId']);
+        // }
+
         $conditions['code'] = $category;
 
         if (!empty($conditions['code'])) {
@@ -154,8 +167,6 @@ class CourseController extends CourseBaseController
             $categories = array();
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
-
-            $categories = $this->makeCategoryTree($categories);
         }
 
         if (!$categoryArray) {
@@ -200,18 +211,21 @@ class CourseController extends CourseBaseController
             'levels'                   => $levels,
             'tagGroups'                => $tagGroups,
             'tags'                     => $tags,
+            'subcategories'            => $subcategories
         ));
     }
 
     protected function makeCategoryTree($categories)
     {
-        $tree = array();
+        $categories = ArrayToolkit::index($categories, 'id');
 
-        foreach ($categories as $category) {
-            
+        foreach ($categories as &$category) {
+            if ($category['parentId'] != '0') {
+                $categories[$category['parentId']]['subs'] = $category;
+            }
         }
 
-        var_dump($tree);exit();
+        return $categories;
     }
 
     public function archiveAction(Request $request)

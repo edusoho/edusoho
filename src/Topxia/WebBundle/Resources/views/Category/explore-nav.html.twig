@@ -3,13 +3,24 @@
 <div class="tabs-wrapper">
   <div class="tabs-group" style="height: 50px;">
     <div class="title">分类</div>
-    <ul class="content clearfix">
-      {% for category in categories %}
-        <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tags:tags|join(','), filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
-      {% endfor %}
-    </ul>
+      <ul class="content clearfix">
+        {% for category in categories %}
+          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tags:tags|join(','), filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
   </div>
+  
+  {% if categorySubs|default(null) %}
+    <div class="tabs-group" style="height: 50px;">
+     <div class="title"></div>
+      <ul class="content clearfix">
+        {% for Subcategories in sub %}
+          <li class="{% if sub.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:sub.code, tags:tags|join(','), filter:filter,orderBy:orderBy}) }}">{{ sub.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 
   {% for tagGroup in tagGroups %}
     <div class="tabs-group" style="height: 50px;">
