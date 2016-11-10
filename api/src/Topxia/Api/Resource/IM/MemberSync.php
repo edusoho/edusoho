@@ -63,6 +63,7 @@ class MemberSync extends BaseResource
     protected function syncClassroomConversations($user)
     {
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
+        $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
 
         $this->syncTargetConversations($user, $classroomIds, 'classroom');
         $this->syncClassroomConversationMembers($user, $classroomIds);
