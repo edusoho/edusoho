@@ -1,4 +1,4 @@
-import SideBar from '../../common/task-show/sidebar';
+import SideBar from './sidebar';
 
 class TaskShow {
   constructor() {
