@@ -19,16 +19,25 @@ class UploaderController extends BaseController
             return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('上传授权码不正确，请重试！')));
         }
 
-        $params = array_merge($request->request->all(), $params);
+        $callback = $request->query->get('callback');
+        $isJsonp = !empty($callback);
+        if($isJsonp){
+            $params = array_merge($request->query->all(), $params);
+            $result                    = $this->getUploadFileService()->initUpload($params);
+            $response = $this->createJsonResponse($result);
+            return $response->setCallback($callback);
+        }else{
+            $params = array_merge($request->request->all(), $params);
 
-        $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), true);
-        $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), true);
-        $result                    = $this->getUploadFileService()->initUpload($params);
+            $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), true);
+            $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), true);
+            $result                    = $this->getUploadFileService()->initUpload($params);
 
-        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
-
-        return $this->createJsonResponse($result);
+            $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
+            return $this->createJsonResponse($result);
+        }
     }
+
 
     public function uploadAuthAction(Request $request)
     {
@@ -45,14 +54,26 @@ class UploaderController extends BaseController
             return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('授权码不正确，请重试！')));
         }
 
-        $params = array_merge($request->request->all(), $params);
-
+        $callback = $request->query->get('callback');
+        $isJsonp = !empty($callback);
+        if($isJsonp){
+            $params = array_merge($request->query->all(), $params);
+            
+        }else{
+            $params = array_merge($request->request->all(), $params);
+        }
+        
         $params = ArrayToolkit::parts($params, array(
             'id', 'length', 'filename', 'size'
         ));
 
         $file = $this->getUploadFileService()->finishedUpload($params);
-        return $this->createJsonResponse($file);
+        if($isJsonp){
+            $response = $this->createJsonResponse($file);
+            return $response->setCallback($callback);
+        }else{
+            return $this->createJsonResponse($file);
+        }
     }
 
     public function uploadCallbackAction(Request $request)

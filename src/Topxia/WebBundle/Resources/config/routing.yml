@@ -174,6 +174,11 @@ attachment_list:
     defaults: { _controller: TopxiaWebBundle:Attachment:list }
     methods: [GET]
 
+attachment_item_show:
+    path: /attachment/file/{fileId}/show
+    defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
+    methods: [GET]
+
 attachment_preview:
     path: /attachment/{id}/preview
     defaults: { _controller: TopxiaWebBundle:Attachment:preview }
@@ -202,7 +207,7 @@ uploader_entry:
 uploader_init:
     pattern:  /uploader/init
     defaults: { _controller: TopxiaWebBundle:Uploader:init }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_auth:
     pattern:  /uploader/auth
@@ -216,12 +221,12 @@ uploader_batch_uplod:
 uploader_finished:
     pattern:  /uploader/finished
     defaults: { _controller: TopxiaWebBundle:Uploader:finished }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_upload_callback:
     pattern:  /uploader/upload_callback
     defaults: { _controller: TopxiaWebBundle:Uploader:uploadCallback }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_process_callback:
     pattern:  /uploader/process_callback
@@ -323,13 +328,13 @@ live_classroom_url:
     pattern:  /course/{courseId}/lesson/{lessonId}/get_classroom_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
 
-live_classroom_replay_url:
-    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
-
 live_classroom_es_replay_play_url:
     pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
     defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
+
+live_classroom_replay_url:
+    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
 
 live_course_manage_replay:
     pattern:  /livecourse/{id}/manage/replay
@@ -817,6 +822,10 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+course_manage_lesson_file_status:
+    pattern:  /course/{id}/manage/lesson/fileStatus
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+
 course_manage_lesson_batch_modal:
     pattern:  /course/{id}/manage/lesson/batch/modal
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
@@ -824,11 +833,6 @@ course_manage_lesson_batch_modal:
 course_manage_lesson_create_from_file:
     pattern:  /course/{id}/manage/lesson/create/from/file
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
-
-course_manage_lesson_file_status:
-    pattern:  /course/{id}/manage/lesson/fileStatus
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
-
 
 course_draft_create:
     pattern:  /course/draft/create
@@ -1169,6 +1173,24 @@ course_lesson_question_marker_list:
 course_lesson_question_marker_search:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
+
+subtitle_manage:
+    pattern:  /subtitle/manage
+    defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
+
+subtitle_media_subtitles:
+    pattern:  /subtitle/media/{mediaId}/subtitles
+    defaults: { _controller: TopxiaWebBundle:Subtitle:mediaSubtitles }
+
+subtitle_create:
+    pattern:  /subtitle/create
+    defaults: { _controller: TopxiaWebBundle:Subtitle:create }
+    methods: [POST]
+
+subtitle_delete:
+    pattern:  /subtitle/{id}/delete
+    defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
+    methods: [POST]
 
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list

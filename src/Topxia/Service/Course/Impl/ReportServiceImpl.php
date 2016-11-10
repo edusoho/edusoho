@@ -48,10 +48,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             $late30DaysStat[$day]['discussionNum'] = $before30DaysData['discussionNum'];
         }
 
+        //隐藏笔记、提问、讨论的历史数据
         $this->countStudentsData($lateMonthData['students'], $late30DaysStat);
-        $this->countNotesData($lateMonthData['notes'], $late30DaysStat);
-        $this->countAsksData($lateMonthData['asks'], $late30DaysStat);
-        $this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
+        //$this->countNotesData($lateMonthData['notes'], $late30DaysStat);
+        //$this->countAsksData($lateMonthData['asks'], $late30DaysStat);
+        //$this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
 
         return $late30DaysStat;
     }
@@ -59,10 +60,15 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getCourseLessonLearnStat($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
-        foreach ($lessons as $lessonId => &$lesson) {
+        usort($lessons, function ($lesson1, $lesson2) {
+            return $lesson1['number'] < $lesson2['number'];
+        });
+        $teachers = $this->getCourseService()->findCourseTeachers($courseId);
+        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
+        foreach ($lessons as &$lesson) {
             $lesson['alias'] = '课时'.$lesson['number'];
-            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'status' => 'finished'));
-            $lesson['learnNum'] = $this->getCourseService()->findLearnsCountByLessonId($lessonId);
+            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
+            $lesson['learnNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
 
             if ($lesson['learnNum']) {
                 $lesson['finishedRate'] = round($lesson['finishedNum']/$lesson['learnNum'], 3) * 100;
@@ -91,6 +97,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $result['finishedNum'] = $this->getCourseService()->searchMemberCount(array(
             'courseId' => $courseId,
             'role' => $role,
+            'isLearned' => 1,
             'startTimeLessThan' => $startTimeLessThan
         ));
         //完成率
