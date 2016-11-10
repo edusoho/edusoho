@@ -2,7 +2,7 @@
   <div class="text-track-title">
     {% set token = uploader_token('subtitle', media.id, 'private') %}
     <div class="row">
-      <div class="col-md-3 caption-uploader js-select-file" id="uploader" style="width: 28%" 
+      <div class="col-md-2 caption-uploader js-select-file" id="uploader" style="width: 110px" 
       data-media-id="{{ media.id }}"
       data-subtitle-create-url="{{ url('subtitle_create', {courseId: courseId}) }}"
       data-subtitle-list-url="{{ url('subtitle_media_subtitles', {courseId: courseId, mediaId: media.id}) }}"
@@ -11,8 +11,7 @@
       >
       </div>
       <div class="col-md-9 caption-notify" style="width: 72%; padding-left: 0" >
-        <i class="es-icon es-icon-xinxi remask-icon color-warning"></i>
-        仅支持srt字幕格式，最多上传4个字幕
+        目前仅支持srt字幕，最多上传4个字幕
       </div>
     </div>
   </div>
