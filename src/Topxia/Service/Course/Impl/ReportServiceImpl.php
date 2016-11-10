@@ -220,7 +220,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'courseId' => $courseId,
                 'startTimeGreaterThan' => $startTimeGreaterThan
             ),
-            array('createdTime', 'ASC'),
+            array('createdTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );
@@ -231,7 +231,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'type' => 'question',
                 'startTimeGreaterThan' => $startTimeGreaterThan
             ),
-            array('createdTime', 'ASC'),
+            array('createdTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );
