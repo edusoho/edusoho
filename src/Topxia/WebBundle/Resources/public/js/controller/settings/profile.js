@@ -69,7 +69,7 @@
         validator.addItem({
             element: '[name="profile[site]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('个人主页地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('个人空间地址不正确，须以http://开头。')
         });
 
         validator.addItem({
