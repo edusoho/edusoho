@@ -33,7 +33,7 @@ class LiveLessonStartNotifyJob implements Job
                 'message'  => $message
             );
 
-            return $this->pushIM($from, $to, $body, $convNo);
+            return $this->pushIM($from, $to, $body, $convNo['no']);
         }
     }
 
