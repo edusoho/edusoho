@@ -153,7 +153,8 @@ define(function(require,exports,module){
             waiting:'等待转码',
             doing:'正在转码',
             success:'转码成功',
-            error:'转码失败'
+            error:'转码失败',
+            none:'转码失败'
         }
     }
     module.exports = Select;
