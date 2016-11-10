@@ -16,7 +16,7 @@
         <div class="title">{{ tagGroup.name }}</div>
         <ul class="content clearfix">
           {% for tag in tagGroup.subs %}
-            <li class="{% if tag.id in tags %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:tag.id, tags:tags|join(','), filter:filter, orderBy:orderBy}) }}">{{ tag.name }}</a></li>
+            <li class="{% if tag.id in tags %}active{% endif %}" ><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:tag.id, tags:tags|join(','), filter:filter, orderBy:orderBy}) }}">{{ tag.name }}</a></li>
           {% endfor %}
         </ul>
       <div class="title"></div>

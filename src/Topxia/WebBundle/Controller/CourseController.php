@@ -32,7 +32,7 @@ class CourseController extends CourseBaseController
         $conditions['tags'] = $tags;
 
         unset($conditions['tag']);
-var_dump($conditions);exit();
+
         $conditions['code'] = $category;
 
         if (!empty($conditions['code'])) {
@@ -154,6 +154,8 @@ var_dump($conditions);exit();
             $categories = array();
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+
+            $categories = $this->makeCategoryTree($categories);
         }
 
         if (!$categoryArray) {
@@ -199,6 +201,17 @@ var_dump($conditions);exit();
             'tagGroups'                => $tagGroups,
             'tags'                     => $tags,
         ));
+    }
+
+    protected function makeCategoryTree($categories)
+    {
+        $tree = array();
+
+        foreach ($categories as $category) {
+            
+        }
+
+        var_dump($tree);exit();
     }
 
     public function archiveAction(Request $request)

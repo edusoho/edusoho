@@ -18,18 +18,9 @@ class CategoryController extends BaseController
     }
 
 
-    //$category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest'
     public function treeNavAction(Request $request, $tagGroups, $tags, $categories, $category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
-        // list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
-// var_dump($tags);exit();
-        // var_dump($tags);exit;
-
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            // 'rootCategories' => $rootCategories,
-            // 'categories'     => $categories,
-            // 'category'       => $category,
-            // 'activeIds'      => $activeIds,
             'selectedCategory'  => $category,
             'path'              => $path,
             'filter'            => $filter,
@@ -38,15 +29,5 @@ class CategoryController extends BaseController
             'tagGroups'         => $tagGroups,
             'tags'              => $tags
         ));
-    }
-
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
