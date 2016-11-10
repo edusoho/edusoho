@@ -9853,6 +9853,7 @@ textarea {
 .dashboard-panel .course-dashboard-ul li {
   width: 33%;
   float: left;
+  margin: 20px auto;
   padding: 0 5px;
   text-align: center;
 }
@@ -9864,6 +9865,9 @@ textarea {
 .dashboard-panel .course-dashboard-ul li .number {
   font-weight: 500;
   font-size: 24px;
+}
+.dashboard-panel .course-dashboard-footer {
+  margin-top: 90px;
 }
 .class-bg-layer {
   position: absolute;
@@ -13458,6 +13462,9 @@ textarea {
   background: blue;
 }
 .track-select-parent .track-selcet-list li .convertStatus.convert-waiting {
+  background: #AAA;
+}
+.track-select-parent .track-selcet-list li .convertStatus.convert-none {
   background: #AAA;
 }
 .track-select-parent .track-selcet-list li:hover {
