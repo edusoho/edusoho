@@ -17,7 +17,7 @@ class CourseController extends CourseBaseController
         $conditions['tags'] = $tags;
 
         if (!empty($conditions['tag'])) {
-            $conditions['tagId'] = 
+            $conditions['tags'] = ArrayToolkit::column($tags, 'id');
         }
 
         unset($conditions['tag']);
@@ -186,7 +186,7 @@ class CourseController extends CourseBaseController
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
             'tagGroups'                => $tagGroups,
-            'tag'                      => $tag
+            'tags'                     => $tags
         ));
     }
 
