@@ -114,11 +114,6 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return $this->createDao('Subtitle.SubtitleDao');
     }
 
-    protected function getUserService()
-    {
-        return $this->createService('User.UserService');
-    }
-
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
