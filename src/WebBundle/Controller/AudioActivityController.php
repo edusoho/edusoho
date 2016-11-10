@@ -14,7 +14,12 @@ class AudioActivityController extends BaseController implements ActivityActionIn
 {
     public function showAction(Request $request, $id, $taskId, $courseId)
     {
-        // TODO: Implement showAction() method.
+        $activity             = $this->getActivityService()->getActivity($id);
+        $activity['courseId'] = $courseId;
+        $activity['taskId']   = $taskId;
+        return $this->render('WebBundle:AudioActivity:show.html.twig', array(
+            'activity' => $activity,
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

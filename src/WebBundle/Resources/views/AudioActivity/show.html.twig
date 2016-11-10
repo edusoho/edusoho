@@ -1,0 +1,17 @@
+{% extends 'WebBundle:Activity:content-layout.html.twig' %}
+
+{% do script(['web/task/audio/index.js']) %}
+
+
+{% block content %}
+  <div class="dashboard-body">
+    <div class="audio-content" id="audio-content" data-role="audio-content"
+         data-course-id="{{ activity.courseId }}"
+         data-task-id="{{ activity.taskId }}"
+         data-media="{{ activity.ext|json_encode }}"
+         data-user-id="{{ app.user.id }}"
+         data-balloon-player="1"
+    >
+    </div>
+  </div>
+{% endblock %}

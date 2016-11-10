@@ -4,6 +4,7 @@ namespace WebBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class ActivityController extends BaseController
 {
@@ -46,6 +47,20 @@ class ActivityController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function playerAction(Request $request, $courseId, $activityId)
+    {
+        $this->getCourseService()->tryLearnCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (empty($activity)) {
+            $this->createResourceNotFoundException('activity', $activityId);
+        }
+        $context = array();
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id'      => $activity['ext']["mediaId"],
+            'context' => $context
+        ));
+    }
+
     /**
      * @return ActivityService
      */
@@ -60,5 +75,10 @@ class ActivityController extends BaseController
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 }
