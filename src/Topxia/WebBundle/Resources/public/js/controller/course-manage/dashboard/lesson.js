@@ -25,8 +25,8 @@ define(function(require, exports, module) {
                         + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
                     var html = params[0].name + '</br>';
-                    html += circle1+'完成人数 : '+params[0].value+'</br>';
-                    html += circle2+'学习人数 : '+params[1].value+'</br>';
+                    html += circle1+params[0].seriesName+' : '+params[0].value+'</br>';
+                    html += circle2+params[1].seriesName+' : '+params[1].value+'</br>';
                     html += circle3+'完成率 : '+rate+'%';
                     return html;
                 },
@@ -35,7 +35,7 @@ define(function(require, exports, module) {
                 }
             },
             legend: {
-                data: ['完成人数', '学习人数']
+                data: ['已学完', '学习中']
             },
             grid: {
                 left: '3%',
@@ -60,7 +60,7 @@ define(function(require, exports, module) {
             ],
             series: [
                 {
-                    name: '完成人数',
+                    name: '已学完',
                     type: 'bar',
                     stack: '总量',
                     label: {
@@ -71,13 +71,13 @@ define(function(require, exports, module) {
                     },
                     itemStyle: {
                         normal: {
-                            color: '#090'
+                            color: '#4CAF50'
                         }
                     },
                     data: $container.data('finishedNum')
                 },
                 {
-                    name: '学习人数',
+                    name: '学习中',
                     type: 'bar',
                     stack: '总量',
                     label: {
@@ -88,7 +88,7 @@ define(function(require, exports, module) {
                     },
                     itemStyle: {
                         normal: {
-                            color: '#668ed6'
+                            color: '#FFC108'
                         }
                     },
                     data: $container.data('learnNum')

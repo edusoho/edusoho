@@ -34,6 +34,7 @@ define(function(require, exports, module) {
                 {
                     name: '完课率',
                     type: 'value',
+                    minInterval: 1,
                     max: 100
                 }
             ],
@@ -46,7 +47,7 @@ define(function(require, exports, module) {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#ffc107'
+                            color: '#FFC108'
                         }
                     },
                     data:$container.data('studentNum')
@@ -59,7 +60,7 @@ define(function(require, exports, module) {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#4caf50'
+                            color: '#4CAF50'
                         }
                     },
                     data:$container.data('finishedNum')
@@ -72,7 +73,7 @@ define(function(require, exports, module) {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#2196f3'
+                            color: '#2096F3'
                         }
                     },
                     data:$container.data('finishedRate')
