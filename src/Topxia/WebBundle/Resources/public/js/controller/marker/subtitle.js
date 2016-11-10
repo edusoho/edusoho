@@ -72,9 +72,11 @@ define(function(require,exports,module){
             "name": file.name,
             "subtitleId": file.id,
             "mediaId": mediaId
-        }, function () {
+        }).success(function (data) {
             Notify.success(Translator.trans('字幕上传成功！'));
             loadSubtitleList();
+        }).error(function (data){
+            Notify.danger(Translator.trans(data.responseJSON.error.message));
         });
     });
 
@@ -90,7 +92,7 @@ define(function(require,exports,module){
             $textTrackDisplay.html('当前字幕解析出错，请删除重新上传！');
             return;
         }
-        
+
         var subtitleArray = captions.getSubtitles({
             duration:true,
             timeFormat:'ms'

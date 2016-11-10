@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Subtitle\SubtitleService;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Common\ArrayToolkit;
 
 class SubtitleServiceImpl extends BaseService implements SubtitleService
@@ -53,6 +54,13 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
     {   
         if (empty($subtitle)) {
             throw new InvalidArgumentException('添加失败');
+        }
+
+        //提供的服务只允许最多添加4个字幕
+        $existSubtitles = $this->getSubtitleDao()->findSubtitlesByMediaId($subtitle['mediaId']);
+
+        if (count($existSubtitles) >= 4) {
+            throw new UnexpectedValueException('最多允许添加4个字幕');
         }
 
         $subtitle = $this->filterSubtitleFields($subtitle);
