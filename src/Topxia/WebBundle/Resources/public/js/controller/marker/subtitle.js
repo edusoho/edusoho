@@ -8,7 +8,6 @@ define(function(require,exports,module){
 
     var $textTrackDisplay = $('.text-track-overview');
     var courseId = $('#lesson-dashboard').data('course-id');
-    console.log(courseId);
     (function (){
         var height = $('.manage-edit-body').height();
         var tabHeight = $('.nav-tabs-edit').height();
