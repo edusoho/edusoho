@@ -4,8 +4,11 @@ define(function(require,exports,module){
     require('subtitle-browser');
     var Select = require('./text-select-module');
     var messenger = require('./messeger.js');
+    var Notify = require('common/bootstrap-notify');
 
     var $textTrackDisplay = $('.text-track-overview');
+    var courseId = $('#lesson-dashboard').data('course-id');
+    console.log(courseId);
     (function (){
         var height = $('.manage-edit-body').height();
         var tabHeight = $('.nav-tabs-edit').height();
@@ -27,7 +30,11 @@ define(function(require,exports,module){
         })
     })
     select.on('deleteoption',function(data){
-        //对接删除字幕接口
+        $.post('/subtitle/'+data.id+'/delete?courseId='+courseId,function(data){
+            if(data){
+                Notify.success(Translator.trans('删除字幕成功'));
+            }
+        })
     })
     
     //初始获取字幕列表
@@ -60,7 +67,7 @@ define(function(require,exports,module){
     });
     uploader.on('error',function(err){
         if(err.error === 'Q_TYPE_DENIED'){
-            alert('请上传srt格式的文件！');
+            Notify.danger(Translator.trans('请上传srt格式的文件！'));
         }
     });
     uploader.on('file.finish', function (file) {
@@ -69,6 +76,7 @@ define(function(require,exports,module){
             "subtitleId": file.id,
             "mediaId": mediaId
         }, function () {
+            Notify.success(Translator.trans('字幕上传成功！'));
             loadSubtitleList();
         });
     });
