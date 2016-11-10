@@ -156,9 +156,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $note['createdDay'] = date('Y-m-d', $note['createdTime']);
          
             foreach ($late30DaysStat as $day => &$stat) {
-                if ($day == $note['createdDay']) {
-                    break;
-                } else {
+                if (strtotime($note['createdDay']) <= strtotime($day)) {
                     $stat['noteNum']++;
                 }
             }
@@ -171,9 +169,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $ask['createdDay'] = date('Y-m-d', $ask['createdTime']);
          
             foreach ($late30DaysStat as $day => &$stat) {
-                if ($day == $ask['createdDay']) {
-                    break;
-                } else {
+                if (strtotime($ask['createdDay']) <= strtotime($day)) {
                     $stat['askNum']++;
                 }
             }
@@ -186,9 +182,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $discussion['createdDay'] = date('Y-m-d', $discussion['createdTime']);
          
             foreach ($late30DaysStat as $day => &$stat) {
-                if ($day == $discussion['createdDay']) {
-                    break;
-                } else {
+                if (strtotime($discussion['createdDay']) <= strtotime($day)) {
                     $stat['discussionNum']++;
                 }
             }
