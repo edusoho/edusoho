@@ -1,19 +1,17 @@
-
 import notify from 'common/notify';
 
-$('.delete-task').on('click', function(evt){
+$('body').on('click','.delete-task',function(evt){
 	console.log('delete task : ', arguments);
 	if (!confirm(Translator.trans('是否确定删除任务？')))
 		return;
 
 	$.post($(evt.target).data('url'), function(data) {
+		console.log(data);
 		if (data.success) {
-			notify('success', data.message);
-			// $.notify('success', data.message);
+			notify('success', "删除成功");
 			location.reload();
 		} else{
-			notify('danger', data.message);
-			// $.notify('danger', data.message);
+			notify('danger', "删除失败");
 		}
 	});
 });

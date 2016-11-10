@@ -19,10 +19,10 @@
   </div>
   <div class="form-group">
     <div class="col-xs-2 control-label">
-      <label for="remark" class="style1">{{ '直播说明'|trans }}</label>
+      <label for="text-content-field" class="style1">{{ '直播说明'|trans }}</label>
     </div>
     <div class="col-xs-10 controls">
-      <textarea class="form-control" id="remark" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+      <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
     >{{ activity.remark|default('') }}</textarea>
     </div>
   </div>
@@ -35,7 +35,7 @@
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-10 controls">
-      进入观看过直播
+    <p class="form-control-static">进入观看过直播</p>
     </div>
   </div>
 {% endblock %}
