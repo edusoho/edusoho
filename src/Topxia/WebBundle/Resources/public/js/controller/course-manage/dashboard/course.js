@@ -42,6 +42,8 @@ define(function(require, exports, module) {
                     name:'学员数',
                     type:'line',
                     yAxisIndex: 0,
+                    showSymbol: false,
+                    smooth: true,
                     itemStyle: {
                         normal: {
                             color: '#ffc107'
@@ -53,6 +55,8 @@ define(function(require, exports, module) {
                     name:'完成数',
                     type:'line',
                     yAxisIndex: 0,
+                    showSymbol: false,
+                    smooth: true,
                     itemStyle: {
                         normal: {
                             color: '#4caf50'
@@ -64,6 +68,8 @@ define(function(require, exports, module) {
                     name:'完课率',
                     type:'line',
                     yAxisIndex: 1,
+                    showSymbol: false,
+                    smooth: true,
                     itemStyle: {
                         normal: {
                             color: '#2196f3'
