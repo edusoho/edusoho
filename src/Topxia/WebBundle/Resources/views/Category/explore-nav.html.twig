@@ -5,7 +5,7 @@
     <div class="title">分类</div>
     <ul class="content clearfix">
       {% for category in categories %}
-        <li class="{% if category.id == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tags:tags, category:category.id, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+        <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tags:tags, category:category.code, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
       {% endfor %}
     </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
@@ -16,7 +16,7 @@
         <div class="title">{{ tagGroup.name }}</div>
         <ul class="content clearfix">
           {% for tag in tagGroup.subs %}
-            <li><a class="nav-link active" href="">{{ tag.name }}</a></li>
+            <li><a class="nav-link {% if tag.id in tags %}active{% endif %}" href="{{ path(path, {category:selectedCategory, tag:tag.id, tags:tags, filter:filter, orderBy:orderBy}) }}">{{ tag.name }}</a></li>
           {% endfor %}
         </ul>
       <div class="title"></div>
