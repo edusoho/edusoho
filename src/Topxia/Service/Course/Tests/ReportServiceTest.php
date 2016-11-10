@@ -11,20 +11,23 @@ class ReportServiceTest extends BaseTestCase
     public function testSummary()
     {
         $fakeCourse = array(
-            'studentNum' => 1,
-            'noteNum' => 2,
+            'studentNum' => 100,
+            'noteNum' => 10,
             'finishedNum' => 100,//完成人数
             'askNum' => 20,
             'discussionNum' => 20,
-            'finishedRate' => 10000,
+            'finishedRate' => 100,
         );
         $this->mock('Course.CourseService', array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
-            array('functionName' => 'searchMemberCount', 'runTimes' => 1, 'returnValue' => 100)
+            array('functionName' => 'searchMemberCount', 'runTimes' => 2, 'returnValue' => 100)
         ));
 
         $this->mock('Course.ThreadService', array(
             array('functionName' => 'searchThreadCount', 'runTimes' => 2, 'returnValue' => 20)
+        ));
+
+        $this->mock('Course.NoteService', array(
+            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 10)
         ));
 
         $summary = $this->getReportService()->summary(1);

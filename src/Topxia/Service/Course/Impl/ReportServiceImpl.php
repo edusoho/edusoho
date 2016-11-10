@@ -17,9 +17,8 @@ class ReportServiceImpl extends BaseService implements ReportService
             'finishedNum' => 0,//完成人数
         );
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        $summary['studentNum'] = $course['studentNum'];
-        $summary['noteNum'] = $course['noteNum'];
+        $summary['studentNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'role' => 'student'));
+        $summary['noteNum'] = $this->getCourseNoteService()->searchNoteCount(array('courseId' => $courseId));
         $summary['askNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'discussion'));
         $summary['finishedNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'isLearned' => 1 , 'role' => 'student'));
@@ -231,7 +230,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'type' => 'question',
                 'startTimeGreaterThan' => $startTimeGreaterThan
             ),
-            array('createdTime' => 'ASC'),
+            array(),
             0,
             PHP_INT_MAX
         );
@@ -242,7 +241,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'type' => 'discussion',
                 'startTimeGreaterThan' => $startTimeGreaterThan
             ),
-            array('createdTime', 'ASC'),
+            array(),
             0,
             PHP_INT_MAX
         );
