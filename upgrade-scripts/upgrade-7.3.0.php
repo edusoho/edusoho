@@ -41,6 +41,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_member', 'finishedTime')) {
             $connection->exec("ALTER TABLE `course_member` ADD `finishedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '完成课程时间' AFTER `isLearned`");
         }
+
+        $now = time();
+        $connection->exec("UPDATE `course_member` SET finishedTime = {$now} WHERE isLearned = 1");
     }
 
     protected function isFieldExist($table, $filedName)
