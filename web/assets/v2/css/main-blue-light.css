@@ -13461,6 +13461,9 @@ textarea {
 .track-select-parent .track-selcet-list li .convertStatus.convert-waiting {
   background: #AAA;
 }
+.track-select-parent .track-selcet-list li .convertStatus.convert-none {
+  background: #AAA;
+}
 .track-select-parent .track-selcet-list li:hover {
   background: #f5f5f5;
 }
