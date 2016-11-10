@@ -73,12 +73,19 @@ define(function(require,exports,module){
             }
         },
         getOptionsStr:function(){
+            var _self = this;
             if(!this.options.length){
                 this.trigger('optionempty');
             }
             var optionsStr = '';
             this.options.map(function(option,index){
-                optionsStr += '<li class="select-item"><div class="value" title="'+ option.name +'" url="'+option.url+'">'+option.name+'</div><i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i></li>';
+                optionsStr += '<li class="select-item">'+
+                    '<div class="value" title="'+ option.name +'" url="'+option.url+'">'+
+                        option.name+
+                    '</div>'+
+                    '<span class="convertStatus convert-'+ option.convertStatus +'">'+_self.convertStatus[option.convertStatus]+ '</span>'+
+                    '<i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i>'+
+                '</li>';
             })
             return optionsStr;
         },
@@ -138,9 +145,15 @@ define(function(require,exports,module){
                 });
             }
         },
-        resetOptions(optionsArray){
+        resetOptions:function(optionsArray){
             this.options = optionsArray;
             this.trigger('listchange',this.options);
+        },
+        convertStatus:{
+            waiting:'等待转码',
+            doing:'正在转码',
+            success:'转码成功',
+            error:'转码失败'
         }
     }
     module.exports = Select;

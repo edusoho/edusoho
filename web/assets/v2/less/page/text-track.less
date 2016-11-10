@@ -73,6 +73,27 @@
         text-overflow: ellipsis;
         padding-right: 20px;
       }
+      .convertStatus{
+        position: absolute;
+        line-height: 1.2;
+        padding: 2px 10px;
+        border-radius: 5px;
+        right: 40px;
+        top: 8px;
+        color: white;
+        &.convert-success{
+          background: #46c37b;
+        }
+        &.convert-error{
+          background: red;
+        }
+        &.convert-doing{
+          background: blue;
+        }
+        &.convert-waiting{
+          background: #AAA;
+        }
+      }
       &:hover{
         background: #f5f5f5;
         .delete{
