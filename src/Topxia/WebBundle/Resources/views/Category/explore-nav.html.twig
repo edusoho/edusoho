@@ -5,30 +5,22 @@
     <div class="title">分类</div>
     <ul class="content clearfix">
       {% for category in categories %}
-      <li><a class="nav-link" href="">{{ category.name }}</a></li>
+      <li><a class="nav-link" href="{{ path(path, {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}">{{ category.name }}</a></li>
       {% endfor %}
     </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
   </div>
 
-  <div class="tabs-group" style="height: 50px;">
-    <div class="title"></div>
-    <ul class="content clearfix">
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li class="active"><a class="nav-link" href="">高级</a></li>
-    </ul>
-    <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
-  </div>
-  <div  class="tabs-group" style="height: 50px;">
-    <div class="title">分类</div>
-    <ul class="content clearfix">
-      <li><a class="nav-link active" href="">全部</a></li>
-      <li><a class="nav-link active" href="">体育</a></li>
-      <li><a class="nav-link" href="">编程</a></li>
-      <li><a class="nav-link" href="">美术</a></li>
-    </ul>
-    <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
-  </div>
+  {% for tagGroup in tagGroups %}
+    <div class="tabs-group" style="height: 50px;">
+        <div class="title">{{ tagGroup.name }}</div>
+        <ul class="content clearfix">
+          {% for tag in tagGroup.subs %}
+            <li><a class="nav-link active" href="">{{ tag.name }}</a></li>
+          {% endfor %}
+        </ul>
+      <div class="title"></div>
+      <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
+    </div>
+  {% endfor %}
 </div>
