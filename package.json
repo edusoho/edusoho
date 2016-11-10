@@ -58,7 +58,8 @@
     "reset.css": "^2.0.2",
     "respond.js": "^1.4.2",
     "es6-event-emitter": "^1.5.2",
-    "swfobject": "^2.2.1"
+    "swfobject": "^2.2.1",
+    "es-swfobject": "^2.3.0"
   },
   "scripts": {
     "start": "npm run dev",
