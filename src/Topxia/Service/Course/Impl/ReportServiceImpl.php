@@ -97,6 +97,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $result['finishedNum'] = $this->getCourseService()->searchMemberCount(array(
             'courseId' => $courseId,
             'role' => $role,
+            'isLearned' => 1,
             'startTimeLessThan' => $startTimeLessThan
         ));
         //完成率
