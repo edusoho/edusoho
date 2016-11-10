@@ -19,8 +19,6 @@
     </li>
   </ul>
 
-  <div id="course-dashboard-container" style="height:400px;" data-days="{{ days|json_encode }}" data-student-num="{{ studentNum|json_encode }}" data-finished-num="{{ finishedNum|json_encode }}" data-finished-rate="{{ finishedRate|json_encode }}"></div>
-
   <ul class="course-dashboard-footer course-dashboard-ul">
     <li>
       <div class="title">{{ '课程笔记数'|trans }}</div>
@@ -35,4 +33,7 @@
       <span class="number">{{ summary.discussionNum }}</span>
     </li>
   </ul>
+
+  <div id="course-dashboard-container" style="height:400px;" data-days="{{ days|json_encode }}" data-student-num="{{ studentNum|json_encode }}" data-finished-num="{{ finishedNum|json_encode }}" data-finished-rate="{{ finishedRate|json_encode }}">
+  </div>
 {% endblock %}

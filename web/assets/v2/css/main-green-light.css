@@ -9844,12 +9844,14 @@ textarea {
   cursor: pointer;
 }
 .dashboard-panel .course-dashboard-ul {
+  height: 80px;
+  margin: 0;
+  padding: 0;
   list-style-type: none;
 }
 .dashboard-panel .course-dashboard-ul li {
   width: 33%;
   float: left;
-  margin: 20px auto;
   padding: 0 5px;
   text-align: center;
 }
@@ -9861,9 +9863,6 @@ textarea {
 .dashboard-panel .course-dashboard-ul li .number {
   font-weight: 500;
   font-size: 24px;
-}
-.dashboard-panel .course-dashboard-footer {
-  margin-top: 90px;
 }
 .class-bg-layer {
   position: absolute;
