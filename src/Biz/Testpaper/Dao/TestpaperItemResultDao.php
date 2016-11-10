@@ -4,6 +4,8 @@ namespace Biz\Testpaper\Dao;
 
 interface TestpaperItemResultDao
 {
+    public function findItemResultsByResultId($resultId);
+
     public function addItemAnswers($testPaperResultId, $answers, $testPaperId, $userId);
 
     public function updateItemAnswers($testPaperResultId, $answers);
@@ -13,8 +15,6 @@ interface TestpaperItemResultDao
     public function updateItemEssays($answers, $testPaperResultId);
 
     public function findTestResultsByItemIdAndTestId($questionIds, $testPaperResultId);
-
-    public function findTestResultsByTestPaperResultId($testPaperResultId);
 
     public function findRightItemCountByTestPaperResultId($testPaperResultId);
 

@@ -7,8 +7,8 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\Exception\RuntimeException;
 use Biz\Testpaper\Builder\TestpaperLibBuilder;
 use Biz\Testpaper\Pattern\TestpaperPatternFactory;
-use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class TestpaperBuilder extends Factory implements TestpaperLibBuilder
 {
@@ -33,20 +33,92 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $testpaper;
     }
 
-    public function filterFields($fields)
+    public function submit($resultId, $answers)
     {
-        if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
-            throw new \InvalidArgumentException('Testpaper field is invalid');
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+        if (!$result) {
+            throw new ResourceNotFoundException('testpaperResult', $resultId);
         }
+    }
+
+    public function showTestItems($resultId)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        foreach ($items as $questionId => &$item) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            if (!$question) {
+                $question = array(
+                    'isDeleted' => true,
+                    'stem'      => $this->getKernel()->trans('此题已删除'),
+                    'score'     => 0,
+                    'answer'    => ''
+                );
+            }
+
+            if (!empty($itemResults[$questionId])) {
+                $item['testResult'] = $itemResults[$questionId];
+            }
+
+            $item['question'] = $question;
+
+            if ($item['parentId'] > 0) {
+                $items[$item['parentId']]['items'][$questionId]                    = $item;
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $item;
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $item;
+            }
+        }
+
+        return $formatItems;
+    }
+
+    public function filterFields($fields, $mode = 'create')
+    {
+        /*if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
+        throw new \InvalidArgumentException('Testpaper field is invalid');
+        }*/
+        $fields = ArrayToolkit::parts($fields, array(
+            'name',
+            'description',
+            'courseId',
+            'lessonId',
+            'type',
+            'metas',
+            'status',
+            'limitedTime',
+            'passedCondition',
+            'copyId',
+            'pattern',
+            'metas'
+        ));
 
         $filtedFields = array();
 
-        $filtedFields['name']        = $fields['name'];
-        $filtedFields['pattern']     = $fields['pattern'];
-        $filtedFields['description'] = empty($fields['description']) ? '' : $fields['description'];
-        $filtedFields['courseId']    = $fields['courseId'];
-        $filtedFields['lessonId']    = empty($fields['lessonId']) ? 0 : $fields['lessonId'];
-        $filtedFields['type']        = 'testpaper';
+        if (!empty($fields['name'])) {
+            $filtedFields['name'] = $fields['name'];
+        }
+
+        if (!empty($fields['pattern'])) {
+            $filtedFields['pattern'] = $fields['pattern'];
+        }
+
+        if (!empty($fields['description'])) {
+            $filtedFields['description'] = $fields['description'];
+        }
+
+        $filtedFields['courseId'] = $fields['courseId'];
+        $filtedFields['lessonId'] = empty($fields['lessonId']) ? 0 : $fields['lessonId'];
+        $filtedFields['type']     = 'testpaper';
 
         $filtedFields['metas']  = empty($fields['metas']) ? array() : $fields['metas'];
         $filtedFields['status'] = 'draft';
@@ -81,7 +153,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
                 $seq++;
             }
 
-            $testpaperItems[] = $this->getTestpaperService()->createTestpaperItem($item);
+            $testpaperItems[] = $this->getTestpaperService()->createItem($item);
         }
 
         return $testpaperItems;

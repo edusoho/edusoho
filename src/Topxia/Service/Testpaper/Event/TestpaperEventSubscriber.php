@@ -12,14 +12,14 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.finish'   => 'onTestpaperFinish',
-            'testpaper.create'   => 'onTestpaperCreate',
-            'testpaper.update'   => 'onTestpaperUpdate',
-            'testpaper.publish'  => 'onTestpaperPublish',
-            'testpaper.close'    => 'onTestpaperClose',
-            'testpaper.delete'   => 'onTestpaperDelete',
+            //'testpaper.finish'   => 'onTestpaperFinish',
+            //'testpaper.create'   => 'onTestpaperCreate',
+            //'testpaper.update'   => 'onTestpaperUpdate',
+            //'testpaper.publish'  => 'onTestpaperPublish',
+            //'testpaper.close'    => 'onTestpaperClose',
+            //'testpaper.delete'   => 'onTestpaperDelete',
             //'testpaper.item.update' => 'onTestpaperItemUpdate',
-            'testpaper.reviewed' => 'onTestpaperReviewed'
+            //'testpaper.reviewed' => 'onTestpaperReviewed'
         );
     }
 

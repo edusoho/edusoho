@@ -7,25 +7,25 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
-class HomeworkController extends BaseController
+class ExerciseController extends BaseController
 {
-    public function startDoAction(Request $request, $homeworkId)
+    public function startDoAction(Request $request, $exerciseId)
     {
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
-        if (empty($homework)) {
-            throw new ResourceNotFoundException('homework', $homeworkId);
+        $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
+        if (empty($exercise)) {
+            throw new ResourceNotFoundException('exercise', $exerciseId);
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($homework['courseId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($exercise['courseId']);
 
-        $result = $this->getTestpaperService()->startTestpaper($homeworkId, $homework['lessonId']);
+        $result = $this->getTestpaperService()->startTestpaper($exerciseId, $exercise['lessonId']);
 
         if ($result['status'] == 'doing') {
-            return $this->redirect($this->generateUrl('homework_show', array(
+            return $this->redirect($this->generateUrl('exercise_show', array(
                 'resultId' => $result['id']
             )));
         } else {
-            return $this->redirect($this->generateUrl('homework_result_show', array(
+            return $this->redirect($this->generateUrl('exercise_result_show', array(
                 'resultId' => $result['id']
             )));
         }
@@ -35,21 +35,20 @@ class HomeworkController extends BaseController
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         if (!$result) {
-            throw new ResourceNotFoundException('homeworkResult', $resultId);
+            throw new ResourceNotFoundException('exerciseResult', $resultId);
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
-        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
-        if (!$homework) {
-            throw new ResourceNotFoundException('homework', $result['testId']);
+        $exercise = $this->getTestpaperService()->getTestpaper($result['testId']);
+        if (!$exercise) {
+            throw new ResourceNotFoundException('exercise', $result['testId']);
         }
 
-        //$items = $this->getItemSetByHomeworkId($homework['id']);
         $items = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
         return $this->render('WebBundle:Homework:do.html.twig', array(
-            'paper'          => $homework,
+            'paper'          => $exercise,
             'items'          => $items,
             'course'         => $course,
             'result'         => $result,
@@ -57,77 +56,27 @@ class HomeworkController extends BaseController
         ));
     }
 
-    public function getItemSetByHomeworkId($homeworkId)
-    {
-        $items       = $this->getTestpaperService()->findItemsByTestId($homeworkId);
-        $indexdItems = ArrayToolkit::index($items, 'questionId');
-        $questions   = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
-
-        $validQuestionIds = array();
-
-        foreach ($indexdItems as $index => $item) {
-            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
-
-            if (empty($item['parentId'])) {
-                $indexdItems[$index] = $item;
-                continue;
-            }
-
-            if (empty($indexdItems[$item['parentId']]['subItems'])) {
-                $indexdItems[$item['parentId']]['subItems'] = array();
-            }
-
-            $indexdItems[$item['parentId']]['subItems'][] = $item;
-            unset($indexdItems[$item['questionId']]);
-        }
-
-        $set = array(
-            'items'       => ArrayToolkit::index($indexdItems, 'questionId'),
-            'questionIds' => array(),
-            'total'       => 0
-        );
-
-        foreach ($set['items'] as $item) {
-            if (!empty($item['subItems'])) {
-                $set['total'] += count($item['subItems']);
-                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'], 'questionId'));
-            } else {
-                $set['total']++;
-                $set['questionIds'][] = $item['questionId'];
-            }
-        }
-
-        return $set;
-    }
-
     public function showTestAction(Request $request, $resultId)
     {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+        if (!$result) {
+            throw new ResourceNotFoundException('exerciseResult', $resultId);
+        }
+
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        $homework              = $this->getTestpaperService()->getTestpaper($homeworkId);
+        $exercise              = $this->getTestpaperService()->getTestpaper($homeworkId);
 
-        if (empty($homework)) {
-            throw $this->createNotFoundException();
+        if (empty($exercise)) {
+            throw new ResourceNotFoundException('exercise', $result['testId']);
         }
 
-        if ($homework['courseId'] != $course['id']) {
-            throw $this->createNotFoundException();
-        }
-
-        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
-
-        if (empty($lesson)) {
-            return $this->createMessageResponse('info', '作业所属课时不存在！');
-        }
-
-        $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+        //$itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+        $items = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
         return $this->render('HomeworkBundle:CourseHomework:do.html.twig', array(
-            'homework'         => $homework,
-            'itemSet'          => $itemSet,
-            'course'           => $course,
-            'lesson'           => $lesson,
-            'homeworkResultId' => $resultId,
-            'questionStatus'   => 'doing'
+            'paper'  => $exercise,
+            'items'  => $items,
+            'course' => $course
         ));
     }
 

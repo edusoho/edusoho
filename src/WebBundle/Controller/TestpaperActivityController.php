@@ -9,6 +9,13 @@ class TestpaperActivityController extends BaseController implements ActivityActi
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity          = $this->getActivityService()->getActivity($id);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        return $this->forward('WebBundle:Testpaper:doTestpaper', array(
+            'testId'   => $testpaperActivity['mediaId'],
+            'lessonId' => 0
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

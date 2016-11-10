@@ -3,7 +3,6 @@ namespace Biz\Testpaper\Builder;
 
 use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Builder\TestpaperLibBuilder;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -23,6 +22,43 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $homework;
     }
 
+    public function submit($resultId, $answers)
+    {
+    }
+
+    public function showTestItems($resultId)
+    {
+        $homework  = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $items     = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+        $itemCount = count($items);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $validQuestionIds = array();
+
+        foreach ($items as $questionId => &$item) {
+            $question = empty($questions[$questionId]) ? array('isDeleted' => true) : $questions[$questionId];
+
+            $item['question'] = $question;
+
+            if ($item['parentId'] == 0) {
+                continue;
+            }
+
+            $items[$item['parentId']]['subItems'][] = $item;
+            unset($items[$item['questionId']]);
+        }
+
+        $set = array(
+            'items'       => $items,
+            'questionIds' => $questionIds,
+            'total'       => $itemCount
+        );
+
+        return $set;
+    }
+
     public function canBuild($options)
     {
         $questions      = $this->getQuestions($options);
@@ -30,7 +66,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function filterFields($fields)
+    public function filterFields($fields, $mode = 'create')
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
             throw new \InvalidArgumentException('homework field is invalid');
@@ -38,12 +74,21 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
         $filtedFields = array();
 
-        $filtedFields['courseId']        = $fields['courseId'];
-        $filtedFields['lessonId']        = $fields['lessonId'];
-        $filtedFields['type']            = 'homework';
-        $filtedFields['passedCondition'] = empty($fields['passedCondition']) ? array() : $fields['correctPercent'];
-        $filtedFields['description']     = empty($fields['description']) ? '' : $fields['description'];
-        $filtedFields['name']            = empty($fields['name']) ? '' : $fields['name'];
+        $filtedFields['courseId'] = $fields['courseId'];
+        $filtedFields['lessonId'] = $fields['lessonId'];
+        $filtedFields['type']     = 'homework';
+
+        if (!empty($fields['name'])) {
+            $filtedFields['name'] = $fields['name'];
+        }
+
+        if (!empty($fields['description'])) {
+            $filtedFields['description'] = $fields['description'];
+        }
+
+        if (!empty($fields['passedCondition'])) {
+            $filtedFields['passedCondition'] = $fields['correctPercent'];
+        }
 
         if (!empty($fields['questionIds'])) {
             $filtedFields['itemCount'] = count($fields['questionIds']);
@@ -63,25 +108,25 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         foreach ($questions as $key => $question) {
-            $questionsSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
 
             $items['seq']          = $index++;
             $items['questionId']   = $question['id'];
             $items['questionType'] = $question['type'];
             $items['testId']       = $homeworkId;
             $items['parentId']     = 0;
-            $homeworkItems[]       = $this->getTestpaperService()->createTestpaperItem($items);
+            $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
 
-            if (!empty($questionsSub)) {
+            if (!empty($questionSubs)) {
                 $i = 1;
 
-                foreach ($questionsSubs as $key => $questionSub) {
+                foreach ($questionSubs as $key => $questionSub) {
                     $items['seq']          = $i++;
                     $items['questionId']   = $questionSub['id'];
                     $items['questionType'] = $questionSub['type'];
                     $items['testId']       = $homeworkId;
                     $items['parentId']     = $questionSub['parentId'];
-                    $homeworkItems[]       = $this->getTestpaperService()->createTestpaperItem($items);
+                    $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
                 }
             }
         }
@@ -158,7 +203,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     protected function getQuestionService()
     {
-        return ServiceKernel::instance()->createService('Question.QuestionService');
+        return $this->getBiz()->service('Question:QuestionService');
     }
 
     protected function getTestpaperService()

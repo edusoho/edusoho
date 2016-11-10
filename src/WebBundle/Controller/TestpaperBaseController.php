@@ -213,7 +213,7 @@ class TestpaperController extends BaseController
 
     private function findAttachments($testId)
     {
-        $items       = $this->getTestpaperService()->getTestpaperItems($testId);
+        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $conditions  = array(
             'type'        => 'attachment',

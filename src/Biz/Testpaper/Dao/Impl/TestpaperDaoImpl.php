@@ -14,23 +14,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
 
     public function findTestpapersByIds(array $ids)
     {
-        if (empty($ids)) {
-            return array();
-        }
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->db()->fetchAll($sql, $ids);
-    }
-
-    public function findTestpaperByTargets(array $targets)
-    {
-        if (empty($targets)) {
-            return array();
-        }
-        $marks = str_repeat('?,', count($targets) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE target IN ({$marks})";
-
-        return $this->db()->fetchAll($sql, $targets) ?: array();
+        return $this->findInField('id', $ids);
     }
 
     public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)

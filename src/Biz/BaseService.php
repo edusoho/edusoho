@@ -6,8 +6,8 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\ServiceException;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\Common\AccessDeniedException;
-use Topxia\Service\Common\ResourceNotFoundException;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {

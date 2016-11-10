@@ -84,8 +84,8 @@ testpaper_do:
   defaults: { _controller: WebBundle:Testpaper:doTestpaper }
 
 testpaper_show:
-  path: /testpaper/{testId}/show
-  defaults: { _controller: WebBundle:Testpaper:showTest }
+  path: /testpaper/{resultId}/show
+  defaults: { _controller: WebBundle:Testpaper:doTest }
 
 testpaper_result_show:
   path: /testpaper/result/{resultId}/show
@@ -94,6 +94,7 @@ testpaper_result_show:
 testpaper_result_submit:
   path: /testpaper/result/{resultId}/submit
   defaults: { _controller: WebBundle:Testpaper:submitTest }
+  methods: [POST]
 
 testpaper_finish_test:
   path: /testpaper/result/{resultId}/finish
@@ -109,10 +110,22 @@ course_manage_homework_create:
   path: /course/{courseId}/manage/lesson/{lessonId}/homework/create
   defaults: { _controller: WebBundle:HomeworkManage:create }
 
-
 course_manage_homework_question_picked:
   path: /course/{courseId}/manage/question/picked
   defaults: { _controller: WebBundle:HomeworkManage:questionPicked }
+
+homework_start_do:
+    pattern: /homework/{homeworkId}/startDo
+    defaults: { _controller: WebBundle:Homework:startDo }
+
+homework_show:
+    pattern: /homework/{resultId}/show
+    defaults: { _controller: WebBundle:Homework:doTest }
+
+homework_result_show:
+    pattern: /homework/result/{resultId}/show
+    defaults: { _controller: WebBundle:Homework:showResult }
+
 
 
 #exercise
@@ -125,6 +138,18 @@ course_manage_exercise_check:
   path:  /course/{courseId}/manage/exercise/check
   defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
 
+exercise_start_do:
+    pattern: /exercise/{exerciseId}/startDo
+    defaults: { _controller: WebBundle:Exercise:startDo }
+
+exercise_show:
+    pattern: /exercise/{resultId}/show
+    defaults: { _controller: WebBundle:Exercise:doTest }
+
+exercise_result_show:
+    pattern: /exercise/result/{resultId}/show
+    defaults: { _controller: WebBundle:Exercise:showResult }
+
 #question
 course_manage_question_picker:
   path: /course/{courseId}/manage/question/picker
@@ -133,4 +158,5 @@ course_manage_question_picker:
 course_manage_question_picked:
   path:  /course/{courseId}/manage/question/{questionId}/picked
   defaults: { _controller: WebBundle:QuestionManage:PickedQuestion }
+
 

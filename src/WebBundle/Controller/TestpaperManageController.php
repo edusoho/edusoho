@@ -269,7 +269,7 @@ class TestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper', array('courseId' => $courseId)));
         }
 
-        $items     = $this->getTestpaperService()->getTestpaperItems($testpaper['id']);
+        $items     = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
         //$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));

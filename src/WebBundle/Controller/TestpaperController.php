@@ -64,7 +64,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('testpaper', $testId);
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -75,14 +75,10 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
-        $testpaperResult = $this->getTestpaperService()->getUserDoingResult($testpaper['id'], $testpaper['courseId'], $lessonId, $testpaper['type'], $user['id']);
-
-        if (!$testpaperResult) {
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
-        }
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('testpaper_show', array('testId' => $testpaperResult['id'])));
+            return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         } else {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
         }
@@ -95,7 +91,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('testpaper', $testId);
         }
 
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
@@ -167,9 +163,9 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function doTestAction(Request $request, $testId)
+    public function doTestAction(Request $request, $resultId)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($testId);
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
@@ -178,9 +174,10 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
-        $result           = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
-        $items            = $result['formatItems'];
-        $total            = $this->makeTestpaperTotal($testpaper, $items);
+        //$result           = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
+        $items = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
+
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 
@@ -208,7 +205,7 @@ class TestpaperController extends BaseController
 
     private function findAttachments($testId)
     {
-        $items       = $this->getTestpaperService()->getTestpaperItems($testId);
+        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $conditions  = array(
             'type'        => 'attachment',
@@ -230,7 +227,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
@@ -284,7 +281,7 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         if (!$testpaperResult) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在!'));
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
 //权限！
@@ -330,10 +327,9 @@ class TestpaperController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data     = $request->request->all();
-            $answers  = array_key_exists('data', $data) ? $data['data'] : array();
-            $usedTime = $data['usedTime'];
-            $user     = $this->getUser();
+            $data    = $request->request->all();
+            $answers = empty($data['data']) ? array() : $data['data'];
+            $user    = $this->getUser();
 
             //提交变化的答案
             $results = $this->getTestpaperService()->submitTestpaperAnswer($testpaperResult['id'], $answers);
@@ -341,11 +337,9 @@ class TestpaperController extends BaseController
             //完成试卷，计算得分
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($testpaperResult['id']);
 
-            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($testpaperResult['id']);
-
             $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
             //试卷信息记录
-            $this->getTestpaperService()->finishTest($testpaperResult['id'], $user['id'], $usedTime);
+            $this->getTestpaperService()->finishTest($testpaperResult['id'], $user['id'], $data['usedTime']);
 
             //$course = $this->getCourseService()->getCourse($testpaper['courseId']);
 
@@ -391,7 +385,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {

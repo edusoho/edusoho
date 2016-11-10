@@ -9,6 +9,11 @@ class ExerciseActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        return $this->forward('WebBundle:Exercise:startDo', array(
+            'exerciseId' => $activity['mediaId']
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

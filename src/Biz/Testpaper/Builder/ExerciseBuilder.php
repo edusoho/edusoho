@@ -15,6 +15,28 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         return $this->getTestpaperService()->createTestpaper($fields);
     }
 
+    public function submit($resultId, $answers)
+    {
+    }
+
+    public function showTestItems($resultId)
+    {
+        $exercise      = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $questionTypes = $exercise['metas']['questionTypes'];
+
+        $conditions = array(
+            'types' => $questionTypes
+
+        );
+        if (!empty($exercise['metas']['difficulty'])) {
+            $conditions['difficulty'] = $exercise['metas']['difficulty'];
+        }
+
+        $items = $this->getQuestionService()->search($conditions, $sort, $start, $limit);
+
+        return $set;
+    }
+
     public function canBuild($options)
     {
         $questions     = $this->getQuestions($options);
@@ -28,7 +50,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         }
     }
 
-    public function filterFields($fields)
+    public function filterFields($fields, $mode = 'create')
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
             throw new \InvalidArgumentException('exercise field is invalid');

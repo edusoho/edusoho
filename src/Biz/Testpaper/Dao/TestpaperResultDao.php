@@ -4,7 +4,7 @@ namespace Biz\Testpaper\Dao;
 
 interface TestpaperResultDao
 {
-    public function getUserDoingResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
 
     public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
 

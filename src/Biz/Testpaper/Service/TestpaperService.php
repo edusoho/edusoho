@@ -5,6 +5,10 @@ interface TestpaperService
 {
     public function getTestpaper($id);
 
+    public function createTestpaper($fields);
+
+    public function updateTestpaper($id, $fields);
+
     public function findTestpapersByIds($ids);
 
     public function searchTestpapers($conditions, $sort, $start, $limit);
@@ -15,13 +19,27 @@ interface TestpaperService
      * testpaper_item
      */
 
-    public function getTestpaperItem($id);
+    public function getItem($id);
 
-    public function createTestpaperItem($fields);
+    public function createItem($fields);
 
-    public function updateTestpaperItem($id, $fields);
+    public function updateItem($id, $fields);
 
-    public function deleteTestpaperItem($id);
+    public function deleteItem($id);
+
+    public function findItemsByTestId($testpaperId);
+
+    public function searchItems($conditions, $orderBy, $start, $limit);
+
+    public function searchItemCount($conditions);
+
+    /*
+     * testpaper_item_result
+     */
+
+    public function createItemResult($fields);
+
+    public function findItemResultsByResultId($resultId);
 
     /**
      * testpaper_result
@@ -34,10 +52,6 @@ interface TestpaperService
     public function searchTestpaperResults($conditions, $sort, $start, $limit);
 
     public function searchTestpapersScore($conditions);
-
-    public function createTestpaper($fields);
-
-    public function updateTestpaper($id, $fields);
 
     public function publishTestpaper($id);
 
@@ -72,12 +86,8 @@ interface TestpaperService
 
     public function findTestpaperResultCountByStatusAndTeacherIds($ids, $status);
 
-    public function findAllTestpapersByTarget($id);
-
-    public function findAllTestpapersByTargets(array $ids);
-
     //new
-    public function getUserDoingResult($testId, $courseId, $lessonId, $type, $userId);
+    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
 
     /**
      * 开始做试卷
@@ -110,15 +120,6 @@ interface TestpaperService
     public function updateTestResultsByLessonId($lessonId, $fields);
 
     public function findTeacherTestpapersByTeacherId($teacherId);
-
-    /**
-     * 获取试卷的所有题目
-     *
-     * @param  integer $id                                                         试卷ID
-     * @return array   试卷所有题目，包含item对应的question的信息
-     */
-
-    public function getTestpaperItems($testpaperId);
 
     public function updateTestpaperItems($testpaperId, $items);
 
