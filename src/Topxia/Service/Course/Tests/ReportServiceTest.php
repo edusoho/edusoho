@@ -82,14 +82,16 @@ class ReportServiceTest extends BaseTestCase
         $this->mock('Course.CourseService', array(
             array('functionName' => 'getCourseLessons', 'runTimes' => 1, 'returnValue' => $fakeLessons),
             array('functionName' => 'searchLearnCount', 'runTimes' => 2, 'returnValue' => 10),
-            array('functionName' => 'findLearnsCountByLessonId', 'runTimes' => 2, 'returnValue' => 20)
+            array('functionName' => 'findCourseTeachers', 'runTimes' => 1, 'returnValue' => array(array(
+                'userId' => 1
+            ))),
         ));
 
         $stat = $this->getReportService()->getCourseLessonLearnStat(1);
 
         $this->assertCount(2, $stat);
         $this->assertEquals(10, array_pop($stat)['finishedNum']);
-        $this->assertEquals(20, array_pop($stat)['learnNum']);
+        $this->assertEquals(10, array_pop($stat)['learnNum']);
     }
 
     protected function getReportService()

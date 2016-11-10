@@ -60,10 +60,12 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getCourseLessonLearnStat($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $teachers = $this->getCourseService()->findCourseTeachers($courseId);
+        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
         foreach ($lessons as $lessonId => &$lesson) {
             $lesson['alias'] = '课时'.$lesson['number'];
-            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'status' => 'finished'));
-            $lesson['learnNum'] = $this->getCourseService()->findLearnsCountByLessonId($lessonId);
+            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
+            $lesson['learnNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lessonId, 'excludeUserIds' => $excludeUserIds));
 
             if ($lesson['learnNum']) {
                 $lesson['finishedRate'] = round($lesson['finishedNum']/$lesson['learnNum'], 3) * 100;
