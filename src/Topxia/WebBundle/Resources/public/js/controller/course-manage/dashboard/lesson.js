@@ -13,8 +13,11 @@ define(function(require, exports, module) {
                     var rate = 0;
 
                     //求完成率
+                    var learningNum = parseInt(params[1].value);
+                    var learnedNum = parseInt(params[0].value);
+                    var totalNum = learnedNum + learningNum;
                     if (params[1].value > 0) {
-                        rate = (params[0].value/params[1].value).toFixed(3) * 100;
+                        rate = (learnedNum/totalNum).toFixed(3) * 100;
                     }
 
                     var circle1 = '<span style="display:inline-block;margin-right:5px;'
