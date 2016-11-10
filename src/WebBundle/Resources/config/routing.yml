@@ -28,9 +28,10 @@ course_task_activity_show:
 task_live_entry:
   path: /course/{courseId}/activity/{id}/live_entry
   defaults: {_controller: WebBundle:LiveActivity:liveEntry}
-course_task_trigger:
-  path:  /course/{courseId}/task/{id}/trigger/{eventName}
-  defaults: { _controller: WebBundle:Task:trigger }
+
+course_activity_trigger:
+  path: /course/{courseId}/activity/{activityId}/trigger
+  defaults: { _controller: WebBundle:Activity:trigger }
   methods: [POST]
 
 media_materiallib_choose:
