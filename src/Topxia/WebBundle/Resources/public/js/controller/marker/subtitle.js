@@ -82,7 +82,6 @@ define(function(require,exports,module){
     var captions = new Subtitle();
     function showSubtitleContent(data)
     {
-        console.log(data);
         captions.parse(data);
         var subtitleArray = captions.getSubtitles({
             duration:true,
