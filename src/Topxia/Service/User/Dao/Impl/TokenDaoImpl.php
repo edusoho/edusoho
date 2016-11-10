@@ -43,7 +43,12 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         }
 
         $token = $this->getToken($this->getConnection()->lastInsertId());
-        $this->flushCache($token);
+        
+        $this->incrVersions(array(
+            "{$this->table}:version:userId:{$token['userId']}",
+            "{$this->table}:version:type:{$token['type']}"
+        ));
+        
         return $token;
     }
 

@@ -27,6 +27,7 @@ use Symfony\Component\Debug\Debug;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\AppConnectionFactory;
 
 fix_gpc_magic();
 
@@ -54,8 +55,7 @@ $serviceKernel->setTranslatorEnabled(true);
 $serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-$serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
-$serviceKernel->getConnection()->exec('SET NAMES UTF8');
+$serviceKernel->setConnectionFactory(new AppConnectionFactory());
 
 $currentUser = new CurrentUser();
 $currentUser->fromArray(array(
