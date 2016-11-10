@@ -14,7 +14,11 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        // TODO: Implement showAction() method.
+        $activity             = $this->getActivityService()->getActivity($id);
+        $activity['courseId'] = $courseId;
+        return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
+            'activity' => $activity,
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -31,6 +35,11 @@ class DownLoadActivityController extends BaseController implements ActivityActio
             'activity' => $activity,
             'courseId' => $courseId
         ));
+    }
+
+    public function downloadFileAction(Request $request, $activity, $fileId)
+    {
+
     }
 
     public function createAction(Request $request, $courseId)

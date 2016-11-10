@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $taskId,$courseId)
+    public function showAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $format   = 'Y-m-d H:i';

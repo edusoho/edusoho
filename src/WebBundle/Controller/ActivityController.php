@@ -47,20 +47,6 @@ class ActivityController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function playerAction(Request $request, $courseId, $activityId)
-    {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($activityId);
-        if (empty($activity)) {
-            $this->createResourceNotFoundException('activity', $activityId);
-        }
-        $context = array();
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'      => $activity['ext']["mediaId"],
-            'context' => $context
-        ));
-    }
-
     /**
      * @return ActivityService
      */
