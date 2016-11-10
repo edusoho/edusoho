@@ -54,7 +54,7 @@ define(function(require, exports, module) {
         [
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i,
-            Translator.trans('%display%用户名支持中文字、英文字母、数字及_ . ·', {display: '{{display}}'})
+            Translator.trans('%display%支持中文字、英文字母、数字及_ . ·', {display: '{{display}}'})
         ],
         [
            'reg_inviteCode',
