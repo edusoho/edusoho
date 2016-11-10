@@ -111,6 +111,9 @@ define(function(require,exports,module){
                     }
                 });
                 $subtitleDom.removeClass('active');
+                if(!last){
+                    return;
+                }
                 if(last.index>1 && subtitleArray[last.index - 2].end > parseFloat(data.currentTime)*1000){
                     $subtitleDom.eq(last.index - 2).addClass('active');
                 }
