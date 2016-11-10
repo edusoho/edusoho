@@ -20,20 +20,20 @@ class PPT extends Emitter {
     this._init();
   }
 
-  get page(){
+  get page() {
     return this._page;
   }
 
-  set page(newPage){
+  set page(newPage) {
     let beforePage = this.page;
     let currentPage = newPage;
 
-    if(currentPage > this.total){
+    if (currentPage > this.total) {
       this.element.find('.goto-page').val(currentPage);
       this._page = currentPage;
     }
 
-    if(currentPage < 1){
+    if (currentPage < 1) {
       this.element.find('.goto-page').val(beforePage);
       this._page = beforePage;
     }
@@ -43,9 +43,9 @@ class PPT extends Emitter {
     if ($currentSlide.attr('src')) {
       $currentSlide.addClass('active');
     } else {
-      $currentSlide.load(() =>{
+      $currentSlide.load(() => {
         if (this._page != $currentSlide.data('page')) {
-          return ;
+          return;
         }
         $currentSlide.addClass('active');
       });
@@ -59,8 +59,9 @@ class PPT extends Emitter {
     this._page = currentPage;
 
     this.trigger('change', {
-      current:beforePage,
-      before: currentPage}
+          current: beforePage,
+          before: currentPage
+        }
     );
   }
 
@@ -107,6 +108,12 @@ class PPT extends Emitter {
     this.element.on('click', '.goto-last', this._onLast.bind(this));
     this.element.on('click', '.fullscreen', this._onFullScreen.bind(this));
     this.element.on('change', '.goto-page', this._onChangePage.bind(this));
+    let self = this;
+    this.on('change', ({currentPage, beforePage}) => {
+      if (currentPage == self.total) {
+        self.trigger('end');
+      }
+    });
   }
 
   _onNext() {
@@ -143,23 +150,35 @@ class PPT extends Emitter {
   }
 }
 let watermarkUrl = $('#activity-ppt-content').data('watermarkUrl');
-
-if (watermarkUrl === undefined) {
+let eventUrl = $('#activity-ppt-content').data('eventUrl');
+let createPPT = (watermark) => {
   let ppt = new PPT({
     element: '#activity-ppt-content',
     slides: $('#activity-ppt-content').data('slides').split(','),
+    watermark: watermark
   });
+
+  return ppt.on('end', () => {
+    $.post(eventUrl, {
+      event: 'finish'
+    })
+        .then(() => {
+          console.log('PPT活动完成');
+        })
+        .fail(() => {
+          console.log('finish事件上报出错');
+        });
+  });
+};
+
+if (watermarkUrl === undefined) {
+  let ppt = createPPT();
 } else {
   $.get(watermarkUrl)
       .then((watermark) => {
-        let ppt = new PPT({
-          element: '#activity-ppt-content',
-          slides: $('#activity-ppt-content').data('slides').split(','),
-          watermark: watermark
-        })
+        let ppt = createPPT(watermark);
       })
       .fail(error => {
         console.error(error);
       });
 }
-
