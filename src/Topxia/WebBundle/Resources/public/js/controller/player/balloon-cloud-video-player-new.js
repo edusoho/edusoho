@@ -22,7 +22,7 @@ define(function(require, exports, module) {
             },
             enablePlaybackRates: false,
             videoHeaderLength: 0,
-            subtitles: ''
+            textTrack: ''
         },
 
         events: {},
@@ -100,13 +100,11 @@ define(function(require, exports, module) {
                 });
             }
 
-            if(self.get('subtitles') != '' ) {
+            if(self.get('textTrack') != '' ) {
                 extConfig = $.extend(extConfig, {
-                    subtitles: self.get('subtitles')
+                    textTrack: self.get('textTrack')
                 });
             }
-
-            console.log(extConfig);
 
             var player = new VideoPlayerSDK($.extend({
                 id: elementId,

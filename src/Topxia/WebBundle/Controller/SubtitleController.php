@@ -47,9 +47,8 @@ class SubtitleController extends BaseController
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
 
-        return $this->render('TopxiaWebBundle:Subtitle:media-subtitles-list.html.twig', array(
-            'courseId' => $courseId,
-            'subtitles' => $subtitles
+        return $this->createJsonResponse(array(
+            'subtitles' => array_values($subtitles)
         ));
     }
 

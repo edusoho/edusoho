@@ -5,9 +5,8 @@ define(function(require,exports,module){
             if(!this.$el.length){
                 throw new Error('id 不存在');
             }
+            this.options = [];
             this.eventManager = {};
-            this.options = this.fetchOption();
-            this.value = this.options[0];
             this.initParent();
             this.initEvent();
         },
@@ -33,14 +32,14 @@ define(function(require,exports,module){
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
                 var name = $(this).find('.value').html();
-                var src = $(this).find('.value').attr('src');
-                _self.setValue({name:name,src:src});
+                var url = $(this).find('.value').attr('url');
+                _self.setValue({name:name,url:url});
                 _self.handleClose();
             })
             this.$showBox.on('click',this.toggle.bind(this));
             this.on('valuechange',function(){
-                this.$dataShow.html(this.value.name);
-                this.$dataShow.attr('title',this.value.name);
+                this.$dataShow.html(this.getValue().name);
+                this.$dataShow.attr('title',this.getValue().name);
             });
             this.on('listchange',function(){
                 this.$list.html(this.getOptionsStr());
@@ -52,7 +51,7 @@ define(function(require,exports,module){
             return ''+
                 '<div class="track-select-parent">'+
                     '<div class="track-select-show">'+
-                        '<div class="data-show" title="'+ this.getDefaultOption().name +'">'+ this.getDefaultOption().name +'</div>'+
+                        '<div class="data-show" title="'+ this.getDefaultOption().name +'"></div>'+
                         '<span class="track-selcet-open-arrow">'+
                             '<i class="es-icon es-icon-keyboardarrowdown"></i>'+
                         '</span>'+
@@ -65,18 +64,6 @@ define(function(require,exports,module){
                     '</ul>'+
                 '</div>';
         },
-        fetchOption(){
-            return [
-                {
-                    name:'vavda',
-                    src:'/assets/textTrack/jixieshi.srt'
-                },
-                {
-                    name:'cdavavfa',
-                    src:'/assets/textTrack/jixieshi.srt'
-                }
-            ]
-        },
         getDefaultOption() {
             if(this.options.length){
                 return this.options[0];
@@ -86,27 +73,26 @@ define(function(require,exports,module){
             }
         },
         getOptionsStr:function(){
-            if(!this.options){
+            if(!this.options.length){
                 this.trigger('optionempty');
             }
             var optionsStr = '';
             this.options.map(function(option,index){
-                optionsStr += '<li class="select-item"><div class="value" title="'+ option.name +'" src="'+option.src+'">'+option.name+'</div><i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i></li>';
+                optionsStr += '<li class="select-item"><div class="value" title="'+ option.name +'" url="'+option.url+'">'+option.name+'</div><i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i></li>';
             })
             return optionsStr;
         },
         setValue:function(value){
             if(!value){
                 this.$dataShow.html('无字幕');
+                this.trigger('valuechange',false);
                 return;
             }
-            if(this.value.name !== value.name){
-                this.value = value;
-                this.trigger('valuechange',this.value);
-            }
+            this.value = value;
+            this.trigger('valuechange',this.value);
         },
         getValue:function(){
-            return this.value;
+            return this.value || { name:'无字幕'};
         },
         toggle:function(){
             this.open ? this.handleClose() : this.handleOpen();
@@ -129,12 +115,14 @@ define(function(require,exports,module){
         handleDelete:function(e){
             var el = e.target;
             $(el).parent().remove();
+            this.trigger('deleteoption',this.options[$(el).data('index')]);
             this.options.splice($(el).data('index'),1);
             this.trigger('listchange',this.options);
             e.stopPropagation();
         },
         handleOptionEmpty(){
-            this.$dataShow.html('无字幕');
+            this.value = '';
+            this.trigger('valuechange',false);
         },
         on:function(event,fn){
             if(!this.eventManager[event]){
@@ -149,6 +137,10 @@ define(function(require,exports,module){
                     fn(data);
                 });
             }
+        },
+        resetOptions(optionsArray){
+            this.options = optionsArray;
+            this.trigger('listchange',this.options);
         }
     }
     module.exports = Select;
