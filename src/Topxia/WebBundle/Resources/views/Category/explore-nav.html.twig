@@ -5,7 +5,7 @@
     <div class="title">分类</div>
     <ul class="content clearfix">
       {% for category in categories %}
-        <li><a class="nav-link" href="{{ path(path, {category:category,filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+        <li><a class="nav-link {% if category.id = selectedCategory %}active{% endif %}" href="{{ path(path, {tags:tags, category:category.id, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
       {% endfor %}
     </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
