@@ -16,7 +16,7 @@ services:
 
     user.login_listener:
         class: Topxia\WebBundle\Handler\LoginSuccessHandler
-        arguments: ['@security.context', '@doctrine']
+        arguments: ['@security.context']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
     user.login_generate_notification_handler:

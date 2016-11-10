@@ -17,7 +17,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('login_limit', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.login_limit) }}
-        <p class="help-block">{{'开启后同一账号将不能在不同IP或者不同地域下同时登录'|trans}}</p>
+        <p class="help-block">{{'开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录'|trans}}</p>
       </div>
     </div>
   </fieldset>
@@ -94,7 +94,17 @@
         <div class="controls col-md-8 radios">
           {{ radios( type ~ '_enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect[type ~ '_enabled']) }}
           {% if client.apply_url|default(null) %}
+            {% if type =='weixinmob' %}
+              <div class="help-block">开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。</div>
+              <div class="help-block">
+              如何开通：1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>账号；3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+            {% elseif type == 'weixinweb' %}
+              <div class="help-block">请先到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>申请<a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN">网站应用开发</a>，开通后，网站PC端将支持微信扫码登录；</div>
+              <div class="help-block">
+              申请条件：在微信开放平台注册并且完成实名认证。
+            {% else %}  
             <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">{{'申请'|trans}}{{ client.admin_name }}</a> 
+            {% endif %}
               {% if type == "qq" %}
               <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="{{'接入帮助:'|trans}}" data-html="true" data-content="1.{{'你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；'|trans}}<br>2.{{'需填写的回调地址为：'|trans}}<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>{{'为你的ES系统网址。例如，气球鱼学院的回调地址填写为：'|trans}}http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；{{'网址一定要有www哦；'|trans}}<br>3.{{'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。'|trans}}<br>{{'如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。'|trans}}">{{'接入帮助'|trans}}</a>
               {% endif %}
@@ -118,6 +128,11 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control" value="{{loginConnect[type ~ '_secret']}}">
+          {% if type =='weixinweb' %}
+            <div class="help-block">APP ID和APP Secret来自<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>创建的网站应用</div>
+          {% elseif type =='weixinmob' %}
+            <div class="help-block">APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。</div>
+          {% endif %}
         </div>
       </div>
       {% if type == 'weixinmob' %}

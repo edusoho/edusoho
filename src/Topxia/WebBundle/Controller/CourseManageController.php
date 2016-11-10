@@ -194,7 +194,36 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function dataAction($id)
+    public function courseDashboardAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $summary = $this->getCourseReportService()->summary($id);
+        $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:course.html.twig', array(
+            'course' => $course,
+            'summary' => $summary,
+            'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
+            'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
+            'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
+            'days' => ArrayToolkit::column($lateMonthLearndData, 'day')
+        ));
+    }
+
+    public function lessonDashboardAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson.html.twig', array(
+            'course' => $course,
+            'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
+            'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
+            'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
+            'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),
+        ));
+    }
+
+    public function lessonlearnDashboardAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -235,7 +264,7 @@ class CourseManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson-learn.html.twig', array(
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
@@ -649,6 +678,11 @@ class CourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseReportService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReportService');
     }
 
     protected function getLevelService()

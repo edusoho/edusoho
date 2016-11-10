@@ -78,7 +78,7 @@
             <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
             <div class="col-md-8 controls radios">
               {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
-              <div class="help-block">{{'视频试看功能仅云视频支持'|trans}}</div>
+              <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
             </div>
         </div>
 

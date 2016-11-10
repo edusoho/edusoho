@@ -9844,6 +9844,28 @@ textarea {
   padding: 15px 10px 5px 5px;
   cursor: pointer;
 }
+.dashboard-panel .course-dashboard-ul {
+  list-style-type: none;
+}
+.dashboard-panel .course-dashboard-ul li {
+  width: 33%;
+  float: left;
+  margin: 20px auto;
+  padding: 0 5px;
+  text-align: center;
+}
+.dashboard-panel .course-dashboard-ul li .title {
+  font-size: 14px;
+  color: #333;
+  margin-top: 0;
+}
+.dashboard-panel .course-dashboard-ul li .number {
+  font-weight: 500;
+  font-size: 24px;
+}
+.dashboard-panel .course-dashboard-footer {
+  margin-top: 90px;
+}
 .class-bg-layer {
   position: absolute;
   top: 5px;
