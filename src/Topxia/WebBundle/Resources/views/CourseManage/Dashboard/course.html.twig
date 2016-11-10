@@ -3,6 +3,7 @@
 {% set submenu = 'course_dashboard' %}
 {% do load_script('course-manage/dashboard/course') %}
 
+
 {% block dashboard %}
   <ul class="course-dashboard-header course-dashboard-ul">
     <li>
@@ -14,7 +15,14 @@
       <span class="number js-finished-num">{{ summary.finishedNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '完课率'|trans }}</div>
+      <div class="title">{{ '完课率'|trans }}
+      <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm finisher-lesson-popover" style="z-index: 100"></span>
+      <div class="popover-content hidden">
+        <div class="popover-item">
+          <div class="content">{{ '学完整个课程的人数 ÷ 课程学员总数'|trans }}</div>
+          </div>
+        </div>
+      </div>
       <span class="number js-finished-rate">{{ summary.finishedRate }}%</span>
     </li>
   </ul>
