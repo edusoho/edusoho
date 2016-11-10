@@ -19,21 +19,22 @@ class CategoryController extends BaseController
 
 
     //$category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest'
-    public function treeNavAction(Request $request, $tagGroups, $tag, $categories, $category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    public function treeNavAction(Request $request, $tagGroups, $tags, $categories, $category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
-        list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
+        // list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
 
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            'rootCategories' => $rootCategories,
+            // 'rootCategories' => $rootCategories,
+            // 'categories'     => $categories,
+            // 'category'       => $category,
+            // 'activeIds'      => $activeIds,
             'categories'     => $categories,
-            'category'       => $category,
             'path'           => $path,
-            'activeIds'      => $activeIds,
             'filter'         => $filter,
             'orderBy'        => $orderBy,
             'categories'     => $categories,
             'tagGroups'      => $tagGroups,
-            'tag'            => $tag
+            'tags'           => $tags
         ));
     }
 
