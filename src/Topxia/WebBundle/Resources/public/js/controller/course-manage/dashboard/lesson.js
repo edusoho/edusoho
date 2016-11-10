@@ -83,7 +83,10 @@ define(function(require, exports, module) {
                     label: {
                         normal: {
                             show: true,
-                            position: 'insideRight'
+                            position: 'insideRight',
+                            formatter: function (params) {
+                                return params.value == 0 ? '':params.value;
+                            }
                         }
                     },
                     itemStyle: {
