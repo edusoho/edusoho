@@ -1,7 +1,8 @@
 .task-manage-editor {
+  padding: 0 20px;
   .task-manage-type-list {
-    padding: 0 45px;
-    margin-bottom: 15px;
+    padding: 0 55px;
+    margin-bottom: 0;
     list-style: none;
     .task-manage-type-item {
       margin-bottom: 20px;
@@ -32,21 +33,35 @@
       }
       i {
         display: block;
-        font-size: 40px;
+        font-size: 35px;
         line-height: 1;
         padding-top: 18px;
         margin-bottom: 10px;
       }
     }
   }
-}
-
-.task-manage-content-iframe {
-  width: 100%;
-  border: none;
-  min-height: 300px;
+  .task-manage-content {
+    min-height: 200px;
+    position: relative;
+    .task-manage-content-iframe {
+      width: 100%;
+      border: none;
+      min-height: 300px;
+    }
+  }
 }
 
 .task-iframe-body {
   background-color: #fff;
+  padding: 0 20px;
+}
+
+.task-manage-header {
+  padding-top: 22px-15px;
+  padding-bottom: 28px;
+  font-size: 16px;
+  line-height: 30px;
+  .space {
+    margin-right: 50px;
+  }
 }

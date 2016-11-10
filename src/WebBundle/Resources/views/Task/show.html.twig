@@ -3,114 +3,132 @@
 {% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
 
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
-{% set bodyClass = "task-dashboard-body" %}
+{% set bodyClass = "task-dashboard-page js-task-dashboard-page" %}
 {% do css(['web.css']) %}
-{% do script(['libs/perfect-scrollbar.js','web/task/show.js']) %}
+{% do script(['libs/perfect-scrollbar.js','libs/ckeditor/ckeditor.js','web/task/index.js']) %}
 
 {% block body %}
 	{#<iframe id="task-detail" data-task-start-url="{{path('course_task_trigger', {id:task.id,courseId:task.courseId,eventName:'start'})}}" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
 	<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'完成'|trans}}</button>#}
-  <div class="dashboard-header">
+  <div class="dashboard-content" id="dashboard-content">
+    <div class="dashboard-header">
       <a class="back-link" href="javascript:;">
         <i class="es-icon es-icon-chevronleft"></i>
       </a>
-      当前任务：{{activity.title}} 
-  </div>
-  <div class="dashboard-content">
-    <iframe id="task-content-iframe" class="task-content-iframe" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}" style="width:100%;height:100%;border:0px">
-    </iframe>
-  </div>
-  <div class="dashboard-toolbar">
-    <ul class="dashboard-toolbar-nav">
-      <li><a href="javascript:;"><i class="es-icon es-icon-menu"></i><br/>课程</a></li>
-      <li><a href="javascript:;"><i class="es-icon es-icon-help"></i><br/>问答</a></li>
-      <li><a href="javascript:;"><i class="es-icon es-icon-edit"></i><br/>笔记</a></li>
-    </ul>
-  </div>
-  <div class="dashboard-panel">
-    <div class="dashboard-group task-group" id="task-group">
-      <ul class="task-list ">
-        {% for task in tasks %}
-          <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
-            <i class="es-icon 
-            {% if task.task_result is not defined  or task.task_result.status is empty %}
-               es-icon-lock 
-            {% elseif task.task_result.status == 'start' %}
-               es-icon-doing 
-            {% elseif task.task_result.status == 'finish' %}
-               es-icon-iccheckcircleblack24px 
-            {% endif %} 
-             left-menu color-primary"></i>
-            {% if task.isOptional %}
-            <span class="label label-success mrm">选修</span>
-            {% endif %}
-            <a class="text-overflow" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
-            
-            {% if task.task_result is not defined  or task.task_result.status is empty %}
-            <span class="right-menu mouse-leave">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm"></i></span> 
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-            {% else %}
-              <span class="right-menu">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activity_meta']['name']}}任务"></i></span>  
-            {% endif %}
-
-          </li>
-        {% endfor %}
-        {# <li class="task-item task-title">
-          <i class="es-icon es-icon-menu left-menu"></i>
-          <a class="text-overflow">第一基阶段：平面设计</a>
-        </li>
-        <li class="task-item task-title">
-          <a class="text-overflow">第一节：ps基本工具</a>
-        </li>
-        <li class="task-item">
-          <i class="es-icon es-icon-iccheckcircleblack24px  left-menu color-primary"></i>
-          <a class="text-overflow">任务1：移动工具</a>
-          <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm" data-toggle="tooltip" data-placement="top" title="图文课时"></i></span>
-        </li>
-        <li class="task-item active">
-          <i class="es-icon es-icon-doing left-menu"></i>
-          <a class="text-overflow">任务2：移动工具</a>
-          <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm"></i></span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li>
-        <li class="task-item mouse-control">
-          <i class="es-icon es-icon-lock left-menu"></i>
-          <a class="text-overflow">任务3：移动工具</a>
-          <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-          <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-        </li> #}
-      </ul>
+      任务1：{{activity.title}} 
+      <a class="btn-gray pull-right" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-help mrm"></i>任务完成条件</a>
     </div>
-    <div class="dashboard-group note-group hidden" id="note-group"></div>
+    <div class="dashboard-body">
+      <iframe id="task-content-iframe" class="task-content-iframe" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}" style="width:100%;height:100%;border:0px">
+      </iframe>
+    </div>
   </div>
-
+  <div class="dashboard-sidebar" id="dashboard-sidebar">
+    <div class="dashboard-sidebar-content">
+      <div class="dashboard-toolbar">
+        <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
+          <li class="active" data-pane="#task-pane">
+            <a href="javascript:;"> <i class="es-icon es-icon-menu"></i>
+              <br/>      
+              课程
+            </a>
+          </li>
+          <li class="" data-pane="#question-pane">
+            <a href="javascript:;"> <i class="es-icon es-icon-help"></i>
+              <br/>      
+              问答
+            </a>
+          </li>
+          <li class="" data-pane="#note-pane">
+            <a href="javascript:;">
+              <i class="es-icon es-icon-edit"></i>
+              <br/>      
+              笔记
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="dashboard-pane task-pane" id="task-pane" >
+        <ul class="task-list ">
+          {% for task in tasks %}
+            <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
+              <i class="es-icon 
+              {% if task.task_result is not defined  or task.task_result.status is empty %}
+                es-icon-lock 
+              {% elseif task.task_result.status == 'start' %}
+                es-icon-doing 
+              {% elseif task.task_result.status == 'finish' %}
+                es-icon-iccheckcircleblack24px 
+              {% endif %} 
+                left-menu"></i>
+              {% if task.isOptional %}
+              <span class="label label-success mrm">选修</span>
+              {% endif %}
+              <a class="text-overflow" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
+              {% if task.task_result is not defined  or task.task_result.status is empty %}
+              <span class="right-menu mouse-leave">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm"></i></span> 
+              <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+              {% else %}
+                <span class="right-menu">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activity_meta']['name']}}任务"></i></span>  
+              {% endif %}
+            </li>
+          {% endfor %}
+          {# <li class="task-item task-title">
+            <i class="es-icon es-icon-menu left-menu"></i>
+            <a class="text-overflow">第一基阶段：平面设计</a>
+          </li>
+          <li class="task-item task-title">
+            <a class="text-overflow">第一节：ps基本工具</a>
+          </li>
+          <li class="task-item">
+            <i class="es-icon es-icon-iccheckcircleblack24px  left-menu color-primary"></i>
+            <a class="text-overflow">任务1：移动工具</a>
+            <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm" data-toggle="tooltip" data-placement="top" title="图文课时"></i></span>
+          </li>
+          <li class="task-item active">
+            <i class="es-icon es-icon-doing left-menu"></i>
+            <a class="text-overflow">任务2：移动工具</a>
+            <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm"></i></span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li>
+          <li class="task-item mouse-control">
+            <i class="es-icon es-icon-lock left-menu"></i>
+            <a class="text-overflow">任务3：移动工具</a>
+            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
+            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+          </li> #}
+        </ul>
+      </div>
+      <div class="dashboard-pane note-pane hidden" id="question-pane">问答</div>
+      <div class="dashboard-pane note-pane hidden" id="note-pane">笔记</div>
+    </div>
 {% endblock %}

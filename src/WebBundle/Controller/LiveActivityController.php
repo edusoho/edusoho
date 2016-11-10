@@ -29,7 +29,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-
+        // var_dump($this->formatTimeFields($activity));exit();
         return $this->render('WebBundle:LiveActivity:modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity)
         ));
