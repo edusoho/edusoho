@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             Notify.success(Translator.trans('学习卡已使用，充值'+ coin +'虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。'), 1);
             window.location.href = target_url;
           } else {
-            Notify.danger(Translator.trans('失败！'), 1);
+            Notify.danger(Translator.trans('失败！'), 10);
         }
       });
     });
