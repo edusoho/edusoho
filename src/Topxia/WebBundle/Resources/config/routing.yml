@@ -692,9 +692,17 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
-course_manage_data:
-    pattern:  /course/{id}/manage/data
-    defaults: { _controller: TopxiaWebBundle:CourseManage:data }
+course_manage_course_dashboard:
+    pattern:  /course/{id}/manage/course/dashboard
+    defaults: { _controller: TopxiaWebBundle:CourseManage:courseDashboard }
+
+course_manage_lesson_dashboard:
+    pattern:  /course/{id}/manage/lesson/dashboard
+    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonDashboard }
+
+course_manage_lesson_learn_dashboard:
+    pattern:  /course/{id}/manage/lessonlearn/dashboard
+    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonlearnDashboard }
 
 #课程同步
 course_manage_course_sync:

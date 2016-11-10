@@ -42,21 +42,10 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
     {
         if (empty($userId)) {
             $user   = $this->getCurrentUser();
-
             $userId = $user->getId();
         }
-        $path     = $this->getFilePath($userId);
-        $isActive = false;
-
-        if (file_exists($path)) {
-            $isActive = true;
-        } else {
-            $activeUser = $this->getActiveUser($userId);
-            if (!empty($activeUser)) {
-                $isActive = $this->writeToFile($path, $activeUser);
-            }
-        }
-        return $isActive;
+        $activeUser = $this->getActiveUser($userId);
+        return !empty($activeUser);
     }
 
     public function analysisActiveUser($startTime, $endTime)

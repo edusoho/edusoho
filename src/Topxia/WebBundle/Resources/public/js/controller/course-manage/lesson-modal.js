@@ -507,5 +507,17 @@ define(function(require, exports, module) {
             var temp = val > multiple ? (multiple+0.5) : multiple;
             $(this).val(temp.toFixed(1));
         })
+
+        $('.js-free-lesson-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
     };
 });

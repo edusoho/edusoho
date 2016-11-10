@@ -3,11 +3,11 @@
 {% set side_nav = "price" %}
 {% set script_controller = 'classroombundle/controller/classroom/set-price' %}
 
-{% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'价格设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'基本信息'|trans}}</div>
+  <div class="panel-heading">{{'价格设置'|trans}}</div>
   <div class="panel-body">
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>

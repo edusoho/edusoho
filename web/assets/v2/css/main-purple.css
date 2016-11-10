@@ -9707,6 +9707,7 @@ textarea {
 }
 .lesson-list .item-lesson {
   margin-left: 20px;
+  cursor: move;
 }
 .lesson-list .item-line {
   border-bottom: 2px solid #ccc;
@@ -9842,6 +9843,27 @@ textarea {
   font-size: 18px;
   padding: 15px 10px 5px 5px;
   cursor: pointer;
+}
+.dashboard-panel .course-dashboard-ul {
+  height: 80px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.dashboard-panel .course-dashboard-ul li {
+  width: 33%;
+  float: left;
+  padding: 0 5px;
+  text-align: center;
+}
+.dashboard-panel .course-dashboard-ul li .title {
+  font-size: 14px;
+  color: #333;
+  margin-top: 0;
+}
+.dashboard-panel .course-dashboard-ul li .number {
+  font-weight: 500;
+  font-size: 24px;
 }
 .class-bg-layer {
   position: absolute;
