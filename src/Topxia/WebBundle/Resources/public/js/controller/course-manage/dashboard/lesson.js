@@ -28,8 +28,10 @@ define(function(require, exports, module) {
                         + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
                     var html = params[0].name + '</br>';
-                    html += circle1+params[0].seriesName+' : '+params[0].value+'</br>';
-                    html += circle2+params[1].seriesName+' : '+params[1].value+'</br>';
+                    var val1 = isNaN(learningNum)? '-' : learningNum;
+                    var val2 = isNaN(learnedNum)? '-' : learnedNum;
+                    html += circle1+params[0].seriesName+' : '+val1+'</br>';
+                    html += circle2+params[1].seriesName+' : '+val2+'</br>';
                     html += circle3+'完成率 : '+rate+'%';
                     return html;
                 },
