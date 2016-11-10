@@ -17,10 +17,17 @@ define(function(require, exports, module) {
                         rate = (params[0].value/params[1].value).toFixed(3) * 100;
                     }
 
+                    var circle1 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
+                    var circle2 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
+                    var circle3 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
+
                     var html = params[0].name + '</br>';
-                    html += '完成人数 : '+params[0].value+'</br>';
-                    html += '学习人数 : '+params[1].value+'</br>';
-                    html += '完成率 : '+rate+'%';
+                    html += circle1+params[0].seriesName+' : '+params[0].value+'</br>';
+                    html += circle2+params[1].seriesName+' : '+params[1].value+'</br>';
+                    html += circle3+'完成率 : '+rate+'%';
                     return html;
                 },
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -28,7 +35,7 @@ define(function(require, exports, module) {
                 }
             },
             legend: {
-                data: ['完成人数', '学习人数']
+                data: ['已学完', '学习中']
             },
             grid: {
                 left: '3%',
@@ -37,6 +44,7 @@ define(function(require, exports, module) {
                 containLabel: true
             },
             xAxis:  {
+                name: '人',
                 type: 'value',
                 minInterval: 1
             },
@@ -52,7 +60,7 @@ define(function(require, exports, module) {
             ],
             series: [
                 {
-                    name: '完成人数',
+                    name: '已学完',
                     type: 'bar',
                     stack: '总量',
                     label: {
@@ -63,13 +71,13 @@ define(function(require, exports, module) {
                     },
                     itemStyle: {
                         normal: {
-                            color: '#090'
+                            color: '#4CAF50'
                         }
                     },
                     data: $container.data('finishedNum')
                 },
                 {
-                    name: '学习人数',
+                    name: '学习中',
                     type: 'bar',
                     stack: '总量',
                     label: {
@@ -80,7 +88,7 @@ define(function(require, exports, module) {
                     },
                     itemStyle: {
                         normal: {
-                            color: '#668ed6'
+                            color: '#FFC108'
                         }
                     },
                     data: $container.data('learnNum')

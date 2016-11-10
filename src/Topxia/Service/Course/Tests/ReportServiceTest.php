@@ -11,20 +11,23 @@ class ReportServiceTest extends BaseTestCase
     public function testSummary()
     {
         $fakeCourse = array(
-            'studentNum' => 1,
-            'noteNum' => 2,
+            'studentNum' => 100,
+            'noteNum' => 10,
             'finishedNum' => 100,//完成人数
             'askNum' => 20,
             'discussionNum' => 20,
-            'finishedRate' => 10000,
+            'finishedRate' => 100,
         );
         $this->mock('Course.CourseService', array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
-            array('functionName' => 'searchMemberCount', 'runTimes' => 1, 'returnValue' => 100)
+            array('functionName' => 'searchMemberCount', 'runTimes' => 2, 'returnValue' => 100)
         ));
 
         $this->mock('Course.ThreadService', array(
             array('functionName' => 'searchThreadCount', 'runTimes' => 2, 'returnValue' => 20)
+        ));
+
+        $this->mock('Course.NoteService', array(
+            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 10)
         ));
 
         $summary = $this->getReportService()->summary(1);
@@ -34,14 +37,35 @@ class ReportServiceTest extends BaseTestCase
 
     public function testGetLateMonthLearndData()
     {
-        $students = array(
-            array('createdTime' => 100, 'isLearned' => 1, 'finishedTime' => 100),
-            array('createdTime' => 1477311115, 'isLearned' => 1, 'finishedTime' => 1477311115),
-            array('createdTime' => 1477311115, 'isLearned' => 1, 'finishedTime' => 1477311115),
-            array('createdTime' => 1477311115, 'isLearned' => 1, 'finishedTime' => 1477311115),
+        $fakeMembers = array(
+            array('createdTime' => strtotime(date('- 13 days')), 'finishedTime' => strtotime(date('- 13 days')), 'isLearned' => 1),
+            array('createdTime' => strtotime(date('- 10 days')), 'finishedTime' => strtotime(date('- 10 days')), 'isLearned' => 1),
+            array('createdTime' => strtotime(date('- 6 days')), 'finishedTime' => strtotime(date('- 6 days')), 'isLearned' => 1),
+            array('createdTime' => strtotime(date('- 3 days')), 'finishedTime' => strtotime(date('- 3 days')), 'isLearned' => 1),
         );
         $this->mock('Course.CourseService', array(
-            array('functionName' => 'findCourseStudents', 'runTimes' => 1, 'returnValue' => $students)
+            array('functionName' => 'searchMemberCount', 'runTimes' => 2, 'returnValue' => 100),
+            array('functionName' => 'searchMembers', 'runTimes' => 1, 'returnValue' => $fakeMembers)
+        ));
+
+        $fakeThreads = array(
+            array('createdTime' => strtotime(date('- 13 days'))),
+            array('createdTime' => strtotime(date('- 3 days'))),
+            array('createdTime' => strtotime(date('- 1 days'))),
+        );
+        $this->mock('Course.ThreadService', array(
+            array('functionName' => 'searchThreadCount', 'runTimes' => 2, 'returnValue' => 20),
+            array('functionName' => 'searchThreads', 'runTimes' => 2, 'returnValue' => $fakeThreads)
+        ));
+
+        $fakeNotes = array(
+            array('createdTime' => strtotime(date('- 13 days'))),
+            array('createdTime' => strtotime(date('- 3 days'))),
+            array('createdTime' => strtotime(date('- 1 days'))),
+        );
+        $this->mock('Course.NoteService', array(
+            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 20),
+            array('functionName' => 'searchNotes', 'runTimes' => 1, 'returnValue' => $fakeNotes)
         ));
 
         $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData(1);
