@@ -5,6 +5,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Common\AppConnectionFactory;
 
 class ServiceKernel
 {
@@ -28,6 +29,7 @@ class ServiceKernel
     protected $currentUser;
 
     protected $pool = array();
+    protected $connection;
 
     protected $classMaps = array();
 
@@ -212,9 +214,15 @@ class ServiceKernel
 
     public function getConnection()
     {
-        if (is_null($this->connection)) {
+        if ($this->connection) {
+            return $this->connection;
+        }
+
+        if (is_null($this->connectionFactory)) {
             throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
         }
+
+        $this->connection = $this->connectionFactory->getConnection();
 
         return $this->connection;
     }
@@ -223,6 +231,13 @@ class ServiceKernel
     {
         $this->connection = $connection;
         return $this;
+    }
+
+    public function setConnectionFactory(ConnectionFactory $factory)
+    {
+        if(empty($this->connection)){
+            $this->connectionFactory = $factory;
+        }
     }
 
     public function createService($name)
@@ -239,8 +254,8 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
-            $dao   =new $class();
-            $dao->setConnection($this->getConnection());
+            $dao   = new $class();
+            $dao->setConnectionFactory($this->connectionFactory);
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
         }
