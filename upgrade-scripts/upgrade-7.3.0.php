@@ -41,6 +41,26 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_member', 'finishedTime')) {
             $connection->exec("ALTER TABLE `course_member` ADD `finishedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '完成课程时间' AFTER `isLearned`");
         }
+
+        if (!$this->isTableExist('subtitle')) {
+            $connection->exec("CREATE TABLE `subtitle` (
+                `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `name` varchar(255) NOT NULL COMMENT '字幕名称',
+                `subtitleId` int(10) UNSIGNED NOT NULL COMMENT 'subtitle的uploadFileId',
+                `mediaId` int(10) UNSIGNED NOT NULL COMMENT 'video/audio的uploadFileId',
+                `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+                `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
+                PRIMARY KEY (`id`)
+            ) COMMENT='字幕关联表';");
+        }
+
+        if ($this->isFieldExist('upload_files', 'type')) {
+            $connection->exec("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+        }
+
+        if ($this->isFieldExist('upload_file_inits', 'type')) {
+            $connection->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+        }
     }
 
     protected function isFieldExist($table, $filedName)
