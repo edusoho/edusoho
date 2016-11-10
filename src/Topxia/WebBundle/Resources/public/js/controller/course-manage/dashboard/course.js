@@ -35,7 +35,10 @@ define(function(require, exports, module) {
                     name: '完课率',
                     type: 'value',
                     minInterval: 1,
-                    max: 100
+                    max: 100,
+                    axisLabel: {
+                        formatter: '{value}%' 
+                    },
                 }
             ],
             series: [
