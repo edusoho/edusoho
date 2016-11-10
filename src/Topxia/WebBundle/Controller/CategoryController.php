@@ -23,6 +23,8 @@ class CategoryController extends BaseController
     {
         // list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
 // var_dump($tags);exit();
+        // var_dump($tags);exit;
+
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
             // 'rootCategories' => $rootCategories,
             // 'categories'     => $categories,

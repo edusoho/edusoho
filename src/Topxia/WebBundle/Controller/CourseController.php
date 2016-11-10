@@ -14,18 +14,25 @@ class CourseController extends CourseBaseController
         $categoryArray = array();
         $levels        = array();
 
-        // var_dump($conditions);exit();
+        if (!empty($tags)) {
+            $tags = explode(',', $tags);
+        } else {
+            $tags = array();
+        }
 
-        // $tags = array();
+        if (!empty($conditions['tag'])) {
+            if (in_array($conditions['tag'], $tags)) {
+                $key = array_search($conditions['tag'], $tags);
+                unset($tags[$key]);
+            } else {
+                $tags[] = $conditions['tag'];
+            }
+        }
 
-        // if (!empty($conditions['tags'])) {
-        //     $conditions['tags'] = ArrayToolkit::column($tags, 'id');
-        // } else {
-        //     $tags[] = $tag;
-        // }
+        $conditions['tags'] = $tags;
 
-        // unset($conditions['tag']);
-
+        unset($conditions['tag']);
+var_dump($conditions);exit();
         $conditions['code'] = $category;
 
         if (!empty($conditions['code'])) {
