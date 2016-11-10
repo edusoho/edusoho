@@ -45,8 +45,14 @@ const onSelectFile = file => {
         $("#minute").val(minute);
         $("#second").val(second);
     }
-
-    console.log('action triggered', onSelectFile);
+    $("#ext_mediaSource").val(file.source);
+    if (file.source == 'self') {
+        $("#ext_mediaId").val(file.id);
+        $("#ext_mediaUri").val('');
+    } else {
+        $("#ext_mediaId").val('');
+        $("#ext_mediaUri").val(file.uri);
+    }
 }
 
 fileChooser.on('select', onSelectFile);

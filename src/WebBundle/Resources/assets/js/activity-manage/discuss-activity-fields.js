@@ -13,11 +13,9 @@ class Discuss{
         validator = $step2_form.validate({
             onkeyup: false,
             rules: {
+                title:'required',
                 content: 'required',
             },
-            messages: {
-                content:"请输入说明"
-            }
         });
     }
 }

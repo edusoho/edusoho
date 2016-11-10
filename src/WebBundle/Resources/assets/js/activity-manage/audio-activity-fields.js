@@ -38,9 +38,15 @@ _inItStep2form();
 
 const fileChooser = new FileChooser();
 
-const action = data => {
-    console.log('action triggered', data);
+const onSelectFile = file => {
+    if (file.length && file.length > 0) {
+        let minute = parseInt(file.length / 60);
+        let second = Math.round(file.length % 60);
+        $("#minute").val(minute);
+        $("#second").val(second);
+    }
+    $("#ext_mediaId").val(file.id);
 }
 
-fileChooser.on('select', action);
+fileChooser.on('select', onSelectFile);
 

@@ -16,7 +16,7 @@ class LiveActivity extends Migration
           `liveId` int(11) NOT NULL COMMENT '直播间ID',
           `liveProvider` int(11) NOT NULL COMMENT '直播供应商',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     }
 
     /**

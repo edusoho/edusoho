@@ -1,6 +1,6 @@
 {% extends 'WebBundle:Activity:content-layout.html.twig' %}
 
-{% do script(['web/activity/ppt-show.js']) %}
+{% do script(['web/activity/ppt/index.js']) %}
 
 {% block content %}
 <div id="activity-ppt-content" data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>

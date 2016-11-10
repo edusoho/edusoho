@@ -1,4 +1,4 @@
-import FileChooser from '../../common/file-choose';
+import FileChooser from './../../../common/file-choose';
 
 let onConditionTimeType = () => {
   var $step3_form = $("#step3-form");
