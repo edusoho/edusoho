@@ -24,14 +24,14 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert notification error.');
         }
-        $this->clearCache();
+        $this->clearCached();
         return $this->getNotification($this->getConnection()->lastInsertId());
     }
 
     public function updateNotification($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $this->getNotification($id);
     }
 
@@ -80,7 +80,7 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
     public function deleteNotification($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $result;
     }
 

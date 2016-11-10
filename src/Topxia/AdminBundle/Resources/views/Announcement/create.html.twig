@@ -43,7 +43,9 @@
       <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if announcement|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
     </div>
   </div>
-
+  <div class="alert alert-info">
+    <strong>1.公告将显示在网站首页顶部导航上方</strong><br><strong>2.最多可显示3条最新的进行中的通告</strong>
+  </div>
   {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode:announcement.orgCode|default(null), modal: 'modal'} %}
   
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

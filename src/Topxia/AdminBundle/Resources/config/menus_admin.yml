@@ -377,7 +377,7 @@ admin:
                     name: 小组话题管理
                     children:
                         admin_operation_group_manage:
-                            name: 小组话题管理
+                            name: 小组管理
                             disable: true
                             router_name: admin_group
                             children:
@@ -387,7 +387,7 @@ admin:
                                     group: topBtn
                                     blank: 1
                         admin_operation_group_thread:
-                            name: 话题管理
+                            name: 小组话题管理
                             disable: true
                             router_name: admin_groupThread
                 admin_operation_invite:
@@ -701,7 +701,7 @@ admin:
                             name: 小组
                             disable: true
                         admin_invite_set:
-                            name: '邀请码设置'
+                            name: '邀请注册设置'
                             disable: true
                 admin_setting_finance:
                     name: 账务设置
