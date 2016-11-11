@@ -360,7 +360,7 @@ admin:
                             router_name: admin_article
                             children:
                                 admin_operation_article_create:
-                                    name: '添加栏目'
+                                    name: '添加资讯'
                                     router_name: admin_article_create
                                     group: topBtn
                         admin_operation_article_category:

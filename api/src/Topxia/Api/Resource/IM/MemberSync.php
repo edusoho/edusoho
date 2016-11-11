@@ -56,13 +56,14 @@ class MemberSync extends BaseResource
     {
         $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
 
-        $this->syncTargetConversations($user, ArrayToolkit::column($courseIds, 'courseId'), 'course');
+        $this->syncTargetConversations($user, $courseIds, 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
     }
 
     protected function syncClassroomConversations($user)
     {
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
+        $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
 
         $this->syncTargetConversations($user, $classroomIds, 'classroom');
         $this->syncClassroomConversationMembers($user, $classroomIds);
@@ -124,9 +125,9 @@ class MemberSync extends BaseResource
 
         $cnt = 0;
         foreach ($targetIds as $id) {
-            if (array_key_exists($id, $toCreate)) {
+            if (in_array($id, $toCreate)) {
                 // 防止请求过于频繁造成服务器压力过大
-                if (++$cnt > MAX_CREATION_PER_TIME) {
+                if (++$cnt > MemberSync::MAX_CREATION_PER_TIME) {
                     break;
                 }
                 $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));

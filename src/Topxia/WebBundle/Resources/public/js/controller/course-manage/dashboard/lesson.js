@@ -13,14 +13,26 @@ define(function(require, exports, module) {
                     var rate = 0;
 
                     //求完成率
+                    var learningNum = parseInt(params[1].value);
+                    var learnedNum = parseInt(params[0].value);
+                    var totalNum = learnedNum + learningNum;
                     if (params[1].value > 0) {
-                        rate = (params[0].value/params[1].value).toFixed(3) * 100;
+                        rate = ((learnedNum/totalNum) * 100).toFixed(1);
                     }
 
+                    var circle1 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
+                    var circle2 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
+                    var circle3 = '<span style="display:inline-block;margin-right:5px;'
+                        + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
+
                     var html = params[0].name + '</br>';
-                    html += '完成人数 : '+params[0].value+'</br>';
-                    html += '学习人数 : '+params[1].value+'</br>';
-                    html += '完成率 : '+rate+'%';
+                    var val1 = isNaN(learnedNum)? '-' : learnedNum;
+                    var val2 = isNaN(learningNum)? '-' : learningNum;
+                    html += circle1+params[0].seriesName+' : '+val1+'</br>';
+                    html += circle2+params[1].seriesName+' : '+val2+'</br>';
+                    html += circle3+'完成率 : '+rate+'%';
                     return html;
                 },
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -28,7 +40,7 @@ define(function(require, exports, module) {
                 }
             },
             legend: {
-                data: ['完成人数', '学习人数']
+                data: ['已学完', '学习中']
             },
             grid: {
                 left: '3%',
@@ -37,6 +49,7 @@ define(function(require, exports, module) {
                 containLabel: true
             },
             xAxis:  {
+                name: '人',
                 type: 'value',
                 minInterval: 1
             },
@@ -52,35 +65,38 @@ define(function(require, exports, module) {
             ],
             series: [
                 {
-                    name: '完成人数',
+                    name: '已学完',
                     type: 'bar',
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
+                            show: false,
                             position: 'insideRight'
                         }
                     },
                     itemStyle: {
                         normal: {
-                            color: '#090'
+                            color: '#4CAF50'
                         }
                     },
                     data: $container.data('finishedNum')
                 },
                 {
-                    name: '学习人数',
+                    name: '学习中',
                     type: 'bar',
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
-                            position: 'insideRight'
+                            show: false,
+                            position: 'insideRight',
+                            formatter: function (params) {
+                                return params.value == 0 ? '':params.value;
+                            }
                         }
                     },
                     itemStyle: {
                         normal: {
-                            color: '#668ed6'
+                            color: '#FFC108'
                         }
                     },
                     data: $container.data('learnNum')
@@ -104,8 +120,8 @@ define(function(require, exports, module) {
             var length = $container.data('lesson-num');
             var maxHeight = 30 * length;
 
-            if (maxHeight < 400) {
-                return 400;
+            if (maxHeight < 200) {
+                return 200;
             } else {
                 return maxHeight;
             }
