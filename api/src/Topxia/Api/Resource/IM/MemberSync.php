@@ -223,7 +223,7 @@ class MemberSync extends BaseResource
         }
 
         $this->logger = new Logger('MemberSync');
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/member_sync.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }
