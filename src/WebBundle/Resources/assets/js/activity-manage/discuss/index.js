@@ -1,9 +1,12 @@
+import { initEditor } from '../editor'
+
 class Discuss{
     constructor(props) {
-        this.Init();
+        this._init();
     }
 
-    Init() {
+    _init() {
+        initEditor($('[name="content"]'));
         this._inItStep2form();
     }
 

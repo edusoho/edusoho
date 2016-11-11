@@ -4,10 +4,10 @@
 {% block activity_content %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
-      <label for="content" class="style1">{{ '说明'|trans }}</label>
+      <label for="text-content-field" class="style1">{{ '说明'|trans }}</label>
     </div>
-    <div class="col-xs-9 controls">
-      <textarea class="form-control" id="content" name="content" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+    <div class="col-xs-10">
+      <textarea class="form-control type-hidden" id="text-content-field" name="content" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
     >{{ activity.content|default('') }}</textarea>
     </div>
   </div>
@@ -18,6 +18,6 @@
     <div class="col-xs-2 control-label">
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-9 controls">发表或者回复一个话题</div>
+    <div class="col-xs-10"><p class="form-control-static">发表或者回复一个话题</p></div>
   </div>
 {% endblock %}

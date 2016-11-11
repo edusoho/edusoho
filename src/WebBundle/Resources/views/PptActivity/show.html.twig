@@ -1,8 +1,8 @@
-{% extends 'WebBundle:Activity:content-layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% do script(['web/activity/ppt/index.js']) %}
 
-{% block content %}
+{% block body %}
   <div id="activity-ppt-content" data-event-url=""
        data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
@@ -33,7 +33,7 @@
           <span class="glyphicon glyphicon-fullscreen"></span>
         </a>
         <div class="goto-index-input">
-          <input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;
+          <input type="text" class="goto-page form-control input-sm" value="1">&nbsp;/&nbsp;
           <span class="total"></span>
         </div>
       </div>
