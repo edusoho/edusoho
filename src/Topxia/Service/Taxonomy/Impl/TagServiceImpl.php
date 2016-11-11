@@ -59,7 +59,7 @@ class TagServiceImpl extends BaseService implements TagService
             $tagRelation['name'] = $tagGroup['name'];
         }
 
-        return ArrayToolkit::index($tagRelations, 'tagId');
+        return ArrayToolkit::group($tagRelations, 'tagId');
     }
 
     public function findTagsByGroupId($groupId)

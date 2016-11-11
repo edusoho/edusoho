@@ -11,7 +11,6 @@ class CourseController extends CourseBaseController
     public function exploreAction(Request $request, $category, $tag)
     {
         $conditions    = $request->query->all();
-        $subCategories = array();
         $categoryArray = array();
         $levels        = array();
 
@@ -193,7 +192,6 @@ class CourseController extends CourseBaseController
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
             'tag'                      => $tag,
-            'subCategories'            => $subCategories,
             'subCategory'              => $subCategory
         ));
     }

@@ -207,16 +207,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($conditions['creator']);
         }
 
-        // if (isset($conditions['categoryId'])) {
-        //     $conditions['categoryIds'] = array();
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
 
-        //     if (!empty($conditions['categoryId'])) {
-        //         $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-        //         $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
-        //     }
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
 
-        //     unset($conditions['categoryId']);
-        // }
+            unset($conditions['categoryId']);
+        }
 
         if (isset($conditions['nickname'])) {
             $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
