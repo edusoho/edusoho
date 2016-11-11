@@ -72,27 +72,13 @@ class Editor {
 
         let $this = $(event.currentTarget).attr('disabled','disabled');
         let length = this._getLength();
-        let postData = $('.js-hidden-data')
-            .map((index, node) => {
-                let name = $(node).attr('name');
-                let value = $(node).val();
-                return {name: name, value: value}
-            })
-            .filter((index, obj) => {
-                return obj.value !== '' || obj.value !== null;
-            })
-            .get()
-            .concat($('#step1-form').serializeArray())
+        let postData = $('#step1-form').serializeArray()
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
-            .concat(this.$iframe_body.find("#step3-form").serializeArray())
-            .concat([
-                {name: 'mediaType', value: this.type},
-                {name: 'length', value: length}
-            ]);
+            .concat(this.$iframe_body.find("#step3-form").serializeArray());
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                //location.reload();
+                location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
@@ -129,18 +115,20 @@ class Editor {
     }
 
     _initIframe() {
-        let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
+        let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"></iframe>';
         this.$task_manage_content.html(html).show(); 
         this.$frame = $('#'+this.iframe_name);
+        // this.$frame.iFrameResize([{log: true}]);
         let loadiframe = () => {
             this.loaded = true;
             let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
-            this.$frame.height(this.$iframe_body.height());
+            // this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
             this.$iframe_body.find("#step2-form").data('validator', validator);
             this.$iframe_body.find("#step3-form").data('validator', validator); 
+
         };
         this.$frame.load(loadAnimation(loadiframe,this.$task_manage_content));
     }

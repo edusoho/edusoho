@@ -1,10 +1,10 @@
 class Live {
-	constructor(props) {
+  constructor(props) {
         this._init();
     }
     _init(){
         this._dateTimePicker();
-    	this._initStep2Form();
+      this._initStep2Form();
     }
     _initStep2Form() {
         var $step2_form = $("#step2-form");
@@ -16,16 +16,16 @@ class Live {
                     required: true,
                 },
                 startTime: {
-                	required: true,
-                	date: true
+                  required: true,
+                  date: true
                 },
                 length: {
-                	required: true,
-                	digits: true,
-                	max: 300
+                  required: true,
+                  digits: true,
+                  max: 300
                 },
                 remark: {
-                	maxlength: 1000
+                  maxlength: 1000
                 },
             },
         });

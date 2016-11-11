@@ -10,8 +10,6 @@
     {% endfor %}
   ];
 
-  window.Xxxx = Array();
-
   var Loader = (function () {
     var loadScript = function (paths, index) {
       var path = paths[index];
@@ -39,7 +37,7 @@
       };
 
       script.src = path;
-      document.body.appendChild(script);
+      document.getElementById('modal').appendChild(script);
     };
 
     return {
