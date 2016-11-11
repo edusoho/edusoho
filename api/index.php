@@ -40,7 +40,7 @@ $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
-$serviceKernel->setConnectionFactory(new AppConnectionFactory($kernel->getContainer()));
+$serviceKernel->setConnectionFactory(new AppConnectionFactory());
 
 include __DIR__.'/src/functions.php';
 

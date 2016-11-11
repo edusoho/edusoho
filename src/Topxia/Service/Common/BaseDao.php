@@ -311,7 +311,11 @@ abstract class BaseDao
     {
         $keys = 'count';
         foreach ($conditions as $key => $value) {
-            $keys = $key.":{$key}:{$value}";
+            if(is_array($value)) {
+                $keys .= ":{$key}:".implode('-', $value);
+            } else {
+                $keys .= ":{$key}:{$value}";
+            }
         }
         return $keys;
     }

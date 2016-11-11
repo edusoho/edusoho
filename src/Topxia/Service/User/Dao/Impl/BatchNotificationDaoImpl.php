@@ -25,7 +25,7 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert batchNotification error.');
         }
-        $this->clearCache();
+        $this->clearCached();
         return $this->getBatchNotification($this->getConnection()->lastInsertId());
     }
 
@@ -47,14 +47,14 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
     public function deleteBatchNotification($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $result;
     }
 
     public function updateBatchNotification($id, $batchNotification)
     {
         $this->getConnection()->update($this->table, $batchNotification, array('id' => $id));
-        $this->clearCache();
+        $this->clearCached();
         return $this->getBatchNotification($id);
     }
 
