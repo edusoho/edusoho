@@ -10,13 +10,13 @@
       </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
   </div>
-  
-  {% if categorySubs|default(null) %}
+
+  {% if subCategories|default(null) %}
     <div class="tabs-group" style="height: 50px;">
      <div class="title"></div>
       <ul class="content clearfix">
-        {% for Subcategories in sub %}
-          <li class="{% if sub.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:sub.code, tags:tags|join(','), filter:filter,orderBy:orderBy}) }}">{{ sub.name }}</a></li>
+        {% for subCategory in subCategories %}
+          <li class=""><a class="nav-link" href="">{{ subCategory.name }}</a></li>
         {% endfor %}
       </ul>
     </div>

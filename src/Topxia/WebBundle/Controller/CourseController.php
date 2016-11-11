@@ -11,6 +11,8 @@ class CourseController extends CourseBaseController
     public function exploreAction(Request $request, $category, $tags)
     {
         $conditions    = $request->query->all();
+        // $subCategory   = '';
+        // $subCategories = array();
         $categoryArray = array();
         $levels        = array();
 
@@ -33,27 +35,29 @@ class CourseController extends CourseBaseController
 
         unset($conditions['tag']);
 
-        $category = $this->getCategoryService()->getCategoryByCode($category);
 
-        if (isset($category['parentId'])) {
-            $subcategory = $category;
-            
-        }
-
-        $subcategories = $this->getCategoryService()->findAllCategoriesByParentId($category['id']);
-
-        // if ($category['parentId'] == 0) {
-        //     $categorySubs = $this->getCategoryService()->findAllCategoriesByParentId($category['parentId']);
+        // if (isset($subCategory)) {
+        //     $conditions['code'] = $subCategory;
+        // } else {
+        //     $conditions['code'] = $category;
         // }
 
         $conditions['code'] = $category;
 
         if (!empty($conditions['code'])) {
             $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
+            // $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            // $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
+            // $conditions['categoryIds'] = $categoryIds;
+            $conditions['categoryId'] = $categoryArray['id'];
         }
+
+        // if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
+        //     $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
+        // }
+        // if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
+        //     $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
+        // }
 
         unset($conditions['code']);
 
@@ -106,6 +110,7 @@ class CourseController extends CourseBaseController
 
         $conditions['parentId'] = 0;
         $conditions['status']   = 'published';
+
         $paginator              = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
@@ -167,6 +172,12 @@ class CourseController extends CourseBaseController
             $categories = array();
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+
+            foreach ($categories as $id => $c) {
+                if ($categories[$id]['parentId'] != '0') {
+                    unset($categories[$id]);
+                }
+            }
         }
 
         if (!$categoryArray) {
@@ -211,7 +222,8 @@ class CourseController extends CourseBaseController
             'levels'                   => $levels,
             'tagGroups'                => $tagGroups,
             'tags'                     => $tags,
-            'subcategories'            => $subcategories
+            // 'subCategories'            => $subCategories,
+            // 'subCategory'              => $subCategory
         ));
     }
 

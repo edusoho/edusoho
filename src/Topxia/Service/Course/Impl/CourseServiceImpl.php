@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
-
+     
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
@@ -147,7 +147,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     protected function _prepareCourseConditions($conditions)
-    {
+    {   
         $conditions = array_filter($conditions, function ($value) {
             if ($value == 0) {
                 return true;
@@ -207,16 +207,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($conditions['creator']);
         }
 
-        if (isset($conditions['categoryId'])) {
-            $conditions['categoryIds'] = array();
+        // if (isset($conditions['categoryId'])) {
+        //     $conditions['categoryIds'] = array();
 
-            if (!empty($conditions['categoryId'])) {
-                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
-            }
+        //     if (!empty($conditions['categoryId'])) {
+        //         $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+        //         $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+        //     }
 
-            unset($conditions['categoryId']);
-        }
+        //     unset($conditions['categoryId']);
+        // }
 
         if (isset($conditions['nickname'])) {
             $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);

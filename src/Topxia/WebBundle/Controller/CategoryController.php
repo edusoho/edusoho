@@ -20,12 +20,16 @@ class CategoryController extends BaseController
 
     public function treeNavAction(Request $request, $tagGroups, $tags, $categories, $category, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
+        // var_dump($subCategories);
+        // var_dump($subCategory);exit();
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
+            'categories'        => $categories,
             'selectedCategory'  => $category,
+            // 'subCategories'     => $subCategories,
+            // 'subCategory'       => $subCategory,
             'path'              => $path,
             'filter'            => $filter,
             'orderBy'           => $orderBy,
-            'categories'        => $categories,
             'tagGroups'         => $tagGroups,
             'tags'              => $tags
         ));
