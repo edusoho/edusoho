@@ -153,8 +153,12 @@ class MemberSync extends BaseResource
     {
         $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
         foreach ($targetIds as $id) {
-            $this->debug('quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
-            $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
+            try {
+                $this->debug('quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
+                $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
+            } catch (\Exception $e) {
+                $this->error('quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id.', error = '.$e->getMessage());
+            }
         }
     }
 
@@ -186,6 +190,14 @@ class MemberSync extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function error($message)
+    {
+        if (is_array($message)) {
+            $message = json_encode($message);
+        }
+        $this->getLogger()->error($message);
     }
 
     protected function debug($message)
