@@ -34,12 +34,13 @@
   {% set currentLevelId = filter.currentLevelId|default('all')%}
 
 
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{tagGroups:tagGroups, tags:tags, categories:categories, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
-
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{subCategories:subCategories, subCategory:subCategory, tagGroups:tagGroups, tag:tag, categories:categories, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
+<!-- 
+{category:selectedCategory, subCategory:selectedSubCategory, tag:tag.id, tag:tag, filter:filter, orderBy:orderBy} -->
 
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
-      <li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %}active{% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %}active{% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">{{'推荐'|trans}}</a></li>
+      <li><a href="{{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %}active{% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %}active{% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">{{'推荐'|trans}}</a></li>
     </ul>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
@@ -59,17 +60,17 @@
       <label class="checkbox-inline">
         <input type="checkbox" {% if type == 'live'%}checked="true" {% endif %} id="live" value="
         {% if type == 'all'%}
-          {{ path('course_explore', {category:category, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_explore', {category:category, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}"> {{'直播课程'|trans}}
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
-          {{ path('course_explore', {category:category, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_explore', {category:category, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category, subCategory:subCategory, tag:tag, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
         "> {{'免费课程'|trans}}
       </label>

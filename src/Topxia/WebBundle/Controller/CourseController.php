@@ -8,56 +8,54 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
-    public function exploreAction(Request $request, $category, $tags)
+    public function exploreAction(Request $request, $category, $tag)
     {
         $conditions    = $request->query->all();
-        // $subCategory   = '';
-        // $subCategories = array();
+        $subCategories = array();
         $categoryArray = array();
         $levels        = array();
 
-        if (!empty($tags)) {
-            $tags = explode(',', $tags);
-        } else {
-            $tags = array();
-        }
-
-        if (!empty($conditions['tag'])) {
-            if (in_array($conditions['tag'], $tags)) {
-                $key = array_search($conditions['tag'], $tags);
-                unset($tags[$key]);
+        if (isset($conditions['selectedTag'])) {
+            if ($conditions['selectedTag'] == $tag) {
+                unset($conditions['tagId']);
+                $tag = '';
             } else {
-                $tags[] = $conditions['tag'];
+                $conditions['tagId'] = $conditions['selectedTag'];
+                $tag = $conditions['selectedTag'];
             }
         }
 
-        $conditions['tags'] = $tags;
 
-        unset($conditions['tag']);
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
 
-
-        // if (isset($subCategory)) {
-        //     $conditions['code'] = $subCategory;
-        // } else {
-        //     $conditions['code'] = $category;
-        // }
-
-        $conditions['code'] = $category;
+        if (!empty($conditions['subCategory'])) {
+            $conditions['code'] = $subCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
 
         if (!empty($conditions['code'])) {
             $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            // $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            // $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            // $conditions['categoryIds'] = $categoryIds;
-            $conditions['categoryId'] = $categoryArray['id'];
+
+            $categoryArrays = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
+
+            if (!empty($categoryArrays)) {
+                $categoryIds = ArrayToolkit::column($categoryArrays, 'id');
+
+                $conditions['categoryIds'] = $categoryIds;
+
+                $conditions['categoryIds'][] = $conditions['code'];
+            } else {
+                $conditions['categoryId'] = $categoryArray['id'];
+            }
         }
 
-        // if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
-        //     $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
-        // }
-        // if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
-        //     $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
-        // }
+        if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
+            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
+        }
+        if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
+            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
+        }
 
         unset($conditions['code']);
 
@@ -221,9 +219,9 @@ class CourseController extends CourseBaseController
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
             'tagGroups'                => $tagGroups,
-            'tags'                     => $tags,
-            // 'subCategories'            => $subCategories,
-            // 'subCategory'              => $subCategory
+            'tag'                      => $tag,
+            'subCategories'            => $subCategories,
+            'subCategory'              => $subCategory
         ));
     }
 
