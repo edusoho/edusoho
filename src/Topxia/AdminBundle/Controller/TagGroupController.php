@@ -25,18 +25,6 @@ class TagGroupController extends BaseController
                 $fields['tagNum'] = count($fields['tagIds']);
             }
 
-            if (isset($fields['scope'])) {
-                foreach ($fields['scope'] as &$scope) {
-                    if ($scope == 'classroom') {
-                        $scope = '班级筛选';
-                    }
-
-                    if ($scope == 'course') {
-                        $scope = '课程筛选';
-                    }
-                }
-            }
-
             $tagGroup = $this->getTagService()->addTagGroup($fields);
 
             return $this->render('TopxiaAdminBundle:TagGroup:list-tr.html.twig', array(
@@ -54,16 +42,6 @@ class TagGroupController extends BaseController
 
             if (empty($fields['scope'])) {
                 $fields['scope'] = array();
-            } else {
-                foreach ($fields['scope'] as &$scope) {
-                    if ($scope == 'classroom') {
-                        $scope = '班级筛选';
-                    }
-
-                    if ($scope == 'course') {
-                        $scope = '课程筛选';
-                    }
-                }
             }
 
             $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
@@ -100,11 +78,7 @@ class TagGroupController extends BaseController
     {
         $flag = $this->getTagService()->deleteTagGroup($tagId);
 
-        if ($flag) {
-            return $this->createJsonResponse(true);
-        } else {
-            return $this->createJsonResponse(false);
-        }
+        return $this->createJsonResponse(true);
     }
 
     protected function getTagService()

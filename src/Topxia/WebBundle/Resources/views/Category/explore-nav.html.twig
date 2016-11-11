@@ -2,27 +2,15 @@
 {% set nextCode = '' %}
 <div class="tabs-wrapper">
   <div class="tabs-group" style="height: 50px;">
-    <div class="title">等级</div>
+    <div class="title">分类</div>
     <ul class="content clearfix">
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li><a class="nav-link" href="">全部</a></li>
-      <li><a class="nav-link" href="">初级</a></li>
-      <li><a class="nav-link" href="">中级</a></li>
-      <li class="active"><a class="nav-link" href="">高级</a></li>
+      {% for category in categories %}
+      <li><a class="nav-link" href="">{{ category.name }}</a></li>
+      {% endfor %}
     </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
   </div>
+
   <div class="tabs-group" style="height: 50px;">
     <div class="title"></div>
     <ul class="content clearfix">
@@ -43,31 +31,4 @@
     </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
   </div>
-</div>
-<div class="es-tabs">
-
-  <div class="tab-header">
-    <ul class="clearfix">
-      <li class="{% if category == '' %}active{% endif %}"><a href="{{ path(path, {category:'',filter:filter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
-      {% for cateogory in rootCategories %}
-        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {category:cateogory.code,filter:filter,orderBy:orderBy}) }}">{{ cateogory.name }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-
-
-  {% if categories %}
-    <div class="tab-body">
-      {% for l,cs in categories if cs %}
-        <ul class="clearfix">
-          {% for c in cs %}
-            {% if loop.index == 1 %}
-              <li class="all"><a href="{{ path(path, {category:nextCode,filter:filter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
-            {% endif %}
-            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path(path, {category:c.code,filter:filter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endfor %}
-    </div>
-  {% endif %}
 </div>

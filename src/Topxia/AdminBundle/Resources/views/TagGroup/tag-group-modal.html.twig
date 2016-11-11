@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set modal_class = 'modal-lg' %}
+
 {% block title %}
   {% if tagGroup.name|default(null) %}{{'编辑标签组'|trans}}{% else %}{{'添加标签组'|trans}}{% endif %}
 {% endblock %}
@@ -7,7 +9,7 @@
   <form class="form-horizontal" id="tag-group-form" action="{% if tagGroup.name|default(null) %}{{ path('admin_tag_group_update',{groupId:tagGroup.id|default(null)}) }}{% else %}{{ path('admin_tag_group_create') }}{% endif %}" method="post">
     <div class="form-group">
       <label class="col-md-3 control-label" for="tag-group-name-field">{{'标签组名称'|trans}}</label>
-      <div class="col-md-6 controls">
+      <div class="col-md-8 controls">
         <input class="form-control" id="tag-group-name-field" type="text" name="name" value="{{ tagGroup.name|default(null) }}" data-url="{{ path('admin_tag_group_checkname', {exclude:tagGroup.name|default(null)}) }}">
       </div>
     </div>
@@ -15,20 +17,20 @@
     <div class="form-group">
       <label class="col-md-3 control-label">{{'用于'|trans}}</label>
       <div class="col-md-6 controls">
-        <input type="checkbox" data-role="batch-select" name="scope[]" value="course" {% if '课程筛选' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
-        <label class="required">课程筛选</label>
-        <input type="checkbox" data-role="batch-select" name="scope[]" value="classroom" {% if '班级筛选' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
-        <label class="required">班级筛选</label>
+        <input type="checkbox" data-role="batch-select" name="scope[]" value="course" {% if 'course' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
+        <label class="required">课程列表筛选</label>
+        <input type="checkbox" data-role="batch-select" name="scope[]" value="classroom" {% if 'classroom' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
+        <label class="required">班级列表筛选</label>
       </div>
     </div>
   
     <div class="form-group">
       <label class="col-md-3 control-label">包含标签</label>
-      <div class="col-md-6 controls">
-        
-      </div>
-      <div class="help-block">
-        回车可添加标签，标签组内添加的标签也会添加到标签管理中
+      <div class="col-md-8 controls">
+        <input class="form-control" id="tags" type="text" name="tags" value="{{ tags|join(',') }}" data-url="{{ path('tag_match') }}">
+        <div class="help-block">
+          回车可添加标签，标签组内添加的标签也会添加到标签管理中
+        </div>
       </div>
     </div>
 

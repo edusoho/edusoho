@@ -50,6 +50,32 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagGroupDao()->findTagGroups();
     }
 
+    public function findTagGroupsByTagIds($tagIds)
+    {
+        $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByTagIds($tagIds);
+
+        $tagRelations = ArrayToolkit::index($tagRelations, 'groupId');
+
+        $groupIds = ArrayToolkit::column($tagRelations, 'groupId');
+
+        $groups = $this->getTagGroupDao()->findTagGroupsByGroupIds($groupIds);
+
+        foreach ($groups as &$group) {
+            $group['tagId'] = $tagRelations[$group['id']]['tagId'];
+        }
+
+        return $groups;
+    }
+
+    public function findTagsByGroupId($groupId)
+    {
+        $tagRelaTagtions = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
+
+        $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
+
+        return $this->findTagsByIds($tagIds);
+    }
+
     public function searchTags($conditions, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
@@ -83,15 +109,6 @@ class TagServiceImpl extends BaseService implements TagService
     public function findTagsByNames(array $names)
     {
         return $this->getTagDao()->findTagsByNames($names);
-    }
-
-    public function findTagsByGroupId($groupId)
-    {
-        $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByGroupId($groupId);
-
-        $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
-
-        return $this->findTagsByIds($tagIds);
     }
 
     public function isTagNameAvalieable($name, $exclude = null)
@@ -223,6 +240,8 @@ class TagServiceImpl extends BaseService implements TagService
 
         $fields['updatedTime'] = time();
 
+        $fields['tagNum'] = count($tagIds);
+
         $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
 
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$updatedTagGroup['name']}(#{$id})");
@@ -234,14 +253,16 @@ class TagServiceImpl extends BaseService implements TagService
     {
         $tag = $this->getTag($id);
 
-        if (!empty($tag['groupId'])) {
-            $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tag['groupId'], $id);
+        $tagGroupRelation = $this->getTagGroupTagDao()->getByTagId($id);
 
-            $tagGroup = $this->getTagGroup($tag['groupId']);
+        if (!empty($tagGroupRelation['groupId'])) {
+            $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tagGroupRelation['groupId'], $id);
+
+            $tagGroup = $this->getTagGroup($tagGroupRelation['groupId']);
 
             $tagNum = $tagGroup['tagNum'] - 1;
 
-            $this->updateTagGroup($tag['groupId'], array('tagNum' => $tagNum));
+            $this->updateTagGroup($tagGroupRelation['groupId'], array('tagNum' => $tagNum));
         }
 
         $this->getTagDao()->deleteTag($id);
@@ -252,12 +273,6 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function deleteTagGroup($id)
     {
-        $tagGroup = $this->getTagGroup($id);
-
-        if ($tagGroup['tagNum']) {
-            return false;
-        }
-
         $this->getTagGroupDao()->delete($id);
 
         $this->getTagGroupTagDao()->deleteByGroupId($id);

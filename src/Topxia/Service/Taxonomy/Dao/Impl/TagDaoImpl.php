@@ -82,6 +82,7 @@ class TagDaoImpl extends BaseDao implements TagDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
+            ->orderBy('createdTime', 'DESC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
