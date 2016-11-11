@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                     var learningNum = parseInt(params[1].value);
                     var learnedNum = parseInt(params[0].value);
                     var totalNum = learnedNum + learningNum;
-                    if (params[1].value > 0) {
+                    if (learnedNum > 0 && learningNum > 0) {
                         rate = ((learnedNum/totalNum) * 100).toFixed(1);
                     }
 
