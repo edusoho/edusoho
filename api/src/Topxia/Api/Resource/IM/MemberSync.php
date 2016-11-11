@@ -2,15 +2,20 @@
 
 namespace Topxia\Api\Resource\IM;
 
+use Monolog\Logger;
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
+use Monolog\Handler\StreamHandler;
 use Topxia\Api\Resource\BaseResource;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class MemberSync extends BaseResource
 {
     /*每次请求允许创建的最大会话数量*/
     const MAX_CREATION_PER_TIME = 20;
+
+    private $logger;
 
     public function post(Application $app, Request $request)
     {
@@ -79,6 +84,7 @@ class MemberSync extends BaseResource
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $courseIds)) {
+                $this->debug('syncCourseConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
@@ -94,6 +100,7 @@ class MemberSync extends BaseResource
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $classroomIds)) {
+                $this->debug('syncClassroomConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
@@ -130,11 +137,13 @@ class MemberSync extends BaseResource
                 if (++$cnt > MemberSync::MAX_CREATION_PER_TIME) {
                     break;
                 }
+                $this->debug('joinConversations & create : targetType='.$targetType.', targetId='.$id.', userId='.$user['id']);
                 $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));
             } else {
                 if (!isset($targetConvsMap[$id])) {
                     continue;
                 }
+                $this->debug('joinConversations & join : targetType='.$targetType.',convNo='.$targetConvsMap[$id]['no'].',targetId='.$id);
                 $this->getConversationService()->joinConversation($targetConvsMap[$id]['no'], $user['id']);
             }
         }
@@ -144,6 +153,7 @@ class MemberSync extends BaseResource
     {
         $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
         foreach ($targetIds as $id) {
+            $this->debug('quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
             $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
         }
     }
@@ -176,5 +186,33 @@ class MemberSync extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function debug($message)
+    {
+        if (!$this->isDebug()) {
+            return;
+        }
+        if (is_array($message)) {
+            $message = json_encode($message);
+        }
+        $this->getLogger()->debug($message);
+    }
+
+    protected function isDebug()
+    {
+        return 'dev' == $this->getServiceKernel()->getEnvironment();
+    }
+
+    protected function getLogger()
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger('MemberSync');
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/member_sync.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 }
