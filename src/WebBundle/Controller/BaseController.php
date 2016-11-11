@@ -63,6 +63,11 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
     /**
      * @param  string        $alias
      * @return BaseService

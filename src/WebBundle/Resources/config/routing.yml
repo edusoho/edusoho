@@ -63,3 +63,12 @@ uploader_finished_v2:
   path:  /uploader/v2/finished
   defaults: { _controller: WebBundle:Uploader:finished }
   methods: [GET]
+
+#question
+course_manage_question:
+    path: /course/{courseId}/manage/question
+    defaults: { _controller: WebBundle:QuestionManage:index }
+
+course_manage_question_create:
+    path: /course2.0/{courseId}/manage/question/{type}/create
+    defaults: { _controller: WebBundle:QuestionManage:create }
