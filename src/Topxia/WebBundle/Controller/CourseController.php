@@ -23,8 +23,9 @@ class CourseController extends CourseBaseController
                 $conditions['tagId'] = $conditions['selectedTag'];
                 $tag = $conditions['selectedTag'];
             }
+        } else {
+            $conditions['tagId'] = $tag;
         }
-
 
         $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
 
@@ -35,7 +36,7 @@ class CourseController extends CourseBaseController
         }
 
         if (!empty($conditions['code'])) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
 
             $categoryArrays = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
 
@@ -48,13 +49,6 @@ class CourseController extends CourseBaseController
             } else {
                 $conditions['categoryId'] = $categoryArray['id'];
             }
-        }
-
-        if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
-            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
-        }
-        if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
-            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
         }
 
         unset($conditions['code']);
@@ -166,18 +160,6 @@ class CourseController extends CourseBaseController
 
         $group = $this->getCategoryService()->getGroupByCode('course');
 
-        if (empty($group)) {
-            $categories = array();
-        } else {
-            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
-
-            foreach ($categories as $id => $c) {
-                if ($categories[$id]['parentId'] != '0') {
-                    unset($categories[$id]);
-                }
-            }
-        }
-
         if (!$categoryArray) {
             $categoryArrayDescription = array();
         } else {
@@ -197,20 +179,12 @@ class CourseController extends CourseBaseController
             }
         }
 
-        $tagGroups = $this->getTagService()->findTagGroups();
-
-        foreach ($tagGroups as $key => $tagGroup) {
-            $allTags = $this->getTagService()->findTagsByGroupId($tagGroup['id']);
-            $tagGroups[$key]['subs'] = $allTags;
-        }
-
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
             'filter'                   => $filter,
             'orderBy'                  => $orderBy,
             'paginator'                => $paginator,
-            'categories'               => $categories,
             'consultDisplay'           => true,
             'path'                     => 'course_explore',
             'categoryArray'            => $categoryArray,
@@ -218,7 +192,6 @@ class CourseController extends CourseBaseController
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
-            'tagGroups'                => $tagGroups,
             'tag'                      => $tag,
             'subCategories'            => $subCategories,
             'subCategory'              => $subCategory

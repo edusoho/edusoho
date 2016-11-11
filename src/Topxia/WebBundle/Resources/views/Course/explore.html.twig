@@ -34,7 +34,7 @@
   {% set currentLevelId = filter.currentLevelId|default('all')%}
 
 
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{subCategories:subCategories, subCategory:subCategory, tagGroups:tagGroups, tag:tag, categories:categories, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{subCategory:subCategory,tag:tag, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
 <!-- 
 {category:selectedCategory, subCategory:selectedSubCategory, tag:tag.id, tag:tag, filter:filter, orderBy:orderBy} -->
 

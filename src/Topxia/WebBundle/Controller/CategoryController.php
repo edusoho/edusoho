@@ -18,10 +18,62 @@ class CategoryController extends BaseController
     }
 
 
-    public function treeNavAction(Request $request, $tagGroups, $tag, $categories, $category, $subCategories, $subCategory, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    protected function makeCategories()
     {
-        // var_dump($subCategories);
-        // var_dump($subCategory);exit();
+        $group = $this->getCategoryService()->getGroupByCode('course');
+
+        if (empty($group)) {
+            $categories = array();
+        } else {
+            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+
+            foreach ($categories as $id => $c) {
+                if ($categories[$id]['parentId'] != '0') {
+                    unset($categories[$id]);
+                }
+            }
+        }
+
+        return $categories;
+    }
+
+    protected function makeTags()
+    {
+        $tagGroups = $this->getTagService()->findTagGroups();
+
+        foreach ($tagGroups as $key => $tagGroup) {
+            $allTags = $this->getTagService()->findTagsByGroupId($tagGroup['id']);
+            $tagGroups[$key]['subs'] = $allTags;
+        }
+
+        return $tagGroups;
+    }
+
+    protected function makeSubCategories($category)
+    {
+        $subCategories = array();
+
+        $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
+
+        if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
+            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
+        }
+
+        if (!empty($categoryArray) && $categoryArray['parentId'] != 0) {
+            $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['parentId']);
+        }
+
+        return $subCategories;
+    }
+
+    public function treeNavAction(Request $request, $tag, $category, $subCategory, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    {
+        $categories = $this->makeCategories();
+
+        $tagGroups = $this->makeTags();
+
+        $subCategories = $this->makeSubCategories($category);
+
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
             'selectedCategory'    => $category,
             'selectedSubCategory' => $subCategory,
@@ -33,5 +85,15 @@ class CategoryController extends BaseController
             'tagGroups'           => $tagGroups,
             'tag'                => $tag
         ));
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 }

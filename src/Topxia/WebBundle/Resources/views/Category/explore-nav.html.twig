@@ -6,7 +6,7 @@
       <ul class="content clearfix">
         <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:tag, filter:filter,orderBy:orderBy}) }}">全部</a></li>
         {% for category in categories %}
-          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:tag|join(','), filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:tag, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
         {% endfor %}
       </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
