@@ -1,4 +1,4 @@
-import ThreadShowWidget from '../../common/ThreadShowWidget'
+import ThreadShowWidget from '../../course-thread/show-widget'
 
 class QuestionPane {
   constructor(option) {
@@ -18,7 +18,7 @@ class QuestionPane {
   }
   showList() {
     let toolbar = this.plugin.toolbar;
-    $.get(this.get('plugin').api.init, {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
+    $.get(this.plugin.api.init, {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
         this._dataInitialized = true;
         this.element.html(html);
         this.createFormElement = $('#' + this.createFormId);
@@ -92,7 +92,7 @@ class QuestionPane {
   showItem(e) {
     let toolbar = this.plugin.toolbar,
       $thread = $(e.currentTarget);
-    $.get(pane.get('plugin').api.show, {courseId:toolbar.courseId, id:$thread.data('id')}, (html) => {
+    $.get(this.plugin.api.show, {courseId:toolbar.courseId, id:$thread.data('id')}, (html) => {
       this._showItemPane().html(html);
       this._showWidget.trigger('reload');
     });

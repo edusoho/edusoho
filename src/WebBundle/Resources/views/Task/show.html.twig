@@ -5,7 +5,7 @@
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
 {% set bodyClass = "task-dashboard-page js-task-dashboard-page" %}
 {% do css(['web.css']) %}
-{% do script(['libs/perfect-scrollbar.js','libs/ckeditor/ckeditor.js','web/task/index.js']) %}
+{% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','web/task/index.js']) %}
 
 {% block body %}
 	{#<iframe id="task-detail" data-task-start-url="{{path('course_task_trigger', {id:task.id,courseId:task.courseId,eventName:'start'})}}" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
