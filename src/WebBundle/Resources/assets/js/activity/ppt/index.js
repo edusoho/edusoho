@@ -1,4 +1,5 @@
-import Emitter from "es6-event-emitter";
+import Emitter from "common/es-event-emitter";
+import screenfull from "screenfull";
 
 class PPT extends Emitter {
   constructor({element, slides, watermark}) {
@@ -38,6 +39,10 @@ class PPT extends Emitter {
       this._page = beforePage;
     }
 
+    if (beforePage) {
+      this.element.find('.slide-player-body .slide').eq(beforePage - 1).removeClass('active');
+    }
+
     let $currentSlide = this._getSlide(currentPage);
 
     if ($currentSlide.attr('src')) {
@@ -59,8 +64,8 @@ class PPT extends Emitter {
     this._page = currentPage;
 
     this.trigger('change', {
-          current: beforePage,
-          before: currentPage
+          current: currentPage,
+          before: beforePage
         }
     );
   }
@@ -109,8 +114,8 @@ class PPT extends Emitter {
     this.element.on('click', '.fullscreen', this._onFullScreen.bind(this));
     this.element.on('change', '.goto-page', this._onChangePage.bind(this));
     let self = this;
-    this.on('change', ({currentPage, beforePage}) => {
-      if (currentPage == self.total) {
+    this.on('change', ({current, before}) => {
+      if (current == self.total) {
         self.trigger('end');
       }
     });
@@ -141,8 +146,15 @@ class PPT extends Emitter {
     this.page = this.total
   }
 
-  _onFullScreen() {
-
+  _onFullScreen(event) {
+    if (!screenfull.enabled) {
+      return;
+    }
+    if (screenfull.isFullscreen) {
+      screenfull.toggle();
+    } else {
+      screenfull.request();
+    }
   }
 
   _onChangePage(e) {
@@ -158,7 +170,7 @@ let createPPT = (watermark) => {
     watermark: watermark
   });
 
-  return ppt.on('end', () => {
+  return ppt.once('end', () => {
     $.post(eventUrl, {
       event: 'finish'
     })
