@@ -17,7 +17,7 @@ define(function(require, exports, module) {
                     var learnedNum = parseInt(params[0].value);
                     var totalNum = learnedNum + learningNum;
                     if (params[1].value > 0) {
-                        rate = (learnedNum/totalNum).toFixed(3) * 100;
+                        rate = ((learnedNum/totalNum) * 100).toFixed(1);
                     }
 
                     var circle1 = '<span style="display:inline-block;margin-right:5px;'
@@ -28,8 +28,8 @@ define(function(require, exports, module) {
                         + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
                     var html = params[0].name + '</br>';
-                    var val1 = isNaN(learningNum)? '-' : learningNum;
-                    var val2 = isNaN(learnedNum)? '-' : learnedNum;
+                    var val1 = isNaN(learnedNum)? '-' : learnedNum;
+                    var val2 = isNaN(learningNum)? '-' : learningNum;
                     html += circle1+params[0].seriesName+' : '+val1+'</br>';
                     html += circle2+params[1].seriesName+' : '+val2+'</br>';
                     html += circle3+'完成率 : '+rate+'%';
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
+                            show: false,
                             position: 'insideRight'
                         }
                     },
@@ -87,7 +87,7 @@ define(function(require, exports, module) {
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
+                            show: false,
                             position: 'insideRight',
                             formatter: function (params) {
                                 return params.value == 0 ? '':params.value;
