@@ -1,0 +1,11 @@
+{% extends "@Web/Activity/content-layout.html.twig" %}
+
+{% do script(['web/activity/flash/index.js']) %}
+
+{% block content %}
+
+  <div id="flash-player" data-uri="{{ flashMedia.uri }}">
+
+  </div>
+
+{% endblock %}
