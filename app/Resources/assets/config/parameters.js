@@ -20,8 +20,9 @@ const parameters = {
     "jquery-form": ['jquery-form'],
     'bootstrap-datetimepicker':['../libs/js/bootstrap-datetimepicker.js'],
     "perfect-scrollbar":['perfect-scrollbar'],
-    'iframe-resizer':['../libs/js/iframe-resizer.js'],
-    'iframe-resizer-contentWindow':['../libs/js/iframe-resizer-contentWindow.js'],
+    "jquery-sortable":['jquery-sortable'],
+    "iframe-resizer":['../libs/js/iframe-resizer.js'],
+    "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -34,6 +35,7 @@ const parameters = {
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
+    'jquery-sortable/source/js/jquery-sortable.js',
   ],
   onlyCopys: [
     {

@@ -1,13 +1,4 @@
-{#<li class="task-item">
-	{{task.title}} 
-	<a class='delete-task' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
-
-	<a >修改</a>
-
-	<a href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}" target="_blank">进入学习</a>
-</li>#}
-
-<li class="task-manage-item clearfix ">
+<li class="task-manage-item drag clearfix " id="task-{{task.id}}">
   <div class="item-line"></div>
   <div class="item-content text-overflow">
     <i class="es-icon {{task['activity_meta']['icon']}} mrm"></i><span class="label label-success mrm">选修</span>{{task.title}}<span class="color-gray mlm">{{task['activity_meta']['length'] | default('')}}</span>
