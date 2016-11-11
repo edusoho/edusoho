@@ -35,7 +35,7 @@ define(function(require,exports,module){
     });
     
     //初始获取字幕列表
-    var videoNo = $(window.frames['viewerIframe'].document).find('#lesson-video-content').data('file-global-id');
+    var videoNo = $elem.data('mediaGlobalId');;
     var $elem = $('#uploader');
     var mediaId = $elem.data('mediaId');
     var subtitleCreateUrl = $elem.data('subtitleCreateUrl');
