@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Common\ArrayToolkit;
 
 class TagGroupController extends BaseController
 {
@@ -20,7 +21,7 @@ class TagGroupController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-
+            $fields['tagIds'] = $this->getTagIdsFromRequest($request);
             if (isset($fields['tagIds'])) {
                 $fields['tagNum'] = count($fields['tagIds']);
             }
@@ -36,10 +37,10 @@ class TagGroupController extends BaseController
     }
 
     public function updateAction(Request $request, $groupId)
-    {   
+    {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-
+            $fields['tagIds'] = $this->getTagIdsFromRequest($request);
             if (empty($fields['scope'])) {
                 $fields['scope'] = array();
             }
@@ -48,13 +49,14 @@ class TagGroupController extends BaseController
             
             return $this->render('TopxiaAdminBundle:TagGroup:list-tr.html.twig', array(
                 'tagGroup' => $tagGroup
-            ));    
+            ));
         }
 
         $tagGroup = $this->getTagService()->getTagGroup($groupId);
-
+        $tags = $this->getTagService()->findTagsByGroupId($groupId);
         return $this->render('TopxiaAdminBundle:TagGroup:tag-group-modal.html.twig', array(
             'tagGroup' => $tagGroup,
+            'tags' => ArrayToolkit::column($tags, 'name')
         ));
     }
 
@@ -79,6 +81,14 @@ class TagGroupController extends BaseController
         $flag = $this->getTagService()->deleteTagGroup($tagId);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
     }
 
     protected function getTagService()
