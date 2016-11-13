@@ -35,8 +35,6 @@
 
 
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{subCategory:subCategory,tag:tag, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
-<!-- 
-{category:selectedCategory, subCategory:selectedSubCategory, tag:tag.id, tag:tag, filter:filter, orderBy:orderBy} -->
 
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
@@ -50,9 +48,9 @@
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, subCategory:subCategory, tag:tag,  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
           {% for level in levels %}
-            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, subCategory:subCategory, tag:tag,  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>

@@ -73,7 +73,7 @@ class CategoryController extends BaseController
         $tagGroups = $this->makeTags();
 
         $subCategories = $this->makeSubCategories($category);
-
+// var_dump($tag);exit();
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
             'selectedCategory'    => $category,
             'selectedSubCategory' => $subCategory,

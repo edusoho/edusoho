@@ -108,8 +108,8 @@ classroom_manage_homework:
     defaults: { _controller: ClassroomBundle:ClassroomManage:homework }
 
 classroom_explore:
-    pattern:  /classroom/explore/{category}
-    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'' }
+    pattern:  /classroom/explore/{category}/{tag}
+    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'0', tag:'' }
 
 classroom_show:
     pattern:  /classroom/{id}

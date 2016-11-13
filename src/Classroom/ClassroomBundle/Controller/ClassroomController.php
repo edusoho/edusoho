@@ -23,16 +23,37 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function exploreAction(Request $request, $category)
+    public function exploreAction(Request $request, $category, $tag)
     {
         $conditions             = $request->query->all();
+
         $conditions['status']   = 'published';
         $conditions['showable'] = 1;
 
         $categoryArray = array();
 
-        if (!empty($category)) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($category);
+        if (isset($conditions['selectedTag'])) {
+            if ($conditions['selectedTag'] == $tag) {
+                unset($conditions['tagId']);
+                $tag = '';
+            } else {
+                $conditions['tagId'] = $conditions['selectedTag'];
+                $tag = $conditions['selectedTag'];
+            }
+        } else {
+            $conditions['tagId'] = $tag;
+        }
+
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+
+        if (!empty($conditions['subCategory'])) {
+            $conditions['code'] = $subCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
+
+        if (!empty($conditions['code'])) {
+            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
@@ -122,7 +143,9 @@ class ClassroomController extends BaseController
             'categoryParent'           => $categoryParent,
             'filter'                   => $filter,
             'levels'                   => $levels,
-            'orderBy'                  => $orderBy[0]
+            'orderBy'                  => $orderBy[0],
+            'tag'                      => $tag,
+            'subCategory'              => $subCategory
         ));
     }
 
