@@ -56,7 +56,7 @@
     <div class="row form-group">
       <div class="col-md-3 control-label"><label>UC_DBPW</label></div>
       <div class="controls col-md-8">
-        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbpw|default('') }}" placeholder="UC_DBPW" name="discuzConfig[uc_dbpw]">
+        <input class="form-control" type="password" value="{{ discuzConfig.uc_dbpw|default('') }}" placeholder="UC_DBPW" name="discuzConfig[uc_dbpw]">
       </div>
     </div>
     <div class="row form-group">
@@ -177,7 +177,7 @@
     <div class="row form-group">
       <div class="col-md-3 control-label"><label>database.pwd</label></div>
       <div class="controls col-md-8">
-        <input class="form-control" type="text" value="{{ phpwindConfig.database.pwd|default('') }}" placeholder="database.pwd" name="phpwindConfig[database][pwd]">
+        <input class="form-control" type="password" value="{{ phpwindConfig.database.pwd|default('') }}" placeholder="database.pwd" name="phpwindConfig[database][pwd]">
       </div>
     </div>
     <div class="row form-group">
