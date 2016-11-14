@@ -237,8 +237,7 @@ class ClassroomController extends BaseController
         
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $member['levelId']) : 'ok';
-
+            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
