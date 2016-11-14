@@ -372,7 +372,7 @@ class TagServiceTest extends BaseTestCase
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
-        $this->assertEquals(2, count($this->getTagService()->findTagRelationByTagId(1)));
+        $this->assertEquals(1, count($this->getTagService()->findTagRelationsByTagId(1)));
     }
 
     public function testSearchTags()
