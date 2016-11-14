@@ -343,15 +343,13 @@ class CourseController extends CourseBaseController
             }
         }     
 
-        if ($course['parentId']) {
+        if ($course['parentId'] && empty($member)) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
-        }
 
-        if (empty($member)) {
             $user   = $this->getCurrentUser();
             $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
 
@@ -359,6 +357,7 @@ class CourseController extends CourseBaseController
                 $course['studentNum']++;
             }
         }
+
 
         $this->getCourseService()->hitCourse($id);
 
