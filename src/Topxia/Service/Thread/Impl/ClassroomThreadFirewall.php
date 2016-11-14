@@ -13,6 +13,23 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessThreadCreate($thread)
     {
+        $user = $this->getCurrentUser();
+        $member = $this->getClassroomService()->getClassroomMember($thread['targetId'], $user['id']);
+
+        $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
+
+        if(!empty($member['levelId']) 
+            && empty($classroom['vipLevelId'])) {
+            return false;
+        }
+
+        if ($this->getVipService()->isPluginInstalled('Vip') 
+            && $this->getVipService()->setting('vip.enabled', 0) 
+            && !empty($member['levelId']) 
+            && $this->getVipService()->checkUserInMemberLevel($user['id'], $member['levelId']) != 'ok') {
+            return false;
+        }
+
         return $this->getClassroomService()->canLookClassroom($thread['targetId']);
     }
 
@@ -105,6 +122,11 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getVipService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
     }
 
     protected function getKernel()
