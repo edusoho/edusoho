@@ -77,7 +77,7 @@ class PayCenterController extends BaseController
             );
             list($success, $order) = $this->getPayCenterService()->processOrder($payData);
             if ($success) {
-                $this->dispatchEvent("order.pay.success",
+                $this->dispatchEvent("order.free.paid",
                     new ServiceEvent($order, array('targetType' => $order["targetType"]))
                 );
             }
