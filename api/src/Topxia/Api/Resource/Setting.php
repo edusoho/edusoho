@@ -67,7 +67,7 @@ class Setting extends BaseResource
     {
       return array(
           'course' => array(
-              'needToken' => true
+              'needToken' => false
           ),
           'app_im' => array()
         );
