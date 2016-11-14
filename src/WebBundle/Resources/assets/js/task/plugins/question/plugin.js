@@ -13,13 +13,16 @@ class QuestionPlugin extends BasePlugin  {
       show: '../../lessonplugin/question/show',
       create: '../../lessonplugin/question/create',
       answer: '../../lessonplugin/question/answer'
-    }
+    };
     this.pane= null;
   }
+  
   execute() {
     if (!this.pane) {
       this.pane = new QuestionPane({
         element: this.toolbar.createPane(this.code),
+        code: this.code,
+        toolbar: this.toolbar,
         plugin: this
       });
     } 

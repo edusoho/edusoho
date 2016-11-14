@@ -21,7 +21,7 @@ class TaskShow {
   _sidebar() {
     var sideBar = new SideBar({
       element:'.dashboard-sidebar-content',
-      activePlugins:["note"],
+      activePlugins:["note","question"],
       courseId: 1,
     });
   }

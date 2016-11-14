@@ -1,7 +1,11 @@
 class ThreadShowWidget {
     constructor(props) {
         this.element = props.element;
-        this.on('reload', this.onReload, this);
+        this.init();
+    }
+
+    init() {
+        $(this.element).on('reload',this.onReload)
     }
 
     onReload() {

@@ -48,7 +48,7 @@
           </li>
         </ul>
       </div>
-      <div class="dashboard-pane task-pane" id="task-pane" >
+      <div data-pane='task' class="dashboard-pane task-pane" id="task-pane" >
         <ul class="task-list ">
           {% for task in tasks %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
@@ -132,7 +132,7 @@
           </li> #}
         </ul>
       </div>
-      <div class="dashboard-pane note-pane hidden" id="question-pane">问答</div>
-      <div class="dashboard-pane note-pane hidden" id="note-pane">笔记</div>
+      {#<div class="dashboard-pane note-pane hidden" id="question-pane">问答</div>
+      <div class="dashboard-pane note-pane hidden" id="note-pane">笔记</div>#}
     </div>
 {% endblock %}

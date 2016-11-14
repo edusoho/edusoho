@@ -16,11 +16,12 @@ class QuestionPane {
     $('.show-question-item').click(event=>this.showItem(event));
     $('.back-to-list').click(event=>this.backToList(event));
   }
+
   showList() {
     let toolbar = this.plugin.toolbar;
-    $.get(this.plugin.api.init, {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
+    $.get('http://www.esdev.com/lessonplugin/question/init', {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
         this._dataInitialized = true;
-        this.element.html(html);
+        this.$element.html(html);
         this.createFormElement = $('#' + this.createFormId);
         this._showListPane();
         this._showWidget = new ThreadShowWidget({
@@ -101,8 +102,8 @@ class QuestionPane {
     this.showList();
   }
   _showListPane() {
-      this.$('[data-role=show-pane]').hide();
-      this.$('[data-role=list-pane]').show();
+      $('[data-role=show-pane]').hide();
+      $('[data-role=list-pane]').show();
       $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
       return $('[data-role=list-pane]');
   }
@@ -113,6 +114,7 @@ class QuestionPane {
 
 }
 
+export default QuestionPane;
 
 
 
