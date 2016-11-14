@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'course-list-page bg-blank' %}
+{% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
@@ -74,21 +74,22 @@
       </label>
     </div>
   </div>
-
-  <div class="course-list">
-    <div class="row">
-      {% if courses %}
-        {% for course in courses %}
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
-          </div>
-        {% endfor %}
-      {% else %}
-        <div class="empty">{{'该分类下无课程'|trans}}</div>
-      {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="course-list">
+        <div class="row">
+          {% if courses %}
+            {% for course in courses %}
+              <div class="col-lg-3 col-md-4 col-xs-6">
+                {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty">{{'该分类下无课程'|trans}}</div>
+          {% endif %}
+        </div>
+      </div>
+      <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
     </div>
   </div>
-  <nav class="text-center">
-    {{ web_macro.paginator(paginator) }}
-  </nav>
 {% endblock %}

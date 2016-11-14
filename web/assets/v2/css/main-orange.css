@@ -6960,6 +6960,7 @@ textarea {
   border: 1px solid #e4ecf3;
   border-radius: 4px;
   margin-bottom: 30px;
+  background-color: #ffffff;
 }
 .tabs-wrapper .tabs-group {
   padding: 0 60px 0 15px;
@@ -6999,8 +7000,10 @@ textarea {
 .tabs-wrapper .tabs-group .content > li:hover > a,
 .tabs-wrapper .tabs-group .content > li:focus > a,
 .tabs-wrapper .tabs-group .content > li.active > a {
-  background-color: #ff8e33;
-  color: #ffffff;
+  color: #ff7200;
+}
+.tabs-wrapper .tabs-group .content > li:first-child {
+  padding-left: 0;
 }
 .tabs-wrapper .tabs-group .tabs-toggle {
   position: absolute;
@@ -7011,7 +7014,7 @@ textarea {
   cursor: pointer;
 }
 .tabs-wrapper .tabs-group + .tabs-group {
-  border-top: 1px solid #e4ecf3;
+  border-top: 1px dashed #e4ecf3;
 }
 .class-serve > ul {
   padding: 20px 10px;

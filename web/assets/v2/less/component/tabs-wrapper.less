@@ -2,6 +2,7 @@
   border: 1px solid @border-color;
   border-radius: 4px;
   margin-bottom: 30px;
+  background-color: #ffffff;
   .tabs-group {
     padding: 0 60px 0 15px;
     position: relative;
@@ -29,9 +30,11 @@
         }
         &:hover, &:focus, &.active {
           > a {
-            background-color: lighten(@brand-primary, 10%);
-            color: #ffffff;
+            color: @brand-primary;
           }
+        }
+        &:first-child {
+          padding-left: 0;
         }
       }
     }
@@ -44,7 +47,7 @@
       cursor: pointer;
     }
     + .tabs-group {
-      border-top: 1px solid @border-color;
+      border-top: 1px dashed  @border-color;
     }
   }
 }
