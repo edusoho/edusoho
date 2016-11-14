@@ -10,7 +10,7 @@
     <div class="page-header clearfix"><a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">{{'管理员帐号同步'|trans}}</a>
     </div>
   {% endif %}
-  
+
 
 {{ web_macro.flash_messages() }}
 
@@ -24,37 +24,187 @@
       <div class="help-block">{{'支持phpwind 9系列，Discuz X2.5/X3.0/X3.1的用户中心'|trans}}</div>
     </div>
   </div>
+  <div class="with-discuz" style="display:none;">
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>Ucenter{{'配置'|trans}}</label></div>
+      <div class="controls col-md-8">
+        <div class="help-block"><a href="http://www.qiqiuyu.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+      </div>
+    </div>
 
-  <div class="row form-group with-discuz" style="display:none;">
-    <div class="col-md-3 control-label"><label>Ucenter{{'配置'|trans}}</label></div>
-    <div class="controls col-md-8">
-      <textarea class="form-control" name="discuz_config" rows="10">{{ discuzConfig }}</textarea>
-      <div class="help-block">{{'从Ucenter复制配置，粘帖到此处。注意：请在第一行加上'|trans}}" &lt;?php"。 <a href="http://www.qiqiuyu.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_connect|default('') }}" placeholder="UC_CONNECT" name="discuzConfig[uc_connect]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBHOST</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbhost|default('') }}" placeholder="UC_DBHOST" name="discuzConfig[uc_dbhost]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBUSER</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbuser|default('') }}" placeholder="UC_DBUSER" name="discuzConfig[uc_dbuser]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBPW</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="password" value="{{ discuzConfig.uc_dbpw|default('') }}" placeholder="UC_DBPW" name="discuzConfig[uc_dbpw]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBNAME</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbname|default('') }}" placeholder="UC_DBNAME" name="discuzConfig[uc_dbname]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbcharset|default('') }}" placeholder="UC_DBCHARSET" name="discuzConfig[uc_dbcharset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBTABLEPRE</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbtablepre|default('') }}" placeholder="UC_DBTABLEPRE" name="discuzConfig[uc_dbtablepre]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbconnect|default('') }}" placeholder="UC_DBCONNECT" name="discuzConfig[uc_dbconnect]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_KEY</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_key|default('') }}" placeholder="UC_KEY" name="discuzConfig[uc_key]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_API</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_api|default('') }}" placeholder="UC_API" name="discuzConfig[uc_api]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_charset|default('') }}" placeholder="UC_CHARSET" name="discuzConfig[uc_charset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_IP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ip|default('') }}" placeholder="UC_IP" name="discuzConfig[uc_ip]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_APPID</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_appid|default('') }}" placeholder="UC_APPID" name="discuzConfig[uc_appid]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_PPP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ppp|default('') }}" placeholder="UC_PPP" name="discuzConfig[uc_ppp]">
+      </div>
     </div>
   </div>
 
-  <div class="row form-group with-phpwind" style="display:none;">
-    <div class="col-md-3 control-label"><label>{{'WindId配置'|trans}}</label></div>
-    <div class="controls col-md-8">
-      <textarea class="form-control" name="phpwind_config" rows="10">{{ phpwindConfig }}</textarea>
-      <div class="help-block">{{'如使用phpwind (WindID)的用户中心，请填写此项配置。'|trans}}<a href="http://demo.edusoho.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+  <div class="with-phpwind" style="display:none;">
+    <div class="row form-group with-phpwind" style="display:none;">
+      <div class="col-md-3 control-label"><label>{{'WindId配置'|trans}}</label></div>
+      <div class="controls col-md-8">
+        <div class="help-block"><a href="http://qiqiuyu.edusoho.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>conf.connect</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.conf.connect|default('') }}" placeholder="conf.connect" name="phpwindConfig[conf][connect]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>conf.serverUrl</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.conf.serverUrl|default('') }}" placeholder="conf.serverUrl" name="phpwindConfig[conf][serverUrl]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>conf.clientId</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.conf.clientId|default('') }}" placeholder="conf.clientId" name="phpwindConfig[conf][clientId]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>conf.clientKey</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.conf.clientKey|default('') }}" placeholder="conf.clientKey" name="phpwindConfig[conf][clientKey]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>conf.charset</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.conf.charset|default('') }}" placeholder="conf.charset" name="phpwindConfig[conf][charset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>database.dsn</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.database.dsn|default('') }}" placeholder="database.dsn" name="phpwindConfig[database][dsn]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>database.user</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.database.user|default('') }}" placeholder="database.user" name="phpwindConfig[database][user]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>database.pwd</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="password" value="{{ phpwindConfig.database.pwd|default('') }}" placeholder="database.pwd" name="phpwindConfig[database][pwd]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>database.charset</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.database.charset|default('') }}" placeholder="database.charset" name="phpwindConfig[database][charset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>database.tableprefix</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ phpwindConfig.database.tableprefix|default('') }}" placeholder="database.tableprefix" name="phpwindConfig[database][tableprefix]">
+      </div>
     </div>
   </div>
 
-    <div class="form-group with-phpwind with-discuz">
+  <div class="form-group with-phpwind with-discuz">
     <div class="col-md-3 control-label">
       <label for="email_filter">{{'过滤邮箱地址清单'|trans}}</label>
     </div>
     <div class="controls col-md-8">
       <textarea id="email_filter" name="email_filter" class="form-control" rows="5">{{setting.email_filter}}</textarea>
       <div class="help-block">
-        {#{% verbatim %}#}
         <div>{{'每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱'|trans}}</div>
-        {#{% endverbatim %}#}
       </div>
     </div>
   </div>
-
 
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>
@@ -62,9 +212,6 @@
       <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
     </div>
   </div>
-
-
-
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

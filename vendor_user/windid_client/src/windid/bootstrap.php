@@ -1,13 +1,16 @@
 <?php
+use Topxia\Service\Common\ServiceKernel;
 
 if (!defined('WEKIT_VERSION')) {
 	error_reporting(E_ERROR | E_PARSE);
 	require_once (WINDID_BOOT . '../wekit.php');
 	Wekit::init('windidclient');
 	Wind::application('windidclient', Wekit::S());
-	$clientConfig = include __DIR__ . '/../../../../app/config/windid_client_config.php';
+	$service = ServiceKernel::$instance->createService('System.SettingService');
+	$setting = $service->get('user_partner');
+	$clientConfig = $setting['partner_config']['phpwind'];
 	$database =  $clientConfig['database'];
-	$windidConfig =  $clientConfig['conf'];	
+	$windidConfig =  $clientConfig['conf'];
 	Wind::register(WINDID_PATH . 'service', 'SRV');
 } else {
 	$windidConfig = Wekit::C('windid');
@@ -24,7 +27,7 @@ if (!defined('WEKIT_VERSION')) {
 			'tableprefix' => $windidConfig['db.prefix']
 		);
 	}
-	$windidConfig['charset'] = Wekit::V('charset'); 
+	$windidConfig['charset'] = Wekit::V('charset');
 }
 
 Wind::register(WINDID_PATH . 'service', 'WSRV');
