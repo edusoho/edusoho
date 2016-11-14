@@ -32,7 +32,7 @@ define(function(require, exports, module) {
         })
 
 
-        $('#course_tags').select2({
+        $('#classroom_tags').select2({
 
             ajax: {
                 url: app.arguments.tagMatchUrl + '#',
