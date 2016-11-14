@@ -14,14 +14,20 @@ class TagController extends BaseController
         $paginator = new Paginator($request, $total, 20);
         $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        $tagIds = ArrayToolkit::column($tags, 'id');
+        foreach ($tags as &$tag) {
+            $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
+            $groupNames = ArrayToolkit::column($tagGroups, 'name');
 
-        $tagRelations = $this->getTagService()->findTagRelationsByTagIds($tagIds);
+            if (!empty($groupNames)) {
+                $tag['groupNames'] = $groupNames;
+            } else {
+                $tag['groupNames'] = array();
+            }
+        }
 
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
             'tags'         => $tags,
             'paginator'    => $paginator,
-            'tagRelations' => $tagRelations
         ));
     }
 

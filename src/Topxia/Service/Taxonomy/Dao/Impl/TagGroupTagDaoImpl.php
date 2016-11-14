@@ -27,10 +27,10 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
         return $this->getConnection()->fetchAll($sql, $tagIds);
     }
 
-    public function findTagRelationByTagId($tagId)
+    public function findTagRelationsByTagId($tagId)
     {
-        $sql = "SELECT * FROM {$that->getTable()} WHERE tagId = ?";
-        return $that->getConnection()->fetchAll($sql, array($tagId)) ?: array();
+        $sql = "SELECT * FROM {$this->getTable()} WHERE tagId = ?";
+        return $this->getConnection()->fetchAll($sql, array($tagId)) ?: array();
     }
 
     public function create($fields)

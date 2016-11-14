@@ -2,8 +2,8 @@
   <td>{{ tag.id }}</td>
   <td>{{ tag.name }}</td>
   <td>
-  {% for tagRelation in tagRelations[tag.id] %}
-    {{ tagRelation.groupName }}
+  {% for groupName in tag.groupNames|default('') %}
+    {{ groupName }}
   {% endfor %}
   </td>
   <td>{{ tag.createdTime|date('Y-m-d H:i') }}</td>

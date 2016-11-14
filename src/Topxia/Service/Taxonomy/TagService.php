@@ -21,6 +21,8 @@ interface TagService
 
     public function findTagRelationsByTagId($tagId);
 
+    public function findTagGroupsByTagId($tagId);
+
     public function getAllTagCount();
 
     public function searchTags($conditions, $start, $limit);

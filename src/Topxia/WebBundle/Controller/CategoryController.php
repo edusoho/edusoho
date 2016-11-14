@@ -84,8 +84,6 @@ class CategoryController extends BaseController
             'orderBy'             => $orderBy,
             'tagGroups'           => $tagGroups,
             'tags'                => $tags,
-            // 'groupId'             => $groupId,
-            // 'groupIds'            => $groupIds
         ));
     }
 
