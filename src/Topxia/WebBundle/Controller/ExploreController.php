@@ -266,9 +266,9 @@ class ExploreController extends CourseBaseController
             $tags[$selectedTagGroupId] = $selectedTag;
         }
 
-        $conditions['tags'] = array_values($tags);
-        $conditions['tags'] = array_unique($conditions['tags']);
-        $conditions['tags'] = array_filter($conditions['tags']);
+        $conditions['tagLikes'] = array_values($tags);
+        $conditions['tagLikes'] = array_unique($conditions['tagLikes']);
+        $conditions['tagLikes'] = array_filter($conditions['tagLikes']);
 
         unset($conditions['tag']);
 

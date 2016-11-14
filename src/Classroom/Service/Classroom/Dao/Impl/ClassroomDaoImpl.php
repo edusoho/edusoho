@@ -97,15 +97,24 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         if (!empty($conditions['tags'])) {
             $tagIds = $conditions['tags'];
+            $tags   = '';
+
+            foreach ($tagIds as $tagId) {
+                $tags .= "|".$tagId;
+            }
+
+            $conditions['tags'] = $tags.'|';
+        }
+
+        if (!empty($conditions['tagLikes'])) {
+            $tagIds = $conditions['tagLikes'];
             $tags   = '%';
 
             foreach ($tagIds as $tagId) {
                 $tags .= "|".$tagId;
             }
 
-            // $tags = substr($tags, 0, -2);
-
-            $conditions['tags'] = $tags.'|%';
+            $conditions['tagLikes'] = $tags.'|%';
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -119,7 +128,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('categoryId =:categoryId')
             ->andWhere('id IN (:classroomIds)')
             ->andWhere('tags LIKE :tagsLike')
-            ->andWhere('tags LIKE :tags')
+            ->andWhere('tags LIKE :tagLikes')
             ->andWhere('recommended = :recommended')
             ->andWhere('showable = :showable')
             ->andWhere('buyable = :buyable')
