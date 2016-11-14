@@ -625,45 +625,11 @@ class CourseController extends CourseBaseController
      */
     public function headerAction($course, $manage = false)
     {
-        $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-        if (empty($member)) {
-            $member['deadline'] = 0;
-            $member['levelId']  = 0;
-        }
-
-        $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
-
-        if ($member['levelId'] > 0) {
-            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
-        } elseif(!empty($member['classroomId'])) {
-            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
-        } else {
-            $vipChecked = 'ok';
-        }
-
-        if ($this->isBecomeStudentFromCourse($member)
-            || $this->isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)) {
-            $canExit = true;
-        } else {
-            $canExit = false;
-        }
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course'       => $course,
-            'canManage'    => $this->getCourseService()->canManageCourse($course['id']),
-            'canExit'      => $canExit,
-            'member'       => $member,
             'users'        => $users,
-            'manage'       => $manage,
-            'isNonExpired' => $isNonExpired,
-            'vipChecked'   => $vipChecked,
-            'isAdmin'      => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
 
