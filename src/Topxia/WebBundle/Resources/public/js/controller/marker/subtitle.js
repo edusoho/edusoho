@@ -60,6 +60,7 @@ define(function(require,exports,module){
             extensions:['srt'],
             mimeTypes:['text/srt']
         },
+        type:'sub',
         directives:{
             videoNo:videoNo
         }
