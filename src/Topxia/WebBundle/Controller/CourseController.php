@@ -198,7 +198,7 @@ class CourseController extends CourseBaseController
                 $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
-// var_dump($tags);exit;
+
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,

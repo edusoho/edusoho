@@ -224,13 +224,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         if (!empty($conditions['tags'])) {
             $tagIds = $conditions['tags'];
-            $tags   = '';
+            $tags   = '%';
 
             foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId.'| or';
+                $tags .= "|".$tagId;
             }
 
-            $conditions['tags'] = $tags;
+            // $tags = substr($tags, 0, -2);
+
+            $conditions['tags'] = $tags.'|%';
         }
 
         if (isset($conditions['tagId'])) {
@@ -254,7 +256,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
         }
-// var_dump($conditions);exit();
+
         $builder = $this->createDynamicQueryBuilder($conditions)
 
             ->from($this->table, 'course')
