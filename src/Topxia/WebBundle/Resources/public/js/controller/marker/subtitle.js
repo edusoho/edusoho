@@ -13,7 +13,7 @@ define(function(require,exports,module){
         var tabHeight = $('.nav-tabs-edit').height();
         var textTrackTitleHeight = $('.text-track-title').height();
         var selectorHeight = $('#track-select').height();
-        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selectorHeight - 100).show();
+        $textTrackDisplay.height(height - tabHeight - textTrackTitleHeight - selectorHeight - 140).show();
     })();
 
     //选择框组件实例
@@ -35,8 +35,8 @@ define(function(require,exports,module){
     });
     
     //初始获取字幕列表
-    var videoNo = $elem.data('mediaGlobalId');;
     var $elem = $('#uploader');
+    var videoNo = $elem.data('mediaGlobalId');;
     var mediaId = $elem.data('mediaId');
     var subtitleCreateUrl = $elem.data('subtitleCreateUrl');
     var subtitleListUrl = $elem.data('subtitleListUrl');
@@ -60,7 +60,9 @@ define(function(require,exports,module){
             extensions:['srt'],
             mimeTypes:['text/srt']
         },
-        videoNo:videoNo
+        directives:{
+            videoNo:videoNo
+        }
     });
     uploader.on('error',function(err){
         if(err.error === 'Q_TYPE_DENIED'){
