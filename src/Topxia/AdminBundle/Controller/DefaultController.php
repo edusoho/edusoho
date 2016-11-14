@@ -467,7 +467,6 @@ class DefaultController extends BaseController
         array_walk($result, function (&$data, $key) {
             $data = array('count' => count(array_unique($data)), 'date' => $key);
         });
-        //var_dump($result);
 
         return $result; //array_values($result);
     }
