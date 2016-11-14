@@ -56,7 +56,7 @@ class CourseMaterialController extends CourseBaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $member['levelId']) != 'ok') {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
             }
         }
