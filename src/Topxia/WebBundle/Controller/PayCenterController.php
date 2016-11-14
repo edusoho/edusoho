@@ -574,13 +574,8 @@ class PayCenterController extends BaseController
         return ServiceKernel::dispatcher();
     }
 
-    protected function dispatchEvent($eventName, $subject)
+    protected function dispatchEvent($eventName, $event)
     {
-        if ($subject instanceof ServiceEvent) {
-            $event = $subject;
-        } else {
-            $event = new ServiceEvent($subject);
-        }
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
