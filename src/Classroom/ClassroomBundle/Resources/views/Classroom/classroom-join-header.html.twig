@@ -21,16 +21,16 @@
       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {% if vipChecked == 'not_member' %}
-          {{'您已经不是会员，不能学习！'|trans}}
+          {{'您已经不是会员，不能学习此' ~ setting("classroom.name")|default("班级") ~ '！'|trans}}
           {% if classroom.price > 0 %}
             {{'请重新'|trans}}<a class="alert-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
           {% else %}
             <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
           {% endif %}！
         {% elseif vipChecked == 'member_expired' %}
-          {{'您的会员已过期，不能学习，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
+          {{'您的会员已过期，不能学习此' ~ setting("classroom.name")|default("班级") ~ '，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
         {% elseif vipChecked == 'level_low' %}
-          {{'会员等级不够，不能学习。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
+          {{'会员等级不够，不能学习此' ~ setting("classroom.name")|default("班级") ~ '。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
         {% else %}
           {{'该' ~ setting("classroom.name")|default("班级") ~ '已不支持会员免费学，'|trans}}<a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
         {% endif %}
