@@ -503,9 +503,9 @@ class CourseController extends CourseBaseController
             }
 
             if ($member && $member['levelId'] > 0) {
-                if($member['joinType'] == 'course'){
+                if($member['joinedType'] == 'course'){
                     $vipLevelId = $course['vipLevelId'];
-                } elseif ($member['joinType'] == 'classroom') {
+                } elseif ($member['joinedType'] == 'classroom') {
                     $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
                     $vipLevelId = $classroom['vipLevelId'];
                 }
