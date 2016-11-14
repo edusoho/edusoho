@@ -55,11 +55,20 @@ class TagServiceImpl extends BaseService implements TagService
         $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByTagIds($tagIds);
 
         foreach ($tagRelations as &$tagRelation) {
-            $tagGroup = $this->getTagGroup($tagRelation['groupId']);
-            $tagRelation['name'] = $tagGroup['name'];
+            if (!empty($this->getTagGroup($tagRelation['groupId']))) {
+                $tagGroup = $this->getTagGroup($tagRelation['groupId']);
+                $tagRelation['name'] = $tagGroup['name'];
+            } else {
+                $tagRelation['name'] = '';
+            }
         }
 
         return ArrayToolkit::group($tagRelations, 'tagId');
+    }
+
+    public function findTagRelationByTagId($tagId)
+    {
+        return $this->getTagGroupTagDao()->findTagRelationByTagId($tagId);
     }
 
     public function findTagsByGroupId($groupId)
@@ -143,6 +152,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag['createdTime'] = time();
         $tag                = $this->setTagOrg($tag);
         $tag                = $this->getTagDao()->addTag($tag);
+        $this->getTagGroupTagDao()->create(array('tagId' => $tag['id']));
 
         $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 

@@ -227,10 +227,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $tags   = '';
 
             foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
+                $tags .= "|".$tagId.'| or';
             }
 
-            $conditions['tags'] = $tags."|";
+            $conditions['tags'] = $tags;
         }
 
         if (isset($conditions['tagId'])) {
@@ -254,7 +254,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
         }
-
+// var_dump($conditions);exit();
         $builder = $this->createDynamicQueryBuilder($conditions)
 
             ->from($this->table, 'course')
@@ -273,6 +273,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
             ->andWhere('tags LIKE :tagsLike')
+            ->andWhere('tags LIKE :tags')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')

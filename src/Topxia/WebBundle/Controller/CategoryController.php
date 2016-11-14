@@ -66,14 +66,14 @@ class CategoryController extends BaseController
         return $subCategories;
     }
 
-    public function treeNavAction(Request $request, $tag, $category, $subCategory, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    public function treeNavAction(Request $request, $category, $subCategory, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
         $categories = $this->makeCategories();
 
         $tagGroups = $this->makeTags();
 
         $subCategories = $this->makeSubCategories($category);
-// var_dump($tag);exit();
+
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
             'selectedCategory'    => $category,
             'selectedSubCategory' => $subCategory,
@@ -83,7 +83,9 @@ class CategoryController extends BaseController
             'filter'              => $filter,
             'orderBy'             => $orderBy,
             'tagGroups'           => $tagGroups,
-            'tag'                => $tag
+            'tags'                 => $tags,
+            // 'groupId'             => $groupId,
+            // 'groupIds'            => $groupIds
         ));
     }
 

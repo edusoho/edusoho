@@ -4,9 +4,9 @@
   <div class="tabs-group" style="height: 50px;">
     <div class="title">分类:</div>
       <ul class="content clearfix">
-        <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:tag, filter:filter,orderBy:orderBy}) }}">全部</a></li>
+        <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">全部</a></li>
         {% for category in categories %}
-          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:tag, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
         {% endfor %}
       </ul>
     <a class="js-tabs-toggle tabs-toggle tabs-hide hidden">展开</a>
@@ -16,9 +16,9 @@
     <div class="tabs-group" style="height: 50px;">
      <div class="title"></div>
       <ul class="content clearfix">
-        <li class="{% if not selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:tag, filter:filter,orderBy:orderBy}) }}">全部</a></li>   
+        <li class="{% if not selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">全部</a></li>   
         {% for subCategory in subCategories %}
-          <li class="{% if subCategory.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:subCategory.code, tag:tag, filter:filter,orderBy:orderBy}) }}">{{ subCategory.name }}</a></li>
+          <li class="{% if subCategory.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:subCategory.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ subCategory.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
@@ -30,7 +30,7 @@
           <div class="title">{{ tagGroup.name }}:</div>
           <ul class="content clearfix">
             {% for sub in tagGroup.subs %}
-              <li class="{% if sub.id == tag %}active{% endif %}" ><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:tag, selectedTag:sub.id, filter:filter, orderBy:orderBy}) }}">{{ sub.name }}</a></li>
+              <li class="{% if tag_equal(tags, sub.id, tagGroup.id) %}active{% endif %}" ><a class="nav-link tag" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags, selectedTag:{group:tagGroup.id, tag:sub.id}}, filter:filter, orderBy:orderBy}) }}">{{ sub.name }}</a></li>
             {% endfor %}
           </ul>
         <div class="title"></div>

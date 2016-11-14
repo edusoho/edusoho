@@ -8,23 +8,54 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
-    public function exploreAction(Request $request, $category, $tag)
+    public function exploreAction(Request $request, $category)
     {
         $conditions    = $request->query->all();
-        $categoryArray = array();
-        $levels        = array();
 
-        if (isset($conditions['selectedTag'])) {
-            if ($conditions['selectedTag'] == $tag) {
-                unset($conditions['tagId']);
-                $tag = '';
-            } else {
-                $conditions['tagId'] = $conditions['selectedTag'];
-                $tag = $conditions['selectedTag'];
+        $selectedTag        = '';
+        $selectedTagGroupId = '';
+        $tags               = array();
+        $categoryArray      = array();
+        $levels             = array();
+
+        if (!empty($conditions['tag'])) {
+            if (!empty($conditions['tag']['tags'])) {
+                $tags = $conditions['tag']['tags'];
             }
-        } else {
-            $conditions['tagId'] = $tag;
+
+            if (!empty($conditions['tag']['selectedTag'])) {
+                $selectedTag        = $conditions['tag']['selectedTag']['tag'];
+                $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
+            }
         }
+
+        $tag = array($selectedTagGroupId => $selectedTag);
+
+        $flag = false;
+
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
+                $tags[$groupId] = $selectedTag;
+                $flag = true;
+                break;
+            }
+
+            if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
+                unset($tags[$groupId]);
+                $flag = true;
+                break;
+            }
+        }
+
+        if (!$flag) {
+            $tags[$selectedTagGroupId] = $selectedTag;
+        }
+
+        $conditions['tags'] = array_values($tags);
+        $conditions['tags'] = array_unique($conditions['tags']);
+        $conditions['tags'] = array_filter($conditions['tags']);
+
+        unset($conditions['tag']);
 
         $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
 
@@ -37,17 +68,7 @@ class CourseController extends CourseBaseController
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
 
-            $categoryArrays = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
-
-            if (!empty($categoryArrays)) {
-                $categoryIds = ArrayToolkit::column($categoryArrays, 'id');
-
-                $conditions['categoryIds'] = $categoryIds;
-
-                $conditions['categoryIds'][] = $conditions['code'];
-            } else {
-                $conditions['categoryId'] = $categoryArray['id'];
-            }
+            $conditions['categoryId'] = $categoryArray['id'];
         }
 
         unset($conditions['code']);
@@ -177,7 +198,7 @@ class CourseController extends CourseBaseController
                 $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
-
+// var_dump($tags);exit;
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
@@ -191,8 +212,8 @@ class CourseController extends CourseBaseController
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
-            'tag'                      => $tag,
-            'subCategory'              => $subCategory
+            'tags'                     => $tags,
+            'subCategory'              => $subCategory,
         ));
     }
 

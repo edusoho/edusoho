@@ -30,7 +30,12 @@ class TagController extends BaseController
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->addTag($request->request->all());
 
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
+            $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
+
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag'          => $tag,
+                'tagRelations' => $tagRelation,
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
