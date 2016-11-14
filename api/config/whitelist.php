@@ -11,7 +11,8 @@ return array(
         '/^\/api\/lessons$/',
         '/^\/api\/lessons\/\d+$/',
         '/^\/api\/classroom_play\/\d+$/',
-        '/^\/api\/course\/\d+\/lessons$/'
+        '/^\/api\/course\/\d+\/lessons$/',
+        '/^\/api\/setting\/\w+$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',
