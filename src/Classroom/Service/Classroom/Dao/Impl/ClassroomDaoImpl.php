@@ -11,7 +11,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     private $serializeFields = array(
         'assistantIds' => 'json',
         'teacherIds'   => 'json',
-        'service'      => 'json'
+        'service'      => 'json',
+        'tags'         => 'saw'
     );
 
     public function getClassroom($id)
@@ -94,6 +95,19 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             unset($conditions['tagId']);
         }
 
+        if (!empty($conditions['tags'])) {
+            $tagIds = $conditions['tags'];
+            $tags   = '%';
+
+            foreach ($tagIds as $tagId) {
+                $tags .= "|".$tagId;
+            }
+
+            // $tags = substr($tags, 0, -2);
+
+            $conditions['tags'] = $tags.'|%';
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('status = :status')
@@ -105,6 +119,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('categoryId =:categoryId')
             ->andWhere('id IN (:classroomIds)')
             ->andWhere('tags LIKE :tagsLike')
+            ->andWhere('tags LIKE :tags')
             ->andWhere('recommended = :recommended')
             ->andWhere('showable = :showable')
             ->andWhere('buyable = :buyable')

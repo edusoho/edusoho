@@ -643,8 +643,12 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
+        $tags = $this->getTagService()->findTagsByIds($classroom['tags']);
+
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
+
+            $class['tags'] = $this->getTagIdsFromRequest($request);
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
@@ -652,7 +656,9 @@ class ClassroomManageController extends BaseController
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
-            'classroom' => $classroom));
+            'classroom' => $classroom,
+            'tags'      => ArrayToolkit::column($tags, 'name')
+        ));
     }
 
     public function setPriceAction(Request $request, $id)
@@ -991,6 +997,14 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
+    }
+
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses            = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -1112,6 +1126,11 @@ class ClassroomManageController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     private function getWebExtension()

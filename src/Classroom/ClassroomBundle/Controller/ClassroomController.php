@@ -23,26 +23,56 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function exploreAction(Request $request, $category, $tag)
+    public function exploreAction(Request $request, $category)
     {
         $conditions             = $request->query->all();
 
         $conditions['status']   = 'published';
         $conditions['showable'] = 1;
 
-        $categoryArray = array();
+        $selectedTag        = '';
+        $selectedTagGroupId = '';
+        $tags               = array();
+        $categoryArray      = array();
 
-        if (isset($conditions['selectedTag'])) {
-            if ($conditions['selectedTag'] == $tag) {
-                unset($conditions['tagId']);
-                $tag = '';
-            } else {
-                $conditions['tagId'] = $conditions['selectedTag'];
-                $tag = $conditions['selectedTag'];
+        if (!empty($conditions['tag'])) {
+            if (!empty($conditions['tag']['tags'])) {
+                $tags = $conditions['tag']['tags'];
             }
-        } else {
-            $conditions['tagId'] = $tag;
+
+            if (!empty($conditions['tag']['selectedTag'])) {
+                $selectedTag        = $conditions['tag']['selectedTag']['tag'];
+                $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
+            }
         }
+
+        $tag = array($selectedTagGroupId => $selectedTag);
+
+        $flag = false;
+
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
+                $tags[$groupId] = $selectedTag;
+                $flag = true;
+                break;
+            }
+
+            if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
+                unset($tags[$groupId]);
+                $flag = true;
+                break;
+            }
+        }
+
+        if (!$flag) {
+            $tags[$selectedTagGroupId] = $selectedTag;
+        }
+
+        $conditions['tags'] = array_values($tags);
+        $conditions['tags'] = array_unique($conditions['tags']);
+        $conditions['tags'] = array_filter($conditions['tags']);
+
+        unset($conditions['tag']);
 
         $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
 
@@ -53,11 +83,12 @@ class ClassroomController extends BaseController
         }
 
         if (!empty($conditions['code'])) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+
+            $conditions['categoryId'] = $categoryArray['id'];
         }
+
+        unset($conditions['code']);
 
         if (!isset($conditions['filter'])) {
             $conditions['filter'] = array(
@@ -138,14 +169,14 @@ class ClassroomController extends BaseController
             'classrooms'               => $classrooms,
             'path'                     => 'classroom_explore',
             'category'                 => $category,
+            'subCategory'              => $subCategory,
             'categoryArray'            => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
             'filter'                   => $filter,
             'levels'                   => $levels,
             'orderBy'                  => $orderBy[0],
-            'tag'                      => $tag,
-            'subCategory'              => $subCategory
+            'tags'                     => $tags,
         ));
     }
 
