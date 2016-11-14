@@ -18,6 +18,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->findInField('parentId', array($id));
     }
 
+    public function deleteSubQuestions($parentId)
+    {
+        return $this->db()->delete($this->table(), array('parentId' => $parentId));
+    }
+
     public function declares()
     {
         $declares['orderbys'] = array(

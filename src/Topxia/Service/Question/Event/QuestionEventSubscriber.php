@@ -23,45 +23,41 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $question = $context['question'];
         $argument = $context['argument'];
 
-        $questionTarget       = explode('/', $question['target']);
-        $questionCourseTarget = explode('-', $questionTarget[0]);
-        $courseId             = $questionCourseTarget[1];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($question['courseId'], 1), 'id');
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
-        if ($courseIds) {
-            $num = count(explode('/', $question['target']));
-            if ($num > 1) {
-                $questionLessonTarget = explode('-', $questionTarget[1]);
-                $lessonId             = $questionLessonTarget[1];
-                $lessonIds            = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'id');
-            }
+        if (!$courseIds) {
+            return false;
+        }
 
-            //材料题
-            if ($argument['parentId']) {
-                $lockedTarget = '';
-                foreach ($courseIds as $key => $courseId) {
-                    if ($num > 1) {
-                        $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
-                    } else {
-                        $lockedTarget .= "'course-".$courseId."',";
-                    }
-                }
-                $lockedTarget = "(".trim($lockedTarget, ',').")";
-                $questionIds  = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['parentId'], $lockedTarget), 'id');
-            }
+        if ($question['lessonId'] > 0) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($question['lessonId'], $courseIds), 'id');
+        }
 
-            $argument['copyId'] = $question['id'];
+        //材料题
+        if ($argument['parentId']) {
+            $lockedTarget = '';
             foreach ($courseIds as $key => $courseId) {
-                if ($argument['parentId']) {
-                    $argument['parentId'] = $questionIds[$key];
-                }
                 if ($num > 1) {
-                    $argument['target'] = "course-".$courseId."/lesson-".$lessonIds[$key]."";
+                    $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
                 } else {
-                    $argument['target'] = "course-".$courseId;
+                    $lockedTarget .= "'course-".$courseId."',";
                 }
-                $this->getQuestionService()->createQuestion($argument);
             }
+            $lockedTarget = "(".trim($lockedTarget, ',').")";
+            $questionIds  = ArrayToolkit::column($this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget($question['parentId'], $lockedTarget), 'id');
+        }
+
+        $argument['copyId'] = $question['id'];
+        foreach ($courseIds as $key => $courseId) {
+            if ($argument['parentId']) {
+                $argument['parentId'] = $questionIds[$key];
+            }
+            if ($num > 1) {
+                $argument['target'] = "course-".$courseId."/lesson-".$lessonIds[$key]."";
+            } else {
+                $argument['target'] = "course-".$courseId;
+            }
+            $this->getQuestionService()->createQuestion($argument);
         }
     }
 

@@ -22,6 +22,15 @@ class MaterialQuestion extends Question
         );
     }
 
+    public function registerTemplates()
+    {
+        return array(
+            'create' => 'WebBundle:MaterialQuestion:form.html.twig',
+            'edit'   => 'WebBundle:MaterialQuestion:form.html.twig',
+            'do'     => 'WebBundle:MaterialQuestion:do.html.twig'
+        );
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.

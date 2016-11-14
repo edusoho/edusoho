@@ -70,5 +70,25 @@ course_manage_question:
     defaults: { _controller: WebBundle:QuestionManage:index }
 
 course_manage_question_create:
-    path: /course2.0/{courseId}/manage/question/{type}/create
+    path: /course/{courseId}/manage/question/{type}/create
     defaults: { _controller: WebBundle:QuestionManage:create }
+
+course_manage_question_update:
+    path: /course/{courseId}/manage/question/{id}/update
+    defaults: { _controller: WebBundle:QuestionManage:update }
+
+course_manage_question_delete:
+    path: /course/{courseId}/manage/question/delete/{id}
+    defaults: { _controller: WebBundle:QuestionManage:delete }
+    methods: [POST]
+
+course_manage_question_deletes:
+    path: /course/{courseId}/manage/question/deletes
+    defaults: { _controller: WebBundle:QuestionManage:deletes }
+    methods: [POST]
+
+course_manage_question_preview:
+    path: /course/{courseId}/manage/question/{id}/preview
+    defaults: { _controller: WebBundle:QuestionManage:preview }
+
+

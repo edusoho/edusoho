@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
@@ -20,9 +21,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $user             = $this->getCurrentuser();
         $fields['userId'] = $user['id'];
 
-        $fields = $this->getQuestionConfig($fields['type'])->filter($fields, 'create');
+        $questionConfig = $this->getQuestionConfig($fields['type']);
+        $media          = $questionConfig->create($fields);
+
+        if (!empty($media)) {
+            $fields['metas']['mediaId'] = $media['id'];
+        }
+
+        $fields = $questionConfig->filter($fields, 'create');
 
         $question = $this->getQuestionDao()->create($fields);
+
+        if ($question['parentId'] > 0) {
+            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+        }
 
         $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
 
@@ -31,12 +43,67 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function update($id, $fields)
     {
-        return $this->getQuestionDao()->update($id, $fields);
+        $question = $this->get($id);
+        $argument = array('question' => $question, 'fields' => $fields);
+        if (!$question) {
+            throw new ResourceNotFoundException('question', $id);
+        }
+
+        $questionConfig = $this->getQuestionConfig($question['type']);
+        if (!empty($question['metas']['mediaId'])) {
+            $questionConfig->update($question['metas']['mediaId'], $fields);
+        }
+
+        $fields = $questionConfig->filter($fields, 'create');
+
+        $question = $this->getQuestionDao()->update($id, $fields);
+
+        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
+
+        return $question;
     }
 
     public function delete($id)
     {
-        return $this->getQuestionDao()->delete($id);
+        $question = $this->get($id);
+        if (!$question) {
+            return false;
+        }
+
+        $questionConfig = $this->getQuestionConfig($question['type']);
+        $questionConfig->delete($question['metas']['mediaId']);
+
+        $result = $this->getQuestionDao()->delete($id);
+
+        if ($question['parentId'] > 0) {
+            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+        }
+
+        if ($question['subCount'] > 0) {
+            $this->deleteSubQuestions($question['id']);
+        }
+
+        $this->dispatchEvent("question.delete", array('question' => $question));
+
+        return $result;
+    }
+
+    public function batchDeletes($ids)
+    {
+        if (!$ids) {
+            return false;
+        }
+
+        foreach ($ids ?: array() as $id) {
+            $this->delete($id);
+        }
+
+        return true;
+    }
+
+    public function deleteSubQuestions($parentId)
+    {
+        return $this->getQuestionDao()->deleteSubQuestions($parentId);
     }
 
     public function findQuestionsByIds(array $ids)
@@ -94,6 +161,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         return $results;
+    }
+
+    public function waveSubCount($id, $diffs)
+    {
+        return $this->getQuestionDao()->wave(array($id), $diffs);
     }
 
     protected function getQuestionDao()

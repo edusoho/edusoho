@@ -57,6 +57,8 @@ abstract class Question
      */
     abstract public function registerActions();
 
+    abstract public function registerTemplates();
+
     /**
      * @param  $action
      * @return String
@@ -65,6 +67,12 @@ abstract class Question
     {
         $map = $this->registerActions();
         return $map[$action];
+    }
+
+    final public function getTemplate($code)
+    {
+        $map = $this->registerTemplates();
+        return $map[$code];
     }
 
     abstract public function getMetas();

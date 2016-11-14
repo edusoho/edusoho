@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class QuestionManageController extends BaseController
 {
@@ -16,6 +17,7 @@ class QuestionManageController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['courseId'] = $courseId;
+        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
 
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
@@ -25,17 +27,11 @@ class QuestionManageController extends BaseController
             $conditions['lessonId'] = $conditions['target'];
         }
 
-        if (!empty($conditions['parentId'])) {
+        $parentQuestion = array();
+        $orderBy        = array('createdTime' => 'DESC');
+        if ($conditions['parentId'] > 0) {
             $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-
-            if (!$parentQuestion) {
-                return $this->redirect($this->generateUrl('course_manage_question', array('courseId' => $courseId)));
-            }
-
-            $orderBy = array('createdTime' => 'ASC');
-        } else {
-            $parentQuestion = null;
-            $orderBy        = array('createdTime' => 'DESC');
+            $orderBy        = array('createdTime' => 'ASC');
         }
 
         $paginator = new Paginator(
@@ -67,17 +63,18 @@ class QuestionManageController extends BaseController
 
     public function createAction(Request $request, $courseId, $type)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course         = $this->getCourseService()->tryManageCourse($courseId);
+        $parentId       = $request->query->get('parentId', 0);
+        $parentQuestion = array();
+        if ($parentId > 0) {
+            $parentQuestion = $this->getQuestionService()->get($parentId);
+        }
 
         if ($request->getMethod() == 'POST') {
-            $data       = $request->request->all();
-            $attachment = $request->request->get('attachment');
+            $data = $request->request->all();
 
             $data['courseId'] = $courseId;
             $question         = $this->getQuestionService()->create($data);
-
-            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
-            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
@@ -95,12 +92,120 @@ class QuestionManageController extends BaseController
             }
         }
 
-        $questionConfig   = $this->getQuestionService()->getQuestionConfig($type);
-        $createController = $questionConfig->getAction('create');
+        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
 
-        return $this->forward($createController, array(
-            'courseId' => $courseId,
-            'type'     => $type
+        $features = array();
+        if ($this->container->hasParameter('enabled_features')) {
+            $features = $this->container->getParameter('enabled_features');
+        }
+        $enabledAudioQuestion = in_array('audio_question', $features);
+
+        $questionConfig = $this->getQuestionService()->getQuestionConfig($type);
+        $typeTemplate   = $questionConfig->getTemplate('create');
+
+        return $this->render('WebBundle:QuestionManage:question-form-layout.html.twig', array(
+            'course'               => $course,
+            'parentQuestion'       => $parentQuestion,
+            'enabledAudioQuestion' => $enabledAudioQuestion,
+            'courseTasks'          => $courseTasks,
+            'type'                 => $type,
+            'typeTemplate'         => $typeTemplate
+        ));
+    }
+
+    public function updateAction(Request $request, $courseId, $id)
+    {
+        $course      = $this->getCourseService()->tryManageCourse($courseId);
+        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+
+        $question = $this->getQuestionService()->get($id);
+        if (!$question) {
+            throw new ResourceNotFoundException('question', $id);
+        }
+
+        $parentQuestion = array();
+        if ($question['parentId'] > 0) {
+            $parentQuestion = $this->getQuestionService()->get($question['parentId']);
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $question = $request->request->all();
+            $this->getQuestionService()->update($id, $question);
+
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目修改成功！'));
+
+            return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['parentId']))));
+        }
+
+        $questionConfig = $this->getQuestionService()->getQuestionConfig($question['type']);
+        $typeTemplate   = $questionConfig->getTemplate('edit');
+
+        return $this->render('WebBundle:QuestionManage:question-form-layout.html.twig', array(
+            'course'         => $course,
+            'question'       => $question,
+            'parentQuestion' => $parentQuestion,
+            'type'           => $question['type'],
+            'courseTasks'    => $courseTasks,
+            'typeTemplate'   => $typeTemplate
+        ));
+    }
+
+    public function deleteAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $this->getQuestionService()->delete($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deletesAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $ids = $request->request->get('ids');
+
+        $this->getQuestionService()->batchDeletes($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function previewAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $isNewWindow = $request->query->get('isNew');
+
+        $question = $this->getQuestionService()->get($id);
+
+        if (empty($question)) {
+            throw new ResourceNotFoundException('question', $id);
+        }
+
+        $questionTypeObj      = $this->getQuestionService()->getQuestionConfig($question['type']);
+        $question['template'] = $questionTypeObj->getTemplate('do');
+
+        if ($question['subCount'] > 0) {
+            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($id);
+
+            foreach ($questionSubs as $key => $questionSub) {
+                $questionTypeObj = $this->getQuestionService()->getQuestionConfig($questionSub['type']);
+
+                $questionSubs[$key]['template'] = $questionTypeObj->getTemplate('do');
+            }
+
+            $question['items'] = $questionSubs;
+        }
+
+        $template = 'WebBundle:QuestionManage:preview-modal.html.twig';
+        if ($isNewWindow) {
+            $template = 'WebBundle:QuestionManage:preview.html.twig';
+        }
+
+        return $this->render($template, array(
+            'question'     => $question,
+            'showAnswer'   => 1,
+            'showAnalysis' => 1
         ));
     }
 

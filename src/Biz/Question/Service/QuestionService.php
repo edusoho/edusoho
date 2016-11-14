@@ -11,6 +11,8 @@ interface QuestionService
 
     public function delete($id);
 
+    public function deleteSubQuestions($parentId);
+
     public function findQuestionsByIds(array $ids);
 
     public function findQuestionsByParentId($id);

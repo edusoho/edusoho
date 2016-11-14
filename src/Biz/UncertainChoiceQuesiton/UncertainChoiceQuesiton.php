@@ -22,6 +22,15 @@ class UncertainChoiceQuesiton extends Question
         );
     }
 
+    public function registerTemplates()
+    {
+        return array(
+            'create' => 'WebBundle:UncertainChoiceQuesiton:form.html.twig',
+            'edit'   => 'WebBundle:UncertainChoiceQuesiton:form.html.twig',
+            'do'     => 'WebBundle:ChoiceQuestion:do.html.twig'
+        );
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.

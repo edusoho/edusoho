@@ -22,6 +22,15 @@ class EssayQuestion extends Question
         );
     }
 
+    public function registerTemplates()
+    {
+        return array(
+            'create' => 'WebBundle:EssayQuestion:form.html.twig',
+            'edit'   => 'WebBundle:EssayQuestion:form.html.twig',
+            'do'     => 'WebBundle:EssayQuestion:do.html.twig'
+        );
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.

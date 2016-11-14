@@ -12,11 +12,23 @@ class MaterialQuestionController extends BaseController
         // TODO: Implement showAction() method.
     }
 
-    public function editAction(Request $request, $id, $courseId)
+    public function editAction(Request $request, $courseId, $questionId)
     {
-        return $this->render('WebBundle:MaterialQuestion:modal.html.twig', array(
-            'activity' => $activity,
-            'courseId' => $courseId
+        $course      = $this->getCourseService()->getCourse($courseId);
+        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $question    = $this->getQuestionService()->get($questionId);
+
+        $parentQuestion = array();
+        if ($question['parentId'] > 0) {
+            $parentQuestion = $this->getQuestionService()->get($question['parentId']);
+        }
+
+        return $this->render('WebBundle:MaterialQuestion:form.html.twig', array(
+            'course'         => $course,
+            'question'       => $question,
+            'parentQuestion' => $parentQuestion,
+            'type'           => $question['type'],
+            'courseTasks'    => $courseTasks
         ));
     }
 
@@ -32,7 +44,7 @@ class MaterialQuestionController extends BaseController
         }
         $enabledAudioQuestion = in_array('audio_question', $features);
 
-        return $this->render('WebBundle:MaterialQuestion:create.html.twig', array(
+        return $this->render('WebBundle:MaterialQuestion:form.html.twig', array(
             'course'               => $course,
             'parentQuestion'       => null,
             'enabledAudioQuestion' => $enabledAudioQuestion,

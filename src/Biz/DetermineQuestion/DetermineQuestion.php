@@ -22,6 +22,15 @@ class DetermineQuestion extends Question
         );
     }
 
+    public function registerTemplates()
+    {
+        return array(
+            'create' => 'WebBundle:DetermineQuestion:form.html.twig',
+            'edit'   => 'WebBundle:DetermineQuestion:form.html.twig',
+            'do'     => 'WebBundle:DetermineQuestion:do.html.twig'
+        );
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.

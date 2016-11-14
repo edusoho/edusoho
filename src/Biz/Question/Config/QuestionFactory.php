@@ -17,7 +17,7 @@ class QuestionFactory
     /**
      * @param  Biz        $biz
      * @param  $type
-     * @return Activity
+     * @return Question
      */
     final public static function create(Biz $biz, $type)
     {

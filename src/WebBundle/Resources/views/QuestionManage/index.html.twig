@@ -21,7 +21,7 @@
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
         {% for type in questionTypes %}
-          {% if type not in ['single_choice','choice','essay'] or (type == 'material' and not parentQuestion) %}
+          {% if type not in ['single_choice','choice','essay','material'] or (type == 'material' and not parentQuestion) %}
             <li><a href="{{ path('course_manage_question_create',{courseId:course.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-sm"><span class="glyphicon glyphicon-plus"></span> {{ dict_text('questionType',type)}}</a></li>
           {% endif %}
         {% endfor %}

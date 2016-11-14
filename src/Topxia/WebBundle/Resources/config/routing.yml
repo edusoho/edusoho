@@ -887,23 +887,23 @@ question_file_url:
 #     path: /course/{courseId}/manage/question/create/{type}
 #     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:create }
 
-course_manage_question_update:
-    path: /course/{courseId}/manage/question/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
+# course_manage_question_update:
+#     path: /course/{courseId}/manage/question/{id}/update
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
 
-course_manage_question_delete:
-    path: /course/{courseId}/manage/question/delete/{id}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
-    methods: [POST]
+# course_manage_question_delete:
+#     path: /course/{courseId}/manage/question/delete/{id}
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
+#     methods: [POST]
 
-course_manage_question_deletes:
-    path: /course/{courseId}/manage/question/deletes
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
-    methods: [POST]
+# course_manage_question_deletes:
+#     path: /course/{courseId}/manage/question/deletes
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
+#     methods: [POST]
 
-course_manage_question_preview:
-    path: /course/{courseId}/manage/question/{id}/preview
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
+# course_manage_question_preview:
+#     path: /course/{courseId}/manage/question/{id}/preview
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
 
 course_manage_upload_question_attachment:
     path:  /course/{id}/manage/upload/question/attachment/{targetType}

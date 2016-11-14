@@ -23,6 +23,15 @@ class FillQuestion extends Question
         );
     }
 
+    public function registerTemplates()
+    {
+        return array(
+            'create' => 'WebBundle:FillQuestion:form.html.twig',
+            'edit'   => 'WebBundle:FillQuestion:form.html.twig',
+            'do'     => 'WebBundle:FillQuestion:do.html.twig'
+        );
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.
