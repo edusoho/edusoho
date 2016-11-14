@@ -503,7 +503,14 @@ class CourseController extends CourseBaseController
             }
 
             if ($member && $member['levelId'] > 0) {
-                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                if($member['joinType'] == 'course'){
+                    $vipLevelId = $course['vipLevelId'];
+                } elseif ($member['joinType'] == 'classroom') {
+                    $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+                    $vipLevelId = $classroom['vipLevelId'];
+                }
+
+                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $vipLevelId) != 'ok') {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
                 }
             }
