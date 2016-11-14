@@ -601,7 +601,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $info = array(
                     'orderId'   => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
-                    'levelId' => empty($classroom['vipLevelId']) ? 0 : $classroom['vipLevelId']
+                    'levelId' => empty($member['levelId']) ? 0 : $member['levelId']
                 );
                 $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
