@@ -41,11 +41,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::column($results, 'classroomId');
     }
 
+    /**
+     * @deprecated
+     */
     public function findClassroomsByCourseId($courseId)
     {
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
         return $this->findClassroomsByIds($classroomIds);
     }
+
+    public function getClassroomByCourseId($courseId)
+    {
+        $classroomIds = $this->findClassroomIdsByCourseId($courseId);
+        if(empty($classroomIds)) {
+            return array();
+        }
+        
+        return $this->getClassroom($classroomIds[0]);
+    }
+
 
     public function findClassroomByCourseId($courseId)
     {

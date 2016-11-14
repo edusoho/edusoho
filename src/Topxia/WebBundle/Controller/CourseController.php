@@ -634,6 +634,9 @@ class CourseController extends CourseBaseController
 
         if ($member['levelId'] > 0) {
             $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+        } elseif(!empty($member['classroomId'])) {
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
         } else {
             $vipChecked = 'ok';
         }
