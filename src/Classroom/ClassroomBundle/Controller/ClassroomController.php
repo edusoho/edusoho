@@ -208,7 +208,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -216,7 +215,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member    = $this->previewAsMember($previewAs, $member, $classroom);
         $lessonNum = 0;
         $coinPrice = 0;
         $price     = 0;
@@ -233,13 +231,14 @@ class ClassroomController extends BaseController
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
 
-        if (!empty($member['role'])) {
-            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-        } else {
-            $isclassroomteacher = false;
-        }
 
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member    = $this->previewAsMember($previewAs, $member, $classroom);
+        
         if ($member) {
+            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
+            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $member['levelId']) : 'ok';
+
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
@@ -252,7 +251,8 @@ class ClassroomController extends BaseController
                 'coursesNum'             => $coursesNum,
                 'canFreeJoin'            => $canFreeJoin,
                 'breadcrumbs'            => $breadcrumbs,
-                'isclassroomteacher'     => $isclassroomteacher
+                'isclassroomteacher'     => $isclassroomteacher,
+                'vipChecked'             => $vipChecked
             ));
         }
 
