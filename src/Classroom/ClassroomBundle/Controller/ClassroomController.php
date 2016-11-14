@@ -810,27 +810,22 @@ class ClassroomController extends BaseController
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
-        $vipStatus = $classroomVip = null;
-
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-
-            if ($classroomVip) {
-                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
-
-                if ($vipStatus == 'ok') {
-                    $formData['becomeUseMember'] = true;
-                }
-            }
+        if ($this->isPluginInstalled('Vip') 
+            && $this->setting('vip.enabled') 
+            && !empty($classroom['vipLevelId'])
+            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
+            return $this->forward("Classroom:ClassroomBundle:becomeStudent", array(
+                'request' => $request, 
+                'id' => $id
+            ));
         }
 
-        if ($classroom['price'] == 0 || $vipStatus == 'ok') {
+        if ($classroom['price'] == 0) {
             $formData['amount']     = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
-            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 
