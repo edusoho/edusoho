@@ -27,7 +27,7 @@ class CategoryController extends BaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
 
-            foreach ($categories as $id => $c) {
+            foreach ($categories as $id => $category) {
                 if ($categories[$id]['parentId'] != '0') {
                     unset($categories[$id]);
                 }
@@ -53,7 +53,7 @@ class CategoryController extends BaseController
     {
         $subCategories = array();
 
-        $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
+        $categoryArray = $this->getCategoryService()->getCategoryByCode($category['category']);
 
         if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
             $subCategories = $this->getCategoryService()->findAllCategoriesByParentId($categoryArray['id']);
@@ -66,7 +66,7 @@ class CategoryController extends BaseController
         return $subCategories;
     }
 
-    public function treeNavAction(Request $request, $category, $subCategory, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
         $categories = $this->makeCategories();
 
@@ -75,8 +75,8 @@ class CategoryController extends BaseController
         $subCategories = $this->makeSubCategories($category);
 
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            'selectedCategory'    => $category,
-            'selectedSubCategory' => $subCategory,
+            'selectedCategory'    => $category['category'],
+            'selectedSubCategory' => $category['subCategory'],
             'categories'          => $categories,
             'subCategories'       => $subCategories,
             'path'                => $path,

@@ -19,7 +19,7 @@ interface TagService
 
     public function findTagRelationsByTagIds($tagIds);
 
-    public function findTagRelationByTagId($tagId);
+    public function findTagRelationsByTagId($tagId);
 
     public function getAllTagCount();
 
