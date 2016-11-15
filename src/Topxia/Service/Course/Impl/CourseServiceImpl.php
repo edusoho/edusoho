@@ -2060,6 +2060,37 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function quitCourseByDeadlineReach($userId, $courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，退出课程失败。', array('%courseId%' => $courseId)));
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member) || ($member['role'] != 'student')) {
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
+        }
+
+        $isNonExpired = $this->isMemberNonExpired($course, $member);
+
+        if ($isNonExpired) {
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)还未达到有效期，不能退出课程。', array('%userId%')));
+        }
+
+        $this->getMemberDao()->deleteMember($member['id']);
+
+        $this->getCourseDao()->updateCourse($courseId, array(
+            'studentNum' => $this->getCourseStudentCount($courseId)
+        ));
+
+        $user = $this->getUserService()->getUser($userId);
+        
+        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
+    }
+
     public function findCourseStudents($courseId, $start, $limit)
     {
         return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
