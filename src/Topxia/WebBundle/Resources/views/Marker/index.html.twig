@@ -10,7 +10,8 @@
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
     data-lesson-mediaid="{{ lesson.mediaId }}"
-    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}" 
+    data-marker-metas-url="{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}">
     {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
