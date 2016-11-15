@@ -2077,7 +2077,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $isNonExpired = $this->isMemberNonExpired($course, $member);
 
         if ($isNonExpired) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)还未达到有效期，不能退出课程。', array('%userId%')));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)还未达到有效期，不能退出课程。', array('%userId%' => $userId)));
         }
 
         $this->getMemberDao()->deleteMember($member['id']);
@@ -2087,7 +2087,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
 
         $user = $this->getUserService()->getUser($userId);
-        
+
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
     }
 
