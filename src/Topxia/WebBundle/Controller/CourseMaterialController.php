@@ -56,10 +56,19 @@ class CourseMaterialController extends CourseBaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if(empty($course['vipLevelId'])){
-                return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
-            } elseif ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+            if(empty($course['vipLevelId'])) {
+                return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+            } elseif (empty($course['parentId']) 
+                && $this->isVipPluginEnabled()
+                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+            } elseif (!empty($course['parentId'])) {
+                $classroom        = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                if(!empty($classroom) 
+                    && $this->isVipPluginEnabled()
+                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok') {
+                    return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+                }
             }
         }
 
@@ -84,6 +93,11 @@ class CourseMaterialController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
+    protected function isVipPluginEnabled()
+    {
+        return $this->isPluginInstalled('Vip') && $this->setting('vip.enabled');
+    }
+
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
@@ -97,5 +111,10 @@ class CourseMaterialController extends CourseBaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }

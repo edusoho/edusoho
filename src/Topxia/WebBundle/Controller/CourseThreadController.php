@@ -144,8 +144,17 @@ class CourseThreadController extends CourseBaseController
         if ($member && $member['levelId'] > 0) {
             if(empty($course['vipLevelId'])){
                 return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
-            } elseif ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+            } elseif (empty($course['parentId']) 
+                && $this->isVipPluginEnabled()
+                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+            } elseif (!empty($course['parentId'])) {
+                $classroom        = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                if(!empty($classroom) 
+                    && $this->isVipPluginEnabled()
+                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok') {
+                    return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+                }
             }
         }
 
@@ -180,6 +189,11 @@ class CourseThreadController extends CourseBaseController
             'form'   => $form->createView(),
             'type'   => $type
         ));
+    }
+
+    protected function isVipPluginEnabled()
+    {
+        return $this->isPluginInstalled('Vip') && $this->setting('vip.enabled');
     }
 
     public function editAction(Request $request, $courseId, $id)
