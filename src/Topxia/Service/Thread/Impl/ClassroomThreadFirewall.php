@@ -26,7 +26,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         if ($this->getVipService()->isPluginInstalled('Vip') 
             && $this->getVipService()->setting('vip.enabled', 0) 
             && !empty($member['levelId']) 
-            && $this->getVipService()->checkUserInMemberLevel($user['id'], $member['levelId']) != 'ok') {
+            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) != 'ok') {
             return false;
         }
 
