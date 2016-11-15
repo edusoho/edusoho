@@ -114,7 +114,7 @@
   <div class="alert alert-danger alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{'您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击'|trans}}
-      <a class="btn btn-primary btn-sm "  href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
+      <a class="btn btn-primary btn-sm"  href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
       {% if course.price>0 %}
         {{'重新购买'|trans}}
       {% else %}

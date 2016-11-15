@@ -2081,22 +2081,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         //查询出订单
-        $orders = $this->getOrderService()->searchOrders(
-            array('targetType' => 'course', 'targetId' => $courseId, 'userId' => $userId, 'status' => 'paid'),
-            'latest',
-            0,
-            1
-        );
-
+        $order = $this->getOrderService()->getOrder($member['orderId']);
         $user = $this->getUserService()->getUser($userId);
-        
-        if (!empty($orders)) {
+        if (!empty($order)) {
             $reason = array(
                 'type'     => 'other',
                 'note'     => '达到有效期，用户自己退出',
                 'operator' => $user['id']
             );
-            $order = array_pop($orders);
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
       
