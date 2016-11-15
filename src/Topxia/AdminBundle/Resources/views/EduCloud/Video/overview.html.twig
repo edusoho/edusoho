@@ -1,131 +1,24 @@
-     <div class="panel panel-default">
-        <div class="panel-heading">
-          <a href="">升级</a>｜<a href="">续费</a>  
-        </div>
-        <div class="panel-body">
-          <div class="row pvm">
-            <div class="col-sm-2 text-right">
-              存储空间
-            </div>
-            <div class="col-xs-7">
-              <div class="progress mbm cloud-progress">
-                <div class="progress-bar progress-bar-storage progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                  <span class="sr-only">100% Complete</span>
-                </div>
-              </div>
-              <span class="text-danger">20GB</span>/190GB
-            </div>
-            <div class="col-xs-1" style="width:100px;padding-left:0">
-              <div class="progress mbm cloud-progress">
-                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
-                  <span class="sr-only">100% Complete</span>
-                </div>
-              </div>
-              <div class="text-danger text-center">超额20GB</div>
-            </div>
-          </div>
-          <div class="row pvm">
-            <div class="col-sm-2 text-right">
-              存储空间
-            </div>
-            <div class="col-xs-7">
-              <div class="progress mbm cloud-progress">
-                <div class="progress-bar progress-bar-storage" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                  <span class="sr-only">60% Complete</span>
-                </div>
-              </div>
-              <span>20GB</span>/190GB
-            </div>
-          </div>
-          <div class="row pvm">
-            <div class="col-sm-2 text-right">
-            服务期限
-            </div>
-            <div class="col-sm-7">
-               2016-01-10 ~ 2017-01-10
-            </div>
-            <div class="col-sm-offset-2 col-sm-7">
-              <div class="text-danger">
-              云视频包已过期，请尽快续费
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel panel-default panel-chart">
-        <div class="panel-heading">
-          <span class="prl">流量年包</span>
-          <a href="" target="_blank">流量年包是什么？</a>
-        </div>
-        <div class="video-overview">
-          <div class="panel-body"  id="hengxangliebiao">
-            <div class="row pvm">
-              <div class="col-sm-2 text-right">
-              流量
-              </div>
-              <div class="col-sm-7">
-                <div class="progress mbm cloud-progress">
-                  <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-                    <span class="sr-only">100% Complete</span>
-                  </div>
-                </div>
-                <span class="color-danger">20GB</span>/100GB<span style="color:#aeaeae !important;">（剩余70GB）</span>
-              </div>
-            </div>
-            <div class="row pvm">
-              <div class="col-sm-2 text-right">
-              服务期限
-              </div>
-              <div class="col-sm-7">
-               2017-10-21~2017-11-11
-              </div>
-              <div class="col-sm-offset-2 col-sm-7">
-                <div class="text-danger">
-                您的流量年包已过期，请尽快续购（0571-28022356）
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
+{% include 'TopxiaAdminBundle:EduCloud:Video/video-buy.html.twig' %}
+{#{% include 'TopxiaAdminBundle:EduCloud:Video/video-show.html.twig' %}#}
+{% include 'TopxiaAdminBundle:EduCloud:Video/flow-buy.html.twig' %}
+{#{% include 'TopxiaAdminBundle:EduCloud:Video/flow-show.html.twig' %}#}
 
-      <!-- 概览 -->
-      <div class="buy-cloud-video clearfix">
-        <img class="pull-left" src="/assets/v2/img/educloud/shopping_cart.png" alt="">
-        <div class="buy-section pull-left">
-          <h4 class="mbl"><a class="" href="/buy/cloud/video" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</h4>
-          <div class="color-gray">最低 ￥7.2/GB/年</div>
-        </div>
-      </div>
-      <div class="buy-cloud-video clearfix">
-        <img class="pull-left" src="/assets/v2/img/educloud/shopping_cart.png" alt="">
-        <div class="buy-section pull-left">
-          <h4 class="mbl">开通流量年包，视频流量更划算。<a class="" href="/doc/ServiceGuide/video-package/index.html" target="_blank">什么是流量年包？</a></h4>
-          <div class="gray-dark">联系官方立即开通 : <span class="color-primary">0571-28022356</span></div>
-        </div>
-      </div>
-      <div class="panel panel-default panel-chart">
-        <input id="spaceItemData" type="hidden" value="{{spaceItem|default('')}}"/>
-        <div class="panel-heading">存储空间使用趋势<span class="text-muted">（最近7个月）</span><a class="pull-right" href="">更多&ensp;></a></div>
-        <div class="panel-body">
-          <div id="spaceItemChart" style="width: 100%;height:400px;"></div>
-        </div>
-      </div>
-      <div class="panel panel-default panel-chart">
-        <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
-        <div class="panel-heading">
-          流量使用趋势
-          <span class="text-muted">（最近7个月）</span>
-          <a class="pull-right" href="">更多&ensp;></a>
-        </div>
-        <div class="panel-body">
-          <div id="flowItemChart"></div>
-        </div>
-      </div>
-    {#{% if  info.accessCloud|default(0) != 0 and storageSetting.upload_mode|default('cloud') == "cloud" %}#}
-      {#<div class="page-header clearfix">
-        <h1 class="pull-left">{{ '云视频功能设置'|trans }}</h1>
-      </div>#}
-
+<div class="panel panel-default panel-chart">
+  <input id="spaceItemData" type="hidden" value="{{spaceItem|default('')}}"/>
+  <div class="panel-heading">存储空间使用趋势<span class="text-muted">（最近7个月）</span><a class="pull-right" href="">更多&ensp;></a></div>
+  <div class="panel-body">
+    <div id="spaceItemChart" style="width: 100%;height:400px;"></div>
   </div>
+</div>
+
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    流量使用趋势
+    <span class="text-muted">（最近7个月）</span>
+    <a class="pull-right" href="">更多&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="flowItemChart"></div>
+  </div>
+</div>
