@@ -17,7 +17,9 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
+          
           {{ setting('classroom.name')|default('班级'|trans) }}:{{ classroom.title }}
+          
           {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo|default(null) %}
             <span>{{ userPlanTaskNumInfo.allDoneNum ~ '/' ~ userPlanTaskNumInfo.tasksNum }}</span>
           {% else %}
