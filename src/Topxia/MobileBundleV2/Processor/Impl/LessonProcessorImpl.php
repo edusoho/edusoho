@@ -136,7 +136,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $material = $this->controller->getMaterialService()->getMaterial($courseId, $materialId);
 
         if (empty($material)) {
-            throw "createNotFoundException";
+            throw new \RuntimeException("资料不存在");
         }
 
         return $this->controller->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
