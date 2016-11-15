@@ -37,22 +37,23 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
             $sql    = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
             $result = $that->getConnection()->fetchAssoc($sql, array($email));
-            return $result;
-        }
-
-        );
+            return $result?:array();
+        });
     }
 
     public function findUserByNickname($nickname)
     {
+        if(empty($nickname)) {
+            return array();
+        }
+
         $that = $this;
 
         return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE nickname = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($nickname));
-        }
-
-        );
+            $result = $that->getConnection()->fetchAssoc($sql, array($nickname));
+            return $result ? : array();
+        });
     }
 
     public function getCountByMobileNotEmpty()
@@ -263,10 +264,30 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function updateUser($id, $fields)
     {
-        $fields['updatedTime'] = time();
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCached();
-        return $this->getUser($id);
+        // if (empty(array_diff(array_keys($fields), array(
+        //     'loginIp', 
+        //     'loginTime', 
+        //     'updatedTime',
+        //     'loginSessionId',
+        //     'lockDeadline',
+        //     'consecutivePasswordErrorTimes',
+        //     'lastPasswordFailTime')))) {
+
+        //     $fields['updatedTime'] = time();
+        //     $user = $this->getUser($id);
+        //     if($fields['updatedTime'] - $user['updatedTime'] > 1800) {
+        //         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        //         $this->clearCached();
+        //     }
+        //     return $user;
+
+        // } else {
+            $fields['updatedTime'] = time();
+            $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+            $this->clearCached();
+            return $this->getUser($id);
+        // }
     }
 
     public function waveCounterById($id, $name, $number)

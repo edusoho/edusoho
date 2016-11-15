@@ -4,7 +4,7 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
 
-use Doctrine\DBAL\DriverManager;
+// use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -17,6 +17,7 @@ use Symfony\Component\Debug\Debug;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
+use Topxia\Common\AppConnectionFactory;
 
 if (API_ENV == 'prod') {
     ErrorHandler::register(0);
@@ -26,21 +27,20 @@ if (API_ENV == 'prod') {
 $paramaters         = include __DIR__.'/config/paramaters.php';
 $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
-$connection = DriverManager::getConnection(array(
-    'wrapperClass' => 'Topxia\Service\Common\Connection',
-    'dbname'       => $paramaters['database_name'],
-    'user'         => $paramaters['database_user'],
-    'password'     => $paramaters['database_password'],
-    'host'         => $paramaters['database_host'],
-    'driver'       => $paramaters['database_driver'],
-    'charset'      => 'utf8'
-));
+// $connection = DriverManager::getConnection(array(
+//     'wrapperClass' => 'Topxia\Service\Common\Connection',
+//     'dbname'       => $paramaters['database_name'],
+//     'user'         => $paramaters['database_user'],
+//     'password'     => $paramaters['database_password'],
+//     'host'         => $paramaters['database_host'],
+//     'driver'       => $paramaters['database_driver'],
+//     'charset'      => 'utf8'
+// ));
 
 
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
-$serviceKernel->setConnection($connection);
-$serviceKernel->getConnection()->exec('SET NAMES UTF8');
+$serviceKernel->setConnectionFactory(new AppConnectionFactory());
 
 include __DIR__.'/src/functions.php';
 
@@ -103,7 +103,6 @@ $app->error(function (\Exception $exception, $code) use ($app) {
             foreach ($e['trace'] as $position => $trace) {
                 $content = sprintf('%s. ', $position+1);
                 if ($trace['function']) {
-                    // var_dump($trace['args']);
                     $content .= sprintf('at %s%s%s(%s)', $trace['class'], $trace['type'], $trace['function'], '...args...');
                 }
                 if (isset($trace['file']) && isset($trace['line'])) {

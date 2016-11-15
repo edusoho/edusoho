@@ -31,10 +31,9 @@ class ApiAuthTest extends BaseTestCase
 
         exit();
 
-
         $decoded = $auth->decodeKeysign($token);
 
-        var_dump($decoded);
+        // var\_dump($decoded);
     }
 
     private function getSettingService()

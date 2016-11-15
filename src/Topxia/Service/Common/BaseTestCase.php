@@ -11,6 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Doctrine\Bundle\MigrationsBundle\Command\MigrationsMigrateDoctrineCommand;
+use Topxia\Common\TestConnectionFactory;
 
 class BaseTestCase extends WebTestCase
 {
@@ -44,8 +45,7 @@ class BaseTestCase extends WebTestCase
 
         $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-        $connection = $kernel->getContainer()->get('database_connection');
-        $serviceKernel->setConnection(new TestCaseConnection($connection));
+        $serviceKernel->setConnectionFactory(new TestConnectionFactory($kernel->getContainer()));
         $serviceKernel->setEnvVariable(array(
             'host'          => 'test.com',
             'schemeAndHost' => 'http://test.com'

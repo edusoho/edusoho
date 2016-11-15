@@ -15,7 +15,7 @@
   <table id="announcement-table" class="table table-striped">
     <thead>
     <tr>
-      <th width="25%">{{'公告信息'|trans}}</th>
+      <th width="25%">{{'公告内容'|trans}}</th>
       {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>{{'发布时间'|trans}}</th>
       <th>{{'结束时间'|trans}}</th>
@@ -67,6 +67,5 @@
   {% if not announcements %}
     <div class="empty">{{'暂无公告'|trans}}</div>
   {% endif %}
-
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

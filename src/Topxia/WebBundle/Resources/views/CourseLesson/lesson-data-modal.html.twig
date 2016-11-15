@@ -1,6 +1,10 @@
 {% set modal_class= "modal-lg" %}
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% block title %}{{lesson.title}}{{'课时的数据'|trans}}{% endblock %}
+
+{% block title %}
+  {{ '学员学习详情'|trans }} ({{ '课时'|trans }}{{ lesson.seq }}: {{lesson.title}})
+{% endblock %}
+
 {% block body %}
   <div class="table-responsive">
     <table class="table table-bordered" style="word-break:break-all;text-align:center;">
@@ -9,7 +13,6 @@
         <td>{{'加入课时时间'|trans}}</td>
         <td>{{'完成课时时间'|trans}}</td>
         <td width="18%">{{'课时学习时长（分）'|trans}}</td>
-        <td width="18%">{{'音视频时长（分）'|trans}}</td>
         <td width="18%">{{'音视频学习时长（分）'|trans}}</td>
         <td>{{'最近考试得分'|trans}}</td>
       </tr>
@@ -20,13 +23,6 @@
             <td>{{student.startTime|date('Y-m-d H:i:s')}}</td>
             <td>{% if student.finishedTime %}{{student.finishedTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
             <td>{{(student.learnTime/60)|round(0, 'floor')}}</td>
-            <td>
-              {% if lesson.type in ['live'] %}
-                ----
-              {% else %}
-                {{lesson.length|default('----')}}
-              {% endif %}
-            </td>
             <td>{% if lesson.type == "video" or lesson.type == "audio" %}{{(student.watchTime/60)|round(0, 'floor')}}{% else %}----{% endif %}</td>
             <td>{% if lesson.type == "testpaper" %}{{student.result}}{% else %}----{% endif %}</td>
           </tr>
