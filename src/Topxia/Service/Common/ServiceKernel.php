@@ -264,7 +264,7 @@ class ServiceKernel
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
             $dao   = new $class();
-            $dao->setConnectionFactory($this->connectionFactory);
+            $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
         }

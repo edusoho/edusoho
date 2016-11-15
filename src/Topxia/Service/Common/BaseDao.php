@@ -73,7 +73,13 @@ abstract class BaseDao
      */
     public function getConnection()
     {
-        return $this->connectionFactory->getConnection();
+        return $this->connection;
+    }
+
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+        return $this;
     }
 
     public function setConnectionFactory($connectionFactory)
