@@ -174,7 +174,7 @@ class QuestionManageController extends BaseController
                 $questionSubs[$key]['template'] = $questionTypeObj->getTemplate('do');
             }
 
-            $question['items'] = $questionSubs;
+            $question['subs'] = $questionSubs;
         }
 
         $template = 'WebBundle:QuestionManage:preview-modal.html.twig';

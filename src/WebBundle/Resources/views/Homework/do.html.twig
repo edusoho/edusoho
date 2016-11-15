@@ -1,27 +1,20 @@
-{% extends 'WebBundle:Testpaper:testpaper-layout1.html.twig' %}
+{% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
 
 {#{% set script_controller = 'homeworkbundle/controller/homework/do' %}#}
-
-{% set items = items|default(null) %}
 
 {% block paper_body %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      {{'作业题目'|trans}} <small class="text-muted">{{'共%itemCount%题'|trans({'%itemCount%':items.total})}}</small>
+      {{'作业题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':0}) }}</small>
     </div>
 
     <div class="panel-body">
       <div class="question-set-items">
-        {% for item in items.items %}
-          {% if item.question.isDelete|default(false) %}
-            {% include 'WebBundle:Question/Part:question-delete.html.twig' with {showScore:0}%}
+        {% for question in questions %}
+          {% if question.isDelete|default(false) %}
+            {% include 'WebBundle:Question/Part:question-delete.html.twig' with {showScore:0,question:question}%}
           {% else %}
-            {% if item.questionType in ['single_choice', 'choice', 'uncertain_choice'] %}
-              {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-            {% else %}
-              {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ item.questionType ~ '.html.twig' %}
-            {% endif %}
-
+            {% include question.template with {showAcore:0} %}
           {% endif %}
 
         {% endfor %}

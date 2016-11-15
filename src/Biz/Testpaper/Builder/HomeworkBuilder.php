@@ -28,35 +28,44 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     public function showTestItems($resultId)
     {
-        $homework  = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $items     = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-        $itemCount = count($items);
+        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $items          = $this->getTestpaperService()->findItemsByTestId($homeworkResult['testId']);
+
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $validQuestionIds = array();
-
-        foreach ($items as $questionId => &$item) {
+        $formatQuestions = array();
+        foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array('isDeleted' => true) : $questions[$questionId];
 
-            $item['question'] = $question;
-
-            if ($item['parentId'] == 0) {
-                continue;
+            if (!empty($itemResults[$questionId])) {
+                $question['testResult'] = $itemResults[$questionId];
             }
 
-            $items[$item['parentId']]['subItems'][] = $item;
-            unset($items[$item['questionId']]);
+            $question['score']     = $item['score'];
+            $question['seq']       = $item['seq'];
+            $question['missScore'] = $item['missScore'];
+
+            $questionConfig       = $this->getQuestionService()->getQuestionConfig($item['questionType']);
+            $question['template'] = $questionConfig->getTemplate('do');
+
+            if ($item['parentId'] > 0) {
+                $formatQuestions[$item['parentId']]['subs'][$questionId] = $question;
+            } else {
+                $formatQuestions[$item['questionId']] = $question;
+            }
         }
 
-        $set = array(
-            'items'       => $items,
-            'questionIds' => $questionIds,
-            'total'       => $itemCount
-        );
+        /*$set = array(
+        'items'       => $items,
+        'questionIds' => $questionIds,
+        'total'       => $itemCount
+        );*/
 
-        return $set;
+        return $formatQuestions;
     }
 
     public function canBuild($options)

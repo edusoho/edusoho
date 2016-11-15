@@ -46,13 +46,13 @@ class HomeworkController extends BaseController
         }
 
         //$items = $this->getItemSetByHomeworkId($homework['id']);
-        $items = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
         return $this->render('WebBundle:Homework:do.html.twig', array(
             'paper'          => $homework,
-            'items'          => $items,
+            'questions'      => $questions,
             'course'         => $course,
-            'result'         => $result,
+            'paperResult'    => $result,
             'questionStatus' => 'doing'
         ));
     }

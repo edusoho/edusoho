@@ -4,7 +4,7 @@
 		{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
 	</div>
 	
-	{% for question in question.items|default([]) %}
-		{% include question.template %}
+	{% for subQuestion in question.subs|default([]) %}
+		{% include subQuestion.template with {question:subQuestion, parentQuestion:question, seq:loop.index} %}
 	{% endfor %}
 </div>

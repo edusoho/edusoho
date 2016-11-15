@@ -1,7 +1,9 @@
 {% set showAcore = showAcore|default(1) %}
 <div class="testpaper-question-stem-wrap clearfix">
   <div class="testpaper-question-seq-wrap">
-    <div class="testpaper-question-seq">{{ question.seq|default('') }}</div>
+    <div class="testpaper-question-seq">
+      {% if parentQuestion|default(null) %}{{ parentQuestion.seq }}.{{ seq }}{% else %}{{ question.seq|default('') }}{% endif %}
+    </div>
     {% if showAcore %}
       <div class="testpaper-question-score">
         {{ question.score|default('0.0') }}{{'分'|trans}}
@@ -10,9 +12,9 @@
   </div>
     <div class="testpaper-question-stem">
       {% if question.type == 'fill' %}
-        {{ question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
+        {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
       {% else %}
-        {{ question.stem|bbCode2Html|raw|nl2br }}
+        {{ question.stem|bbCode2Html|raw }}
       {% endif %}
     	
       {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id|default(null)  } %}

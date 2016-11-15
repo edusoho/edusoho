@@ -10,7 +10,7 @@
 
 {% block testpaper_heading_content %}
 
-  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+  {% include 'WebBundle:Testpaper/Part:paper-result-objective.html.twig' %}
 
   {% if app.user.id == paperResult.userId %}
     {% if paperResult.status == 'reviewing' %}

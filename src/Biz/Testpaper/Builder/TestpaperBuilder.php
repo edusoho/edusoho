@@ -51,31 +51,33 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-
-        foreach ($items as $questionId => &$item) {
+        foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
             if (!$question) {
                 $question = array(
                     'isDeleted' => true,
-                    'stem'      => $this->getKernel()->trans('此题已删除'),
+                    'stem'      => $this->getServiceKernel()->trans('此题已删除'),
                     'score'     => 0,
                     'answer'    => ''
                 );
             }
 
+            $question['score']     = $item['score'];
+            $question['seq']       = $item['seq'];
+            $question['missScore'] = $item['missScore'];
+            $questionConfig        = $this->getQuestionService()->getQuestionConfig($item['questionType']);
+            $question['template']  = $questionConfig->getTemplate('do');
+
             if (!empty($itemResults[$questionId])) {
-                $item['testResult'] = $itemResults[$questionId];
+                $question['testResult'] = $itemResults[$questionId];
             }
 
-            $item['question'] = $question;
-
-            if ($item['parentId'] > 0) {
-                $items[$item['parentId']]['items'][$questionId]                    = $item;
-                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $item;
+            if ($question['parentId'] > 0) {
+                $formatItems['material'][$item['parentId']]['subs'][$questionId] = $question;
             } else {
-                $formatItems[$item['questionType']][$item['questionId']] = $item;
+                $formatItems[$item['questionType']][$questionId] = $question;
             }
         }
 
@@ -233,7 +235,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getBiz()->service('Question:QuestionService');
     }
 
     protected function getServiceKernel()

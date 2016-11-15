@@ -3,7 +3,7 @@
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
 	<div class="testpaper-question-body">
-    {% include 'WebBundle:Question/Part:question-stem.html.twig' %}
+    {% include 'WebBundle:Question/Part:question-stem.html.twig' with {question:question, parentQuestion:parentQuestion|default(null)} %}
 
 		<ul class="testpaper-question-choices">
 			{% for key, choice in question.metas.choices %}

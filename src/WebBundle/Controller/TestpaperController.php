@@ -175,9 +175,9 @@ class TestpaperController extends BaseController
 
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
         //$result           = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
 
-        $total = $this->makeTestpaperTotal($testpaper, $items);
+        $total = $this->makeTestpaperTotal($testpaper, $questions);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 
@@ -191,19 +191,33 @@ class TestpaperController extends BaseController
         $attachments = $this->findAttachments($testpaper['id']);
 
         return $this->render('WebBundle:Testpaper:start-do-show.html.twig', array(
-            'items'       => $items,
-            'limitTime'   => $testpaperResult['limitedTime'] * 60,
-            'paper'       => $testpaper,
-            'paperResult' => $testpaperResult,
-            'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
+            'questions'     => $questions,
+            'limitTime'     => $testpaperResult['limitedTime'] * 60,
+            'paper'         => $testpaper,
+            'paperResult'   => $testpaperResult,
+            'favorites'     => ArrayToolkit::column($favorites, 'questionId'),
             //'id'          => $id,
-            'total'       => $total,
+            'total'         => $total,
             //'target'      => $target,
-            'attachments' => $attachments
+            'attachments'   => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'showTypeBar'   => 1
         ));
     }
 
-    private function findAttachments($testId)
+    protected function getCheckedQuestionType($testpaper)
+    {
+        $questionTypes = array();
+        foreach ($testpaper['metas']['counts'] as $type => $count) {
+            if ($count > 0) {
+                $questionTypes[] = $type;
+            }
+        }
+
+        return $questionTypes;
+    }
+
+    protected function findAttachments($testId)
     {
         $items       = $this->getTestpaperService()->findItemsByTestId($testId);
         $questionIds = ArrayToolkit::column($items, 'questionId');
