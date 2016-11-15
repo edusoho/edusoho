@@ -33,6 +33,11 @@ class BaseController extends Controller
         ;
     }
 
+    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
+    {
+        return new ResourceNotFoundException($resourceType, $resourceId, $message);
+    }
+
     /**
      * 创建消息提示响应
      *
@@ -46,7 +51,7 @@ class BaseController extends Controller
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
         if (!in_array($type, array('info', 'warning', 'error'))) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('type不正确'));
+            throw new \RuntimeException('type error');
         }
 
         return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
@@ -56,11 +61,6 @@ class BaseController extends Controller
             'duration' => $duration,
             'goto'     => $goto
         ));
-    }
-
-    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
-    {
-        return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
     /**

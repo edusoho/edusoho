@@ -110,10 +110,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $fields                = $this->filterFields($fields);
         $fields['updatedTime'] = time();
 
-        if (isset($fields['startTime']) && isset($fields['length'])) {
-            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
-        }
-
         return $this->getActivityDao()->update($id, $fields);
     }
 
