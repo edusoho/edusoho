@@ -9,11 +9,22 @@ use Biz\LiveActivity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
+    private $client;
+
+    public function getLiveActivity($id)
+    {
+        return $this->getLiveActivityDao()->get($id);
+    }
+
     public function createLiveActivity($activity)
     {
         //创建直播室
-        $speaker = $this->getUserService()->getUser($this->getCurrentUser()->getId());
-        $speaker = $speaker ? $speaker['nickname'] : $this->getServiceKernel()->trans('老师');
+        $speaker = $this->getUserService()->getUser($activity['fromUserId']);
+        if (empty($speaker)) {
+            throw new \RuntimeException($this->getServiceKernel()->trans('教师不存在！'));
+        }
+
+        $speaker = $speaker['nickname'];
 
         $liveLogo    = $this->getSettingService()->get('course');
         $liveLogoUrl = "";
@@ -22,15 +33,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
         }
 
-        $client = new EdusohoLiveClient();
-        $live   = $client->createLive(array(
+        $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary'     => $activity['remark'],
             'title'       => $activity['title'],
             'speaker'     => $speaker,
             'startTime'   => $activity['startTime'].'',
             'endTime'     => ($activity['startTime'] + $activity['length'] * 60).'',
             'authUrl'     => $activity['_base_url'].'/live/auth',
-            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseSetId'],
+            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl
         ));
 
@@ -61,7 +71,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'summary'  => $fields['remark'],
             'title'    => $fields['title'],
             'authUrl'  => $fields['_base_url'].'/live/auth',
-            'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseSetId']
+            'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
         );
 
         if (array_key_exists('startTime', $fields)) {
@@ -72,9 +82,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveParams['endTime'] = ($fields['startTime'] + $fields['length'] * 60).'';
         }
 
-        $client = new EdusohoLiveClient();
-        $live   = $client->updateLive($liveParams);
+        $this->getEdusohoLiveClient()->updateLive($liveParams);
         //live activity自身没有需要更新的信息
+        $fields['id'] = $id;
+        return $fields;
     }
 
     public function deleteLiveActivity($id)
@@ -84,9 +95,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        $client = new EdusohoLiveClient();
-        $result = $client->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+
         $this->getLiveActivityDao()->delete($id);
+        $result = $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
     }
 
     protected function getLiveActivityDao()
@@ -107,5 +118,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    public function getEdusohoLiveClient()
+    {
+        if (empty($this->client)) {
+            $this->client = new EdusohoLiveClient();
+        }
+        return $this->client;
     }
 }

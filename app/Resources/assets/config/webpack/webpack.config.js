@@ -4,12 +4,15 @@ import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import WebpackNotifierPlugin from 'webpack-notifier';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
 const bundleEntry = appConfig.bundleEntry;
 const libEntry = appConfig.libEntry;
 const nodeModulesDir = appConfig.nodeModulesDir;
+
 
 let entries = libEntry;
 let webpackPlugins = [];
@@ -66,7 +69,7 @@ let config = {
       loader: ExtractTextPlugin.extract('style', 'css!less'),
     }, {
       test: /\.(png|jpe?g|gif)$/,
-      loader: 'url?limit=8192&name=/img/[hash:8].[ext]'
+      loader: 'url?limit=16384&name=/img/[hash:8].[ext]'
     }, {
       test: /\.(woff|woff2|eot|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'file?name=fonts/[name].[ext]'
@@ -85,6 +88,13 @@ let config = {
     new ChunkManifestPlugin({
       filename: "chunk-manifest.json",
       manifestVariable: "webpackManifest"
+    }),
+
+    new CopyWebpackPlugin(appConfig.onlyCopys),
+
+    new WebpackNotifierPlugin({
+      title: 'webpack',
+      excludeWarnings: true
     }),
 
     // new FixModuleIdAndChunkIdPlugin(),

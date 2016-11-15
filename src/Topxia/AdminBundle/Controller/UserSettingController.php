@@ -146,6 +146,9 @@ class UserSettingController extends BaseController
             $default["{$type}_key"]              = '';
             $default["{$type}_secret"]           = '';
             $default["{$type}_set_fill_account"] = 0;
+            if ($type == 'weixinmob') {
+                $default['weixinmob_mp_secret'] = '';
+            }
         }
 
         $loginConnect = array_merge($default, $loginConnect);
@@ -157,6 +160,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
+            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
@@ -267,7 +271,7 @@ class UserSettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth          = $this->getSettingService()->get('auth', array());
 
-        $commomFields     = $this->get('topxia.twig.web_extension')->getDict('userInfoFields');
+        $commomFields     = $this->get('codeages_plugin.dict_twig_extension')->getDict('userInfoFields');
         $commomFieldsKeys = array_keys($commomFields);
 
         if (isset($auth['registerFieldNameArray'])) {
@@ -402,6 +406,15 @@ class UserSettingController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+    }
+
+    protected function updateWeixinMpFile($val)
+    {
+        $dir = realpath(__DIR__.'/../../../../web/');
+        array_map('unlink', glob($dir.'/MP_verify_*.txt'));
+        if (!empty($val)) {
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
+        }
     }
 
     protected function getUserDefaultSet()

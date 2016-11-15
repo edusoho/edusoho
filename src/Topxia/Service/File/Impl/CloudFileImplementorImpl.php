@@ -556,7 +556,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $params = array(
             "length" => $params['length'],
-            'name'   => $params['filename'],
+            'name'   => empty($params['filename']) ? $file['filename'] : $params['filename'],
             'size'   => $params['size'],
             'extno'  => $file['id']
         );

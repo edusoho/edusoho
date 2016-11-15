@@ -25,7 +25,9 @@ course_task_show:
 course_task_activity_show:
   path:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: WebBundle:Task:taskActivity }
-
+task_live_entry:
+  path: /course/{courseId}/activity/{id}/live_entry
+  defaults: {_controller: WebBundle:LiveActivity:liveEntry}
 course_task_trigger:
   path:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: WebBundle:Task:trigger }
@@ -33,19 +35,19 @@ course_task_trigger:
 
 media_materiallib_choose:
     path: /media/materiallib/choose
-    defaults: { _controller: WebBundle:MediaProccess:materialChoose }
+    defaults: { _controller: WebBundle:FileChooser:materialChoose }
 
 media_materiallib_contacts:
     path: /media/materiallib/contacts
-    defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
+    defaults: { _controller: WebBundle:FileChooser:findMySharingContacts }
 
 media_corusefile_choose:
     path: /media/corusefile/{courseId}/choose
-    defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
+    defaults: { _controller: WebBundle:FileChooser:CourseFileChoose }
 
 media_video_import:
     path: /media/course/{courseId}/import
-    defaults: { _controller: WebBundle:MediaProccess:import }
+    defaults: { _controller: WebBundle:FileChooser:import }
 
 uploader_auth_v2:
     path:  /uploader/v2/auth
