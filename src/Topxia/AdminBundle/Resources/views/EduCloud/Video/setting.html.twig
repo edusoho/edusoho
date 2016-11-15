@@ -1,0 +1,211 @@
+      <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+        <div class="page-heading">
+          云视频开关
+        </div>
+        <div class="row form-group">
+          <label for="" class="col-sm-3 control-label">启用云视频：</label>
+          <div class="controls col-md-9 radios">
+            <label>
+              <input type="radio" name="cloud_open" value="1"> 开启
+            </label>
+            <label>
+              <input type="radio" name="cloud_open" value="0" checked="checked"> 关闭
+            </label>
+            <div class="help-block">
+              云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。<a href="">点击这里</a>了解详情。
+            </div>
+          </div>
+        </div>
+        <div class="page-heading">
+          基本设置
+        </div>
+        <div class="row form-group">
+          <label for="" class="col-sm-3 control-label">视频转码画质：</label>
+          <div class="controls col-sm-9 radios">
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 流畅
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合PPT讲解">
+              </a>
+            </label>
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1" checked="checked"> 标准
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合屏幕录制、摄像头拍摄">
+              </a>
+            </label>
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 精细
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合动态电影">
+              </a>
+            </label>
+          </div>
+        </div>
+        <div class="row form-group">
+          <label for="" class="col-sm-3 control-label">视频转码音质：</label>
+          <div class="controls col-sm-9 radios">
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1"> 流畅
+            </label>
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1" checked="checked"> 标准
+            </label>
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1"> 高品
+            </label>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="enable_playback_rates">倍速播放：</label>
+          </div>
+          <div class="controls col-md-8 radios">
+            {{ radios('enable_playback_rates', {'1':'开启', '0':'关闭'}, storageSetting.enable_playback_rates) }}
+            <div class="text-muted mts">
+              开启后，云视频课时支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
+            </div>
+          </div>
+        </div>
+        <div class="upload-mode">
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '视频片头：'|trans }}</label>
+          </div>
+          {#<div class="controls col-md-8 radios">
+            {{ radios('video_header', {'1':'开启'|trans,'0':'关闭'|trans}, storageSetting.video_header|default(0)) }}
+          </div>#}
+          <div class="controls col-md-8">
+            <div id="upload-panel" data-params-url="{{ path('admin_uploadfile_head_leader_params', {storage:storageSetting.upload_mode}) }}" data-hls-encrypted="1">
+              {#<div class="head-leader-edit" {% if not headLeader|default(null) %}style="display:none;"{% endif %}>#}
+              <div class="head-leader-edit">
+                <button class="btn btn-primary edit-btn" type="button">
+                  {#<i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}#}
+                  {{ '点击上传'|trans }}
+                </button>
+                <br/>
+                <div class="file-name" data-role="placeholder"><i class="es-icon es-icon-videoclass mrs"></i>{{ headLeader.filename|default('') }}</div>
+                {% if headLeader.convertStatus|default(null) != 'success' %}
+                {#<div class="alert alert-warning" data-role="waiting-tip">
+                  {{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}#}
+                </div>
+                {% endif %}
+              </div>
+              <div class="file-chooser-main"{% if headLeader|default(null) %}style="display:none;"{% endif %}>
+              <!-- <div class="file-chooser-main"> -->
+                {% set token = uploader_token('headLeader', 0, 'private') %}
+                <div id="balloon-uploader"
+                     data-init-url="{{ path('uploader_init', {token:token}) }}"
+                     data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+                     data-upload-auth-url="{{ path('uploader_auth', {token:token}) }}"
+                     data-accept="{{ uploader_accept('attachment', 'video')|json_encode }}"
+                     data-process="{{ uploader_process('headLeader') }}">
+                </div>
+                <div class="alert alert-info">
+                  <ul>
+                    <li>{{ '支持'|trans }}<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv,
+                        m4v</strong>{{ '格式的视频文件上传，文件大小不能超过'|trans }}<strong>10 MB</strong>。
+                    </li>
+                    <li>{{ '支持'|trans }}<strong>{{ '断点续传'|trans }}</strong>{{ '（仅支持HTML5浏览器）。'|trans }}</li>
+                    <li>{{ '视频将上传到'|trans }}
+                      <strong>{{ '云视频服务器'|trans }}</strong>{{ '，上传后会对视频进行格式转换，转换过程需要一定的时间。'|trans }}</li>
+                  </ul>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="page-heading">
+          安全设置
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '视频水印：'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios " data-content="123">
+            {{ radios('video_watermark', {'1':'开启', '0':'关闭'}, storageSetting.video_watermark) }}
+            <div class="text-muted mts">
+              开启后，将会在云视频课时的右上角显示水印。
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <label for="" class="col-sm-3 control-label">水印类型：</label>
+          <div class="controls col-sm-9 radios">
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 播放器水印
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合PPT讲解">
+              </a>
+            </label>
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 视频内嵌水印
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合动态电影">
+              </a>
+            </label>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '播放器水印图片：'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+
+            <button class="btn btn-primary" id="cloud-video-watermark-upload" type="button"
+                    data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">{{ '点击上传'|trans }}</button>
+            <button class="btn btn-primary" id="cloud-video-watermark-remove" type="button"
+                    data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}"
+                    {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>{{ '删除'|trans }}</button>
+            <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img
+                src="{{ filepath(storageSetting.video_watermark_image) }}">{% endif %}</div>
+
+            <div class="text-muted mts">{{ '支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸150×50。'|trans }}</div>
+            <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '视频内嵌水印图片：'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+
+            <button class="btn btn-primary" id="cloud-video-embed-watermark-upload" type="button"
+                    data-url="{{ path('admin_setting_cloud_video_embed_watermark_upload') }}">{{ '点击上传'|trans }}</button>
+            <button class="btn btn-primary" id="cloud-video-embed-watermark-remove" type="button"
+                    data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}"
+                    {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>{{ '删除'|trans }}</button>
+            <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img  src="{{ filepath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
+
+            <div class="text-muted mts">{{ '支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。'|trans }}</div>
+            <input type="hidden" name="video_embed_watermark_image"
+                   value="{{ storageSetting.video_embed_watermark_image }}">
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '视频指纹：'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+            {{ radios('video_fingerprint', { '1':'开启'|trans,'0':'关闭'|trans}, storageSetting.video_fingerprint) }}
+            <div
+                class="text-muted mts">{{ '开启后，将在视频播放中随机时间、随机位置显示当前网站域名及'|trans }}{% if setting('default.user_name') %}{{ '%user_name%的用户名'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}{% endif %}
+              。
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>云视频指纹显示时长：</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small"
+                   name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> 秒
+            <div class="text-muted mts">建议时长在0.5 - 1.5秒之间</div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" id="cloud-video-form-btn" class="btn btn-primary"
+                    data-submiting-text="{{ '正在提交'|trans }}">{{ '确认保存'|trans }}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>

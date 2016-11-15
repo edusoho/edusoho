@@ -141,7 +141,7 @@ class EduCloudController extends BaseController
         if (!empty($imUsedTotal['error'])) {
             $imUsedTotal['count'] = 0;
         }
-        return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
             'notices'     => $notices,
@@ -222,7 +222,7 @@ class EduCloudController extends BaseController
 
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
-        return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud/Video:video.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
             'videoInfo'      => $videoInfo,
@@ -366,7 +366,7 @@ class EduCloudController extends BaseController
 
             $this->handleSmsSetting($request, $api);
             $smsStatus = $this->getSettingService()->get('cloud_sms', array());
-            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
                 'accessCloud' => $this->isAccessEduCloud(),
@@ -640,7 +640,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:search.html.twig', array(
             'data' => $data
         ));
     }
@@ -1186,7 +1186,7 @@ class EduCloudController extends BaseController
     // 添加云直播
     public function liveAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud:live.html.twig');
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:live.html.twig');
     }
     // 添加重建索引模态框
     public function modalAction(Request $request)
