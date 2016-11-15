@@ -140,7 +140,7 @@
           {{'会员等级不够，不能学习此课程。请先'|trans}}<a class="btn-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
         {% else %}
           {% if member.joinedType == 'course' %}
-            {{'此课程已不支持会员免费学，'|trans}}<a class="btn-link js-exit-course" href="javascript:;" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
+            {{'此课程已不支持会员免费学，请退出课程后重新购买。'|trans}}
           {% elseif member.joinedType == 'classroom' %}
             {{'此' ~ setting('classroom.name', '班级') ~ '课程已不支持会员免费学，'|trans}}<a class="btn-link js-exit-course" href="javascript:;" data-url="{{ path('classroom_exit', { id:member.classroomId }) }}" data-go="{{ path('classroom_show', { id:member.classroomId }) }}">{{'退出' ~ setting('classroom.name', '班级')|trans}}</a>
           {% endif %}

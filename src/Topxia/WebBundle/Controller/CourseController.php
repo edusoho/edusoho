@@ -439,7 +439,6 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user                  = $this->getCurrentUser();
-
         if (empty($member)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
@@ -448,6 +447,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
 
+var_dump($member);
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
