@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'small' %}
+
+{% block title %}
+  风险提示
+{% endblock %}
+
+{% block body %}
+  <ul>
+    <li class="pvs color-gray">
+      1. 重建索引后，之前的索引数据会被全部覆盖。
+    </li>
+    <li class="pvs color-gray">
+      2. 重建索引需要大约30分钟。
+    </li>
+    <li class="pvs color-gray">
+      3. 重建索引期间不影响云搜索功能的正常使用。
+    </li>
+  </ul>
+{% endblock %}
+
+{% block footer %}
+  <button id="announcement-create-btn" class="btn btn-primary" data-target="">{{'确定'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+  <script>app.load('announcement/create-modal')</script>
+{% endblock %}
