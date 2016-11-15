@@ -23,7 +23,7 @@ class ChoiceQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
-        return $this->render('WebBundle:SingleChoiceQuestion:form.html.twig', array(
+        return $this->render('WebBundle:ChoiceQuestion:form.html.twig', array(
             'course'         => $course,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,

@@ -63,12 +63,7 @@ class QuestionManageController extends BaseController
 
     public function createAction(Request $request, $courseId, $type)
     {
-        $course         = $this->getCourseService()->tryManageCourse($courseId);
-        $parentId       = $request->query->get('parentId', 0);
-        $parentQuestion = array();
-        if ($parentId > 0) {
-            $parentQuestion = $this->getQuestionService()->get($parentId);
-        }
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -92,40 +87,23 @@ class QuestionManageController extends BaseController
             }
         }
 
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $questionConfig   = $this->getQuestionService()->getQuestionConfig($type);
+        $createController = $questionConfig->getAction('create');
 
-        $features = array();
-        if ($this->container->hasParameter('enabled_features')) {
-            $features = $this->container->getParameter('enabled_features');
-        }
-        $enabledAudioQuestion = in_array('audio_question', $features);
-
-        $questionConfig = $this->getQuestionService()->getQuestionConfig($type);
-        $typeTemplate   = $questionConfig->getTemplate('create');
-
-        return $this->render('WebBundle:QuestionManage:question-form-layout.html.twig', array(
-            'course'               => $course,
-            'parentQuestion'       => $parentQuestion,
-            'enabledAudioQuestion' => $enabledAudioQuestion,
-            'courseTasks'          => $courseTasks,
-            'type'                 => $type,
-            'typeTemplate'         => $typeTemplate
+        return $this->forward($createController, array(
+            'request'  => $request,
+            'courseId' => $course['id'],
+            'type'     => $type
         ));
     }
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $course      = $this->getCourseService()->tryManageCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $question = $this->getQuestionService()->get($id);
         if (!$question) {
             throw new ResourceNotFoundException('question', $id);
-        }
-
-        $parentQuestion = array();
-        if ($question['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
         if ($request->getMethod() == 'POST') {
@@ -137,16 +115,13 @@ class QuestionManageController extends BaseController
             return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['parentId']))));
         }
 
-        $questionConfig = $this->getQuestionService()->getQuestionConfig($question['type']);
-        $typeTemplate   = $questionConfig->getTemplate('edit');
+        $questionConfig   = $this->getQuestionService()->getQuestionConfig($question['type']);
+        $createController = $questionConfig->getAction('edit');
 
-        return $this->render('WebBundle:QuestionManage:question-form-layout.html.twig', array(
-            'course'         => $course,
-            'question'       => $question,
-            'parentQuestion' => $parentQuestion,
-            'type'           => $question['type'],
-            'courseTasks'    => $courseTasks,
-            'typeTemplate'   => $typeTemplate
+        return $this->forward($createController, array(
+            'request'    => $request,
+            'courseId'   => $course['id'],
+            'questionId' => $question['id']
         ));
     }
 
@@ -184,6 +159,11 @@ class QuestionManageController extends BaseController
 
         $questionTypeObj      = $this->getQuestionService()->getQuestionConfig($question['type']);
         $question['template'] = $questionTypeObj->getTemplate('do');
+
+        if (!empty($question['matas']['mediaId'])) {
+            $questionExtends = $questionTypeObj->get($question['matas']['mediaId']);
+            $question        = array_merge_recursive($question, $questionExtends);
+        }
 
         if ($question['subCount'] > 0) {
             $questionSubs = $this->getQuestionService()->findQuestionsByParentId($id);
