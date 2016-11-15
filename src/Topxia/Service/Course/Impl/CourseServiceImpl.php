@@ -2080,13 +2080,32 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)还未达到有效期，不能退出课程。', array('%userId%' => $userId)));
         }
 
+        //查询出订单
+        $orders = $this->getOrderService()->searchOrders(
+            array('targetType' => 'course', 'targetId' => $courseId, 'userId' => $userId, 'status' => 'paid'),
+            'latest',
+            0,
+            1
+        );
+
+        $user = $this->getUserService()->getUser($userId);
+        
+        if (!empty($orders)) {
+            $reason = array(
+                'type'     => 'other',
+                'note'     => '达到有效期，用户自己退出',
+                'operator' => $user['id']
+            );
+            $order = array_pop($orders);
+            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        }
+      
         $this->getMemberDao()->deleteMember($member['id']);
 
         $this->getCourseDao()->updateCourse($courseId, array(
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
 
-        $user = $this->getUserService()->getUser($userId);
 
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
     }
