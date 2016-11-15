@@ -3,9 +3,10 @@
 
 {% set script_controller = 'marker/index' %}
 {% set bodyClass="marker-manage" %}
+{% set condition="subtitle" %}
 
 {% block body %}
-  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
+  <div class="marker-manage-content {% if condition != 'subtitle' %}question {% endif %} js-marker-manage-content" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
     data-lesson-mediaid="{{ lesson.mediaId }}"
@@ -13,10 +14,11 @@
     {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
-        <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
-        <li role="presentation" class="">
-          <a href="#text-track" aria-controls="text-track" role="tab" data-toggle="tab">字幕</a>
-        </li>
+        {% if condition != 'subtitle' %}
+          <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
+        {% else %}
+          <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">字幕</a></li>
+        {% endif %}
         <li class="static" role="presentation">
           <a>
             <!-- border show-introhelp-->
@@ -36,13 +38,20 @@
       <a href="{{ path('course_lesson_marker_manage_preview', {courseId:course.id,lessonId:lesson.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览'|trans}}</a>
 
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active pane-question js-pane-question" id="practice" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}">
+      {% if condition != 'subtitle' %}
+        <div role="tabpanel" class="tab-pane active pane-question">
+          {{ render(path('course_lesson_question_marker_list', {courseId:course.id,lessonId:lesson.id})) }}
         </div>
-        <div role="tabpanel" class="tab-pane panel-texttrack" id="text-track" data-url="{{ path('subtitle_manage',{courseId:course.id,lessonId:lesson.id}) }}">
+      {% else %}
+        <div role="tabpanel" class="tab-pane active pane-question">
+          {{ render(path('subtitle_manage',{courseId:course.id,lessonId:lesson.id})) }}
         </div>
+      {% endif %}
       </div>
     </div>
-    {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
+    {% if condition != 'subtitle' %}
+      {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
+    {% endif %}
   </div>
   <div class="modal"></div>
   <div class="introhelp-overlay js-introhelp-overlay hidden"></div>
