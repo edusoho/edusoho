@@ -64,6 +64,42 @@ uploader_finished_v2:
   defaults: { _controller: WebBundle:Uploader:finished }
   methods: [GET]
 
+#question
+course_manage_question:
+    path: /course/{courseId}/manage/question
+    defaults: { _controller: WebBundle:QuestionManage:index }
+
+course_manage_question_create:
+    path: /course/{courseId}/manage/question/{type}/create
+    defaults: { _controller: WebBundle:QuestionManage:create }
+
+course_manage_question_update:
+    path: /course/{courseId}/manage/question/{id}/update
+    defaults: { _controller: WebBundle:QuestionManage:update }
+
+course_manage_question_delete:
+    path: /course/{courseId}/manage/question/delete/{id}
+    defaults: { _controller: WebBundle:QuestionManage:delete }
+    methods: [POST]
+
+course_manage_question_deletes:
+    path: /course/{courseId}/manage/question/deletes
+    defaults: { _controller: WebBundle:QuestionManage:deletes }
+    methods: [POST]
+
+course_manage_question_preview:
+    path: /course/{courseId}/manage/question/{id}/preview
+    defaults: { _controller: WebBundle:QuestionManage:preview }
+
+course_manage_question_picker:
+  path: /course/{courseId}/manage/question/picker
+  defaults: { _controller: WebBundle:QuestionManage:questionPicker }
+
+course_manage_question_picked:
+  path:  /course/{courseId}/manage/question/{questionId}/picked
+  defaults: { _controller: WebBundle:QuestionManage:PickedQuestion }
+
+
 #testpaper
 course_manage_testpaper:
   path: /testpaper2/course/{courseId}/manage/testpaper
@@ -152,13 +188,7 @@ exercise_result_show:
     pattern: /exercise/result/{resultId}/show
     defaults: { _controller: WebBundle:Exercise:showResult }
 
-#question
-course_manage_question_picker:
-  path: /course/{courseId}/manage/question/picker
-  defaults: { _controller: WebBundle:QuestionManage:questionPicker }
 
-course_manage_question_picked:
-  path:  /course/{courseId}/manage/question/{questionId}/picked
-  defaults: { _controller: WebBundle:QuestionManage:PickedQuestion }
+
 
 
