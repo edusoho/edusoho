@@ -3,6 +3,8 @@ namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Course\CourseService;
 
 class ActivityController extends BaseController
 {
@@ -40,6 +42,8 @@ class ActivityController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $activityId)
     {
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
+
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if(empty($activity)){
@@ -65,4 +69,13 @@ class ActivityController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
 }

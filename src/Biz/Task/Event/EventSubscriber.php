@@ -1,8 +1,10 @@
 <?php
 namespace Biz\Task\Event;
 
-use Biz\Activity\Event\Event;
+
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 
 class EventSubscriber implements EventSubscriberInterface
 {
