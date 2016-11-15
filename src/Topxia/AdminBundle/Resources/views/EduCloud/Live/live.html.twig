@@ -4,9 +4,11 @@
 {% set script_controller = 'setting/cloud-live' %}
 
 {% block main %}
-{% include 'TopxiaAdminBundle:EduCloud:Live/without-enable.html.twig'  %}
+{#{% include 'TopxiaAdminBundle:EduCloud:Live/without-enable.html.twig'  %}#}
 
+{% include 'TopxiaAdminBundle:EduCloud:part/side-bar.html.twig'  %}
 {#{% include 'TopxiaAdminBundle:EduCloud:part/side-bar.html.twig'  %}#}
+{% include 'TopxiaAdminBundle:EduCloud:Live/setting.html.twig'  %}
 
 
 {% endblock %}
