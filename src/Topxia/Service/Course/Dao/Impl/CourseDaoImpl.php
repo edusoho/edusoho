@@ -233,17 +233,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['tags'] = $tags.'|';
         }
 
-        if (!empty($conditions['tagLikes'])) {
-            $tagIds = $conditions['tagLikes'];
-            $tags   = '%';
-
-            foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
-            }
-
-            $conditions['tagLikes'] = $tags.'|%';
-        }
-
         if (isset($conditions['tagId'])) {
             $tagId = (int) $conditions['tagId'];
 
@@ -266,8 +255,24 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['likeOrgCode'] .= "%";
         }
 
-        $builder = $this->createDynamicQueryBuilder($conditions)
+        $tagsql = "";
+        if (isset($conditions['tagLikes'])) {
+            $conditions['tagLikes'] = array_merge($conditions['tagLikes']);
+            $tagIds = $conditions['tagLikes'];
 
+            foreach ($tagIds as $key => $tagId) {
+                $conditions['tagsLike_'.$key] = "%|{$tagId}|%";
+                $tagsql.="tags like :tagsLike_{$key}";
+                $breakKey = $key+1;
+                if($breakKey == count($tagIds)) {
+                    break;
+                }
+                $tagsql.=" OR ";
+            }
+            unset($conditions['tagLikes']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
@@ -284,7 +289,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
             ->andWhere('tags LIKE :tagsLike')
-            ->andWhere('tags LIKE :tagLikes')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')
@@ -304,7 +308,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('locked = :locked')
             ->andWhere('lessonNum > :lessonNumGT')
             ->andWhere('orgCode = :orgCode')
-            ->andWhere('orgCode LIKE :likeOrgCode');
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere($tagsql);
 
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];
