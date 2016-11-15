@@ -1,7 +1,7 @@
 <div>
   <div class="text-track-title">
-    {% set token = uploader_token('subtitle', media.id, 'private') %}
     <div class="row">
+      {% set token = uploader_token('subtitle', media.id, 'private') %}
       <div class="col-md-2 caption-uploader js-select-file" id="uploader" style="width: 130px" 
       data-media-id="{{ media.id }}"
       data-media-global-id="{{ media.globalId }}"

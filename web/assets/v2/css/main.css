@@ -12842,8 +12842,6 @@ textarea {
 }
 .marker-manage-content {
   height: 100%;
-}
-.marker-manage-content.question {
   padding-bottom: 160px;
 }
 .marker-manage-content .manage-player-body {

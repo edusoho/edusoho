@@ -120,6 +120,36 @@
     </div>
   </div>
 
+  <div class="form-group for-video-type for-audio-type" id="subtitle-form-group">
+    <div class="col-md-2 control-label for-video-type"><label>{{'字幕'|trans}}</label></div>
+    <div class="col-md-9 controls">
+      <ul class="list-unstyled plm js-subtitle-list">
+        <li class="pvs">
+          <span class="subtitle-name prl">cdsacae</span>
+          <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
+        </li>
+        <li class="pvs">
+          <span class="subtitle-name prl">cdsacae</span>
+          <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
+        </li>
+        <li class="pvs">
+          <span class="subtitle-name prl">cdsacae</span>
+          <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
+        </li>
+      </ul>
+      {% set token = uploader_token('subtitle', 69, 'private') %}
+      <div class="col-md-2 caption-uploader js-select-file" id="uploader" style="width: 130px" 
+      data-media-id="{{ 69 }}"
+      data-media-global-id="{{ 'c77de10a7f5a417786f8170e130dcab0' }}"
+      data-subtitle-create-url="{{ url('subtitle_create', {courseId: course.id}) }}"
+      data-subtitle-list-url="{{ url('subtitle_media_subtitles', {courseId: course.id, mediaId: 69}) }}"
+      data-init-url="{{ url('uploader_init', {token:token}) }}"
+      data-finish-url="{{ url('uploader_finished', {token:token}) }}"
+      >
+      </div>
+    </div>
+  </div>
+
   <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
       <div class="col-md-2 control-label for-video-type"><label>{{'视频时长'|trans}}</label></div>
       <div class="hide"><label for="lesson-length-field">{{'视频时长或'|trans}}</label></div>

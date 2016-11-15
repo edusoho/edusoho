@@ -10,6 +10,42 @@ define(function(require, exports, module) {
     var _ = require('underscore');
     require('jquery.sortable');
     require('es-ckeditor');
+    require('new-uploader');
+
+    var $elem = $('#uploader');
+    var uploader = new UploaderSDK({
+        initUrl:$elem.data('initUrl'),
+        finishUrl:$elem.data('finishUrl'),
+        id:'uploader',
+        ui:'simple',
+        multi:true,
+        accept:{
+            extensions:['srt'],
+            mimeTypes:['text/srt']
+        },
+        type:'sub',
+        process:{
+            videoNo:$elem.data('mediaGlobalId'),
+        }
+    })
+    uploader.on('error',function(err){
+        if(err.error === 'Q_TYPE_DENIED'){
+            Notify.danger(Translator.trans('请上传srt格式的文件！'));
+        }
+    });
+    uploader.on('file.finish', function (file) {
+        $.post($elem.data('subtitleCreateUrl'), {
+            "name": file.name,
+            "subtitleId": file.id,
+            "mediaId": 69
+        }).success(function (data) {
+            Notify.success(Translator.trans('字幕上传成功！'));
+        }).error(function (data){
+            Notify.danger(Translator.trans(data.responseJSON.error.message));
+        });
+    });
+
+
 
     function getEditorContent(editor){
         editor.updateElement();

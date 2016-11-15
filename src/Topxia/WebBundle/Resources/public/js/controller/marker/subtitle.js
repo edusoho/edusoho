@@ -3,7 +3,7 @@ define(function(require,exports,module){
     require('new-uploader');
     require('subtitle-browser');
     var Select = require('./text-select-module');
-    var messenger = require('./messeger.js');
+    var messenger = require('./index.js');
     var Notify = require('common/bootstrap-notify');
 
     var $textTrackDisplay = $('.text-track-overview');
