@@ -61,7 +61,7 @@ define(function(require,exports,module){
             mimeTypes:['text/srt']
         },
         type:'sub',
-        directives:{
+        process:{
             videoNo:videoNo
         }
     });
