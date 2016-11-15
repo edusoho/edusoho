@@ -27,7 +27,6 @@ define(function(require,exports,module){
         success: function (data) {
             initMarkerArry = data.markersMeta;
             mediaLength = data.videoTime;
-            console.log(mediaLength);
             var parttime = mediaLength/partnum;
             for (var i = 0; i <= partnum; i++) {
                 var $new_scale_default = $('[data-role="scale-default"]').clone().css('left', getleft(parttime * i,mediaLength)).removeClass('hidden').removeAttr('data-role');
@@ -66,10 +65,6 @@ define(function(require,exports,module){
         }
         return time;
     }
-    
-    
-    
-    
 
     //选择框组件实例
     var select = Object.create(Select);
