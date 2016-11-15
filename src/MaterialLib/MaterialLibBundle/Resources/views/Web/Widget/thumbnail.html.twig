@@ -41,6 +41,12 @@
       {% endif %}
 
       <li>
+        <a href="javascript:;" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
+          <i class="glyphicon glyphicon-pencil prm"></i>{{'字幕管理'|trans}}
+        </a>
+      </li>
+
+      <li>
         <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
           <i class="glyphicon glyphicon-save prm"></i>{{'下载'|trans}}
         </a>
