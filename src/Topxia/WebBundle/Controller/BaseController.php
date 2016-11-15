@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
@@ -21,6 +22,7 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
+    protected $biz;
 
     protected function getCurrentUser()
     {
@@ -293,5 +295,11 @@ abstract class BaseController extends Controller
     protected function trans($text, $arguments = array(), $domain = null, $locale = null)
     {
         return $this->getServiceKernel()->trans($text, $arguments, $domain, $locale);
+    }
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->biz = $this->container->get('biz');
     }
 }
