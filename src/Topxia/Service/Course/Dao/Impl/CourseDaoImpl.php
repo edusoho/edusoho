@@ -255,23 +255,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['likeOrgCode'] .= "%";
         }
 
-        $tagsql = "";
-        if (isset($conditions['tagLikes'])) {
-            $conditions['tagLikes'] = array_merge($conditions['tagLikes']);
-            $tagIds = $conditions['tagLikes'];
-
-            foreach ($tagIds as $key => $tagId) {
-                $conditions['tagsLike_'.$key] = "%|{$tagId}|%";
-                $tagsql.="tags like :tagsLike_{$key}";
-                $breakKey = $key+1;
-                if($breakKey == count($tagIds)) {
-                    break;
-                }
-                $tagsql.=" OR ";
-            }
-            unset($conditions['tagLikes']);
-        }
-
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')
@@ -308,8 +291,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('locked = :locked')
             ->andWhere('lessonNum > :lessonNumGT')
             ->andWhere('orgCode = :orgCode')
-            ->andWhere('orgCode LIKE :likeOrgCode')
-            ->andWhere($tagsql);
+            ->andWhere('orgCode LIKE :likeOrgCode');
 
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];
