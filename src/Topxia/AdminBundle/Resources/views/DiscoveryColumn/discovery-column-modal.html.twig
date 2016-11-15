@@ -2,9 +2,9 @@
 
 {% block title %}
   {% if discoveryColumn|default(false) %}
-  {{'栏目编辑'|trans}}
+  {{'编辑栏目'|trans}}
   {% else %}
-  {{'栏目添加'|trans}}
+  {{'添加栏目'|trans}}
   {% endif %}
 {% endblock %}
 
@@ -80,5 +80,5 @@
 
 {% block footer %}
   	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'取消'|trans}}</button>
-	<button id="category-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'确定'|trans}}</button>
+	<button id="category-create-btn" data-submiting-text="{{'正在添加'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'添加'|trans}}</button>
 {% endblock %}

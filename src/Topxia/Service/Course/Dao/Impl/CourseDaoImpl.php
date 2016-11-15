@@ -92,24 +92,30 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-
         if ($orderBy[0] == 'recommendedSeq') {
             $builder->addOrderBy('recommendedTime', 'DESC');
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     public function searchCourseCount($conditions)
     {
+        $keys = $this->generateKeyWhenCount($conditions);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchColumn(0);
+        });
     }
 
     public function addCourse($course)
