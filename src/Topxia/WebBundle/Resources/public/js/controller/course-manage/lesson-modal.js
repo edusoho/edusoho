@@ -128,9 +128,9 @@ define(function(require, exports, module) {
 
                     if($parent.length){
                         var add = 0;
-                        if($parent.hasClass('item-chapter  clearfix')){
+                        if($parent.hasClass('js-chapter')){
                             $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix')){
+                                if($(this).hasClass('js-chapter')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
@@ -143,12 +143,12 @@ define(function(require, exports, module) {
 
                         }else{
                              $parent.nextAll().each(function() {
-                                if($(this).hasClass('item-chapter  clearfix')){
+                                if($(this).hasClass('js-chapter')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
                                 }
-                                if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
+                                if($(this).hasClass('item-chapter-unit')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
@@ -507,5 +507,17 @@ define(function(require, exports, module) {
             var temp = val > multiple ? (multiple+0.5) : multiple;
             $(this).val(temp.toFixed(1));
         })
+
+        $('.js-free-lesson-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
     };
 });

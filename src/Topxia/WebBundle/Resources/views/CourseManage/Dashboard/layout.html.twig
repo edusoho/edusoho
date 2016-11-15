@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{{'课程学习数据'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'course_manage_dashboard' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col course-data">
+    <div class="panel-heading">{{'课程学习数据'|trans}}</div>
+    <div class="panel-body dashboard-panel">
+      <ul class="nav nav-tabs mbl">
+        <li class="{% if submenu|default() == 'course_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_manage_course_dashboard',{id:course.id}) }}">{{ '课程数据概览'|trans }}
+          </a>
+        </li>
+
+        <li class="{% if submenu|default() == 'lesson_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_manage_lesson_dashboard',{id:course.id}) }}">{{ '课时完成率'|trans }}
+          </a>
+        </li>
+
+        <li class="{% if submenu|default() == 'lesson_learn_dashboard' %}active{% endif %}">
+          <a href="{{ path('course_manage_lesson_learn_dashboard',{id:course.id}) }}">{{ '课时学习详情'|trans }}
+          </a>
+        </li>
+
+      </ul>
+      {% block dashboard %}{% endblock %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+
