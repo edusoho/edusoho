@@ -6,7 +6,8 @@
  */
 const parameters = {
   registeredBundles: [ //register php bundles
-    'Topxia/WebBundle',
+    'src/Topxia/WebBundle',
+    'plugins/CrmPlugin'
     // 'Topxia/AdminBundle',
   ],
   output: {
@@ -15,9 +16,9 @@ const parameters = {
   },
   libs: {
     vendor: ['../libs/vendor.js'], //can be a js file
-    ckeditor: ['ckeditor'], //or can be a node module name
     "fix-ie": ['html5shiv', 'respond-js'],
     "jquery-validation": ['../libs/js/jquery-validation.js'],
+    "jquery-insertAtCaret": ['../libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
@@ -28,8 +29,19 @@ const parameters = {
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     // The `.` will auto be replaced to `-` for compatibility 
-    'respond.js/dest/respond.src.js', 
+    'respond.js/dest/respond.src.js',
+    'bootstrap-daterangepicker/daterangepicker.js',
+    'moment/moment.js',
   ],
+  onlyCopys: [
+    {
+      name: 'es-ckeditor',
+      ignore: [
+        '**/samples/**',
+        // '**/lang/!(zh-cn.js)',
+      ]
+    }
+  ]
 }
 
 export default parameters;

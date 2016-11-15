@@ -4,6 +4,8 @@ import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ChunkManifestPlugin from 'chunk-manifest-webpack-plugin';
 import FixModuleIdAndChunkIdPlugin from 'fix-moduleid-and-chunkid-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import WebpackNotifierPlugin from 'webpack-notifier';
 
 const __DEBUG__ = appConfig.__DEBUG__;
 const __DEV__ = appConfig.__DEV__;
@@ -87,7 +89,20 @@ let config = {
       manifestVariable: "webpackManifest"
     }),
 
-    new FixModuleIdAndChunkIdPlugin(),
+    // new FixModuleIdAndChunkIdPlugin(),
+
+    new CopyWebpackPlugin(appConfig.onlyCopys),
+
+    new WebpackNotifierPlugin({
+      title: 'webpack',
+      excludeWarnings: true
+    }),
+
+    new ChunkManifestPlugin({
+      filename: "chunk-manifest.json",
+      manifestVariable: "webpackManifest"
+    }),
+
   ].concat(webpackPlugins),
 };
 

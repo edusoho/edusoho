@@ -2,7 +2,6 @@
 
 import 'jquery';
 import 'bootstrap';
-import 'bootstrap-notify';
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {
