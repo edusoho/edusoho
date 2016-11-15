@@ -12,13 +12,10 @@ class UpgradeLock
     public static function lock($expire = 120)
     {
         $filePath = self::_getFile();
-        if(file_exists($filePath)){
-            $time = file_get_contents($filePath);
-        }else{
-            $time = time();
-        }
 
-        file_put_contents($filePath, (string) ($time + $expire));
+        $time = time();
+
+        file_put_contents($filePath, (string) $time);
     }
 
     public static function unlock()

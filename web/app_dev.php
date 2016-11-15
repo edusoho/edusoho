@@ -25,6 +25,7 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
 
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\AppConnectionFactory;
 
 fix_gpc_magic();
 
@@ -35,6 +36,7 @@ $kernel = new AppKernel('dev', true);
 // $kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
+
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等
 try {

@@ -94,27 +94,39 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
     public function findNavigations($start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+
+        $that = $this;
+        return $this->fetchCached("order_by:sequence:asc:start:{$start}:limit:{$limit}", $start, $limit, function ($start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAll($sql, array());
+        });
     }
 
     public function searchNavigationCount($conditions)
     {
+        $keys = $this->generateKeyWhenCount($conditions);
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+                ->select('COUNT(id)');
+
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchColumn(0);
+        });
     }
 
     public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        
+        $key = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $this->fetchCached($key, $builder, function ($builder) {
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     protected function _createSearchQueryBuilder($conditions)

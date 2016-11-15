@@ -43,6 +43,16 @@ define(function(require, exports, module) {
             Notify.success(Translator.trans('正在导出数据，请稍候...'));
         })
 
+        $('.js-pay-way-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
     };
 
 });
