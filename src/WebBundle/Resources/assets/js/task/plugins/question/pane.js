@@ -11,7 +11,7 @@ class QuestionPane {
     this._init();
   }
   _init() {
-    $('.expand-form-trigger').focusin(event=>this.expandForm(event));
+    this.$element.on('focusin','.expand-form-trigger',event=>this.expandForm(event));
     $('.collapse-form-btn').click(event=>this.collapseForm(event));
     $('.show-question-item').click(event=>this.showItem(event));
     $('.back-to-list').click(event=>this.backToList(event));
@@ -34,6 +34,7 @@ class QuestionPane {
     this.showList();
   }
   expandForm() {
+    console.log("expandForm");
     let $form = this.createFormElement;
     if ($form.hasClass('form-expanded')) {
         return ;
@@ -47,33 +48,33 @@ class QuestionPane {
 
     this.editor = editor;
 
-    let validator = $form.validate({
-      onkeyup: false,
-      rules: {
-          'question[title]': {
-            required: true,
-          },
-          length: {
-            required: true,
-            digits: true,
-            max: 300
-          },
-          remark: {
-            maxlength: 1000
-          },
-      },
-    });
+    // let validator = $form.validate({
+    //   onkeyup: false,
+    //   rules: {
+    //       'question[title]': {
+    //         required: true,
+    //       },
+    //       length: {
+    //         required: true,
+    //         digits: true,
+    //         max: 300
+    //       },
+    //       remark: {
+    //         maxlength: 1000
+    //       },
+    //   },
+    // });
 
-    if(validator.form()) {
-      $.post($form.attr('action'), $form.serialize(), function(html) {
-        pane.$('[data-role=list]').prepend(html);
-        pane.$('.empty-item').remove();
-        pane.collapseForm();
-      }).error(function(response){
-        var response = $.parseJSON(response.responseText);
-        Notify.danger(response.error.message);
-      });
-    }
+    // if(validator.form()) {
+    //   $.post($form.attr('action'), $form.serialize(), function(html) {
+    //     pane.$('[data-role=list]').prepend(html);
+    //     pane.$('.empty-item').remove();
+    //     pane.collapseForm();
+    //   }).error(function(response){
+    //     var response = $.parseJSON(response.responseText);
+    //     Notify.danger(response.error.message);
+    //   });
+    // }
     this.createFormElement.find('.detail-form-group').removeClass('hide');
   }
   collapseForm() {
@@ -104,7 +105,7 @@ class QuestionPane {
   _showListPane() {
       $('[data-role=show-pane]').hide();
       $('[data-role=list-pane]').show();
-      $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
+      // $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
       return $('[data-role=list-pane]');
   }
   _showItemPane() {
