@@ -19,6 +19,13 @@ class IndexController extends BaseController
         return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $media['globalId']));
     }
 
+    public function previewAction($mediaId)
+    {
+        return $this->render('TopxiaWebBundle:MediaManage:preview.html.twig', array(
+            'mediaId' => $mediaId
+        ));
+    }
+
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
