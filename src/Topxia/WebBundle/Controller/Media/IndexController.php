@@ -14,9 +14,7 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $media   = $this->getUploadFileService()->getFile($mediaId);
-
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $media['globalId']));
+        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId));
     }
 
     public function previewAction($mediaId)
