@@ -218,4 +218,16 @@ define(function(require, exports, module) {
         });
     }
 
+    $('.js-lesson-batch-btn-popover').popover({
+        html: true,
+        trigger: 'hover',
+        delay: { "show": 200, "hide": 1000 },
+        placement: 'top',
+        template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        content: function() {
+            var html = $(this).find('.popover-content').html();
+            return html;
+        }
+    });
+
 });

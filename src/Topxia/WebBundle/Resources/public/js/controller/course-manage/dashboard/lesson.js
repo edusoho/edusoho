@@ -13,8 +13,13 @@ define(function(require, exports, module) {
                     var rate = 0;
 
                     //求完成率
-                    if (params[1].value > 0) {
-                        rate = (params[0].value/params[1].value).toFixed(3) * 100;
+                    var learningNum = parseInt(params[1].value);
+                    var learnedNum = parseInt(params[0].value);
+                    var totalNum = learnedNum + learningNum;
+                    if (totalNum > 0) {
+                        rate = ((learnedNum/totalNum) * 100).toFixed(1);
+                    } else {
+                        rate = 0;
                     }
 
                     var circle1 = '<span style="display:inline-block;margin-right:5px;'
@@ -25,8 +30,10 @@ define(function(require, exports, module) {
                         + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
 
                     var html = params[0].name + '</br>';
-                    html += circle1+params[0].seriesName+' : '+params[0].value+'</br>';
-                    html += circle2+params[1].seriesName+' : '+params[1].value+'</br>';
+                    var val1 = isNaN(learnedNum)? '-' : learnedNum;
+                    var val2 = isNaN(learningNum)? '-' : learningNum;
+                    html += circle1+params[0].seriesName+' : '+val1+'</br>';
+                    html += circle2+params[1].seriesName+' : '+val2+'</br>';
                     html += circle3+'完成率 : '+rate+'%';
                     return html;
                 },
@@ -65,7 +72,7 @@ define(function(require, exports, module) {
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
+                            show: false,
                             position: 'insideRight'
                         }
                     },
@@ -82,8 +89,11 @@ define(function(require, exports, module) {
                     stack: '总量',
                     label: {
                         normal: {
-                            show: true,
-                            position: 'insideRight'
+                            show: false,
+                            position: 'insideRight',
+                            formatter: function (params) {
+                                return params.value == 0 ? '':params.value;
+                            }
                         }
                     },
                     itemStyle: {

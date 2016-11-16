@@ -62,7 +62,7 @@
         {% else %}
          <div class="alert alert-danger alert-dismissable">
             您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击
-              <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
+              <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
               {% if course.price>0 %}
               重新购买
               {% else %}
