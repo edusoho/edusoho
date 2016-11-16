@@ -24,7 +24,7 @@ class TagGroupTagDaoImpl extends BaseDao implements TagGroupTagDao
         $marks = str_repeat('?,', count($tagIds) - 1) . '?';
 
         $sql ="SELECT * FROM {$this->table} WHERE tagId IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $tagIds);
+        return $this->getConnection()->fetchAll($sql, $tagIds) ?: array();
     }
 
     public function findTagRelationsByTagId($tagId)

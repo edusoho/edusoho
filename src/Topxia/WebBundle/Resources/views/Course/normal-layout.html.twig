@@ -3,7 +3,7 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
+  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {tags: tags|default('')} %}
 {% endblock %}
 
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}

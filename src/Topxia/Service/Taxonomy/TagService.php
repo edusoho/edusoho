@@ -2,7 +2,13 @@
 namespace Topxia\Service\Taxonomy;
 
 interface TagService
-{
+{   
+    //tag_owner
+    public function findTagsByOwner(array $owner);
+
+    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
+    //
+
     public function getTag($id);
 
     public function getTagGroup($id);

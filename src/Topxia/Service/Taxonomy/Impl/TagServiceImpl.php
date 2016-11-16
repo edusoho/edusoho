@@ -11,6 +11,22 @@ class TagServiceImpl extends BaseService implements TagService
         'name', 'scope', 'tagNum'
     );
 
+    //tag_owner
+    public function findTagsByOwner(array $owner)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findTagOwnerRelationsByOwner($owner);
+
+        $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
+
+        return $this->getTagDao()->findTagsByIds($tagIds);
+    }
+
+    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
+    {
+        return $this->getTagOwnerDao()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
+    }
+    //
+
     public function getTag($id)
     {
         return $this->getTagDao()->getTag($id);
@@ -110,8 +126,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagsByIds(array $ids)
     {
-        $tags = $this->getTagDao()->findTagsByIds($ids);
-        return ArrayToolkit::index($tags, 'id');
+        return $this->getTagDao()->findTagsByIds($ids);
     }
 
     public function findTagsByNames(array $names)
@@ -313,6 +328,11 @@ class TagServiceImpl extends BaseService implements TagService
     protected function filterTagGroupFields($fields)
     {
         return ArrayToolkit::parts($fields, $this->allowFields);
+    }
+
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getTagGroupTagDao()

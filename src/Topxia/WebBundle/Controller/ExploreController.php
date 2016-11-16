@@ -51,9 +51,10 @@ class ExploreController extends CourseBaseController
             $tags[$selectedTagGroupId] = $selectedTag;
         }
 
-        $conditions['tagLikes'] = array_values($tags);
-        $conditions['tagLikes'] = array_unique($conditions['tagLikes']);
-        $conditions['tagLikes'] = array_filter($conditions['tagLikes']);
+        $conditions['tagIds'] = array_values($tags);
+        $conditions['tagIds'] = array_unique($conditions['tagIds']);
+        $conditions['tagIds'] = array_filter($conditions['tagIds']);
+        $conditions['tagIds'] = array_merge($conditions['tagIds']);
 
         unset($conditions['tag']);
 
@@ -204,6 +205,8 @@ class ExploreController extends CourseBaseController
             }
         }
 
+        $courses = $this->filterByTags($courses, 'course', $conditions['tagIds']);
+
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
@@ -266,9 +269,10 @@ class ExploreController extends CourseBaseController
             $tags[$selectedTagGroupId] = $selectedTag;
         }
 
-        $conditions['tagLikes'] = array_values($tags);
-        $conditions['tagLikes'] = array_unique($conditions['tagLikes']);
-        $conditions['tagLikes'] = array_filter($conditions['tagLikes']);
+        $conditions['tagIds'] = array_values($tags);
+        $conditions['tagIds'] = array_unique($conditions['tagIds']);
+        $conditions['tagIds'] = array_filter($conditions['tagIds']);
+        $conditions['tagIds'] = array_merge($conditions['tagIds']);
 
         unset($conditions['tag']);
 
@@ -367,6 +371,8 @@ class ExploreController extends CourseBaseController
             }
         }
 
+        $classrooms = $this->filterByTags($classrooms, 'classroom', $conditions['tagIds']);
+
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator'                => $paginator,
             'classrooms'               => $classrooms,
@@ -381,6 +387,32 @@ class ExploreController extends CourseBaseController
             'orderBy'                  => $orderBy[0],
             'tags'                     => $tags,
         ));
+    }
+
+    protected function filterByTags($targets, $type, $tagIds)
+    {
+        if (!empty($tagIds)) {
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $type);
+
+            if (empty($tagOwnerRelations)) {
+                return array();
+            } else {
+                if (count($tagOwnerRelations) != count($tagIds)) {
+                    return array();
+                }
+                
+                $targetIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+                $targetIds = array_unique($targetIds);
+
+                foreach ($targets as $key => $target) {
+                    if (!in_array($target['id'], $targetIds)) {
+                        unset($targets[$key]);
+                    }
+                }
+            }
+        }
+
+        return $targets;
     }
 
     protected function getTokenService()

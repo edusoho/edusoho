@@ -99,12 +99,30 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function createArticle($article)
     {
+        $user = $this->getCurrentUser();
+
         if (empty($article)) {
             throw $this->createServiceException($this->getKernel()->trans('文章内容为空，创建文章失败！'));
         }
 
         $article = $this->filterArticleFields($article, 'add');
+
+        $tagIds = $article['tagIds'];
+
+        unset($article['tagIds']);
+
         $article = $this->getArticleDao()->addArticle($article);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagOwnerDao()->addTagOwnerRelation(array(
+                'ownerType'   => 'article',
+                'ownerId'     => $article['id'],
+                'tagId'       => $tagId,
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            ));
+        }
+
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
@@ -115,6 +133,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function updateArticle($id, $article)
     {
+        $user = $this->getCurrentUser();
+
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
@@ -123,7 +143,28 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->filterArticleFields($article);
 
+        $tagIds = $article['tagIds'];
+
+        unset($article['tagIds']);
+
         $article = $this->getArticleDao()->updateArticle($id, $article);
+
+        $owner = array(
+            'ownerType' => 'article',
+            'ownerId'   => $id
+        );
+
+        $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagOwnerDao()->addTagOwnerRelation(array(
+                'ownerType'   => $owner['ownerType'],
+                'ownerId'     => $owner['ownerId'],
+                'tagId'       => $tagId,
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            ));
+        }
 
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
         $this->dispatchEvent('article.update', new ServiceEvent($article));
@@ -476,6 +517,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         return $orderBys;
+    }
+
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getArticleDao()

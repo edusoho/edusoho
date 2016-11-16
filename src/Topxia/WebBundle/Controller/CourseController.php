@@ -115,7 +115,11 @@ class CourseController extends CourseBaseController
         }
 
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
+
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
 
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course'   => $course,
@@ -212,10 +216,21 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
             'member' => $member,
-            'items'  => $items
+            'items'  => $items,
+            'tags'   => $tags
         ));
     }
 

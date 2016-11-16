@@ -19,6 +19,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
+
         return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
@@ -174,8 +175,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * 要过滤要更新的字段
      */
     public function updateClassroom($id, $fields)
-    {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'tags'));
+    {   
+        $user = $this->getCurrentUser();
+
+        $tagIds = $fields['tagIds'];
+
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
@@ -183,6 +188,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
+
+        $owner = array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        );
+
+        $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagOwnerDao()->addTagOwnerRelation(array(
+                'ownerType'   => $owner['ownerType'],
+                'ownerId'     => $owner['ownerId'],
+                'tagId'       => $tagId,
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            ));
+        }
+
         return $classroom;
     }
 
@@ -1438,6 +1461,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:Classroom.ClassroomMemberDao');
     }
 
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
@@ -1471,6 +1499,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
+    }
+
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getStatusService()

@@ -21,7 +21,7 @@
         {% if tags %}
           <p><strong>{{'标签：'|trans}}</strong>
             {% for tag in tags %}
-              <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
+              <a href="{{ path('course_explore') }}">{{ tag.name }}</a>
             {% endfor %}
           </p>
         {% endif %}

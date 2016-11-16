@@ -47,12 +47,17 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['tagIds'] = $this->getTagIdsFromRequest($request);
+
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程基本信息已保存！'));
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
 
         $default = $this->getSettingService()->get('default', array());
 
@@ -662,6 +667,14 @@ class CourseManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseManage:open-course-marketing.html.twig', array(
             'course' => $course
         ));
+    }
+
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
     }
 
     private function filterFields(&$fields)

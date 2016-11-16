@@ -462,8 +462,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     public function updateCourse($id, $fields)
-    {
+    {   
+        $user = $this->getCurrentUser();
+
         $argument = $fields;
+        $tagIds   = $fields['tagIds'];
         $course   = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
@@ -482,7 +485,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
+
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
+
+        $owner = array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        );
+
+        $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagOwnerDao()->addTagOwnerRelation(array(
+                'ownerType'   => $owner['ownerType'],
+                'ownerId'     => $owner['ownerId'],
+                'tagId'       => $tagId,
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            ));
+        }
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
 
@@ -532,7 +553,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'vipLevelId'     => 0,
             'goals'          => array(),
             'audiences'      => array(),
-            'tags'           => '',
             'startTime'      => 0,
             'endTime'        => 0,
             'locationId'     => 0,
@@ -2907,6 +2927,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
+    }
+
     protected function getCourseDao()
     {
         return $this->createDao('Course.CourseDao');
@@ -3035,14 +3060,6 @@ class CourseSerialize
 {
     public static function serialize(array &$course)
     {
-        if (isset($course['tags'])) {
-            if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|'.implode('|', $course['tags']).'|';
-            } else {
-                $course['tags'] = '';
-            }
-        }
-
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
                 $course['goals'] = '|'.implode('|', $course['goals']).'|';
@@ -3075,8 +3092,6 @@ class CourseSerialize
         if (empty($course)) {
             return $course;
         }
-
-        $course['tags'] = empty($course['tags']) ? array() : explode('|', trim($course['tags'], '|'));
 
         if (empty($course['goals'])) {
             $course['goals'] = array();
