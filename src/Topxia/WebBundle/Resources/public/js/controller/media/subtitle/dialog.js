@@ -50,7 +50,6 @@ define(function(require, exports, module) {
                             '<span class="subtitle-name prl">'+data.name+'</span>'+
                             '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/'+ mediaId+'/subtitle/'+ data.id +'/delete">删除</a>'+
                         '</li>');
-                    console.log($('.js-media-subtitle-list li').length);
                     if($('.js-media-subtitle-list li').length > 3){
                         $('#subtitle-uploader').hide();
                     }
@@ -72,6 +71,19 @@ define(function(require, exports, module) {
                     $('#subtitle-uploader').show();
                 }
             });
+        },
+        _destoryUploader: function() {
+            if (!this.uploader) {
+                return ;
+            }
+            this.uploader.destroy();
+            this.uploader = null;
+        },
+
+        destroy: function () {
+            this.uploader.__events = null;
+            this._destoryUploader();
+            SubtitleDialog.superclass.destroy.call(this);
         }
     });
 

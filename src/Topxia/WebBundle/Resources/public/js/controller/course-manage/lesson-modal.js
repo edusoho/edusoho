@@ -346,6 +346,7 @@ define(function(require, exports, module) {
             $title.val(name.substring(0, name.lastIndexOf('.')));
         }; 
 
+        var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
             var $container = $form.find('#subtitle-form-group');
             $container.removeClass('hidden');
@@ -353,7 +354,7 @@ define(function(require, exports, module) {
             if ($container.length > 0) {
                 $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
                     $container.find('.js-subtitle-list').html(html);
-                    new SubtitleDialog({
+                    subtitleDialog = new SubtitleDialog({
                         element: '.js-subtitle-dialog'
                     });
                 });
@@ -406,6 +407,10 @@ define(function(require, exports, module) {
             if(isUploading){
                 Notify.danger(Translator.trans('文件正在上传，等待上传完后再保存。'));
                 return false;
+            }
+
+            if (subtitleDialog) {
+                subtitleDialog.destroy();
             }
 
             _.each(choosers, function (chooser) {
