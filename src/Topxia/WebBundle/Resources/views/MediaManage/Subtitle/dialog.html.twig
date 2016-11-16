@@ -1,17 +1,11 @@
 <div class="js-subtitle-dialog">
   <ul class="list-unstyled plm js-subtitle-list">
-    <li class="pvs">
-      <span class="subtitle-name prl">cdsacae</span>
-      <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
-    </li>
-    <li class="pvs">
-      <span class="subtitle-name prl">cdsacae</span>
-      <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
-    </li>
-    <li class="pvs">
-      <span class="subtitle-name prl">cdsacae</span>
-      <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
-    </li>
+    {% for subtitle in subtitles %}
+      <li class="pvs">
+        <span class="subtitle-name prl">{{ subtitle.name }}</span>
+        <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete">删除</a>
+      </li>
+    {% endfor %}
   </ul>
   {% set token = uploader_token('subtitle', media.id, 'private') %}
   <div class="col-md-2 caption-uploader js-select-file" id="subtitle-uploader" style="width: 130px" 

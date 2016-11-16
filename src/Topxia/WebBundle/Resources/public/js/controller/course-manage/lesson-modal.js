@@ -349,8 +349,8 @@ define(function(require, exports, module) {
         var displaySubtitleManage = function(media) {
             var $container = $form.find('#subtitle-form-group');
             if ($container.length > 0) {
-                $container.removeClass('hidden');
                 $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
+                    $container.removeClass('hidden');
                     $container.find('.js-subtitle-list').append(html);
                     new SubtitleDialog({
                         element: '.js-subtitle-dialog'

@@ -12,11 +12,11 @@ define(function(require, exports, module) {
         },
         initUploader: function()
         {
-            var $elem = $('#subtitle-uploader');
+            var $elem = this.$('#subtitle-uploader');
             var uploader = new UploaderSDK({
                 initUrl:$elem.data('initUrl'),
                 finishUrl:$elem.data('finishUrl'),
-                id:'uploader',
+                id:'subtitle-uploader',
                 ui:'simple',
                 multi:true,
                 accept:{
