@@ -2,11 +2,8 @@
   <div class="manage-player-header">
     <a href="" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回</a>
     <ol class="breadcrumb breadcrumb-o">
-      <li>
-        {# {{course.title}} #}
-      </li>
       <li class="active">{{media.filename|plain_text(50) }}</li>
-      </ol>
+    </ol>
   </div>
   <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
     0 and setting('storage.video_watermark_image') %}
@@ -20,3 +17,4 @@
   <div class="mask hidden" data-role="player-mask"></div>
   <div class="watermarkEmbedded"></div>
 </div>
+{% do load_script('media/player.js') %}
