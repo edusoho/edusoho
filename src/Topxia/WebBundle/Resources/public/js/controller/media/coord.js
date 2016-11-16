@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-  var messenger = require('./player.js');
+  var player = require('./player.js');
 
   var $elem = $('.js-editbox')
   var partnum = 6;
@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     $new_scale_default.find('[data-role="scale-time"]').text(convertTime(Math.round(parttime * i)));
     $('[data-role="scale-default"]').before($new_scale_default);
   }
-  messenger.on("timechange", function(data) {
+  player.on("timechange", function(data) {
     $('.scale-white').css('left', getleft(data.currentTime, mediaLength));
   });
 
