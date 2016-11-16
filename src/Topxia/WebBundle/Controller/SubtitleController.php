@@ -63,6 +63,19 @@ class SubtitleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function manageDialogAction($mediaId)
+    {
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
+        }
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+
+        return $this->render('', array(
+            'subtitles' => $subtitles
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
