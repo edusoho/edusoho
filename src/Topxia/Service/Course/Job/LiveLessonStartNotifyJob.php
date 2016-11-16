@@ -15,7 +15,8 @@ class LiveLessonStartNotifyJob implements Job
             $lesson           = $this->getCourseService()->getLesson($targetId);
             $course           = $this->getCourseService()->getCourse($lesson['courseId']);
             $lesson['course'] = $course;
-            $message          = "您报名的课程".$course['title']."，即将于".date('H:i', $lesson['startTime'])."开始直播，马上前往直播教室准备学习吧!";
+
+            $message = "您报名的《".$lesson['title']."》课程将于".date('H:i', $lesson['startTime'])."开始直播，点击学习吧";
 
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
             if (empty($classrooms)) {
