@@ -43,9 +43,14 @@ services:
         class:          "%templating.locator.class%"
         arguments:      ['@codeages_plugin.theme.file_locator', '%kernel.cache_dir%']
 
-    codeages_plugin.event.subscribers:
-        class: Codeages\PluginBundle\Event\Subscribers
-        arguments: ['@biz']
+    codeags_plugin.event.lazy_subscribers:
+        class: Codeages\PluginBundle\Event\LazySubscribers
+        arguments: ['@service_container']
+
+    codeags_plugin.event.test:
+        class: Codeages\PluginBundle\Event\TestSubscriber
+        tags:
+            - { name: codeages_plugin.event.subscriber }
 
     templating.locator:
         alias:          codeages_plugin.theme.templating.locator

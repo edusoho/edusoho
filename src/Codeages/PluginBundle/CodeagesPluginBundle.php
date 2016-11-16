@@ -3,7 +3,7 @@
 namespace Codeages\PluginBundle;
 
 use Codeages\PluginBundle\DependencyInjection\Compiler\EventSubscriberPass;
-use Codeages\PluginBundle\Event\CacheDispatcher;
+use Codeages\PluginBundle\Event\LazyDispatcher;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -14,7 +14,7 @@ class CodeagesPluginBundle extends Bundle
         $biz = $this->container->get('biz');
         $container = $this->container;
         $biz['dispatcher'] = function () use ($container) {
-            return new CacheDispatcher($container);
+            return new LazyDispatcher($container);
         };
 
         $biz['subscribers'] = new \ArrayObject();
