@@ -6,7 +6,7 @@
       data-media-id="{{ media.id }}"
       data-media-global-id="{{ media.globalId }}"
       data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}"
-      data-subtitle-list-url="{{ url('media_subtitles', {mediaId: media.id}) }}"
+      data-subtitle-list-url="{{ url('media_subtitle_list', {mediaId: media.id}) }}"
       data-init-url="{{ url('uploader_init', {token:token}) }}"
       data-finish-url="{{ url('uploader_finished', {token:token}) }}"
       >

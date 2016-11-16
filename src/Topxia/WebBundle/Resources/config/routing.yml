@@ -1178,9 +1178,9 @@ media_subtitle_manage:
     pattern:  /media/{mediaId}/subtitles/manage
     defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
 
-media_subtitles:
+media_subtitle_list:
     pattern:  /media/{mediaId}/subtitles
-    defaults: { _controller: TopxiaWebBundle:Subtitle:mediaSubtitles }
+    defaults: { _controller: TopxiaWebBundle:Subtitle:list }
 
 media_subtitle_create:
     pattern:  /media/{mediaId}/subtitle/create

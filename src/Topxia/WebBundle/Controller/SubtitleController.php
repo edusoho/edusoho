@@ -7,7 +7,7 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
-    public function manageAction(Request $request, $mediaId)
+    public function manageAction($mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
@@ -26,13 +26,11 @@ class SubtitleController extends BaseController
     /**
      * 获取某一视频下所有的字幕
      */
-    public function mediaSubtitlesAction(Request $request, $mediaId)
+    public function listAction($mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        if (empty($courseId)) {
-            throw new InvalidArgumentException("courseId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
-        $this->getCourseService()->tryManageCourse($courseId);
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
         
@@ -41,13 +39,11 @@ class SubtitleController extends BaseController
         ));
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        if (empty($courseId)) {
-            throw new InvalidArgumentException("courseId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
-        $this->getCourseService()->tryManageCourse($courseId);
 
         $fileds = $request->request->all();
 
@@ -56,10 +52,11 @@ class SubtitleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($mediaId, $id)
     {
-        $courseId = $request->query->get('courseId', 0);
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
+        }
 
         $this->getSubtitleService()->deleteSubtitle($id);
 
