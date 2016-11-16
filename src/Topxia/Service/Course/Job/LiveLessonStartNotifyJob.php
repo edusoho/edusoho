@@ -17,7 +17,7 @@ class LiveLessonStartNotifyJob implements Job
 
             $lesson['course'] = $course;
             $message          = "您报名的课程".$course['title']."，即将于".date('H:i', $lesson['startTime'])."开始直播，马上前往直播教室准备学习吧!";
-            $convNo           = $this->getConversationService()->getConversationByTarget($lesson['courseId'], 'course-push');
+            $conv             = $this->getConversationService()->getConversationByTarget($lesson['courseId'], 'course-push');
             $from             = array(
                 'type' => 'lesson',
                 'id'   => $targetId
@@ -33,7 +33,7 @@ class LiveLessonStartNotifyJob implements Job
                 'message'  => $message
             );
 
-            return $this->pushIM($from, $to, $body, $convNo['no']);
+            return $this->pushIM($from, $to, $body, $conv['no']);
         }
     }
 
