@@ -45,13 +45,13 @@ class ExerciseController extends BaseController
             throw new ResourceNotFoundException('exercise', $result['testId']);
         }
 
-        $items = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
         return $this->render('WebBundle:Homework:do.html.twig', array(
             'paper'          => $exercise,
-            'items'          => $items,
+            'questions'      => $questions,
             'course'         => $course,
-            'result'         => $result,
+            'paperResult'    => $result,
             'questionStatus' => 'doing'
         ));
     }
