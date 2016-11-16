@@ -56,7 +56,9 @@
     </span>
   </td>
   <td>
-    <a class="btn btn-default" href="">字幕管理</a>
+    {% if uploadFile.type == 'video' %}
+    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id}) }}">字幕管理</a>
+    {% endif %}
   </td>
 
 </tr>
