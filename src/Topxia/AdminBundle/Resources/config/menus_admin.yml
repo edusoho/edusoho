@@ -559,9 +559,13 @@ admin:
                 #             router_name: admin_edu_cloud_email
                 admin_edu_cloud_search_setting:
                     name: 云搜索
+                    router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search:
                             name: 云搜索
+                            disable: true
+                        admin_edu_cloud_setting_search:
+                            name: 设置
                             disable: true
                 admin_app_im:
                     name: 即时聊天设置

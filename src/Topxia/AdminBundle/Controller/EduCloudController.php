@@ -719,7 +719,49 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:EduCloud/Search:search.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig', array(
+            'data' => $data
+        ));
+    }
+    public function searchAction(Request $request)
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        if (!$cloud_search_settting) {
+            $cloud_search_settting = array(
+                'search_enabled' => 0,
+                'status'         => 'closed' //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
+            );
+            $this->getSettingService()->set('cloud_search', $cloud_search_settting);
+        }
+
+        $data = $cloud_search_settting;
+
+        try {
+            $api = CloudAPIFactory::create('root');
+
+            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
+
+            $this->isSearchInited($api);
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+                'data' => array('status' => 'unlink')
+            ));
+        }
+
+        //是否接入教育云
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+            $data['status'] = 'unconnect';
+        } elseif (empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+                $data['status'] = 'binded_error';
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
             'data' => $data
         ));
     }
