@@ -6,7 +6,7 @@ if (!defined('WEKIT_VERSION')) {
 	require_once (WINDID_BOOT . '../wekit.php');
 	Wekit::init('windidclient');
 	Wind::application('windidclient', Wekit::S());
-	$service = ServiceKernel::$instance->createService('System.SettingService');
+	$service = ServiceKernel::instance()->createService('System.SettingService');
 	$setting = $service->get('user_partner');
 	$clientConfig = $setting['partner_config']['phpwind'];
 	$database =  $clientConfig['database'];
