@@ -49,10 +49,11 @@ class LiveLessonStartNotifyJob implements Job
             'id'   => 'all'
         );
         $body = array(
-            'type'     => 'live_start',
-            'courseId' => $courseId,
-            'lessonId' => $lessonId,
-            'message'  => $message
+            'type'        => 'live_start',
+            'courseId'    => $courseId,
+            'lessonId'    => $lessonId,
+            'lessonTitle' => $lesson['title'],
+            'message'     => $message
         );
         if (!empty($classroomId)) {
             $body['classroomId'] = $classroomId;
