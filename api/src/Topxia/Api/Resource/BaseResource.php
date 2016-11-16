@@ -228,7 +228,7 @@ abstract class BaseResource
         if (is_array($message)) {
             $message = json_encode($message);
         }
-        $this->getLogger()->error($message);
+        $this->getLogger($logName)->error($message);
     }
 
     protected function addDebug($logName, $message)
