@@ -23,7 +23,7 @@ class LiveLessonStartNotifyJob implements Job
                 $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id']);
             } else {
                 foreach ($classrooms as $classroom) {
-                    $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id'], $classroom['id']);
+                    $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id'], $classroom['classroomId']);
                 }
             }
 
