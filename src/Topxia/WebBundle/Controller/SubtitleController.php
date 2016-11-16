@@ -7,29 +7,18 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
-    public function manageAction(Request $request)
+    public function manageAction(Request $request, $mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        $lessonId = $request->query->get('lessonId');
-
-        if (empty($courseId) || empty($lessonId)) {
-            throw new InvalidArgumentException("courseId或 lessonId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (!in_array($lesson['type'], array('video', 'audio')) || empty($lesson['mediaId'])) {
-            throw new ResourceNotFoundException('lesson', $lessonId);
-        }
-
-        $mediaId = $lesson['mediaId'];
         $media   = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
             throw new ResourceNotFoundException('uploadFile', $mediaId);
         }
 
         return $this->render('TopxiaWebBundle:Subtitle:manage.html.twig', array(
-            'courseId' => $courseId,
             'media'  => $media
         ));
     }

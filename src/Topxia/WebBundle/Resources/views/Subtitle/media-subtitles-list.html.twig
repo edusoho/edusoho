@@ -14,7 +14,7 @@
       <span class="subtitle-label pull-left plm" data-url="{{ subtitle.url|default('') }}">
         {{ subtitle.name }}
       </span>
-      <a class="subtitle-delete pull-right text-warning prm" data-url="{{ path('subtitle_delete', {courseId: courseId, id: subtitle.id}) }}">
+      <a class="subtitle-delete pull-right text-warning prm" data-url="{{ path('media_subtitle_delete', {mediaId: media.id, id: subtitle.id}) }}">
         <i class="fa fa-trash-o"></i>
       </a>
     </li>

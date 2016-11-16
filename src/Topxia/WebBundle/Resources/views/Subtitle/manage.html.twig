@@ -5,8 +5,8 @@
       <div class="col-md-2 caption-uploader js-select-file" id="uploader" style="width: 130px" 
       data-media-id="{{ media.id }}"
       data-media-global-id="{{ media.globalId }}"
-      data-subtitle-create-url="{{ url('subtitle_create', {courseId: courseId}) }}"
-      data-subtitle-list-url="{{ url('subtitle_media_subtitles', {courseId: courseId, mediaId: media.id}) }}"
+      data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}"
+      data-subtitle-list-url="{{ url('media_subtitles', {mediaId: media.id}) }}"
       data-init-url="{{ url('uploader_init', {token:token}) }}"
       data-finish-url="{{ url('uploader_finished', {token:token}) }}"
       >

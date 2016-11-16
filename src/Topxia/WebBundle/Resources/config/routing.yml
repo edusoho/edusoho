@@ -1174,21 +1174,21 @@ course_lesson_question_marker_search:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
 
-subtitle_manage:
-    pattern:  /subtitle/manage
+media_subtitle_manage:
+    pattern:  /media/{mediaId}/subtitles/manage
     defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
 
-subtitle_media_subtitles:
-    pattern:  /subtitle/media/{mediaId}/subtitles
+media_subtitles:
+    pattern:  /media/{mediaId}/subtitles
     defaults: { _controller: TopxiaWebBundle:Subtitle:mediaSubtitles }
 
-subtitle_create:
-    pattern:  /subtitle/create
+media_subtitle_create:
+    pattern:  /media/{mediaId}/subtitle/create
     defaults: { _controller: TopxiaWebBundle:Subtitle:create }
     methods: [POST]
 
-subtitle_delete:
-    pattern:  /subtitle/{id}/delete
+media_subtitle_delete:
+    pattern:  /media/{mediaId}/subtitle/{id}/delete
     defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
     methods: [POST]
 
