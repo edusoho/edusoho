@@ -271,7 +271,6 @@ define(function(require, exports, module) {
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
-					console.log(data.message);
 					$('[role=no-use-coupon-code]').show();
 					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(data.message);
 				} else if(data.useable == "yes"){
