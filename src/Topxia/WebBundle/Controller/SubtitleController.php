@@ -18,7 +18,7 @@ class SubtitleController extends BaseController
             throw new ResourceNotFoundException('uploadFile', $mediaId);
         }
 
-        return $this->render('TopxiaWebBundle:Subtitle:manage.html.twig', array(
+        return $this->render('TopxiaWebBundle:MediaManage/Subtitle:manage.html.twig', array(
             'media'  => $media
         ));
     }
