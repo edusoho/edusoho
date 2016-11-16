@@ -1,6 +1,6 @@
 # 前端开发说明
 
-### 本项目采用基于[webpack](./webpack.md)的前端解决方案
+### 本项目采用基于[webpack](../webpack.md)的前端解决方案
 
 ### 目录文件说明
     app/Resourses/assets/common    存放整个项目共用的代码片段或组件，在js中import引入  
