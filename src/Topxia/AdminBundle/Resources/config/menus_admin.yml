@@ -528,6 +528,9 @@ admin:
                         admin_setting_cloud_video:
                             name: 云视频
                             disable: true
+                        admin_cloud_setting_video:
+                            name: 设置
+                            disable: true
                 admin_cloud_edulive_setting:
                     name: 云直播
                     router_name: admin_setting_cloud_edulive

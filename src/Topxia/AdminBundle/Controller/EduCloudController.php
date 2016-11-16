@@ -222,12 +222,61 @@ class EduCloudController extends BaseController
 
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
-        return $this->render('TopxiaAdminBundle:EduCloud/Video:video.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
             'videoInfo'      => $videoInfo,
             'info'           => $info
         ));
+    }
+
+    public function videoSettingAction(Request $request)
+    {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $default        = array(
+            'upload_mode'                 => 'local',
+            'support_mobile'              => 0,
+            'enable_playback_rates'       => 0,
+            'video_quality'               => 'low',
+            'video_audio_quality'         => 'low',
+            'video_watermark'             => 0,
+            'video_watermark_image'       => '',
+            'video_embed_watermark_image' => '',
+            'video_watermark_position'    => 'topright',
+            'video_fingerprint'           => 0,
+            'video_fingerprint_time'      => 0.5,
+            'video_header'                => null
+        );
+
+        if ($request->getMethod() == 'POST') {
+            $set = $request->request->all();
+
+            $storageSetting = array_merge($default, $storageSetting, $set);
+            $this->getSettingService()->set('storage', $storageSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
+        } else {
+            $storageSetting = array_merge($default, $storageSetting);
+        }
+
+        //云端视频判断
+        try {
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
+
+        $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
+
+        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        
+        return $this->render('TopxiaAdminBundle:EduCloud/Video:setting.html.twig', array(
+            'storageSetting' => $storageSetting,
+            'headLeader'     => $headLeader,
+            'videoInfo'      => $videoInfo,
+            'info'           => $info
+        ));        
     }
 
     public function videoControlAction(Request $request)

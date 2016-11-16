@@ -1,7 +1,10 @@
-{% include 'TopxiaAdminBundle:EduCloud:Video/video-buy.html.twig' %}
-{#{% include 'TopxiaAdminBundle:EduCloud:Video/video-show.html.twig' %}#}
-{% include 'TopxiaAdminBundle:EduCloud:Video/flow-buy.html.twig' %}
-{#{% include 'TopxiaAdminBundle:EduCloud:Video/flow-show.html.twig' %}#}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_cloud_video' %}
+{% set script_controller = 'setting/cloud' %}
+{#{% block tabs %}{% endblock %}#}
+
+{% block main %}
 
 <div class="panel panel-default panel-chart">
   <input id="spaceItemData" type="hidden" value="{{spaceItem|default('')}}"/>
@@ -22,3 +25,4 @@
     <div id="flowItemChart"></div>
   </div>
 </div>
+{% endblock %}
