@@ -241,7 +241,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             $liveJobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('live_lesson', $lesson['id']);
-            IMAPIFactory::getLogger()->debug('Live Jobs : ', !is_array($liveJobs) ? array() : $liveJobs);
 
             if ($liveJobs) {
                 $this->deleteJob($liveJobs);
