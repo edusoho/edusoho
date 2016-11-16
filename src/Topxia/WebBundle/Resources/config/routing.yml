@@ -358,7 +358,7 @@ live_capacity:
 
 course_explore:
     pattern:  /course/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
+    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
 
 course_archive:
     pattern:  /archive/course

@@ -11,6 +11,8 @@ interface TagGroupTagDao
 
     public function findTagRelationsByTagIds($tagIds);
 
+    public function findTagRelationsByTagId($tagId);
+
     public function update($groupId, $fields);
 
     public function deleteByGroupId($groupId);

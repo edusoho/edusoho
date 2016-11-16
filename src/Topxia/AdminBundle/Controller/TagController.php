@@ -14,16 +14,20 @@ class TagController extends BaseController
         $paginator = new Paginator($request, $total, 20);
         $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        $tagIds = ArrayToolkit::column($tags, 'id');
+        foreach ($tags as &$tag) {
+            $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
+            $groupNames = ArrayToolkit::column($tagGroups, 'name');
 
-        $tagGroups = $this->getTagService()->findTagGroupsByTagIds($tagIds);
-
-        $tagGroups = ArrayToolkit::index($tagGroups, 'tagId');
+            if (!empty($groupNames)) {
+                $tag['groupNames'] = $groupNames;
+            } else {
+                $tag['groupNames'] = array();
+            }
+        }
 
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
             'tags'         => $tags,
             'paginator'    => $paginator,
-            'tagGroups' => $tagGroups
         ));
     }
 
@@ -32,7 +36,12 @@ class TagController extends BaseController
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->addTag($request->request->all());
 
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
+            $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
+
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag'          => $tag,
+                'tagRelations' => $tagRelation,
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(

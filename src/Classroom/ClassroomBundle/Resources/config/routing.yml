@@ -109,7 +109,7 @@ classroom_manage_homework:
 
 classroom_explore:
     pattern:  /classroom/explore/{category}
-    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'' }
+    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
 
 classroom_show:
     pattern:  /classroom/{id}

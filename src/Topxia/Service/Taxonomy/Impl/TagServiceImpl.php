@@ -50,21 +50,29 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagGroupDao()->findTagGroups();
     }
 
-    public function findTagGroupsByTagIds($tagIds)
+    public function findTagRelationsByTagIds($tagIds)
     {
         $tagRelations = $this->getTagGroupTagDao()->findTagRelationsByTagIds($tagIds);
 
-        $tagRelations = ArrayToolkit::index($tagRelations, 'groupId');
+        foreach ($tagRelations as &$tagRelation) {
+            $tagGroup = $this->getTagGroup($tagRelation['groupId']);
+            if (!empty($tagGroup)) {
+                $tagRelation['groupName'] = $tagGroup['name'];
+            } else {
+                $tagRelation['groupName'] = '';
+            }
+        }
+
+        return ArrayToolkit::group($tagRelations, 'tagId');
+    }
+
+    public function findTagGroupsByTagId($tagId)
+    {
+        $tagRelations = $this->findTagRelationsByTagIds(array($tagId));
 
         $groupIds = ArrayToolkit::column($tagRelations, 'groupId');
 
-        $groups = $this->getTagGroupDao()->findTagGroupsByGroupIds($groupIds);
-
-        foreach ($groups as &$group) {
-            $group['tagId'] = $tagRelations[$group['id']]['tagId'];
-        }
-
-        return $groups;
+        return $this->getTagGroupDao()->findTagGroupsByGroupIds($groupIds);
     }
 
     public function findTagsByGroupId($groupId)
@@ -228,19 +236,21 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
-        $this->getTagGroupTagDao()->deleteByGroupId($id);
+        if (!empty($fields['tagIds'])) {
+            $this->getTagGroupTagDao()->deleteByGroupId($id);
 
-        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
-        foreach ($tagIds as $tagId) {
-            $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+            foreach ($tagIds as $tagId) {
+                $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+            }
+
+            $fields = $this->filterTagGroupFields($fields);
+
+            $fields['updatedTime'] = time();
+
+            $fields['tagNum'] = count($tagIds);
         }
-
-        $fields = $this->filterTagGroupFields($fields);
-
-        $fields['updatedTime'] = time();
-
-        $fields['tagNum'] = count($tagIds);
 
         $updatedTagGroup = $this->getTagGroupDao()->update($id, $fields);
 
@@ -253,16 +263,18 @@ class TagServiceImpl extends BaseService implements TagService
     {
         $tag = $this->getTag($id);
 
-        $tagGroupRelation = $this->getTagGroupTagDao()->getByTagId($id);
+        $tagGroupRelations = $this->getTagGroupTagDao()->findTagRelationsByTagId($id);
 
-        if (!empty($tagGroupRelation['groupId'])) {
-            $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tagGroupRelation['groupId'], $id);
+        if (count($tagGroupRelations) != 0) {
+            foreach ($tagGroupRelations as $tagGroupRelation) {
+                $this->getTagGroupTagDao()->deleteByGroupIdAndTagId($tagGroupRelation['groupId'], $id);
 
-            $tagGroup = $this->getTagGroup($tagGroupRelation['groupId']);
+                $tagGroup = $this->getTagGroup($tagGroupRelation['groupId']);
 
-            $tagNum = $tagGroup['tagNum'] - 1;
+                $tagNum = $tagGroup['tagNum'] - 1;
 
-            $this->updateTagGroup($tagGroupRelation['groupId'], array('tagNum' => $tagNum));
+                $this->updateTagGroup($tagGroupRelation['groupId'], array('tagNum' => $tagNum));
+            }
         }
 
         $this->getTagDao()->deleteTag($id);

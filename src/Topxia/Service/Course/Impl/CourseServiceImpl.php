@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
-
+     
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
@@ -147,7 +147,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     protected function _prepareCourseConditions($conditions)
-    {
+    {   
         $conditions = array_filter($conditions, function ($value) {
             if ($value == 0) {
                 return true;

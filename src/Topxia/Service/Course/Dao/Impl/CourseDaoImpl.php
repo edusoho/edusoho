@@ -230,7 +230,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $tags .= "|".$tagId;
             }
 
-            $conditions['tags'] = $tags."|";
+            $conditions['tags'] = $tags.'|';
         }
 
         if (isset($conditions['tagId'])) {
@@ -256,7 +256,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
