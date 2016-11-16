@@ -2,17 +2,24 @@ define(function(require, exports, module) {
 
     require('new-uploader');
     var Widget = require('widget');
+    var Notify = require('common/bootstrap-notify');
 
     var SubtitleDialog = Widget.extend({
         uploader: null,
+        attrs:{
+            subtitleUploader:$('#subtitle-uploader')
+        },
         events: {
+            'click .js-subtitle-delete':'subtitleDelete'
         },
         setup: function(){
             this.initUploader();
         },
         initUploader: function()
         {
+            var _self = this;
             var $elem = this.$('#subtitle-uploader');
+            var mediaId = this.element.data('mediaId');
             var uploader = new UploaderSDK({
                 initUrl:$elem.data('initUrl'),
                 finishUrl:$elem.data('finishUrl'),
@@ -37,8 +44,16 @@ define(function(require, exports, module) {
                 $.post($elem.data('subtitleCreateUrl'), {
                     "name": file.name,
                     "subtitleId": file.id,
-                    "mediaId": 69
+                    "mediaId": mediaId
                 }).success(function (data) {
+                    $('.js-media-subtitle-list').append('<li class="pvs">'+
+                            '<span class="subtitle-name prl">'+data.name+'</span>'+
+                            '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/'+ mediaId+'/subtitle/'+ data.id +'/delete">删除</a>'+
+                        '</li>');
+                    console.log($('.js-media-subtitle-list li').length);
+                    if($('.js-media-subtitle-list li').length > 3){
+                        $('#subtitle-uploader').hide();
+                    }
                     Notify.success(Translator.trans('字幕上传成功！'));
                 }).error(function (data){
                     Notify.danger(Translator.trans(data.responseJSON.error.message));
@@ -46,6 +61,17 @@ define(function(require, exports, module) {
             });
 
             this.uploader = uploader;
+        },
+        subtitleDelete: function(e){
+            var _self = this;
+            var $elem = $(e.currentTarget);
+            $.post($elem.data('subtitleDeleteUrl'),function(data){
+                if(data){
+                    Notify.success(Translator.trans('删除字幕成功'));
+                    $elem.parent().remove();
+                    $('#subtitle-uploader').show();
+                }
+            });
         }
     });
 
