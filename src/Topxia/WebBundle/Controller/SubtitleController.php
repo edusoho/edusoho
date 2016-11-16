@@ -47,9 +47,9 @@ class SubtitleController extends BaseController
 
         $fileds = $request->request->all();
 
-        $this->getSubtitleService()->addSubtitle($fileds);
+        $subtitle = $this->getSubtitleService()->addSubtitle($fileds);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse($subtitle);
     }
 
     public function deleteAction($mediaId, $id)
