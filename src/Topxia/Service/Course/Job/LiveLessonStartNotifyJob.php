@@ -12,29 +12,52 @@ class LiveLessonStartNotifyJob implements Job
         $targetType = $params['targetType'];
         $targetId   = $params['targetId'];
         if ($targetType == 'live_lesson') {
-            $lesson = $this->getCourseService()->getLesson($targetId);
-            $course = $this->getCourseService()->getCourse($lesson['courseId']);
-
+            $lesson           = $this->getCourseService()->getLesson($targetId);
+            $course           = $this->getCourseService()->getCourse($lesson['courseId']);
             $lesson['course'] = $course;
             $message          = "您报名的课程".$course['title']."，即将于".date('H:i', $lesson['startTime'])."开始直播，马上前往直播教室准备学习吧!";
-            $conv             = $this->getConversationService()->getConversationByTarget($lesson['courseId'], 'course-push');
-            $from             = array(
-                'type' => 'lesson',
-                'id'   => $targetId
-            );
-            $to = array(
-                'type' => 'lesson',
-                'id'   => 'all'
-            );
-            $body = array(
-                'type'     => 'live_start',
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $targetId,
-                'message'  => $message
-            );
 
-            return $this->pushIM($from, $to, $body, $conv['no']);
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
+            if (empty($classrooms)) {
+                $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id']);
+            } else {
+                foreach ($classrooms as $classroom) {
+                    $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id'], $classroom['id']);
+                }
+            }
+
+            return true;
         }
+    }
+
+    protected function pushForClassroomOrCourse($message, $lessonId, $courseId, $classroomId = null)
+    {
+        $conv = array();
+        if (empty($classroomId)) {
+            $conv = $this->getConversationService()->getConversationByTarget($courseId, 'course-push');
+        } else {
+            $conv = $this->getConversationService()->getConversationByTarget($classroomId, 'classroom-push');
+        }
+
+        $from = array(
+            'type' => 'lesson',
+            'id'   => $lessonId
+        );
+        $to = array(
+            'type' => 'lesson',
+            'id'   => 'all'
+        );
+        $body = array(
+            'type'     => 'live_start',
+            'courseId' => $courseId,
+            'lessonId' => $lessonId,
+            'message'  => $message
+        );
+        if (!empty($classroomId)) {
+            $body['classroomId'] = $classroomId;
+        }
+
+        $this->pushIM($from, $to, $body, $conv['no']);
     }
 
     protected function pushIM($from, $to, $body, $convNo = '')
@@ -91,6 +114,11 @@ class LiveLessonStartNotifyJob implements Job
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getSettingService()

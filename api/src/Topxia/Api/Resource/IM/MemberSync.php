@@ -55,7 +55,7 @@ class MemberSync extends BaseResource
     protected function syncCourseConversations($user)
     {
         $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
-
+        $this->addDebug('MemberSync.syncTargetConversations.courseIds', $courseIds);
         $this->syncTargetConversations($user, $courseIds, 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
     }
@@ -64,7 +64,7 @@ class MemberSync extends BaseResource
     {
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
         $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
-
+        $this->addDebug('MemberSync.syncTargetConversations.classroomIds', $classroomIds);
         $this->syncTargetConversations($user, $classroomIds, 'classroom');
         $this->syncClassroomConversationMembers($user, $classroomIds);
     }
@@ -106,6 +106,7 @@ class MemberSync extends BaseResource
         $userConvs = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
 
         $userConvIds = ArrayToolkit::column($userConvs, 'targetId');
+        $this->addDebug('MemberSync.syncTargetConversations.userConvIds', $userConvIds);
 
         $this->joinConversations(array_diff($targetIds, $userConvIds), $targetType, $user);
         $this->quitConversations(array_diff($userConvIds, $targetIds), $userConvs, $user);
