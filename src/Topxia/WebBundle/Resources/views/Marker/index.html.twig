@@ -3,10 +3,9 @@
 
 {% set script_controller = 'marker/index' %}
 {% set bodyClass="marker-manage" %}
-{% set condition="subtitle" %}
 
 {% block body %}
-  <div class="marker-manage-content {% if condition != 'subtitle' %}question {% endif %} js-marker-manage-content" id="lesson-dashboard"
+  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
     data-lesson-mediaid="{{ lesson.mediaId }}"
@@ -15,11 +14,7 @@
     {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
-        {% if condition != 'subtitle' %}
-          <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
-        {% else %}
-          <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">字幕</a></li>
-        {% endif %}
+        <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
         <li class="static" role="presentation">
           <a>
             <!-- border show-introhelp-->
@@ -37,17 +32,10 @@
         </li>
       </ul>
       <a href="{{ path('course_lesson_marker_manage_preview', {courseId:course.id,lessonId:lesson.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览'|trans}}</a>
-
       <div class="tab-content">
-      {% if condition != 'subtitle' %}
         <div role="tabpanel" class="tab-pane active pane-question">
           {{ render(path('course_lesson_question_marker_list', {courseId:course.id,lessonId:lesson.id})) }}
         </div>
-      {% else %}
-        <div role="tabpanel" class="tab-pane active pane-question">
-          {{ render(path('media_subtitle_manage',{mediaId:media.id})) }}
-        </div>
-      {% endif %}
       </div>
     </div>
     {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
