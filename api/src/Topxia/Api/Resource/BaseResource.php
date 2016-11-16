@@ -2,10 +2,14 @@
 
 namespace Topxia\Api\Resource;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
 {
+    private $logger;
+
     abstract public function filter($res);
 
     protected function callFilter($name, $res)
@@ -77,9 +81,9 @@ abstract class BaseResource
     protected function error($code, $message)
     {
         return array('error' => array(
-                'code' => $code,
-                'message' => $message,
-            ));
+            'code'    => $code,
+            'message' => $message
+        ));
     }
 
     protected function wrap($resources, $total)
@@ -87,7 +91,7 @@ abstract class BaseResource
         if (is_array($total)) {
             return array('resources' => $resources, 'next' => $total);
         } else {
-            return array('resources' => $resources, 'total' => $total ? : 0);
+            return array('resources' => $resources, 'total' => $total ?: 0);
         }
     }
 
@@ -105,11 +109,11 @@ abstract class BaseResource
     {
         $simple = array();
 
-        $simple['id'] = $user['id'];
+        $simple['id']       = $user['id'];
         $simple['nickname'] = $user['nickname'];
-        $simple['title'] = $user['title'];
-        $simple['roles'] = $user['roles'];
-        $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
+        $simple['title']    = $user['title'];
+        $simple['roles']    = $user['roles'];
+        $simple['avatar']   = $this->getFileUrl($user['smallAvatar']);
 
         return $simple;
     }
@@ -120,35 +124,34 @@ abstract class BaseResource
         if (empty($end)) {
             return array(
                 'cursor' => $currentCursor + 1,
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => true,
+                'start'  => 0,
+                'limit'  => $currentLimit,
+                'eof'    => true
             );
         }
 
         if (count($currentRows) < $currentLimit) {
             return array(
                 'cursor' => $end['updatedTime'] + 1,
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => true,
+                'start'  => 0,
+                'limit'  => $currentLimit,
+                'eof'    => true
             );
         }
-
 
         if ($end['updatedTime'] != $currentCursor) {
             $next = array(
                 'cursor' => $end['updatedTime'],
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => false,
+                'start'  => 0,
+                'limit'  => $currentLimit,
+                'eof'    => false
             );
         } else {
             $next = array(
                 'cursor' => $currentCursor,
-                'start' => $currentStart + $currentLimit,
-                'limit' => $currentLimit,
-                'eof' => false,
+                'start'  => $currentStart + $currentLimit,
+                'limit'  => $currentLimit,
+                'eof'    => false
             );
         }
 
@@ -218,5 +221,41 @@ abstract class BaseResource
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function addError($logName, $message)
+    {
+        if (is_array($message)) {
+            $message = json_encode($message);
+        }
+        $this->getLogger($logName)->error($message);
+    }
+
+    protected function addDebug($logName, $message)
+    {
+        if (!$this->isDebug()) {
+            return;
+        }
+        if (is_array($message)) {
+            $message = json_encode($message);
+        }
+        $this->getLogger($logName)->debug($message);
+    }
+
+    protected function isDebug()
+    {
+        return 'dev' == $this->getServiceKernel()->getEnvironment();
+    }
+
+    protected function getLogger($name)
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 }
