@@ -270,7 +270,7 @@ class EduCloudController extends BaseController
         $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        
+
         return $this->render('TopxiaAdminBundle:EduCloud/Video:setting.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
@@ -1235,7 +1235,12 @@ class EduCloudController extends BaseController
     // 添加云直播
     public function liveAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud/Live:live.html.twig');
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig');
+    }
+    
+    public function liveSettingAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');
     }
     // 添加重建索引模态框
     public function modalAction(Request $request)

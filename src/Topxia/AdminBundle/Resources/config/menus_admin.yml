@@ -538,6 +538,9 @@ admin:
                         admin_setting_cloud_edulive:
                             name: 云直播
                             disable: true
+                        admin_cloud_setting_edulive:
+                            name: 设置
+                            disable: true
                 admin_edu_cloud_sms:
                     name: 云短信
                     children:
