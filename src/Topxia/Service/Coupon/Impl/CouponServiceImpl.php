@@ -141,10 +141,12 @@ class CouponServiceImpl extends BaseService implements CouponService
         $coupon      = $this->getCouponByCode($code);
         $currentUser = $this->getCurrentUser();
 
+        $target = $this->getCouponContent($coupon['targetId'], $coupon['targetType']);
+
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不存在', array('%code%' => $code))
+                'message' => $this->getKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $target))
             );
         }
 
@@ -172,14 +174,14 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                'message' => $this->getKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $target))
             );
         }
 
         if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                'message' => $this->getKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $target))
             );
         }
 
@@ -187,7 +189,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
                     'useable' => 'no',
-                    'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                    'message' => $this->getKernel()->trans('无法使用%code%优惠券,该优惠券只能用于《%couponContent%》', array('%code%' => $code, '%couponContent%' => $target))
                 );
             }
         }
@@ -264,6 +266,59 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $coupon;
     }
 
+    protected function getCouponContent($couponId, $couponType)
+    {
+        $couponContents = array(
+            'all'       => '全站可用',
+            'vip'       => '全部会员',
+            'course'    => '全部课程',
+            'classroom' => '全部班级'
+        );
+
+        $couponContent = '';
+        $target = '';
+
+        if ($couponId == 0 || $couponType == 'all') {
+            $couponContent = $couponContents[$couponType];
+            $target = $couponContent;
+        } 
+
+        if ($couponType == 'course') {
+            if ($couponId != 0) {
+                $course        = $this->getCourseService()->getCourse($couponId);
+                $couponContent = '课程:'.$course['title'];
+                $target = "<a href='/{$couponType}/{$couponId}}'>{$couponContent}</a>";
+            } else {
+                $couponContent = '全部课程';
+                $target = "<a href='/{$couponType}/explore'>{$couponContent}</a>";
+            }
+        } 
+
+        if ($couponType == 'classroom') {
+            if ($couponId != 0) {
+                $classroom     = $this->getClassroomService()->getClassroom($couponId);
+                $couponContent = '班级:'.$classroom['title'];
+                $target = "<a href='/{$couponType}/{$couponId}}'>{$couponContent}</a>";
+            } else {
+                $couponContent = '全部班级';
+                $target = "<a href='/{$couponType}/explore'>{$couponContent}</a>";
+            }
+        } 
+
+        if ($couponType == 'vip' && $this->isPluginInstalled('Vip')) {
+            if ($couponId != 0) {
+                $level         = $this->getLevelService()->getLevel($couponId);
+                $couponContent = '会员:'.$level['name'];
+            } else {
+                $couponContent = '全部VIP';
+            }
+
+            $target = "<a href='/{$couponType}'>{$couponContent}</a >";    
+        }
+
+        return $target;
+    }
+
     private function generateRandomCode($length, $prefix)
     {
         $randomCode = "";
@@ -317,6 +372,11 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->createService('System.SettingService');
     }
 
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:Classroom.ClassroomService');
+    }
+
     private function getLogService()
     {
         return $this->createService('System.LogService');
@@ -325,6 +385,11 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getNotificationService()
     {
         return $this->createService('User.NotificationService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
     private function getUserService()

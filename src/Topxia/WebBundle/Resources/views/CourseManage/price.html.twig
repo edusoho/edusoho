@@ -16,6 +16,13 @@
 
     {% if canModifyPrice %}
       <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '课程购买'|trans }}</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
+            <div class="help-block">{{ '关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans }}</div>
+          </div>
+        </div>
         {% if currency == 'coin' %}
           <div class="form-group">
             <label class="col-md-2 control-label">{{'%coin_name%价格'|trans({'%coin_name%':setting('coin.coin_name')})}}</label>
