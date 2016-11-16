@@ -20,10 +20,10 @@ class LiveLessonStartNotifyJob implements Job
 
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
             if (empty($classrooms)) {
-                $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id']);
+                $this->pushForClassroomOrCourse($message, $lesson['title'], $lesson['id'], $course['id']);
             } else {
                 foreach ($classrooms as $classroom) {
-                    $this->pushForClassroomOrCourse($message, $lesson['id'], $course['id'], $classroom['classroomId']);
+                    $this->pushForClassroomOrCourse($message, $lesson['title'], $lesson['id'], $course['id'], $classroom['classroomId']);
                 }
             }
 
@@ -31,7 +31,7 @@ class LiveLessonStartNotifyJob implements Job
         }
     }
 
-    protected function pushForClassroomOrCourse($message, $lessonId, $courseId, $classroomId = null)
+    protected function pushForClassroomOrCourse($message, $lessonTitle, $lessonId, $courseId, $classroomId = null)
     {
         $conv = array();
         if (empty($classroomId)) {
@@ -52,7 +52,7 @@ class LiveLessonStartNotifyJob implements Job
             'type'        => 'live_start',
             'courseId'    => $courseId,
             'lessonId'    => $lessonId,
-            'lessonTitle' => $lesson['title'],
+            'lessonTitle' => $lessonTitle,
             'message'     => $message
         );
         if (!empty($classroomId)) {
