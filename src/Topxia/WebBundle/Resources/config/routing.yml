@@ -1196,6 +1196,10 @@ media_subtitle_delete:
     defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
     methods: [POST]
 
+media_subtitle_manage_dialog:
+    pattern:  /media/subtitles/manage/dialog
+    defaults: { _controller: TopxiaWebBundle:Subtitle:manageDialog }
+
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }

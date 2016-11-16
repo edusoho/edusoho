@@ -63,16 +63,18 @@ class SubtitleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function manageDialogAction($mediaId)
+    public function manageDialogAction(Request $request)
     {
+        $mediaId = $request->query->get('mediaId');
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
-
-        return $this->render('', array(
-            'subtitles' => $subtitles
+        $media   = $this->getUploadFileService()->getFile($mediaId);
+        return $this->render('TopxiaWebBundle:MediaManage/Subtitle:dialog.html.twig', array(
+            'subtitles' => $subtitles,
+            'media' => $media
         ));
     }
 

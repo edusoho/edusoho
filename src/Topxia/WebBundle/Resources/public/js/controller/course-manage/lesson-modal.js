@@ -8,44 +8,9 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     var _ = require('underscore');
+    var SubtitleDialog = require('topxiawebbundle/controller/media/subtitle/dialog');
     require('jquery.sortable');
     require('es-ckeditor');
-    require('new-uploader');
-
-    var $elem = $('#uploader');
-    var uploader = new UploaderSDK({
-        initUrl:$elem.data('initUrl'),
-        finishUrl:$elem.data('finishUrl'),
-        id:'uploader',
-        ui:'simple',
-        multi:true,
-        accept:{
-            extensions:['srt'],
-            mimeTypes:['text/srt']
-        },
-        type:'sub',
-        process:{
-            videoNo:$elem.data('mediaGlobalId'),
-        }
-    })
-    uploader.on('error',function(err){
-        if(err.error === 'Q_TYPE_DENIED'){
-            Notify.danger(Translator.trans('请上传srt格式的文件！'));
-        }
-    });
-    uploader.on('file.finish', function (file) {
-        $.post($elem.data('subtitleCreateUrl'), {
-            "name": file.name,
-            "subtitleId": file.id,
-            "mediaId": 69
-        }).success(function (data) {
-            Notify.success(Translator.trans('字幕上传成功！'));
-        }).error(function (data){
-            Notify.danger(Translator.trans(data.responseJSON.error.message));
-        });
-    });
-
-
 
     function getEditorContent(editor){
         editor.updateElement();
@@ -381,13 +346,26 @@ define(function(require, exports, module) {
             $title.val(name.substring(0, name.lastIndexOf('.')));
         }; 
 
+        var displaySubtitleManage = function(media) {
+            var $container = $form.find('#subtitle-form-group');
+            if ($container.length > 0) {
+                $container.removeClass('hidden');
+                $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
+                    $container.find('.js-subtitle-list').append(html);
+                    new SubtitleDialog({
+                        element: '.js-subtitle-dialog'
+                    });
+                });
+            }
+        }
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
 
             updateDuration(item.length);
             fillTitle(item.name);
-
+            displaySubtitleManage(item);
         });
 
         audioChooser.on('change', function(item) {
