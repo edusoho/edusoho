@@ -415,7 +415,37 @@ class EduCloudController extends BaseController
 
             $this->handleSmsSetting($request, $api);
             $smsStatus = $this->getSettingService()->get('cloud_sms', array());
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:sms.html.twig', array(
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
+                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
+                'accessCloud' => $this->isAccessEduCloud(),
+                'smsStatus'   => $smsStatus
+            ));
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
+        }
+    }
+    //云短信设置页
+    public function smsSettingAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+
+        try {
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+
+            $this->handleSmsSetting($request, $api);
+            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
                 'accessCloud' => $this->isAccessEduCloud(),
@@ -1237,7 +1267,7 @@ class EduCloudController extends BaseController
     {
         return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig');
     }
-    
+
     public function liveSettingAction(Request $request)
     {
         return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');

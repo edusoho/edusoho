@@ -1768,9 +1768,13 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /setting/edu_cloud/sms
+    pattern:  /edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
     permissions: [admin_edu_cloud_sms_setting]
+
+admin_edu_cloud_setting_sms:
+    pattern:  /setting/edu_cloud/sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsSetting }
 
 admin_edu_cloud_sms_status:
     pattern:  /setting/sms/status
