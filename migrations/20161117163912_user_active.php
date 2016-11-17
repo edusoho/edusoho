@@ -12,7 +12,7 @@ class UserActive extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE user_active_log RENAME INDEX createdTime TO userId;
+        $db->exec("ALTER TABLE user_active_log DROP INDEX createdTime;
                 ALTER TABLE user_active_log ADD INDEX `userId_createdTime` (`userId`,`createdTime`);
                 ALTER TABLE user_active_log ADD INDEX `createdTime`(`createdTime`)");
 
@@ -26,7 +26,7 @@ class UserActive extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE user_active_log RENAME INDEX userId TO createdTime;
+        $db->exec("
                 ALTER TABLE user_active_log DROP INDEX `userId_createdTime`;
                 ALTER TABLE user_active_log DROP INDEX `createdTime`;");
     }

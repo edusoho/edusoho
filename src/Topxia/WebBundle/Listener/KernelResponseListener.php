@@ -22,35 +22,14 @@ class KernelResponseListener
         $request     = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $activeUserTime = $request->getSession()->get('active_user_time', 0);
-
-        //当天登录激活
-        if (!($activeUserTime >= strtotime("today") && $activeUserTime < (strtotime("today") + 60 * 60 * 24))) {
-            $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
-            if (!$isActiveUser) {
-                $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
-            }
-            $request->getSession()->set('active_user_time', strtotime("today"));
-        }
+        $this->checkUserIsActive($request);
 
         $auth = $this->getSettingService()->get('auth');
 
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])
             && isset($auth['fill_userinfo_after_login']) && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])
         ) {
-            $whiteList = array(
-                '/fill/userinfo', '/login', '/logout', '/login_check', '/register/mobile/check',
-                '/register/email/check', '/login/bind/weixinmob/newset',
-                '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
-                '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
-                '/login/bind/qq/exist', '/login/bind/weibo/exist', '/login/bind/renren/exist',
-                '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
-                '/login/bind/weixinmob/choose', '/login/bind/weixinmob/changetoexist',
-                '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
-                '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-                '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
-                '/login/weixinmob', '/login/bind/weixinmob/existbind'
-            );
+            $whiteList = $this->getRouteWhiteList();
 
             if (in_array($request->getPathInfo(), $whiteList) || strstr($request->getPathInfo(), '/admin')
                 || strstr($request->getPathInfo(), '/register/submited') || strstr($request->getPathInfo(), '/mapi_v2')
@@ -68,6 +47,37 @@ class KernelResponseListener
                 return;
             }
         }
+    }
+
+    private function checkUserIsActive($request)
+    {
+        $activeUserTime = $request->getSession()->get('active_user_time', 0);
+        //当天登录激活
+        if ($activeUserTime != strtotime("today")) {
+            $currentUser  = $this->getUserService()->getCurrentUser();
+            $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
+            if (!$isActiveUser) {
+                $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
+            }
+            $request->getSession()->set('active_user_time', strtotime("today"));
+        }
+    }
+
+    protected function getRouteWhiteList()
+    {
+        return array(
+            '/fill/userinfo', '/login', '/logout', '/login_check', '/register/mobile/check',
+            '/register/email/check', '/login/bind/weixinmob/newset',
+            '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
+            '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
+            '/login/bind/qq/exist', '/login/bind/weibo/exist', '/login/bind/renren/exist',
+            '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
+            '/login/bind/weixinmob/choose', '/login/bind/weixinmob/changetoexist',
+            '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
+            '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
+            '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
+            '/login/weixinmob', '/login/bind/weixinmob/existbind'
+        );
     }
 
     protected function generateUrl($router, $params = array(), $withHost = false)
