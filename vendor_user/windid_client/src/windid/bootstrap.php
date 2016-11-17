@@ -1,14 +1,11 @@
 <?php
-use Topxia\Service\Common\ServiceKernel;
 
 if (!defined('WEKIT_VERSION')) {
 	error_reporting(E_ERROR | E_PARSE);
 	require_once (WINDID_BOOT . '../wekit.php');
 	Wekit::init('windidclient');
 	Wind::application('windidclient', Wekit::S());
-	$service = ServiceKernel::instance()->createService('System.SettingService');
-	$setting = $service->get('user_partner');
-	$clientConfig = $setting['partner_config']['phpwind'];
+	$clientConfig = include __DIR__ . '/../../../../app/config/windid_client_config.php';
 	$database =  $clientConfig['database'];
 	$windidConfig =  $clientConfig['conf'];
 	Wind::register(WINDID_PATH . 'service', 'SRV');
