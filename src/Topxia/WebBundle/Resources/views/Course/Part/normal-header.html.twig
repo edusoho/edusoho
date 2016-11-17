@@ -146,7 +146,7 @@
 {% macro student_num(course) %}
   <div class="student-num hidden-xs">
     {% if setting('course.show_student_num_enabled', '1') == 1  %}
-      <i class="es-icon es-icon-people"></i>{{'%studentNum%人 已学习'|trans({'%studentNum%': course.studentNum}) }}
+      <i class="es-icon es-icon-people"></i>{{'%studentNum%人'|trans({'%studentNum%': course.studentNum}) }}
       {% if course.maxStudentNum > 0 %}
         {% if course.studentNum >= course.maxStudentNum %}
           <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
