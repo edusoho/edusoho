@@ -362,7 +362,7 @@ define(function(require, exports, module) {
         }
 
         //显示字幕编辑组件
-        if ('id' in choosedMedia) {
+        if (choosedMedia && 'id' in choosedMedia) {
             displaySubtitleManage(choosedMedia);
         }
 
