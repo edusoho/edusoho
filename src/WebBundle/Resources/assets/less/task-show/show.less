@@ -1,0 +1,95 @@
+.task-dashboard-page {
+  background-color: #111111;
+  height: 100%;
+  padding-right: 442px;
+  overflow: hidden;
+  &.open {
+    padding-right: 0;
+    .dashboard-content {
+      right: 26px;
+    }
+  }
+  .dashboard-content {
+    position: absolute;
+    left: 26px;
+    right: 442px+19px;
+    top:0;
+    padding-top: 54px;
+    bottom: 26px;
+    .dashboard-header {
+      position: absolute;
+      top:0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      line-height: 54px;
+      color:@gray;
+      font-size: 16px;
+      z-index: 1;
+      .back-link {
+        color: @gray;
+        padding-right: 30px;
+        font-size: 22px;
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+    .dashboard-body {
+      position: relative;
+      background-color: #fff;
+      height: 100%;
+    }
+  }
+  .dashboard-sidebar {
+    position: absolute;
+    right: 0;
+    top:0;
+    bottom: 0;
+    width: 442px;
+    .dashboard-sidebar-content {
+      position: relative;
+      height: 100%;
+    }
+  }
+  .dashboard-toolbar {
+    position: absolute;
+    top:0;
+    left: -58px;
+    height: 100%;
+    display: table;
+    .dashboard-toolbar-nav {
+      display: table-cell;
+      margin-bottom: 0;
+      vertical-align: middle;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      >li {
+        margin-bottom: 10px;
+        >a {
+          padding:12px 15px;
+          display: inline-block;
+          background-color: #333333;
+          color: @gray;
+          text-align: center;
+        }
+        &.active,
+        &:hover {
+          >a {
+            background-color: @brand-primary;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  .dashboard-pane {
+    height: 100%;
+    overflow: hidden;
+    background-color: #151515;
+  }
+  .task-pane {
+    padding: 15px 17px;
+  }
+}
