@@ -40,7 +40,7 @@ define(function(require, exports, module) {
     return _left + 20;
   }
 
-  gettime = function(left, mediaLength) {
+  function gettime(left, mediaLength) {
     return Math.round((left - 20) * mediaLength / $('#editbox-lesson-list').width());
   }
 
