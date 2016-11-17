@@ -4,9 +4,9 @@ namespace Biz\Task\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Codeages\Biz\Framework\Event\EventSubscriber;
 
-
-class EventSubscriber implements EventSubscriberInterface
+class ActivitySubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
