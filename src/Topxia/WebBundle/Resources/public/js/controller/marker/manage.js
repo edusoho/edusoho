@@ -1,6 +1,7 @@
 define(function (require, exports, module) {
     require('jquery.sortable');
     var Widget = require('widget');
+    var Tool = require('../../util/tool');
 
     var DraggableWidget = Widget.extend({
         attrs: {
@@ -140,7 +141,7 @@ define(function (require, exports, module) {
 
                 _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
                 _move_time = _self._gettime(_mover_left);
-                $scale_red_details.text(_self._convertTime(_move_time));
+                $scale_red_details.text(Tool.sec2Time(_move_time));
                 $scale_red.removeClass('hidden').css('left', _mover_left);
 
                 //markers_array靠近的元素提示合并,
@@ -185,7 +186,7 @@ define(function (require, exports, module) {
                     var $scale_blue = $('[data-role="scale-blue"]'),
                         $new_scale_blue = $scale_blue.clone().css('left', _mover_left).removeAttr('data-role'),
                         $scale_blue_list = $new_scale_blue.find('[data-role="scale-blue-list"]'),
-                        $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(_self._convertTime(_move_time));
+                        $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(_move_time));
                     $scale_blue_list.children().remove();
                     $scale_blue_list.append($moveeditem);
                     $scale_blue.after($new_scale_blue);
@@ -210,7 +211,7 @@ define(function (require, exports, module) {
                 _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
                 _move_time = Math.round((_mover_left - 20) * _self.get('_video_time') / $editbox_list.width());
                 $moveitem.css('left', _mover_left);
-                $moveitem.find('[data-role="scale-blue-time"]').text(_self._convertTime(_move_time));
+                $moveitem.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(_move_time));
 
                 if (_self.get('markers_array').length > 0) {
                     $('.scale-blue').removeClass('highlight');
@@ -278,17 +279,17 @@ define(function (require, exports, module) {
                 $_editbox = $(_self.get("editbox"));
             if (isresize) {
                 $_editbox.find('.scale.scale-default:visible').each(function () {
-                    $(this).css('left', _self._getleft(_self._convertSec($(this).find('[data-role="scale-time"]').text())));
+                    $(this).css('left', _self._getleft(Tool.time2Sec($(this).find('[data-role="scale-time"]').text())));
                 });
                 $_editbox.find('.scale.scale-blue:visible').each(function () {
-                    $(this).css('left', _self._getleft(_self._convertSec($(this).find('[data-role="scale-blue-time"]').text())));
+                    $(this).css('left', _self._getleft(Tool.time2Sec($(this).find('[data-role="scale-blue-time"]').text())));
                 });
             } else {
                 var _partnum = _self.get("timepartnum");
                 var _parttime = _self.get("_video_time") / _partnum;
                 for (var i = 0; i <= _partnum; i++) {
                     var $new_scale_default = $('[data-role="scale-default"]').clone().css('left', _self._getleft(_parttime * i)).removeClass('hidden').removeAttr('data-role');
-                    $new_scale_default.find('[data-role="scale-time"]').text(_self._convertTime(Math.round(_parttime * i)));
+                    $new_scale_default.find('[data-role="scale-time"]').text(Tool.sec2Time(Math.round(_parttime * i)));
                     $('[data-role="scale-default"]').before($new_scale_default);
                 }
             }
@@ -304,7 +305,7 @@ define(function (require, exports, module) {
                 var $scale_blue = $('[data-role="scale-blue"]');
                 for (var i = 0; i < initMarkerArry.length; i++) {
                     $new_scale_blue = $scale_blue.clone().css('left', this._getleft(initMarkerArry[i].second)).removeAttr('data-role').removeClass('hidden').attr('id', initMarkerArry[i].id);
-                    $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(this._convertTime(initMarkerArry[i].second));
+                    $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(initMarkerArry[i].second));
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     var $scale_blue_item = $new_scale_blue.find('[data-role="scale-blue-item"]');
                     for (var j = 0; j < questionMarkers.length; j++) {
@@ -364,53 +365,6 @@ define(function (require, exports, module) {
                     return true;
                 }
             });
-        },
-        _convertTime: function (num) {
-            var time = "";
-            var h = parseInt((num % 86400) / 3600);
-            var s = parseInt((num % 3600) / 60);
-            var m = num % 60;
-            if (h > 0) {
-                time += h + ':';
-            }
-            if (s.toString().length < 2) {
-                time += '0' + s + ':';
-            } else {
-                time += s + ':';
-
-            }
-            if (m.toString().length < 2) {
-                time += '0' + m;
-            } else {
-                time += m;
-            }
-            return time;
-        },
-        _convertSec: function (num) {
-            var arry = num.split(':');
-            var sec = 0;
-            for (var i = 0; i < arry.length; i++) {
-                if (arry.length > 2) {
-                    if (i == 0) {
-                        sec += arry[i] * 3600;
-                    }
-                    if (i == 1) {
-                        sec += arry[i] * 60;
-                    }
-                    if (i == 2) {
-                        sec += parseInt(arry[i]);
-                    }
-                }
-                if (arry.length <= 2) {
-                    if (i == 0) {
-                        sec += arry[i] * 60;
-                    }
-                    if (i == 1) {
-                        sec += parseInt(arry[i]);
-                    }
-                }
-            }
-            return sec;
         },
         _addScale: function ($marker, time, seq, markers_array) {
             var $marker_item = $marker.find('li' + ':last');

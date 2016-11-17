@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
   var player = require('./player.js');
+  var Tool = require('../../util/tool');
 
   var $elem = $('.js-editbox')
   var $editbox_list = $('#editbox-lesson-list');
@@ -9,7 +10,7 @@ define(function(require, exports, module) {
   var parttime = mediaLength / partnum;
   for (var i = 0; i <= partnum; i++) {
     var $new_scale_default = $('[data-role="scale-default"]').clone().css('left', getleft(parttime * i, mediaLength)).removeClass('hidden').removeAttr('data-role');
-    $new_scale_default.find('[data-role="scale-time"]').text(convertTime(Math.round(parttime * i)));
+    $new_scale_default.find('[data-role="scale-time"]').text(Tool.sec2Time(Math.round(parttime * i)));
     $('[data-role="scale-default"]').before($new_scale_default);
   }
   player.on("timechange", function(data) {
@@ -39,28 +40,7 @@ define(function(require, exports, module) {
     return _left + 20;
   }
 
-  function convertTime(num) {
-    var time = "";
-    var h = parseInt((num % 86400) / 3600);
-    var s = parseInt((num % 3600) / 60);
-    var m = num % 60;
-    if (h > 0) {
-      time += h + ':';
-    }
-    if (s.toString().length < 2) {
-      time += '0' + s + ':';
-    } else {
-      time += s + ':';
-
-    }
-    if (m.toString().length < 2) {
-      time += '0' + m;
-    } else {
-      time += m;
-    }
-    return time;
-  }
-  gettime = function(left, mediaLength) {
+  function gettime(left, mediaLength) {
     return Math.round((left - 20) * mediaLength / $('#editbox-lesson-list').width());
   }
 
