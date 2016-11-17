@@ -68,7 +68,7 @@ define(function(require,exports,module){
                     '</ul>'+
                 '</div>';
         },
-        getDefaultOption() {
+        getDefaultOption: function() {
             if(this.options.length){
                 return this.options[0];
             }else{
@@ -131,7 +131,7 @@ define(function(require,exports,module){
             this.trigger('listchange',this.options);
             e.stopPropagation();
         },
-        handleOptionEmpty(){
+        handleOptionEmpty: function(){
             this.value = '';
             this.trigger('valuechange',false);
         },
