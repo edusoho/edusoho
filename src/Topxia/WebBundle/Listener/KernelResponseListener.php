@@ -22,9 +22,15 @@ class KernelResponseListener
         $request     = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
-        if (!$isActiveUser) {
-            $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
+        $activeUserTime = $request->getSession()->get('active_user_time', 0);
+
+        //当天登录激活
+        if (!($activeUserTime >= strtotime("today") && $activeUserTime < (strtotime("today") + 60 * 60 * 24))) {
+            $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
+            if (!$isActiveUser) {
+                $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
+            }
+            $request->getSession()->set('active_user_time', strtotime("today"));
         }
 
         $auth = $this->getSettingService()->get('auth');
