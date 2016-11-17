@@ -81,13 +81,13 @@
         right: 40px;
         top: 8px;
         color: white;
-        &.convert-success{
+        &.convert-ok{
           background: #46c37b;
         }
         &.convert-error{
           background: red;
         }
-        &.convert-doing{
+        &.convert-processing{
           background: blue;
         }
         &.convert-waiting{
@@ -113,5 +113,29 @@
         color: #46c37b;
       }
     }
+  }
+}
+
+//新建课时页面，添加视频资料之后，字幕列表样式
+.subtitle-transcode-status{
+  color: white;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  line-height: 1;
+  text-align: center;
+  min-width: 72px;
+  &.waiting,
+  &.none{
+    background: @gray;
+  }
+  &.processing{
+    background: @brand-info;
+  }
+  &.ok{
+    background: @brand-primary;
+  }
+  &.error{
+    background: @brand-danger;
   }
 }
