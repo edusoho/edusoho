@@ -311,7 +311,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
-                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"]);
+                $info = ArrayToolkit::parts($member, array('levelId'));
+                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"], $info);
                 return $member;
             }
         }

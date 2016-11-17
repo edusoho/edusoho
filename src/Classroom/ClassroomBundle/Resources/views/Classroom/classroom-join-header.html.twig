@@ -1,12 +1,7 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
-    {% if member.locked|default("0") == "1" %}
-      <div class="alert alert-warning">
-        您的退款申请已提交，请等待管理员的处理。
-        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
-      </div>
-    {% endif %}
+
     <ol class="breadcrumb breadcrumb-o">
       <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
       {% for breadcrumb in breadcrumbs %}
@@ -14,6 +9,33 @@
       {% endfor %}
       <li class="active">{{ classroom.title }}</li>
     </ol>
+    
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        您的退款申请已提交，请等待管理员的处理。
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
+      </div>
+    {% endif %}
+
+    {% if vipChecked|default('ok') != 'ok' %}
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {% if vipChecked == 'not_member' %}
+          {{'您已经不是会员，不能学习此' ~ setting("classroom.name")|default("班级") ~ '！'|trans}}
+          {% if classroom.price > 0 %}
+            {{'请重新'|trans}}<a class="alert-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
+          {% else %}
+            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
+          {% endif %}！
+        {% elseif vipChecked == 'member_expired' %}
+          {{'您的会员已过期，不能学习此' ~ setting("classroom.name")|default("班级") ~ '，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
+        {% elseif vipChecked == 'level_low' %}
+          {{'会员等级不够，不能学习此' ~ setting("classroom.name")|default("班级") ~ '。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
+        {% else %}
+          {{'该' ~ setting("classroom.name")|default("班级") ~ '已不支持会员免费学，'|trans}}<a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}" data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{'退出'|trans}}</a>
+        {% endif %}
+      </div>
+    {% endif %}
 
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
@@ -58,6 +80,7 @@
               </div>
             {% endif %}
           </div>
+          
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
               {{'承诺服务'|trans}}
@@ -131,6 +154,8 @@
     </div>
   </div>
 </section>
+
+{% do load_script('classroombundle/controller/classroom/join-header') %}
 
 {% if is_plugin_installed('ClassroomPlan') %}
   {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}

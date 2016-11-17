@@ -9,8 +9,7 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-
+        $classroomName = $this->setting('classroom.name');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $user = $this->getCurrentUser();
@@ -18,7 +17,7 @@ class ClassroomThreadController extends BaseController
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -32,6 +31,7 @@ class ClassroomThreadController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
+
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
             'classroom'            => $classroom,
             'filters'              => $this->getThreadSearchFilters($request),

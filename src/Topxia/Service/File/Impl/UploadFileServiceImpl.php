@@ -818,15 +818,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
         $file = $this->getFullFile($fileId);
 
-        if (!$user->isTeacher()) {
-            return false;
-        }
-
         if ($user->isAdmin()) {
             return true;
         }
 
-        if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
+        if ($user['id'] != $file['createdUserId']) {
             return false;
         }
 
