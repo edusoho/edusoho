@@ -342,10 +342,10 @@ class ArticleServiceTest extends BaseTestCase
         $article3 = $this->getArticleService()->createArticle($article3);
 
         $relativeArticles = $this->getArticleService()->findRelativeArticles($article1['id'], 3);
-        $this->assertEquals(count($relativeArticles), 1);
+        $this->assertEquals(count($relativeArticles), 2);
 
         $relativeArticles = $this->getArticleService()->findRelativeArticles($article3['id'], 3);
-        $this->assertEquals(count($relativeArticles), 1);
+        $this->assertEquals(count($relativeArticles), 2);
     }
 
     protected function createArticle()
