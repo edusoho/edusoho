@@ -3,6 +3,7 @@ define(function(require, exports, module) {
   var player = require('./player.js');
 
   var $elem = $('.js-editbox')
+  var $editbox_list = $('#editbox-lesson-list');
   var partnum = 6;
   mediaLength = $elem.data('mediaLength');
   var parttime = mediaLength / partnum;
@@ -13,6 +14,22 @@ define(function(require, exports, module) {
   }
   player.on("timechange", function(data) {
     $('.scale-white').css('left', getleft(data.currentTime, mediaLength));
+  });
+  $('.scale-white').on('mousedown', function(event) {
+    var changeleft = false;
+    $(document).on('mousemove.playertime', function(event) {
+      window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+      var left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
+      $('.scale-white').css('left', left);
+      var times = gettime(left, mediaLength);
+      player.sendToChild({ id: 'viewerIframe' }, 'setCurrentTime', { time: times });
+    }).on('mouseup.playertime', function(event) {
+      $(document).off('mousemove.playertime');
+      $(document).off('mousedown.playertime');
+      changeleft = true;
+      // player.sendToChild({ id: 'viewerIframe' }, 'setPlayerPlay');
+    });
+
   });
 
   function getleft(time, videoLength) {
@@ -42,6 +59,9 @@ define(function(require, exports, module) {
       time += m;
     }
     return time;
+  }
+  gettime = function(left, mediaLength) {
+    return Math.round((left - 20) * mediaLength / $('#editbox-lesson-list').width());
   }
 
 })
