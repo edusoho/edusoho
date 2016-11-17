@@ -26,10 +26,9 @@ class LazySubscribers
     {
         $this->container = $container;
 
-        $debug       = $this->container->getParameter('kernel.debug');
-        $cacheDir    = $this->container->getParameter('kernel.cache_dir');
-        $cacheFile   = $cacheDir . DIRECTORY_SEPARATOR . '/event_map.php';
-        $this->cache = new ConfigCache($cacheFile, $debug);
+        $kernel = $this->container->get('kernel');
+        $cacheFile = $kernel->getCacheDir() . DIRECTORY_SEPARATOR . '/event_map.php';
+        $this->cache = new ConfigCache($cacheFile, $kernel->isDebug());
     }
 
     /**
@@ -64,12 +63,8 @@ class LazySubscribers
     }
 
     protected function getEventMap(){
-        if(!file_exists($this->cache->getPath())){
-            $this->generateCache();
-        }
-
+        $this->generateCache();
         $eventMap = require $this->cache->getPath();
-
         return $eventMap;
     }
 

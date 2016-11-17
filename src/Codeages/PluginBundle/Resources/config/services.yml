@@ -47,10 +47,5 @@ services:
         class: Codeages\PluginBundle\Event\LazySubscribers
         arguments: ['@service_container']
 
-    codeags_plugin.event.test:
-        class: Codeages\PluginBundle\Event\TestSubscriber
-        tags:
-            - { name: codeages_plugin.event.subscriber }
-
     templating.locator:
         alias:          codeages_plugin.theme.templating.locator
