@@ -277,6 +277,8 @@ interface CourseService
 
     public function isCourseStudent($courseId, $userId);
 
+    public function isCourseMember($courseId, $userId);
+
     public function setCourseTeachers($courseId, $teachers);
 
     public function cancelTeacherInAllCourses($userId);

@@ -1550,6 +1550,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         list($course, $member) = $this->tryTakeCourse($courseId);
         $user                  = $this->getCurrentUser();
 
+        if (!$user->isLogin()) {
+            return false;
+        }
+
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (!empty($lesson)) {
@@ -2148,6 +2152,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             return empty($member) || $member['role'] != 'student' ? false : true;
         }
+    }
+
+    public function isCourseMember($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        return empty($member) ? false : true;
     }
 
     public function setCourseTeachers($courseId, $teachers)
