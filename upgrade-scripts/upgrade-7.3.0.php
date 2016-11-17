@@ -71,6 +71,42 @@ class EduSohoUpgrade extends AbstractUpdater
             $setting['mode'] = 'default';
             $setting = $this->getSettingService()->set('user_partner', $setting);
         }
+
+        $this->updateUserCenterConfig();
+    }
+
+
+    protected function updateUserCenterConfig()
+    {
+        $discuzConfigPath = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/config/uc_client_config.php';
+
+        $phpwindConfigPath = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/config/windid_client_config.php';
+
+        $setting = $this->getSettingService()->get('user_partner', array());
+
+        if(empty($setting)){
+            return;
+        }
+
+        $setting['partner_config'] = array(
+            'discuz'  => array(),
+            'phpwind' => array(
+                'conf'     => array(),
+                'database' => array()
+            )
+        );
+
+        if(file_exists($discuzConfigPath)){
+            require_once $discuzConfigPath;
+            $keys = array('uc_connect', 'us_dbhost', 'uc_dbuser', 'uc_dbpw', 'uc_dbname', 'uc_dbcharset', 'uc_dbtablepre', 'uc_dbconnect', 'uc_key', 'uc_api', 'uc_charset', 'uc_ip', 'uc_appid', 'uc_ppp');
+            foreach($keys as $key){
+                if(defined(strtoupper($key))){
+                    $setting['partner_config']['discuz'][$key] = constant(strtoupper($key));
+                }
+            }
+        }
+
+        $this->getSettingService()->set('user_partner', $setting);
     }
 
     protected function isFieldExist($table, $filedName)
