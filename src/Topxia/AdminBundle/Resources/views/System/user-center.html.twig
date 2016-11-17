@@ -12,7 +12,6 @@
     </div>
   {% endif %}
 
-
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" novalidate>
@@ -21,8 +20,8 @@
       <label >{{'用户中心'|trans}}</label>
     </div>
     <div class="controls col-md-8 radios mode-radios">
-      {{ radios('mode', {'default':'无'|trans, 'discuz':'Discuz (Ucenter)'}, setting.mode) }}
-      <div class="help-block">{{'支持Discuz X2.5/X3.0/X3.1的用户中心'|trans}}</div>
+      {{ radios('mode', {'default':'无'|trans, 'discuz':'Discuz (Ucenter)', 'phpwind':'Phpwind'}, setting.mode) }}
+      <div class="help-block">{{'支持Phpwind9以上版本，Discuz X2.5/X3.0/X3.1的用户中心'|trans}}</div>
     </div>
   </div>
   <div class="with-discuz" style="display:none;">
@@ -121,6 +120,16 @@
       </div>
     </div>
   </div>
+  
+  {% if setting('magic.uc_phpwind','0') %}  
+  <div class="row form-group with-phpwind" style="display:none;">
+    <div class="col-md-3 control-label"><label>{{'WindId配置'|trans}}</label></div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" name="phpwind_config" rows="10">{{ phpwindConfig }}</textarea>
+      <div class="help-block">{{'如使用phpwind (WindID)的用户中心，请填写此项配置。'|trans}}<a href="http://demo.edusoho.com/course/125" target="_blank">{{'如何配置？'|trans}}</a></div>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="form-group with-phpwind with-discuz">
     <div class="col-md-3 control-label">
@@ -143,9 +152,9 @@
 
   <div class="alert alert-info">
     <p>1.若通讯失败，注册和登录将提示<strong class="user-center-copys-darken">输入不合法</strong>或通讯失败需管理员配置。</p>
-    <p>2.通讯成功，Discuz<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
+    <p>2.通讯成功，Discuz或Phpwind<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
     <p>3.通讯成功，只有<strong class="user-center-copys-darken">通讯之后</strong>在ES注册的新用户，<strong class="user-center-copys-darken">才能</strong>登录并同步到Discuz，<strong class="user-center-copys-darken">通讯之前</strong>的注册用户，<strong class="user-center-copys-darken">不能</strong>登录和同步。</p>
-    <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz。</p>
+    <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz或Phpwind的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz或Phpwind。</p>
   </div>
 
 
