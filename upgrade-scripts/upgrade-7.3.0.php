@@ -46,6 +46,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $setting = $this->getSettingService()->set('user_partner', $setting);
         }
 
+        $connection->exec("ALTER TABLE `ip_blacklist` MODIFY `type`  enum('failed','banned') NOT NULL DEFAULT 'failed' COMMENT '禁用类型'");
+
         $this->updateUserCenterConfig();
     }
 
