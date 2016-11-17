@@ -18,7 +18,13 @@ services:
         arguments:
             - "@codeages_plugin.slot_collector"
             - "@service_container"
-        
+
+    codeages_plugin.html_twig_extension:
+        class: Codeages\PluginBundle\Twig\HtmlExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+  
     codeages_plugin.slot_twig_extension:
         class: Codeages\PluginBundle\Twig\SlotExtension
         public: false
