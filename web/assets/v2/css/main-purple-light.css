@@ -13500,6 +13500,13 @@ textarea {
 .subtitle-transcode-status.error {
   background: #e83d2c;
 }
+.subtitle-name {
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .user-center-header {
   position: relative;
   height: 220px;
