@@ -22,7 +22,7 @@
     <div class="controls col-md-8 radios mode-radios">
       {{ radios('mode', {'default':'无'|trans, 'discuz':'Discuz (Ucenter)'}, setting.mode) }}
       {% if setting('magic.uc_phpwind','0') %}
-      <label><input type="radio" name="mode" value="phpwind"> Phpwind</label>
+      <label><input type="radio" name="mode" value="phpwind" {% if setting.mode == 'phpwind' %}checked{% endif %}> Phpwind</label>
       {% endif %}
       <div class="help-block">{{'支持Phpwind9以上版本，Discuz X2.5/X3.0/X3.1的用户中心'|trans}}</div>
     </div>
