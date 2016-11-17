@@ -51,10 +51,36 @@ class ExploreController extends CourseBaseController
             $tags[$selectedTagGroupId] = $selectedTag;
         }
 
-        $conditions['tagIds'] = array_values($tags);
-        $conditions['tagIds'] = array_unique($conditions['tagIds']);
-        $conditions['tagIds'] = array_filter($conditions['tagIds']);
-        $conditions['tagIds'] = array_merge($conditions['tagIds']);
+        $tags = array_filter($tags);
+
+        if (!empty($tags)) {
+            $conditions['tagIds'] = array_values($tags);
+            $conditions['tagIds'] = array_unique($conditions['tagIds']);
+            $conditions['tagIds'] = array_filter($conditions['tagIds']);
+            $conditions['tagIds'] = array_merge($conditions['tagIds']);
+
+            $tagIdsNum = count($conditions['tagIds']);
+
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
+            $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag = array_count_values($courseIds);
+
+            $courseIds = array_unique($courseIds);
+
+            foreach ($courseIds as $key => $courseId) {
+                if ($flag[$courseId] != $tagIdsNum) {
+                    unset($courseIds[$key]);
+                }
+            }
+
+            if (empty($courseIds)) {
+                $conditions['courseIds'] = 0;
+            } else {
+                $conditions['courseIds'] = $courseIds;
+            }
+
+            unset($conditions['tagIds']);
+        }
 
         unset($conditions['tag']);
 
@@ -267,31 +293,36 @@ class ExploreController extends CourseBaseController
             $tags[$selectedTagGroupId] = $selectedTag;
         }
 
-        $conditions['tagIds'] = array_values($tags);
-        $conditions['tagIds'] = array_unique($conditions['tagIds']);
-        $conditions['tagIds'] = array_filter($conditions['tagIds']);
-        $conditions['tagIds'] = array_merge($conditions['tagIds']);
+       $tags = array_filter($tags);
 
-        unset($conditions['tag']);
+        if (!empty($tags)) {
+            $conditions['tagIds'] = array_values($tags);
+            $conditions['tagIds'] = array_unique($conditions['tagIds']);
+            $conditions['tagIds'] = array_filter($conditions['tagIds']);
+            $conditions['tagIds'] = array_merge($conditions['tagIds']);
 
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+            $tagIdsNum = count($conditions['tagIds']);
 
-        if (!empty($conditions['subCategory'])) {
-            $conditions['code'] = $subCategory;
-        } else {
-            $conditions['code'] = $category;
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'classroom');
+            $classroomIds      = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag              = array_count_values($classroomIds);
+
+            $classroomIds = array_unique($classroomIds);
+
+            foreach ($classroomIds as $key => $classroomId) {
+                if ($flag[$classroomId] != $tagIdsNum) {
+                    unset($classroomIds[$key]);
+                }
+            }
+
+            if (empty($classroomIds)) {
+                $conditions['classroomIds'] = 0;
+            } else {
+                $conditions['classroomIds'] = $classroomIds;
+            }
+
+            unset($conditions['tagIds']);
         }
-
-        if (!empty($conditions['code'])) {
-            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-
-            $conditions['categoryId'] = $categoryArray['id'];
-        }
-
-        $category = array(
-            'category'    => $conditions['code'],
-            'subCategory' => $subCategory
-        );
         
         unset($conditions['code']);
 

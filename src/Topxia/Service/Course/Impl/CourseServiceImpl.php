@@ -102,7 +102,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
-     
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
@@ -121,37 +120,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $orderBy = array('createdTime', 'DESC');
         }
 
-        $courses = CourseSerialize::unserializes($this->getCourseDao()->searchCourses($conditions, $orderBy, $start, $limit));
-
-        if (!empty($conditions['tagIds'])) {
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
-
-            if (empty($tagOwnerRelations)) {
-                return array();
-            } else {
-                $tagIdsNum = count($conditions['tagIds']);
-
-                if (count($tagOwnerRelations) < $tagIdsNum) {
-                    return array();
-                }
-                
-                $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-                $flag = array_count_values($courseIds);
-
-                foreach ($courses as $key => $course) {
-                    if (!in_array($course['id'], array_keys($flag))) {
-                        unset($courses[$key]);
-                        continue;
-                    }
-
-                    if ($flag[$course['id']] != $tagIdsNum) {
-                        unset($courses[$key]);
-                    }
-                }
-            }
-        }
-
-        return $courses;
+        return CourseSerialize::unserializes($this->getCourseDao()->searchCourses($conditions, $orderBy, $start, $limit));
     }
 
     public function searchCourseCount($conditions)

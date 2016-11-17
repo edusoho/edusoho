@@ -82,38 +82,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $conditions = $this->prepareSearchConditions($conditions);
 
-        $articles = $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
-
-        if (!empty($conditions['tagId'])) {
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($conditions['tagId']), 'article');
-
-            if (!empty($tagOwnerRelations)) {
-                $articleIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-
-                foreach ($articles as $key => $article) {
-                    if (!in_array($article['id'], $articleIds)) {
-                        unset($articles[$key]);
-                    }
-                }
-            } else {
-                return array();
-            }
-        }
-
-        return $articles;
+        return $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
     }
 
     public function searchArticlesCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        $count = $this->getArticleDao()->searchArticlesCount($conditions);
-
-        if (!empty($conditions['tagId'])) {
-            return count($this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($conditions['tagId']), 'article'));
-        }
-
-        return $count;
+        return $this->getArticleDao()->searchArticlesCount($conditions);
     }
 
     public function searchCount($conditions)
@@ -173,6 +149,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             unset($article['tagIds']);
         } else {
             $tagIds = array();
+            unset($article['tagIds']);
         }
 
         $article = $this->getArticleDao()->updateArticle($id, $article);
@@ -433,6 +410,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $self = $this;
+
+        $tags = $this->getTagService()->findTagsByOwner(array("ownerType" => 'article',"ownerId" => $articleId));
+
+        $article['tagIds'] = ArrayToolkit::column($tags, 'id');
 
         $relativeArticles = array_map(function ($tagId) use ($article, $self) {
             $conditions = array(

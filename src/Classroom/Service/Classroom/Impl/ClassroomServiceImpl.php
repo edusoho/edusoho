@@ -20,37 +20,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
 
-        $classrooms = $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
-
-        if (!empty($conditions['tagIds'])) {
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'classroom');
-
-            if (empty($tagOwnerRelations)) {
-                return array();
-            } else {
-                $tagIdsNum = count($conditions['tagIds']);
-
-                if (count($tagOwnerRelations) < $tagIdsNum) {
-                    return array();
-                }
-                
-                $classroomIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-                $flag = array_count_values($classroomIds);
-
-                foreach ($classrooms as $key => $classroom) {
-                    if (!in_array($classroom['id'], array_keys($flag))) {
-                        unset($classrooms[$key]);
-                        continue;
-                    }
-                    
-                    if ($flag[$classroom['id']] != $tagIdsNum) {
-                        unset($classrooms[$key]);
-                    }
-                }
-            }
-        }
-
-        return $classrooms;
+        return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
     public function searchClassroomsCount($conditions)

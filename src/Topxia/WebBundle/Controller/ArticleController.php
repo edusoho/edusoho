@@ -376,9 +376,11 @@ class ArticleController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('标签不存在!'));
         }
 
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'article');
+
         $conditions = array(
-            'status' => 'published',
-            'tagId'  => $tag['id']
+            'status'     => 'published',
+            'articleIds' => ArrayToolkit::column($tagOwnerRelations, 'ownerId')
         );
 
         $paginator = new Paginator(
