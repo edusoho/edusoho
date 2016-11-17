@@ -13478,6 +13478,28 @@ textarea {
 .track-select-parent .track-selcet-list li.active {
   color: #46c37b;
 }
+.subtitle-transcode-status {
+  color: white;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  line-height: 1;
+  text-align: center;
+  min-width: 72px;
+}
+.subtitle-transcode-status.waiting,
+.subtitle-transcode-status.none {
+  background: #919191;
+}
+.subtitle-transcode-status.doing {
+  background: #2db7f5;
+}
+.subtitle-transcode-status.success {
+  background: #9e9abd;
+}
+.subtitle-transcode-status.error {
+  background: #e83d2c;
+}
 .user-center-header {
   position: relative;
   height: 220px;

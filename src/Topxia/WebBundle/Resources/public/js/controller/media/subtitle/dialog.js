@@ -46,8 +46,10 @@ define(function(require, exports, module) {
                     "subtitleId": file.id,
                     "mediaId": mediaId
                 }).success(function (data) {
+                    console.log(data);
                     $('.js-media-subtitle-list').append('<li class="pvs">'+
                             '<span class="subtitle-name prl">'+data.name+'</span>'+
+                            '<span class="subtitle-transcode-status waiting">'+ '等待转码' +'</span>'+
                             '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/'+ mediaId+'/subtitle/'+ data.id +'/delete">删除</a>'+
                         '</li>');
                     if($('.js-media-subtitle-list li').length > 3){
