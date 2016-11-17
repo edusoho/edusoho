@@ -1307,7 +1307,21 @@ class EduCloudController extends BaseController
     // 添加云直播
     public function liveAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig');
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/live/overview");
+            foreach ($overview['items'] as $key => $value) {
+                $items['date'][] = $value['date'];
+                $items['count'][] = $value['count'];
+
+            }
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
+                'account'  => $overview['account'],
+                'items'  => $items
+            ));
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+        }
     }
 
     public function liveSettingAction(Request $request)

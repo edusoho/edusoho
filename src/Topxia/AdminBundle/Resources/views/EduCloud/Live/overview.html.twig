@@ -2,6 +2,8 @@
 
 {% set menu = 'admin_setting_cloud_edulive' %}
 {% set script_controller = 'setting/cloud-live' %}
+{% set script_arguments = {items: items}  %}
+
 {% block main %}
 <!-- 概览 -->
 <div class="panel panel-default">
@@ -11,13 +13,13 @@
   <div class="panel-body">
     <div class="pll pbl">
       教室容量：
-      <span class="h3 text-primary plm prs">22</span>人
+      <span class="h3 text-primary plm prs">{{ account.capacity }}</span>人
     </div>
     <div class="pll pbm">
       服务期限：
-      <span class="color-gray plm">2016-01-10 ~ 2017-01-10</span>
+      <span class="color-gray plm">{{account.effective|date("Y-m-d")}} ~ {{ account.expire|date("Y-m-d") }}</span>
       <div class="text-danger pts">
-        您的云直播服务已到期，请尽快续费，以免影响正常使用
+        您的云直播服务已到期，请尽快续费，以免影响正常使用(云平台提供)
       </div>
     </div>
   </div>
