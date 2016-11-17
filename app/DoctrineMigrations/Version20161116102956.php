@@ -28,6 +28,11 @@ class Version20161116102956 extends AbstractMigration
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签关系表';
         ");
+
+        $this->addSql("ALTER TABLE `classroom` DROP `tags`;");
+        $this->addSql("ALTER TABLE `course` DROP `tags`;");
+        $this->addSql("ALTER TABLE `article` DROP `tags`;");
+        $this->addSql("ALTER TABLE `course_lesson` DROP `tags`;");
     }
 
     /**
