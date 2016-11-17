@@ -162,8 +162,8 @@ define(function(require,exports,module){
         },
         convertStatus:{
             waiting:'等待转码',
-            processing:'正在转码',
-            ok:'转码成功',
+            doing:'正在转码',
+            success:'转码成功',
             error:'转码失败',
             none:'等待转码'
         }

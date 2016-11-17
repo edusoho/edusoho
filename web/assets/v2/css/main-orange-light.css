@@ -13448,13 +13448,13 @@ textarea {
   top: 8px;
   color: white;
 }
-.track-select-parent .track-selcet-list li .convertStatus.convert-ok {
+.track-select-parent .track-selcet-list li .convertStatus.convert-success {
   background: #46c37b;
 }
 .track-select-parent .track-selcet-list li .convertStatus.convert-error {
   background: red;
 }
-.track-select-parent .track-selcet-list li .convertStatus.convert-processing {
+.track-select-parent .track-selcet-list li .convertStatus.convert-doing {
   background: blue;
 }
 .track-select-parent .track-selcet-list li .convertStatus.convert-waiting {
@@ -13491,10 +13491,10 @@ textarea {
 .subtitle-transcode-status.none {
   background: #919191;
 }
-.subtitle-transcode-status.processing {
+.subtitle-transcode-status.doing {
   background: #2db7f5;
 }
-.subtitle-transcode-status.ok {
+.subtitle-transcode-status.success {
   background: #f9b469;
 }
 .subtitle-transcode-status.error {
