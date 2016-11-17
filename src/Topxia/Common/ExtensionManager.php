@@ -7,6 +7,11 @@ use Symfony\Component\Finder\Finder;
 use Topxia\Common\ExtensionalBundle;
 use Topxia\Service\Common\ServiceKernel;
 
+/**
+ * Class ExtensionManager
+ * @package Topxia\Common
+ * @deprecated since version 7.0 to be removed in 8.0, use codeages_plugin.dict_twig_extension twig extension
+ */
 class ExtensionManager
 {
     protected $kernel;
@@ -78,14 +83,7 @@ class ExtensionManager
 
     public function getDataDict($type)
     {
-
-        $this->loadDataDict();
-
-        if (empty($this->dataDict[$type])) {
-            return array();
-        }
-
-        return $this->dataDict[$type];
+        return $this->kernel->getContainer()->get('codeages_plugin.dict_twig_extension')->getDict($type);
     }
 
     public function getDataTag($name)

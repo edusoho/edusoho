@@ -164,7 +164,9 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
         if(!$this->isServiceKernelInit){
             $container     = $this->getContainer();
             $biz = $container->get('biz');
+
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
+
             $serviceKernel->setEnvVariable(array(
                 'host'          => $this->request->getHttpHost(),
                 'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
@@ -185,8 +187,11 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
                 'currentIp' => $this->request->getClientIp(),
                 'roles'     => array()
             ));
+
             $biz['user'] = $currentUser;
-            $serviceKernel->setCurrentUser($currentUser);
+            $serviceKernel
+                ->setBiz($biz)
+                ->setCurrentUser($currentUser);
             $this->isServiceKernelInit = true;
         }
     }
