@@ -210,10 +210,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             $conditions['keywords'] = "%{$conditions['keywords']}%";
         }
 
-        if (isset($conditions['tagId'])) {
-            $conditions['tagId'] = "%|{$conditions['tagId']}|%";
-        }
-
         if(isset($conditions['likeOrgCode'])){
             $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
             unset($conditions['orgCode']);
@@ -228,7 +224,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             ->andWhere('sticky = :sticky')
             ->andWhere('title LIKE :keywords')
             ->andWhere('picture != :pictureNull')
-            ->andWhere('tagIds LIKE :tagId')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('categoryId IN (:categoryIds)')

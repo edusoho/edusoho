@@ -222,27 +222,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['title']);
         }
 
-        if (!empty($conditions['tags'])) {
-            $tagIds = $conditions['tags'];
-            $tags   = '';
-
-            foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
-            }
-
-            $conditions['tags'] = $tags.'|';
-        }
-
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
-
-            if (!empty($tagId)) {
-                $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-            }
-
-            unset($conditions['tagId']);
-        }
-
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
@@ -271,7 +250,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
-            ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')
@@ -292,17 +270,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('lessonNum > :lessonNumGT')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
-
-        if (isset($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-
-            foreach ($tagIds as $key => $tagId) {
-                $conditions['tagIds_'.$key] = '%|'.$tagId.'|%';
-                $builder->andWhere('tags LIKE :tagIds_'.$key);
-            }
-
-            unset($conditions['tagIds']);
-        }
 
         if (isset($conditions['types'])) {
             $builder->andWhere('type IN ( :types )');

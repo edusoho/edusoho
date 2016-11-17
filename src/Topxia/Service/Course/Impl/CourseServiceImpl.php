@@ -121,7 +121,37 @@ class CourseServiceImpl extends BaseService implements CourseService
             $orderBy = array('createdTime', 'DESC');
         }
 
-        return CourseSerialize::unserializes($this->getCourseDao()->searchCourses($conditions, $orderBy, $start, $limit));
+        $courses = CourseSerialize::unserializes($this->getCourseDao()->searchCourses($conditions, $orderBy, $start, $limit));
+
+        if (!empty($conditions['tagIds'])) {
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
+
+            if (empty($tagOwnerRelations)) {
+                return array();
+            } else {
+                $tagIdsNum = count($conditions['tagIds']);
+
+                if (count($tagOwnerRelations) < $tagIdsNum) {
+                    return array();
+                }
+                
+                $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+                $flag = array_count_values($courseIds);
+
+                foreach ($courses as $key => $course) {
+                    if (!in_array($course['id'], array_keys($flag))) {
+                        unset($courses[$key]);
+                        continue;
+                    }
+
+                    if ($flag[$course['id']] != $tagIdsNum) {
+                        unset($courses[$key]);
+                    }
+                }
+            }
+        }
+
+        return $courses;
     }
 
     public function searchCourseCount($conditions)
@@ -466,7 +496,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user = $this->getCurrentUser();
 
         $argument = $fields;
-        $tagIds   = $fields['tagIds'];
+
+        $tagIds   = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
         $course   = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
@@ -702,7 +734,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
         $this->dispatchEvent("course.delete", $course);
-
+        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'course')));
         return true;
     }
 

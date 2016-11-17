@@ -117,7 +117,7 @@ class CourseController extends CourseBaseController
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
 
         $tags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'classroom',
+            'ownerType' => 'course',
             'ownerId'   => $id
         ));
 

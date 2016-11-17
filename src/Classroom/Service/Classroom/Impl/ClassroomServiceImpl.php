@@ -20,7 +20,37 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
 
-        return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
+        $classrooms = $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
+
+        if (!empty($conditions['tagIds'])) {
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'classroom');
+
+            if (empty($tagOwnerRelations)) {
+                return array();
+            } else {
+                $tagIdsNum = count($conditions['tagIds']);
+
+                if (count($tagOwnerRelations) < $tagIdsNum) {
+                    return array();
+                }
+                
+                $classroomIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+                $flag = array_count_values($classroomIds);
+
+                foreach ($classrooms as $key => $classroom) {
+                    if (!in_array($classroom['id'], array_keys($flag))) {
+                        unset($classrooms[$key]);
+                        continue;
+                    }
+                    
+                    if ($flag[$classroom['id']] != $tagIdsNum) {
+                        unset($classrooms[$key]);
+                    }
+                }
+            }
+        }
+
+        return $classrooms;
     }
 
     public function searchClassroomsCount($conditions)
@@ -178,7 +208,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {   
         $user = $this->getCurrentUser();
 
-        $tagIds = $fields['tagIds'];
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
@@ -251,7 +281,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->deleteClassroom($id);
         $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
-
+        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'classroom')));
         $this->dispatchEvent("classroom.delete", $classroom);
 
         return true;

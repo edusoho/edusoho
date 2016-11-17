@@ -3,5 +3,6 @@
 return array(
     'event_subscriber' => array(
         'Topxia\\Service\\Taxonomy\\Event\\TagEventSubscriber',
+        'Topxia\\Service\\Taxonomy\\Event\\TagOwnerEventSubscriber',
     ),
 );

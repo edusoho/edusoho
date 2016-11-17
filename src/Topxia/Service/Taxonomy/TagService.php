@@ -7,6 +7,8 @@ interface TagService
     public function findTagsByOwner(array $owner);
 
     public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
+
+    public function deleteTagOwnerRelationsByOwner(array $owner);
     //
 
     public function getTag($id);

@@ -205,8 +205,6 @@ class ExploreController extends CourseBaseController
             }
         }
 
-        $courses = $this->filterByTags($courses, 'course', $conditions['tagIds']);
-
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
@@ -371,8 +369,6 @@ class ExploreController extends CourseBaseController
             }
         }
 
-        $classrooms = $this->filterByTags($classrooms, 'classroom', $conditions['tagIds']);
-
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator'                => $paginator,
             'classrooms'               => $classrooms,
@@ -387,32 +383,6 @@ class ExploreController extends CourseBaseController
             'orderBy'                  => $orderBy[0],
             'tags'                     => $tags,
         ));
-    }
-
-    protected function filterByTags($targets, $type, $tagIds)
-    {
-        if (!empty($tagIds)) {
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $type);
-
-            if (empty($tagOwnerRelations)) {
-                return array();
-            } else {
-                if (count($tagOwnerRelations) != count($tagIds)) {
-                    return array();
-                }
-                
-                $targetIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-                $targetIds = array_unique($targetIds);
-
-                foreach ($targets as $key => $target) {
-                    if (!in_array($target['id'], $targetIds)) {
-                        unset($targets[$key]);
-                    }
-                }
-            }
-        }
-
-        return $targets;
     }
 
     protected function getTokenService()

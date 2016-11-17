@@ -82,14 +82,38 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $conditions = $this->prepareSearchConditions($conditions);
 
-        return $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
+        $articles = $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
+
+        if (!empty($conditions['tagId'])) {
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($conditions['tagId']), 'article');
+
+            if (!empty($tagOwnerRelations)) {
+                $articleIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+                foreach ($articles as $key => $article) {
+                    if (!in_array($article['id'], $articleIds)) {
+                        unset($articles[$key]);
+                    }
+                }
+            } else {
+                return array();
+            }
+        }
+
+        return $articles;
     }
 
     public function searchArticlesCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        return $this->getArticleDao()->searchArticlesCount($conditions);
+        $count = $this->getArticleDao()->searchArticlesCount($conditions);
+
+        if (!empty($conditions['tagId'])) {
+            return count($this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($conditions['tagId']), 'article'));
+        }
+
+        return $count;
     }
 
     public function searchCount($conditions)
@@ -143,9 +167,13 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->filterArticleFields($article);
 
-        $tagIds = $article['tagIds'];
+        if (!empty($article['tagIds'])) {
+            $tagIds = $article['tagIds'];
 
-        unset($article['tagIds']);
+            unset($article['tagIds']);
+        } else {
+            $tagIds = array();
+        }
 
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
@@ -322,6 +350,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $res = $this->getArticleDao()->deleteArticle($id);
         $this->dispatchEvent('article.delete', new ServiceEvent($checkArticle));
+        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'article')));
         $this->getLogService()->info('article', 'delete', "文章#{$id}永久删除");
 
         return true;
