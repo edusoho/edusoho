@@ -64,7 +64,11 @@ class ActivityController extends BaseController
         $data = $request->request->get('data', array());
 
         $this->getActivityService()->trigger($activityId, $eventName, $data);
-        return $this->createJsonResponse(true);
+
+        return $this->createJsonResponse(array(
+            'event' => $eventName,
+            'data'  => $data
+        ));
     }
 
     /**
