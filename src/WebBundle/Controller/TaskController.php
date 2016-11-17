@@ -24,7 +24,6 @@ class TaskController extends BaseController
     public function taskActivityAction(Request $request, $courseId, $id)
     {
         $task = $this->tryLearnTask($courseId, $id);
-
         return $this->forward('WebBundle:Activity:show', array(
             'id'       => $task['activityId'],
             'taskId'   => $task['id'],
@@ -51,15 +50,10 @@ class TaskController extends BaseController
 
     public function playerAction(Request $request, $courseId, $taskId)
     {
-        $task     = $this->tryLearnTask($courseId, $taskId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (empty($activity)) {
-            $this->createResourceNotFoundException('activity', $task['activityId']);
-        }
-        $context = array();
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'      => $activity['ext']["mediaId"],
-            'context' => $context
+        $task = $this->tryLearnTask($courseId, $taskId);
+        return $this->forward('WebBundle:Activity:player', array(
+            'id'       => $task['activityId'],
+            'courseId' => $courseId
         ));
     }
 

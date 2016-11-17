@@ -13,11 +13,10 @@ class ActivityController extends BaseController
         $activity       = $this->getActivityService()->getActivity($id);
         $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $showController = $config->getAction('show');
-
         return $this->forward($showController, array(
-            'courseId' => $courseId,
+            'id'       => $id,
             'taskId'   => $taskId,
-            'id'       => $id
+            'courseId' => $courseId,
         ));
     }
 
@@ -47,17 +46,15 @@ class ActivityController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function playerAction(Request $request, $courseId, $activityId)
+    public function playerAction(Request $request, $id, $courseId)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($activityId);
-        if (empty($activity)) {
-            $this->createResourceNotFoundException('activity', $activityId);
-        }
-        $context = array();
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'      => $activity['ext']["mediaId"],
-            'context' => $context
+        $activity         = $this->getActivityService()->getActivity($id);
+        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $createController = $config->getAction('player');
+
+        return $this->forward($createController, array(
+            'id'       => $activity['id'],
+            'courseId' => $courseId
         ));
     }
 

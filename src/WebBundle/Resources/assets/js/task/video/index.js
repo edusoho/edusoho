@@ -4,46 +4,29 @@
 import  swfobject from 'es-swfobject';
 import  EsMessager from '../../../common/messenger';
 class VideoPlay {
-    constructor(elment) {
-        this.dom = $(elment);
-        this.data = this.dom.data();
+    constructor() {
         this.player = {};
     }
 
-
     play() {
-        console.log(this.data.media);
-        if (this.data.media.mediaSource == 'self') {
-            this._playVideo();
-        } else {
+        if ($('#swf-player').length) {
             this._playerSwf();
+        } else {
+            this._playVideo();
         }
     }
 
     _playerSwf() {
-        console.log(this.dom, this.data);
-        this.dom.html('<div id="lesson-swf-player"></div>');
-        swfobject.embedSWF(this.data.media.mediaUri,
-            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
+        const swf_dom = 'swf-player';
+        swfobject.embedSWF($('#' + swf_dom).data('url'),
+            swf_dom, '100%', '100%', "9.0.0", null, null, {
                 wmode: 'opaque',
                 allowFullScreen: 'true'
             });
     }
 
     _playVideo() {
-        // if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-        //     Notify.warning('视频文件正在转换中，稍后完成后即可查看');
-        //     return;
-        // }
-        let startTime = this.data.startTime | 0;
-        let playerUrl = `/course/${this.data.courseId}/task/${this.data.taskId}/player`;// '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-        if (startTime) {
-            playerUrl += "?starttime=" + startTime;
-        }
-        const html = `<iframe src='${playerUrl}' name='viewerIframe' id='viewerIframe' width='100%' allowfullscreen webkitallowfullscreen height='100%' style='border:0px'></iframe>`;
         let self = this;
-        this.dom.show();
-        this.dom.html(html);
 
         var messenger = new EsMessager({
             name: 'parent',
@@ -81,7 +64,7 @@ class VideoPlay {
 
 
 }
-let videoplay = new VideoPlay("#video-content");
+let videoplay = new VideoPlay("#");
 videoplay.play();
 
 //

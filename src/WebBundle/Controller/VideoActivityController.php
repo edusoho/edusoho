@@ -10,18 +10,37 @@ namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $taskId, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivity($id);
-        $activity['courseId'] = $courseId;
-        $activity['taskId']   = $taskId;
-        return $this->render('WebBundle:VideoActivity:show.html.twig', array(
-            'activity' => $activity,
-        ));
+        $activity = $this->getActivityService()->getActivity($id);
+        if ($this->getMediaSource($activity) == 'self') {
+            return $this->render('WebBundle:VideoActivity:show.html.twig', array(
+                'activity' => $activity,
+                'taskId'   => $taskId,
+                'courseId' => $courseId
+            ));
+        } else {
+            return $this->render('WebBundle:VideoActivity:swf-show.html.twig', array(
+                'activity' => $activity,
+            ));
+        }
+    }
+
+    /**
+     * 获取当前视频活动的文件来源
+     * @param $activity
+     * @return mediaSource
+     */
+    protected function getMediaSource($activity)
+    {
+        return $activity['ext']['mediaSource'];
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -40,6 +59,16 @@ class VideoActivityController extends BaseController implements ActivityActionIn
     {
         return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
             'courseId' => $courseId
+        ));
+    }
+
+    public function playerAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $context  = $request->query->all();
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id'      => $activity['ext']["mediaId"],
+            'context' => $context
         ));
     }
 
@@ -69,6 +98,26 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         return $task;
     }
 
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
+            return strpos($userAgent, $agent) > -1;
+        });
+    }
+
+    protected function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->setting("storage");
+        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * @return ActivityService
      */
@@ -87,5 +136,9 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
 
 }
