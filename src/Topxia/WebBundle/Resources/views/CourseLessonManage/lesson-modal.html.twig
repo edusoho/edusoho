@@ -121,9 +121,10 @@
   </div>
 
   {% if storageSetting.upload_mode|default('local') == 'cloud' %}
-    <div class="form-group for-video-type hidden" id="subtitle-form-group" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
-      <div class="col-md-2 control-label for-video-type"><label>{{'字幕'|trans}}</label></div>
+    <div class="form-group for-video-type" id="subtitle-form-group" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+      <div class="col-md-2 control-label for-video-type"><label>{{'视频字幕'|trans}}</label></div>
       <div class="col-md-9 controls js-subtitle-list">
+        <p>请等待视频上传完之后再添加字幕</p>
       </div>
     </div>
   {% endif %}
