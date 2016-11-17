@@ -86,20 +86,9 @@ class EduCloudController extends BaseController
     {
         try {
             $api  = CloudAPIFactory::create('root');
-            // $info = $api->get('/me');
-            // // var_dump($info);exit();
-            // if (isset($info['licenseDomains'])) {
-            //     $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
-            // }
-
             $isBinded = $this->getAppService()->getBinded();
-            // var_dump($isBinded);exit();
-            // $isBinded['email'] = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
-
-            // $eduSohoOpenClient = new EduSohoOpenClient;
-            $overview          = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $overview = $api->get("/user/center/{$api->getAccessKey()}/overview");
             $overview['enabled'] = true;
-            // var_dump($overview);exit();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
@@ -111,8 +100,7 @@ class EduCloudController extends BaseController
         if (in_array(false, $overviewValue)) {
             $unPaid = true;
         }
-        // var_dump($paid);
-        // var_dump($overview['services']);exit();
+        
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
