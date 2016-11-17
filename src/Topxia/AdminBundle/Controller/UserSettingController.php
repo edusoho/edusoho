@@ -196,7 +196,7 @@ class UserSettingController extends BaseController
             $setting['email_filter'] = $data['email_filter'];
 
             $setting['partner_config']['discuz'] = $data['discuzConfig'];
-            // $setting['partner_config']['phpwind'] = empty($data['phpwindConfig'])? array(): $data['phpwindConfig'];
+            $setting['partner_config']['phpwind'] = empty($data['phpwindConfig'])? array(): $data['phpwindConfig'];
 
             $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
@@ -204,13 +204,13 @@ class UserSettingController extends BaseController
 
         }
 
-        // $phpwindConfig = $setting['partner_config']['phpwind'];
+        $phpwindConfig = $setting['partner_config']['phpwind'];
         $discuzConfig  = $setting['partner_config']['discuz'];
 
         return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
             'setting'       => $setting,
             'discuzConfig'  => $discuzConfig,
-            // 'phpwindConfig' => $phpwindConfig
+            'phpwindConfig' => $phpwindConfig
         ));
     }
 
