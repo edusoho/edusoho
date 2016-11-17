@@ -12,6 +12,15 @@
       <div class="title">
         公开课列表
       </div>
+      <div class="more">
+        <a class="btn btn-primary btn-lg" href="{{ path('course_explore') }}">
+          {{'查看课程'|trans}}
+        </a>
+        <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
+          {{'查看班级'|trans}}
+        </a>
+      </div>
+    </div>
     </div>
   </div>
 {% endblock %}

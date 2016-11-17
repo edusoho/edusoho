@@ -44,6 +44,7 @@ class FinanceSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
+
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
@@ -66,7 +67,10 @@ class FinanceSettingController extends BaseController
 
         if ($sum < 1) {
             $payment['enabled'] = 0;
+        } else {
+            $payment['enabled'] = 1;
         }
+
 
         return $payment;
     }
