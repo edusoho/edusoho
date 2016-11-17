@@ -19,6 +19,10 @@ class CourseController extends BaseController
 
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if(!empty($member['classroomId'])) {
+                $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+                $courseVip = empty($classroom['vipLevelId']) ? null : $this->getLevelService()->getLevel($classroom['vipLevelId']);
+            }
 
             if ($courseVip) {
                 $userVipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);

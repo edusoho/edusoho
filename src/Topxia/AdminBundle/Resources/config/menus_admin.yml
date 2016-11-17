@@ -526,7 +526,7 @@ admin:
                     router_name: admin_setting_cloud_video
                     children:
                         admin_setting_cloud_video:
-                            name: 云视频
+                            name: 概览
                             disable: true
                         admin_cloud_setting_video:
                             name: 设置
@@ -536,7 +536,7 @@ admin:
                     router_name: admin_setting_cloud_edulive
                     children:
                         admin_setting_cloud_edulive:
-                            name: 云直播
+                            name: 概览
                             disable: true
                         admin_cloud_setting_edulive:
                             name: 设置
@@ -545,7 +545,7 @@ admin:
                     name: 云短信
                     children:
                         admin_edu_cloud_sms_setting:
-                            name: 云短信
+                            name: 概览
                             router_name: admin_edu_cloud_sms
                             disable: true
                         admin_edu_cloud_setting_sms:
@@ -562,7 +562,7 @@ admin:
                     router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search:
-                            name: 云搜索
+                            name: 概览
                             disable: true
                         admin_edu_cloud_setting_search:
                             name: 设置

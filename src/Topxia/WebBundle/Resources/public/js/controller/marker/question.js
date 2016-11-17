@@ -1,7 +1,7 @@
 define(function (require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    var messenger = require('./messeger.js');
+    var messenger = require('./index.js');
     var DraggableWidget = require('./manage');
     var Cookie = require('cookie');
     require('common/validator-rules').inject(Validator);

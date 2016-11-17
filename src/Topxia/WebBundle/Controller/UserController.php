@@ -421,7 +421,7 @@ class UserController extends BaseController
         $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
         $levels               = array();
 
-        if ($this->isPluginInstalled('vip')) {
+        if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
         }
 

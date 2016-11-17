@@ -7,7 +7,7 @@ if (!defined('WEKIT_VERSION')) {
 	Wind::application('windidclient', Wekit::S());
 	$clientConfig = include __DIR__ . '/../../../../app/config/windid_client_config.php';
 	$database =  $clientConfig['database'];
-	$windidConfig =  $clientConfig['conf'];	
+	$windidConfig =  $clientConfig['conf'];
 	Wind::register(WINDID_PATH . 'service', 'SRV');
 } else {
 	$windidConfig = Wekit::C('windid');
@@ -24,7 +24,7 @@ if (!defined('WEKIT_VERSION')) {
 			'tableprefix' => $windidConfig['db.prefix']
 		);
 	}
-	$windidConfig['charset'] = Wekit::V('charset'); 
+	$windidConfig['charset'] = Wekit::V('charset');
 }
 
 Wind::register(WINDID_PATH . 'service', 'WSRV');

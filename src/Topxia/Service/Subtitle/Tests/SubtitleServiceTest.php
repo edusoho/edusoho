@@ -6,7 +6,7 @@ use Topxia\Service\Common\BaseTestCase;
 class SubtitleServiceTest extends BaseTestCase
 {
     public function testFindSubtitlesByMediaId()
-    {   
+    {
         $this->mockUploadFileService();
         $subtitle  = $this->createSubtitle();
         $subtitle2 = $this->createSubtitle2();
