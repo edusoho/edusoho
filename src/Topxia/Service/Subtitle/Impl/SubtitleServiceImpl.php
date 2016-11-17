@@ -65,17 +65,10 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             throw new ResourceNotFoundException('subtitle', $id);
         }
 
-        $fileId = $subtitle['subtitleId'];
-        $file = $this->getUploadFileService()->getFile($fileId);
-        if (empty($file) || $file["type"] != "subtitle") {
-            throw new ResourceNotFoundException('subtitleUploadFile', $fileId);
-        }
+        $this->getSubtitleDao()->deleteSubtitle($id);
+        $this->getUploadFileService()->deleteFile($subtitle['subtitleId']);
 
-        if ($this->getSubtitleDao()->deleteSubtitle($id) && $this->getUploadFileService()->deleteFile($file['id'])) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     protected function filterSubtitleFields($fields)

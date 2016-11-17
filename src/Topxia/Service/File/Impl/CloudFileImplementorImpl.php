@@ -412,6 +412,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if ($file['targetType'] == 'attachment') {
             $params['type'] = $file['targetType'];
         }
+
+        if ($file['targetType'] == 'subtitle') {
+            $params['type'] = 'sub';
+        }
         if (isset($file['directives'])) {
             $params['directives'] = $file['directives'];
         }
