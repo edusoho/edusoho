@@ -161,28 +161,17 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function findPublishedArticlesByTagIdsAndCount($tagIds, $count)
+    public function findPublishedArticlesByArticleIdsAndCount($articleIds, $count)
     {
-        $sql      = "SELECT * FROM {$this->table} WHERE status = 'published'";
-        $length   = count($tagIds);
-        $tagArray = array();
-        $sql .= " AND (";
-
-        for ($i = 0; $i < $length; $i++) {
-            $sql .= "  tagIds LIKE  ? ";
-
-            if ($i != $length - 1) {
-                $sql .= " OR ";
-            }
-
-            $tagArray[] = '%|' . $tagIds[$i] . '|%';
+        if (empty($articleIds)) {
+            return array();
         }
 
-        $sql .= " ) ";
+        $marks    = str_repeat('?,', count($articleIds) - 1) . '?';
 
-        $sql .= " ORDER BY publishedTime DESC LIMIT 0, {$count}";
+        $sql = "SELECT * FROM {$this->table} WHERE status = 'published' AND id in ({$marks}) ORDER BY publishedTime DESC LIMIT 0, {$count}";
 
-        return $this->getConnection()->fetchAll($sql, $tagArray);
+        return $this->getConnection()->fetchAll($sql, $articleIds);
     }
 
     protected function _createSearchQueryBuilder($conditions)

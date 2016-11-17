@@ -436,7 +436,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，创建课程失败！'));
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['userId']      = $this->getCurrentUser()->id;
@@ -1085,7 +1085,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'free'          => 0,
             'title'         => '',
             'summary'       => '',
-            'tags'          => array(),
             'type'          => 'text',
             'content'       => '',
             'media'         => array(),

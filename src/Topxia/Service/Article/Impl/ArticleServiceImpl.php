@@ -383,7 +383,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count)
     {
-        return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
+        $articles = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
+
+        return $this->getArticleDao()->findPublishedArticlesByArticleIdsAndCount(ArrayToolkit::column($articles, 'id'), $count);
     }
 
     public function viewArticle($id)

@@ -13,19 +13,6 @@
         {% else %}
           <div class="text-muted">{{'暂无课程简介'|trans}}</div>
         {% endif %}
-
-        {% if category %}
-          <p><strong>{{'分类：'|trans}}</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
-        {% endif %}
-
-        {% if tags %}
-          <p><strong>{{'标签：'|trans}}</strong>
-            {% for tag in tags %}
-              <a href="{{ path('course_explore') }}">{{ tag.name }}</a>
-            {% endfor %}
-          </p>
-        {% endif %}
-
       </div>
     </div>
 

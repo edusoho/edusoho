@@ -8,9 +8,9 @@ use Topxia\Service\Common\ServiceException;
 class ArticleDaoImplTest extends BaseTestCase
 {
 
-    public function testFindPublishedArticlesByTagIdsAndCount()
+    public function testFindPublishedArticlesByArticleIdsAndCount()
     {
-       $articles = $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount(array(1, 2, 4, 3), 10);
+       $articles = $this->getArticleDao()->findPublishedArticlesByArticleIdsAndCount(array(1, 2, 4, 3), 10);
     }
 
     protected function getArticleDao()

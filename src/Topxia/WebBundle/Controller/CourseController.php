@@ -114,18 +114,9 @@ class CourseController extends CourseBaseController
             }
         }
 
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-
-        $tags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'course',
-            'ownerId'   => $id
-        ));
-
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course'   => $course,
             'member'   => $member,
-            'category' => $category,
-            'tags'     => $tags
         ));
     }
 
