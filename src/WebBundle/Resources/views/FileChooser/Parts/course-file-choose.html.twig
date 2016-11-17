@@ -1,6 +1,17 @@
 {#{% do script (['web/file-chooser/chooser/coursefile-choose.js']) %}#}
 
-<div data-role="course-file-browser"
+{#<div data-role="course-file-browser"
      data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}">
 </div>
-<input type="hidden" name="type" value="{{ fileType|default('') }}">
+<input type="hidden" name="type" value="{{ fileType|default('') }}">#}
+
+<div class="chooser-content">
+  <div class="input-group">
+    <input class="form-control mb0" type="text" placeholder="请输入关键词，从已上传的文件中搜索选择" data-role="import-url" value="" style="
+    margin-bottom: 0;
+">  
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default js-video-import" data-role="import" data-url="/course/1/manage/media/import" data-loading-text="正在导入，请稍等">搜索</button>
+    </span>
+  </div>
+</div>

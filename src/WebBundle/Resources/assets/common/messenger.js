@@ -1,4 +1,4 @@
-import Messenger from 'messengerjs';
+import Messenger from 'es-messenger';
 import Emitter from 'es6-event-emitter';
 
 class EsMessager extends Emitter {

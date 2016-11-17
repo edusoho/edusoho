@@ -7,6 +7,7 @@ import 'bootstrap-notify';
 import 'common/bootstrap-modal-hack';
 
 
+$('[data-toggle="popover"]').popover();
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {

@@ -31,7 +31,10 @@ export default FileChooser ;
 
 $("#material a").click(function (e) {
     e.preventDefault();
-    $(this).tab('show')
+    var $this = $(this);
+    $this.find('[type="radio"]').prop('checked','checked');
+    $this.closest('li').siblings('li').find('[type="radio"]').prop('checked',false);
+    $this.tab('show')
     var $parentIframe = $(window.parent.document).find('#task-manage-content-iframe');
     $parentIframe.height($parentIframe.contents().find('body').height());
 });

@@ -39,7 +39,8 @@ export default class UploaderChooser extends Emitter{
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
-      process: $uploader.data('process')
+      process: $uploader.data('process'),
+      ui:'single'
     });
     return this;
   }

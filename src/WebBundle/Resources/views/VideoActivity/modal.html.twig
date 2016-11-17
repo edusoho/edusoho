@@ -1,13 +1,13 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 
-{% do script(['http://localhost:12345/sdk.js','web/activity-manage/video/index.js']) %}
+{% do script(['http://localhost:12345/build-dev/sdk.js','web/activity-manage/video/index.js']) %}
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('video') %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
     </div>
-    <div class="col-xs-9">
+    <div class="col-xs-10">
       <textarea class="form-control" id="text-content-field" name="content"
                 data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                 data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
@@ -26,7 +26,7 @@
     <div class="col-xs-2 control-label for-video-type">
       <label>{{ '视频时长'|trans }}</label>
     </div>
-    <div class="col-xs-9">
+    <div class="col-xs-10">
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
       <input class="form-control width-input width-input-small js-length" id="minute" type="text" name="minute"
              value="{{ activity.minute|default(null) }}">{{ '分'|trans }}
@@ -45,7 +45,7 @@
     <div class="col-xs-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-9">
+    <div class="col-xs-10">
       <p class="form-control-static">观看到最后</p>
     </div>
   </div>

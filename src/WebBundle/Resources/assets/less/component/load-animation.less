@@ -11,9 +11,41 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 100px;
-  height: 100px;
-  margin-left: -50px;
-  margin-top: -50px;
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
   background: url(../../img/loading.gif);
+  background-size:cover;
+}
+
+.chooser-content {
+  padding: 30px;
+  background-color: #f8fbfd;
+}
+
+.uploader-content {
+  background-color: #f8fbfd;
+  padding: 30px 30px 15px 30px;
+  .uploader-bottom {
+    padding-top: 15px;
+    line-height: 30px;
+    border-top: 1px solid #eaf2f7;
+    margin-top: 25px;
+    .form-control {
+      margin-bottom: 0;
+      width: auto;
+      display: inline-block;
+      min-width: 85px;
+    }
+  }
+}
+
+.nav.nav-tabs.nav-tabs-radio {
+  border-bottom: 0;
+  margin-bottom: 15px;
+  >li>a {
+    color: @gray-dark;
+    font-weight:normal;
+  }
 }
