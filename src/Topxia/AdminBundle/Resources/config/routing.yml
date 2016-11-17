@@ -606,6 +606,15 @@ admin_setting_mobile:
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
     permissions: [admin_setting_mobile_settings]
 
+admin_setting_mobile_iap_product:
+    pattern:  /setting/mobile_iap_product
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProduct }
+
+admin_setting_mobile_iap_product_delete:
+    pattern:  /setting/mobile_iap_product_delete/{productId}
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProductDelete }
+    methods: [POST]
+
 admin_operation_mobile_picture_upload:
     path:  /operation/mobile/picture/upload/{type}
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobilePictureUpload }
