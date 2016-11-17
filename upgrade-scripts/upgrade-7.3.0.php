@@ -63,6 +63,14 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isFieldExist('upload_file_inits', 'type')) {
             $connection->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
         }
+
+        $connection->exec("update course_member cm1 LEFT JOIN classroom_member cm2 ON cm1.classroomId = cm2.classroomId and cm1.userId=cm2.userId and cm1.joinedType='classroom' set cm1.levelId=cm2.levelId where cm1.joinedType='classroom'");
+
+        $setting = $this->getSettingService()->get('user_partner');
+        if(!empty($setting['mode']) && $setting['mode'] == 'phpwind') {
+            $setting['mode'] = 'default';
+            $setting = $this->getSettingService()->set('user_partner', $setting);
+        }
     }
 
     protected function isFieldExist($table, $filedName)
