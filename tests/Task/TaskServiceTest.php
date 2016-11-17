@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Biz\Task\Service\TaskService;
+use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Service\Common\BaseTestCase;
 
 class TaskServiceTest extends BaseTestCase
@@ -101,6 +102,23 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNotNull($tasks);
         $this->assertEquals(2, count($tasks));
     }
+
+    /**
+     * @expectedException AccessDeniedException
+     */
+    public function testTaskFinishWhenUserNotGetTask()
+    {
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $task = $this->getTaskService()->createTask($task);
+
+        $this->getTaskService()->taskFinish($task['id']);
+    }
+
 
     /**
      * @return TaskService

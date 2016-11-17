@@ -21,10 +21,22 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->fetchAll($sql, array($courseTaskId, $userId)) ?: array();
     }
 
-    public function save($taskResult)
+    public function getByTaskIdAndActivityId($taskId, $activityId)
     {
-        //TODO create or update
+        return $this->getByFields(array(
+            'courseTaskId' => $taskId,
+            'activityId'   => $activityId
+        ));
     }
+
+    public function getByTaskIdAndUserId($taskId, $userId)
+    {
+        return $this->getByFields(array(
+            'courseTaskId' => $taskId,
+            'userId'       => $userId
+        ));
+    }
+
 
     public function declares()
     {

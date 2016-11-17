@@ -2,11 +2,13 @@
 namespace Biz\Task\Event;
 
 
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\Biz\Framework\Event\EventSubscriber;
 
-class ActivitySubscriber extends EventSubscriber implements EventSubscriberInterface
+class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -18,9 +20,50 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     public function onActivityStart(Event $event)
     {
+        $activity = $event->getSubject();
+        $task = $event->getArgument('task');
+
+        $taskResult = $this->getTaskService()->getTaskResultByTaskIdAndActivityId($task['id'], $activity['id']);
+
+        if(!empty($taskResult)){
+            return;
+        }
+
+        $taskResult = array(
+            'activityId' => $activity['id'],
+            'courseId'   => $task['courseId'],
+            'courseTaskId' => $task['id'],
+        );
+
+        $this->getTaskService()->createTaskResult($taskResult);
     }
 
     public function onActivityFinish(Event $event)
     {
+        $activity = $event->getSubject();
+        $courseId = $activity['fromCourseId'];
+
+        $taskResults = $this->getTaskResultService()->findUserProgressingTaskByCourseIdAndActivityId($courseId, $activity['id']);
+
+        foreach ($taskResults as $taskResult){
+            $this->getTaskService()->taskFinish($taskResult['courseTaskId']);
+        }
     }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
+    }
+
 }

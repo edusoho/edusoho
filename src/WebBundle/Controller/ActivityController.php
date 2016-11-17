@@ -11,10 +11,15 @@ class ActivityController extends BaseController
     public function showAction(Request $request, $id, $courseId)
     {
         $activity         = $this->getActivityService()->getActivity($id);
-        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $createController = $config->getAction('show');
 
-        return $this->forward($createController, array(
+        if(empty($activity)){
+            throw $this->createNotFoundException('activity not found');
+        }
+
+        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $showController = $config->getAction('show');
+
+        return $this->forward($showController, array(
             'courseId' => $courseId,
             'id'       => $id
         ));

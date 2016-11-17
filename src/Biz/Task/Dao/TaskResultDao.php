@@ -10,5 +10,7 @@ interface TaskResultDao extends GeneralDaoInterface
 
     public function findByTaskId($courseTaskId, $userId);
 
-    public function save($taskResult);
+    public function getByTaskIdAndActivityId($taskId, $activityId);
+
+    public function getByTaskIdAndUserId($taskId, $userId);
 }

@@ -35,16 +35,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
 
+        if(empty($activity)){
+            return;
+        }
+
         if (in_array($eventName, array('start', 'doing', 'finish'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
-        $listeners   = array();
-        $listener    = new ActivityLearnLogListener($this->biz);
-        $listeners[] = $listener;
+        $logListener    = new ActivityLearnLogListener($this->biz);
 
-        $eventName        = $activity['mediaType'].'.'.$eventName;
-        $data['event']    = $eventName;
+        $logData = $data;
+        $logData['event'] = $activity['mediaType'] . '.' . $eventName;
+        $logListener->handle($activity, $logData);
+
+        $listeners   = array();
         $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
         if (!is_null($activityListener)) {
             $listeners[] = $activityListener;

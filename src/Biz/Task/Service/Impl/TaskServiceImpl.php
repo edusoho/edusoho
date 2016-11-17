@@ -2,12 +2,17 @@
 
 namespace Biz\Task\Service\Impl;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Service\Course\CourseService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -127,15 +132,43 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $tasks;
     }
 
-    public function findTaskResultsByCourseId($courseId, $userId)
+    public function taskStart($taskId)
     {
-        return $this->getTaskResultDao()->findByCourseId($courseId, $userId);
+        $task = $this->tryTakeTask($taskId);
+
+        $this->getActivityService()->trigger($task['activityId'], 'start', array(
+            'task' => $task
+        ));
     }
 
-    public function findTaskResults($couseTaskId, $userId)
+    public function taskFinish($taskId)
     {
-        return $this->getTaskResultDao()->findByTaskId($courseTaskId, $userId);
+        $task = $this->tryTakeTask($taskId);
+        $user = $this->biz['user'];
+        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $user);
+
+        if(empty($taskResult)){
+            throw new AccessDeniedException('该任务不在进行状态');
+        }
+
+        $taskResult['updatedTime'] = time();
+        $taskResult['status']      = 'finish';
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], $taskResult);
     }
+
+    public function tryTakeTask($taskId)
+    {
+        $task = $this->getTask($taskId);
+
+        if(empty($task)){
+            throw new ResourceNotFoundException('task', $taskId);
+        }
+
+        $this->getCourseService()->tryTakeCourse($task['courseId']);
+
+        return $task;
+    }
+
 
     /**
      * @return TaskDao
@@ -143,11 +176,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
-    }
-
-    protected function getTaskResultDao()
-    {
-        return $this->createDao('Task:TaskResultDao');
     }
 
     protected function canManageCourse($courseId)
@@ -179,13 +207,28 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
+    }
+
 }
