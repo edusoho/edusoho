@@ -24,7 +24,7 @@
                         {% endif %}
                         {{ category.name }}
                     </div>
-                    <div class="td col-md-4 url"><a href="{{ category.url }}" target="_blank">{{ category.url }}</a></div>
+                    <div class="td col-md-4 url"><a href="{{ path('article_category', {categoryCode: category.code }) }}" target="_blank">{{ '/article/category/' ~ category.code }}</a></div>
                     <div class="td col-md-3 code">{{ category.code }}</div>
                     <div class="td col-md-2 operation">
                         <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}</a>
