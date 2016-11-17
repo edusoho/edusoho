@@ -1,11 +1,12 @@
 define(function(require,exports,module){
     var Select = {
-        init:function(id){
-            this.$el = $('#'+id);
+        init:function(options){
+            this.$el = $(options.id);
             if(!this.$el.length){
                 throw new Error('id 不存在');
             }
             this.options = [];
+            this.optionsLimit = options.optionsLimit || false;
             this.eventManager = {};
             this.initParent();
             this.initEvent();
@@ -42,6 +43,9 @@ define(function(require,exports,module){
                 this.$dataShow.attr('title',this.getValue().name);
             });
             this.on('listchange',function(){
+                if(this.optionsLimit && this.options.length >= this.optionsLimit ){
+                    this.trigger('optionlimit');
+                }
                 this.$list.html(this.getOptionsStr());
                 this.setValue(this.getDefaultOption())
             });
@@ -149,10 +153,17 @@ define(function(require,exports,module){
             this.options = optionsArray;
             this.trigger('listchange',this.options);
         },
+        addOption:function(option){
+            if ( !option.convertStatus ){
+                option.convertStatus = 'waiting';
+            }
+            this.options.push(option);
+            this.trigger('listchange');
+        },
         convertStatus:{
             waiting:'等待转码',
-            doing:'正在转码',
-            success:'转码成功',
+            processing:'正在转码',
+            ok:'转码成功',
             error:'转码失败',
             none:'等待转码'
         }
