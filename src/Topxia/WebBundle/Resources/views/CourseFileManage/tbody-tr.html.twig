@@ -1,3 +1,4 @@
+
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% set quality = "" %}
 {% if course.type in ['open','liveOpen'] %}
@@ -57,7 +58,7 @@
   </td>
   <td>
     {% if uploadFile.type == 'video' %}
-    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id}) }}">字幕管理</a>
+    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:app.request.getRequestUri}) }}">字幕管理</a>
     {% endif %}
   </td>
 

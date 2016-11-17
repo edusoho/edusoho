@@ -42,7 +42,7 @@
 
       {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
         <li>
-          <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id}) }}" data-toggle="tooltip" data-placement="bottom">
+          <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}" data-toggle="tooltip" data-placement="bottom">
             <i class="glyphicon glyphicon-cog prm"></i>{{'字幕管理'|trans}}
           </a>
         </li>
