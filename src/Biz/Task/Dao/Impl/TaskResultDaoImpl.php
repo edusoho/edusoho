@@ -37,9 +37,10 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         ));
     }
 
-
     public function declares()
     {
-        return array();
+        return array(
+            'orderbys' => array('createdTime'),
+        );
     }
 }

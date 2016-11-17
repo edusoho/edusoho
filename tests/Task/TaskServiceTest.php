@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests;
+namespace Tests\Task;
 
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Course\CourseService;
 
 class TaskServiceTest extends BaseTestCase
 {
@@ -104,19 +105,66 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException AccessDeniedException
+     * @expectedException \Topxia\Common\Exception\AccessDeniedException
      */
     public function testTaskFinishWhenUserNotGetTask()
     {
+        $course = array(
+            'title' => 'test'
+        );
+
+        $course = $this->getCourseService()->createCourse($course);
+
         $task = array(
             'title'           => 'test1 task',
             'mediaType'       => 'text',
-            'fromCourseId'    => 1,
+            'fromCourseId'    => $course['id'],
             'fromCourseSetId' => 1
         );
         $task = $this->getTaskService()->createTask($task);
 
         $this->getTaskService()->taskFinish($task['id']);
+    }
+
+    public function testTaskStart()
+    {
+        $course = array(
+            'title' => 'test'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => $course['id'],
+            'fromCourseSetId' => 1
+        );
+        $task = $this->getTaskService()->createTask($task);
+
+        $this->getTaskService()->taskStart($task['id']);
+
+        $result = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
+        $this->assertEquals($result['status'], 'start');
+    }
+
+    public function testTaskFinish()
+    {
+        $course = array(
+            'title' => 'test'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => $course['id'],
+            'fromCourseSetId' => 1
+        );
+        $task = $this->getTaskService()->createTask($task);
+
+        $this->getTaskService()->taskStart($task['id']);
+        $this->getTaskService()->taskFinish($task['id']);
+
+        $result = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
+        $this->assertEquals($result['status'], 'finish');
     }
 
 
@@ -127,4 +175,21 @@ class TaskServiceTest extends BaseTestCase
     {
         return $this->getBiz()->service('Task:TaskService');
     }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
+    }
+
 }

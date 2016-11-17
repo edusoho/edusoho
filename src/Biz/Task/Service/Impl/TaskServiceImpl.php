@@ -145,15 +145,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
         $user = $this->biz['user'];
-        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $user);
+        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $user['id']);
 
         if(empty($taskResult)){
             throw new AccessDeniedException('该任务不在进行状态');
         }
 
-        $taskResult['updatedTime'] = time();
-        $taskResult['status']      = 'finish';
-        $this->getTaskResultService()->updateTaskResult($taskResult['id'], $taskResult);
+        $update['updatedTime'] = time();
+        $update['status']      = 'finish';
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
     }
 
     public function tryTakeTask($taskId)

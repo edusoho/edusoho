@@ -27,7 +27,8 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         ArrayToolkit::requireds($taskResult, array(
             'activityId',
             'courseId',
-            'courseTaskId'
+            'courseTaskId',
+            'userId'
         ));
 
         $user = $this->biz['user'];
@@ -37,7 +38,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         }
 
         $taskResult['createdTime'] = time();
-        $taskResult['userId'] = $user['id'];
         $taskResult['status'] = 'start';
 
         $this->getTaskResultDao()->create($taskResult);
@@ -70,7 +70,8 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         );
 
         $count = $this->getTaskResultDao()->count($conditions);
-        return $this->getTaskResultDao()->search($conditions, array('createdTime', 'DESC'), 0, $count);
+
+        return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
     /**
