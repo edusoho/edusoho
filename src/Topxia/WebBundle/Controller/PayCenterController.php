@@ -5,6 +5,8 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
@@ -73,8 +75,12 @@ class PayCenterController extends BaseController
                 'amount'   => $order['amount'],
                 'paidTime' => time()
             );
-            $this->getPayCenterService()->processOrder($payData);
-
+            list($success, $order) = $this->getPayCenterService()->processOrder($payData);
+            if ($success) {
+                $this->dispatchEvent("order.free.paid",
+                    new ServiceEvent($order, array('targetType' => $order["targetType"]))
+                );
+            }
             return $this->redirectOrderTarget($order);
         } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
             $payData = array(
@@ -561,6 +567,16 @@ class PayCenterController extends BaseController
             }
         }
         return $enableds;
+    }
+
+    public function getDispatcher()
+    {
+        return ServiceKernel::dispatcher();
+    }
+
+    protected function dispatchEvent($eventName, $event)
+    {
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     protected function getCouponService()
