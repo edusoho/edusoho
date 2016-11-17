@@ -35,7 +35,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum','updatedTime'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
