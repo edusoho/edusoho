@@ -804,11 +804,15 @@ var_dump($member);
         ));
     }
 
-    public function rebuyAction(Request $request, $courseId)
+    public function deadlineReachAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();
 
-        $this->getCourseService()->removeStudent($courseId, $user['id']);
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getCourseService()->quitCourseByDeadlineReach($user['id'], $courseId);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
     }

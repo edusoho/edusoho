@@ -57,7 +57,7 @@
     <div class="metas">
       <div class="score">
         {{ web_macro.star(course.rating) }}
-        <span>({{ course.ratingNum }}{{'人'|trans}})</span>
+        <span>({{ course.ratingNum }}{{' 评论'|trans}})</span>
       </div>
 
       {% if member and member.deadline > 0 %}
@@ -69,7 +69,7 @@
         {% else %}
          <div class="alert alert-danger alert-dismissable">
             {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
-              <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
+              <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
               {% if course.price>0 %}
               {{'重新购买'|trans}}
               {% else %}
@@ -155,7 +155,7 @@
 {% macro student_num(course) %}
   <div class="student-num hidden-xs">
     {% if setting('course.show_student_num_enabled', '1') == 1  %}
-      <i class="es-icon es-icon-people"></i>{{'%studentNum%人'|trans({'%studentNum%': course.studentNum}) }}
+      <i class="es-icon es-icon-people"></i>{{'%studentNum%人 已学习'|trans({'%studentNum%': course.studentNum}) }}
       {% if course.maxStudentNum > 0 %}
         {% if course.studentNum >= course.maxStudentNum %}
           <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
