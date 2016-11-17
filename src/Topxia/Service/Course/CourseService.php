@@ -291,6 +291,8 @@ interface CourseService
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course');
 
+    public function quitCourseByDeadlineReach($userId, $courseId);
+
     /**
      * 成为学员，即加入课程的学习
      */

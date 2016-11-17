@@ -344,7 +344,7 @@ define(function(require, exports, module) {
             }
 
             $title.val(name.substring(0, name.lastIndexOf('.')));
-        }; 
+        };
 
         var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
@@ -359,6 +359,11 @@ define(function(require, exports, module) {
                     });
                 });
             }
+        }
+
+        //显示字幕编辑组件
+        if ('id' in choosedMedia) {
+            displaySubtitleManage(choosedMedia);
         }
 
         videoChooser.on('change', function(item) {

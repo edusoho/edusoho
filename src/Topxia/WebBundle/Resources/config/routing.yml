@@ -414,9 +414,9 @@ course_member_ids:
     pattern:  /course/{id}/member_ids
     defaults: { _controller: TopxiaWebBundle:Course:memberIds }
 
-course_rebuy:
-    pattern:  /course/{courseId}/course_rebuy
-    defaults: { _controller: TopxiaWebBundle:Course:rebuy }
+course_member_deadline_reach:
+    pattern:  /course/{courseId}/member/deadline/reach
+    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
 
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
