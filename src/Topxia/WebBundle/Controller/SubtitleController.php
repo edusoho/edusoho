@@ -13,13 +13,16 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+
         $media   = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
             throw new ResourceNotFoundException('uploadFile', $mediaId);
         }
-
+        
         return $this->render('TopxiaWebBundle:MediaManage/Subtitle:manage.html.twig', array(
-            'media'  => $media
+            'media'  => $media,
+            'subtitles' => $subtitles
         ));
     }
 

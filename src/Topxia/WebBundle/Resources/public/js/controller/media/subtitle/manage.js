@@ -20,7 +20,13 @@ define(function(require,exports,module){
 
     //选择框组件实例
     var select = Object.create(Select);
-    select.init('track-select');
+    var $subtitleListElem = $('#track-select');
+    var subtitleList = $subtitleListElem.data('subtitleList');
+    select.init({
+        id:'#track-select',
+        optionLimit:4
+    });
+    select.resetOptions(subtitleList);
     select.on('valuechange',function(data){
         if(!data){
             $textTrackDisplay.html('当前无字幕');
@@ -32,29 +38,22 @@ define(function(require,exports,module){
         $.post('/media/'+mediaId+'/subtitle/'+data.id+'/delete',function(data){
             if(data){
                 Notify.success(Translator.trans('删除字幕成功'));
+                $subtitleUploaderElem.show();
             }
         });
     });
+    select.on('optionlimit',function(){
+        $subtitleUploaderElem.hide();
+    })
     
-    //初始获取字幕列表
-    var $elem = $('#uploader');
-    var videoNo = $elem.data('mediaGlobalId');;
-    var mediaId = $elem.data('mediaId');
-    var subtitleCreateUrl = $elem.data('subtitleCreateUrl');
-    var subtitleListUrl = $elem.data('subtitleListUrl');
-    var loadSubtitleList = function() {
-        $.post(subtitleListUrl).done(function(data){
-            if(data.subtitles){
-                select.resetOptions(data.subtitles);
-            }
-        })
-    }
-    loadSubtitleList();
-
     //上传实例
+    var $subtitleUploaderElem = $('#uploader');
+    var videoNo = $subtitleUploaderElem.data('mediaGlobalId');;
+    var mediaId = $subtitleUploaderElem.data('mediaId');
+    var subtitleCreateUrl = $subtitleUploaderElem.data('subtitleCreateUrl');
     var uploader = new UploaderSDK({
-        initUrl:$elem.data('initUrl'),
-        finishUrl:$elem.data('finishUrl'),
+        initUrl:$subtitleUploaderElem.data('initUrl'),
+        finishUrl:$subtitleUploaderElem.data('finishUrl'),
         id:'uploader',
         ui:'simple',
         multi:true,
@@ -78,8 +77,12 @@ define(function(require,exports,module){
             "subtitleId": file.id,
             "mediaId": mediaId
         }).success(function (data) {
+            console.log(data);
+            if(!data){
+                return;
+            }
+            select.addOption(data);
             Notify.success(Translator.trans('字幕上传成功！'));
-            loadSubtitleList();
         }).error(function (data){
             Notify.danger(Translator.trans(data.responseJSON.error.message));
         });
