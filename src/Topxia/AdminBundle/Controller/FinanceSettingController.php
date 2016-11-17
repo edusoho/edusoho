@@ -46,6 +46,14 @@ class FinanceSettingController extends BaseController
             $payment = ArrayToolkit::trim($payment);
 
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
+            if ($payment['enabled'] == 0) {
+                $payment['alipay_enabled']   = 0;
+                $payment['wxpay_enabled']    = 0;
+                $payment['heepay_enabled']   = 0;
+                $payment['quickpay_enabled'] = 0;
+                $payment['llpay_enabled']    = 0;
+            }
+
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
@@ -70,7 +78,6 @@ class FinanceSettingController extends BaseController
         } else {
             $payment['enabled'] = 1;
         }
-
 
         return $payment;
     }
