@@ -57,7 +57,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
-    public function findFilesByIds(array $ids, $showCloud = 0)
+    public function findFilesByIds(array $ids, $showCloud = 0, $params = array())
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
         if (empty($files)) {
@@ -65,7 +65,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if ($showCloud) {
-            $files = $this->getFileImplementor('cloud')->findFiles($files, array());
+            $files = $this->getFileImplementor('cloud')->findFiles($files, $params);
         }
 
         return $files;
