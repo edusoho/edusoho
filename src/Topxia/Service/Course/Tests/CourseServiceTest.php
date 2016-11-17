@@ -144,7 +144,7 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'online test course 1',
         );
         $course = $this->getCourseService()->createCourse($course);
-        $this->getCourseService()->updateCourse($course['id'], array('tagIds' => 1));
+        $this->getCourseService()->updateCourse($course['id'], array('tagIds' => array(1)));
         $result = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus(array('1'), 'draft', array('Rating', 'DESC'), 0, 1);
         $this->assertNotEmpty($result);
         $this->assertEquals($result[1]['title'], $course['title']);

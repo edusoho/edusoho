@@ -384,7 +384,6 @@ class TagServiceTest extends BaseTestCase
         );
 
         $this->getTagService()->addTagGroup($tagGroup);
-        var_dump($this->getTagService()->isTagGroupNameAvalieable('测试标签组', '测试标签组2'));
         $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvalieable('测试标签组', '测试标签组2'));
     }
 
