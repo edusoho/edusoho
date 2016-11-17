@@ -47,10 +47,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
-    {
-        $courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findNormalCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
-        );
+    {   
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'course');
+
+        $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+        $courses = $this->getCourseDao()->findNormalCoursesByStatusAndCourseIds($courseIds, $status, $orderBy, $start, $limit);
+
         return ArrayToolkit::index($courses, 'id');
     }
 
@@ -436,7 +439,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
-        $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);

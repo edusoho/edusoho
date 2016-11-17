@@ -68,25 +68,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
-    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    public function findNormalCoursesByStatusAndCourseIds(array $courseIds, $status, $orderBy, $start, $limit)
     {
-        if (empty($tagIds)) {
+        if (empty($courseIds)) {
             return array();
         }
 
-        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = ? AND (";
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = '{$status}' AND id in ({$marks})ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
 
-        foreach ($tagIds as $key => $tagId) {
-            if ($key > 0) {
-                $sql .= "OR tags LIKE '%|$tagId|%'";
-            } else {
-                $sql .= " tags LIKE '%|$tagId|%' ";
-            }
-        }
-
-        $sql .= ") ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array($status));
+        return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)

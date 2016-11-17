@@ -684,6 +684,10 @@ class CourseController extends CourseBaseController
 
     public function relatedCoursesBlockAction($course)
     {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+        
+        $course['tags'] = ArrayToolkit::column($tags, 'id');
+
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
 
         return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
