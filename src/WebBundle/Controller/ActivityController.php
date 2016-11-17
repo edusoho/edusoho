@@ -47,7 +47,7 @@ class ActivityController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $activityId)
     {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
+        $this->getCourseService()->tryTakeCourse($courseId);
 
         $activity = $this->getActivityService()->getActivity($activityId);
 
