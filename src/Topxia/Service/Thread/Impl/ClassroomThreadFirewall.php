@@ -23,8 +23,8 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
             return false;
         }
 
-        if ($this->getVipService()->isPluginInstalled('Vip') 
-            && $this->getVipService()->setting('vip.enabled', 0) 
+        if ($this->isVipPluginEnabled() 
+            && $this->getSettingService()->setting('vip.enabled', 0) 
             && !empty($member['levelId']) 
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) != 'ok') {
             return false;
@@ -132,6 +132,23 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     protected function getKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function isVipPluginEnabled()
+    {
+        $setting = $this->getSettingService()->get('vip');
+        return $this->isPluginInstalled('Vip') && !empty($setting['enabled']);
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        return !empty(ServiceKernel::instance()->createService('CloudPlatform.AppService')->getAppByCode($code));
+        
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     public function getCurrentUser()
