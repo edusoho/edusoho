@@ -12,7 +12,7 @@ class TaskController extends BaseController
     {
         $task     = $this->tryLearnTask($courseId, $id);
 
-        $tasks    = $this->getTaskService()->findDetailedTasksByCourseId($courseId, $this->getUser()->getId());
+        $tasks    = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if(empty($activity)){
