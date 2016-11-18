@@ -103,7 +103,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($tasks)) {
             return $tasks;
         }
-        $taskResults = $this->findTaskResultsByCourseId($courseId, $userId);
+        $taskResults = $this->getTaskResultService()->findTaskResultsByCourseId($courseId, $userId);
         if (!empty($taskResults)) {
             foreach ($taskResults as $tr) {
                 foreach ($tasks as $tk => $t) {
