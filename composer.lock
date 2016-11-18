@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6a6263bbe3b8d15897106f0437c93067",
+    "hash": "298fd010bcc3aaecf5d53ce55f01feae",
+    "content-hash": "16649008fe7e5face5a500939111da16",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -3054,17 +3055,17 @@
         },
         {
             "name": "willdurand/js-translation-bundle",
-            "version": "2.6.1",
+            "version": "v2.5.0",
             "target-dir": "Bazinga/Bundle/JsTranslationBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
-                "reference": "3d17193ada2938d6b00958bec7beb1f0362d4210"
+                "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/3d17193ada2938d6b00958bec7beb1f0362d4210",
-                "reference": "3d17193ada2938d6b00958bec7beb1f0362d4210",
+                "url": "https://packagist.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/2d449d345ec0f83f9479358c1d37111d0cf3df9a.zip",
+                "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "shasum": ""
             },
             "require": {
@@ -3085,7 +3086,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -3109,7 +3110,7 @@
                 "symfony",
                 "translation"
             ],
-            "time": "2016-09-19 12:54:35"
+            "time": "2015-11-10 13:04:08"
         }
     ],
     "packages-dev": [
