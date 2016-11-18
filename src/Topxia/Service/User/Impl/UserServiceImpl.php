@@ -586,6 +586,11 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function updateUserUpdatedTime($id, array $fields)
+    {
+        return $this->getUserDao()->updateUser($id, $fields);
+    }
+
     protected function getRandomChar()
     {
         return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);

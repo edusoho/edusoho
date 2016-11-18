@@ -36,12 +36,14 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         $this->filterStartLimit($start, $limit);
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum','updatedTime'));
-
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->addOrderBy($orderBy[0], $orderBy[1]);
+            ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };    
 
         $classrooms = $builder->execute()->fetchAll();
 
@@ -101,7 +103,9 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('orgCode = :orgCode')
-            ->andWhere('orgCode LIKE :likeOrgCode');
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('headTeacherId = :headTeacherId')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }

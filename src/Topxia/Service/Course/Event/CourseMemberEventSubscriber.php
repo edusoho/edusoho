@@ -114,13 +114,47 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         }
 
         $memberFields['credit'] = $totalCredits;
+        $memberFields['lastLearnTime'] = time();
+        $memberFields['updatedTime'] = time();
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+        if (!empty($classroom)) {
+            $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $courseIds = ArrayToolkit::column($classroomCourses, 'id');
+
+            $conditions = array();
+            $conditions['courseIds'] = $courseIds;
+            $conditions['userId'] = $learn['userId'];
+            $count = $this->getCourseService()->searchMemberCount($conditions);
+
+            $members = $this->getCourseService()->searchMembers(
+                $conditions,
+                array('updatedTime','DESC'),
+                0,
+                $count
+            );
+
+            $totalLearnNum = array_sum(ArrayToolkit::column($members, 'isLearned'));
+            $fields['updatedTime'] = isset($members[0]['updatedTime']) ? $members[0]['updatedTime'] : time();
+            $fields['lastLearnTime'] = isset($members[0]['lastLearnTime']) ? $members[0]['lastLearnTime'] : time();
+            $fields['learnedNum'] = $totalLearnNum;
+
+            $classroomMember = $this->getClassroomService()->getClassroomMember($classroom['id'], $learn['userId']);
+            $this->getClassroomService()->updateMember($classroomMember['id'], $fields);
+        }
     }
 
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

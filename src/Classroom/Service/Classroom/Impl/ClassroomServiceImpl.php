@@ -196,6 +196,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $fields    = $this->fillOrgId($fields);
+        $fields['updatedTime'] = time();
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
         return $classroom;
     }
@@ -1407,6 +1408,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findUserJoinedClassroomIds($userId)
     {
         return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
+    }
+    public function updateMember($id, $member)
+    {
+        return $this->getClassroomMemberDao()->updateMember($id, $member);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)

@@ -96,7 +96,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status']      = 'created';
-        $order['createdTime'] = time();
 
         $order = $this->getOrderDao()->addOrder($order);
 
@@ -451,17 +450,21 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
-            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+            $refund = $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
                 'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
 
+            $this->dispatchEvent(
+                'learn.refund',
+                new ServiceEvent($refund, array('userId' => $refund['userId']))
+            );
+
             $this->getOrderDao()->updateOrder($order['id'], array(
                 'status' => 'refunded'
             ));
-
             $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('退款申请(ID:%id%)已审核通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
@@ -526,15 +529,19 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-        $orderBy = array();
 
-        if ($sort == 'early') {
-            $orderBy = array('createdTime', 'ASC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime', 'ASC');
+            } else {
+                $orderBy = array('createdTime', 'DESC');
+            }
+        }else{
+            $orderBy = $sort;
         }
-
+       
         $conditions = $this->_prepareSearchConditions($conditions);
+
         $orders     = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
@@ -674,6 +681,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function updateOrder($id, $orderFileds)
     {
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
+    }
+
+    public function findRefundByOrderId($orderId)
+    {
+        return $this->getOrderRefundDao()->findRefundByOrderId($orderId);
     }
 
     protected function getLogService()

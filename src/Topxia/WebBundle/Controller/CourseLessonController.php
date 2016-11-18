@@ -3,6 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -179,7 +181,10 @@ class CourseLessonController extends BaseController
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
             }
         }
-
+        $this->dispatchEvent(
+            'course.preview',
+            new ServiceEvent($course, array('userId' => $user['id']))
+        );
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
             'course'                    => $course,
@@ -791,6 +796,22 @@ class CourseLessonController extends BaseController
         }
 
         return $message;
+    }
+
+    public function getDispatcher()
+    {
+        return ServiceKernel::dispatcher();
+    }
+
+    protected function dispatchEvent($eventName, $subject)
+    {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     protected function getCourseService()

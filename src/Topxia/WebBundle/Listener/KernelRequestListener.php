@@ -34,6 +34,10 @@ class KernelRequestListener
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }
+            
+            if (stripos($request->getPathInfo(), '/crm') === 0) {
+                return;
+            }            
 
             if (stripos($request->getPathInfo(), '/hls') === 0) {
                 return;

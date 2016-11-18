@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -448,7 +449,14 @@ class CourseController extends CourseBaseController
         }
         
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
-
+        $refund = array(
+            'targetId' => $course['id'],
+            'targetType' => 'course'
+        );
+        $this->dispatchEvent(
+            'learn.refund',
+            new ServiceEvent($refund, array('userId' => $user['id']))
+        );
         return $this->createJsonResponse(true);
     }
 
@@ -884,6 +892,21 @@ class CourseController extends CourseBaseController
         }
 
         return true;
+    }
+
+    public function getDispatcher()
+    {
+        return ServiceKernel::dispatcher();
+    }
+
+    protected function dispatchEvent($eventName, $subject)
+    {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     protected function getTokenService()

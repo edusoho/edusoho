@@ -114,7 +114,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
-            $orderBy = array('recommendedSeq', 'ASC');
+            $orderBy = array('recommendedSeq', 'ASC', 'recommendedTime', 'DESC');
         } elseif ($sort == 'createdTimeByAsc') {
             $orderBy = array('createdTime', 'ASC');
         } else {
