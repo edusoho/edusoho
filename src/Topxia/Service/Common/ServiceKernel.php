@@ -338,7 +338,7 @@ class ServiceKernel
 
     public function getBiz(Biz $biz)
     {
-        return $this->biz = $biz;
+        return $this->biz;
     }
 
     protected function getClassMap($type)
