@@ -336,7 +336,7 @@ class ServiceKernel
         return $this;
     }
 
-    public function getBiz(Biz $biz)
+    public function getBiz()
     {
         return $this->biz;
     }
