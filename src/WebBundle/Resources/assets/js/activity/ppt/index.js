@@ -1,5 +1,6 @@
 import Emitter from "common/es-event-emitter";
 import screenfull from "screenfull";
+import ActivityEmitter from "../activity-emitter";
 
 class PPT extends Emitter {
   constructor({element, slides, watermark}) {
@@ -161,8 +162,9 @@ class PPT extends Emitter {
     this.page = $(e.target).val();
   }
 }
+
 let watermarkUrl = $('#activity-ppt-content').data('watermarkUrl');
-let eventUrl = $('#activity-ppt-content').data('eventUrl');
+let emitter = new ActivityEmitter();
 let createPPT = (watermark) => {
   let ppt = new PPT({
     element: '#activity-ppt-content',
@@ -171,15 +173,11 @@ let createPPT = (watermark) => {
   });
 
   return ppt.once('end', () => {
-    $.post(eventUrl, {
-      event: 'finish'
-    })
-        .then(() => {
-          console.log('PPT活动完成');
-        })
-        .fail(() => {
-          console.log('finish事件上报出错');
-        });
+    emitter.emit('finish').then(() => {
+      console.log('ppt.finish');
+    }).catch((error) => {
+      console.error(error);
+    });
   });
 };
 

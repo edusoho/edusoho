@@ -1,9 +1,9 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'WebBundle:Activity:content-layout.html.twig' %}
 
 {% do script(['web/activity/ppt/index.js']) %}
 
 {% block body %}
-  <div id="activity-ppt-content" data-event-url=""
+  <div id="activity-ppt-content"
        data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
       {{ error.message|raw }}
