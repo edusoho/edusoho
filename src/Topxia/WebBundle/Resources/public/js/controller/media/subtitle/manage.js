@@ -24,7 +24,7 @@ define(function(require,exports,module){
     var subtitleList = $subtitleListElem.data('subtitleList');
     select.init({
         id:'#track-select',
-        optionLimit:4
+        optionsLimit:4
     });
     select.resetOptions(subtitleList);
     select.on('valuechange',function(data){

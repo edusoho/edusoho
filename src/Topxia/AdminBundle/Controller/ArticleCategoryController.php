@@ -10,10 +10,6 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryStructureTree();
 
-        foreach ($categories as &$category) {
-            $category['url'] = $this->generateUrl('article_category', array('categoryCode' => $category['code']));
-        }
-
         return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
             'categories' => $categories
         ));
@@ -130,6 +126,7 @@ class ArticleCategoryController extends BaseController
     protected function renderTbody()
     {
         $categories = $this->getCategoryService()->getCategoryTree();
+
         return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
             'categories'   => $categories,
             'categoryTree' => $categories

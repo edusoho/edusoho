@@ -62,7 +62,7 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        list($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum) = $this->getDifferentCoursesNum($courses);
+        list($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum) = $this->getDifferentCoursesNum($conditions);
 
         $classrooms = array();
         $vips       = array();
@@ -113,8 +113,15 @@ class CourseController extends BaseController
         ));
     }
 
-    protected function getDifferentCoursesNum($courses)
+    protected function getDifferentCoursesNum($conditions)
     {   
+        $courses   = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            0,
+            PHP_INT_MAX
+        );
+
         $searchCoursesNum      = 0;
         $publishedCoursesNum   = 0;
         $closedCoursesNum      = 0;

@@ -349,7 +349,6 @@ define(function(require, exports, module) {
         var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
             var $container = $form.find('#subtitle-form-group');
-            $container.removeClass('hidden');
             $container.find('.js-subtitle-list').html('加载字幕...');
             if ($container.length > 0) {
                 $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
