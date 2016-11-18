@@ -13,9 +13,14 @@
         <i class="es-icon es-icon-viewcomfy"></i>
         {{'%name%列表'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
       </div>
-      <a class="btn btn-primary btn-lg more" href="{{ path('course_explore') }}">
-        {{'查看课程'|trans}}
-      </a>
+      <div class="more">
+        <a class="btn btn-primary btn-lg" href="{{ path('course_explore') }}">
+          {{'查看课程'|trans}}
+        </a>
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{'查看公开课'|trans}}
+        </a>
+      </div>
     </div>
   </div>
   

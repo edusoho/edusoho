@@ -15,6 +15,9 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, payment.enabled) }}
+      <div class="help-block">
+        {{ '开启后，网站收入将自动到达配置的支付宝、微信支付或网银账号中。'|trans }}
+      </div>
     </div>
   </div>
     

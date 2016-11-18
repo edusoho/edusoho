@@ -64,6 +64,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             unset($conditions['keywords']);
         }
 
+        if (!empty($conditions['resourceType'])) {
+            $conditions['resType'] = $conditions['resourceType'];
+            unset($conditions['resourceType']);
+        }
+
         $globalIds = array();
 
         for ($i = 0; $i < count($noArray); $i++) {
