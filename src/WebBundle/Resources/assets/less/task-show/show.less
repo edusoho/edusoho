@@ -1,7 +1,7 @@
 .task-dashboard-page {
   background-color: #111111;
   height: 100%;
-  padding-right: 442px;
+  padding-right: 360px;
   overflow: hidden;
   &.open {
     padding-right: 0;
@@ -12,11 +12,11 @@
   .dashboard-content {
     position: absolute;
     left: 26px;
-    right: 442px+19px;
+    right: 360px+19px;
     top:0;
     padding-top: 54px;
-    bottom: 26px;
-    .dashboard-header {
+    bottom: 60px;
+    .dashboard-header{
       position: absolute;
       top:0;
       left: 0;
@@ -35,6 +35,17 @@
         }
       }
     }
+    .dashboard-footer {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      padding: 15px 0;
+      color:@gray;
+      z-index: 1;
+      text-align: right;
+    }
     .dashboard-body {
       position: relative;
       background-color: #fff;
@@ -46,7 +57,7 @@
     right: 0;
     top:0;
     bottom: 0;
-    width: 442px;
+    width: 360px;
     .dashboard-sidebar-content {
       position: relative;
       height: 100%;

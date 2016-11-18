@@ -16,11 +16,29 @@
         <i class="es-icon es-icon-chevronleft"></i>
       </a>
       任务1：{{activity.title}} 
-      <a class="btn-gray pull-right" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-help mrm"></i>任务完成条件</a>
     </div>
     <div class="dashboard-body">
       <iframe id="task-content-iframe" class="task-content-iframe" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}" style="width:100%;height:100%;border:0px">
       </iframe>
+    </div>
+    <div class="dashboard-footer">
+      <!--只有客观条件 -->
+
+        <!--未达到完成条件-->
+        <a class="btn btn-gray text-sm" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
+        <!-- 达到完成条件：step1:3秒后消失-->
+        <a class="btn text-sm" href="javascript:;" ><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>XXX任务已完成</a>
+        <!-- 达到完成条件：step2:-->
+         <a class="btn text-sm" href="javascript:;" ><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成</a>
+
+
+
+
+      <a class="btn btn-gray text-sm" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
+      <!-- 条件： 开启使用学过了按钮-->
+      <a class="btn btn-primary">学过了</a>
+      <!-- 条件： 1、达到客观条件自动触发，2、手动触发 -->
+      <a class="btn btn-primary"><i class="es-icon es-icon-iccheckcircleblack24px"></i>学过了</a>
     </div>
   </div>
   <div class="dashboard-sidebar" id="dashboard-sidebar">
