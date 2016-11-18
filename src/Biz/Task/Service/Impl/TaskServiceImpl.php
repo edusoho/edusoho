@@ -5,13 +5,12 @@ namespace Biz\Task\Service\Impl;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Dao\TaskResultDao;
 use Biz\Task\Service\TaskResultService;
-use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Service\Course\CourseService;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -124,9 +123,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $activityConfigs = $this->getActivityService()->getActivityTypes();
-        $activities      = $this->getActivityService()->getActivities(array_column($tasks, 'activityId'));
+        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
 
-        $activityMap     = array();
+        $activities = $this->getActivityService()->getActivities($activityIds);
+
+        $activityMap = array();
         foreach ($activities as $act) {
             $activityMap[$act['id']] = $act;
         }
@@ -148,15 +149,15 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-        if(!empty($taskResult)){
+        if (!empty($taskResult)) {
             return;
         }
 
         $taskResult = array(
-            'activityId' => $task['id'],
-            'courseId'   => $task['courseId'],
+            'activityId'   => $task['id'],
+            'courseId'     => $task['courseId'],
             'courseTaskId' => $task['id'],
-            'userId'     => $user['id']
+            'userId'       => $user['id']
         );
 
         $this->getTaskResultService()->createTaskResult($taskResult);
@@ -168,7 +169,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-        if(empty($taskResult)){
+        if (empty($taskResult)) {
             throw new AccessDeniedException('该任务不在进行状态');
         }
 
@@ -181,7 +182,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($taskId);
 
-        if(empty($task)){
+        if (empty($task)) {
             throw new ResourceNotFoundException('task', $taskId);
         }
 
@@ -212,7 +213,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $h = floor($len / 60);
         $m = fmod($len, 60);
         //TODO 目前没考虑秒
-        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':00';
+        return ($h < 10 ? '0' . $h : $h) . ':' . ($m < 10 ? '0' . $m : $m) . ':00';
     }
 
     protected function invalidTask($task)
