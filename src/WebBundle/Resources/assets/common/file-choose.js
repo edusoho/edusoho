@@ -35,6 +35,4 @@ $("#material a").click(function (e) {
     $this.find('[type="radio"]').prop('checked','checked');
     $this.closest('li').siblings('li').find('[type="radio"]').prop('checked',false);
     $this.tab('show')
-    var $parentIframe = $(window.parent.document).find('#task-manage-content-iframe');
-    $parentIframe.height($parentIframe.contents().find('body').height());
 });

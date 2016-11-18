@@ -6,7 +6,6 @@ import Emitter from 'es6-event-emitter';
 class Chooser extends Emitter {
     constructor() {
         super();
-        this.$parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
     }
     _open() {
         $('.file-chooser-bar').addClass('hidden');

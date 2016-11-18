@@ -21,10 +21,8 @@ export default class UploaderChooser extends Emitter{
   }
 
   open() {
-    let $iframe = $(window.parent.document).find('#task-manage-content-iframe');
     $('.file-chooser-bar').addClass('hidden');
     $('.file-chooser-main').removeClass('hidden');
-    $iframe.height($iframe.contents().find('body').height());
     return this;
   }
 
@@ -84,8 +82,6 @@ export default class UploaderChooser extends Emitter{
   destroy() {
     $('.file-chooser-main').addClass('hidden');
     $('.file-chooser-bar').removeClass('hidden');
-    let $iframe = $(window.parent.document).find('#task-manage-content-iframe');
-    $iframe.height($iframe.contents().find('body').height());
 
     if(this._sdk === undefined){
       return;
