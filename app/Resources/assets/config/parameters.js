@@ -9,6 +9,7 @@ const parameters = {
     // 'src/Topxia/WebBundle',
     'plugins/CrmPlugin'
     // 'src/Topxia/AdminBundle',
+
   ],
   output: {
     path : '../../../../web/build', //file output path, relative to this file
