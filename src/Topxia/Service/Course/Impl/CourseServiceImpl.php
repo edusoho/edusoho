@@ -9,6 +9,7 @@ use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -2219,9 +2220,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->deleteMembersByCourseId($courseId);
     }
 
-    public function findUserJoinedCourseIds($userId, $joinedType = 'course')
+    public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        return $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
+        return ArrayToolkit::column($courseIds, 'courseId');
     }
 
     public function becomeStudent($courseId, $userId, $info = array())

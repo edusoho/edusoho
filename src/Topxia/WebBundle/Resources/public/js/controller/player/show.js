@@ -34,6 +34,27 @@ define(function(require, exports, module) {
         var disableVolumeButton = videoHtml.data('disableVolumeButton');
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
+        var subtitlesData = videoHtml.data('subtitles');
+        var subtitles = [];
+        if (subtitlesData) {
+            for (var i in subtitlesData) {
+                var item = {
+                    label: subtitlesData[i].name,
+                    src: subtitlesData[i].url,
+                    default: ("default" in subtitlesData[i]) ? subtitlesData[i].default : false
+                }
+                subtitles.push(item);
+            }
+        }
+
+        // set first item to default if no default
+        for (var i in subtitles) {
+            if (subtitles[i].default) {
+                return;
+            }
+            subtitles[0].default = true;
+        }
+
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
@@ -77,7 +98,8 @@ define(function(require, exports, module) {
                     userId : userId,
                     userName : userName
                 },
-                videoHeaderLength: videoHeaderLength
+                videoHeaderLength: videoHeaderLength,
+                textTrack: subtitles
             }
         );
 

@@ -1,13 +1,13 @@
 define(function (require, exports, module) {
     require('jquery.sortable');
     var Widget = require('widget');
-    var Messenger = require('../player/messenger');
 
     var DraggableWidget = Widget.extend({
         attrs: {
             item: '.item-lesson',
             placeholder: '.placeholder',
             _video_time: '18', //视频总时长
+            messenger: {},
             editbox: '.editbox',
             scalebox: '.js-scalebox',
             timepartnum: '6',
@@ -53,22 +53,10 @@ define(function (require, exports, module) {
             this.initPlayer();
         },
         initPlayer: function () {
+            messenger = this.get('messenger');
             var _self = this;
             var changeleft = true;
             var $editbox_list = $('#editbox-lesson-list');
-            var videoHtml = $('#lesson-dashboard');
-            var courseId = videoHtml.data("course-id");
-            var lessonId = videoHtml.data("lesson-id");
-            var mediaId = videoHtml.data("lesson-mediaid");
-            var playerUrl = '/course/' + courseId + '/lesson/' + lessonId + '/player?hideBeginning=true&hideQuestion=1';
-            var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-            $("#lesson-video-content").html(html);
-            var messenger = new Messenger({
-                name: 'parent',
-                project: 'PlayerProject',
-                children: [document.getElementById('viewerIframe')],
-                type: 'parent'
-            });
             messenger.on("timechange", function (data) {
                 if (changeleft) {
                     $('.scale-white').css('left', _self._getleft(data.currentTime));
@@ -476,116 +464,7 @@ define(function (require, exports, module) {
             return Math.round((left - 20) * this.get('_video_time') / $('#editbox-lesson-list').width());
         },
     });
-    // 未避免初始化前端排序操作，将questionMarkers按生序方式返回，可省略questionMarkers.seq
-    var initMarkerArry = [];
-    var mediaLength = 30;
-    $.ajax({
-        type: "get",
-        url: $('.js-pane-question-content').data('marker-metas-url'),
-        cache: false,
-        async: false,
-        success: function (data) {
-            initMarkerArry = data.markersMeta;
-            mediaLength = data.videoTime;
-        }
-    });
+    
+    module.exports = DraggableWidget;
 
-    var myDraggableWidget = new DraggableWidget({
-        element: "#lesson-dashboard",
-        initMarkerArry: initMarkerArry,
-        _video_time: mediaLength,
-        addScale: function (markerJson, $marker, markers_array) {
-            var url = $('.js-pane-question-content').data('queston-marker-add-url');
-            var param = {
-                markerId: markerJson.id,
-                second: markerJson.second,
-                questionId: markerJson.questionMarkers[0].questionId,
-                seq: markerJson.questionMarkers[0].seq
-            };
-            $.post(url, param, function (data) {
-                if (data.id == undefined) {
-                    return;
-                }
-                //新增时间刻度
-                if (markerJson.id == undefined) {
-                    $marker.attr('id', data.markerId);
-                    markers_array.push({id: data.markerId, time: markerJson.second});
-                    //排序
-
-                }
-                $marker.removeClass('hidden');
-                $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
-            });
-            return markerJson;
-        },
-        mergeScale: function (markerJson, $marker, $merg_emarker, markers_array) {
-            var url = $('.js-pane-question-content').data('marker-merge-url');
-            $.post(url, {
-                sourceMarkerId: markerJson.id,
-                targetMarkerId: markerJson.merg_id
-            }, function (data) {
-                $marker.remove();
-                for (i in markers_array) {
-                    if (markers_array[i].id == markerJson.id) {
-                        markers_array.splice(i, 1);
-                        break;
-                    }
-                }
-            });
-            return markerJson;
-        },
-        updateScale: function (markerJson, $marker) {
-            var url = $('.js-pane-question-content').data('marker-update-url');
-            var param = {
-                id: markerJson.id,
-                second: markerJson.second
-            };
-            if(markerJson.second){
-                $.post(url, param, function (data) {
-                });
-            }else{
-                console.log('do not need upgrade scale...');
-            }
-            return markerJson;
-        },
-        deleteScale: function (markerJson, $marker, $marker_question, marker_questions_num, markers_array) {
-            var url = $('.js-pane-question-content').data('queston-marker-delete-url');
-            $.post(url, {
-                questionId: markerJson.questionMarkers[0].id
-            }, function (data) {
-                $marker_question.remove();
-                $('#subject-lesson-list').find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
-                if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
-                    $marker.remove();
-                    for (i in markers_array) {
-                        if (markers_array[i].id == $marker.attr('id')) {
-                            markers_array.splice(i, 1);
-                            break;
-                        }
-                    }
-                } else {
-                    //剩余排序
-                    sortList($marker.find('[data-role="scale-blue-list"]'));
-                }
-            });
-        },
-        updateSeq: function ($scale, markerJson) {
-            if (markerJson == undefined || markerJson.questionMarkers == undefined || markerJson.questionMarkers.length == 0) {
-                return;
-            }
-
-            var url = $('.js-pane-question-content').data('queston-marker-sort-url');
-            param = new Array();
-
-            for (var i = 0; i < markerJson.questionMarkers.length; i++) {
-                param.push(markerJson.questionMarkers[i].id);
-            }
-
-            $.post(url, {questionIds: param});
-        }
-    });
-
-    function sortList($list) {
-        myDraggableWidget._sortList($list);
-    }
 });

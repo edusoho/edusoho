@@ -44,6 +44,12 @@
                   {{'折后价'|trans}}：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> {{'元'|trans}}</strong>。
                 </div>
               {% endif %}
+              <div class="alert alert-info">
+                <p>1.免费课程：即价格设置为“0”的课程，必须要登录才能加入学习。</p>
+                <p>2.免费课时：即勾选了课时标题旁【免费课时】的课时，课时标题前，有“免费”标签。</p>
+                <p>3.免费试看：即设置了试看时长并且有“试看”标签的课时，目前只有云视频支持试看。</p>
+                <p>4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费课时允许未登录用户观看】。</p>
+              </div>
             </div>
           </div>
         {% endif %}
@@ -78,7 +84,7 @@
             <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
             <div class="col-md-8 controls radios">
               {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
-              <div class="help-block">{{'视频试看功能仅云视频支持'|trans}}</div>
+              <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
             </div>
         </div>
 
@@ -106,7 +112,6 @@
     {% else %}
       <div class="alert alert-danger">{{'抱歉，您无权设置课程价格，如有需要请联系网站管理员！'|trans}}</div>
     {% endif %}
-
   </div>
 </div>
 {% endblock %}

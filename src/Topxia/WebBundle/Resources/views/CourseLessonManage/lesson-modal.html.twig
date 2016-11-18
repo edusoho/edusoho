@@ -32,12 +32,19 @@
     <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
     <div class="col-md-9 controls">
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}</label>
+            <label style="display: inline-block;"><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}
+              <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-free-lesson-data-popover"></span>
+              <div class="popover-content hidden">
+                <div class="popover-item">
+                  <div class="content">{{ '若希望未登录用户能观看免费课时，需管理员在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费课时允许未登录用户观看】。'|trans }}</div>
+                </div>
+              </div>
+            </label>
           </div>
         </div>
       </div>
@@ -45,9 +52,10 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode|default('local') == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
-    <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'简介'|trans}}</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'简介'|trans}}</label>
+    </div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
-
+    <div class="help-block">{{'此处填写的内容将显示在该课时学习页右侧的【资料区】。'|trans}}</div>
     </div>
   </div>
 

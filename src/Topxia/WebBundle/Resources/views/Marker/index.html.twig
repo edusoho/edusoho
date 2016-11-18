@@ -13,13 +13,15 @@
     {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
-        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">随堂练习</a></li>
-        <li role="presentation" class="hidden"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">字幕</a></li>
+        <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">随堂练习</a></li>
+        <li role="presentation" class="" style="display: none">
+          <a href="#text-track" aria-controls="text-track" role="tab" data-toggle="tab">字幕</a>
+        </li>
         <li class="static" role="presentation">
           <a>
             <!-- border show-introhelp-->
             <span class=" show-introhelp">
-              <i class="es-icon es-icon-xinxi introhelp-icon-help" id="step-1" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="为保险起见，所有对视频的编辑操作都将实时保存。"></i>
+              <i class="es-icon es-icon-xinxi introhelp-icon-help color-warning" id="step-1" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="为保险起见，所有对视频的编辑操作都将实时保存。"></i>
               <div class="popover bottom" >
                 <div class="arrow"></div>
                 <div class="popover-content clearfix">
@@ -34,10 +36,9 @@
       <a href="{{ path('course_lesson_marker_manage_preview', {courseId:course.id,lessonId:lesson.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览'|trans}}</a>
 
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active pane-question js-pane-question" id="home" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}">
+        <div role="tabpanel" class="tab-pane active pane-question js-pane-question" id="practice" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}">
         </div>
-        <div role="tabpanel" class="tab-pane" id="profile">
-          字幕
+        <div role="tabpanel" class="tab-pane panel-texttrack" id="text-track" data-url="{{ path('subtitle_manage',{courseId:course.id,lessonId:lesson.id}) }}">
         </div>
       </div>
     </div>

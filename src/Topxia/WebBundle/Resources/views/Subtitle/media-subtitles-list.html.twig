@@ -1,0 +1,22 @@
+<style type="text/css">
+  .subtitle-list {
+    max-height: 80px;
+    overflow-y: auto;
+  }
+  .subtitle-label, .subtitle-delete {
+    cursor: pointer;
+  }
+</style>
+
+<ul class="subtitle-list list-unstyled">
+  {% for subtitle in subtitles %}
+    <li class="subtitle-list-item clearfix">
+      <span class="subtitle-label pull-left plm" data-url="{{ subtitle.url|default('') }}">
+        {{ subtitle.name }}
+      </span>
+      <a class="subtitle-delete pull-right text-warning prm" data-url="{{ path('subtitle_delete', {courseId: courseId, id: subtitle.id}) }}">
+        <i class="fa fa-trash-o"></i>
+      </a>
+    </li>
+  {% endfor %}
+</ul>

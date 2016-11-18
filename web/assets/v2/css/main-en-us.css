@@ -1867,6 +1867,39 @@ select:-webkit-autofill {
   white-space: nowrap;
   word-wrap: normal;
 }
+.modal-live-remind .modal-body {
+  padding: 40px;
+}
+.modal-live-remind .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.modal-live-remind .media-left img {
+  width: 160px;
+  max-width: 160px;
+}
+.modal-live-remind .media-body h4 {
+  color: #313131;
+  font-size: 16px;
+}
+.modal-live-remind .media-body p {
+  color: #919191;
+  font-size: 12px;
+}
+.modal-live-remind .live-countdown {
+  font-size: 22px;
+  color: #313131;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.modal-live-remind .live-countdown span {
+  color: #ff8a0c;
+  font-size: 40px;
+}
+.modal-live-remind .btn {
+  width: 300px;
+}
 .navbar {
   margin-bottom: 0;
   z-index: 99;
@@ -3357,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3377,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -9813,6 +9846,7 @@ textarea {
   padding: 15px 10px 5px 5px;
   cursor: pointer;
 }
+<<<<<<< HEAD
 .course-tasks-modal .course-tasks-type {
   padding: 0;
 }
@@ -9830,6 +9864,26 @@ textarea {
 .course-tasks-modal .course-tasks-type .course-tasks-type-item i {
   display: block;
   font-size: 40px;
+=======
+.dashboard-panel .course-dashboard-ul {
+  list-style-type: none;
+}
+.dashboard-panel .course-dashboard-ul li {
+  width: 33%;
+  float: left;
+  margin: 20px auto;
+  padding: 0 5px;
+  text-align: center;
+}
+.dashboard-panel .course-dashboard-ul li .title {
+  font-size: 14px;
+  color: #333;
+  margin-top: 0;
+}
+.dashboard-panel .course-dashboard-ul li .number {
+  font-weight: 500;
+  font-size: 24px;
+>>>>>>> feature/x8
 }
 .class-bg-layer {
   position: absolute;
@@ -10931,7 +10985,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -12823,6 +12877,7 @@ textarea {
   top: 0;
   width: 70%;
   height: 60px;
+<<<<<<< HEAD
 }
 .marker-manage-content .manage-player-body .manage-player-header .title-link {
   float: left;
@@ -12840,6 +12895,25 @@ textarea {
 .marker-manage-content .manage-player-body .manage-player-content {
   height: 100%;
 }
+=======
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link {
+  float: left;
+  font-size: 16px;
+  color: #fff;
+  line-height: 60px;
+  margin-right: 20px;
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link i {
+  font-size: 16px;
+}
+.marker-manage-content .manage-player-body .manage-player-header .title-link:hover {
+  color: #46c37b;
+}
+.marker-manage-content .manage-player-body .manage-player-content {
+  height: 100%;
+}
+>>>>>>> feature/x8
 .marker-manage-content .manage-player-body .mask {
   position: absolute;
   width: 100%;
@@ -12854,6 +12928,7 @@ textarea {
   height: 100%;
   background-color: #414141;
   color: #f5f5f5;
+<<<<<<< HEAD
 }
 .marker-manage-content .manage-edit-body .btn-preview {
   position: absolute;
@@ -12886,6 +12961,40 @@ textarea {
   color: #919191;
   margin-bottom: 12px;
 }
+=======
+}
+.marker-manage-content .manage-edit-body .btn-preview {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+}
+.marker-manage-content .manage-edit-body .tab-pane {
+  padding: 30px 0 30px 20px;
+  position: relative;
+}
+.marker-manage-content .manage-edit-body .btn-search {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  padding: 9px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  color: #616161;
+}
+.marker-manage-content .manage-edit-body .btn-search:focus {
+  outline: none;
+}
+.marker-manage-content .manage-edit-body .question-difficulty {
+  padding-bottom: 30px;
+}
+.marker-manage-content .manage-edit-body .question-remask {
+  padding-top: 24px;
+  border-top: 1px solid #616161;
+  color: #919191;
+  margin-bottom: 12px;
+}
+>>>>>>> feature/x8
 .marker-manage-content .manage-edit-body .question-remask .remask-icon {
   color: #ff8a0c;
   font-size: 16px;
@@ -12999,6 +13108,7 @@ textarea {
   -moz-animation: boxshow 1s ease infinite;
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
+<<<<<<< HEAD
 }
 .marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .scale-details,
 .marker-manage-content .editbox .scalebox .scale.scale-blue:hover .scale-details {
@@ -13021,6 +13131,30 @@ textarea {
   top: 26px;
   border-color: #fff;
 }
+=======
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .scale-details,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .line {
+  -moz-animation: boxshow 0 ease infinite;
+  -webkit-animation: boxshow 0 ease infinite;
+  animation: boxshow 0 ease infinite;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-white .line {
+  height: 106px;
+  top: 26px;
+  border-color: #fff;
+}
+>>>>>>> feature/x8
 .marker-manage-content .editbox .scalebox .scale.scale-white .line i {
   position: absolute;
   left: -8.5px;
@@ -13043,6 +13177,7 @@ textarea {
   left: 0;
   height: 25px;
   border-left: 1px solid #616161;
+<<<<<<< HEAD
 }
 .marker-manage-content .editbox .scalebox .scale .line.line-dashed {
   top: 32px;
@@ -13147,6 +13282,291 @@ textarea {
   padding-bottom: 5px;
   border-bottom: 1px solid #e6e6e6;
   margin-bottom: 10px;
+=======
+}
+.marker-manage-content .editbox .scalebox .scale .line.line-dashed {
+  top: 32px;
+  height: 100px;
+  border-left: 1px dashed #a3a3a3;
+}
+.marker-manage-content .editbox .scalebox .scale .scale-time {
+  display: inline-block;
+  font-size: 12px;
+  -webkit-transform: scale(0.83);
+}
+.marker-manage .introjs-nextbutton.introjs-fullbutton,
+.marker-manage .introjs-button.introjs-skipbutton {
+  background: transparent;
+  border-color: transparent;
+  color: #919191;
+  margin: 0;
+  padding-right: 0;
+  cursor: pointer;
+}
+.marker-manage .introjs-nextbutton.introjs-fullbutton:hover,
+.marker-manage .introjs-button.introjs-skipbutton:hover,
+.marker-manage .introjs-nextbutton.introjs-fullbutton:focus,
+.marker-manage .introjs-button.introjs-skipbutton:focus {
+  background: transparent;
+  border-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+.marker-manage .introjs-overlay {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.marker-manage .introjs-fixedTooltip {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+.marker-manage .introjs-helperNumberLayer,
+.marker-manage .introjs-skipbutton {
+  display: none;
+}
+.marker-manage .introjs-helperLayer {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+.marker-manage .introjs-arrow.top-middle {
+  margin-left: 0;
+}
+.marker-manage .introjs-tooltip {
+  text-align: justify;
+  font-size: 12px;
+  color: #313131;
+  padding: 15px;
+}
+.marker-manage .introjs-tooltip .title {
+  color: #919191;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.marker-manage .introjs-tooltip .remask {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.marker-manage .intro-img {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  color: #fff;
+  font-size: 20px;
+}
+.marker-manage .intro-img img {
+  display: block;
+  margin-left: 70px;
+}
+.show-introhelp {
+  position: relative;
+}
+.show-introhelp .introhelp-icon-help {
+  position: relative;
+  color: #ff8a0c;
+  z-index: 9999999!important;
+}
+.show-introhelp .introhelp-icon-drag {
+  position: relative;
+  color: #fff;
+  z-index: 9999999!important;
+}
+.show-introhelp .popover {
+  display: none;
+  font-size: 12px;
+  color: #313131;
+}
+.show-introhelp .popover .title {
+  color: #919191;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 10px;
+}
+.show-introhelp .popover.bottom {
+  top: 18px;
+  left: -92px;
+}
+.show-introhelp .popover.left {
+  left: -230px;
+  top: 90px;
+}
+.show-introhelp .introhelp-img {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #fff;
+  font-size: 14px;
+}
+.show-introhelp .introhelp-img img {
+  display: block;
+  margin-left: 50px;
+}
+.show-introhelp .close-introhelp {
+  float: right;
+  color: #919191;
+  cursor: pointer;
+}
+.show-introhelp.show .popover {
+  display: block;
+}
+.introhelp-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  background-color: #000;
+}
+.marker-preview {
+  height: 100%;
+  background-color: #f1f4f6;
+}
+.marker-preview .marker-preview-content {
+  position: relative;
+  height: 100%;
+  padding-top: 20px;
+  color: #313131;
+  text-align: center;
+}
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content {
+    padding-top: 10px;
+  }
+}
+.marker-preview .marker-preview-content .title {
+  font-size: 20px;
+  line-height: 1;
+}
+.marker-preview .marker-preview-content .marker-preview-player {
+  position: absolute;
+  left: 120px;
+  right: 120px;
+  top: 60px;
+  bottom: 20px;
+}
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content .marker-preview-player {
+    bottom: 10px;
+    top: 40px;
+  }
+}
+.mark-questions-modal {
+  width: 756px;
+}
+.mark-questions-modal .modal-header {
+  position: relative;
+  padding: 20px 30px;
+  color: #fff;
+  border-color: #fff;
+  border-bottom: 1px solid #F5F8FA;
+}
+.mark-questions-modal .modal-header .close {
+  margin-top: -25px;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  font-size: 26px;
+  color: #616161;
+}
+.mark-questions-modal .modal-title {
+  font-size: 18px;
+  line-height: 18px;
+  text-align: left;
+  color: #313131;
+}
+.mark-questions-modal .modal-content {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.mark-questions-modal .modal-body {
+  padding: 15px 30px;
+}
+.mark-questions-modal .topic-bottom {
+  padding-bottom: 20px;
+  font-size: 14px;
+  color: #fff;
+  color: #616161;
+  line-height: 40px;
+  text-align: left;
+  background-color: #F5F8FA;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.mark-questions-modal .topic-bottom .topic-bottom-info {
+  line-height: 34px;
+  padding: 20px 30px 0;
+  color: #919191;
+}
+.mark-questions-modal .topic-bottom .topic-bottom-info .btn {
+  float: right;
+  margin-left: 20px;
+}
+.mark-questions-modal .popup-topic {
+  padding: 0;
+  margin: 0;
+  height: 300px;
+  overflow: auto;
+  list-style-type: none;
+}
+.mark-questions-modal .popup-topic img {
+  max-width: 100%;
+  vertical-align: top;
+}
+.mark-questions-modal .popup-topic p {
+  margin-bottom: 0;
+}
+.mark-questions-modal .popup-topic .title {
+  margin-bottom: 14px;
+  line-height: 30px;
+  font-size: 18px;
+  color: #313131;
+}
+.mark-questions-modal .popup-topic .list {
+  padding: 10px 0 10px 40px;
+  line-height: 30px;
+  cursor: pointer;
+  cursor: default;
+  position: relative;
+}
+.mark-questions-modal .popup-topic .list .num {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 1px solid #c1c1c1;
+  color: #c1c1c1;
+  font-size: 14px;
+  text-align: center;
+  line-height: 22px;
+}
+.mark-questions-modal .popup-topic.topic-resolve .list {
+  min-height: 200px;
+  padding: 20px;
+  margin-bottom: 15px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  cursor: default;
+  background-color: #f5f8fa;
+}
+.mark-questions-modal .question-stem-fill-blank {
+  color: #313131;
+>>>>>>> feature/x8
 }
 .show-introhelp .popover.bottom {
   top: 18px;

@@ -17,7 +17,7 @@
       {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, payment.enabled) }}
     </div>
   </div>
-
+    
   <div class="form-group">
     <div class="col-md-3 control-label">
       <label for="disabled_message">{{'支付关闭时的提示信息'|trans}}</label>
@@ -41,5 +41,4 @@
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-
 {% endblock %}

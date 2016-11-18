@@ -1,8 +1,10 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
 use Topxia\Service\User\CurrentUser;
@@ -31,8 +33,14 @@ class ServiceKernel
     protected $currentUser;
 
     protected $pool = array();
+    protected $connection;
 
     protected $classMaps = array();
+
+    /**
+     * @var Biz
+     */
+    protected $biz = null;
 
     public function getRedis($group = 'default')
     {
@@ -75,13 +83,16 @@ class ServiceKernel
         return self::$_instance;
     }
 
+    /**
+     * @return EventDispatcherInterface
+     */
     public static function dispatcher()
     {
         if (self::$_dispatcher) {
             return self::$_dispatcher;
         }
 
-        self::$_dispatcher = new EventDispatcher();
+        self::$_dispatcher = self::instance()->biz['dispatcher'];
 
         return self::$_dispatcher;
     }
@@ -125,7 +136,7 @@ class ServiceKernel
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
 
         foreach ($subscribers as $subscriber) {
-            $this->dispatcher()->addSubscriber(new $subscriber());
+            $this->biz['subscribers'][] = $subscriber;
         }
     }
 
@@ -221,17 +232,7 @@ class ServiceKernel
      */
     public function getConnection()
     {
-        if (is_null($this->connection)) {
-            throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
-        }
-
-        return $this->connection;
-    }
-
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
-        return $this;
+        return $this->biz['db'];
     }
 
     public function createService($name)
@@ -248,7 +249,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
-            $dao   =new $class();
+            $dao   = new $class();
             $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
@@ -303,25 +304,6 @@ class ServiceKernel
         return strtr((string) $message, $arguments);
     }
 
-    public function setPluginKernel($pluginKernel)
-    {
-        $this->pluginKernel = $pluginKernel;
-    }
-
-    public function getPluginKernel()
-    {
-        if (is_null($this->pluginKernel)) {
-            throw new \RuntimeException('The pluginKernel of ServiceKernel is not setted!');
-        }
-
-        return $this->pluginKernel;
-    }
-
-    public function placeHook($hookName, $subject)
-    {
-        $this->getPluginKernel()->placeHook($hookName, $subject);
-    }
-
     protected function getClassName($type, $name)
     {
         $classMap = $this->getClassMap($type);
@@ -346,6 +328,12 @@ class ServiceKernel
         }
 
         return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+    }
+
+    public function setBiz(Biz $biz)
+    {
+        $this->biz = $biz;
+        return $this;
     }
 
     protected function getClassMap($type)

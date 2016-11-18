@@ -25,7 +25,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.2.13'
+        version: '7.2.15'
         packages:
             webpack:
                 base_urls:
@@ -42,30 +42,6 @@ twig:
         "%kernel.root_dir%/../" : root
     globals:
         disabled_features: "%disabled_features%"
-
-# Doctrine Configuration
-# doctrine:
-#     dbal:
-#         default_connection: default
-#         types:
-#             enum: Topxia\Common\DoctrineEnumType
-#         connections:
-#             default:
-#                 wrapper_class: Topxia\Service\Common\Connection
-#                 driver:   "%database_driver%"
-#                 host:     "%database_host%"
-#                 port:     "%database_port%"
-#                 dbname:   "%database_name%"
-#                 user:     "%database_user%"
-#                 password: "%database_password%"
-#                 charset:  UTF8
-
-#                 mapping_types:
-#                     enum: string
-
-#     orm:
-#         auto_generate_proxy_classes: "%kernel.debug%"
-#         auto_mapping: true
 
 # Swiftmailer Configuration
 # swiftmailer:

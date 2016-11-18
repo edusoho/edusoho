@@ -6,7 +6,6 @@
  */
 const parameters = {
   registeredBundles: [ //register php bundles
-    'Topxia/WebBundle',
     'WebBundle',
   ],
   output: {
