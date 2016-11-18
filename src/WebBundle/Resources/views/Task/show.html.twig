@@ -15,11 +15,14 @@
       <a class="back-link" href="javascript:;">
         <i class="es-icon es-icon-chevronleft"></i>
       </a>
-      任务1：{{activity.title}} 
+      任务1：{{ task.title }}
       <a class="btn-gray pull-right" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-help mrm"></i>任务完成条件</a>
     </div>
     <div class="dashboard-body">
-      <iframe id="task-content-iframe" class="task-content-iframe" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}" style="width:100%;height:100%;border:0px">
+      <iframe id="task-content-iframe" class="task-content-iframe"
+              data-event-url="{{ path('course_activity_trigger', {courseId: task.courseId, activityId: task.activityId}) }}"
+              src="{{path('course_task_activity_show',{ id:task.id,courseId:task.courseId })}}"
+              style="width:100%;height:100%;border:0px">
       </iframe>
     </div>
   </div>
