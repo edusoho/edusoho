@@ -21,35 +21,38 @@ class Lesson extends BaseResource
             $lesson['type'] = 'video';
         }
 
-        $courseSetting         = $this->getSettingService()->get('course');
-        $allowAnonymousPreview = isset($courseSetting['allowAnonymousPreview']) ? $courseSetting['allowAnonymousPreview'] : 0;
-
-        if (!$allowAnonymousPreview || ($allowAnonymousPreview && !$lesson['free'])) {
-            $currentUser = $this->getCurrentUser();
-            if (empty($currentUser) || !$currentUser->isLogin()) {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            $courseSetting = $this->getSettingService()->get('course');
+            if (empty($courseSetting['allowAnonymousPreview']) || !$lesson['free']) {
                 return $this->error('not_login', "您尚未登录，不能查看该课时");
-            } else {
-                $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
-                if (!$lesson['free'] && empty($member)) {
+            }
+        } else {
+            if (!$this->getCourseService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
+                if (!$lesson['free']) {
                     return $this->error('not_student', "你不是该课程学员，请加入学习");
                 }
+            } else {
+                $this->getCourseService()->startLearnLesson($lesson['courseId'], $id);
             }
-
-            $this->setStartLesson($lesson['courseId'], $id);
         }
 
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
         }
 
-        return $this->filter($lesson);
+        return $this->filter($this->convertLessonContent($lesson));
     }
 
     public function filter($lesson)
     {
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
+        return $lesson;
+    }
 
+    protected function convertLessonContent($lesson)
+    {
         switch ($lesson['type']) {
             case 'ppt':
                 return $this->getPPTLesson($lesson);
@@ -281,12 +284,26 @@ class Lesson extends BaseResource
         return false;
     }
 
-    protected function setStartLesson($courseId, $lessonId)
+    protected function simplify($res)
     {
-        $user = $this->getCurrentUser();
-        if ($user && $this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
-            $this->getCourseService()->startLearnLesson($courseId, $lessonId);
-        }
+        $lesson = array();
+        $lesson['id'] = $res['id'];
+        $lesson['courseId'] = $res['courseId'];
+        $lesson['chapterId'] = $res['chapterId'];
+        $lesson['number'] = $res['number'];
+        $lesson['seq'] = $res['seq'];
+        $lesson['free'] = $res['free'];
+        $lesson['title'] = $res['title'];
+        $lesson['summary'] = $res['summary'];
+        $lesson['tags'] = $res['tags'];
+        $lesson['type'] = $res['type'];
+        $lesson['giveCredit'] = $res['giveCredit'];
+        $lesson['requireCredit'] = $res['requireCredit'];
+        $lesson['length'] = $res['length'];
+        $lesson['userId'] = $res['userId'];
+        $lesson['createdTime'] = $res['createdTime'];
+        $lesson['updatedTime'] = $res['updatedTime'];
+        return $lesson;
     }
 
     protected function getCourseService()

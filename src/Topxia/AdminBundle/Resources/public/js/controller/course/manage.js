@@ -23,6 +23,7 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.publish-course', function() {
+			var studentNum = $(this).closest('tr').next().val();
 			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
 			$.post($(this).data('url'), function(response) {
 				if (response['message']) {

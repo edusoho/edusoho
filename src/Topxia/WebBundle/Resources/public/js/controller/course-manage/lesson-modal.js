@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     var _ = require('underscore');
+    var SubtitleDialog = require('topxiawebbundle/controller/media/subtitle/dialog');
     require('jquery.sortable');
     require('es-ckeditor');
 
@@ -343,7 +344,26 @@ define(function(require, exports, module) {
             }
 
             $title.val(name.substring(0, name.lastIndexOf('.')));
-        }; 
+        };
+
+        var subtitleDialog = null;
+        var displaySubtitleManage = function(media) {
+            var $container = $form.find('#subtitle-form-group');
+            $container.find('.js-subtitle-list').html('加载字幕...');
+            if ($container.length > 0) {
+                $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
+                    $container.find('.js-subtitle-list').html(html);
+                    subtitleDialog = new SubtitleDialog({
+                        element: '.js-subtitle-dialog'
+                    });
+                });
+            }
+        }
+
+        //显示字幕编辑组件
+        if (choosedMedia && 'id' in choosedMedia) {
+            displaySubtitleManage(choosedMedia);
+        }
 
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
@@ -351,7 +371,7 @@ define(function(require, exports, module) {
 
             updateDuration(item.length);
             fillTitle(item.name);
-
+            displaySubtitleManage(item);
         });
 
         audioChooser.on('change', function(item) {
@@ -391,6 +411,10 @@ define(function(require, exports, module) {
             if(isUploading){
                 Notify.danger(Translator.trans('文件正在上传，等待上传完后再保存。'));
                 return false;
+            }
+
+            if (subtitleDialog) {
+                subtitleDialog.destroy();
             }
 
             _.each(choosers, function (chooser) {
