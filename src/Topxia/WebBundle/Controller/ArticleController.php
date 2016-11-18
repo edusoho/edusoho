@@ -158,11 +158,8 @@ class ArticleController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
 
-        if (empty($article['tagIds'])) {
-            $article['tagIds'] = array();
-        }
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId'=> $id));
 
-        $tags     = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $seoKeyword = "";

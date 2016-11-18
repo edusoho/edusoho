@@ -113,19 +113,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->addArticle($article);
 
-        foreach ($tagIds as $tagId) {
-            $this->getTagOwnerDao()->addTagOwnerRelation(array(
-                'ownerType'   => 'article',
-                'ownerId'     => $article['id'],
-                'tagId'       => $tagId,
-                'userId'      => $user['id'],
-                'createdTime' => time()
-            ));
-        }
-
-
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
+        $owner = array(
+            'ownerType' => 'article',
+            'ownerId'   => $article['id']
+        );
+
+        $this->dispatchEvent('tagOwner.alert', array('type' => 'create', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds));
         $this->dispatchEvent('article.create', $article);
 
         return $article;
@@ -159,19 +154,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             'ownerId'   => $id
         );
 
-        $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
-
-        foreach ($tagIds as $tagId) {
-            $this->getTagOwnerDao()->addTagOwnerRelation(array(
-                'ownerType'   => $owner['ownerType'],
-                'ownerId'     => $owner['ownerId'],
-                'tagId'       => $tagId,
-                'userId'      => $user['id'],
-                'createdTime' => time()
-            ));
-        }
-
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
+        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
         $this->dispatchEvent('article.update', new ServiceEvent($article));
 
         return $article;
@@ -415,19 +399,26 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $tags = $this->getTagService()->findTagsByOwner(array("ownerType" => 'article',"ownerId" => $articleId));
 
-        $article['tagIds'] = ArrayToolkit::column($tags, 'id');
+        $tagIds = ArrayToolkit::column($tags, 'id');
 
-        $relativeArticles = array_map(function ($tagId) use ($article, $self) {
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
+        $articleIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+        foreach ($articleIds as $key => $articleId) {
+            if ($articleId == $article['id']) {
+                unset($articleIds[$key]);
+            }
+        }
+
+        $relativeArticles = array_map(function ($articleId) use ($article, $self) {
             $conditions = array(
-                'tagId'      => $tagId,
-                'idNotEqual' => $article['id'],
+                'articleId'  => $articleId,
                 'hasThumb'   => true,
                 'status'     => 'published'
             );
-            $count    = $self->searchArticlesCount($conditions);
-            $articles = $self->searchArticles($conditions, 'normal', 0, $count);
+            $articles = $self->searchArticles($conditions, 'normal', 0, PHP_INT_MAX);
             return ArrayToolkit::index($articles, 'id');
-        }, $article['tagIds']);
+        }, $articleIds);
 
         $ret = array_reduce($relativeArticles, function ($ret, $articles) {
             return array_merge($ret, $articles);

@@ -12,6 +12,16 @@ class TagServiceImpl extends BaseService implements TagService
     );
 
     //tag_owner
+    public function addTagOwnerRelation($fields)
+    {
+        return $this->getTagOwnerDao()->addTagOwnerRelation($fields);
+    }
+
+    public function deleteTagOwnerRelationByOwner(array $owner)
+    {
+        return $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
+    }
+
     public function findTagsByOwner(array $owner)
     {
         $tagOwnerRelations = $this->getTagOwnerDao()->findTagOwnerRelationsByOwner($owner);

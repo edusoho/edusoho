@@ -5,17 +5,18 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\ContentService;
 use Topxia\Service\Content\Type\ContentTypeFactory;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class ContentServiceImpl extends BaseService implements ContentService
 {
 	public function getContent($id)
 	{
-		return ContentSerialize::unserialize($this->getContentDao()->getContent($id));
+		return $this->getContentDao()->getContent($id);
 	}
 
 	public function getContentByAlias($alias)
 	{
-		return ContentSerialize::unserialize($this->getContentDao()->getContentByAlias($alias));
+		return $this->getContentDao()->getContentByAlias($alias);
 	}
 
 	public function searchContents($conditions, $sort, $start, $limit)
@@ -48,6 +49,8 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 	public function createContent($content)
 	{
+        $user = $this->getCurrentUser();
+
 		if (empty($content['type'])) {
 			throw $this->createServiceException($this->getKernel()->trans('参数缺失，创建内容失败！'));
 		}
@@ -72,19 +75,31 @@ class ContentServiceImpl extends BaseService implements ContentService
   //           $content['body'] = $this->purifyHtml($content['body']);
   //       }
 
+        $tagIds = empty($content['tagIds']) ? array() : $content['tagIds'];
 
-		$id = $this->getContentDao()->addContent(ContentSerialize::serialize($content));
+        unset($content['tagIds']);
+
+		$id = $this->getContentDao()->addContent($content);
+
+        $owner = array(
+            'ownerType' => 'content',
+            'ownerId'   => $id
+        );
 
 		$content = $this->getContent($id);
 
+        $this->dispatchEvent('tagOwner.create', new ServiceEvent(array('type' => 'create', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
 		$this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
 		return $content;
 	}
 
 	public function updateContent($id, $fields)
-	{
+	{  
+        $user = $this->getCurrentUser();
+
 		$content = $this->getContent($id);
+
 		if (empty($content)) {
 			throw $this->createServiceException($this->getKernel()->trans('内容不存在，更新失败！'));
 		}
@@ -97,12 +112,22 @@ class ContentServiceImpl extends BaseService implements ContentService
         //     $fields['body'] = $this->purifyHtml($fields['body']);
         // }
 
-		$this->getContentDao()->updateContent($id, ContentSerialize::serialize($fields));
+        $tagIds = empty($content['tagIds']) ? array() : $content['tagIds'];
+
+        unset($fields['tagIds']);
+
+		$this->getContentDao()->updateContent($id, $fields);
 
 		$content = $this->getContent($id);
 
 		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
 
+        $owner = array(
+            'ownerType' => 'content',
+            'ownerId'   => $id
+        );
+
+        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
 		return $content;
 	}
 
@@ -148,39 +173,4 @@ class ContentServiceImpl extends BaseService implements ContentService
         return $this->createService('System.LogService');
     }
 
-}
-
-
-
-class ContentSerialize
-{
-    public static function serialize(array &$course)
-    {
-    	if (isset($course['tagIds'])) {
-    		if (is_array($course['tagIds']) && !empty($course['tagIds'])) {
-    			$course['tagIds'] = '|' . implode('|', $course['tagIds']) . '|';
-    		} else {
-    			$course['tagIds'] = '';
-    		}
-    	}
-        return $course;
-    }
-
-    public static function unserialize(array $course = null)
-    {
-    	if (empty($course)) {
-    		return $course;
-    	}
-
-		$course['tagIds'] = empty($course['tagIds']) ? array() : explode('|', trim($course['tagIds'], '|'));
-
-		return $course;
-    }
-
-    public static function unserializes(array $courses)
-    {
-    	return array_map(function($course) {
-    		return ContentSerialize::unserialize($course);
-    	}, $courses);
-    }
 }

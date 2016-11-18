@@ -219,6 +219,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             ->andWhere('orgCode LIKE :likeOrgCode')
             ->andWhere('id != :idNotEqual')
             ->andWhere('id IN (:articleIds)')
+            ->andWhere('id = :articleId')
             ->andWhere('thumb != :thumbNotEqual')
             ->andWhere('orgCode = :orgCode');
 

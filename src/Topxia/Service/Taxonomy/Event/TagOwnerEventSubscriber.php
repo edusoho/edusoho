@@ -14,7 +14,32 @@ class TagOwnerEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'tagOwner.delete' => 'onTagOwnerDelete',
+            'tagOwner.alert'  => 'onTagOwnerAlert'
         );
+    }
+
+    public function onTagOwnerAlert(ServiceEvent $event)
+    {
+        $fields = $event->getSubject();
+
+        $user   = $fields['user'];
+        $owner  = $fields['owner'];
+        $tagIds = $fields['tagIds'];
+        $type   = $fields['type'];
+
+        if ($type == 'update') {
+            $this->getTagService()->deleteTagOwnerRelationByOwner($owner);
+        }
+
+        foreach ($tagIds as $tagId) {
+            $this->getTagService()->addTagOwnerRelation(array(
+                'ownerType'   => $owner['ownerType'],
+                'ownerId'     => $owner['ownerId'],
+                'tagId'       => $tagId,
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            ));
+        }
     }
 
     public function onTagOwnerDelete(ServiceEvent $event)

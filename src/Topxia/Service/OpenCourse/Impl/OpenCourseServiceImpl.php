@@ -39,10 +39,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'tags'));
+        $course                = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
-        $course['tags']        = !empty($course['tags']) ? array($course['tags']) : array();
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
@@ -65,6 +64,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function updateCourse($id, $fields)
     {
+        $user = $this->getCurrentUser();
+
         $argument = $fields;
         $course   = $this->getCourse($id);
 
@@ -74,10 +75,20 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $fields = $this->_filterCourseFields($fields);
 
+        $tagIds   = empty($fields['tags']) ? array() : $fields['tags'];
+
+        unset($fields['tags']);
+
         $this->getLogService()->info('open_course', 'update_course', "更新公开课《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $updatedCourse = $this->getOpenCourseDao()->updateCourse($id, $fields);
 
+        $owner = array(
+            'ownerType' => 'openCourse',
+            'ownerId'   => $id
+        );
+
+        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
         $this->dispatchEvent("open.course.update", array('argument' => $argument, 'course' => $updatedCourse));
 
         return $updatedCourse;
@@ -97,7 +108,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
+
         $this->dispatchEvent("open.course.delete", $course);
+        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'openCourse')));
 
         return true;
     }
@@ -346,7 +359,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'free'          => 0,
             'title'         => '',
             'summary'       => '',
-            'tags'          => array(),
             'type'          => 'text',
             'content'       => '',
             'media'         => array(),
@@ -859,9 +871,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'subtitle'        => '',
             'about'           => '',
             'categoryId'      => 0,
-            'tags'            => '',
             'startTime'       => 0,
             'endTime'         => 0,
+            'tags'            => '',
             'locationId'      => 0,
             'address'         => '',
             'locked'          => 0,

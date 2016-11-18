@@ -496,18 +496,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'ownerId'   => $id
         );
 
-        $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
-
-        foreach ($tagIds as $tagId) {
-            $this->getTagOwnerDao()->addTagOwnerRelation(array(
-                'ownerType'   => $owner['ownerType'],
-                'ownerId'     => $owner['ownerId'],
-                'tagId'       => $tagId,
-                'userId'      => $user['id'],
-                'createdTime' => time()
-            ));
-        }
-
+        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
 
         return CourseSerialize::unserialize($updatedCourse);

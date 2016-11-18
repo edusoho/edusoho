@@ -4,6 +4,10 @@ namespace Topxia\Service\Taxonomy;
 interface TagService
 {   
     //tag_owner
+    public function addTagOwnerRelation($fields);
+    
+    public function deleteTagOwnerRelationByOwner(array $owner);
+
     public function findTagsByOwner(array $owner);
 
     public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
