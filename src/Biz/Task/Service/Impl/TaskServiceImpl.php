@@ -141,7 +141,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $tasks;
     }
 
-    public function taskStart($taskId)
+    public function startTask($taskId)
     {
         $task = $this->tryTakeTask($taskId);
 
@@ -163,7 +163,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
-    public function taskFinish($taskId)
+    public function finishTask($taskId)
     {
         $task = $this->tryTakeTask($taskId);
 

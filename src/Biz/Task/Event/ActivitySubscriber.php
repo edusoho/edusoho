@@ -23,7 +23,7 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
         $activity = $event->getSubject();
         $task = $event->getArgument('task');
 
-        $this->getTaskService()->taskStart($task['id']);
+        $this->getTaskService()->startTask($task['id']);
     }
 
     public function onActivityFinish(Event $event)
@@ -33,7 +33,7 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
         $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId($activity['id']);
 
         foreach ($taskResults as $taskResult){
-            $this->getTaskService()->taskFinish($taskResult['courseTaskId']);
+            $this->getTaskService()->finishTask($taskResult['courseTaskId']);
         }
     }
 

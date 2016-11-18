@@ -16,9 +16,9 @@ interface TaskService
 
     public function findUserTasksByCourseId($courseId, $userId);
 
-    public function taskStart($taskId);
+    public function startTask($taskId);
 
-    public function taskFinish($taskId);
+    public function finishTask($taskId);
 
     public function tryTakeTask($taskId);
 }
