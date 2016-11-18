@@ -10,11 +10,9 @@ interface TaskResultService
 
     public function updateTaskResult($id, $taskResult);
 
-    public function getTaskResultByTaskIdAndActivityId($taskId, $activityId);
+    public function findUserTaskResultsByCourseId($courseId);
 
-    public function findTaskResultsByCourseId($courseId, $userId);
+    public function getUserTaskResultByTaskId($courseTaskId);
 
-    public function getTaskResultByTaskIdAndUserId($courseTaskId, $userId);
-
-    public function findUserProgressingTaskByCourseIdAndActivityId($courseId, $activityId);
+    public function findUserProgressingTaskResultByActivityId($activityId);
 }

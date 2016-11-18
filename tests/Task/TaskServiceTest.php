@@ -142,7 +142,7 @@ class TaskServiceTest extends BaseTestCase
 
         $this->getTaskService()->taskStart($task['id']);
 
-        $result = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
+        $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
         $this->assertEquals($result['status'], 'start');
     }
 
@@ -163,7 +163,7 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskService()->taskStart($task['id']);
         $this->getTaskService()->taskFinish($task['id']);
 
-        $result = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
+        $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
         $this->assertEquals($result['status'], 'finish');
     }
 

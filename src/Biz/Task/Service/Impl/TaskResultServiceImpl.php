@@ -12,14 +12,26 @@ use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
-    public function findTaskResultsByCourseId($courseId, $userId)
+    public function findUserTaskResultsByCourseId($courseId)
     {
-        return $this->getTaskResultDao()->findByCourseId($courseId, $userId);
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()){
+            throw new AccessDeniedException('can not get task results because user not login');
+        }
+
+        return $this->getTaskResultDao()->findByCourseIdAndUserId($courseId, $user['id']);
     }
 
-    public function getTaskResultByTaskIdAndUserId($taskId, $userId)
+    public function getUserTaskResultByTaskId($taskId)
     {
-        return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $userId);
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()){
+            throw new AccessDeniedException('can not get task result because user not login');
+        }
+
+        return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $user['id']);
     }
 
     public function createTaskResult($taskResult)
@@ -48,13 +60,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->update($id, $taskResult);
     }
 
-
-    public function getTaskResultByTaskIdAndActivityId($taskId, $activityId)
-    {
-        return $this->getTaskResultDao()->getByTaskIdAndActivityId($taskId, $activityId);
-    }
-
-    public function findUserProgressingTaskByCourseIdAndActivityId($courseId, $activityId)
+    public function findUserProgressingTaskResultByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
 
@@ -64,13 +70,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $conditions = array(
             'activityId' => $activityId,
-            'courseId'   => $courseId,
             'userId' => $user['id'],
             'status' => 'start'
         );
 
         $count = $this->getTaskResultDao()->count($conditions);
-
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

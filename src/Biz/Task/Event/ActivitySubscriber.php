@@ -23,31 +23,14 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
         $activity = $event->getSubject();
         $task = $event->getArgument('task');
 
-        $biz = $this->getBiz();
-        $user = $biz['user'];
-
-        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $user['id']);
-
-        if(!empty($taskResult)){
-            return;
-        }
-
-        $taskResult = array(
-            'activityId' => $activity['id'],
-            'courseId'   => $task['courseId'],
-            'courseTaskId' => $task['id'],
-            'userId'     => $user['id']
-        );
-
-        $this->getTaskResultService()->createTaskResult($taskResult);
+        $this->getTaskService()->taskStart($task['id']);
     }
 
     public function onActivityFinish(Event $event)
     {
         $activity = $event->getSubject();
-        $courseId = $activity['fromCourseId'];
 
-        $taskResults = $this->getTaskResultService()->findUserProgressingTaskByCourseIdAndActivityId($courseId, $activity['id']);
+        $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId($activity['id']);
 
         foreach ($taskResults as $taskResult){
             $this->getTaskService()->taskFinish($taskResult['courseTaskId']);

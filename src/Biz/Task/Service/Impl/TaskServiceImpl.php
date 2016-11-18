@@ -99,12 +99,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         if ($this->getCourseService()->isCourseStudent($courseId, $userId)) {
             return array();
         }
+
         $tasks = $this->findTasksByCourseId($courseId);
+
         if (empty($tasks)) {
-            return $tasks;
+            return array();
         }
-        $taskResults = $this->getTaskResultService()->findTaskResultsByCourseId($courseId, $userId);
+
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+
         if (!empty($taskResults)) {
+
             foreach ($taskResults as $tr) {
                 foreach ($tasks as $tk => $t) {
                     if ($tr['courseTaskId'] != $t['id']) {
@@ -117,12 +122,15 @@ class TaskServiceImpl extends BaseService implements TaskService
                 }
             }
         }
+
         $activityConfigs = $this->getActivityService()->getActivityTypes();
         $activities      = $this->getActivityService()->getActivities(array_column($tasks, 'activityId'));
+
         $activityMap     = array();
         foreach ($activities as $act) {
             $activityMap[$act['id']] = $act;
         }
+
         foreach ($tasks as $tk => $t) {
             $act                         = $activityMap[$t['activityId']];
             $config                      = $activityConfigs[$act['mediaType']];
@@ -136,16 +144,29 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
 
-        $this->getActivityService()->trigger($task['activityId'], 'start', array(
-            'task' => $task
-        ));
+        $user = $this->getCurrentUser();
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if(!empty($taskResult)){
+            return;
+        }
+
+        $taskResult = array(
+            'activityId' => $task['id'],
+            'courseId'   => $task['courseId'],
+            'courseTaskId' => $task['id'],
+            'userId'     => $user['id']
+        );
+
+        $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
     public function taskFinish($taskId)
     {
         $task = $this->tryTakeTask($taskId);
-        $user = $this->biz['user'];
-        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $user['id']);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if(empty($taskResult)){
             throw new AccessDeniedException('该任务不在进行状态');

@@ -19,7 +19,9 @@ class TaskController extends BaseController
             throw $this->createNotFoundException("activity not found");
         }
 
-        $this->getTaskService()->taskStart($task['id']);
+        $this->getActivityService()->trigger($activity['id'], 'start', array(
+            'task' => $task
+        ));
 
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'     => $task,
