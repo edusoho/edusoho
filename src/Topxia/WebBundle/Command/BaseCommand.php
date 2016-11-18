@@ -18,9 +18,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     {
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-
-        $biz = $this->getContainer()->get('biz');
-        $serviceKernel->setConnection($biz['db']);
+        $serviceKernel->setBiz($this->getContainer()->get('biz'));
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
