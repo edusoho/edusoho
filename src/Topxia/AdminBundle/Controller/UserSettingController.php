@@ -177,14 +177,17 @@ class UserSettingController extends BaseController
             'mode'             => 'default',
             'nickname_enabled' => 0,
             'avatar_alert'     => 'none',
-            'email_filter'     => ''
+            'email_filter'     => '',
+            'partner_config'   => array(
+                'discuz'  => array(),
+                'phpwind' => array(
+                    'conf'     => array(),
+                    'database' => array()
+                )
+            )
         );
 
         $setting = array_merge($default, $setting);
-
-        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
-        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
 
         if ($request->getMethod() == 'POST') {
             $data                    = $request->request->all();
@@ -192,18 +195,13 @@ class UserSettingController extends BaseController
             $setting['mode']         = $data['mode'];
             $setting['email_filter'] = $data['email_filter'];
 
-            $this->getSettingService()->set('user_partner', $setting);
+            $setting['partner_config']['discuz'] = $data['discuzConfig'];
 
-            $discuzConfig  = $data['discuz_config'];
-            $phpwindConfig = $data['phpwind_config'];
-
-            if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
-                    goto response;
-                }
-                file_put_contents($discuzConfigPath, $discuzConfig);
-            } elseif ($setting['mode'] == 'phpwind') {
+            if($setting['mode'] == 'phpwind') {
+                $setting['partner_config']['phpwind'] = $data['phpwind_config'];
+                $phpwindConfig = $data['phpwind_config'];
+                $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
+                $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', $this->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
@@ -212,23 +210,16 @@ class UserSettingController extends BaseController
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
+            $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
             $this->setFlashMessage('success', $this->trans('用户中心设置已保存！'));
-        }
 
-        if (file_exists($discuzConfigPath)) {
-            $discuzConfig = file_get_contents($discuzConfigPath);
-        } else {
-            $discuzConfig = '';
-        }
-
-        if (file_exists($phpwindConfigPath)) {
-            $phpwindConfig = file_get_contents($phpwindConfigPath);
-        } else {
-            $phpwindConfig = '';
         }
 
         response:
+        $discuzConfig = $setting['partner_config']['discuz'];
+        $phpwindConfig  = empty($setting['partner_config']['phpwind'])? '' : $setting['partner_config']['phpwind'];
+
         return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
             'setting'       => $setting,
             'discuzConfig'  => $discuzConfig,
