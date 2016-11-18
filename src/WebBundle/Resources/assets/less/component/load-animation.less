@@ -13,6 +13,32 @@
 .chooser-content {
   padding: 30px;
   background-color: #f8fbfd;
+  .chooser-list {
+    position: relative;
+    height: 163px;
+    overflow: hidden;
+    border: 1px solid @border-color;
+    margin-top: 15px;
+    background-color: #fff;
+    .table-striped  {
+      margin-bottom: 0;
+      >tbody>tr {
+        &:nth-of-type(odd) {
+          background-color: #f9f9f9;
+        }
+        >td {
+          border-top: 0;
+          padding: 10px 10px;
+        }
+      }
+    }
+    &.ps-container {
+      padding-right: 14px;
+      .ps-scrollbar-y-rail {
+        .opacity(.6);
+      }
+    }
+  }
 }
 
 .uploader-content {
