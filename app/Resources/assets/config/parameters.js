@@ -14,12 +14,14 @@ const parameters = {
   },
   libs: {
     vendor: ['../libs/vendor.js'], //can be a js file
-    // ckeditor: ['ckeditor'], //or can be a node module name
     "fix-ie": ['html5shiv', 'respond-js'],
     "jquery-validation": ['../libs/js/jquery-validation.js'],
     "jquery-form": ['jquery-form'],
+    'bootstrap-datetimepicker':['../libs/js/bootstrap-datetimepicker.js'],
     "perfect-scrollbar":['perfect-scrollbar'],
-    'iframe-resizer':['iframe-resizer'],
+    "jquery-sortable":['jquery-sortable'],
+    "iframe-resizer":['../libs/js/iframe-resizer.js'],
+    "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -32,11 +34,11 @@ const parameters = {
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
-    'iframe-resizer/js/iframeResizer.contentWindow.js',
+    'jquery-sortable/source/js/jquery-sortable.js',
   ],
   onlyCopys: [
     {
-      name: 'ckeditor',
+      name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
         // '**/lang/!(zh-cn.js)',

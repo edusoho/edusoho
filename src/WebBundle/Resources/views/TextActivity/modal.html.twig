@@ -1,12 +1,12 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script(['libs/ckeditor/ckeditor.js','libs/iframe-resizer.js','web/activity-manage/text/index.js'], 300) %}
+{% do script(['web/activity-manage/text/index.js'], 300) %}
 
 {% block activity_content %}
   <div class=" form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '内容'|trans }}</label>
     </div>
-    <div class="col-xs-10 controls">
+    <div class="col-xs-10">
       <textarea class="form-control type-hidden" id="text-content-field" name="content"data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" >{{ activity.content|default('') }}</textarea>
     </div>
   </div>
@@ -17,7 +17,7 @@
     <div class="col-xs-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-4 controls">
+    <div class="col-xs-4">
       <select class="form-control" id="condition-select">
         <option value="handle">点击"看过了"</option>
         <option value="auto">至少x观看分钟</option>
@@ -28,10 +28,10 @@
     <div class="col-xs-2 control-label">
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>
-    <div class="col-xs-4 controls">
+    <div class="col-xs-4">
       <input id="condition-detail" class="form-control" type="text" name="condition_detail" value="1">
     </div>
-    <div class="col-xs-4 controls">
+    <div class="col-xs-4">
       <p class="form-control-static">分钟</p>
     </div>
   </div>

@@ -1,3 +1,7 @@
+course_manage_course_set:
+  path: /course_set/{courseId}/courses
+  defaults: {_controller:WebBundle:TaskManage:courseSet}
+
 course_manage_tasks:
   path:  /course/{courseId}/tasks
   defaults: { _controller: WebBundle:TaskManage:tasks }

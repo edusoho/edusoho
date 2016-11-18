@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% do css(['web.css']) %}
-{% do script(['libs/ckeditor/ckeditor.js','libs/jquery-validation.js'], 500) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js',], 500) %}
 
 {% block body %}
   <div class="tab-content" id="iframe-content">
@@ -8,16 +8,10 @@
       <form class="form-horizontal" id="step2-form" >
         <div class="form-group">
           <div class="col-xs-2 control-label">
-          <label for="title">{{ '标题'|trans }}</label>
+          <label for="title">{{ '标题名称'|trans }}</label>
           </div>
-          <div class="col-xs-10 controls">
+          <div class="col-xs-10">
             <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} >
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-xs-10 col-xs-offset-2 controls">
-            <p><input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
-              <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span></p>
           </div>
         </div>
         {% block activity_content %}
@@ -27,7 +21,13 @@
     <div class="tab-pane js-course-tasks-pane js-step3-view">
       <form class="form-horizontal" id="step3-form" >
         {% block activity_finish %}
-      {% endblock %}
+        {% endblock %}
+        <div class="form-group">
+          <div class="col-xs-10 col-xs-offset-2">
+            <label class="font-normal"><input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修</label>
+              <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>
+          </div>
+        </div>
       </form>
     </div>
   </div>

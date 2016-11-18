@@ -111,6 +111,14 @@ class TaskManageController extends BaseController
         ));
     }
 
+    // TODO 重命名或移动到其它Controller（wuli create）
+    public function courseSetAction(Request $request, $courseId) {
+        $course      = $this->tryManageCourse($courseId);
+        return $this->render('WebBundle:PlanManage:list.html.twig',array(
+            'course' => $course
+        ));
+    }
+
     protected function tryManageCourse($courseId)
     {
         return $this->getCourseService()->tryManageCourse($courseId);
