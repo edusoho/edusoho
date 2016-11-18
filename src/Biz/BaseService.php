@@ -3,13 +3,13 @@
 namespace Biz;
 
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
     /**
      * @param $alias
-     * @return GeneralDaoImpl
+     * @return GeneralDaoInterface
      */
     protected function createDao($alias)
     {
