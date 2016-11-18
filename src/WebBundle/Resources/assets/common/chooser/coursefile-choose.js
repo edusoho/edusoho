@@ -11,7 +11,6 @@ class CourseFileChoose extends Chooser {
         this.container = $container;
         this._init();
         this._initEvent();
-        console.log("CourseFileChoose");
         $('.chooser-list').perfectScrollbar();
     }
 

@@ -1,11 +1,13 @@
+<input type="hidden" name="media">
 <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ file.filename|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+  
   <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
   </div>
 </div>
 
-<div class="col-xs-10 controls file-chooser-main {% if  file|default(null) %}hidden {% endif %}">
+<div class="file-chooser-main {% if  file|default(null) %}hidden {% endif %}">
   {#<ul class="nav nav-pills" id="material">
     <li role="presentation" ><a
           href="#chooser-upload-panel">上传资料</a></li>

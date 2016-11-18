@@ -13,13 +13,13 @@ function _inItStep2form() {
         onkeyup: false,
         ignore: "",
         rules: {
-            content: 'required',
+            title: 'required',
             minute: 'required unsigned_integer',
             second: 'second_range',
             media: 'required'
         },
         messages: {
-            content: "请输入简介",
+            title: "请输入标题",
             minute: {
                 required: '请输入时长',
                 unsigned_integer: '时长必须为非负整数',
