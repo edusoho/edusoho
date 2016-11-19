@@ -7,11 +7,8 @@
   <div class="dashboard-body">
     <div class="lesson-content" id="video-content" data-role="lesson-content">
       {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
-      <iframe
-          src="{{ path('course_task_player', {courseId: courseId, taskId: taskId})}}"
-          name='viewerIframe' id='viewerIframe' width='100%' allowfullscreen webkitallowfullscreen height='100%'
-          style='border:0px'></iframe>
-      <div class="watermarkEmbedded"></div>
+      {{ render(controller('TopxiaWebBundle:Player:show', {id: activity.ext.mediaId})) }}
+
     </div>
   </div>
 {% endblock %}

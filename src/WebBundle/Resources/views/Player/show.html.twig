@@ -58,11 +58,16 @@
           ></div>
         </div>
 
-        {% do script(['web/player/index.js']) %}
+          {# webpack #}
+          {% do script(['libs/vendor.js', 'web.js'], 1000) %}
+          {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
 
-        {% do script(['libs/vendor.js', 'web.js'], 1000) %}
-        {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
-      {% endif %}
+        {% if setting("developer.cloud_sdk_cdn") %} {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %} {% else %} {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %} {% endif %}
+        <script src="{{ cdnUrl }}/js-sdk/video-player/v1/sdk.js"></script>
+
+       {% do script(['web/player/index.js']) %}
+
+    {% endif %}
     {% else %}
       <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
     {% endif %}

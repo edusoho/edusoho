@@ -7,15 +7,15 @@ class PlayerFactory {
    static create(type, options) {
         switch (type) {
             case "local-video-player":
+            case "audio-player":
                 return new LocalVideoPlayer(options);
                 break;
             case "balloon-cloud-video-player":
                 return new BalloonVideoPlayer(options);
                 break;
-            case "audio-player":
-                var AudioPlayer = require('./audio-player');
-                return new AudioPlayer(options);
-                break;
+                //
+                // return new AudioPlayer(options);
+                // break;
         }
     }
 

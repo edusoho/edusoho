@@ -9,7 +9,7 @@ class AudioPlayer extends Emitter {
 
     setup() {
         var that = this;
-        var audioPlayer = new MediaElementPlayer('#' + this.element.attr('id'), {
+        var audioPlayer = new  MediaElementPlayer(this.options.element, {
             mode: 'auto_plugin',
             enablePluginDebug: false,
             enableAutosize: true,
@@ -30,7 +30,7 @@ class AudioPlayer extends Emitter {
                 media.play();
             }
         });
-        this._setPlayer(audioPlayer);
+        this.player = audioPlayer;
     }
 
     _setPlayer() {
@@ -50,7 +50,7 @@ class AudioPlayer extends Emitter {
     setCurrentTime() {
 
     }
-    
+
     pause(e) {
         var player = this._getPlayer();
         player.pause();
@@ -58,4 +58,4 @@ class AudioPlayer extends Emitter {
 
 }
 
-export default Emitter;
+export default AudioPlayer;

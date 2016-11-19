@@ -1,9 +1,11 @@
 import  PlayerFactory from './player-factory';
-import  Messenger from 'es-messenger';
+import  EsMessager from '../../common/messenger';
+import DurationStorage from '../../common/durationStorage';
 class Show {
 
     constructor(element) {
         let container = $(element);
+        this.htmlDom = $(element);
         this.userId = container.data("userId");
         this.userName = container.data("userName");
         this.fileId = container.data("fileId");
@@ -30,12 +32,12 @@ class Show {
         this.disableVolumeButton = container.data('disableVolumeButton');
         this.disablePlaybackButton = container.data('disablePlaybackButton');
         this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
-        this.html = "";
+        this.initView();
+        this.initEvent();
     }
 
     initView() {
-        let view, html;
-
+        let html = "";
         if (this.fileType == 'video') {
             if (this.playerType == 'local-video-player') {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
@@ -43,22 +45,19 @@ class Show {
                 html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
             }
         } else if (this.fileType == 'audio') {
-            view.parent().css({"margin-top": "-25px", "top": "50%"});
-            html += '<audio id="lesson-player" width="90%" height="50">';
-            html += '<source src="' + url + '" type="audio/mp3" />';
-            html += '</audio>';
+            html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto" poster="http://s.cn.bing.net/az/hprichbg/rb/MountScott_ZH-CN8412403132_1920x1080.jpg"></audio>';
         }
-        view.html(html);
-        view.show();
+        this.htmlDom.html(html);
+        this.htmlDom.show();
     }
 
     initPlayer() {
-        let playerFactory = new PlayerFactory();
-        return playerFactory.create(
+        return PlayerFactory.create(
             this.playerType,
             {
                 element: '#lesson-player',
                 url: this.url,
+                mediaType:  this.fileType,
                 fingerprint: this.fingerprint,
                 fingerprintSrc: this.fingerprintSrc,
                 fingerprintTime: this.fingerprintTime,
@@ -84,7 +83,7 @@ class Show {
     }
 
     initMesseger() {
-        return new Messenger({
+        return new EsMessager({
             name: 'parent',
             project: 'PlayerProject',
             type: 'child'
@@ -96,15 +95,15 @@ class Show {
         let messenger = this.initMesseger();
         player.on("ready", function () {
             messenger.sendToParent("ready", {pause: true});
-            if (playerType == 'local-video-player') {
+            if ( this.playerType == 'local-video-player') {
                 var time = DurationStorage.get(userId, fileId);
                 if (time > 0) {
                     player.setCurrentTime(DurationStorage.get(userId, fileId));
                 }
                 player.play();
-            } else if (playerType == 'balloon-cloud-video-player') {
-                if (markerUrl) {
-                    $.getJSON(markerUrl, function (questions) {
+            } else if ( this.playerType == 'balloon-cloud-video-player') {
+                if (this.markerUrl) {
+                    $.getJSON(this.markerUrl, function (questions) {
                         player.setQuestions(questions);
                     });
                 }
@@ -126,7 +125,7 @@ class Show {
 
         player.on("timechange", function (data) {
             messenger.sendToParent("timechange", {pause: true, currentTime: data.currentTime});
-            if (playerType == 'local-video-player') {
+            if (this.playerType == 'local-video-player') {
                 if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
                     DurationStorage.set(userId, fileId, player.getCurrentTime());
                 }
@@ -134,7 +133,6 @@ class Show {
         });
 
         player.on("paused", function () {
-            console.log('paused')
             messenger.sendToParent("paused", {pause: true});
         });
 
@@ -144,14 +142,15 @@ class Show {
         });
 
         player.on("ended", function () {
-            console.log('ended')
             messenger.sendToParent("ended", {stop: true});
-            if (playerType == 'local-video-player') {
+            if (this.playerType == 'local-video-player') {
                 DurationStorage.del(userId, fileId);
             }
         });
     }
 
-}
 
+
+
+}
 new Show('#lesson-video-content');

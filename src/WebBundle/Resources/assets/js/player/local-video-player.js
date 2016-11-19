@@ -1,23 +1,26 @@
-import  videojs from 'video.js';
+import  videojs from 'video.js'
 import Emitter from 'es6-event-emitter';
+require('file-loader?name=libs/[name].[ext]!nodeModulesDir/video.js/dist/video-js/video-js.swf');
 class LocalVideoPlayer extends Emitter{
     constructor(options) {
         super();
         this.options = options;
         this.player = '';
+        this.setup();
     }
 
     setup() {
         var techOrder = ['flash', 'html5'];
-        if (this.options.agentInWhiteList) {
+         if (this.options.agentInWhiteList || this.options.mediaType=='audio') {
             techOrder = ['html5', 'flash'];
         }
-
         var that = this;
-        var player = videojs(this.options.element.attr("id"), {
+        var player = videojs(this.options.element, {
             techOrder: techOrder,
-            autoplay: false,
-            loop: false
+            loop: false,
+            flash: {
+                swf: '/build/libs/video-js.swf'
+            },
         });
         player.dimensions('100%', '100%');
         player.src(this.options.url);
@@ -55,7 +58,7 @@ class LocalVideoPlayer extends Emitter{
             that.trigger("paused", e);
         });
 
-        this._setPlayer(player);
+        this.player =player;
 
         window.player = this;
     }
@@ -68,23 +71,16 @@ class LocalVideoPlayer extends Emitter{
         }
     }
 
-    _setPlayer() {
-        this.player = player;
-    }
-
-    _getPlayer() {
-        return this.player;
-    }
 
     play() {
-        this._getPlayer().play();
+        this.player.play();
     }
 
     _onEnded(e) {
         if (this.get("hasPlayerError")) {
             return;
         }
-        var player = this._getPlayer();
+        var player = this.player;
         player.currentTime(0);
         /* 播放器重置时间后马上暂停没用, 延时100毫秒再执行暂停 */
         setTimeout(function(){
@@ -95,17 +91,17 @@ class LocalVideoPlayer extends Emitter{
 
 
     getCurrentTime() {
-        return this._getPlayer().currentTime();
+        return this.player.currentTime();
     }
 
 
     getDuration() {
-        return this._getPlayer().duration();
+        return this.player.duration();
     }
 
 
     setCurrentTime(time) {
-        this._getPlayer().currentTime(time);
+        this.player.currentTime(time);
         return this;
     }
 
@@ -117,12 +113,11 @@ class LocalVideoPlayer extends Emitter{
 
 
     isPlaying() {
-        return !this._getPlayer().paused();
+        return !this.player.paused();
     }
 
     destroy() {
-        this._getPlayer().dispose();
+        this.player.dispose();
     }
 }
-
-module.exports = LocalVideoPlayer;
+export  default LocalVideoPlayer;

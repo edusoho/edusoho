@@ -17,7 +17,7 @@ class BalloonCloudVideoPlayer extends Emitter {
             return;
         }
 
-        var elementId = this.options.element.attr("id");
+        var elementId = this.options.element;
 
         var self = this;
 

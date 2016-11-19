@@ -13,6 +13,7 @@ class VideoPlay {
             this._playerSwf();
         } else {
             this._playVideo();
+            console.log('_playVideo')
         }
     }
 
@@ -27,11 +28,10 @@ class VideoPlay {
 
     _playVideo() {
         let self = this;
-
         var messenger = new EsMessager({
             name: 'parent',
             project: 'PlayerProject',
-            children: [document.getElementById('viewerIframe')],
+            children: [$('iframe[id=task-content-iframe]')],
             type: 'parent'
         });
 
@@ -64,7 +64,7 @@ class VideoPlay {
 
 
 }
-let videoplay = new VideoPlay("#");
+let videoplay = new VideoPlay();
 videoplay.play();
 
 //

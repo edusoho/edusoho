@@ -6,9 +6,7 @@
 {% block content %}
   <div class="dashboard-body">
     <div class="audio-content" id="audio-content" data-role="audio-content" >
-      <iframe  src="{{ path('course_task_player', {courseId: courseId, taskId: taskId})}}"
-          name='viewerIframe' id='viewerIframe' width='100%' allowfullscreen webkitallowfullscreen height='100%'
-          style='border:0px'></iframe>
+      {{ render(controller('TopxiaWebBundle:Player:show', {id: activity.ext.mediaId})) }}
     </div>
   </div>
 {% endblock %}
