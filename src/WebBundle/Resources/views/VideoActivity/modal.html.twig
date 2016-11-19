@@ -1,5 +1,5 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script(['http://localhost:12345/build-dev/sdk.js','libs/perfect-scrollbar.js','web/activity-manage/video/index.js']) %}
+{% do script(['libs/perfect-scrollbar.js','web/activity-manage/video/index.js']) %}
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('video') %}
@@ -20,9 +20,9 @@
       <input class="form-control width-input width-input-small js-length" id="second" type="text" name="second"
              value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
       <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
-      <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
+      <input type="text" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
       <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
-      <input type="hidden" id="length" name="length" value="{{ activity.length|default(null) }}">
+      <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
     </div>
   </div>
 {% endblock %}

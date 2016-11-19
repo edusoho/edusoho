@@ -62,7 +62,7 @@ class Editor {
         this.type !== type ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
-        console.log("type");
+        console.log(type);
     }
 
     _onSave(event) {
@@ -74,7 +74,6 @@ class Editor {
         let postData = $('#step1-form').serializeArray()
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
             .concat(this.$iframe_body.find("#step3-form").serializeArray());
-            console.log(postData);
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');

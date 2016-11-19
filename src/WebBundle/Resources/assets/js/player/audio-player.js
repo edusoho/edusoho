@@ -1,5 +1,4 @@
 import Emitter from 'es6-event-emitter';
-import MediaElementPlayer from 'mediaelement';
 class AudioPlayer extends Emitter {
     constructor(options) {
         super();
@@ -9,7 +8,7 @@ class AudioPlayer extends Emitter {
 
     setup() {
         var that = this;
-        var audioPlayer = new  MediaElementPlayer(this.options.element, {
+        var audioPlayer = {}; /*new  MediaElementPlayer(this.options.element, {
             mode: 'auto_plugin',
             enablePluginDebug: false,
             enableAutosize: true,
@@ -29,7 +28,7 @@ class AudioPlayer extends Emitter {
 
                 media.play();
             }
-        });
+        });*/
         this.player = audioPlayer;
     }
 
