@@ -29,10 +29,8 @@ class MaterialLibChoose extends Chooser {
 
     _loadList() {
         let url = $('.js-browser-search').data('url');
-        let $iframe = this.$parentiframe;
         $.get(url, this._getParams(), function (html) {
             $('.js-material-list').html(html);
-            $iframe.height($iframe.contents().find('body').height());
         });
     }
 
