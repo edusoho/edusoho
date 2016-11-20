@@ -78,9 +78,11 @@ class EduSohoUpgrade extends AbstractUpdater
                     $setting['partner_config']['discuz'][$key] = constant(strtoupper($key));
                 }
             }
+
+            $this->getSettingService()->set('user_partner', $setting);
         }
 
-        $this->getSettingService()->set('user_partner', $setting);
+
     }
 
     protected function isFieldExist($table, $filedName)
