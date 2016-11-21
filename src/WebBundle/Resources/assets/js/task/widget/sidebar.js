@@ -1,5 +1,6 @@
-import NotePlugin from './plugins/note/plugin';
-import QuestionPlugin from './plugins/question/plugin';
+import NotePlugin from '../plugins/note/plugin';
+import QuestionPlugin from '../plugins/question/plugin';
+import 'store';
 
 class SideBar {
   constructor(option) {
@@ -20,6 +21,7 @@ class SideBar {
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
+    this._isRenderSiderBar();
   }
 
   _registerPlugin(plugin) {
@@ -33,7 +35,7 @@ class SideBar {
     let html = '';
     $.each(this.activePlugins, (i,name)=>{
       let plugin = this.plugins[name];
-      html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><p class="' + plugin.iconClass + '"> </p>' + plugin.name + '</a></li>'
+      html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
     $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]',(event)=>{
       let $this = $(event.currentTarget);
@@ -50,19 +52,19 @@ class SideBar {
     });
   }
 
-  _renderSiderBar(show) {
+  _renderSiderBar(show,time='') {
     let sider_right = '0px';
-    let content_right = '461px';
+    let content_right = '379px';
     if(!show) {
       sider_right = '-'+this.$dashboardsidebar.width()+'px';
       content_right = '26px';
     }
     this.$dashboardsidebar.animate({
       right: sider_right,
-    });
+    },time);
     this.$dashboardcontent.animate({
       right: content_right,
-    });
+    },time);
   }
 
   _rendBar($item,show) {
@@ -79,6 +81,17 @@ class SideBar {
       return undefined;
     }
     return $pane;
+  }
+
+  _isRenderSiderBar() {
+    if(!store.get('USER-START-LEARN')) {
+      store.set('USER-START-LEARN', true);
+      this._renderSiderBar(true,'2000'); 
+      window.setTimeout(()=>{ 
+        this._renderSiderBar(false,'2000'); 
+      },2000); 
+    }
+    console.log(store.get('USER-START-LEARN'));
   }
 
   createPane(name) {
