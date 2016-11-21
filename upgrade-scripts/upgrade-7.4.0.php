@@ -12,7 +12,7 @@ class EduSohoUpgrade extends AbstractUpdater
         try {
             $this->updateScheme();
             $migration = new TagDataMigration($this->getConnection());
-            $migration->tagDataMigration();
+            $migration->exec();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -47,10 +47,35 @@ class EduSohoUpgrade extends AbstractUpdater
                     `ownerType` varchar(255) NOT NULL DEFAULT '' COMMENT '标签拥有者类型',
                     `ownerId` int(10) NOT NULL DEFAULT '0' COMMENT '标签拥有者id',
                     `tagId` int(10) NOT NULL DEFAULT '0' COMMENT '标签id',
-                    `userId` int(10) NOT NULL COMMENT '操作用户id',
+                    `userId` int(10) NOT NULL DEFAULT '' COMMENT '操作用户id',
                     `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签关系表';
+            ");
+        }
+
+        if (!$this->isTableExist('tag_group')) {
+            $connection->exec("
+                CREATE TABLE `tag_group` (
+                    `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '标签ID',
+                    `name` varchar(255) NOT NULL DEFAULT '' COMMENT '标签组名字',
+                    `scope` varchar(255) NOT NULL DEFAULT '' COMMENT '标签组应用范围',
+                    `tagNum` int(10) NOT NULL DEFAULT '0' COMMENT '标签组里的标签数量',
+                    `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+                    `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签组表';
+            ");
+        }
+
+        if (!$this->isTableExist('tag_group_tag')) {
+            $connection->exec("
+                CREATE TABLE `tag_group_tag` (
+                    `id` int(10) NOT NULL AUTO_INCREMENT,
+                    `tagId` int(10) NOT NULL DEFAULT '0' COMMENT '标签ID',
+                    `groupId` int(10) NOT NULL DEFAULT '0' COMMENT '标签组ID',
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签组跟标签的中间表';
             ");
         }
     }
@@ -149,14 +174,14 @@ class TagDataMigration
         $this->connection = $connection;
     }
 
-    protected function tagDataMigration()
+    public function exec()
     {   
         foreach ($this->columns as $table => $column) {
-            $this->TagDataMigration($table , $column);
+            $this->migration($table , $column);
         }
     }
 
-    protected function TagDataMigration($table, $column)
+    protected function migration($table, $column)
     {
         if ($table != 'content' && $table != 'course_lesson' && $table != 'open_course_lesson') {
             $sql = "SELECT * FROM {$table}";
@@ -174,7 +199,7 @@ class TagDataMigration
                         'ownerId'   => $target['id']
                     );
 
-                    $this->migrateTag($fields);
+                    $this->moveTagData($fields);
                 }
             }
         }
@@ -184,14 +209,11 @@ class TagDataMigration
 
     protected function dropTagField($table)
     {   
-        $columns = $this->column;
-        $column = $columns[$table];
-
-        $sql = "ALTER TABLE {$table} DROP COLUMN {$column}";
+        $sql = "ALTER TABLE {$table} DROP COLUMN {$this->columns[$table]}";
         $this->connection->exec($sql);
     }
 
-    protected function migrateTag($fields)
+    protected function moveTagData($fields)
     {
         foreach ($fields['tags'] as $tag) {
             $this->getTagService()->addTagOwnerRelation(array(
