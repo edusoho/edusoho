@@ -346,6 +346,9 @@ define(function(require, exports, module) {
             $title.val(name.substring(0, name.lastIndexOf('.')));
         };
 
+        /**
+         * 视频字幕
+         */
         var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
             var $container = $form.find('#subtitle-form-group');
