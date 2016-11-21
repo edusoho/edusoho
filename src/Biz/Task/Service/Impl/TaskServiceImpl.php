@@ -179,8 +179,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw new AccessDeniedException('该任务不在进行状态');
         }
 
+        if($taskResult['status'] === 'finish'){
+            return;
+        }
+
         $update['updatedTime'] = time();
         $update['status']      = 'finish';
+        $update['finishedTime']= time();
         $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
     }
 

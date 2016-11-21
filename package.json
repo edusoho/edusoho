@@ -53,6 +53,7 @@
     "bootstrap-notify": "^3.1.3",
     "ckeditor": "^4.5.10",
     "es-ckeditor": "^1.0.0",
+    "es-messenger": "^2.1.0",
     "es6-event-emitter": "^1.5.2",
     "font-awesome": "^4.6.3",
     "html5shiv": "^3.7.3",
@@ -62,7 +63,8 @@
     "jquery-sortable": "^0.9.13",
     "jquery-validation": "^1.15.1",
     "reset.css": "^2.0.2",
-    "respond.js": "^1.4.2"
+    "respond.js": "^1.4.2",
+    "screenfull": "^3.0.2"
   },
   "scripts": {
     "start": "npm run dev",

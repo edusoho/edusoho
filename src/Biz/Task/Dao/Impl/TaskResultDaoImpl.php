@@ -33,6 +33,11 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     {
         return array(
             'orderbys' => array('createdTime'),
+            'conditions' => array(
+                'status =:status',
+                'userId =:userId',
+                'activityId =:activityId'
+            )
         );
     }
 }
