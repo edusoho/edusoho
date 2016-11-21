@@ -28,5 +28,4 @@ $bootstrap->boot();
 ServiceKernel::instance()
     ->setEnvVariable(array(
         'host'          => 'test.com',
-        'schemeAndHost' => 'http://test.com'))
-    ->setConnection($biz['db']);
+        'schemeAndHost' => 'http://test.com'));

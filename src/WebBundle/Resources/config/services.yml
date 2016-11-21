@@ -1,7 +1,8 @@
 parameters:
-#    classroom.example.class: Classroom\ClassroomBundle\Example
 
 services:
-#    classroom.example:
-#        class: %classroom.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    task_event_subscriber:
+        class: Biz\Task\Event\ActivitySubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }

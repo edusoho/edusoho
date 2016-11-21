@@ -185,7 +185,13 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
 
     public function initDiscuzApi()
     {
-        require_once __DIR__ .'/../../../../../app/config/uc_client_config.php';
+        $setting = $this->getSettingService()->get('user_partner');
+        $discuzConfig = $setting['partner_config']['discuz'];
+
+        foreach ($discuzConfig as $key => $value) {
+            define(strtoupper($key), $value);
+        }
+
         require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
     }
 
@@ -213,5 +219,10 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
             default:
                 return array('error_unknown', $this->getKernel()->trans('未知错误'));
         }
+    }
+
+    protected function getSettingService()
+    {
+      return $this->createService('System.SettingService');
     }
 }

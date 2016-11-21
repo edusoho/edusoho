@@ -167,19 +167,6 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $serviceKernel->setEnvVariable(array(
-                'host'          => $this->request->getHttpHost(),
-                'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
-                'basePath'      => $this->request->getBasePath(),
-                'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
-                ->setTranslatorEnabled(true)
-                ->setTranslator($container->get('translator'))
-                ->setParameterBag($container->getParameterBag())
-                ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
-                ->setConnection($biz['db']);
-
-            $serviceKernel->getConnection()->exec('SET NAMES UTF8');
-
             $currentUser = new CurrentUser();
             $currentUser->fromArray(array(
                 'id'        => 0,
@@ -191,7 +178,17 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
             $biz['user'] = $currentUser;
             $serviceKernel
                 ->setBiz($biz)
-                ->setCurrentUser($currentUser);
+                ->setCurrentUser($currentUser)
+                ->setEnvVariable(array(
+                    'host'          => $this->request->getHttpHost(),
+                    'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+                    'basePath'      => $this->request->getBasePath(),
+                    'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+                ->setTranslatorEnabled(true)
+                ->setTranslator($container->get('translator'))
+                ->setParameterBag($container->getParameterBag())
+                ->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+
             $this->isServiceKernelInit = true;
         }
     }
