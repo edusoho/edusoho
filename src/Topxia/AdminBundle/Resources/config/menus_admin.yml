@@ -523,7 +523,7 @@ admin:
                             disable: true
                 admin_cloud_video_setting:
                     name: 云视频
-                    visable: (overview.enabled == true)
+                    visable: (overview.enabled|default('true') == true)
                     router_name: admin_setting_cloud_video
                     children:
                         admin_setting_cloud_video:
@@ -534,7 +534,7 @@ admin:
                             disable: true
                 admin_cloud_edulive_setting:
                     name: 云直播
-                    visable: (overview.enabled == true)
+                    visable: (overview.enabled|default('true') == true)
                     router_name: admin_setting_cloud_edulive
                     children:
                         admin_setting_cloud_edulive:
@@ -545,7 +545,7 @@ admin:
                             disable: true
                 admin_edu_cloud_sms:
                     name: 云短信
-                    visable: (overview.enabled == true)
+                    visable: (overview.enabled|default('true') == true)
                     children:
                         admin_edu_cloud_sms_setting:
                             name: 概览
@@ -562,7 +562,7 @@ admin:
                 #             router_name: admin_edu_cloud_email
                 admin_edu_cloud_search_setting:
                     name: 云搜索
-                    visable: (overview.enabled == true)
+                    visable: (overview.enabled|default('true') == true)
                     router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search:
