@@ -1720,6 +1720,10 @@ admin_order_manage_export_coin_csv:
     pattern: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
 
+admin_account_center:
+    path:     /account/center
+    defaults: { _controller: TopxiaAdminBundle:Account:userRecords }
+
 admin_coin_user_records:
     path:     /coin/records/user
     defaults: { _controller: TopxiaAdminBundle:Coin:userRecords }
