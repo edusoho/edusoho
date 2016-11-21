@@ -47,36 +47,48 @@ class ExerciseController extends BaseController
 
         $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
-        return $this->render('WebBundle:Homework:do.html.twig', array(
-            'paper'          => $exercise,
-            'questions'      => $questions,
-            'course'         => $course,
-            'paperResult'    => $result,
-            'questionStatus' => 'doing'
+        return $this->render('WebBundle:Exercise:do.html.twig', array(
+            'paper'       => $exercise,
+            'questions'   => $questions,
+            'course'      => $course,
+            'paperResult' => $result,
+            'showTypeBar' => 0,
+            'showHeader'  => 0
         ));
     }
 
-    public function showTestAction(Request $request, $resultId)
+    public function showResultAction(Request $request, $resultId)
     {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-        if (!$result) {
-            throw new ResourceNotFoundException('exerciseResult', $resultId);
+        $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        $exercise = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
+
+        if (!$exercise) {
+            throw $this->createResourceNotFoundException('exercise', $exerciseResult['testId']);
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        $exercise              = $this->getTestpaperService()->getTestpaper($homeworkId);
-
-        if (empty($exercise)) {
-            throw new ResourceNotFoundException('exercise', $result['testId']);
+        if (in_array($exerciseResult['status'], array('doing', 'paused'))) {
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $exerciseResult['id'])));
         }
 
-        //$itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
-        $items = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $canLookExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);
 
-        return $this->render('HomeworkBundle:CourseHomework:do.html.twig', array(
-            'paper'  => $exercise,
-            'items'  => $items,
-            'course' => $course
+        if (!$canLookExercise) {
+            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
+        }
+
+        $builder   = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
+        $questions = $builder->showTestItems($exerciseResult['id']);
+
+        $student = $this->getUserService()->getUser($exerciseResult['userId']);
+
+        $attachments = $this->findAttachments($exercise['id']);
+        return $this->render('WebBundle:Exercise:do.html.twig', array(
+            'questions'   => $questions,
+            'paper'       => $exercise,
+            'paperResult' => $exerciseResult,
+            'student'     => $student,
+            'attachments' => $attachments
         ));
     }
 
@@ -407,6 +419,23 @@ class ExerciseController extends BaseController
         return $this->createJsonResponse($homework);
     }
 
+    protected function findAttachments($testId)
+    {
+        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $conditions  = array(
+            'type'        => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds'   => $questionIds
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
+        array_walk($attachments, function (&$attachment) {
+            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
+        });
+
+        return ArrayToolkit::group($attachments, 'dkey');
+    }
+
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
@@ -425,6 +454,11 @@ class ExerciseController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getServiceKernel()

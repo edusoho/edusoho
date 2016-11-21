@@ -2,25 +2,29 @@
 
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
-{% block content %}
+{% do script(['libs/es-ckeditor/ckeditor.js','web/testpaper/do-test/index.js']) %}
 
+{% block header %}{% if showHeader|default(1) %}{{ parent() }}{% endif %}{% endblock %}
+
+{% block content %}
+  
   {% block paper_header %}
     <div class="es-section testpaper-heading">
       <div class="testpaper-titlebar clearfix">
         <h1 class="testpaper-title">
           {{ paper.name }} <br>
           <small class="text-sm">
-            {% if result.status|default(null) in ['reviewing','finished'] %}
+            {% if paperResult.status|default(null) in ['reviewing','finished'] %}
               {{'答题人：'|trans}}{{ student.nickname }} 
-              {{'交卷时间：'|trans}}{{ result.endTime|date('Y-n-d H:i') }} 
-              {{'用时：'|trans}}{{ result.usedTime|duration }}
+              {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} 
+              {{'用时：'|trans}}{{ paperResult.usedTime|duration }}
             {% endif %}
           </small>
         </h1>
         <div class="testpaper-status">
-          {% if result.status|default(null) == 'doing' %}
+          {% if paperResult.status|default(null) == 'doing' %}
             <div class="label label-primary">{{'答题中'|trans}}</div>
-          {% elseif result.status|default(null) == 'reviewing' %}
+          {% elseif paperResult.status|default(null) == 'reviewing' %}
             <div class="label label-info">{{'批阅中'|trans}}</div>
           {% else %}
             <div class="label label-success">{{'批阅完成'|trans}}</div>
@@ -50,10 +54,26 @@
     </div>
   {% endblock %}
 
-{% endblock %}
+  {% block testpaperFinishedDialog %}
+    <div id="testpaper-finished-dialog" class="modal in" aria-hidden="false" style="display: none;">
+      <div class="modal-dialog modal-dialog-small">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{'确认交卷'|trans}}</h4>
+          </div>
+          <div class="modal-body">
+            <h4 class="text-primary">{{'您真的要交卷吗？'|trans}}</h4>
+          </div>
+          <div class="modal-footer">
+            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-saving-text="{{'正在交卷, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}">{{'确认交卷'|trans}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
 
-{% block timeoutDialog %}
-  <div class="timeout-dialog-layout">
+  {% block timeoutDialog %}
     <div id="timeout-dialog" class="modal in" aria-hidden="false" style="display: none;">
       <div class="modal-dialog modal-dialog-small">
         <div class="modal-content">
@@ -71,11 +91,9 @@
         </div>
       </div>
     </div>
-  </div>
-{% endblock %}
+  {% endblock %}
 
-{% block testpaperCheckedDialog %}
-  <div class="testpaper-dialog-layout">
+  {% block testpaperCheckedDialog %}
     <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
       <div class="modal-dialog modal-dialog-small">
         <div class="modal-content">
@@ -128,28 +146,11 @@
         </div>
       </div>
     </div>
-  </div>
+  {% endblock %}
+
 {% endblock %}
 
 
-{% block testpaperFinishedDialog %}
-  <div class="testpaper-finished-dialog-layout">
-    <div id="testpaper-finished-dialog" class="modal in" aria-hidden="false" style="display: none;">
-      <div class="modal-dialog modal-dialog-small">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{'确认交卷'|trans}}</h4>
-          </div>
-          <div class="modal-body">
-            <h4 class="text-primary">{{'您真的要交卷吗？'|trans}}</h4>
-          </div>
-          <div class="modal-footer">
-            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-            <button class="btn btn-primary" id="testpaper-finish-btn" data-saving-text="{{'正在交卷, 请稍等'|trans}}...">{{'确认交卷'|trans}}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+
+{% block footer %}{% if showHeader|default(1) %}{{ parent() }}{% endif %}{% endblock %}
 

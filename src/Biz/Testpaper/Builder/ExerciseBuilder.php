@@ -14,8 +14,17 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         return $this->getTestpaperService()->createTestpaper($fields);
     }
 
-    public function submit($resultId, $answers)
+    public function canBuild($options)
     {
+        $questions     = $this->getQuestions($options);
+        $questionCount = count($questions);
+
+        if ($questionCount < $options['itemCount']) {
+            $lessNum = $options['itemCount'] - $questionCount;
+            return array('status' => 'no', 'lessNum' => $lessNum);
+        } else {
+            return array('status' => 'yes');
+        }
     }
 
     public function showTestItems($resultId)
@@ -54,19 +63,6 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         return $this->formatQuestions($questions, $itemResults);
     }
 
-    public function canBuild($options)
-    {
-        $questions     = $this->getQuestions($options);
-        $questionCount = count($questions);
-
-        if ($questionCount < $options['itemCount']) {
-            $lessNum = $options['itemCount'] - $questionCount;
-            return array('status' => 'no', 'lessNum' => $lessNum);
-        } else {
-            return array('status' => 'yes');
-        }
-    }
-
     public function filterFields($fields, $mode = 'create')
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
@@ -99,7 +95,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         $formatQuestions = array();
         $i               = 1;
         foreach ($questions as $question) {
-            if (!empty($itemResults[$question['id']])) {
+            if (!empty($questionResults[$question['id']])) {
                 $question['testResult'] = $questionResults[$question['id']];
             }
 

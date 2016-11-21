@@ -52,6 +52,17 @@ class DetermineQuestion extends Question
     {
     }
 
+    public function judge($question, $answer)
+    {
+        $rightAnswer = array_pop($question['answer']);
+        $userAnswer  = array_pop($answer);
+
+        $status = $userAnswer == $rightAnswer ? 'right' : 'wrong';
+        $score  = $userAnswer == $rightAnswer ? $question['score'] : 0;
+
+        return array('status' => $status, 'score' => $score);
+    }
+
     public function filter($fields, $mode)
     {
         return parent::commonFilter($fields, $mode);

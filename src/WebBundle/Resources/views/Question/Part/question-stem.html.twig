@@ -1,10 +1,10 @@
-{% set showAcore = showAcore|default(1) %}
+{% set showScore = showScore|default(1) %}
 <div class="testpaper-question-stem-wrap clearfix">
   <div class="testpaper-question-seq-wrap">
     <div class="testpaper-question-seq">
       {% if parentQuestion|default(null) %}{{ parentQuestion.seq }}.{{ seq }}{% else %}{{ question.seq|default('') }}{% endif %}
     </div>
-    {% if showAcore %}
+    {% if showScore %}
       <div class="testpaper-question-score">
         {{ question.score|default('0.0') }}{{'分'|trans}}
       </div>

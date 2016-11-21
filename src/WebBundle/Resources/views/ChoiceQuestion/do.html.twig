@@ -28,7 +28,10 @@
 					{{'回答正确'|trans}}
 				{% elseif question.testResult.status == 'partRight' %}
 					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>
-					{{'。回答部分正确。得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
+					{{'。回答部分正确。'|trans}}
+					{% if showScore|default(1) %}
+						{{'得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
+					{% endif %}
 				{% elseif question.testResult.status == 'wrong' %}
 					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。{{'回答错误'|trans}}
 				{% elseif question.testResult.status == 'noAnswer' %}
@@ -50,7 +53,7 @@
 					{% set choiceIndex = (65+key)|chr %}
 
 					<label class="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
-						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ question.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="{{ question.type }}" name="{{ question.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
 						{{ choiceIndex }}
 					</label>
 				{% endfor %}

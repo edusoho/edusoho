@@ -102,19 +102,19 @@ course_manage_question_picked:
 
 #testpaper
 course_manage_testpaper:
-  path: /testpaper2/course/{courseId}/manage/testpaper
+  path: /course/{courseId}/manage/testpaper
   defaults: { _controller: WebBundle:TestpaperManage:index }
 
 course_manage_testpaper_create:
-  path: /testpaper2/course/{courseId}/manage/testpaper/create
+  path: /course/{courseId}/manage/testpaper/create
   defaults: { _controller: WebBundle:TestpaperManage:create }
 
 course_manage_testpaper_questions:
-  path: /testpaper2/course/{courseId}/manage/testpaper/{testpaperId}/items
+  path: /course/{courseId}/manage/testpaper/{testpaperId}/items
   defaults: { _controller: WebBundle:TestpaperManage:questions }
 
 course_manage_testpaper_items_get:
-  path: /testpaper2/course/{courseId}/manage/testpaper/items/get
+  path: /course/{courseId}/manage/testpaper/items/get
   defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
 
 testpaper_do:
@@ -134,7 +134,7 @@ testpaper_result_submit:
   defaults: { _controller: WebBundle:Testpaper:submitTest }
   methods: [POST]
 
-testpaper_finish_test:
+testpaper_finish:
   path: /testpaper/result/{resultId}/finish
   defaults: { _controller: WebBundle:Testpaper:finishTest }
 

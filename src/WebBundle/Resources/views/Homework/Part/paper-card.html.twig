@@ -13,7 +13,7 @@
 			{% if paperResult.status|default(null) == 'reviewing' %}
         <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" data-url"" id="homework-check-show-btn" data-return-url="">{{'完成批改'|trans}}</button>
       {% elseif paperResult.status|default(null) == 'doing' %}
-      	<button id="paper-finish" class="btn btn-success btn-block" >{{'提交作业'|trans}}</button>
+      	<button id="paper-finish" class="btn btn-success btn-block" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</button>
       {% endif %}
 
 		</div>

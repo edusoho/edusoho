@@ -47,6 +47,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
+    public function deleteTestpaper($id)
+    {
+        $testpaper = $this->getTestpaper($id);
+        $result    = $this->getTestpaperDao()->delete($id);
+        $this->deleteTestpaperItemByTestId($id);
+
+        $this->dispatchEvent('testpaper.delete', $testpaper);
+
+        return $result;
+    }
+
     public function findTestpapersByIds($ids)
     {
         $testpapers = $this->getTestpaperDao()->findTestpapersByIds($ids);
@@ -117,6 +128,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemResultDao()->create($fields);
     }
 
+    public function updateItemResult($itemResultId, $fields)
+    {
+        return $this->getItemResultDao()->update($itemResultId, $fields);
+    }
+
     public function findItemResultsByResultId($resultId)
     {
         return $this->getItemResultDao()->findItemResultsByResultId($resultId);
@@ -131,6 +147,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->get($id);
     }
 
+    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
+    {
+        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+    }
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
+    {
+        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+    }
+
     public function addTestpaperResult($fields)
     {
         return $this->getTestpaperResultDao()->create($fields);
@@ -139,7 +165,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function updateTestpaperResult($id, $fields)
     {
         $fields['updateTime'] = time();
-        $fields['endTime']    = time();
 
         return $this->getTestpaperResultDao()->update($id, $fields);
     }
@@ -172,6 +197,31 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaperBuilder = $this->getTestpaperBuilder($result['type']);
 
         return $testpaperBuilder->submit($fields);
+    }
+
+    public function finishTest($resultId, $formData)
+    {
+        $user = $this->getCurrentUser();
+
+        $result = $this->getTestpaperResult($resultId);
+
+        if ($result['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
+        }
+
+        if (in_array($result['status'], array('reviewing', 'finished'))) {
+            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能修改!'));
+        }
+
+        $answers = empty($formData['data']) ? array() : $formData['data'];
+
+        $this->submitAnswers($result['id'], $answers);
+
+        $paperResult = $this->countItemsScore($result['id'], $formData['usedTime']);
+
+        $this->dispatchEvent('testpaper.finish', new ServiceEvent($paperResult));
+
+        return $paperResult;
     }
 
     public function publishTestpaper($id)
@@ -218,17 +268,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function deleteTestpaper($id)
-    {
-        $testpaper = $this->getTestpaper($id);
-        $result    = $this->getTestpaperDao()->delete($id);
-        $this->deleteTestpaperItemByTestId($id);
-
-        $this->dispatchEvent('testpaper.delete', $testpaper);
-
-        return $result;
-    }
-
     public function deleteTestpaperItemByTestId($testpaperId)
     {
         return $this->getItemDao()->deleteItemsByTestpaperId($testpaperId);
@@ -236,55 +275,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function canBuildTestpaper($type, $options)
     {
-        $builder = TestpaperBuilderFactory::create($this->biz, $type);
+        $builder = $this->getTestpaperBuilder($type);
         return $builder->canBuild($options);
-    }
-
-    public function findTestpaperResultsByUserId($id, $start, $limit)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultsByUserId($id, $start, $limit);
-    }
-
-    public function findTestpaperResultsCountByUserId($id)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultsCountByUserId($id);
-    }
-
-    //将废弃
-    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
-    }
-
-    public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $status, $userId);
-    }
-
-    public function findTestpaperResultsByStatusAndTestIds($ids, $status, $start, $limit)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultsByStatusAndTestIds($ids, $status, $start, $limit);
-    }
-
-    public function findTestpaperResultCountByStatusAndTestIds($ids, $status)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultCountByStatusAndTestIds($ids, $status);
-    }
-
-    public function findTestpaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit);
-    }
-
-    public function findTestpaperResultCountByStatusAndTeacherIds($ids, $status)
-    {
-        return $this->getTestpaperResultDao()->findTestpaperResultCountByStatusAndTeacherIds($ids, $status);
-    }
-
-    //new
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
-    {
-        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
     }
 
     public function startTestpaper($id, $lessonId)
@@ -369,286 +361,35 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaperBuilder->showTestItems($resultId);
     }
 
-    public function showTestpaper($testpaperResultId, $isAccuracy = null)
+    public function makeAccuracy($resultId)
     {
-        $testpaperResult = $this->getTestpaperResult($testpaperResultId);
+        $testpaperResult = $this->getTestpaperResult($resultId);
+        $items           = $this->findItemsByTestId($testpaperResult['testId']);
 
-        $itemResults = $this->findItemResultsByResultId($testpaperResult['id']);
+        $itemResults = $this->findItemResultsByResultId($resultId);
         $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
-        $items = $this->findItemsByTestId($testpaperResult['testId']);
-        $items = ArrayToolkit::index($items, 'questionId');
+        $accuracy = array();
 
-        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        foreach ($itemResults as $itemResult) {
+            $item = $items[$itemResult['questionId']];
 
-        $questions = $this->completeQuestion($items, $questions);
+            if ($item['parentId'] > 0) {
+                $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
 
-        $formatItems = array();
+                $accuracy['material'] = $this->countItemResultStatus($accuracy['material'], $item, $itemResult);
 
-        foreach ($items as $questionId => $item) {
-            if (!empty($itemResults[$questionId])) {
-                $questions[$questionId]['testResult'] = $itemResults[$questionId];
-            }
-
-            $items[$questionId]['question'] = $questions[$questionId];
-
-            if ($item['parentId'] != 0) {
-                if (!array_key_exists('items', $items[$item['parentId']])) {
-                    $items[$item['parentId']]['items'] = array();
-                }
-
-                $items[$item['parentId']]['items'][$questionId]                    = $items[$questionId];
-                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
-                unset($items[$questionId]);
+                $accuracy['material'] = $accuracyResult;
             } else {
-                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
-            }
-        }
+                $accuracy[$item['questionType']] = empty($accuracy[$item['questionType']]) ? array() : $accuracy[$item['questionType']];
 
-        if ($isAccuracy) {
-            $accuracy = $this->makeAccuracy($items);
-        }
+                $accuracyResult = $this->countItemResultStatus($accuracy[$item['questionType']], $item, $itemResult);
 
-        ksort($formatItems);
-        return array(
-            'formatItems' => $formatItems,
-            'accuracy'    => $isAccuracy ? $accuracy : null
-        );
-    }
-
-    protected function makeAccuracy($items)
-    {
-        $accuracyResult = array(
-            'right'      => 0,
-            'partRight'  => 0,
-            'wrong'      => 0,
-            'noAnswer'   => 0,
-            'all'        => 0,
-            'score'      => 0,
-            'totalScore' => 0
-        );
-        $accuracy = array(
-            'single_choice'    => $accuracyResult,
-            'choice'           => $accuracyResult,
-            'uncertain_choice' => $accuracyResult,
-            'determine'        => $accuracyResult,
-            'fill'             => $accuracyResult,
-            'essay'            => $accuracyResult,
-            'material'         => $accuracyResult
-        );
-
-        foreach ($items as $item) {
-            if ($item['questionType'] == 'material') {
-                if (!array_key_exists('items', $item)) {
-                    continue;
-                }
-
-                foreach ($item['items'] as $key => $v) {
-                    if ($v['questionType'] == 'essay') {
-                        $accuracy['material']['hasEssay'] = true;
-                    }
-
-                    $accuracy['material']['score'] += $v['question']['testResult']['score'];
-                    $accuracy['material']['totalScore'] += $v['score'];
-
-                    $accuracy['material']['all']++;
-
-                    if ($v['question']['testResult']['status'] == 'right') {
-                        $accuracy['material']['right']++;
-                    }
-
-                    if ($v['question']['testResult']['status'] == 'partRight') {
-                        $accuracy['material']['partRight']++;
-                    }
-
-                    if ($v['question']['testResult']['status'] == 'wrong') {
-                        $accuracy['material']['wrong']++;
-                    }
-
-                    if ($v['question']['testResult']['status'] == 'noAnswer') {
-                        $accuracy['material']['noAnswer']++;
-                    }
-                }
-            } else {
-                $accuracy[$item['questionType']]['score'] += $item['question']['testResult']['score'];
-                $accuracy[$item['questionType']]['totalScore'] += $item['score'];
-
-                $accuracy[$item['questionType']]['all']++;
-
-                if ($item['question']['testResult']['status'] == 'right') {
-                    $accuracy[$item['questionType']]['right']++;
-                }
-
-                if ($item['question']['testResult']['status'] == 'partRight') {
-                    $accuracy[$item['questionType']]['partRight']++;
-                }
-
-                if ($item['question']['testResult']['status'] == 'wrong') {
-                    $accuracy[$item['questionType']]['wrong']++;
-                }
-
-                if ($item['question']['testResult']['status'] == 'noAnswer') {
-                    $accuracy[$item['questionType']]['noAnswer']++;
-                }
+                $accuracy[$item['questionType']] = $accuracyResult;
             }
         }
 
         return $accuracy;
-    }
-
-    //在用
-    public function makeTestpaperResultFinish($id)
-    {
-        $userId = $this->getCurrentUser()->id;
-
-        if (empty($userId)) {
-            throw $this->createServiceException($this->getKernel()->trans('当前用户不存在!'));
-        }
-
-        $testpaperResult = $this->getTestpaperResult($id);
-
-        if ($testpaperResult['userId'] != $userId) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
-        }
-
-        if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能更改答案!'));
-        }
-
-        $items = $this->findItemsByTestId($testpaperResult['testId']);
-
-        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
-
-        //得到当前用户答案
-        $answers = $this->findItemResultsByResultId($testpaperResult['id']);
-
-        $answers = ArrayToolkit::index($answers, 'questionId');
-
-        $answers = $this->formatAnswers($answers, $items);
-
-        $answers = $this->getQuestionService()->judgeQuestions($answers, true);
-
-        $answers = $this->makeScores($answers, $items);
-
-        $questions = $this->completeQuestion($items, $questions);
-
-        foreach ($answers as $questionId => $answer) {
-            if ($answer['status'] == 'noAnswer') {
-                $answer['answer'] = array_pad(array(), count($questions[$questionId]['answer']), '');
-
-                $answer['testId']     = $testpaperResult['testId'];
-                $answer['resultId']   = $testpaperResult['id'];
-                $answer['userId']     = $userId;
-                $answer['questionId'] = $questionId;
-                $this->createItemResult($answer);
-            }
-        }
-
-        //记分
-        $this->getItemResultDao()->updateItemResults($answers, $testpaperResult['id']);
-
-        return $this->findItemResultsByResultId($testpaperResult['id']);
-    }
-
-    protected function formatAnswers($answers, $items)
-    {
-        $results = array();
-
-        foreach ($items as $item) {
-            $results[$item['questionId']] = isset($answers[$item['questionId']]) ? $answers[$item['questionId']]['answer'] : array();
-        }
-
-        return $results;
-    }
-
-    public function makeScores($answers, $items)
-    {
-        foreach ($answers as $questionId => $answer) {
-            if ($answer['status'] == 'right') {
-                $answers[$questionId]['score'] = $items[$questionId]['score'];
-            } elseif ($answer['status'] == 'partRight') {
-                if ($items[$questionId]['questionType'] == 'fill') {
-                    $answers[$questionId]['score'] = ($items[$questionId]['score'] * $answer['percentage']) / 100;
-                    $answers[$questionId]['score'] = number_format($answers[$questionId]['score'], 1, '.', '');
-                } else {
-                    $answers[$questionId]['score'] = $items[$questionId]['missScore'];
-                }
-            } else {
-                $answers[$questionId]['score'] = 0;
-            }
-        }
-
-        return $answers;
-    }
-
-    //在用
-    public function finishTest($id, $userId, $usedTime)
-    {
-        $itemResults = $this->findItemResultsByResultId($id);
-        $questionIds = ArrayToolkit::column($itemResults, 'questionId');
-
-        $testpaperResult = $this->getTestpaperResult($id);
-        $testpaper       = $this->getTestpaper($testpaperResult['testId']);
-
-        $hasEssay = $this->isExistsEssay($questionIds);
-
-        $fields['status'] = $hasEssay ? 'reviewing' : 'finished';
-
-        $accuracy                 = $this->sumScore($itemResults);
-        $fields['objectiveScore'] = $accuracy['sumScore'];
-
-        $fields['score'] = 0;
-
-        if (!$hasEssay) {
-            $fields['score'] = $fields['objectiveScore'];
-        }
-
-        $fields['rightItemCount'] = $accuracy['rightItemCount'];
-        $fields['passedStatus']   = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
-        $fields['usedTime']       = $usedTime + $testpaperResult['usedTime'];
-        $fields['checkedTime']    = time();
-
-        $testpaperResult = $this->updateTestpaperResult($id, $fields);
-
-        $this->dispatchEvent(
-            'testpaper.finish',
-            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
-        );
-
-        return $testpaperResult;
-    }
-
-    //在用
-    public function isExistsEssay($questionIds)
-    {
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-        $types     = ArrayToolkit::column($questions, 'type');
-
-        if (in_array('essay', $types)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    //在用
-    protected function sumScore($itemResults)
-    {
-        $score          = 0;
-        $rightItemCount = 0;
-
-        foreach ($itemResults as $itemResult) {
-            $score += $itemResult['score'];
-
-            if ($itemResult['status'] == 'right') {
-                $rightItemCount++;
-            }
-        }
-
-        return array(
-            'sumScore'       => $score,
-            'rightItemCount' => $rightItemCount
-        );
     }
 
     public function makeTeacherFinishTest($id, $paperId, $teacherId, $field)
@@ -717,50 +458,118 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testPaperResult;
     }
 
-    public function submitTestpaperAnswer($id, $answers)
+    //new
+    protected function submitAnswers($id, $answers)
     {
         if (empty($answers)) {
             return array();
         }
 
-        $user = $this->getCurrentUser();
-
+        $user            = $this->getCurrentUser();
         $testpaperResult = $this->getTestpaperResult($id);
+        $questionIds     = array_keys($answers);
 
-        if ($testpaperResult['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
+        $paperItems = $this->findItemsByTestId($testpaperResult['testId']);
+
+        $itemResults = $this->findItemResultsByResultId($testpaperResult['id']);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $this->getItemResultDao()->db()->beginTransaction();
+
+        try {
+            foreach ($answers as $questionId => $answer) {
+                $fields = array('answer' => $answer);
+
+                $question  = empty($questions[$questionId]) ? array() : $questions[$questionId];
+                $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
+
+                if (!$question) {
+                    $fields['status'] = 'notFound';
+                    $fields['score']  = 0;
+                } else {
+                    $question['score']     = empty($paperItem['score']) ? 0 : $paperItem['score'];
+                    $question['missScore'] = empty($paperItem['missScore']) ? 0 : $paperItem['missScore'];
+
+                    $answerStatus     = $this->getQuestionService()->judgeQuestion($question, $answer);
+                    $fields['status'] = $answerStatus['status'];
+                    $fields['score']  = $answerStatus['score'];
+                }
+
+                if (!empty($itemResults[$questionId])) {
+                    $this->updateItemResult($itemResults[$questionId]['id'], $fields);
+                } else {
+                    $fields['testId']     = $testpaperResult['testId'];
+                    $fields['resultId']   = $testpaperResult['id'];
+                    $fields['userId']     = $user['id'];
+                    $fields['questionId'] = $questionId;
+                    $fields['answer']     = $answer;
+
+                    $this->createItemResult($fields);
+                }
+            }
+            $this->getItemResultDao()->db()->commit();
+        } catch (\Exception $e) {
+            $this->getItemResultDao()->db()->rollback();
+            throw $e;
         }
 
-        if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能更改答案!'));
-        }
-
-        //已经有记录的
-        $itemResults = $this->filterTestAnswers($testpaperResult['id'], $answers);
-        $itemIdsOld  = ArrayToolkit::index($itemResults, 'questionId');
-
-        $answersOld = ArrayToolkit::parts($answers, array_keys($itemIdsOld));
-
-        if (!empty($answersOld)) {
-            $this->getItemResultDao()->updateItemAnswers($testpaperResult['id'], $answersOld);
-        }
-
-        //还没记录的
-        $itemIdsNew = array_diff(array_keys($answers), array_keys($itemIdsOld));
-
-        $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
-
-        if (!empty($answersNew)) {
-            $this->getItemResultDao()->addItemAnswers($testpaperResult['id'], $answersNew, $testpaperResult['testId'], $user['id']);
-        }
-
-        //测试数据
-        return $this->filterTestAnswers($testpaperResult['id'], $answers);
+        return $this->findItemResultsByResultId($testpaperResult['id']);
     }
 
-    protected function filterTestAnswers($testpaperResultId, $answers)
+    //new
+    protected function countItemsScore($resultId, $usedTime)
     {
-        return $this->getItemResultDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testpaperResultId);
+        $testpaperResult = $this->getTestpaperResult($resultId);
+        $testpaper       = $this->getTestpaper($testpaperResult['testId']);
+        $items           = $this->findItemsByTestId($testpaperResult['id']);
+        $itemResults     = $this->findItemResultsByResultId($testpaperResult['id']);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
+
+        $fields = array(
+            'status' => $hasEssay ? 'reviewing' : 'finished'
+        );
+
+        $accuracy                 = $this->sumScore($itemResults);
+        $fields['objectiveScore'] = $accuracy['sumScore'];
+
+        $fields['score'] = 0;
+        if (!$hasEssay) {
+            $fields['score']       = $fields['objectiveScore'];
+            $fields['checkedTime'] = time();
+        }
+
+        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
+
+        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime']  = time();
+
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        return $this->updateTestpaperResult($testpaperResult['id'], $fields);
+    }
+
+    protected function sumScore($itemResults)
+    {
+        $score          = 0;
+        $rightItemCount = 0;
+
+        foreach ($itemResults as $itemResult) {
+            $score += $itemResult['score'];
+
+            if ($itemResult['status'] == 'right') {
+                $rightItemCount++;
+            }
+        }
+
+        return array(
+            'sumScore'       => $score,
+            'rightItemCount' => $rightItemCount
+        );
     }
 
     public function updateTestpaperItems($testpaperId, $items)
@@ -954,35 +763,42 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTeacherTestpapersByTeacherId($teacherId)
+    protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
-        $members = $this->getMemberDao()->findAllMemberByUserIdAndRole($teacherId, 'teacher');
+        $resultStatus = array(
+            'score'      => empty($resultStatus['score']) ? 0 : $resultStatus['score'],
+            'totalScore' => empty($resultStatus['totalScore']) ? 0 : $resultStatus['totalScore'],
+            'all'        => empty($resultStatus['all']) ? 0 : $resultStatus['all'],
+            'right'      => empty($resultStatus['right']) ? 0 : $resultStatus['right'],
+            'partRight'  => empty($resultStatus['partRight']) ? 0 : $resultStatus['partRight'],
+            'wrong'      => empty($resultStatus['wrong']) ? 0 : $resultStatus['wrong'],
+            'noAnswer'   => empty($resultStatus['noAnswer']) ? 0 : $resultStatus['noAnswer']
+        );
+        $resultStatus['score'] += $questionResult['score'];
+        $resultStatus['totalScore'] += $item['score'];
 
-        $targets = array_map(function ($member) {
-            return "course-".$member['courseId'];
-        }, $members);
+        $resultStatus['all']++;
 
-        return $this->getTestpaperDao()->findTestpaperByTargets($targets);
-    }
-
-    public function updateTestResultsByLessonId($lessonId, $fields)
-    {
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-
-        if (empty($lesson)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课时不存在!'));
+        if ($questionResult['status'] == 'right') {
+            $resultStatus['right']++;
         }
 
-        $target = 'course-'.$lesson['courseId'].'/lesson-'.$lesson['id'];
-        $this->getTestpaperResultDao()->updateTestResultsByTarget($target, $fields);
+        if ($questionResult['status'] == 'partRight') {
+            $resultStatus['partRight']++;
+        }
+
+        if ($questionResult['status'] == 'wrong') {
+            $resultStatus['wrong']++;
+        }
+
+        if ($questionResult['status'] == 'noAnswer') {
+            $resultStatus['noAnswer']++;
+        }
+
+        return $resultStatus;
     }
 
-    public function getItemsCountByParams($conditions, $groupBy = '')
-    {
-        return $this->getItemDao()->getItemsCountByParams($conditions, $groupBy);
-    }
-
-    protected function getTestpaperBuilder($type)
+    public function getTestpaperBuilder($type)
     {
         return TestpaperBuilderFactory::create($this->biz, $type);
     }

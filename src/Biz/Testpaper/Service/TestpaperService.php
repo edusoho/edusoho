@@ -9,6 +9,8 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
+    public function deleteTestpaper($id);
+
     public function findTestpapersByIds($ids);
 
     public function searchTestpapers($conditions, $sort, $start, $limit);
@@ -39,6 +41,8 @@ interface TestpaperService
 
     public function createItemResult($fields);
 
+    public function updateItemResult($itemResultId, $fields);
+
     public function findItemResultsByResultId($resultId);
 
     /**
@@ -47,47 +51,31 @@ interface TestpaperService
 
     public function getTestpaperResult($id);
 
+    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+
+    public function addTestpaperResult($fields);
+
+    public function updateTestpaperResult($id, $fields);
+
     public function searchTestpaperResultsCount($conditions);
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit);
 
     public function searchTestpapersScore($conditions);
 
+    public function buildTestpaper($fields, $type);
+
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
 
-    public function deleteTestpaper($id);
-
     public function deleteTestpaperItemByTestId($testpaperId);
-
-    public function buildTestpaper($id, $options);
 
     public function canBuildTestpaper($builder, $options);
 
     public function canLookTestpaper($resultId);
-
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
-
-    public function findTestpaperResultsByUserId($id, $start, $limit);
-
-    public function findTestpaperResultsCountByUserId($id);
-
-    //将废弃
-    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
-
-    public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
-
-    public function findTestpaperResultsByStatusAndTestIds($ids, $status, $start, $limit);
-
-    public function findTestpaperResultCountByStatusAndTestIds($ids, $status);
-
-    public function findTestpaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit);
-
-    public function findTestpaperResultCountByStatusAndTeacherIds($ids, $status);
-
-    //new
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
 
     /**
      * 开始做试卷
@@ -99,30 +87,16 @@ interface TestpaperService
 
     public function previewTestpaper($testpaperId);
 
-    public function showTestpaper($testpaperResultId, $isAccuracy = null);
+    //public function showTestpaper($testpaperResultId, $isAccuracy = null);
 
-    /**
-     * [submitTestpaperAnswer description]
-     * @param  [type] $testpaperId    [description]
-     * @param  [type] $answers        [description]
-     * @return [type] [description]
-     */
-    public function submitTestpaperAnswer($resultId, $answers);
+    //public function submitAnswers($resultId, $answers);
 
-    public function makeTestpaperResultFinish($id);
-
-    public function finishTest($id, $userId, $usedTime);
+    public function finishTest($resultId, $formData);
 
     public function makeTeacherFinishTest($id, $paperId, $teacherId, $field);
 
-    public function updateTestpaperResult($id, $usedTime);
-
-    public function updateTestResultsByLessonId($lessonId, $fields);
-
-    public function findTeacherTestpapersByTeacherId($teacherId);
-
     public function updateTestpaperItems($testpaperId, $items);
 
-    public function getItemsCountByParams($conditions, $groupBy = '');
+    public function getTestpaperBuilder($type);
 
 }

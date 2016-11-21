@@ -52,6 +52,15 @@ class SingleChoiceQuestion extends Question
     {
     }
 
+    public function judge($question, $answer)
+    {
+        if (count(array_diff($question['answer'], $answer)) == 0 && count(array_diff($answer, $question['answer'])) == 0) {
+            return array('status' => 'right', 'score' => $question['score']);
+        }
+
+        return array('status' => 'wrong', 'score' => 0);
+    }
+
     public function filter($fields, $mode)
     {
         if (!empty($fields['choices'])) {

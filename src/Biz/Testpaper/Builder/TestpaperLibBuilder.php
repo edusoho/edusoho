@@ -5,5 +5,7 @@ interface TestpaperLibBuilder
 {
     public function build($fields);
 
-    public function submit($resultId, $answers);
+    public function canBuild($options);
+
+    public function showTestItems($resultId);
 }

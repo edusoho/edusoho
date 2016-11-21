@@ -128,7 +128,6 @@ class TestpaperManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $data           = $request->request->all();
-        $data['target'] = "course-{$course['id']}";
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
         $result         = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);

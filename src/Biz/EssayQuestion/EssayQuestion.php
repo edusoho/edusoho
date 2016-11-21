@@ -52,6 +52,11 @@ class EssayQuestion extends Question
     {
     }
 
+    public function judge($question, $answer)
+    {
+        return array('status' => 'none', 'score' => 0);
+    }
+
     public function filter($fields, $mode)
     {
         return parent::commonFilter($fields, $mode);

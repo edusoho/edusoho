@@ -29,7 +29,11 @@
 		    {% if question.testResult.status == "right" %}
 			    <p class="text-success">{{'回答正确。'|trans}}</p>
 			  {% elseif question.testResult.status == "partRight" %}
-			    <p class="text-warning">{{'回答部分正确，本题得分：%testResult.score%分。'|trans({'%testResult.score%': question.testResult.score})}}</p>
+			    <p class="text-warning">{{'回答部分正确。'|trans}}
+				    {% if showScore|default(1) %}
+							{{'本题得分：%testResult.score%分。'|trans({'%testResult.score%': question.testResult.score})}}
+				    {% endif %}
+			    </p>
 			  {% else %}
 			    <p class="text-danger">{{'回答错误。'|trans}}</p>
 			  {% endif %}

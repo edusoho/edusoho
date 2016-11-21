@@ -21,4 +21,10 @@ interface QuestionService
 
     public function searchCount($conditions);
 
+    public function waveCount($id, $diffs);
+
+    public function judgeQuestion($question, $answer);
+
+    public function hasEssay($questionIds);
+
 }

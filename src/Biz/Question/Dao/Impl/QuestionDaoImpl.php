@@ -31,6 +31,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         );
 
         $declares['conditions'] = array(
+            'id IN ( :ids )',
             'parentId = :parentId',
             'difficulty = :difficulty',
             'type = :type',
@@ -39,7 +40,8 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
-            'lessonId = :lessonId'
+            'lessonId = :lessonId',
+            'lessonId IN ( :lessonIds)'
         );
 
         $declares['serializes'] = array(

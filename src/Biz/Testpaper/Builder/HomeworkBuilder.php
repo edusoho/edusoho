@@ -22,8 +22,11 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $homework;
     }
 
-    public function submit($resultId, $answers)
+    public function canBuild($options)
     {
+        $questions      = $this->getQuestions($options);
+        $typedQuestions = ArrayToolkit::group($questions, 'type');
+        return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
     public function showTestItems($resultId)
@@ -59,20 +62,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
             }
         }
 
-        /*$set = array(
-        'items'       => $items,
-        'questionIds' => $questionIds,
-        'total'       => $itemCount
-        );*/
-
         return $formatQuestions;
-    }
-
-    public function canBuild($options)
-    {
-        $questions      = $this->getQuestions($options);
-        $typedQuestions = ArrayToolkit::group($questions, 'type');
-        return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
     public function filterFields($fields, $mode = 'create')
@@ -185,17 +175,18 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
     {
         $conditions        = array();
         $options['ranges'] = array_filter($options['ranges']);
+
+        $conditions['courseId'] = $options['courseId'];
+
         if (!empty($options['ranges'])) {
-            $conditions['targets'] = $options['ranges'];
-        } else {
-            $conditions['targetPrefix'] = 'course-'.$options['courseId'];
+            $conditions['lessonIds'] = $options['ranges'];
         }
 
         $conditions['parentId'] = 0;
 
-        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
     protected function makeItem($homeworkId, $question)

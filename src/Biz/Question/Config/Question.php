@@ -77,6 +77,8 @@ abstract class Question
 
     abstract public function getMetas();
 
+    abstract public function judge($question, $answer);
+
     protected function commonFilter($fields, $mode)
     {
         if (!empty($fields['target']) && $fields['target'] > 0) {

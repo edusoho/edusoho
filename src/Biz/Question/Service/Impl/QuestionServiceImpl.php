@@ -5,7 +5,6 @@ use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
-use Topxia\Service\Question\Type\QuestionTypeFactory;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
@@ -33,7 +32,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $question = $this->getQuestionDao()->create($fields);
 
         if ($question['parentId'] > 0) {
-            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
         $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
@@ -76,7 +75,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $result = $this->getQuestionDao()->delete($id);
 
         if ($question['parentId'] > 0) {
-            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
         if ($question['subCount'] > 0) {
@@ -144,28 +143,34 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return array();
     }
 
-    public function judgeQuestions(array $answers, $refreshStats = false)
-    {
-        $questions = $this->findQuestionsByIds(array_keys($answers));
-
-        $results = array();
-        foreach ($answers as $id => $answer) {
-            if (empty($answer)) {
-                $results[$id] = array('status' => 'noAnswer');
-            } elseif (empty($questions[$id])) {
-                $results[$id] = array('status' => 'notFound');
-            } else {
-                $question     = $questions[$id];
-                $results[$id] = QuestionTypeFactory::create($question['type'])->judge($question, $answer);
-            }
-        }
-
-        return $results;
-    }
-
-    public function waveSubCount($id, $diffs)
+    public function waveCount($id, $diffs)
     {
         return $this->getQuestionDao()->wave(array($id), $diffs);
+    }
+
+    public function judgeQuestion($question, $answer)
+    {
+        if (!$question) {
+            return array('status' => 'notFound', 'score' => 0);
+        }
+
+        if (!$answer) {
+            return array('status' => 'noAnswer', 'score' => 0);
+        }
+
+        $questionConfig = $this->getQuestionConfig($question['type']);
+        return $questionConfig->judge($question, $answer);
+    }
+
+    public function hasEssay($questionIds)
+    {
+        $count = $this->searchCount(array('ids' => $questionIds, 'type' => 'essay'));
+
+        if ($count) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getQuestionDao()
