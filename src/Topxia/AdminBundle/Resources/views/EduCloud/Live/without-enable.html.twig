@@ -1,8 +1,14 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_cloud_edulive' %}
+{% block tabs %}{% endblock %}
+{% block main %}
 <div class="panel panel-default notice-panel">
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
     <div class="text-md mbl">尚未启用云直播</div>
     <div class="color-gray notice-desc">尚未购买云直播服务，不能启用，<a href="">立即购买</a> 或 <a href="">了解详情</a>。</div>
-    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+    <a href="" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %} >立即启用</a>
   </div>
 </div>
+{% endblock %}
