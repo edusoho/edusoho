@@ -1,0 +1,143 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}{{ '账务中心'|trans }}{% endblock %}
+
+{% set menu = 'admin_account_center' %}
+{% set script_controller = 'account-center/index' %}
+
+
+
+  
+{% block main %}
+  {# 域名检查提示#}
+  {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+        {{ '本周数据'|trans }} 
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-week-data-popover"></span>
+        {{ '收入单位'|trans }}
+        ：
+        {{ '元'|trans }} 
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '登录用户'|trans }}</div>
+            <div class="content">{{ '15分钟内活动的登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '在线总数'|trans }}</div>
+            <div class="content">{{ '15分钟内活动用户数，包括登录用户及未登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增注册'|trans }}</div>
+            <div class="content">{{ '平台新增用户数，包括自主注册、第三方注册及导入'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增学员人次'|trans }}</div>
+            <div class="content">{{ '今日加入课程和班级的总人次，1个学员加入2个课程，算2人次'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增会员'|trans }}</div>
+            <div class="content">{{ '今日购买会员的人数'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复问答'|trans }}</div>
+            <div class="content">{{ '今日新产生问题中未回答的数量'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复总数'|trans }}</div>
+            <div class="content">{{ '到目前为止，未回答问题总数'|trans }}</div>
+          </div>
+        </div>
+      </h3>
+    </div>
+    <div class="panel-body" id="site-overview-table" data-url="{{path('admin_account_analysis')}}">
+      <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+      <!-- model -->
+        
+    </div>
+  </div>
+  <div class="panel panel-default panel-420">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <span class="mrl text-sm js-data-switch-time">{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }} </span>
+        <div class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-primary js-finance-switch-button"
+                  data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="">本月
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.seasonDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="">本季
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.yearDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="">本年
+          </button>
+        </div>
+      </div>
+      <h3 class="panel-title">{{ '财务统计'|trans }}
+        <span data-toggle="popover"
+              class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '新增订单'|trans }}</div>
+            <div class="content">{{ '平台当日产生的所有订单，包括免费和付费'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '付费订单'|trans }}</div>
+            <div class="content">{{ '平台当日产生的订单价格大于0元的订单'|trans }}</div>
+          </div>
+        </div>
+      </h3>
+    </div>
+    <div class="panel-body js-statistic-areas" id="finance-count-statistic"
+         data-url="{{ path('admin_account_statistic', {period: 'week'}) }}" style="height:320px;">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'cash'})}}">{{ '本月用户现金消费top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'coin'})}}">{{ '本月用户虚拟币消费top10'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="user-pay-list"
+             data-url="{{path('admin_payment_rank',{type:'cash'})}}">
+          <!-- model -->
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'all'})}}">{{ '本月top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Course'})}}">{{ '课程top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Classroom'})}}">{{ '班级top10'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Vip'})}}">{{ '会员top10'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="product-consume-list"
+             data-url="{{path('admin_account_rank',{type:'all'})}}">
+          <!-- model -->
+          
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

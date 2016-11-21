@@ -157,6 +157,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('status <> :statusPaid')
             ->andWhere('status <> :statusCreated')
             ->andWhere('payment = :payment')
+            ->andWhere('payment <> :cashPayment')
             ->andWhere('createdTime >= :createdTimeGreaterThan')
             ->andWhere('paidTime >= :paidStartTime')
             ->andWhere('paidTime < :paidEndTime')
@@ -250,6 +251,17 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     {
         $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisAmountData($group, $conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select("sum(amount) as count, userId, title, targetType, targetId ,from_unixtime(paidTime,'%Y-%m-%d') date")
+            ->groupBy($group)
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function analysisExitCourseOrderDataByTime($startTime, $endTime)
