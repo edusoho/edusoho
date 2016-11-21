@@ -1,24 +1,25 @@
-import SideBar from "./sidebar";
 import Messenger from "es-messenger";
+import SideBar from './widget/sidebar';
+import LearnState from './widget/learn-state';
+
+>>>>>>> feature/course2.0-activity
 
 class TaskShow {
   constructor(element) {
     this.element = $(element);
-
     this.init();
   }
 
   init() {
-    this._initPlugin();
-    this._sidebar();
-    this.bindActivityEmitterEvent();
+    this.initPlugin();
+    this.sidebar();
   }
 
-  _initPlugin() {
-    this.element.find('[data-toggle="tooltip"]').tooltip();
-    this.element.find('[data-toggle="popover"]').popover({
+  initPlugin() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
       html: true,
-      trigger: 'hover',
+      trigger: 'click',
     });
   }
 
@@ -53,11 +54,15 @@ class TaskShow {
     //@ TODO 任务完成的方法
   }
 
-  _sidebar() {
+  sidebar() {
     var sideBar = new SideBar({
-      element: this.element.find('.dashboard-sidebar-content'),
-      activePlugins: ["note"],
+      element:'.dashboard-sidebar-content',
+      activePlugins:["note","question"],
       courseId: 1,
+    });
+
+    var learnState = new LearnState ({
+      element:'.js-task-dashboard-page',
     });
   }
 }

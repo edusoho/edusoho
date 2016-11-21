@@ -3,12 +3,12 @@ import loadAnimation from 'common/load-animation'
 class Editor {
     constructor($modal) {
         this.$element = $modal;
-        this.$task_manage_content = $('#task-manage-content');
-        this.$task_manage_type = $('#task-manage-type');
+        this.$task_manage_content = $('#task-create-content');
+        this.$task_manage_type = $('#task-create-type');
         this.$frame = null;
         this.$iframe_body = null;
         this.iframe_jQuery = null;
-        this.iframe_name = 'task-manage-content-iframe';
+        this.iframe_name = 'task-create-content-iframe';
         this.mode = this.$task_manage_type.data('editorMode');
         this.type = this.$task_manage_type.data('editorType');
         this.step = 1;
@@ -194,8 +194,8 @@ class Editor {
     }
 
     _renderStep(step) {
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
+        $('#task-create-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
+        $('#task-create-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
     }
 
     _renderContent(step) {
