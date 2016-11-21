@@ -1,4 +1,6 @@
-import SideBar from './sidebar';
+import SideBar from './widget/sidebar';
+import LearnState from './widget/learn-state';
+
 
 class TaskShow {
   constructor() {
@@ -6,11 +8,11 @@ class TaskShow {
   }
 
   init() {
-    this._initPlugin();
-    this._sidebar();
+    this.initPlugin();
+    this.sidebar();
   }
 
-  _initPlugin() {
+  initPlugin() {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({
       html: true,
@@ -18,11 +20,15 @@ class TaskShow {
     });
   }
 
-  _sidebar() {
+  sidebar() {
     var sideBar = new SideBar({
       element:'.dashboard-sidebar-content',
       activePlugins:["note","question"],
       courseId: 1,
+    });
+
+    var learnState = new LearnState ({
+      element:'.js-task-dashboard-page',
     });
   }
 }

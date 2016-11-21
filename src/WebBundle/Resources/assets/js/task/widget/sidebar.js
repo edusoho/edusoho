@@ -1,5 +1,6 @@
-import NotePlugin from './plugins/note/plugin';
-import QuestionPlugin from './plugins/question/plugin';
+import NotePlugin from '../plugins/note/plugin';
+import QuestionPlugin from '../plugins/question/plugin';
+import 'store';
 
 class SideBar {
   constructor(option) {
@@ -20,6 +21,7 @@ class SideBar {
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
+    this._isRenderSiderBar();
   }
 
   _registerPlugin(plugin) {
@@ -50,7 +52,7 @@ class SideBar {
     });
   }
 
-  _renderSiderBar(show) {
+  _renderSiderBar(show,time='') {
     let sider_right = '0px';
     let content_right = '379px';
     if(!show) {
@@ -59,10 +61,10 @@ class SideBar {
     }
     this.$dashboardsidebar.animate({
       right: sider_right,
-    });
+    },time);
     this.$dashboardcontent.animate({
       right: content_right,
-    });
+    },time);
   }
 
   _rendBar($item,show) {
@@ -79,6 +81,17 @@ class SideBar {
       return undefined;
     }
     return $pane;
+  }
+
+  _isRenderSiderBar() {
+    this._renderSiderBar(true);
+    if(!store.get('USER-START-LEARN')) {
+      store.set('USER-START-LEARN', true);
+      window.setTimeout(()=>{ 
+        this._renderSiderBar(false,'1000'); 
+      },2000); 
+    }
+    console.log(store.get('USER-START-LEARN'));
   }
 
   createPane(name) {

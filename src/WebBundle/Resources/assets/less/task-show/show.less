@@ -3,16 +3,10 @@
   height: 100%;
   padding-right: 360px;
   overflow: hidden;
-  &.open {
-    padding-right: 0;
-    .dashboard-content {
-      right: 26px;
-    }
-  }
   .dashboard-content {
     position: absolute;
     left: 26px;
-    right: 360px+19px;
+    right: 26px;
     top:0;
     padding-top: 54px;
     bottom: 60px;
@@ -51,6 +45,30 @@
       background-color: #fff;
       height: 100%;
     }
+    .state-opration {
+      position: relative;
+      display: inline-block;
+      height: 31px;
+      overflow-y: hidden;
+      overflow: hidden;
+      min-width: 200px;
+      text-align: right;
+      vertical-align: middle;
+      .btn {
+        position: absolute;
+        top: 31px;
+        right: 0;
+        &.open {
+          top:0;
+        }
+        &.moveup {
+          -webkit-animation: moveUp .5s;
+          -moz-animation: moveUp .5s;
+          animation: moveUp .5s;
+          top:0;
+        }
+      }
+    }
   }
   .dashboard-sidebar {
     position: absolute;
@@ -58,6 +76,7 @@
     top:0;
     bottom: 0;
     width: 360px;
+    right: -360px;
     .dashboard-sidebar-content {
       position: relative;
       height: 100%;
@@ -104,3 +123,103 @@
     padding: 15px 17px;
   }
 }
+
+
+.task-state-modal {
+  .title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: @gray-darker;
+    margin-bottom: 15px;
+    i {
+      font-size: 22px;
+      color: @brand-success;
+      margin-right: 10px;
+    }
+  }
+  .content {
+    background-color: #fafafa;
+    padding: 30px 60px;
+    text-align: center;
+    margin-bottom: 15px;
+    .content-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: @gray-darker;
+      margin-bottom: 30px;
+    }
+    .content-progress {
+      margin-bottom: 15px;
+    }
+  }
+  &.task-state-modal-xs {
+    padding: 6px 0;
+    .title {
+      font-size: 12px;
+      text-align: left;
+      i {
+        font-size: 14px;
+      }
+    }
+    .content {
+      font-size: 12px;
+      padding: 0;
+      background-color: transparent;
+      text-align: left;
+      margin-bottom: 13px;
+      .content-title {
+        font-size: 12px;
+        color: @gray-dark;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        font-weight: normal;
+        border-bottom: 1px solid @border-color;
+      }
+      .content-progress {
+        padding-bottom: 14px;
+        border-bottom: 1px solid @border-color;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.btn-success:after {
+  content: "Success!";
+ 
+}
+
+@-webkit-keyframes moveUp {
+  0% {
+    top: 100%;
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+    top:0;
+  }
+}
+
+@-moz-keyframes moveUp {
+  0% {
+    top: 100%;
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+    top: 0;
+  }
+}
+
+@keyframes moveUp {
+  0% {
+    top: 100%;
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+    top:0
+  }
+}
+
