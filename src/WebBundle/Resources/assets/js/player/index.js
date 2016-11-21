@@ -96,9 +96,9 @@ class Show {
         player.on("ready", function () {
             messenger.sendToParent("ready", {pause: true});
             if ( this.playerType == 'local-video-player') {
-                var time = DurationStorage.get(userId, fileId);
+                var time = DurationStorage.get( this.userId, this.fileId);
                 if (time > 0) {
-                    player.setCurrentTime(DurationStorage.get(userId, fileId));
+                    player.setCurrentTime(DurationStorage.get( this.userId, this.fileId));
                 }
                 player.play();
             } else if ( this.playerType == 'balloon-cloud-video-player') {
@@ -124,10 +124,11 @@ class Show {
         });
 
         player.on("timechange", function (data) {
+            console.log('data---',data)
             messenger.sendToParent("timechange", {pause: true, currentTime: data.currentTime});
             if (this.playerType == 'local-video-player') {
                 if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
-                    DurationStorage.set(userId, fileId, player.getCurrentTime());
+                    DurationStorage.set( this.userId, this.fileId, player.getCurrentTime());
                 }
             }
         });
@@ -144,7 +145,7 @@ class Show {
         player.on("ended", function () {
             messenger.sendToParent("ended", {stop: true});
             if (this.playerType == 'local-video-player') {
-                DurationStorage.del(userId, fileId);
+                DurationStorage.del( this.userId, this.fileId);
             }
         });
     }

@@ -26,7 +26,7 @@ class CourseFileChoose extends Chooser {
     }
 
     _loadList() {
-        let $containter = $('[data-role=course-file-browser]');
+        let $containter = $('.chooser-list');
         let url = $containter.data('url');
         $.get(url, {'type': $("input[name=type]").val()}, function (html) {
             $containter.html(html);

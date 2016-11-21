@@ -7,17 +7,17 @@ class BalloonCloudVideoPlayer extends Emitter {
         super();
         this.options = options;
         this.setup();
+        this.palyer = '';
     }
 
     setup() {
+        let element = this.options.element;
         // todo delete, to move into the cloud player
         if (!swfobject.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-            this.element.css({'background-color': '#313131', 'position': 'relative'});
-            this.element.html('<p style="color:#fff; position: absolute; top: 49%; left:0; right:0">您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p>');
+            $(element).css({'background-color': '#313131', 'position': 'relative'});
+            $(element).html('<p style="color:#fff; position: absolute; top: 49%; left:0; right:0">您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p>');
             return;
         }
-
-        var elementId = this.options.element;
 
         var self = this;
 
@@ -80,9 +80,8 @@ class BalloonCloudVideoPlayer extends Emitter {
                 }
             });
         }
-
         var player = new VideoPlayerSDK($.extend({
-            id: elementId,
+            id: $(self.options.element).attr('id'),
             disableControlBar: self.options.disableControlBar,
             disableProgressBar: self.options.disableProgressBar,
             playlist: self.options.url,
@@ -117,33 +116,25 @@ class BalloonCloudVideoPlayer extends Emitter {
             self.trigger("answered", data);
         });
 
-        self._setPlayer(player);
+       this.palyer = player;
 
         window.BalloonPlayer = this;
     }
 
-    _setPlayer() {
-        this.player = player;
-    }
-
-    _getPlayer() {
-        return this.player;
-    }
-
     play() {
-        this._getPlayer().play();
+        this.player.play();
     }
 
     pause() {
-        this._getPlayer().pause();
+        this.player.pause();
     }
 
     getCurrentTime() {
-        return this._getPlayer().getCurrentTime();
+        return this.player.getCurrentTime();
     }
 
     setCurrentTime(time) {
-        this._getPlayer().setCurrentTime(time);
+        this.player.setCurrentTime(time);
         return this;
     }
 
@@ -153,8 +144,8 @@ class BalloonCloudVideoPlayer extends Emitter {
     }
 
     isPlaying() {
-        if (this._getPlayer() && this._getPlayer().paused) {
-            return !this._getPlayer().paused();
+        if (this.player && this.player.paused) {
+            return !this.player.paused();
         }
         return false;
     }
@@ -176,7 +167,7 @@ class BalloonCloudVideoPlayer extends Emitter {
                 }
             }
 
-            this._getPlayer().setExams(exam);
+            this.player.setExams(exam);
         }
 
         return this;
