@@ -20,7 +20,7 @@
       <input class="form-control width-input width-input-small js-length" id="second" type="text" name="second"
              value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
       <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
-      <input type="text" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
+      <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
       <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
       <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
     </div>
