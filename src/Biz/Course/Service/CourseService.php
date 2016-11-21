@@ -6,7 +6,7 @@ interface CourseService
 {
     public function getCourse($id);
 
-    public function findCoursesByCourseId($courseId);
+    public function findCoursesByCourseSetId($courseSetId);
 
     public function createCourse($course);
 

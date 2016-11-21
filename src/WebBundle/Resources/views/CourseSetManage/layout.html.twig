@@ -1,0 +1,167 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<style>
+.locked li a{
+  padding:10px 15px 10px 0px !important;
+}
+.locked li a>span{
+  display:inline-block;
+  width:35px;
+  padding:0px 10px;
+}
+</style>
+  {{ render(controller('TopxiaWebBundle:Course:header', {course:courseSet, manage: true})) }}
+
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+      {% set side_nav = side_nav|default(null) %}
+      <div class="sidenav locked">
+        <ul class="list-group">
+          <li class="list-group-heading">{{'课程设置'|trans}}</li>
+          <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'base'}) }}{% else %}
+            {{ path('course_manage_base', {id:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'基本信息'|trans}}
+            </a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'detail' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'detail'}) }}{% else %}
+            {{ path('course_manage_detail', {id:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'详细信息'|trans}}
+            </a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'picture'}) }}{% else %}
+            {{ path('course_manage_picture', {id:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程封面'|trans}}
+            </a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'files'}) }}{% else %}
+            {{ path('course_manage_files', {id:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程文件'|trans}}
+            </a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'question'}) }}{% else %}
+            {{ path('course_manage_question', {courseId:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目管理'|trans}}
+            </a>
+          </li>
+          {% if is_plugin_installed('QuestionPlus') and setting('question_plus.enabled') %}
+            <li class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}">
+              <a href="{% if courseSet.locked|default(0) == 1 %}
+              {{ path('course_manage_course_sync', {id:courseSet.id,type:'question_plumber'}) }}{% else %}
+              {{ path('course_question_plumber', {courseId:courseSet.id, type:'import'}) }}
+              {% endif %}">
+                <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目导入/导出'|trans}}
+              </a>
+            </li>
+          {% endif %}
+
+          <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
+            <a href="{% if courseSet.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:courseSet.id,type:'testpaper'}) }}{% else %}
+            {{ path('course_manage_testpaper', {courseId:courseSet.id}) }}
+            {% endif %}">
+              <span {% if courseSet.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'试卷管理'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
+            <a href="{{ path('course_manage_test_check', {id:courseSet.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
+          </li>
+          {% if is_plugin_installed('Homework') %}
+            <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
+              <a href="{{ path('course_homework_check_list', {courseId:courseSet.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">
+            <select id="courses_switch">
+              {% for course in courses %}
+                <option value="{{course.id}}">{{course.title}}</option>
+              {% endfor %}
+            </select>
+          </li>
+          <li class="list-group-item">
+            <a href="{{ path('course_manage_tasks', {courseId: courses[0].id})}}">
+              <span></span>{{'计划任务'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: courses[0].id})}}">
+              <span></span>{{'计划设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="{{path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: courses[0].id})}}">
+              <span></span>{{'营销设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'教师设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'学员设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'作业批改'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'试卷批阅'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'学习数据'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="javascript:;">
+              <span></span>{{'订单查询'|trans}}
+            </a>
+          </li>
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">{{'更多教学计划'|trans}}</li>
+          <li class="list-group-item {% if side_nav == 'task' %}active{% endif %}">
+           <a href="{{path('courseset_manage_courses', {courseSetId: courseSet.id})}}">
+              <span></span>{{'教学计划管理'|trans}}</a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

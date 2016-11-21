@@ -1,0 +1,42 @@
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
+{% block main %}
+<!-- 当前课程的教学计划列表 -->
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    教学计划管理
+  </div>
+
+  <div class="panel-body">
+      <table>
+      	<thead>
+      		<td>计划名称</td>
+      		<td>计划状态</td>
+      		<td>任务数量</td>
+      		<td>学员数量</td>
+      		<td>价格</td>
+      		<td>操作</td>
+      	</thead>
+      	<tbody>
+      		{%for course in courses %}
+      		<tr>
+      			<td>{{course.title}}</td>
+      			<td>{{course.status}}</td>
+      			<td>course.taskNum</td>
+      			<td>course.stuNum</td>
+      			<td>course.price</td>
+      			<td>
+      				<a href="javascript:;">编辑</a><!-- popup modal -->
+      				<a href="{{path('courseset_manage_course_preview', {courseSetId: courseSet.id, courseId: course.id})}}">预览</a>
+      				<a href="javascript:;">复制为</a>
+      				<a href="{{path('courseset_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}">关闭</a>
+      				<a href="{{path('courseset_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}">删除</a>
+      				<a href="{{path('courseset_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">发布</a><!-- 已发布的不能删除，可关闭 -->
+      			</td>
+      		</tr>
+      		{% endfor %}
+      	</tbody>
+      </table>
+      <a href="javascript:;">创建一个新的教学计划</a>
+  </div>
+</div>
+{% endblock %}

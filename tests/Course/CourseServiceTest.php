@@ -6,6 +6,19 @@ use Topxia\Service\Common\BaseTestCase;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testFindCoursesByCourseSetId()
+    {
+        $course = array(
+            'title'       => '第一个教学计划',
+            'courseSetId' => 1
+        );
+
+        $result = $this->getCourseService()->createCourse($course);
+        $this->assertNotNull($result);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId(1);
+        $this->assertEquals(sizeof($courses), 1);
+    }
+
     public function testCreateAndGet()
     {
         //TODO

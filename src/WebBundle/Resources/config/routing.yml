@@ -1,3 +1,37 @@
+courseset_manage:
+  path: /courseset/{id}
+  defaults: {_controller: WebBundle:CourseSetManage:index}
+
+courseset_manage_courses:
+  path: /courseset/{courseSetId}/courses
+  defaults: {_controller: WebBundle:CourseManage:list}
+
+courseset_manage_course_info:
+  path: /courseset/{courseSetId}/course/{courseId}/info
+  defaults: {_controller: WebBundle:CourseManage:info}
+
+courseset_manage_course_marketing:
+  path: /courseset/{courseSetId}/course/{courseId}/marketing
+  defaults: {_controller: WebBundle:CourseManage:marketing}
+
+courseset_manage_course_preview:
+  path: /courseset/{courseSetId}/course/{courseId}/preview
+  defaults: {_controller: WebBundle:CourseManage:preview}
+
+courseset_manage_course_close:
+  path: /courseset/{courseSetId}/course/{courseId}/close
+  defaults: {_controller: WebBundle:CourseManage:close}
+
+courseset_manage_course_delete:
+  path: /courseset/{courseSetId}/course/{courseId}/delete
+  defaults: {_controller: WebBundle:CourseManage:delete}
+
+courseset_manage_course_publish:  
+  path: /courseset/{courseSetId}/course/{courseId}/publish
+  defaults: {_controller: WebBundle:CourseManage:publish}
+
+
+
 course_manage_tasks:
   path:  /course/{courseId}/tasks
   defaults: { _controller: WebBundle:TaskManage:tasks }
