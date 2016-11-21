@@ -60,7 +60,7 @@ define(function(require, exports, module) {
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
+                html += '<div id="lesson-player" style="width: 100%;height: 100%;background: black;"></div>';
             }
         }else if(fileType == 'audio'){
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});

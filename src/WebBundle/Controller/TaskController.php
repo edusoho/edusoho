@@ -1,6 +1,8 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,8 +11,17 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $task     = $this->tryLearnTask($courseId, $id);
-        $tasks    = $this->getTaskService()->findDetailedTasksByCourseId($courseId, $this->getUser()->getId());
+
+        $tasks    = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+        if(empty($activity)){
+            throw $this->createNotFoundException("activity not found");
+        }
+
+        $this->getActivityService()->trigger($activity['id'], 'start', array(
+            'task' => $task
+        ));
 
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'     => $task,
@@ -28,23 +39,6 @@ class TaskController extends BaseController
             'id'       => $task['activityId'],
             'courseId' => $courseId
         ));
-    }
-
-    public function triggerAction(Request $request, $courseId, $id, $eventName)
-    {
-        $task         = $this->tryLearnTask($courseId, $id);
-        $data         = $request->request->all();
-        $data['task'] = $task;
-
-        return $this->forward('WebBundle:Activity:trigger', array(
-            'id'        => $task['activityId'],
-            'eventName' => $eventName,
-            'data'      => $data
-        ));
-    }
-
-    public function finishAction(Request $request, $courseId, $id)
-    {
     }
 
     protected function tryLearnTask($courseId, $taskId)
@@ -67,11 +61,17 @@ class TaskController extends BaseController
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');

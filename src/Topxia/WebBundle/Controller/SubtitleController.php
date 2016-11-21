@@ -7,43 +7,34 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
-    public function manageAction(Request $request)
+    public function manageAction(Request $request, $mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        $lessonId = $request->query->get('lessonId');
-
-        if (empty($courseId) || empty($lessonId)) {
-            throw new InvalidArgumentException("courseId或 lessonId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (!in_array($lesson['type'], array('video', 'audio')) || empty($lesson['mediaId'])) {
-            throw new ResourceNotFoundException('lesson', $lessonId);
-        }
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
 
-        $mediaId = $lesson['mediaId'];
         $media   = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
             throw new ResourceNotFoundException('uploadFile', $mediaId);
         }
-
-        return $this->render('TopxiaWebBundle:Subtitle:manage.html.twig', array(
-            'courseId' => $courseId,
-            'media'  => $media
+        
+        return $this->render('TopxiaWebBundle:MediaManage/Subtitle:manage.html.twig', array(
+            'media'  => $media,
+            'goto' => $request->query->get('goto'),
+            'subtitles' => $subtitles
         ));
     }
 
     /**
      * 获取某一视频下所有的字幕
      */
-    public function mediaSubtitlesAction(Request $request, $mediaId)
+    public function listAction($mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        if (empty($courseId)) {
-            throw new InvalidArgumentException("courseId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
-        $this->getCourseService()->tryManageCourse($courseId);
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
         
@@ -52,29 +43,43 @@ class SubtitleController extends BaseController
         ));
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $mediaId)
     {
-        $courseId = $request->query->get('courseId');
-        if (empty($courseId)) {
-            throw new InvalidArgumentException("courseId不能为空");
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
-        $this->getCourseService()->tryManageCourse($courseId);
 
         $fileds = $request->request->all();
 
-        $this->getSubtitleService()->addSubtitle($fileds);
+        $subtitle = $this->getSubtitleService()->addSubtitle($fileds);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse($subtitle);
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($mediaId, $id)
     {
-        $courseId = $request->query->get('courseId', 0);
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
+        }
 
         $this->getSubtitleService()->deleteSubtitle($id);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function manageDialogAction(Request $request)
+    {
+        $mediaId = $request->query->get('mediaId');
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
+        }
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $media   = $this->getUploadFileService()->getFile($mediaId);
+        return $this->render('TopxiaWebBundle:MediaManage/Subtitle:dialog.html.twig', array(
+            'subtitles' => $subtitles,
+            'media' => $media
+        ));
     }
 
     protected function getCourseService()

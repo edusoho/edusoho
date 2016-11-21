@@ -316,6 +316,13 @@ processStatus:
     ok: 转码成功
     error: 转码失败
 
+convertStatus:
+    none: 等待转码
+    waiting: 等待转码
+    doing: 正在转码
+    success: 转码成功
+    error: 转码失败
+
 state:
     banned: 禁用
     replaced: 屏蔽

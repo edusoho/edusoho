@@ -6,9 +6,9 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TaskResultDao extends GeneralDaoInterface
 {
-    public function findByCourseId($courseId, $userId);
+    public function findByCourseIdAndUserId($courseId, $userId);
 
-    public function findByTaskId($courseTaskId, $userId);
+    public function findByActivityIdAndUserId($activityId, $userId);
 
-    public function save($taskResult);
+    public function getByTaskIdAndUserId($taskId, $userId);
 }

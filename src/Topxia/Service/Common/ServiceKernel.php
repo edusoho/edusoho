@@ -232,30 +232,7 @@ class ServiceKernel
      */
     public function getConnection()
     {
-        if ($this->connection) {
-            return $this->connection;
-        }
-
-        if (is_null($this->connectionFactory)) {
-            throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
-        }
-
-        $this->connection = $this->connectionFactory->getConnection();
-
-        return $this->connection;
-    }
-
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
-        return $this;
-    }
-
-    public function setConnectionFactory(ConnectionFactory $factory)
-    {
-        if(empty($this->connection)){
-            $this->connectionFactory = $factory;
-        }
+        return $this->biz['db'];
     }
 
     public function createService($name)
