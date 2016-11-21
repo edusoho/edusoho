@@ -3,7 +3,7 @@
   var paths = [
     {% for path in script() %}
     {% if path starts with 'http://' %}
-    "{{ path }}",
+    "{{ path ~ '?' ~ asset_version('')}}",
     {% else %}
     "{{ asset('build/' ~ path, 'webpack') }}",
     {% endif %}
