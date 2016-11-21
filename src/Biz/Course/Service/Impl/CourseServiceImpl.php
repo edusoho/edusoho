@@ -4,6 +4,8 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -37,6 +39,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         //validator basic info of $course
         //copy tasks、marketing from copyCourse
         //save basic info,tasks,marketing
+
+        $course['copyCourseId'] = $copyId;
+        return $this->getCourseDao()->create($course);
     }
 
     public function deleteCourse($id)
@@ -53,8 +58,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw new ResourceNotFoundException('Course', $id);
         }
-        //TODO define status ？
-        $course['status'] = 0;
+        $course['status'] = 'closed';
 
         $this->getCourseDao()->update($id, $course);
     }
@@ -77,7 +81,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw new ResourceNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'draft') {
-            throw new IllegalOperationException('Course', $id, 'Audit');
+            //TODO change to IllegalOperationException
+            throw new AccessDeniedException('Course', $id, 'Audit');
         }
 
         $audit = array(
@@ -101,7 +106,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw new ResourceNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'committed') {
-            throw new IllegalOperationException('Course', $id, 'Audit');
+            //TODO change to IllegalOperationException
+            throw new AccessDeniedException('Course', $id, 'Audit');
         }
         $result = $reject ? 'reject' : 'pass';
         $audit  = array(
@@ -119,6 +125,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
+    protected function getCourseAuditDao()
+    {
+        return $this->createDao('Course:CourseAuditDao');
+    }
+
     protected function getCourseMarketingDao()
     {
         return $this->createDao('Course:CourseMarketingDao');
@@ -126,6 +137,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getCourseDao()
     {
-        return $this->createDao('Course:CourseSetDao');
+        return $this->createDao('Course:CourseDao');
     }
 }
