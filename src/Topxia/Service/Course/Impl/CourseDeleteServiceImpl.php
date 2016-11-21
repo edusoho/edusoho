@@ -20,7 +20,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             $method = 'delete'.ucwords($type);
             $result = $this->$method($course);
-            $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $courseId, 'ownerType' => 'course')));
+            $this->dispatchEvent("course.delete", $course);
             $this->getCourseDao()->getConnection()->commit();
 
             return $result;
