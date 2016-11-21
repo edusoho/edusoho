@@ -8,7 +8,15 @@
 <!-- 概览 -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="">升级</a>｜<a href="">续费</a>  
+    <a href="">升级</a>｜
+    {% if account.renewInfo['status'] == true %} 
+      <span class="text-muted">已续费</span>
+      <span class="text-danger pts">
+        {{account.renewInfo['message']|default('')}}
+      </span>
+    {% else %}
+      <a href="">续费</a>
+    {% endif %}
   </div>
   <div class="panel-body">
     <div class="pll pbl">
@@ -19,7 +27,7 @@
       服务期限：
       <span class="color-gray plm">{{account.effective|date("Y-m-d")}} ~ {{ account.expire|date("Y-m-d") }}</span>
       <div class="text-danger pts">
-        您的云直播服务已到期，请尽快续费，以免影响正常使用(云平台提供)
+        {{account.message}}
       </div>
     </div>
   </div>

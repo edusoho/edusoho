@@ -1311,15 +1311,15 @@ class EduCloudController extends BaseController
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
-            if (isset($overview['isBuy']) && $overview['isBuy'] == false) {
+            $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
+            if ((isset($overview['isBuy']) && $overview['isBuy'] == false)||$liveCourseSetting['live_course_enabled'] == 0) {
                 return $this->render('TopxiaAdminBundle:EduCloud/Live:without-enable.html.twig', array(
                     'overview'  => $overview
-                ));                
+                ));
             }
             foreach ($overview['items'] as $key => $value) {
                 $items['date'][] = $value['date'];
                 $items['count'][] = $value['count'];
-
             }
             return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
                 'account'  => $overview['account'],
@@ -1332,30 +1332,17 @@ class EduCloudController extends BaseController
 
     public function liveSettingAction(Request $request)
     {
-        $courseSetting     = $this->getSettingService()->get('course', array());
-        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-        // var_dump($courseSetting);
-        // var_dump($liveCourseSetting);
-        $client            = new EdusohoLiveClient();
-        $capacity          = $client->getCapacity();
-        // var_dump($capacity);
-        $default = array(
-            'live_course_enabled' => '0'
-        );
-
-        $this->getSettingService()->set('course', $courseSetting);
-        $this->getSettingService()->set('live-course', $liveCourseSetting);
-        $setting = array_merge($default, $liveCourseSetting);
-
         if ($request->getMethod() == 'POST') {
-            $liveCourseSetting                          = $request->request->all();
+            $courseSetting     = $this->getSettingService()->get('course', array());
+            $client            = new EdusohoLiveClient();
+            $capacity          = $client->getCapacity();
+            $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-            $setting                                    = array_merge($courseSetting, $liveCourseSetting);
+            $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
 
             $hiddenMenus = $this->getSettingService()->get('menu_hiddens', array());
-            // var_dump($hiddenMenus);exit();
             if ($liveCourseSetting['live_course_enabled']) {
                 unset($hiddenMenus['admin_live_course_add']);
                 unset($hiddenMenus['admin_live_course']);
@@ -1363,10 +1350,10 @@ class EduCloudController extends BaseController
                 $hiddenMenus['admin_live_course_add'] = true;
                 $hiddenMenus['admin_live_course']     = true;
             }
-
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
             $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
+            return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');
