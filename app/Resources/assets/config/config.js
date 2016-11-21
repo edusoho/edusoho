@@ -13,6 +13,7 @@ argv._.forEach((arg) => {
 
 let port = specialArgv.port || 3030;
 let debugMode = !!argv.debugMode;
+let devMode = process.env.NODE_ENV === 'development';
 
 const currentDir = path.resolve(__dirname);
 const globalAssetsDir = path.resolve(currentDir, '../');
@@ -41,15 +42,25 @@ let bundleEntry = {};
 parameters.registeredBundles.forEach((bundle) => {
   const bundleAssetsDir = `${rootDir}/${bundle}/Resources/assets`;
 
+  const bundleBuildDir = `${bundle}/Resources/build`;
 
   const bundleName = bundle.replace('src','').replace('plugins','').replace('Bundle', '').replace(/\//g, '').toLowerCase();
 
   bundleEntry[bundleName] = {};
-  bundleEntry[bundleName][bundleName] = `${bundleAssetsDir}/main.js`;
-  Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleName}/`));
+
+  if(devMode) {
+    bundleEntry[bundleName][`${bundleName}/main`] = `${bundleAssetsDir}/main.js`;
+    Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleName}/js/`));
+
+  }else {
+    bundleEntry[bundleName][`${bundleBuildDir}/main`] = `${bundleAssetsDir}/main.js`;
+    Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleBuildDir}/js/`));
+  }
 
   assetsSrcDirs.push(bundleAssetsDir);
 });
+
+console.log('bundleEntry',bundleEntry)
 
 let libEntry = {};
 let libEntryPrefix = 'libs/';
@@ -76,11 +87,13 @@ parameters.onlyCopys.forEach((item) => {
   onlyCopys.push(copyitem);
 })
 
+let outputPath = devMode ? path.resolve(currentDir, parameters.output.path) : path.resolve(currentDir, parameters.output.buildpath)
+
 let config = {
 
   // Environment
   __DEBUG__: debugMode,
-  __DEV__: process.env.NODE_ENV === 'development',
+  __DEV__: devMode,
   __DEV_SERVER_PORT__: port,
 
   // Dir
@@ -94,12 +107,14 @@ let config = {
   // Webpack
   bundleEntry: bundleEntry,
   libEntry: libEntry,
+
   output: {
-    path : path.resolve(currentDir, parameters.output.path),
-    publicPath: parameters.output.publicPath,
+    path : outputPath,
+    publicPath: parameters.output.publicPath
   },
   noParseDeps: parameters.noParseDeps || [],
   onlyCopys: onlyCopys || [],
+  commonsChunkFilename: parameters.commonsChunkFilename
 };
 
 export default config;

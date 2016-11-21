@@ -12,7 +12,9 @@ const parameters = {
 
   ],
   output: {
-    path : '../../../../web/build', //file output path, relative to this file
+    path: '../../../../web/build',
+    buildpath: '../../../../',
+    // path : '../../../../web/build', //file output path, relative to this file
     publicPath: '/build/' //relative to website domain
   },
   libs: {
@@ -42,7 +44,8 @@ const parameters = {
         // '**/lang/!(zh-cn.js)',
       ]
     }
-  ]
+  ],
+  commonsChunkFilename: 'common'
 }
 
 export default parameters;
