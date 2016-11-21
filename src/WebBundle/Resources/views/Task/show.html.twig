@@ -5,7 +5,7 @@
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
 {% set bodyClass = "task-dashboard-page js-task-dashboard-page" %}
 {% do css(['web.css']) %}
-{% do script(['libs/perfect-scrollbar.js','libs/ckeditor/ckeditor.js','web/task/index.js']) %}
+{% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','web/task/index.js']) %}
 
 {% block body %}
 	{#<iframe id="task-detail" data-task-start-url="{{path('course_task_trigger', {id:task.id,courseId:task.courseId,eventName:'start'})}}" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
@@ -51,7 +51,7 @@
           </li>
         </ul>
       </div>
-      <div class="dashboard-pane task-pane" id="task-pane" >
+      <div data-pane='task' class="dashboard-pane task-pane" id="task-pane" >
         <ul class="task-list ">
           {% for task in tasks %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
@@ -65,14 +65,18 @@
               {% endif %} 
                 left-menu"></i>
               {% if task.isOptional %}
-              <span class="label label-success mrm">选修</span>
+                <span class="label label-success mrm">选修</span>
               {% endif %}
               <a class="text-overflow" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
               {% if task.task_result is not defined  or task.task_result.status is empty %}
-              <span class="right-menu mouse-leave">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm"></i></span> 
-              <span class="right-menu mouse-enter color-primary">任务未解锁</span>
+                <span class="right-menu mouse-leave">{{task['activity_meta']['length'] | default('')}}
+                  <i class="es-icon {{task['activity_meta']['icon']}} mlm"></i>
+                </span> 
+                <span class="right-menu mouse-enter color-primary">任务未解锁</span>
               {% else %}
-                <span class="right-menu">{{task['activity_meta']['length'] | default('')}}<i class="es-icon {{task['activity_meta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activity_meta']['name']}}任务"></i></span>  
+                <span class="right-menu">{{task['activity_meta']['length'] | default('')}}
+                  <i class="es-icon {{task['activity_meta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activity_meta']['name']}}任务"></i>
+                </span>  
               {% endif %}
             </li>
           {% endfor %}
@@ -131,7 +135,7 @@
           </li> #}
         </ul>
       </div>
-      <div class="dashboard-pane note-pane hidden" id="question-pane">问答</div>
-      <div class="dashboard-pane note-pane hidden" id="note-pane">笔记</div>
+      {#<div class="dashboard-pane note-pane hidden" id="question-pane">问答</div>
+      <div class="dashboard-pane note-pane hidden" id="note-pane">笔记</div>#}
     </div>
 {% endblock %}
