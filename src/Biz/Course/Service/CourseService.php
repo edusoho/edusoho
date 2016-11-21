@@ -8,11 +8,11 @@ interface CourseService
 
     public function findCoursesByCourseId($courseId);
 
-    public function createCourse($courseSet);
+    public function createCourse($course);
 
     public function updateCourse($id, $fields);
 
-    public function copyCourse($copyId, $courseSet);
+    public function copyCourse($copyId, $course);
 
     public function deleteCourse($id);
 

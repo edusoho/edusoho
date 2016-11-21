@@ -6,8 +6,13 @@ use Topxia\Service\Common\BaseTestCase;
 
 class CourseSetServiceTest extends BaseTestCase
 {
-	publif function testCreate()
-	{
-		//TODO
-	}
+    public function testCreate()
+    {
+        //TODO
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
+    }
 }

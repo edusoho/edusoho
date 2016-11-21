@@ -17,11 +17,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao->findByCourseId($courseId);
     }
 
-    public function createCourse($courseSet)
+    public function createCourse($course)
     {
         //TODO validator
 
-        return $this->getCourseDao()->create($courseSet);
+        return $this->getCourseDao()->create($course);
     }
 
     public function updateCourse($id, $fields)
@@ -31,10 +31,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
-    public function copyCourse($copyId, $courseSet)
+    public function copyCourse($copyId, $course)
     {
         //TODO
-        //validator basic info of $courseSet
+        //validator basic info of $course
         //copy tasks、marketing from copyCourse
         //save basic info,tasks,marketing
     }
@@ -42,7 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function deleteCourse($id)
     {
         //TODO
-        //validator if courseSet can be deleted
+        //validator if course can be deleted
 
         return $this->getCourseDao()->delete($id);
     }
