@@ -643,18 +643,20 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $tags = $this->getTagService()->findTagsByIds($classroom['tags']);
-
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
-
-            $class['tags'] = $this->getTagIdsFromRequest($request);
+            $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('基本信息设置成功！'));
         }
 
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+        
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
             'classroom' => $classroom,
             'tags'      => ArrayToolkit::column($tags, 'name')

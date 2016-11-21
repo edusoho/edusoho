@@ -114,14 +114,9 @@ class CourseController extends CourseBaseController
             }
         }
 
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course'   => $course,
             'member'   => $member,
-            'category' => $category,
-            'tags'     => $tags
         ));
     }
 
@@ -212,10 +207,21 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
             'member' => $member,
-            'items'  => $items
+            'items'  => $items,
+            'tags'   => $tags
         ));
     }
 
@@ -669,6 +675,10 @@ class CourseController extends CourseBaseController
 
     public function relatedCoursesBlockAction($course)
     {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+        
+        $course['tags'] = ArrayToolkit::column($tags, 'id');
+
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
 
         return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(

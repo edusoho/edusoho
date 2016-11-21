@@ -84,6 +84,20 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->findTagsByIds($tagIds);
     }
 
+    public function findTagsByOwner(array $owner)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
+
+        $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
+
+        return $this->getTagDao()->findTagsByIds($tagIds);
+    }
+
+    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
+    {
+        return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
+    }
+
     public function searchTags($conditions, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
@@ -110,8 +124,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagsByIds(array $ids)
     {
-        $tags = $this->getTagDao()->findTagsByIds($ids);
-        return ArrayToolkit::index($tags, 'id');
+        return $this->getTagDao()->findTagsByIds($ids);
     }
 
     public function findTagsByNames(array $names)
@@ -190,6 +203,11 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
 
         return $tagGroup;
+    }
+
+    public function addTagOwnerRelation($fields)
+    {
+        return $this->getTagOwnerDao()->add($fields);
     }
 
     protected function setTagOrg($tag)
@@ -292,6 +310,11 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
+    public function deleteTagOwnerRelationsByOwner(array $owner)
+    {
+        return $this->getTagOwnerDao()->deleteByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
+    }
+
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
@@ -313,6 +336,11 @@ class TagServiceImpl extends BaseService implements TagService
     protected function filterTagGroupFields($fields)
     {
         return ArrayToolkit::parts($fields, $this->allowFields);
+    }
+
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getTagGroupTagDao()

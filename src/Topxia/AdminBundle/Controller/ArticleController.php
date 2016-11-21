@@ -50,6 +50,7 @@ class ArticleController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $formData        = $request->request->all();
+
             $article['tags'] = array_filter(explode(',', $formData['tags']));
 
             $article = $this->getArticleService()->createArticle($formData);
@@ -75,11 +76,11 @@ class ArticleController extends BaseController
             throw $this->createNotFoundException($this->getServiceKernel()->trans('文章已删除或者未发布！'));
         }
 
-        if (empty($article['tagIds'])) {
-            $article['tagIds'] = array();
-        }
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'article',
+            'ownerId'   => $id
+        ));
 
-        $tags     = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $categoryId = $article['categoryId'];

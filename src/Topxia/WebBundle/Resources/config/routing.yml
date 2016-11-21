@@ -1363,10 +1363,6 @@ location_all:
     pattern: /location/all
     defaults: { _controller: TopxiaWebBundle:Location:all }
 
-tag:
-    pattern: /tag
-    defaults: { _controller: TopxiaWebBundle:Tag:index }
-
 tag_all:
     pattern: /tag/all_jsonm
     defaults: { _controller: TopxiaWebBundle:Tag:all }
@@ -1374,10 +1370,6 @@ tag_all:
 tag_match:
     pattern: /tag/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
-
-tag_show:
-    pattern: /tag/{name}
-    defaults: { _controller: TopxiaWebBundle:Tag:show }
 
 following_match_bynickname:
     pattern: /following/bynickname/match_jsonp

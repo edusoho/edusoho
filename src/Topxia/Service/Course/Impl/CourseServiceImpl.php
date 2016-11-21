@@ -47,10 +47,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
-    {
-        $courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findNormalCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
-        );
+    {   
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'course');
+
+        $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+        $courses = $this->getCourseDao()->searchCourses(array('courseIds' => $courseIds, 'status' => $status), $orderBy, $start, $limit);
+
         return ArrayToolkit::index($courses, 'id');
     }
 
@@ -102,7 +105,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
-     
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
@@ -147,16 +149,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     protected function _prepareCourseConditions($conditions)
-    {   
+    {
         $conditions = array_filter($conditions, function ($value) {
             if ($value == 0) {
                 return true;
             }
 
             return !empty($value);
-        }
-
-        );
+        });
 
         if (isset($conditions['date'])) {
             $dates = array(
@@ -434,10 +434,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，创建课程失败！'));
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
-        $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
@@ -462,8 +461,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     public function updateCourse($id, $fields)
-    {
+    {   
+        $user = $this->getCurrentUser();
+
         $argument = $fields;
+
+        $tagIds   = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
         $course   = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
@@ -482,9 +486,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
+
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
+        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
         return CourseSerialize::unserialize($updatedCourse);
     }
@@ -532,7 +537,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'vipLevelId'     => 0,
             'goals'          => array(),
             'audiences'      => array(),
-            'tags'           => '',
             'startTime'      => 0,
             'endTime'        => 0,
             'locationId'     => 0,
@@ -1062,7 +1066,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'free'          => 0,
             'title'         => '',
             'summary'       => '',
-            'tags'          => array(),
             'type'          => 'text',
             'content'       => '',
             'media'         => array(),
@@ -2907,6 +2910,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy.TagOwnerDao');
+    }
+
     protected function getCourseDao()
     {
         return $this->createDao('Course.CourseDao');
@@ -3035,14 +3043,6 @@ class CourseSerialize
 {
     public static function serialize(array &$course)
     {
-        if (isset($course['tags'])) {
-            if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|'.implode('|', $course['tags']).'|';
-            } else {
-                $course['tags'] = '';
-            }
-        }
-
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
                 $course['goals'] = '|'.implode('|', $course['goals']).'|';
@@ -3075,8 +3075,6 @@ class CourseSerialize
         if (empty($course)) {
             return $course;
         }
-
-        $course['tags'] = empty($course['tags']) ? array() : explode('|', trim($course['tags'], '|'));
 
         if (empty($course['goals'])) {
             $course['goals'] = array();

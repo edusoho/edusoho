@@ -11,8 +11,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     private $serializeFields = array(
         'assistantIds' => 'json',
         'teacherIds'   => 'json',
-        'service'      => 'json',
-        'tags'         => 'saw'
+        'service'      => 'json'
     );
 
     public function getClassroom($id)
@@ -85,38 +84,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             $conditions['likeOrgCode'] .= "%";
         }
 
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
-
-            if (!empty($tagId)) {
-                $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-            }
-
-            unset($conditions['tagId']);
-        }
-
-        if (!empty($conditions['tags'])) {
-            $tagIds = $conditions['tags'];
-            $tags   = '';
-
-            foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
-            }
-
-            $conditions['tags'] = $tags.'|';
-        }
-
-        if (!empty($conditions['tagLikes'])) {
-            $tagIds = $conditions['tagLikes'];
-            $tags   = '%';
-
-            foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
-            }
-
-            $conditions['tagLikes'] = $tags.'|%';
-        }
-
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('status = :status')
@@ -127,8 +94,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('categoryId IN (:categoryIds)')
             ->andWhere('categoryId =:categoryId')
             ->andWhere('id IN (:classroomIds)')
-            ->andWhere('tags LIKE :tagsLike')
-            ->andWhere('tags LIKE :tagLikes')
             ->andWhere('recommended = :recommended')
             ->andWhere('showable = :showable')
             ->andWhere('buyable = :buyable')
