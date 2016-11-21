@@ -6,13 +6,14 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
             $migration = new TagDataMigration($this->getConnection());
-            $migration->exec();
+
+            $migration->exec($index);
+
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -153,13 +154,13 @@ class TagDataMigration
     protected $connection;
 
     protected $columns = array(
-        'content'            => 'tagIds',
-        'article'            => 'tagIds',
-        'course'             => 'tags',
-        'open_course'        => 'tags',
-        'course_lesson'      => 'tags',
-        'open_course_lesson' => 'tags',
-        'classroom'          => 'tags'
+        0 => array('content', 'tagIds'),
+        1 => array('article', 'tagIds'),
+        2 => array('course', 'tags'),
+        3 => array('open_course', 'tags'),
+        4 => array('course_lesson', 'tags'),
+        5 => array('open_course_lesson', 'tags'),
+        6 => array('classroom', 'tags')
     );
 
     protected $ownerType = array(
@@ -174,11 +175,12 @@ class TagDataMigration
         $this->connection = $connection;
     }
 
-    public function exec()
+    public function exec($index)
     {   
-        foreach ($this->columns as $table => $column) {
-            $this->migration($table , $column);
-        }
+        $table  = $this->columns[$index][0];
+        $column = $this->columns[$index][1];
+
+        $this->migration($table, $column);
     }
 
     protected function migration($table, $column)
@@ -193,7 +195,7 @@ class TagDataMigration
                     $tags = $this->unserialize($target[$column]);
 
                     $fields = array(
-                        'userId'    => empty($target['userId']) ? null : $target['userId'],
+                        'userId'    => empty($target['userId']) ? '' : $target['userId'],
                         'tags'      => $tags,
                         'ownerType' => $this->ownerType[$table],
                         'ownerId'   => $target['id']
@@ -214,13 +216,24 @@ class TagDataMigration
     }
 
     protected function moveTagData($fields)
-    {
+    {   
+        $fields['tags'] = array_filter($fields['tags']);
         foreach ($fields['tags'] as $tag) {
+            if (!empty($fields['userId'])) {
+                $this->getTagService()->addTagOwnerRelation(array(
+                    'ownerType'   => $fields['ownerType'],
+                    'ownerId'     => $fields['ownerId'],
+                    'tagId'       => $tag,
+                    'userId'      => $fields['userId'],
+                    'createdTime' => time()
+                ));
+                continue;
+            }
+
             $this->getTagService()->addTagOwnerRelation(array(
                 'ownerType'   => $fields['ownerType'],
                 'ownerId'     => $fields['ownerId'],
                 'tagId'       => $tag,
-                'userId'      => $fields['userId'],
                 'createdTime' => time()
             ));
         }
