@@ -12,6 +12,10 @@ class EduSohoUpgrade extends AbstractUpdater
         try {
             $migration = new TagDataMigration($this->getConnection());
 
+            if ($index == 0) {
+                $this->updateScheme();
+            }
+
             $migration->exec($index);
 
             $this->getConnection()->commit();
