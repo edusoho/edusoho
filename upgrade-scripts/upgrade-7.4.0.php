@@ -18,7 +18,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $migration->exec($index);
 
-            $this->getConnection()->commit();
+            $index++;
+
+            if ($index == 8) {
+                $this->getConnection()->commit();
+            } else {
+                return array('index' => $index);
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
