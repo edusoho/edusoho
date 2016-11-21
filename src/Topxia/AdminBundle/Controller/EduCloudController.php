@@ -403,7 +403,6 @@ class EduCloudController extends BaseController
         }
 
         $settings = $this->getSettingService()->get('storage', array());
-
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
@@ -411,15 +410,18 @@ class EduCloudController extends BaseController
 
         try {
             $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
-
-            $this->handleSmsSetting($request, $api);
-            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
+            $overview  = $api->get("/me/sms/overview");
+            if (isset($overview['isBuy']) && $overview['isBuy'] == false) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array());               
+            }
+            // $this->handleSmsSetting($request, $api);
+            foreach ($overview['items'] as $key => $value) {
+                $items['date'][] = $value['date'];
+                $items['count'][] = $value['count'];
+            }
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
-                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'accessCloud' => $this->isAccessEduCloud(),
-                'smsStatus'   => $smsStatus
+                'account'  => $overview['account'],
+                'items'  => $items
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
@@ -428,32 +430,7 @@ class EduCloudController extends BaseController
     //云短信设置页
     public function smsSettingAction(Request $request)
     {
-        if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
-        }
-
-        $settings = $this->getSettingService()->get('storage', array());
-
-        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
-            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
-        }
-
-        try {
-            $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
-
-            $this->handleSmsSetting($request, $api);
-            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
-                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'accessCloud' => $this->isAccessEduCloud(),
-                'smsStatus'   => $smsStatus
-            ));
-        } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
-        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array());
     }
 
     //云邮件设置页

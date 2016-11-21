@@ -1,7 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_edu_cloud_sms_setting' %} 
-{% set script_controller = 'educloud/sms-setting' %}
+{% set script_controller = 'educloud/sms-overview' %}
+{% set script_arguments = {items: items}  %}
 {% block main %}
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -10,16 +11,16 @@
   <div class="panel-body">
     <div class="pll pbl">
       短信余额：
-      <span class="h3 text-primary plm prs">12345</span>条
-      <span class="color-gray">（信用额度剩余: 300条）</span>
+      <span class="h3 text-primary plm prs">{{account.remainCount}}</span>条
+      <span class="color-gray">（信用额度剩余: {{account.creditLimit}}条）</span>
       <a href="" class="btn btn-sm btn-primary">购买</a>
       <div class="text-danger pts">
-        您的短信余额剩余300条，请尽快续购，以免影响正常使用。
+      {{account.message}}
       </div>
     </div>
     <div class="pll pbm">
       今日发送：
-      <span class="color-gray phm text-md">1700 条</span>
+      <span class="color-gray phm text-md">{{account.todayUsed}} 条</span>
       <a href="">发送记录</a>｜<a href="">发送明细</a> 
     </div>
   </div>

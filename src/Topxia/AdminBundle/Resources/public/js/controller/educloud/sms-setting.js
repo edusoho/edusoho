@@ -2,8 +2,6 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-    require('echarts-debug');
-
 
     exports.run = function() {
         for (var i = 17; i >= 1; i--) {
@@ -52,35 +50,6 @@ define(function(require, exports, module) {
         $("[name='sms-open']").on('click', function() {
             validateSmsControllerForm();
         });
-
-
-        //改版图表
-        var smsSendChart = echarts.init(document.getElementById('smsSendChart'));
-         var option = {
-            title: {
-                text: ''
-            },
-            tooltip: {},
-            legend: {
-                data:['时间']
-            },
-            xAxis: {
-                data: ["2016/02","2016/03","2016/04","2016/05","2016/05","2016/06"]
-            },
-            yAxis: {},
-            series: [{
-                name: '发送量(条)',
-                type: 'bar',
-                data: [50, 220, 136, 110, 10, 90]
-            }],
-            color:['#428BCA'],
-            grid:{
-                show:true,
-                borderColor:'#fff',
-                backgroundColor:'#fff'
-            }
-        };
-        smsSendChart.setOption(option);
     }
 
 });
