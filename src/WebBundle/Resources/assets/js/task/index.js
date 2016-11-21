@@ -2,8 +2,6 @@ import Messenger from "es-messenger";
 import SideBar from './widget/sidebar';
 import LearnState from './widget/learn-state';
 
->>>>>>> feature/course2.0-activity
-
 class TaskShow {
   constructor(element) {
     this.element = $(element);
