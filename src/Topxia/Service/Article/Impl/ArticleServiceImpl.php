@@ -115,13 +115,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
-        $owner = array(
-            'ownerType' => 'article',
-            'ownerId'   => $article['id']
-        );
-
-        $this->dispatchEvent('tagOwner.alert', array('type' => 'create', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds));
-        $this->dispatchEvent('article.create', $article);
+        $this->dispatchEvent('article.create', array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
         return $article;
     }
@@ -149,14 +143,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
-        $owner = array(
-            'ownerType' => 'article',
-            'ownerId'   => $id
-        );
-
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
-        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
-        $this->dispatchEvent('article.update', new ServiceEvent($article));
+
+        $this->dispatchEvent('article.update', new ServiceEvent(array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id'])));
 
         return $article;
     }
@@ -311,7 +300,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $res = $this->getArticleDao()->deleteArticle($id);
         $this->dispatchEvent('article.delete', new ServiceEvent($checkArticle));
-        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'article')));
         $this->getLogService()->info('article', 'delete', "文章#{$id}永久删除");
 
         return true;
@@ -332,7 +320,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
         $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
-        $this->dispatchEvent('article.publish', $article);
+        $this->dispatchEvent('article.publish', array('article' => $article));
     }
 
     public function unpublishArticle($id)
@@ -369,7 +357,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     {
         $articles = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
 
-        return $this->getArticleDao()->findPublishedArticlesByArticleIdsAndCount(ArrayToolkit::column($articles, 'id'), $count);
+        return $this->getArticleDao()->searchArticles(array('articleIds' => ArrayToolkit::column($articles, 'id'), 'status' => 'published'), array('publishedTime' => 'DESC'), 0, $count);
     }
 
     public function viewArticle($id)
@@ -520,11 +508,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         return $orderBys;
-    }
-
-    protected function getTagOwnerDao()
-    {
-        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getArticleDao()

@@ -52,7 +52,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
 
-        $courses = $this->getCourseDao()->findNormalCoursesByStatusAndCourseIds($courseIds, $status, $orderBy, $start, $limit);
+        $courses = $this->getCourseDao()->searchCourses(array('courseIds' => $courseIds, 'status' => $status), $orderBy, $start, $limit);
 
         return ArrayToolkit::index($courses, 'id');
     }
@@ -149,16 +149,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     protected function _prepareCourseConditions($conditions)
-    {   
+    {
         $conditions = array_filter($conditions, function ($value) {
             if ($value == 0) {
                 return true;
             }
 
             return !empty($value);
-        }
-
-        );
+        });
 
         if (isset($conditions['date'])) {
             $dates = array(
@@ -491,13 +489,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        $owner = array(
-            'ownerType' => 'course',
-            'ownerId'   => $id
-        );
-
-        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
-        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
+        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
         return CourseSerialize::unserialize($updatedCourse);
     }

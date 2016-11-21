@@ -189,12 +189,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
-        $owner = array(
-            'ownerType' => 'classroom',
-            'ownerId'   => $id
-        );
-        
-        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
+        $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
 
         return $classroom;
     }
@@ -1489,11 +1484,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
-    }
-
-    protected function getTagOwnerDao()
-    {
-        return $this->createDao('Taxonomy.TagOwnerDao');
     }
 
     protected function getStatusService()

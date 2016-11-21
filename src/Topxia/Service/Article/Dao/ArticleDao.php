@@ -29,6 +29,4 @@ interface ArticleDao
 	public function updateArticle($id, $article);
 
 	public function deleteArticle($id);
-
-	public function findPublishedArticlesByArticleIdsAndCount($articleIds,$count);
 }

@@ -10,10 +10,6 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryStructureTree();
 
-        foreach ($categories as &$category) {
-            $category['url'] = $this->generateUrl('homepage');
-        }
-
         return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
             'categories' => $categories
         ));

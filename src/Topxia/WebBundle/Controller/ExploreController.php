@@ -74,7 +74,7 @@ class ExploreController extends CourseBaseController
             }
 
             if (empty($courseIds)) {
-                $conditions['courseIds'] = 0;
+                $conditions['courseIds'] = array(0);
             } else {
                 $conditions['courseIds'] = $courseIds;
             }
@@ -316,7 +316,7 @@ class ExploreController extends CourseBaseController
             }
 
             if (empty($classroomIds)) {
-                $conditions['classroomIds'] = 0;
+                $conditions['classroomIds'] = array(0);
             } else {
                 $conditions['classroomIds'] = $classroomIds;
             }
@@ -324,6 +324,25 @@ class ExploreController extends CourseBaseController
             unset($conditions['tagIds']);
         }
         
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+
+        if (!empty($conditions['subCategory'])) {
+            $conditions['code'] = $subCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
+
+        if (!empty($conditions['code'])) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+
+            $conditions['categoryId'] = $categoryArray['id'];
+        }
+
+        $category = array(
+            'category'    => $conditions['code'],
+            'subCategory' => $subCategory
+        );
+
         unset($conditions['code']);
 
         if (!isset($conditions['filter'])) {

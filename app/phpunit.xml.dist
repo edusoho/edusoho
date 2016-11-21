@@ -15,8 +15,10 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-
-            <directory>../src/Topxia/Service/Content/Tests</directory>
+            <directory>../src/Classroom/Service/Classroom/Tests</directory>
+            <directory>../src/Topxia/Common/Tests</directory>
+            <directory>../src/Topxia/Component/*/Tests</directory>
+            <directory>../src/Topxia/Service/*/Tests</directory>
         </testsuite>
     </testsuites>
 

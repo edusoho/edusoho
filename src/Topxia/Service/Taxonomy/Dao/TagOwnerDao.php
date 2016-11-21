@@ -3,15 +3,15 @@ namespace Topxia\Service\Taxonomy\Dao;
 
 interface TagOwnerDao
 {
-    public function getTagOwnerRelation($id);
+    public function get($id);
 
-    public function findTagOwnerRelationsByOwner(array $owner);
+    public function findByOwnerTypeAndOwnerId($ownerType, $ownerId);
 
-    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
+    public function findByTagIdsAndOwnerType($tagIds, $ownerType);
 
-    public function addTagOwnerRelation($fields);
+    public function add($fields);
 
-    public function updateTagOwnerRelationByOwner(array $owner, $fields);
+    public function updateByOwnerTypeAndOwnerId($ownerType, $ownerId, $fields);
 
-    public function deleteTagOwnerRelationByOwner(array $owner);
+    public function deleteByOwnerTypeAndOwnerId($ownerType, $ownerId);
 }

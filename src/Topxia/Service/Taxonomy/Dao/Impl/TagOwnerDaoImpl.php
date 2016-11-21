@@ -9,19 +9,19 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
 {
     protected $table = 'tag_owner';
 
-    public function getTagOwnerRelation($id)
+    public function get($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: array();
     }
 
-    public function findTagOwnerRelationsByOwner(array $owner)
+    public function findByOwnerTypeAndOwnerId($ownerType, $ownerId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ownerId = ? and ownerType = ?";
-        return $this->getConnection()->fetchAll($sql, array($owner['ownerId'], $owner['ownerType'])) ?: array();
+        $sql = "SELECT * FROM {$this->table} WHERE ownerType = ? and ownerId = ?";
+        return $this->getConnection()->fetchAll($sql, array($ownerType, $ownerId)) ?: array();
     }
 
-    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
+    public function findByTagIdsAndOwnerType($tagIds, $ownerType)
     {
         if (empty($tagIds)) {
             return array();
@@ -34,7 +34,7 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
         return $this->getConnection()->fetchAll($sql, $tagIds);
     }
 
-    public function addTagOwnerRelation($fields)
+    public function add($fields)
     {
         $affected = $this->getConnection()->insert($this->table, $fields);
 
@@ -42,20 +42,20 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
             throw $this->createDaoException('Insert tag error.');
         }
         $this->clearCached();
-        return $this->getTagOwnerRelation($this->getConnection()->lastInsertId());
+        return $this->get($this->getConnection()->lastInsertId());
 
     }
 
-    public function updateTagOwnerRelationByOwner(array $owner, $fields)
+    public function updateByOwnerTypeAndOwnerId($ownerType, $ownerId, $fields)
     {
-        $this->getConnection()->update($this->table, array('ownerType' => $owner['ownerType'], 'ownerId' => $owner['ownerId']), $fields);
+        $this->getConnection()->update($this->table, array('ownerType' => $ownerType, 'ownerId' => $ownerId), $fields);
         $this->clearCached();
-        return $this->findTagOwnerRelationsByOwner($owner);
+        return $this->findByOwnerTypeAndOwnerId($ownerType, $ownerId);
     }
 
-    public function deleteTagOwnerRelationByOwner(array $owner)
+    public function deleteByOwnerTypeAndOwnerId($ownerType, $ownerId)
     {
-        $result = $this->getConnection()->delete($this->table, array('ownerId' => $owner['ownerId'], 'ownerType' => $owner['ownerType']));
+        $result = $this->getConnection()->delete($this->table, array('ownerId' => $ownerId, 'ownerType' => $ownerType));
         $this->clearCached();
         return $result;
     }

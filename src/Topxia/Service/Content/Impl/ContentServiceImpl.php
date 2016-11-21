@@ -81,14 +81,9 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$id = $this->getContentDao()->addContent($content);
 
-        $owner = array(
-            'ownerType' => 'content',
-            'ownerId'   => $id
-        );
-
 		$content = $this->getContent($id);
 
-        $this->dispatchEvent('tagOwner.create', new ServiceEvent(array('type' => 'create', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
+        $this->dispatchEvent('content.create', new ServiceEvent(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
 		$this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
 		return $content;
@@ -122,12 +117,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
 
-        $owner = array(
-            'ownerType' => 'content',
-            'ownerId'   => $id
-        );
-
-        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
+        $this->dispatchEvent('content.update', new ServiceEvent(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
 		return $content;
 	}
 
@@ -140,6 +130,8 @@ class ContentServiceImpl extends BaseService implements ContentService
 	public function deleteContent($id)
 	{
 		$this->getContentDao()->deleteContent($id);
+
+        $this->dispatchEvent("content.delete", $id);
 		$this->getLogService()->info('content', 'delete', "内容#{$id}永久删除");
 	}
 

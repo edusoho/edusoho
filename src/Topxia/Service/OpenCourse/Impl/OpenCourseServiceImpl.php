@@ -83,13 +83,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedCourse = $this->getOpenCourseDao()->updateCourse($id, $fields);
 
-        $owner = array(
-            'ownerType' => 'openCourse',
-            'ownerId'   => $id
-        );
-
-        $this->dispatchEvent('tagOwner.alert', new ServiceEvent(array('type' => 'update', 'owner' => $owner, 'user' => $user, 'tagIds' => $tagIds)));
-        $this->dispatchEvent("open.course.update", array('argument' => $argument, 'course' => $updatedCourse));
+        $this->dispatchEvent("open.course.update", array('argument' => $argument, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
         return $updatedCourse;
     }
@@ -110,7 +104,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
 
         $this->dispatchEvent("open.course.delete", $course);
-        $this->dispatchEvent('tagOwner.delete', new ServiceEvent(array("ownerId" => $id, 'ownerType' => 'openCourse')));
 
         return true;
     }

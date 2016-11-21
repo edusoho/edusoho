@@ -11,37 +11,6 @@ class TagServiceImpl extends BaseService implements TagService
         'name', 'scope', 'tagNum'
     );
 
-    //tag_owner
-    public function addTagOwnerRelation($fields)
-    {
-        return $this->getTagOwnerDao()->addTagOwnerRelation($fields);
-    }
-
-    public function deleteTagOwnerRelationByOwner(array $owner)
-    {
-        return $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
-    }
-
-    public function findTagsByOwner(array $owner)
-    {
-        $tagOwnerRelations = $this->getTagOwnerDao()->findTagOwnerRelationsByOwner($owner);
-
-        $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
-
-        return $this->getTagDao()->findTagsByIds($tagIds);
-    }
-
-    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
-    {
-        return $this->getTagOwnerDao()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType);
-    }
-
-    public function deleteTagOwnerRelationsByOwner(array $owner)
-    {
-        return $this->getTagOwnerDao()->deleteTagOwnerRelationByOwner($owner);
-    }
-    //
-
     public function getTag($id)
     {
         return $this->getTagDao()->getTag($id);
@@ -113,6 +82,20 @@ class TagServiceImpl extends BaseService implements TagService
         $tagIds = ArrayToolkit::column($tagRelations, 'tagId');
 
         return $this->findTagsByIds($tagIds);
+    }
+
+    public function findTagsByOwner(array $owner)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
+
+        $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
+
+        return $this->getTagDao()->findTagsByIds($tagIds);
+    }
+
+    public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
+    {
+        return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
     }
 
     public function searchTags($conditions, $start, $limit)
@@ -222,6 +205,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $tagGroup;
     }
 
+    public function addTagOwnerRelation($fields)
+    {
+        return $this->getTagOwnerDao()->add($fields);
+    }
+
     protected function setTagOrg($tag)
     {
         $magic = $this->getSettingService()->get('magic');
@@ -320,6 +308,11 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getTagGroupTagDao()->deleteByGroupId($id);
 
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
+    }
+
+    public function deleteTagOwnerRelationsByOwner(array $owner)
+    {
+        return $this->getTagOwnerDao()->deleteByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
     }
 
     protected function filterTagFields(&$tag, $relatedTag = null)

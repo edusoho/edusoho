@@ -225,10 +225,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['likeOrgCode'] .= "%";
         }
 
-        if (empty($conditions['courseIds']) && isset($conditions['courseIds'])) {
-            $conditions['courseIds'] = array(0);
-        }
-
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')

@@ -31,9 +31,9 @@ class Version20161116102956 extends AbstractMigration
 
         $this->addSql("ALTER TABLE `classroom` DROP `tags`;");
         $this->addSql("ALTER TABLE `course` DROP `tags`;");
-        $this->addSql("ALTER TABLE `article` DROP `tags`;");
+        $this->addSql("ALTER TABLE `article` DROP `tagIds`;");
         $this->addSql("ALTER TABLE `course_lesson` DROP `tags`;");
-        $this->addSql("ALTER TABLE `content` DROP `tags`;");
+        $this->addSql("ALTER TABLE `content` DROP `tagIds`;");
         $this->addSql("ALTER TABLE `open_course` DROP `tags`;");
         $this->addSql("ALTER TABLE `open_course_lesson` DROP `tags`;");
     }
