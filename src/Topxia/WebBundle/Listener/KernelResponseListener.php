@@ -22,10 +22,7 @@ class KernelResponseListener
         $request     = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
-        if (!$isActiveUser) {
-            $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
-        }
+        $this->generateActiveLog($request);
 
         $auth = $this->getSettingService()->get('auth');
 
@@ -61,6 +58,22 @@ class KernelResponseListener
                 $event->setResponse($response);
                 return;
             }
+        }
+    }
+
+    protected function generateActiveLog($request)
+    {
+        $isActiveUser = $request->getSession()->get('isActiveUser', false);
+        $currentUser = $this->getUserService()->getCurrentUser();
+        
+        if(!$isActiveUser) {
+            $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
+            $request->getSession()->set('isActiveUser', $isActiveUser);
+        }
+
+        if (!$isActiveUser) {
+            $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
+            $request->getSession()->set('isActiveUser', true);
         }
     }
 
