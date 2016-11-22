@@ -131,13 +131,33 @@
   .dashboard-pane {
     height: 100%;
     overflow: hidden;
-    background-color: #151515;
-  }
-  .task-pane {
-    padding: 15px 17px;
+    background-color: #333333;
   }
 }
 
+.task-pane {
+  padding: 15px 17px;
+}
+
+.note-pane {
+  padding: 20px 15px;
+  .lesson-note-plugin-form {
+    background-color: #333;
+  }
+}
+
+.question-pane {
+  .lesson-question-plugin-form {
+    margin-bottom: 0;
+    padding: 6px;
+  }
+  .media-list {
+    background-color: #272727;
+    .media {
+      background-color: #272727;
+    }
+  }
+}
 
 .task-state-modal {
   .title {
@@ -199,10 +219,7 @@
   }
 }
 
-.btn-success:after {
-  content: "Success!";
- 
-}
+
 
 @-webkit-keyframes moveUp {
   0% {
