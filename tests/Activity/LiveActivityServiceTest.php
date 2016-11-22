@@ -2,7 +2,6 @@
 
 namespace Tests\Activity;
 
-use Tests\Activity\Mock\MockEdusohoLiveClient;
 use Topxia\Service\Common\BaseTestCase;
 use Biz\LiveActivity\Service\LiveActivityService;
 
@@ -83,5 +82,36 @@ class LiveActivityServiceTest extends BaseTestCase
         $clientProp->setAccessible(true);
         $clientProp->setValue($service, new MockEdusohoLiveClient());
         return $service;
+    }
+}
+
+/*
+Mock of Topxia\Service\Util\EdusohoLiveClient
+ */
+class MockEdusohoLiveClient
+{
+    public function __contruct()
+    {
+    }
+
+    public function createLive($live)
+    {
+        return array(
+            'id'       => rand(1, 1000),
+            'provider' => rand(1, 10)
+        );
+    }
+
+    public function updateLive($live)
+    {
+        return $live;
+    }
+
+    public function deleteLive($id, $provider)
+    {
+        return array(
+            'id'       => $id,
+            'provider' => $provider
+        );
     }
 }
