@@ -45,6 +45,10 @@ class TagGroupController extends BaseController
                 $fields['scope'] = array();
             }
 
+            foreach ($fields['tagIds'] as $tagId) {
+                
+            }
+
             $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
             
             return $this->render('TopxiaAdminBundle:TagGroup:list-tr.html.twig', array(
