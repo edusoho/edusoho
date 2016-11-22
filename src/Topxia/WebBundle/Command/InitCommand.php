@@ -425,13 +425,13 @@ EOD;
         ));
 
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
-        chmod($directory, 0777);
+        @chmod($directory, 0777);
 
         $directory = $this->getContainer()->getParameter('topxia.upload.private_directory');
-        chmod($directory, 0777);
+        @chmod($directory, 0777);
 
         $directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
-        chmod($directory, 0777);
+        @chmod($directory, 0777);
 
         $output->writeln(' ...<info>成功</info>');
     }
