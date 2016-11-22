@@ -8,6 +8,8 @@ interface CourseService
 
     public function findCoursesByCourseSetId($courseSetId);
 
+    public function getDefaultCourseByCourseSetId($courseSetId);
+
     public function createCourse($course);
 
     public function updateCourse($id, $fields);

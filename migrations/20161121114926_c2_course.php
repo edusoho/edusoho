@@ -22,6 +22,7 @@ class C2Course extends Migration
             `summary` text,
             `goals` text,
             `audiences` text,
+            `isDefault` tinyint(1) DEFAULT '0',
             `maxStudentNum` int(11) DEFAULT '0',
             `smallPicture` varchar(255) DEFAULT NULL,
             `middlePicture` varchar(255) DEFAULT NULL,

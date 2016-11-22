@@ -19,6 +19,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetId($courseSetId);
     }
 
+    public function getDefaultCourseByCourseSetId($courseSetId)
+    {
+        $courses = $this->findCoursesByCourseSetId($courseSetId);
+        if (empty($courses)) {
+            return null;
+        }
+        foreach ($courses as $course) {
+            if ($course['isDefault']) {
+                return $course;
+            }
+        }
+        return null;
+    }
+
     public function createCourse($course)
     {
         //TODO validator

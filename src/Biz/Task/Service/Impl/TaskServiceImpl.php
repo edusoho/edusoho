@@ -135,7 +135,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         foreach ($tasks as $tk => $t) {
             $act                         = $activityMap[$t['activityId']];
             $config                      = $activityConfigs[$act['mediaType']];
-            $tasks[$tk]['activity_meta'] = array_merge($config->getMetas(), array('length' => $this->formatActivityLength($act['length'])));
+            $tasks[$tk]['activity_meta'] = array_merge($config->getMetas(), array(
+                'length' => $this->formatActivityLength($act['length']), 
+                'mediaType' => $act['mediaType'],
+                'startTime' => $act['startTime'], 
+                'endTime' => $act['endTime'], 
+                'finished' => !empty($act['endTime']) && $act['mediaType'] == 'live' ? ($act['endTime'] < time() ? 1 : 0) : 0)
+            );
         }
 
         return $tasks;
@@ -173,8 +179,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw new AccessDeniedException('该任务不在进行状态');
         }
 
+        if($taskResult['status'] === 'finish'){
+            return;
+        }
+
         $update['updatedTime'] = time();
         $update['status']      = 'finish';
+        $update['finishedTime']= time();
         $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
     }
 

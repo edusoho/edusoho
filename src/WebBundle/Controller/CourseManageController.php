@@ -6,22 +6,26 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
 {
-    public function createAction(Request $request)
+    public function createAction(Request $request, $courseSetId)
     {
-        $data   = $request->request->all();
-        $course = $this->getCourseService()->createCourse($data);
+        // $data   = $request->request->all();
+        // $course = $this->getCourseService()->createCourse($data);
 
-        return $this->createJsonResponse($course);
+        // return $this->createJsonResponse($course);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        return $this->render('WebBundle:CourseSetManage:course-create-modal.html.twig', array(
+            'courseSet' => $courseSet
+        ));
     }
 
-    public function infoAction(Request $request, $courseSetId, $courseId)
+    public function copyAction(Request $request, $courseSetId, $courseId)
     {
-        return $this->render('WebBundle:CourseSetManage:course_info.html.twig', array());
-    }
-
-    public function previewAction(Request $request, $courseSetId, $courseId)
-    {
-        return $this->render('WebBundle:CourseSet:preview.html.twig', array());
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSetManage:course-create-modal.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
     }
 
     public function listAction(Request $request, $courseSetId)
@@ -34,9 +38,67 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function tasksAction(Request $request, $courseSetId, $courseId)
+    {
+        // $course      = $this->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        $tasks     = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
+        return $this->render('WebBundle:TaskManage:list.html.twig', array(
+            'tasks'     => $tasks,
+            'course'    => $course,
+            'courseSet' => $courseSet
+        ));
+    }
+
+    public function infoAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSetManage:course-info.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function previewAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSet:preview.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        return $this->render('WebBundle:CourseSetManage:course_marketing.html.twig', array());
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSetManage:course-marketing.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function teachersAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSetManage:course-teachers.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function studentsAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseSetManage:course-students.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)
@@ -65,5 +127,10 @@ class CourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

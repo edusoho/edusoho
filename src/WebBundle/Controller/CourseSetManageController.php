@@ -8,13 +8,16 @@ class CourseSetManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
+        $courses       = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
 
-        $courseSet['locked'] = $courseSet['status'] == 'closed';
+        $defualtCourse['locked'] = $defaultCourse['status'] == 'closed';
+        $courseSet['locked']     = $courseSet['status'] == 'closed';
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
-            'courseSet' => $courseSet,
-            'courses'   => $courses
+            'courseSet'     => $courseSet,
+            'courses'       => $courses,
+            'defaultCourse' => $defualtCourse
         ));
     }
 

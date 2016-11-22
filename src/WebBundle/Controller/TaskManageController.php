@@ -98,6 +98,10 @@ class TaskManageController extends BaseController
     }
 
     // TODO 是否移到CourseManageController
+    /*
+     * @deprecated
+     * @see CourseManageController->tasksAction
+     */
     public function tasksAction(Request $request, $courseId)
     {
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
@@ -108,6 +112,15 @@ class TaskManageController extends BaseController
             'tasks'  => $tasks,
             'course' => $course,
             'items'  => $courseItems
+        ));
+    }
+
+    // TODO 重命名或移动到其它Controller（wuli create）
+    public function courseSetAction(Request $request, $courseId)
+    {
+        $course = $this->tryManageCourse($courseId);
+        return $this->render('WebBundle:PlanManage:list.html.twig', array(
+            'course' => $course
         ));
     }
 

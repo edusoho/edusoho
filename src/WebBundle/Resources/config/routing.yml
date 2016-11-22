@@ -4,11 +4,24 @@ courseset_manage:
 
 courseset_manage_courses:
   path: /courseset/{courseSetId}/courses
-  defaults: {_controller: WebBundle:CourseManage:list}
+  defaults: {_controller:WebBundle:CourseManage:list}
+
+courseset_manage_course_create:
+  path: /courseset/{courseSetId}/course/create
+  defaults: {_controller: WebBundle:CourseManage:create}
+
+courseset_manage_course_copy:
+  path: /courseset/{courseSetId}/course/{courseId}/copy
+  defaults: {_controller: WebBundle:CourseManage:copy}
 
 courseset_manage_course_info:
   path: /courseset/{courseSetId}/course/{courseId}/info
   defaults: {_controller: WebBundle:CourseManage:info}
+
+courseset_manage_course_tasks:
+  path: /courseset/{courseSetId}/course/{courseId}/tasks
+  defaults: {_controller: WebBundle:CourseManage:tasks}
+
 
 courseset_manage_course_marketing:
   path: /courseset/{courseSetId}/course/{courseId}/marketing
@@ -17,6 +30,14 @@ courseset_manage_course_marketing:
 courseset_manage_course_preview:
   path: /courseset/{courseSetId}/course/{courseId}/preview
   defaults: {_controller: WebBundle:CourseManage:preview}
+
+courseset_manage_course_teachers:
+  path: /courseset/{courseSetId}/course/{courseId}/teachers
+  defaults: {_controller: WebBundle:CourseManage:teachers}
+
+courseset_manage_course_students:
+  path: /courseset/{courseSetId}/course/{courseId}/students
+  defaults: {_controller: WebBundle:CourseManage:students}
 
 courseset_manage_course_close:
   path: /courseset/{courseSetId}/course/{courseId}/close
@@ -29,8 +50,6 @@ courseset_manage_course_delete:
 courseset_manage_course_publish:  
   path: /courseset/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: WebBundle:CourseManage:publish}
-
-
 
 course_manage_tasks:
   path:  /course/{courseId}/tasks
