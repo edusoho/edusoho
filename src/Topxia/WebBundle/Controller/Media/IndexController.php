@@ -14,7 +14,7 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId));
+        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId, 'context' => array('hideQuestion' => 1)));
     }
 
     public function previewAction($mediaId)
