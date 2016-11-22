@@ -5,11 +5,7 @@
 {% set menu = 'admin_account_center' %}
 {% set script_controller = 'account-center/index' %}
 
-
-
-  
 {% block main %}
-  {# 域名检查提示#}
   {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
   <div class="panel panel-default">
     <div class="panel-heading clearfix">
@@ -20,7 +16,6 @@
         {{ '元'|trans }} 
     <div class="panel-body" id="site-overview-table" data-url="{{path('admin_account_analysis')}}">
       <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-        
     </div>
   </div>
   <div class="panel panel-default panel-420">
@@ -64,9 +59,7 @@
           </div>
         </div>
         <div class="panel-body js-statistic-areas" id="user-pay-list"
-             data-url="{{path('admin_payment_rank',{type:'cash'})}}">
-          <!-- model -->
-          
+             data-url="{{path('admin_payment_rank',{type:'cash'})}}">  
         </div>
       </div>
     </div>
@@ -88,8 +81,6 @@
         </div>
         <div class="panel-body js-statistic-areas" id="product-consume-list"
              data-url="{{path('admin_account_rank',{type:'all'})}}">
-          <!-- model -->
-          
         </div>
       </div>
     </div>
