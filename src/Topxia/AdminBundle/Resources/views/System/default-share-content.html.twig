@@ -1,6 +1,23 @@
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
   <div >
     <fieldset>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="article_share_content">{{'资讯分享内容'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="inviteShareContent" name="inviteShareContent" class="form-control" rows="5">{{ defaultSetting.inviteShareContent }}</textarea>
+          <div class="help-block">
+            <div>{{'变量说明：'|trans}}</div>
+            <ul>
+              <li>{% verbatim %}{{articletitle}}{% endverbatim %} {{'为资讯标题'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网校名称'|trans}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
         <div class="col-md-3 control-label">
           <label for="article_share_content">{{'资讯分享内容'|trans}}</label>
