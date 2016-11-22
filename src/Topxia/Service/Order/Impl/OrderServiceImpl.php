@@ -592,6 +592,14 @@ class OrderServiceImpl extends BaseService implements OrderService
             $tmpConditions['amount'] = $conditions['amount'];
         }
 
+		if (isset($conditions['totalPrice_GT'])){
+			$tmpConditions['totalPrice_GT'] = $conditions['totalPrice_GT'];
+		}
+
+		if (isset($conditions['updatedTime_GE'])){
+			$tmpConditions['updatedTime_GE'] = $conditions['updatedTime_GE'];
+		}
+
         $conditions = array_filter($conditions);
         $conditions = array_merge($conditions, $tmpConditions);
 
