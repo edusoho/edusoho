@@ -56,15 +56,15 @@
       vertical-align: middle;
       .btn {
         position: absolute;
-        top: 31px;
+        top: 30px;
         right: 0;
         &.open {
           top:0;
         }
         &.moveup {
-          -webkit-animation: moveUp .5s;
-          -moz-animation: moveUp .5s;
-          animation: moveUp .5s;
+          -webkit-animation: moveUp 1s;
+          -moz-animation: moveUp 1s;
+          animation: moveUp 1s;
           top:0;
         }
       }
@@ -121,6 +121,22 @@
   }
   .task-pane {
     padding: 15px 17px;
+  }
+  .btn-learn {
+    .doing {
+      display: inline;
+    }
+    .done {
+      display: none;
+    }
+    &.active {
+      .doing {
+        display: none;
+      }
+      .done {
+        display: inline;
+      }
+    }
   }
 }
 
