@@ -1,16 +1,26 @@
-import Messenger from "es-messenger";
 import SideBar from './widget/sidebar';
-import LearnState from './widget/learn-state';
+import TaskUi from './widget/task-ui';
+import TaskEventEmitter from './widget/task-event-emitter';
+import Emitter from 'common/es-event-emitter'
 
-class TaskShow {
-  constructor(element) {
+class TaskShow extends Emitter{
+  constructor({element, courseId, taskId}) {
+    super();
     this.element = $(element);
+    this.courseId = courseId;
+    this.taskId = taskId;
+    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
+    this.ui = new TaskUi({
+      element:'.js-task-dashboard-page',
+    });
+
     this.init();
   }
 
   init() {
     this.initPlugin();
     this.sidebar();
+    this.bindEvent();
   }
 
   initPlugin() {
@@ -21,51 +31,59 @@ class TaskShow {
     });
   }
 
-  bindActivityEmitterEvent() {
-    let messenger = new Messenger('parent', 'ActivityEvent');
-    let $iframe = this.element.find('#task-content-iframe');
-    messenger.addTarget($iframe.get(0).contentWindow, 'task-content-iframe');
-    messenger.listen(message => {
-      let {event, data} = JSON.parse(message);
-      let eventUrl = $iframe.data('eventUrl');
-
-      let postData = data;
-
-      if (postData === undefined) {
-        postData = {};
+  bindEvent(){
+    let minute = 60 * 1000;
+    let timeStep = 2; // 分钟
+    this.delay('doing', () => {
+      let eventUrl = this.element.find('#task-content-iframe').data('eventUrl');
+      if(eventUrl === undefined){
+        return;
       }
+      let postData = {
+        eventName: 'doing',
+        data: {
+          taskId: this.taskId,
+        }
+      };
+      $.post(eventUrl, postData).done((currentTime) => {
+        this.eventEmitter.emit('doing', {currentTime: currentTime});
+        this.trigger('doing');
+      });
+    }, timeStep * minute);
 
-      postData['eventName'] = event;
+    this.trigger('doing');
 
-      $.post(eventUrl, postData)
-          .then(({event, data}) => {
-            messenger.send(JSON.stringify({event: event, data: data}));
-          })
-          .fail((error) => {
-            messenger.send(JSON.stringify({event: event, error: error}));
-          })
-      ;
+    this.bindEmitterEvent();
+  }
+
+  bindEmitterEvent() {
+    this.eventEmitter.receive('finish', (data) => {
+      this.onActivityFinish();
     });
   }
 
-  onActivityFinish() {
-    //@ TODO 任务完成的方法
+  onActivityFinish(transition) {
+    if(transition === 'url'){
+
+    }
+    this.ui.learnedWeakPrompt();
+    this.ui.learned();
   }
 
   sidebar() {
-    var sideBar = new SideBar({
+    this.sideBar = new SideBar({
       element:'.dashboard-sidebar-content',
       activePlugins:["note","question"],
-      courseId: 1,
-    });
-
-    var learnState = new LearnState ({
-      element:'.js-task-dashboard-page',
+      courseId: this.courseId,
     });
   }
 }
 
-new TaskShow($('body'));
+new TaskShow({
+  element: $('body'),
+  courseId: $('body').find('#hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#hidden-data [name="task-id"]').val()
+});
 
 
 
