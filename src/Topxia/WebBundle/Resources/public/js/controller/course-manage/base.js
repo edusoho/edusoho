@@ -96,7 +96,7 @@ define(function (require, exports, module) {
 
         validator.addItem({
             element: '[name=maxStudentNum]',
-            rule: 'integer',
+            rule: 'unsigned_integer',
             onItemValidated: function (error, message, elem) {
                 if (error) {
                     return;
