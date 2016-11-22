@@ -45,10 +45,6 @@ class TagGroupController extends BaseController
                 $fields['scope'] = array();
             }
 
-            foreach ($fields['tagIds'] as $tagId) {
-                
-            }
-
             $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
             
             return $this->render('TopxiaAdminBundle:TagGroup:list-tr.html.twig', array(
@@ -91,6 +87,13 @@ class TagGroupController extends BaseController
     {
         $tags = $request->request->get('tags');
         $tags = explode(',', $tags);
+
+        foreach ($tags as $tag) {
+            if (!$this->getTagService()->getTagByName($tag)) {
+                $this->getTagService()->addTag($tag);
+            }
+        }
+
         $tags = $this->getTagService()->findTagsByNames($tags);
         return ArrayToolkit::column($tags, 'id');
     }
