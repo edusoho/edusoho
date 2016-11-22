@@ -88,7 +88,6 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $isBinded = $this->getAppService()->getBinded();
             $overview = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            $overview['enabled'] = true;
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
