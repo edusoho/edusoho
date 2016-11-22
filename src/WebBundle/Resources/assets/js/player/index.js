@@ -1,6 +1,8 @@
 import  PlayerFactory from './player-factory';
 import  EsMessager from '../../common/messenger';
 import DurationStorage from '../../common/durationStorage';
+
+
 class Show {
 
     constructor(element) {
@@ -57,7 +59,7 @@ class Show {
             {
                 element: '#lesson-player',
                 url: this.url,
-                mediaType:  this.fileType,
+                mediaType: this.fileType,
                 fingerprint: this.fingerprint,
                 fingerprintSrc: this.fingerprintSrc,
                 fingerprintTime: this.fingerprintTime,
@@ -93,15 +95,15 @@ class Show {
     initEvent() {
         let player = this.initPlayer();
         let messenger = this.initMesseger();
-        player.on("ready", function () {
+        player.on("ready", ()=> {
             messenger.sendToParent("ready", {pause: true});
-            if ( this.playerType == 'local-video-player') {
-                var time = DurationStorage.get( this.userId, this.fileId);
+            if (this.playerType == 'local-video-player') {
+                let time = DurationStorage.get(this.userId, this.fileId);
                 if (time > 0) {
-                    player.setCurrentTime(DurationStorage.get( this.userId, this.fileId));
+                    player.setCurrentTime(time);
                 }
                 player.play();
-            } else if ( this.playerType == 'balloon-cloud-video-player') {
+            } else if (this.playerType == 'balloon-cloud-video-player') {
                 if (this.markerUrl) {
                     $.getJSON(this.markerUrl, function (questions) {
                         player.setQuestions(questions);
@@ -123,34 +125,32 @@ class Show {
 
         });
 
-        player.on("timechange", function (data) {
-            console.log('data---',data)
-            messenger.sendToParent("timechange", {pause: true, currentTime: data.currentTime});
+        player.on("timechange", (data)=> {
+            messenger.sendToParent("timechange", {pause: true, currentTime: player.getCurrentTime()});
+            console.log(player.getCurrentTime(),player.getDuration(), parseInt(player.getCurrentTime()), parseInt(player.getDuration()));
             if (this.playerType == 'local-video-player') {
                 if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
-                    DurationStorage.set( this.userId, this.fileId, player.getCurrentTime());
+                    DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
                 }
             }
         });
 
-        player.on("paused", function () {
+        player.on("paused", () => {
             messenger.sendToParent("paused", {pause: true});
         });
 
-        player.on("playing", function () {
-            console.log('playing')
+        player.on("playing", ()=> {
             messenger.sendToParent("playing", {pause: false});
         });
 
-        player.on("ended", function () {
+        player.on("ended", ()=> {
             messenger.sendToParent("ended", {stop: true});
+            console.log('end');
             if (this.playerType == 'local-video-player') {
-                DurationStorage.del( this.userId, this.fileId);
+                DurationStorage.del(this.userId, this.fileId);
             }
         });
     }
-
-
 
 
 }

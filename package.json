@@ -65,7 +65,7 @@
     "es-swfobject": "^3.0.0",
     "es-messenger":"^2.1.0",
     "video.js": "^4.10.2",
-    "store2": "^2.3.2 "
+    "store": "^1.3.20"
   },
   "scripts": {
     "start": "npm run dev",
