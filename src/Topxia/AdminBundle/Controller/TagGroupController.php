@@ -87,6 +87,13 @@ class TagGroupController extends BaseController
     {
         $tags = $request->request->get('tags');
         $tags = explode(',', $tags);
+
+        foreach ($tags as $tag) {
+            if (!$this->getTagService()->getTagByName($tag)) {
+                $this->getTagService()->addTag(array('name' => $tag));
+            }
+        }
+
         $tags = $this->getTagService()->findTagsByNames($tags);
         return ArrayToolkit::column($tags, 'id');
     }

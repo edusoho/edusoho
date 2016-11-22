@@ -107,8 +107,9 @@ define(function(require, exports, module) {
         maximumSelectionSize: 50,
         placeholder: Translator.trans('请输入标签'),
         multiple: true,
-        createSearchChoice: function () {
-            return null;
+        tokenSeparators: [",", " "],
+        createSearchChoice: function(term,data) {
+            return {id:term, name:term};
         }
     });
   };
