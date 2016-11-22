@@ -22,7 +22,8 @@ class KernelResponseListener
         $request     = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $this->checkUserIsActive($request);
+        $this->generateUserActiveLog($request);
+
 
         $auth = $this->getSettingService()->get('auth');
 
@@ -49,7 +50,7 @@ class KernelResponseListener
         }
     }
 
-    private function checkUserIsActive($request)
+    private function generateUserActiveLog($request)
     {
         $activeUserTime = $request->getSession()->get('active_user_time', 0);
         //当天登录激活
@@ -78,6 +79,7 @@ class KernelResponseListener
             '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
             '/login/weixinmob', '/login/bind/weixinmob/existbind'
         );
+
     }
 
     protected function generateUrl($router, $params = array(), $withHost = false)

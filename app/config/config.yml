@@ -24,7 +24,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.2.15'
+        version: '7.3.0'
         packages:
             webpack:
                 base_urls:
@@ -187,7 +187,7 @@ services:
 
     topxia.twig.file_cache:
         class: Topxia\Service\Common\FilesystemCache
-        arguments:    ['%kernel.root_dir%/cache']
+        arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter

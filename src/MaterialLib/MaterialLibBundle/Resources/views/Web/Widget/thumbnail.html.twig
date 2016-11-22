@@ -40,6 +40,14 @@
         </li>
       {% endif %}
 
+      {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+        <li>
+          <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}" data-toggle="tooltip" data-placement="bottom">
+            <i class="glyphicon glyphicon-cog prm"></i>{{'字幕管理'|trans}}
+          </a>
+        </li>
+      {% endif %}
+
       <li>
         <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
           <i class="glyphicon glyphicon-save prm"></i>{{'下载'|trans}}

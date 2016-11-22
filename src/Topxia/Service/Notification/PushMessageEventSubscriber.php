@@ -76,14 +76,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
-    public function onUserChangeNickname(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $user    = $context;
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $result  = $this->pushCloud('user.update', $this->convertUser($user, $profile));
-    }
-
     /**
      * User相关
      */
@@ -246,6 +238,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             $liveJobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('live_lesson', $lesson['id']);
+
             if ($liveJobs) {
                 $this->deleteJob($liveJobs);
             }
@@ -871,9 +864,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function deleteJob($jobs)
     {
         foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'PushNotificationOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
+            $this->getCrontabService()->deleteJob($job['id']);
         }
     }
 

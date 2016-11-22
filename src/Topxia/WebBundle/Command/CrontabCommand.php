@@ -33,7 +33,7 @@ class CrontabCommand extends BaseCommand
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
 
         $biz = $this->getContainer()->get('biz');
-		$serviceKernel->setConnection($biz['db']);
+		$serviceKernel->setBiz($biz);
 		$currentUser = new CurrentUser();
 		$currentUser->fromArray(array(
 		    'id' => 0,
