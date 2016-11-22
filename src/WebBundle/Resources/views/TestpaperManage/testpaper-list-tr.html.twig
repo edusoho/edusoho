@@ -11,8 +11,8 @@
   </td>
   <td>
     {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="text-muted">/</span> {{'%score%分'|trans({'%score%': testpaper.score})}}
-    {% if testpaper.passedCondition > 0 %}
-      <div class="text-muted"><small>{{'及格%passedCondition%分'|trans({'%passedCondition%': testpaper.passedCondition[0] })}}</small></div>
+    {% if testpaper.passedCondition[0]|default(0) > 0 %}
+      <div class="text-muted"><small>{{'及格%passedCondition%分'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
     {% endif %}
   </td>
   <td>

@@ -183,13 +183,11 @@ class TestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperWithException($course, $id);
-
         $testpaper = $this->getTestpaperService()->publishTestpaper($id);
 
         $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
 
-        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+        return $this->render('WebBundle:TestpaperManage:testpaper-list-tr.html.twig', array(
             'testpaper' => $testpaper,
             'user'      => $user,
             'course'    => $course
@@ -200,13 +198,11 @@ class TestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testpaper = $this->getTestpaperWithException($course, $id);
-
         $testpaper = $this->getTestpaperService()->closeTestpaper($id);
 
         $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
 
-        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+        return $this->render('WebBundle:TestpaperManage:testpaper-list-tr.html.twig', array(
             'testpaper' => $testpaper,
             'user'      => $user,
             'course'    => $course

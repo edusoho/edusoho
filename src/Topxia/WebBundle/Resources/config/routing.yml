@@ -1017,13 +1017,13 @@ course_manage_testpaper_deletes:
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
     methods: [POST]
 
-course_manage_testpaper_publish:
-    path: /course/{courseId}/manage/testpaper/{id}/publish
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
+# course_manage_testpaper_publish:
+#     path: /course/{courseId}/manage/testpaper/{id}/publish
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
 
-course_manage_testpaper_close:
-    path: /course/{courseId}/manage/testpaper/{id}/close
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
+# course_manage_testpaper_close:
+#     path: /course/{courseId}/manage/testpaper/{id}/close
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
 
 course_manage_testpaper_items:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items

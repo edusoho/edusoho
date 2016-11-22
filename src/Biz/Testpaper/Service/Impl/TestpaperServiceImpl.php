@@ -7,6 +7,7 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Builder\TestpaperBuilderFactory;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
@@ -229,7 +230,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw new ResourceNotFoundException('testpaper', $id);
         }
 
         if (!in_array($testpaper['status'], array('closed', 'draft'))) {
@@ -239,7 +240,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = array(
             'status' => 'open'
         );
-        $testpaper = $this->updateTestpaper($id, $testpaper);
+        $testpaper = $this->updateTestpaper($id, array('status' => 'open'));
 
         $this->dispatchEvent('testpaper.publish', $testpaper);
 
@@ -251,17 +252,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw new ResourceNotFoundException('testpaper', $id);
         }
 
         if (!in_array($testpaper['status'], array('open'))) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
-        $testpaper = array(
-            'status' => 'closed'
-        );
-        $testpaper = $this->updateTestpaper($id, $testpaper);
+        $testpaper = $this->updateTestpaper($id, array('status' => 'closed'));
 
         $this->dispatchEvent('testpaper.close', $testpaper);
 
