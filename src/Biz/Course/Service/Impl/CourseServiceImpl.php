@@ -36,6 +36,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createCourse($course)
     {
         //TODO validator
+        if ($course['expiryMode'] == 'days') {
+            unset($course['expiryStartDate']);
+            unset($course['expiryEndDate']);
+        } else {
+            unset($course['expiryDays']);
+        }
 
         return $this->getCourseDao()->create($course);
     }

@@ -8,10 +8,13 @@ class CourseManageController extends BaseController
 {
     public function createAction(Request $request, $courseSetId)
     {
-        // $data   = $request->request->all();
-        // $course = $this->getCourseService()->createCourse($data);
+        if ($request->isMethod('POST')) {
+            $data   = $request->request->all();
+            $course = $this->getCourseService()->createCourse($data);
+            var_dump($course);exit();
+            return $this->createJsonResponse($course);
+        }
 
-        // return $this->createJsonResponse($course);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-create-modal.html.twig', array(
             'courseSet' => $courseSet
@@ -30,34 +33,40 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courses       = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
-            'courseSet' => $courseSet,
-            'courses'   => $courses
+            'courseSet'     => $courseSet,
+            'courses'       => $courses,
+            'defaultCourse' => $defaultCourse
         ));
     }
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
         // $course      = $this->tryManageCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
-        $tasks     = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course        = $this->getCourseService()->getCourse($courseId);
+        $tasks         = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'     => $tasks,
-            'course'    => $course,
-            'courseSet' => $courseSet
+            'tasks'         => $tasks,
+            'course'        => $course,
+            'courseSet'     => $courseSet,
+            'defaultCourse' => $defaultCourse
         ));
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course        = $this->getCourseService()->getCourse($courseId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-info.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'     => $courseSet,
+            'course'        => $course,
+            'defaultCourse' => $defaultCourse
         ));
     }
 
@@ -73,31 +82,37 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course        = $this->getCourseService()->getCourse($courseId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-marketing.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'     => $courseSet,
+            'course'        => $course,
+            'defaultCourse' => $defaultCourse
         ));
     }
 
     public function teachersAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course        = $this->getCourseService()->getCourse($courseId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-teachers.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'     => $courseSet,
+            'course'        => $course,
+            'defaultCourse' => $defaultCourse
         ));
     }
 
     public function studentsAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course        = $this->getCourseService()->getCourse($courseId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-students.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'     => $courseSet,
+            'course'        => $course,
+            'defaultCourse' => $defaultCourse
         ));
     }
 

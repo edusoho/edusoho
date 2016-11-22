@@ -12,8 +12,6 @@ class CourseSetManageController extends BaseController
         $courses       = $this->getCourseService()->findCoursesByCourseSetId($id);
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
 
-        $defualtCourse['locked'] = $defaultCourse['status'] == 'closed';
-        $courseSet['locked']     = $courseSet['status'] == 'closed';
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
             'courseSet'     => $courseSet,
             'courses'       => $courses,

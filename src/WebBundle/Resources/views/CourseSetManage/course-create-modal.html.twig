@@ -1,2 +1,80 @@
-course-create-modal.html.twig
-create or copy
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['libs/jquery-validation.js','web/course-manage/create/index.js']) %}
+
+{% block title %}
+  {% if course|default(false) %}
+    {{ '复制' }}{{ '"' ~ course.title ~ '"' }}{{ '为一个新的教学计划'|trans }}
+  {% else %}
+    {{ '创建一个教学计划'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="course-create-editor" id="course-create-editor">
+      <form class="form-horizontal" id="course-create-form" action="{{path('courseset_manage_course_create', {courseSetId: courseSet.id})}}" method="post">
+        <div class="form-group">
+          <div class="col-xs-2 control-label">
+            <label for="title">{{'新计划名称'|trans}}</label>
+          </div>
+          <div class="col-xs-10">
+            <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
+            <input type="text" id="title" name="title" class="form-group col-xs-9" placeholder="">
+          </div>
+        </div>        
+        <div class="form-group">
+          <div class="col-xs-2 control-label">
+            <label for="learnMode">{{'学习模式'|trans}}</label>
+          </div>
+          <div class="col-xs-10">
+            <div class="col-xs-12">
+              <input type="radio" id="learnFreeOrder" name="learnMode" value="freeOrder" {% if course.learnMode|default('freeOrder') == 'freeOrder' %}checked{% endif %}>
+              <label for="learnFreeOrder">{{'自由式学习'|trans}}</label>
+              <span class="help-info">{{'学习过程学员自由安排'|trans}}</span>
+            </div>
+            <div class="col-xs-12">
+              <input type="radio" id="learnByOrder" name="learnMode" value="byOrder" {% if course.learnMode|default('freeOrder') == 'byOrder' %}checked{% endif %}>
+              <label for="learnByOrder">{{'任务式学习'|trans}}</label>
+              <span class="help-info">{{'根据既定顺序诸个解锁学习'|trans}}</span>
+            </div>
+            <span class="help-info"><i class="es-icon es-icon-warning"></i>{{'确定创建后“学习模式”将不能修改'|trans}}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-2 control-label">
+            <label>{{'学习有效期模式'|trans}}</label>
+          </div>
+          <div class="col-xs-10">
+            <div class="col-xs-12">
+              <input type="radio" id="expiryByDays" name="expiryMode" value="days" {% if course.expiryMode|default('days') == 'days' %}checked{% endif %}>
+              <label for="expiryByDays">{{'随到随学'|trans}}</label>
+              <div class="inline">
+                <span>{{'学习有效期'|trans}}</span>
+                <input type="number" name="expiryDays" value="{{course.expiryDays|default('0')}}">
+                <span>{{'天'|trans}}</span>
+              </div>
+              <span class="help-info">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。设置为0表示无限制。'|trans}}</span>
+            </div>
+            <div class="col-xs-12">
+              <input type="radio" id="expiryByDays" name="expiryMode" value="date" {% if course.expiryMode|default('days') == 'date' %}checked{% endif %}>
+              <label for="expiryByDate">{{'指定日期'|trans}}</label>
+              <div>
+                <span>{{'开始日期'|trans}}</span>
+                <input type="date" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}">
+                <span>{{'结束日期'|trans}}</span>
+                <input type="date" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}">
+              </div>
+              <span class="help-info">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。学习开始5天后不可再加入学习。'|trans}}</span>
+            </div>
+            <span class="help-info"><i class="es-icon es-icon-warning"></i>{{'课程首次发布后“学习模式”和“学习有效期方式”将不能再修改'|trans}}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="course-submit" type="submit" class="btn btn-primary" data-submiting-text="{{ '正在创建...'|trans }}">{{ '确定创建'|trans }}</button>
+          <button id="course-cancel" type="button" class="btn btn-secondary">{{ '取消'|trans }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

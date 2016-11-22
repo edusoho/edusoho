@@ -8,17 +8,25 @@
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      <a href="/courseset/{{courseSet.id}}/courses">{{'教学计划列表'|trans}}</a>/{{course.title}}
+      <a href="{{path('courseset_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
       <button class="btn btn-success btn-sm pull-right">发布计划</button>
     </div>
     <div class="panel-body">
       <!-- TODO  删除返回的课程数据，为任务加章节数据 -->
       <ul class="nav nav-pills mbl">
         <li class="active"><a href="javascript:;">计划任务</a></li>
-        <li class=""><a href="/courseset/{{courseSet.id}}/course/{{course.id}}/info">计划设置</a></li>
-        <li class=""><a href="/courseset/{{courseSet.id}}/course/{{course.id}}/marketing">营销设置</a></li>
-        <li class=""><a href="/courseset/{{courseSet.id}}/course/{{course.id}}/teachers">教师设置</a></li>
-        <li class=""><a href="/courseset/{{courseSet.id}}/course/{{course.id}}/students">学员管理</a></li>
+        <li class="">
+          <a href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">计划设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">营销设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('courseset_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">教师设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">学员管理</a>
+        </li>
       </ul>
       <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务

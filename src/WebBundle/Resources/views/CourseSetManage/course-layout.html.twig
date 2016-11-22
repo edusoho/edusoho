@@ -9,11 +9,21 @@
     </div>
     <div class="panel-body">
       <ul class="nav nav-pills mbl">
-        <li class="active"><a href="{{path('courseset_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">计划任务</a></li>
-        <li class=""><a href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">计划设置</a></li>
-        <li class=""><a href="{{path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">营销设置</a></li>
-        <li class=""><a href="{{path('courseset_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">教师设置</a></li>
-        <li class=""><a href="{{path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">学员管理</a></li>
+        <li class="active">
+        	<a href="{{path('courseset_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">计划任务</a>
+        </li>
+        <li class="">
+        	<a href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">计划设置</a>
+        </li>
+        <li class="">
+        	<a href="{{path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">营销设置</a>
+        </li>
+        <li class="">
+        	<a href="{{path('courseset_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">教师设置</a>
+        </li>
+        <li class="">
+        	<a href="{{path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">学员管理</a>
+        </li>
       </ul>
       <div class="content">
       	计划任务列表
