@@ -112,10 +112,10 @@
           <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
             <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
           </li>
-          <li class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}">
+          {#<li class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}">
             <a href="{{path('course_manage_data',{id:course.id})}}">
               <span></span>{{'学习数据'|trans}}</a>
-          </li>
+          </li>#}
           {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
             <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
               <a href="{{path('course_manage_order',{id:course.id})}}"><span></span>{{'订单查询'|trans}}</a>

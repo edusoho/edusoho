@@ -17,13 +17,12 @@ use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $taskId, $courseId)
+    public function showAction(Request $request, $id,  $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         if ($this->getMediaSource($activity) == 'self') {
             return $this->render('WebBundle:VideoActivity:show.html.twig', array(
                 'activity' => $activity,
-                'taskId'   => $taskId,
                 'courseId' => $courseId
             ));
         } else {

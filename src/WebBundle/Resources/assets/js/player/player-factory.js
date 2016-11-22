@@ -1,10 +1,9 @@
 import  LocalVideoPlayer from './local-video-player';
 import  BalloonVideoPlayer from './balloon-cloud-video-player-new';
-import  AudioPlayer from './audio-player';
 
 class PlayerFactory {
 
-   static create(type, options) {
+    static create(type, options) {
         switch (type) {
             case "local-video-player":
             case "audio-player":
@@ -13,9 +12,6 @@ class PlayerFactory {
             case "balloon-cloud-video-player":
                 return new BalloonVideoPlayer(options);
                 break;
-                //
-                // return new AudioPlayer(options);
-                // break;
         }
     }
 

@@ -1,4 +1,4 @@
-import ThreadShowWidget from '../../course-thread/show-widget'
+// import ThreadShowWidget from '../../course-thread/show-widget'
 
 class QuestionPane {
   constructor(option) {
@@ -24,9 +24,9 @@ class QuestionPane {
         this.$element.html(html);
         this.createFormElement = $('#' + this.createFormId);
         this._showListPane();
-        this._showWidget = new ThreadShowWidget({
-            element: $('[data-role=show-pane]')
-        });
+        // this._showWidget = new ThreadShowWidget({
+        //     element: $('[data-role=show-pane]')
+        // });
     });
   }
   show() {

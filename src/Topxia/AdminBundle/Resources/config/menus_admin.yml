@@ -356,12 +356,12 @@ admin:
                             router_name: admin_article_category
                             children:
                                 admin_operation_category_create:
-                                    name: '新建栏目'
+                                    name: '添加栏目'
                                     router_name: admin_article_category_create
                                     mode: modal
                                     group: topBtn
                 admin_operation_group:
-                    name: 小组管理
+                    name: 小组话题管理
                     children:
                         admin_operation_group_manage:
                             name: 小组管理
@@ -374,7 +374,7 @@ admin:
                                     group: topBtn
                                     blank: 1
                         admin_operation_group_thread:
-                            name: 话题管理
+                            name: 小组话题管理
                             disable: true
                             router_name: admin_groupThread
                 admin_operation_invite:
@@ -498,7 +498,7 @@ admin:
                     name: 虚拟币管理
                     children:
                         admin_coin_user_records:
-                            name: 记录
+                            name: 虚拟币管理
                             disable: true
                             router_name: admin_coin_user_records
                 admin_course_refunds:
@@ -688,7 +688,7 @@ admin:
                             name: 小组
                             disable: true
                         admin_invite_set:
-                            name: '邀请码设置'
+                            name: '邀请注册设置'
                             disable: true
                 admin_setting_finance:
                     name: 账务设置
@@ -711,6 +711,14 @@ admin:
                             name: 移动端设置
                             disable: true
                             router_name: admin_setting_mobile
+                admin_setting_mobile_iap_product:
+                    name: IOS内购商品设置
+                    disable: true
+                    visable: (setting('magic.enable_mobile_iap', '0'))
+                    children:
+                        admin_setting_mobile_iap_product_list:
+                            name: IOS内购商品设置
+                            router_name: admin_setting_mobile_iap_product
                 admin_optimize:
                     name: 系统优化
                     group: 2

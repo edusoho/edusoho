@@ -46,13 +46,13 @@ abstract class BaseDao
                 if ($currentTime - $data['syncTime'] > 600) {
                     $args[2] += $data['increment'];
                     call_user_func_array($callback, $args);
-                    $redis->setex($key, 20 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
+                    $redis->setex($key, 30 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
                 } else {
                     $data['increment'] += $args[2];
-                    $redis->setex($key, 20 * 60 * 60, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
+                    $redis->setex($key, 30 * 60 * 60, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
                 }
             } else {
-                $redis->setex($key, 20 * 60 * 60, array('increment' => $args[2], 'syncTime' => $currentTime));
+                $redis->setex($key, 30 * 60 * 60, array('increment' => $args[2], 'syncTime' => $currentTime));
             }
         } else {
             call_user_func_array($callback, $args);
@@ -79,6 +79,12 @@ abstract class BaseDao
     public function setConnection($connection)
     {
         $this->connection = $connection;
+        return $this;
+    }
+
+    public function setConnectionFactory($connectionFactory)
+    {
+        $this->connectionFactory = $connectionFactory;
     }
 
     public function getRedis()
@@ -287,5 +293,36 @@ abstract class BaseDao
             }
         }
         return false;
+    }
+
+    protected function generateKeyWhenSearch($conditions, $orderBy, $start, $limit)
+    {
+        $keys = 'search';
+
+        if(!empty($conditions)) {
+            ksort($conditions);
+            foreach ($conditions as $key => $value) {
+                if(is_array($value)) {
+                    $keys .= ":{$key}:".implode('-', $value);
+                } else {
+                    $keys .= ":{$key}:{$value}";
+                }
+            }
+        }
+
+        return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+    }
+
+    protected function generateKeyWhenCount($conditions)
+    {
+        $keys = 'count';
+        foreach ($conditions as $key => $value) {
+            if(is_array($value)) {
+                $keys .= ":{$key}:".implode('-', $value);
+            } else {
+                $keys .= ":{$key}:{$value}";
+            }
+        }
+        return $keys;
     }
 }

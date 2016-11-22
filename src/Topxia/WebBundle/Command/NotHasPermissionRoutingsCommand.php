@@ -56,7 +56,7 @@ class NotHasPermissionRoutingsCommand extends BaseCommand
 
             foreach ($routings as $key => $routing) {
                 if(!isset($routing['permissions'])){
-                    var_dump($key);
+                    echo $key.'\n';
                 }
             }
         }

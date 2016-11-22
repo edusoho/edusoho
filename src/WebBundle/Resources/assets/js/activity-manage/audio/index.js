@@ -11,8 +11,6 @@ function _inItStep2form() {
     var $step1_form = $('#step2-form');
     var validator = $step1_form.data('validator', validator);
     validator = $step1_form.validate({
-        onkeyup: false,
-        ignore: "",
         rules: {
             content: 'required',
             minute: 'required unsigned_integer',

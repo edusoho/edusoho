@@ -4,11 +4,11 @@ import Emitter from 'es6-event-emitter';
 class EsMessager extends Emitter {
     constructor(options) {
         super();
+
         this.name = options.name;
         this.project = options.project;
         this.children = options.children;
         this.type = options.type;
-        this.options  = options;
         this.setup();
     }
 
@@ -19,7 +19,7 @@ class EsMessager extends Emitter {
             messenger.addTarget(window.parent, 'parent');
             console.log('-child',messenger.targets)
         } else if (this.type == "parent") {
-            console.log('--parent',messenger.targets, this.children,this.options );
+            console.log('--parent',messenger.targets, this.children );
             var children = this.children;
             for (var i = children.length - 1; i >= 0; i--) {
                 messenger.addTarget(children[i].contentWindow, children[i].id);

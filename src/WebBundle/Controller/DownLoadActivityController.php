@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DownLoadActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $taskId,$courseId)
+    public function showAction(Request $request, $id, $courseId)
     {
         // TODO: Implement showAction() method.
     }

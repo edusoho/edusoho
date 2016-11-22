@@ -2,6 +2,7 @@
 namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,9 +10,18 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $task     = $this->tryLearnTask($courseId, $id);
-        $tasks    = $this->getTaskService()->findDetailedTasksByCourseId($courseId, $this->getUser()->getId());
+        $task = $this->tryLearnTask($courseId, $id);
+
+        $tasks    = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+        if (empty($activity)) {
+            throw $this->createNotFoundException("activity not found");
+        }
+
+        $this->getActivityService()->trigger($activity['id'], 'start', array(
+            'task' => $task
+        ));
 
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'     => $task,
@@ -60,7 +70,7 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId)
     {
         $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->tryTakeTask($taskId);
 
         if (empty($task)) {
             throw $this->createResourceNotFoundException('task', $taskId);
@@ -77,6 +87,9 @@ class TaskController extends BaseController
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');

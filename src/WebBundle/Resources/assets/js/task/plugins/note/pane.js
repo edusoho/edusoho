@@ -22,7 +22,7 @@ class NotePane {
       this.editor = CKEDITOR.replace('note_content', {
         toolbar: 'Simple',
         filebrowserImageUploadUrl: this.$element.find('#note_content').data('imageUploadUrl'),
-        height: 200
+        height: 320
       });
       this.editor.focusManager.focus();
       this.$form.on('submit', (event)=> {

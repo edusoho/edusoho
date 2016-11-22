@@ -10,6 +10,7 @@ define(function(require, exports, module) {
         
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
+
             if (radio == '1') {
                 validator.addItem({
                     element: '[name="alipay_secret"]',

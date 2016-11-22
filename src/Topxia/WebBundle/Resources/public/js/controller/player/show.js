@@ -34,12 +34,33 @@ define(function(require, exports, module) {
         var disableVolumeButton = videoHtml.data('disableVolumeButton');
         var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
         var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
+        var subtitlesData = videoHtml.data('subtitles');
+        var subtitles = [];
+        if (subtitlesData) {
+            for (var i in subtitlesData) {
+                var item = {
+                    label: subtitlesData[i].name,
+                    src: subtitlesData[i].url,
+                    default: ("default" in subtitlesData[i]) ? subtitlesData[i].default : false
+                }
+                subtitles.push(item);
+            }
+        }
+
+        // set first item to default if no default
+        for (var i in subtitles) {
+            if (subtitles[i].default) {
+                return;
+            }
+            subtitles[0].default = true;
+        }
+
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
+                html += '<div id="lesson-player" style="width: 100%;height: 100%;background: black;"></div>';
             }
         }else if(fileType == 'audio'){
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
@@ -77,7 +98,8 @@ define(function(require, exports, module) {
                     userId : userId,
                     userName : userName
                 },
-                videoHeaderLength: videoHeaderLength
+                videoHeaderLength: videoHeaderLength,
+                textTrack: subtitles
             }
         );
 

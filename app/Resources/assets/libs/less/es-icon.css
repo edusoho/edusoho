@@ -6,6 +6,18 @@
   url('fonts/es-icon.svg#es-icon') format('svg'); 
 }
 
+<<<<<<< HEAD
+=======
+.es-icon {
+  font-family:"es-icon" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+>>>>>>> feature/course2.0-activity
 .es-icon-qrcode:before { content: "\e615"; }
 .es-icon-time:before { content: "\e69d"; }
 .es-icon-videocam:before { content: "\e678"; }
@@ -188,6 +200,7 @@
 .es-icon-putongkecheng:before { content: "\e6b1"; }
 .es-icon-zhibokecheng:before { content: "\e6b2"; }
 .es-icon-zhibokecheng2:before { content: "\e6b3"; }
+.es-icon-zanting1:before { content: "\e6c6"; }
 .es-icon-ting:before { content: "\e6b8"; }
 .es-icon-sun:before { content: "\e6c3"; }
 .es-icon-sousuo:before { content: "\e6b4"; }
@@ -205,4 +218,10 @@
 .es-icon-replay10:before { content: "\e6c0"; }
 .es-icon-rewardsolid:before { content: "\e6c2"; }
 .es-icon-zhouqikechengtubiao1:before { content: "\e6c1"; }
+<<<<<<< HEAD
 .es-icon-subtitle:before { content: "\e783"; }
+=======
+.es-icon-subtitle:before { content: "\e783"; }
+.es-icon--check-circle:before { content: "\e6c7"; }
+.es-icon-undone-check:before { content: "\e6c8"; }
+>>>>>>> feature/course2.0-activity
