@@ -182,6 +182,14 @@ class TaskServiceTest extends BaseTestCase
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
         $this->assertEmpty($nextTask);
 
+        //finish firstTask;
+        $this->getTaskService()->startTask($firstTask['id']);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($firstTask['id']);
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], array('status' => 'finish'));
+
+        $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
+        $this->assertEquals($secondTask,$nextTask);
+
     }
 
     public function testCanLearnTask()
@@ -198,6 +206,25 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(false, $canLearnSecond);
     }
 
+    public function testIsTaskLearned(){
+        $task      = $this->mockSimpleTask();
+        $firstTask = $this->getTaskService()->createTask($task);
+
+
+        //begin to learn  firstTask;
+        $this->getTaskService()->startTask($firstTask['id']);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($firstTask['id']);
+        $this->assertEquals('start',$taskResult['status']);
+
+        $isLearned = $this->getTaskService()->isTaskLearned($firstTask['id']);
+        $this->assertEquals(false, $isLearned);
+
+        //finished
+        $this->getTaskResultService()->updateTaskResult($taskResult['id'], array('status' => 'finish'));
+        $isLearned = $this->getTaskService()->isTaskLearned($firstTask['id']);
+        $this->assertEquals(true, $isLearned);
+
+    }
 
     protected function mockSimpleTask()
     {
