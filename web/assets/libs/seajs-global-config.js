@@ -78,6 +78,8 @@ seajs.config({
         'video-player': 'balloon-video-player/1.3.0/index',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
         'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/video-player/v1/sdk.js',
+        'new-uploader': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/uploader/v1/sdk.js',
+        'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
@@ -123,6 +125,11 @@ seajs.on('fetch', function(data) {
     }
 
     if (data.uri.indexOf('js-sdk/video-player') > 0) {
+        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
+        return ;
+    }
+
+    if (data.uri.indexOf('js-sdk/uploader') > 0) {
         data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
         return ;
     }

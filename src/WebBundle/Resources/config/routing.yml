@@ -1,3 +1,7 @@
+course_manage_course_set:
+  path: /course_set/{courseId}/courses
+  defaults: {_controller:WebBundle:TaskManage:courseSet}
+
 course_manage_tasks:
   path:  /course/{courseId}/tasks
   defaults: { _controller: WebBundle:TaskManage:tasks }
@@ -25,12 +29,14 @@ course_task_show:
 course_task_activity_show:
   path:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: WebBundle:Task:taskActivity }
+
 task_live_entry:
   path: /course/{courseId}/activity/{id}/live_entry
   defaults: {_controller: WebBundle:LiveActivity:liveEntry}
-course_task_trigger:
-  path:  /course/{courseId}/task/{id}/trigger/{eventName}
-  defaults: { _controller: WebBundle:Task:trigger }
+
+course_activity_trigger:
+  path: /course/{courseId}/activity/{activityId}/trigger
+  defaults: { _controller: WebBundle:Activity:trigger }
   methods: [POST]
 
 media_materiallib_choose:

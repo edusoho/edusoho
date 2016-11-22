@@ -1,14 +1,12 @@
 <?php
 
-namespace Tests;
+namespace Tests\Activity;
 
+use Tests\Activity\Mock\MockEdusohoLiveClient;
 use Topxia\Service\Common\BaseTestCase;
-use Biz\Activity\Service\ActivityService;
 use Biz\LiveActivity\Service\LiveActivityService;
 
-require 'Mock/MockEdusohoLiveClient.php';
-
-class ActivityServiceTest extends BaseTestCase
+class LiveActivityServiceTest extends BaseTestCase
 {
     public function testCreate()
     {
@@ -83,7 +81,7 @@ class ActivityServiceTest extends BaseTestCase
         $class      = new \ReflectionClass(get_class($service));
         $clientProp = $class->getProperty('client');
         $clientProp->setAccessible(true);
-        $clientProp->setValue($service, new Mock\MockEdusohoLiveClient());
+        $clientProp->setValue($service, new MockEdusohoLiveClient());
         return $service;
     }
 }

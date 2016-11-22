@@ -9,6 +9,7 @@ use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -310,7 +311,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
-                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"]);
+                $info = ArrayToolkit::parts($member, array('levelId'));
+                $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"], $info);
                 return $member;
             }
         }
@@ -1548,6 +1550,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         list($course, $member) = $this->tryTakeCourse($courseId);
         $user                  = $this->getCurrentUser();
 
+        if (!$user->isLogin()) {
+            return false;
+        }
+
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (!empty($lesson)) {
@@ -2059,6 +2065,48 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function quitCourseByDeadlineReach($userId, $courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，退出课程失败。', array('%courseId%' => $courseId)));
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member) || ($member['role'] != 'student')) {
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
+        }
+
+        $isNonExpired = $this->isMemberNonExpired($course, $member);
+
+        if ($isNonExpired) {
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)还未达到有效期，不能退出课程。', array('%userId%' => $userId)));
+        }
+
+        //查询出订单
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        $user = $this->getUserService()->getUser($userId);
+        if (!empty($order)) {
+            $reason = array(
+                'type'     => 'other',
+                'note'     => '达到有效期，用户自己退出',
+                'operator' => $user['id']
+            );
+            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        }
+      
+        $this->getMemberDao()->deleteMember($member['id']);
+
+        $this->getCourseDao()->updateCourse($courseId, array(
+            'studentNum' => $this->getCourseStudentCount($courseId)
+        ));
+
+
+        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
+    }
+
     public function findCourseStudents($courseId, $start, $limit)
     {
         return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
@@ -2104,6 +2152,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             return empty($member) || $member['role'] != 'student' ? false : true;
         }
+    }
+
+    public function isCourseMember($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        return empty($member) ? false : true;
     }
 
     public function setCourseTeachers($courseId, $teachers)
@@ -2219,9 +2274,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->deleteMembersByCourseId($courseId);
     }
 
-    public function findUserJoinedCourseIds($userId, $joinedType = 'course')
+    public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        return $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
+        return ArrayToolkit::column($courseIds, 'courseId');
     }
 
     public function becomeStudent($courseId, $userId, $info = array())
@@ -2391,7 +2447,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
 
-        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
+        $removeMember = $this->getUserService()->getUser($member['userId']);
+
+        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
             new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))

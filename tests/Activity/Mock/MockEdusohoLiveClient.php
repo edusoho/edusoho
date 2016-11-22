@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Mock;
+namespace Tests\Activity\Mock;
 
 /*
 Mock of Topxia\Service\Util\EdusohoLiveClient

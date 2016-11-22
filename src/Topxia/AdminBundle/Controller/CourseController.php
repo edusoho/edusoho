@@ -62,6 +62,8 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        list($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum) = $this->getDifferentCoursesNum($conditions);
+
         $classrooms = array();
         $vips       = array();
         if ($filter == 'classroom') {
@@ -91,18 +93,56 @@ class CourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
+
+
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
-            'conditions'     => $conditions,
-            'courses'        => $courses,
-            'users'          => $users,
-            'categories'     => $categories,
-            'paginator'      => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled'],
-            'default'        => $default,
-            'classrooms'     => $classrooms,
-            'filter'         => $filter,
-            'vips'           => $vips
+            'conditions'            => $conditions,
+            'courses'               => $courses,
+            'users'                 => $users,
+            'categories'            => $categories,
+            'paginator'             => $paginator,
+            'liveSetEnabled'        => $courseSetting['live_course_enabled'],
+            'default'               => $default,
+            'classrooms'            => $classrooms,
+            'filter'                => $filter,
+            'vips'                  => $vips,
+            'searchCoursesNum'      => $searchCoursesNum,
+            'publishedCoursesNum'   => $publishedCoursesNum,
+            'closedCoursesNum'      => $closedCoursesNum,
+            'unPublishedCoursesNum' => $unPublishedCoursesNum
         ));
+    }
+
+    protected function getDifferentCoursesNum($conditions)
+    {   
+        $courses   = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            0,
+            PHP_INT_MAX
+        );
+
+        $searchCoursesNum      = 0;
+        $publishedCoursesNum   = 0;
+        $closedCoursesNum      = 0;
+        $unPublishedCoursesNum = 0;
+        $searchCoursesNum      = count($courses);
+
+        foreach ($courses as $course) {
+            if ($course['status'] == 'published') {
+                $publishedCoursesNum ++;
+            }
+
+            if ($course['status'] == 'closed') {
+                $closedCoursesNum ++;
+            }
+
+            if ($course['status'] == 'draft') {
+                $unPublishedCoursesNum ++;
+            }
+        }
+
+        return array($searchCoursesNum, $publishedCoursesNum, $closedCoursesNum, $unPublishedCoursesNum);   
     }
 
     protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)

@@ -57,7 +57,7 @@
     <div class="metas">
       <div class="score">
         {{ web_macro.star(course.rating) }}
-        <span>({{ course.ratingNum }}{{'人'|trans}})</span>
+        <span>({{ course.ratingNum }}{{' 评论'|trans}})</span>
       </div>
 
       {% if member and member.deadline > 0 %}
@@ -69,7 +69,7 @@
         {% else %}
          <div class="alert alert-danger alert-dismissable">
             {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
-              <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
+              <a href="{{path('course_member_deadline_reach',{courseId:course.id})}}">
               {% if course.price>0 %}
               {{'重新购买'|trans}}
               {% else %}
@@ -128,14 +128,23 @@
           {% if course.price > 0 %}
             {{'请重新'|trans}}<a class="btn-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
           {% else %}
-            <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
+            {% if member.joinedType == 'course' %}
+              <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
+            {% elseif member.joinedType == 'classroom' %}
+              <a class="btn-link js-exit-course" data-url="{{ path('classroom_exit', { id:member.classroomId }) }}" data-go="{{ path('classroom_show', { id:member.classroomId }) }}">{{'退出' ~ setting('classroom.name', '班级')|trans}}</a>
+            {% endif %}
           {% endif %}！
         {% elseif userVipStatus == 'member_expired' %}
           {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="btn-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
         {% elseif userVipStatus == 'level_low' %}
           {{'会员等级不够，不能学习此课程。请先'|trans}}<a class="btn-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
         {% else %}
-          {{'此课程已不支持会员免费学，'|trans}}<a class="btn-link js-exit-course" href="javascript:;" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
+          {% if member.joinedType == 'course' %}
+            {{'此课程已不支持会员免费学，请退出课程后重新购买。'|trans}}
+          {% elseif member.joinedType == 'classroom' %}
+            {{'此' ~ setting('classroom.name', '班级') ~ '课程已不支持会员免费学，'|trans}}<a class="btn-link js-exit-course" href="javascript:;" data-url="{{ path('classroom_exit', { id:member.classroomId }) }}" data-go="{{ path('classroom_show', { id:member.classroomId }) }}">{{'退出' ~ setting('classroom.name', '班级')|trans}}</a>
+          {% endif %}
+
         {% endif %}
       </div>
     {% endif %}

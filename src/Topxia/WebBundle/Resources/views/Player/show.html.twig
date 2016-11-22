@@ -13,7 +13,7 @@
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
   </head>
-  <body style="overflow:hidden;border:0px;">
+  <body style="overflow:hidden;border:0px;background: black;">
     {% if file|default(null) %}
       {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <div class="alert alert-danger">{{'转码失败，请联系管理员。'|trans}}</div>
@@ -50,6 +50,9 @@
           {% endif %}
           {% if context.hideQuestion|default(0) == 0 %}
             data-markerurl="{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}"
+          {% endif %}
+          {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
+            data-subtitles="{{ context.subtitles|json_encode }}"
           {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-starttime="{{ context.starttime|default('')}}"

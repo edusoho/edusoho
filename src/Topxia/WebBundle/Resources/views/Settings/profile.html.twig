@@ -27,7 +27,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="profile_truename">{{'姓名'|trans}}</label>
+						<label class="col-md-2 control-label" for="profile_truename">{{'真实姓名'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="control-text">{{ profile.truename }}</div>
             {% else %}
@@ -51,7 +51,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="profile_idcard">{{'身份证号'|trans}}</label>
+						<label class="col-md-2 control-label" for="profile_idcard">{{'身份证号码'|trans}}</label>
 						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
                 <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
@@ -87,7 +87,7 @@
 							<div class="help-block">
 								<label class="col-md-2 control-label"></label>
 								<p class="text-warning">
-								{{'还没绑定手机号，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
+								{{'还没绑定手机号码，'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'前去绑定'|trans}}</a>{{'。'|trans}}
 								</strong>
 								</p>
 							</div>
@@ -134,7 +134,7 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label">{{'个人主页'|trans}}</label>
+						<label class="col-md-2 control-label">{{'个人空间'|trans}}</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_site" name="profile[site]" class="form-control" data-widget-cid="widget-4" data-explain="" value="{{ profile.site|default('') }}">
 							<div class="help-block" style="display:none;"></div>

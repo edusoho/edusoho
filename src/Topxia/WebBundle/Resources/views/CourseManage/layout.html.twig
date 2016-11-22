@@ -143,8 +143,8 @@
 
         <ul class="list-group">
           <li class="list-group-heading">{{'课程运营'|trans}}</li>
-          <li class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}">
-            <a href="{{path('course_manage_data',{id:course.id})}}">
+          <li class="list-group-item {% if side_nav == 'course_manage_dashboard' %}active{% endif %}">
+            <a href="{{path('course_manage_course_dashboard',{id:course.id})}}">
               <span></span>{{'课程学习数据'|trans}}</a>
           </li>
 

@@ -12,7 +12,6 @@ class CourseLessonController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $courseId, $lessonId = 0)
     {
-        $hideQuestion = $request->query->get('hideQuestion', 0);
         $isPreview    = $request->query->get('isPreview', '');
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -22,7 +21,8 @@ class CourseLessonController extends BaseController
         }
 
         $context                 = array();
-        $context['hideQuestion'] = $hideQuestion;
+        $context['hideQuestion'] = $request->query->get('hideQuestion', 0);
+        $context['hideSubtitle'] = $request->query->get('hideSubtitle', 0);
 
         if (($isPreview && $lesson["free"])) {
             return $this->forward('TopxiaWebBundle:Player:show', array(

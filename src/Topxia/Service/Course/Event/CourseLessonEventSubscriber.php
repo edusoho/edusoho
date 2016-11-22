@@ -12,8 +12,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create'                => array('onCourseLessonCreate', 0),
-            'course.lesson.delete'                => array('onCourseLessonDelete', 0),
+            'course.lesson.create'                => 'onCourseLessonCreate',
+            'course.lesson.delete'                => 'onCourseLessonDelete',
             'course.lesson.update'                => 'onCourseLessonUpdate',
             'course.lesson.publish'               => 'onCourseLessonPublish',
             'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
