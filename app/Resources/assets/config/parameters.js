@@ -5,16 +5,14 @@
  * 3. How to name the output path folder and source code folder in each bundle?
  */
 const parameters = {
-  registeredBundles: [ //register php bundles
-    // 'src/Topxia/WebBundle',
-    'plugins/CrmPlugin'
-    // 'src/Topxia/AdminBundle',
-
-  ],
+  // registeredBundles: [ //register php bundles
+  //   // 'src/Topxia/WebBundle',
+  //   'plugins/CrmPlugin'
+  //   // 'src/Topxia/AdminBundle',
+  // ],
   output: {
-    path: '../../../../web/build',
+    path: '../../../../web/build', //file output path, relative to this file
     buildpath: '../../../../',
-    // path : '../../../../web/build', //file output path, relative to this file
     publicPath: '/build/' //relative to website domain
   },
   libs: {
@@ -36,7 +34,7 @@ const parameters = {
     'bootstrap-daterangepicker/daterangepicker.js',
     'moment/moment.js',
   ],
-  onlyCopys: [
+  onlyCopys: [ // copy these form node modules to libs dir 
     {
       name: 'es-ckeditor',
       ignore: [
@@ -45,7 +43,10 @@ const parameters = {
       ]
     }
   ],
-  commonsChunkFilename: 'common'
+  // defaultValue 'common'
+  // commonsChunkFilename: 'common',
+  // defaultValue 'main'
+  // bundleMainname: 'main'
 }
 
 export default parameters;

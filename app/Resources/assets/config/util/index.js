@@ -1,4 +1,5 @@
 import glob from 'glob';
+import fs from 'fs';
 
 const searchEntries = (entryPath, filenamePrefix = '') => {
 
@@ -12,4 +13,36 @@ const searchEntries = (entryPath, filenamePrefix = '') => {
   return files;
 }
 
-export { searchEntries };
+const fsExistsSync = (path) => {
+  try {
+    fs.accessSync(path,fs.F_OK);
+
+  }catch(e) {
+    return false;
+  }
+
+  return true;
+}
+
+const searchBundles = (paths,filterpath) => {
+  let BundlesArr = [];
+
+  paths.forEach((path) => {
+    let dirs = fs.readdirSync(path);
+    let rootdir = path.substring(path.lastIndexOf('/') + 1)
+
+    dirs = dirs.filter((dir) => {
+      return dir !== '.DS_Store' && dir !== '.gitkeep' && fsExistsSync(`${path}/${dir}/${filterpath}`);
+    })
+
+    dirs = dirs.map((dir) => {
+      return `${rootdir}/${dir}`;
+    })
+
+    BundlesArr = BundlesArr.concat(dirs);
+  })
+  
+  return BundlesArr;
+}
+
+export { searchEntries,searchBundles,fsExistsSync };

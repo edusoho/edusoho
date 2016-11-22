@@ -1,7 +1,8 @@
 import { argv } from 'yargs';
 import path from 'path';
 import parameters from './parameters';
-import { searchEntries } from './util';
+import { searchEntries,searchBundles } from './util';
+
 
 let specialArgv = {};
 argv._.forEach((arg) => {
@@ -25,6 +26,10 @@ const commonDir = path.resolve(globalAssetsDir, 'common');
 
 let assetsSrcDirs = [globalAssetsDir];
 let bundleEntry = {};
+let registeredBundles = searchBundles([
+                          path.resolve(rootDir,'src'),
+                          path.resolve(rootDir,'plugins')
+                        ],`Resources/assets/${parameters.bundleMainname || 'main'}.js`);
   /**
    * let bundleEntry = {
    *    topxiaweb: {
@@ -39,7 +44,7 @@ let bundleEntry = {};
    *    },
    * };
    */
-parameters.registeredBundles.forEach((bundle) => {
+registeredBundles.forEach((bundle) => {
   const bundleAssetsDir = `${rootDir}/${bundle}/Resources/assets`;
 
   const bundleBuildDir = `${bundle}/Resources/build`;
@@ -49,18 +54,18 @@ parameters.registeredBundles.forEach((bundle) => {
   bundleEntry[bundleName] = {};
 
   if(devMode) {
-    bundleEntry[bundleName][`${bundleName}/main`] = `${bundleAssetsDir}/main.js`;
+    bundleEntry[bundleName][`${bundleName}/${parameters.bundleMainname || 'main'}`] = `${bundleAssetsDir}/${parameters.bundleMainname || 'main'}.js`;
     Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleName}/js/`));
 
   }else {
-    bundleEntry[bundleName][`${bundleBuildDir}/main`] = `${bundleAssetsDir}/main.js`;
+    bundleEntry[bundleName][`${bundleBuildDir}/${parameters.bundleMainname || 'main'}`] = `${bundleAssetsDir}/${parameters.bundleMainname || 'main'}.js`;
     Object.assign(bundleEntry[bundleName], searchEntries(`${bundleAssetsDir}/js`, `${bundleBuildDir}/js/`));
   }
 
   assetsSrcDirs.push(bundleAssetsDir);
 });
 
-console.log('bundleEntry',bundleEntry)
+// console.log('bundleEntry',bundleEntry)
 
 let libEntry = {};
 let libEntryPrefix = 'libs/';
