@@ -248,7 +248,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
-                                    visable: ( course.status in ['closed', 'draft'])
+                                    visable: ( course.status in ['closed', 'draft', 'published'])
                         admin_course_recommend_list:
                             name: 课程推荐
                         admin_course_data:
