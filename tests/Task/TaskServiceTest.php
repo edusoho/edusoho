@@ -4,6 +4,7 @@ namespace Tests\Task;
 
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Course\CourseService;
 
@@ -169,7 +170,7 @@ class TaskServiceTest extends BaseTestCase
 
     public function testGetNextTask()
     {
-        $task      = $this->mockSimpleTask();
+        $task      = $this->mockTask();
         $firstTask = $this->getTaskService()->createTask($task);
 
         $secondTask = $this->getTaskService()->createTask($task);
@@ -184,17 +185,16 @@ class TaskServiceTest extends BaseTestCase
 
         //finish firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($firstTask['id']);
-        $this->getTaskResultService()->updateTaskResult($taskResult['id'], array('status' => 'finish'));
+        $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
-        $this->assertEquals($secondTask,$nextTask);
+        $this->assertEquals($secondTask, $nextTask);
 
     }
 
     public function testCanLearnTask()
     {
-        $task      = $this->mockSimpleTask();
+        $task      = $this->mockTask();
         $firstTask = $this->getTaskService()->createTask($task);
 
         $secondTask = $this->getTaskService()->createTask($task);
@@ -206,15 +206,16 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(false, $canLearnSecond);
     }
 
-    public function testIsTaskLearned(){
-        $task      = $this->mockSimpleTask();
+    public function testIsTaskLearned()
+    {
+        $task      = $this->mockTask();
         $firstTask = $this->getTaskService()->createTask($task);
 
 
         //begin to learn  firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($firstTask['id']);
-        $this->assertEquals('start',$taskResult['status']);
+        $this->assertEquals('start', $taskResult['status']);
 
         $isLearned = $this->getTaskService()->isTaskLearned($firstTask['id']);
         $this->assertEquals(false, $isLearned);
@@ -226,7 +227,43 @@ class TaskServiceTest extends BaseTestCase
 
     }
 
-    protected function mockSimpleTask()
+    public function testFindTasksWithLearningResultByCourseId()
+    {
+        $course = $this->getCourseService()->createCourse(array('title' => 'test'));
+
+        $task = $this->mockSimpleTask($course['id']);
+
+        $firstTask = $this->getTaskService()->createTask($task);
+        $this->getTaskService()->startTask($firstTask['id']);
+        $this->getTaskService()->finishTask($firstTask['id']);
+
+        $secondTask = $this->getTaskService()->createTask($task);
+        $this->getTaskService()->startTask($secondTask['id']);
+
+        $thirdTask = $this->getTaskService()->createTask($task);
+
+        $forthTask = $this->getTaskService()->createTask($task);
+
+        $tasks = $this->getTaskService()->findTasksWithLearningResultByCourseId($course['id']);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        $this->assertEquals('finish', $tasks[$firstTask['id']]['resultStatus']['status']);
+       $this->assertEquals('start', $tasks[$secondTask['id']]['resultStatus']['status']);
+
+    }
+
+    protected function mockSimpleTask($courseId = 1)
+    {
+
+        return array(
+            'title'           => 'test task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => $courseId,
+            'fromCourseSetId' => 1
+        );
+    }
+
+    protected function mockTask($courseId = 1)
     {
         $course = $this->getCourseService()->createCourse(array('title' => 'test'));
         return array(
