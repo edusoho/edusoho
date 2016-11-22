@@ -523,7 +523,7 @@ admin:
                             disable: true
                 admin_cloud_video_setting:
                     name: 云视频
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     router_name: admin_setting_cloud_video
                     children:
                         admin_setting_cloud_video:
@@ -534,7 +534,7 @@ admin:
                             disable: true
                 admin_cloud_edulive_setting:
                     name: 云直播
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     router_name: admin_setting_cloud_edulive
                     children:
                         admin_setting_cloud_edulive:
@@ -545,7 +545,7 @@ admin:
                             disable: true
                 admin_edu_cloud_sms:
                     name: 云短信
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     children:
                         admin_edu_cloud_sms_setting:
                             name: 概览
@@ -562,7 +562,7 @@ admin:
                 #             router_name: admin_edu_cloud_email
                 admin_edu_cloud_search_setting:
                     name: 云搜索
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search:
@@ -573,7 +573,7 @@ admin:
                             disable: true
                 admin_app_im:
                     name: 即时聊天设置
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     children:
                         admin_app_im_setting:
                             name: 即时聊天设置
@@ -581,7 +581,7 @@ admin:
                             disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled')|default(false) != false)
                     children:
                         admin_edu_cloud_attachment:
                             name: 云附件设置
@@ -612,7 +612,7 @@ admin:
                             disable: true
                 admin_cloud_attachment_manage:
                     name: 云附件
-                    visable: (setting('cloud_status')|default(false) != false)
+                    visable: (setting('cloud_status.enabled.enabled')|default(false) != false)
                     children:
                         admin_cloud_attachment:
                             name: 云附件
