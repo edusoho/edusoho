@@ -89,7 +89,7 @@ class TagGroupController extends BaseController
         $tags = explode(',', $tags);
 
         foreach ($tags as $tag) {
-            if (!$this->getTagService()->getTagByName($tag)) {
+            if (!empty($tag) && !$this->getTagService()->getTagByName($tag)) {
                 $this->getTagService()->addTag(array('name' => $tag));
             }
         }
