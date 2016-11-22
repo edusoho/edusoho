@@ -46,7 +46,7 @@ class OrderRefundController extends BaseController
             $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
             if ($refund['status'] == 'success') {
             $this->dispatchEvent(
-                'learn.refund',
+                'learning.quit',
                 new ServiceEvent($refund, array('userId' => $user['id']))
             );            
             }

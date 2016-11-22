@@ -449,13 +449,13 @@ class CourseController extends CourseBaseController
         }
         
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
-        $refund = array(
+        $learningQuit = array(
             'targetId' => $course['id'],
             'targetType' => 'course'
         );
         $this->dispatchEvent(
-            'learn.refund',
-            new ServiceEvent($refund, array('userId' => $user['id']))
+            'learning.quit',
+            new ServiceEvent($learningQuit , array('userId' => $user['id']))
         );
         return $this->createJsonResponse(true);
     }
