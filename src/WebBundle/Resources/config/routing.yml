@@ -4,7 +4,7 @@ course_manage_course_set:
 
 course_manage_tasks:
   path:  /course/{courseId}/tasks
-  defaults: { _controller: WebBundle:TaskManage:tasks }
+  defaults: { _controller: WebBundle:CourseManage:tasks }
 
 course_manage_task_create:
   path:  /course/{courseId}/task
