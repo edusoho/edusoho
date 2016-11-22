@@ -12,19 +12,19 @@ class EduSohoUpgrade extends AbstractUpdater
         try {
             $migration = new TagDataMigration($this->getConnection());
 
-            // if ($index == 0) {
+            if ($index == 0) {
                 $this->updateScheme();
-            // }
+            }
 
             $migration->exec($index);
 
-            // $index++;
+            $index++;
 
-            // if ($index == 8) {
+            if ($index == 8) {
                 $this->getConnection()->commit();
-            // } else {
-            //     return array('index' => $index);
-            // }
+            } else {
+                return array('index' => $index);
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -187,34 +187,30 @@ class TagDataMigration
 
     public function exec($index)
     {   
-        // $table  = $this->columns[$index][0];
-        // $column = $this->columns[$index][1];
+        $table  = $this->columns[$index][0];
+        $column = $this->columns[$index][1];
 
-        foreach ($this->columns as $value) {
-            $this->migration($value[0], $value[1]);
-        }
+        $this->migration($table, $column);
     }
 
     protected function migration($table, $column)
     {
-        if ($table != 'content' && $table != 'course_lesson' && $table != 'open_course_lesson') {
-            $sql = "SELECT * FROM {$table}";
+        $sql = "SELECT * FROM {$table}";
 
-            $targets = $this->connection->fetchAll($sql, array()) ?: array();
+        $targets = $this->connection->fetchAll($sql, array()) ?: array();
 
-            foreach ($targets as $target) {
-                if (!empty($target[$column])) {
-                    $tags = $this->unserialize($target[$column]);
+        foreach ($targets as $target) {
+            if (!empty($target[$column])) {
+                $tags = $this->unserialize($target[$column]);
 
-                    $fields = array(
-                        'userId'    => empty($target['userId']) ? null : $target['userId'],
-                        'tags'      => $tags,
-                        'ownerType' => $this->ownerType[$table],
-                        'ownerId'   => $target['id']
-                    );
+                $fields = array(
+                    'userId'    => empty($target['userId']) ? null : $target['userId'],
+                    'tags'      => $tags,
+                    'ownerType' => $this->ownerType[$table],
+                    'ownerId'   => $target['id']
+                );
 
-                    $this->moveTagData($fields);
-                }
+                $this->moveTagData($fields);
             }
         }
 
@@ -231,12 +227,12 @@ class TagDataMigration
     {   
         $fields['tags'] = array_filter($fields['tags']);
         foreach ($fields['tags'] as $tag) {
-            if (!empty($fields['userId'])) {
+            if (empty($fields['userId'])) {
                 $this->getTagService()->addTagOwnerRelation(array(
                     'ownerType'   => $fields['ownerType'],
                     'ownerId'     => $fields['ownerId'],
                     'tagId'       => $tag,
-                    'userId'      => $fields['userId'],
+                    'userId'      => $fields['headTeacherId'],
                     'createdTime' => time()
                 ));
                 continue;
@@ -246,6 +242,7 @@ class TagDataMigration
                 'ownerType'   => $fields['ownerType'],
                 'ownerId'     => $fields['ownerId'],
                 'tagId'       => $tag,
+                'userId'      => $fields['userId'],
                 'createdTime' => time()
             ));
         }
