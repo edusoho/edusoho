@@ -204,7 +204,7 @@ class TagDataMigration
                 $tags = $this->unserialize($target[$column]);
 
                 $fields = array(
-                    'userId'    => empty($target['userId']) ? null : $target['userId'],
+                    'userId'    => empty($target['userId']) ? $target['headTeacherId'] : $target['userId'],
                     'tags'      => $tags,
                     'ownerType' => $this->ownerType[$table],
                     'ownerId'   => $target['id']
@@ -227,24 +227,13 @@ class TagDataMigration
     {   
         $fields['tags'] = array_filter($fields['tags']);
         foreach ($fields['tags'] as $tag) {
-            if (empty($fields['userId'])) {
                 $this->getTagService()->addTagOwnerRelation(array(
                     'ownerType'   => $fields['ownerType'],
                     'ownerId'     => $fields['ownerId'],
                     'tagId'       => $tag,
-                    'userId'      => $fields['headTeacherId'],
+                    'userId'      => $fields['userId'],
                     'createdTime' => time()
                 ));
-                continue;
-            }
-
-            $this->getTagService()->addTagOwnerRelation(array(
-                'ownerType'   => $fields['ownerType'],
-                'ownerId'     => $fields['ownerId'],
-                'tagId'       => $tag,
-                'userId'      => $fields['userId'],
-                'createdTime' => time()
-            ));
         }
     }
 
