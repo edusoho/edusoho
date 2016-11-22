@@ -1,6 +1,6 @@
 class LearnState {
   constructor(option) {
-    this.element = $(option.element);
+    this.element = $(option);
     this.learningPrompt = this.element.find('.js-learning-prompt');
     this.learnedPrompt = this.element.find('.js-learned-prompt');
     this.learnprompt = this.element.find('.js-learn-prompt');
@@ -23,7 +23,11 @@ class LearnState {
   }
 
   clickBtnLearn() {
-    this.btnLearn.toggleClass('active');
+    this.btnLearnRender(true);
+  }
+
+  btnLearnRender(done) {
+    done ? this.btnLearn.addClass('active') : this.btnLearn.removeClass('active');
   }
 }
 

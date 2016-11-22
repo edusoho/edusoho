@@ -9,7 +9,7 @@ export default class ActivityEmitter {
         event: event,
         data: data
       });
-
+      
       messenger.addTarget(window.parent, 'parent');
       messenger.send(message);
 

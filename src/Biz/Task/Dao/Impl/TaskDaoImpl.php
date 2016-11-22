@@ -15,18 +15,24 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
-    public function getMaxTaskSeqByCourseId($courseId)
-    {
-        $sql = "SELECT max(seq) FROM {$this->table()} WHERE `courseId` = ? LIMIT 1";
-        return $this->db()->fetchColumn($sql, array($courseId));
-    }
-
     public function getByCourseIdAndSeq($courseId, $seq)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `seq` = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($courseId, $seq));
     }
 
+
+    public function getMaxSeqByCourseId($courseId)
+    {
+        $sql = "SELECT max(seq) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
+    }
+
+    public function findTasksByChapterId($chapterId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseChapterId = ? ";
+        return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
+    }
 
     public function declares()
     {

@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
-        $currentSeq              = $this->getCurrentTaskSeq($activity['fromCourseId']);
+        $currentSeq              = $this->getMaxSeqByCourseId($activity['fromCourseId']);
         $fields['seq']           = $currentSeq + 1;
 
 
@@ -75,6 +75,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         ));
 
         return $this->getTaskDao()->update($id, $fields);
+    }
+
+    public function updateSeq($id, $fileds)
+    {
+        $fileds = ArrayToolkit::parts($fileds, array(
+            'seq',
+            'courseChapterId',
+        ));
+        return $this->getTaskDao()->update($id, $fileds);
     }
 
     public function deleteTask($id)
@@ -255,6 +264,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return empty($taskResult) ? false : ('finish' == $taskResult['status']);
     }
 
+    public function getMaxSeqByCourseId($courseId)
+    {
+        return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
+    }
+
+    public function findTasksByChapterId($chapterId)
+    {
+        return $this->getTaskDao()->findTasksByChapterId($chapterId);
+    }
+
     /**
      * @return TaskDao
      */
@@ -292,12 +311,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
-
-    protected function getCurrentTaskSeq($courseId)
-    {
-        return $this->getTaskDao()->getMaxTaskSeqByCourseId($courseId);
-    }
-
     protected function isFirstTask($task)
     {
         return 1 == $task['seq'];
@@ -305,7 +318,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function isLastTask($task)
     {
-        $maxSeq = $this->getCurrentTaskSeq($task['courseId']);
+        $maxSeq = $this->getMaxSeqByCourseId($task['courseId']);
         return $maxSeq == $task['seq'];
     }
 

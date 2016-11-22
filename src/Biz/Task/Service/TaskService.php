@@ -43,5 +43,7 @@ interface TaskService
      * @return True|False
      */
     public function isTaskLearned($taskId);
+
+    public function getMaxSeqByCourseId($courseId);
 }
 

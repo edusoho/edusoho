@@ -5,12 +5,14 @@ import LearnState from './widget/learn-state';
 class TaskShow {
   constructor(element) {
     this.element = $(element);
+    this.learnState = new LearnState(this.element);
     this.init();
   }
 
   init() {
     this.initPlugin();
     this.sidebar();
+    this.bindActivityEmitterEvent();
   }
 
   initPlugin() {
@@ -39,6 +41,9 @@ class TaskShow {
 
       $.post(eventUrl, postData)
           .then(({event, data}) => {
+            if(event === 'finish'){
+              this.onActivityFinish();
+            }
             messenger.send(JSON.stringify({event: event, data: data}));
           })
           .fail((error) => {
@@ -49,6 +54,8 @@ class TaskShow {
   }
 
   onActivityFinish() {
+    console.log('activity.finish');
+    this.learnState.btnLearnRender(true);
     //@ TODO 任务完成的方法
   }
 
@@ -57,10 +64,6 @@ class TaskShow {
       element:'.dashboard-sidebar-content',
       activePlugins:["note","question"],
       courseId: 1,
-    });
-
-    var learnState = new LearnState ({
-      element:'.js-task-dashboard-page',
     });
   }
 }
