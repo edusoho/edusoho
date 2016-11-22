@@ -222,7 +222,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
 
-    public function canLearnTask($taskId, $finished = false)
+    public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
 
@@ -240,7 +240,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         //先按照默认实现
         $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
         if (empty($preTask)) {
-            throw new NotFoundException("previous task does not exist");
+            throw new NotFoundException("previous task does is lost");
         }
         $isTaskLearned = $this->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {

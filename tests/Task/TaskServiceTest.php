@@ -184,6 +184,20 @@ class TaskServiceTest extends BaseTestCase
 
     }
 
+    public function testCanLearnTask()
+    {
+        $task      = $this->mockSimpleTask();
+        $firstTask = $this->getTaskService()->createTask($task);
+
+        $secondTask = $this->getTaskService()->createTask($task);
+        $this->assertEquals(1, $firstTask['seq']);
+
+        $canLearnFirst  = $this->getTaskService()->canLearnTask($firstTask['id']);
+        $canLearnSecond = $this->getTaskService()->canLearnTask($secondTask['id']);
+        $this->assertEquals(true, $canLearnFirst);
+        $this->assertEquals(false, $canLearnSecond);
+    }
+
 
     protected function mockSimpleTask()
     {
