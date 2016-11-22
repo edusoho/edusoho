@@ -173,9 +173,53 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return false;
     }
 
+    /**
+     * question_favorite
+     */
+
+    public function createFavoriteQuestion($fields)
+    {
+        return $this->getQuestionFavoriteDao()->create($fields);
+    }
+
+    public function updateFavoriteQuestion($id, $fields)
+    {
+        return $this->getQuestionFavoriteDao()->update($id, $fields);
+    }
+
+    public function deleteFavoriteQuestion($id)
+    {
+        return $this->getQuestionFavoriteDao()->delete($id);
+    }
+
+    public function searchFavoriteQuestions($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getQuestionFavoriteDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchFavoriteCount($conditions)
+    {
+        return $this->getQuestionFavoriteDao()->count($conditions);
+    }
+
+    public function findUserFavoriteQuestions($userId)
+    {
+        return $this->getQuestionFavoriteDao()->findUserFavoriteQuestions($userId);
+    }
+
+    public function deleteFavoriteByQuestionId($questionId)
+    {
+        return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
+    }
+
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
+    }
+
+    protected function getQuestionFavoriteDao()
+    {
+        return $this->createDao('Question:QuestionFavoriteDao');
     }
 
     private function getCourseTaskService()

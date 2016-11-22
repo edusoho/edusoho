@@ -104,6 +104,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemDao()->delete($id);
     }
 
+    public function getItemsCountByParams(array $conditions, $groupBy = '')
+    {
+        return $this->getItemDao()->getItemsCountByParams($conditions, $groupBy);
+    }
+
     public function findItemsByTestId($testpaperId)
     {
         $items = $this->getItemDao()->findItemsByTestId($testpaperId);
@@ -521,7 +526,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $testpaperResult = $this->getTestpaperResult($resultId);
         $testpaper       = $this->getTestpaper($testpaperResult['testId']);
-        $items           = $this->findItemsByTestId($testpaperResult['id']);
+        $items           = $this->findItemsByTestId($testpaperResult['testId']);
         $itemResults     = $this->findItemResultsByResultId($testpaperResult['id']);
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
@@ -536,6 +541,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['objectiveScore'] = $accuracy['sumScore'];
 
         $fields['score'] = 0;
+
         if (!$hasEssay) {
             $fields['score']       = $fields['objectiveScore'];
             $fields['checkedTime'] = time();

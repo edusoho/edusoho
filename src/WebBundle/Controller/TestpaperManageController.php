@@ -77,7 +77,7 @@ class TestpaperManageController extends BaseController
         $conditions['target']                    = 'course'.'-'.$course["id"];
         $conditions['type']                      = 'material';
         $conditions['subCount']                  = 0;
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
         return $this->render('WebBundle:TestpaperManage:create.html.twig', array(
             'course'       => $course,
@@ -374,11 +374,11 @@ class TestpaperManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getQuestionService()->searchQuestionsCount($conditions),
+            $this->getQuestionService()->searchCount($conditions),
             7
         );
 
-        $questions = $this->getQuestionService()->searchQuestions(
+        $questions = $this->getQuestionService()->search(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -407,7 +407,7 @@ class TestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
+        $question = $this->getQuestionService()->get($request->query->get('questionId'));
 
         if (empty($question)) {
             throw $this->createNotFoundException();
@@ -493,7 +493,7 @@ class TestpaperManageController extends BaseController
 
     protected function getQuestionService()
     {
-        return ServiceKernel::instance()->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getServiceKernel()

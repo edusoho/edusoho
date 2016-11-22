@@ -27,4 +27,22 @@ interface QuestionService
 
     public function hasEssay($questionIds);
 
+    /**
+     * question_favorite
+     */
+
+    public function createFavoriteQuestion($fields);
+
+    public function updateFavoriteQuestion($id, $fields);
+
+    public function deleteFavoriteQuestion($id);
+
+    public function searchFavoriteQuestions($conditions, $orderBy, $start, $limit);
+
+    public function searchFavoriteCount($conditions);
+
+    public function findUserFavoriteQuestions($userId);
+
+    public function deleteFavoriteByQuestionId($questionId);
+
 }

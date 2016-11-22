@@ -1,5 +1,5 @@
 import QuestionTypeBuilder from '../../../common/testpaper/question-type-builder';
-
+import ActivityEmitter from "../../activity/activity-emitter";
 
 class DoTest
 {
@@ -110,6 +110,7 @@ class DoTest
 	_submit(event) {
 		let $target = $(event.currentTarget);
 		let values = {};
+		let emitter = new ActivityEmitter();
 
 		$('*[data-type]').each(function(index){
 			let questionId = $(this).attr('name');
@@ -119,8 +120,15 @@ class DoTest
 			values[questionId] = answer;
 		})
 
-		$.post($target.data('url'),{data:values,usedTime:0},function(){
-			console.log('111');
+		$.post($target.data('url'),{data:values,usedTime:0},function(response){
+			if (response.result) {
+				console.log(emitter);
+				emitter.emit('finish').then(() => {
+		      console.log('testpaper.finish');
+		    }).catch((error) => {
+		      console.error(error);
+		    });
+			}
 		})
 	}
 }

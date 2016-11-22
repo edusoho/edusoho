@@ -29,6 +29,8 @@ interface TestpaperService
 
     public function deleteItem($id);
 
+    public function getItemsCountByParams(array $conditions, $groupBy = '');
+
     public function findItemsByTestId($testpaperId);
 
     public function searchItems($conditions, $orderBy, $start, $limit);

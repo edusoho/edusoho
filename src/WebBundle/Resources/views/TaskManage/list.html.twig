@@ -23,7 +23,7 @@
       <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
         <div class="pull-right">
-          <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> 任务 </button>
+          <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> 任务 </button>
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>

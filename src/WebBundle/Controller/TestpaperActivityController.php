@@ -16,7 +16,7 @@ class TestpaperActivityController extends BaseController implements ActivityActi
 
         return $this->forward('WebBundle:Testpaper:doTestpaper', array(
             'testId'   => $testpaperActivity['mediaId'],
-            'lessonId' => 0
+            'lessonId' => $activity['id']
         ));
 
         /*return $this->render('WebBundle:TestpaperActivity:show.html.twig', array(
