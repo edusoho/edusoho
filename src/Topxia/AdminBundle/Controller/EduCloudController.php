@@ -408,22 +408,23 @@ class EduCloudController extends BaseController
         try {
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
-
             $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
             if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || $cloudSmsSettings['sms_enabled'] == 0) {
                 $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
-                'overview' => $overview,
-                'cloudSmsSettings' => $cloudSmsSettings
-            ));               
+                return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
+                    'overview' => $overview,
+                    'cloudSmsSettings' => $cloudSmsSettings
+                ));               
             }
             foreach ($overview['items'] as $key => $value) {
                 $items['date'][] = $value['date'];
                 $items['count'][] = $value['count'];
             }
+            $smsInfo = $api->get('/me/sms_account');
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
-                'account'  => $overview['account'],
-                'items'  => $items
+                'account' => $overview['account'],
+                'items'   => $items,
+                'smsInfo' => $smsInfo
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
@@ -432,19 +433,22 @@ class EduCloudController extends BaseController
     //云短信设置页
     public function smsSettingAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        try {
             $api  = CloudAPIFactory::create('root');
+            if ($request->getMethod() == 'POST') {
 
-            $this->handleSmsSetting($request, $api);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
+                $this->handleSmsSetting($request, $api);
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
+            }
+            $isBinded = $this->getAppService()->getBinded();
+            $smsInfo   = $api->get('/me/sms_account');
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
+                'isBinded' => $isBinded,
+                'smsInfo'   => $smsInfo
+            ));
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());            
         }
-        $isBinded = $this->getAppService()->getBinded();
-        $api      = CloudAPIFactory::create('root');
-        $smsInfo   = $api->get('/me/sms_account');
-        return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
-            'isBinded' => $isBinded,
-            'smsInfo'   => $smsInfo
-        ));
     }
 
     //云邮件设置页
