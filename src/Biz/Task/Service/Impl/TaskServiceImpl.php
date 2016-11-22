@@ -74,6 +74,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->update($id, $fields);
     }
 
+    public function updateSeq($id, $fileds)
+    {
+        $fileds = ArrayToolkit::parts($fileds, array(
+            'seq',
+            'courseChapterId',
+        ));
+        return $this->getTaskDao()->update($id, $fileds);
+    }
+
     public function deleteTask($id)
     {
         $task = $this->getTask($id);

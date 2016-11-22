@@ -51,6 +51,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function sortCourseItems($courseId, $ids)
+    {
+        $this->tryManageCourse($courseId);
+        $parentChapterId = 0;
+        foreach ($ids as $key => $id) {
+            if(strpos($id, 'chapter') === 0) {
+                $id = str_replace('chapter-', '', $id);
+                $fileds = array('seq' => $key);
+                $chapter = $this->getChapterDao()->get($id);
+                if($chapter['type'] != 'chapter'){
+                    $fileds['parentId'] = $parentChapterId;
+                } else {
+                    $parentChapterId = $id;
+                }
+                $this->getChapterDao()->update($id, $fileds);
+            }
+
+            if(strpos($id, 'task') === 0) {
+                $id = str_replace('task-', '', $id);
+                $this->getTaskService()->updateSeq($id, array('seq' => $key, 'courseChapterId' => $parentChapterId));    
+            }
+        }
+
+    }
+
     protected function hasCourseManagerRole($courseId, $userId)
     {
         return true;

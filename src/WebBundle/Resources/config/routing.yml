@@ -6,6 +6,11 @@ course_manage_tasks:
   path:  /course/{courseId}/manage/tasks
   defaults: { _controller: WebBundle:CourseManage:tasks }
 
+course_manage_items_sort:
+  path:  /course/{courseId}/manage/items/sort
+  defaults: { _controller: WebBundle:CourseManage:courseItemsSort }
+  methods: ['POST']
+
 course_manage_task_create:
   path:  /course/{courseId}/task
   defaults: { _controller: WebBundle:TaskManage:create}

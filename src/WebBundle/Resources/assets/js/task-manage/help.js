@@ -26,9 +26,9 @@ export const sortList = () => {
       var data = $list.sortable("serialize").get();
       console.log(data);
       //排序URL
-      // $.post($list.data('sortUrl'), {ids:data}, function(response){
+      $.post($list.data('sortUrl'), {ids:data}, function(response){
        
-      // });
+      });
     },
     serialize: function(parent, children, isContainer) {
       return isContainer ? children : parent.attr('id');

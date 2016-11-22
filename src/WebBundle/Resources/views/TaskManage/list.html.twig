@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-      <ul class="task-manage-list sortable-list" id="sortable-list">
+      <ul class="task-manage-list sortable-list" id="sortable-list" data-sort-url='{{path("course_manage_items_sort",{courseId:1})}}'>
         {% for key, item in items %}
           {% if item.itemType == 'task' %}
             {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:item} %}
