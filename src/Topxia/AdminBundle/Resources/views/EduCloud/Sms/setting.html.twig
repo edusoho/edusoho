@@ -2,9 +2,21 @@
 
 {% set menu = 'admin_edu_cloud_setting_sms' %} 
 {% set script_controller = 'educloud/sms-setting' %}
+{% set lock = setting('cloud_status.locked') %}
+
+{#{% if lock == true %}
+  {% block page_title %}
+      111
+      {{dump(lock == true)}}
+      <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% endblock %}
+{% endif %}
+  #}
 
 {% block main %}
   <!-- 设置 -->
+{#{{dump(setting('cloud_status.locked'))}}#}
 {{ web_macro.flash_messages() }}
 <div class="page-heading">
   云短信开关

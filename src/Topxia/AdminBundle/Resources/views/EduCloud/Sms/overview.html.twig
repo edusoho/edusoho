@@ -3,6 +3,14 @@
 {% set menu = 'admin_edu_cloud_sms_setting' %} 
 {% set script_controller = 'educloud/sms-overview' %}
 {% set script_arguments = {items: items}  %}
+
+{#{% if setting('cloud_status.locked')|default('') == true %}
+  {% block page_title %}
+      <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% endblock %}
+{% endif %}#}
+
 {% block main %}
 <div class="panel panel-default">
   <div class="panel-heading">
