@@ -85,13 +85,12 @@ class SideBar {
 
   _isRenderSiderBar() {
     if(!store.get('USER-START-LEARN')) {
-      store.set('USER-START-LEARN', true);
+    //  store.set('USER-START-LEARN', true);
       this._renderSiderBar(true,'2000'); 
       window.setTimeout(()=>{ 
-        this._renderSiderBar(false,'2000'); 
+       // this._renderSiderBar(false,'2000');
       },2000); 
     }
-    console.log(store.get('USER-START-LEARN'));
   }
 
   createPane(name) {

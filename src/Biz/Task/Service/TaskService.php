@@ -35,7 +35,7 @@ interface TaskService
      * @param $taskId
      * @return  True|False
      */
-    public function canLearn($taskId); // 任务是否可学
+    public function canLearnTask($taskId); // 任务是否可学
 
     /**
      * return if the task has been learned
