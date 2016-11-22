@@ -8,7 +8,7 @@
 </div>
 
 <div class="file-chooser-main {% if  file|default(null) %}hidden {% endif %}">
-  {#<ul class="nav nav-pills" id="material">
+  <ul class="nav nav-pills" id="material">
     <li role="presentation" ><a
           href="#chooser-upload-panel">上传资料</a></li>
     <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
@@ -21,8 +21,8 @@
       <li role="presentation" ><a href="#import-link-panel">网络连接</a>
       </li>
     {% endif %}
-  </ul>#}
-  <ul class="nav nav-tabs  nav-tabs-radio" id="material">
+  </ul>
+  {#<ul class="nav nav-tabs  nav-tabs-radio" id="material">
     <li role="presentation"><a
       href="#chooser-upload-panel"><input class="radio" type="radio" name="type" value="video" checked="checked">本地上传</a></li>
     <li role="presentation"><a href="#chooser-course-panel"><input  class="radio" type="radio" name="type" value="video" >选择文件</a></li>
@@ -32,7 +32,7 @@
     {% if mediaType == 'download' %}
     <li role="presentation"><a href="#import-link-panel"><input  class="radio" type="radio" name="type" value="video" >网络连接</a></li>
     {% endif %}
-  </ul>
+  </ul>#}
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
       {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' %}
