@@ -49,14 +49,12 @@
       position: relative;
       display: inline-block;
       height: 31px;
-      overflow-y: hidden;
-      overflow: hidden;
-      min-width: 200px;
       text-align: right;
       vertical-align: middle;
-      .btn {
+      min-width: 300px;
+      >.btn {
         position: absolute;
-        top: 30px;
+        top: 60px;
         right: 0;
         &.open {
           top:0;
@@ -66,6 +64,22 @@
           -moz-animation: moveUp 1s;
           animation: moveUp 1s;
           top:0;
+        }
+      }
+    }
+    .btn-learn {
+      .doing {
+        display: inline;
+      }
+      .done {
+        display: none;
+      }
+      &.active {
+        .doing {
+          display: none;
+        }
+        .done {
+          display: inline;
         }
       }
     }
@@ -122,22 +136,6 @@
   .task-pane {
     padding: 15px 17px;
   }
-  .btn-learn {
-    .doing {
-      display: inline;
-    }
-    .done {
-      display: none;
-    }
-    &.active {
-      .doing {
-        display: none;
-      }
-      .done {
-        display: inline;
-      }
-    }
-  }
 }
 
 
@@ -145,25 +143,25 @@
   .title {
     text-align: center;
     font-size: 22px;
-    font-weight: bold;
     color: @gray-darker;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    line-height: 1;
     i {
       font-size: 22px;
-      color: @brand-success;
       margin-right: 10px;
     }
   }
   .content {
+    font-size: 12px;
     background-color: #fafafa;
-    padding: 30px 60px;
+    padding: 30px 70px;
     text-align: center;
     margin-bottom: 15px;
     .content-title {
+      line-height: 1;
       font-size: 16px;
-      font-weight: bold;
       color: @gray-darker;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
     }
     .content-progress {
       margin-bottom: 15px;
@@ -179,11 +177,11 @@
       }
     }
     .content {
-      font-size: 12px;
       padding: 0;
       background-color: transparent;
       text-align: left;
       margin-bottom: 13px;
+      color: @gray;
       .content-title {
         font-size: 12px;
         color: @gray-dark;

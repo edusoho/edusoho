@@ -1,4 +1,10 @@
 .progress {
+  background-color: @gray-light;
+  color: #fff;
+  text-align: right;
+  font-weight: bold;
+  font-size: 14px;
+  .box-shadow(none);
   .border-radius(0);
   &.progress-xs {
   	height: 5px;
@@ -8,6 +14,7 @@
   }
   &.progress-md {
     height: 30px;
+    line-height: 30px;
     margin-bottom: 15px;
     .progress-bar {
       line-height: 30px;
@@ -18,6 +25,14 @@
   &.progress-radius {
     border-radius: 30px;
   }
+}
+
+.progress-bar {
+  .box-shadow(none);
+}
+.progress-bar-left {
+  text-align: left;
+  padding-left: 15px;
 }
 
 
