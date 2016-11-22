@@ -173,6 +173,7 @@ let createPPT = (watermark) => {
   });
 
   return ppt.once('end', () => {
+    console.log('end');
     emitter.emit('finish').then(() => {
       console.log('ppt.finish');
     }).catch((error) => {
