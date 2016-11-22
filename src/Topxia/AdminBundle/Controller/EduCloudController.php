@@ -373,13 +373,10 @@ class EduCloudController extends BaseController
             return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
         }
 
-        //启动或者更新短信签名
-        if (isset($dataUserPosted['sms-open']) || isset($dataUserPosted['sms_school_name'])) {
+        //启动
+        if (isset($dataUserPosted['sms-open'])) {
             $smsStatus                    = array_merge($smsStatus, $settings);
             $smsStatus['sms_enabled']     = 1;
-            $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
-
-            $info = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
         }
 
         $status = $api->get('/me/sms_account');
@@ -411,10 +408,15 @@ class EduCloudController extends BaseController
         try {
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
-            if (isset($overview['isBuy']) && $overview['isBuy'] == false) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array());               
+
+            $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
+            if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || $cloudSmsSettings['sms_enabled'] == 0) {
+                $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
+                'overview' => $overview,
+                'cloudSmsSettings' => $cloudSmsSettings
+            ));               
             }
-            // $this->handleSmsSetting($request, $api);
             foreach ($overview['items'] as $key => $value) {
                 $items['date'][] = $value['date'];
                 $items['count'][] = $value['count'];
@@ -430,7 +432,19 @@ class EduCloudController extends BaseController
     //云短信设置页
     public function smsSettingAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array());
+        if ($request->getMethod() == 'POST') {
+            $api  = CloudAPIFactory::create('root');
+
+            $this->handleSmsSetting($request, $api);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
+        }
+        $isBinded = $this->getAppService()->getBinded();
+        $api      = CloudAPIFactory::create('root');
+        $smsInfo   = $api->get('/me/sms_account');
+        return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
+            'isBinded' => $isBinded,
+            'smsInfo'   => $smsInfo
+        ));
     }
 
     //云邮件设置页
