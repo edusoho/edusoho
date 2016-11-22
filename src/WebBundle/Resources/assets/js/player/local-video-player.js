@@ -1,7 +1,7 @@
 import  videojs from 'video.js'
 import Emitter from 'es6-event-emitter';
 require('file-loader?name=libs/[name].[ext]!nodeModulesDir/video.js/dist/video-js/video-js.swf');
-class LocalVideoPlayer extends Emitter{
+class LocalVideoPlayer extends Emitter {
     constructor(options) {
         super();
         this.options = options;
@@ -11,7 +11,7 @@ class LocalVideoPlayer extends Emitter{
 
     setup() {
         var techOrder = ['flash', 'html5'];
-         if (this.options.agentInWhiteList || this.options.mediaType=='audio') {
+        if (this.options.agentInWhiteList || this.options.mediaType == 'audio') {
             techOrder = ['html5', 'flash'];
         }
         var that = this;
@@ -28,7 +28,7 @@ class LocalVideoPlayer extends Emitter{
         player.on('error', function (error) {
             that.set("hasPlayerError", true);
             var message = Translator.trans('您的浏览器不能播放当前视频。');
-           // Notify.danger(message, 60);
+            // Notify.danger(message, 60);
         });
 
         player.on('fullscreenchange', function (e) {
@@ -37,28 +37,28 @@ class LocalVideoPlayer extends Emitter{
             }
         });
 
-        player.on('ended', function (e) {
-            that._onEnded(e);
-            that.trigger('ended', e);
+        player.on('ended', (e)=> {
+            this._onEnded(e);
+            this.trigger('ended', e);
         });
 
-        player.on('timeupdate', function (e) {
-            that.trigger('timechange', e);
+        player.on('timeupdate', (e)=> {
+            this.trigger('timechange', e);
         });
 
-        player.on('loadedmetadata', function (e) {
+        player.on('loadedmetadata', (e)=> {
             that.trigger('ready', e);
         });
 
-        player.on("play", function (e) {
+        player.on("play", (e)=> {
             that.trigger("playing", e);
         });
 
-        player.on("pause", function (e) {
+        player.on("pause", (e) => {
             that.trigger("paused", e);
         });
 
-        this.player =player;
+        this.player = player;
 
         window.player = this;
     }
@@ -77,16 +77,7 @@ class LocalVideoPlayer extends Emitter{
     }
 
     _onEnded(e) {
-        if (this.get("hasPlayerError")) {
-            return;
-        }
-        var player = this.player;
-        player.currentTime(0);
-        /* 播放器重置时间后马上暂停没用, 延时100毫秒再执行暂停 */
-        setTimeout(function(){
-            player.pause();
-        },100);
-       // _.delay(_.bind(player.pause, player), 100);
+        this.player.currentTime(0);
     }
 
 

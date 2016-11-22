@@ -92,18 +92,22 @@ class Show {
         });
     }
 
+    isCloudPalyer() {
+        return 'balloon-cloud-video-player' == this.playerType;
+    }
+
     initEvent() {
         let player = this.initPlayer();
         let messenger = this.initMesseger();
         player.on("ready", ()=> {
             messenger.sendToParent("ready", {pause: true});
-            if (this.playerType == 'local-video-player') {
+            if (!this.isCloudPalyer()) {
                 let time = DurationStorage.get(this.userId, this.fileId);
                 if (time > 0) {
                     player.setCurrentTime(time);
                 }
                 player.play();
-            } else if (this.playerType == 'balloon-cloud-video-player') {
+            } else if (this.isCloudPalyer()) {
                 if (this.markerUrl) {
                     $.getJSON(this.markerUrl, function (questions) {
                         player.setQuestions(questions);
@@ -127,8 +131,7 @@ class Show {
 
         player.on("timechange", (data)=> {
             messenger.sendToParent("timechange", {pause: true, currentTime: player.getCurrentTime()});
-            console.log(player.getCurrentTime(),player.getDuration(), parseInt(player.getCurrentTime()), parseInt(player.getDuration()));
-            if (this.playerType == 'local-video-player') {
+            if (!this.isCloudPalyer()) {
                 if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
                     DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
                 }
@@ -145,8 +148,7 @@ class Show {
 
         player.on("ended", ()=> {
             messenger.sendToParent("ended", {stop: true});
-            console.log('end');
-            if (this.playerType == 'local-video-player') {
+            if (!this.isCloudPalyer()) {
                 DurationStorage.del(this.userId, this.fileId);
             }
         });
