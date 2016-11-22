@@ -27,7 +27,7 @@
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
-              {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}
+              {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}/课时
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
@@ -43,17 +43,22 @@
                   {{'添加%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节')})}}
                 </a>
               </li>
+              <li>
+                <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+                  <i class="es-icon es-icon-anonymous-iconfont"></i>
+                  {{'添加课时'|trans}}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
       <ul class="task-manage-list sortable-list" id="sortable-list">
-        {% include 'WebBundle:TaskManage:list-chapter-item.html.twig' %}
-        {% include 'WebBundle:TaskManage:list-unit-item.html.twig' %}
         {% for key, item in items %}
-          {{dump(item)}}
           {% if item.itemType == 'task' %}
-            {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:task} %}
+            {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:item} %}
+          {% elseif item.itemType == 'chapter' %}
+            {% include 'WebBundle:TaskManage:list-chapter-item.html.twig' with {chapter:item} %}
           {% endif %}
         {% endfor %}
       </ul>

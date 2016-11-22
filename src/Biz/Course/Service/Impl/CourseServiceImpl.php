@@ -10,8 +10,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getCourseItems($courseId)
     {
         $items = array();
-
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $user = $this->getCurrentUser();
+        $tasks = $this->getTaskService()->findUserTasksByCourseId($courseId, $user['id']);
         foreach ($tasks as $task) {
             $task['itemType']              = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -30,7 +30,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $items;
     }
 
-    public function tryManageCourse($courseId) 
+    public function tryManageCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createServiceException($this->getKernel()->trans('未登录用户，无权操作！'));
+        }
+
+        $course = $this->getCourseDao()->get($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException();
+        }
+
+        if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
+            throw $this->createServiceException($this->getKernel()->trans('您不是课程的教师或管理员，无权操作！'));
+        }
+
+        return $course;
+    }
+
+    protected function hasCourseManagerRole($courseId, $userId)
     {
         return true;
     }
@@ -38,6 +59,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 
     protected function getChapterDao()
