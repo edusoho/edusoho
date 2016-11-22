@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\User\CurrentUser;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -19,6 +20,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz->dao($alias);
     }
 
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];

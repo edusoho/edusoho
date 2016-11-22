@@ -1,18 +1,18 @@
 <li class="task-manage-item drag clearfix " id="task-{{task.id}}">
   <div class="item-line"></div>
   <div class="item-content text-overflow">
-    <i class="es-icon {{task['activity_meta']['icon']}} mrm"></i>
+    <i class="es-icon {{task['activityMeta']['icon']}} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     {{task.title}}
-    {% if task['activity_meta']['mediaType'] is same as('live') %}
-      {% if task['activity_meta']['finished'] %}
+    {% if task['activityMeta']['mediaType'] is same as('live') %}
+      {% if task['activityMeta']['finished'] %}
         <span class="color-gray mls">已结束</span>
       {% else %}
         <span class="color-success mls">
-        {{ task['activity_meta']['startTime']|date('Y-n-j H:i'|trans) }} ~ {{ task['activity_meta']['endTime']|date('H:i'|trans) }}</span>
+        {{ task['activityMeta']['startTime']|date('Y-n-j H:i'|trans) }} ~ {{ task['activityMeta']['endTime']|date('H:i'|trans) }}</span>
       {% endif %}
     {% else %}
-      {% if task['activity_meta']['length'] %}<span class="color-gray mls">（{{task['activity_meta']['length'] | default('')}}）</span>{% endif %}
+      {% if task['activityMeta']['length'] %}<span class="color-gray mls">（{{task['activityMeta']['length'] | default('')}}）</span>{% endif %}
     {% endif %}
   </div>
   <div class="item-actions">

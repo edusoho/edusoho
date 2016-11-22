@@ -12,7 +12,7 @@ class TaskController extends BaseController
     {
         $task     = $this->tryLearnTask($courseId, $id);
 
-        $tasks    = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
+        $tasks    = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if(empty($activity)){
@@ -44,7 +44,7 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId)
     {
         $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->tryTakeTask($taskId);
 
         if (empty($task)) {
             throw $this->createResourceNotFoundException('task', $taskId);

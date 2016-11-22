@@ -90,85 +90,33 @@
       <div data-pane='task' class="dashboard-pane task-pane" id="task-pane" >
         <ul class="task-list ">
           {% for task in tasks %}
+            {% set task_lock =  (task.resultStatus is not defined  or task.resultStatus.status is empty ) ? true : false %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
               <i class="es-icon 
-              {% if task.task_result is not defined  or task.task_result.status is empty %}
+              {% if task.resultStatus is not defined  or task.resultStatus.status is empty %}
                 es-icon-lock 
-              {% elseif task.task_result.status == 'start' %}
+              {% elseif task.resultStatus.status == 'start' %}
                 es-icon-doing 
-              {% elseif task.task_result.status == 'finish' %}
+              {% elseif task.resultStatus.status == 'finish' %}
                 es-icon-iccheckcircleblack24px 
               {% endif %} 
                 left-menu"></i>
               {% if task.isOptional %}
                 <span class="label label-success mrm">选修</span>
               {% endif %}
-              <a class="text-overflow" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
-              {% if task.task_result is not defined  or task.task_result.status is empty %}
-                <span class="right-menu mouse-leave">{{task['activity_meta']['length'] | default('')}}
-                  <i class="es-icon {{task['activity_meta']['icon']}} mlm"></i>
+              <a class="text-overflow"  {% if task_lock %} data-url {% else  %} href {% endif %} ="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
+              {% if task_lock %}
+                <span class="right-menu mouse-leave">{{task['activityMeta']['length'] | default('')}}
+                  <i class="es-icon {{task['activityMeta']['icon']}} mlm"></i>
                 </span> 
                 <span class="right-menu mouse-enter color-primary">任务未解锁</span>
               {% else %}
-                <span class="right-menu">{{task['activity_meta']['length'] | default('')}}
-                  <i class="es-icon {{task['activity_meta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activity_meta']['name']}}任务"></i>
+                <span class="right-menu">{{task['activityMeta']['length'] | default('')}}
+                  <i class="es-icon {{task['activityMeta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activityMeta']['name']}}任务"></i>
                 </span>  
               {% endif %}
             </li>
           {% endfor %}
-          {# <li class="task-item task-title">
-            <i class="es-icon es-icon-menu left-menu"></i>
-            <a class="text-overflow">第一基阶段：平面设计</a>
-          </li>
-          <li class="task-item task-title">
-            <a class="text-overflow">第一节：ps基本工具</a>
-          </li>
-          <li class="task-item">
-            <i class="es-icon es-icon-iccheckcircleblack24px  left-menu color-primary"></i>
-            <a class="text-overflow">任务1：移动工具</a>
-            <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm" data-toggle="tooltip" data-placement="top" title="图文课时"></i></span>
-          </li>
-          <li class="task-item active">
-            <i class="es-icon es-icon-doing left-menu"></i>
-            <a class="text-overflow">任务2：移动工具</a>
-            <span class="right-menu">12:04<i class="es-icon es-icon-videoclass mlm"></i></span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li>
-          <li class="task-item mouse-control">
-            <i class="es-icon es-icon-lock left-menu"></i>
-            <a class="text-overflow">任务3：移动工具</a>
-            <span class="right-menu mouse-leave">12:04<i class="es-icon es-icon-videoclass mlm "></i></span>
-            <span class="right-menu mouse-enter color-primary">任务未解锁</span>
-          </li> #}
         </ul>
       </div>
     </div>
