@@ -1,9 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_my_cloud_overview' %}
-{% if overview.enabled == false %}
-{% set submenu = 'cloud-sms-disabled' %}
-{% endif %}
 
 {% block main %}
 {% if overview.accessCloud == false %}

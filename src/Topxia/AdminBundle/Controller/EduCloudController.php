@@ -92,6 +92,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
         unset($overview['services']['email']);
+        $this->getSettingService()->set('cloud_status', $overview['enabled']);
         $overviewValue = array_values($overview['services']);
         if (in_array(true, $overviewValue)) {
             $paid = true;
@@ -104,7 +105,7 @@ class EduCloudController extends BaseController
             'isBinded'    => $isBinded,
             'overview'    => $overview,
             'paid'        => isset($paid) ? $paid : false,
-            'unPaid'        => isset($unPaid) ? $unPaid : false
+            'unPaid'      => isset($unPaid) ? $unPaid : false
         ));
     }
 
