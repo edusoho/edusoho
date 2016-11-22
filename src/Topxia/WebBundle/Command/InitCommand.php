@@ -345,6 +345,28 @@ EOD;
             ));
         }
 
+        $group = $this->getCategoryService()->getGroupByCode('classroom');
+
+        if (!$group) {
+            $group = $this->getCategoryService()->addGroup(array(
+                'name'  => '班级分类',
+                'code'  => 'classroom',
+                'depth' => 2
+            ));
+        }
+
+        $category = $this->getCategoryService()->getCategoryByCode('classroomdefault');
+
+        if (!$category) {
+            $this->getCategoryService()->createCategory(array(
+                'name'     => '默认分类',
+                'code'     => 'classroomdefault',
+                'weight'   => 100,
+                'groupId'  => $group['id'],
+                'parentId' => 0
+            ));
+        }
+
         $output->writeln(' ...<info>成功</info>');
     }
 
