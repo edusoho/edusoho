@@ -227,9 +227,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisVipAmountDataByTime($startTime, $endTime);
     }
 
-    public function analysisAmountData($groupBy, $conditions, $orderBy, $startTime, $endTime)
+    public function analysisAmountData($groupBy, $conditions, $orderBy, $startTime, $endTime, $select = '*')
     {
-        return $this->getOrderDao()->analysisAmountData($groupBy, $conditions, $orderBy, $startTime, $endTime);
+        return $this->getOrderDao()->analysisAmountData($groupBy, $conditions, $orderBy, $startTime, $endTime, $select);
     }
 
     public function analysisCourseAmountDataByTitle($startTime, $endTime, $number)

@@ -253,10 +253,10 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function analysisAmountData($group, $conditions, $orderBy, $start, $limit)
+    public function analysisAmountData($group, $conditions, $orderBy, $start, $limit, $select)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select("sum(amount) as count, userId, title, targetType, targetId ,from_unixtime(paidTime,'%Y-%m-%d') date")
+            ->select($select)
             ->groupBy($group)
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)

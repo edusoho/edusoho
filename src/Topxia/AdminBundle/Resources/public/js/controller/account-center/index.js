@@ -36,7 +36,7 @@ define(function (require, exports, module) {
         //图表
         payExplore();
         productExplore();
-        // financeCountStatistic();
+        financeCountStatistic();
 
         //事件
         registerSwitchEvent();
@@ -101,12 +101,12 @@ define(function (require, exports, module) {
                     {
                         name: '现金收入',
                         type: 'line',
-                        data: datas.series.newOrderCount
+                        data: datas.series.cashAmounts
                     },
                     {
                         name: '虚拟币收入',
                         type: 'line',
-                        data: datas.series.newPaidOrderCount
+                        data: datas.series.coinAmounts
                     }
                 ],
                 color: ['#46C37B', '#428BCA']

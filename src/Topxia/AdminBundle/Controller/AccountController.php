@@ -5,13 +5,18 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Component\Echats\EchartsBuilder;
 
 class AccountController extends BaseController
 {
     public function IndexAction(Request $request)
     {
-        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60),'seasonDate' => date('Y-m-d', time() - 90 * 24 * 60 * 60),'yearDate'=>date('Y-m-d', time() - 29 * 24 * 60 * 60),'seasonDate' => date('Y-m-d', time() - 365 * 24 * 60 * 60));
-
+        $weekAndMonthDate = array(
+            'weekDate' => $this->getStartTime('week'),
+            'monthDate' => $this->getStartTime('month'),
+            'seasonDate' => $this->getStartTime('quarter'),
+            'yearDate' => $this->getStartTime('year'),
+        );
         return $this->render('TopxiaAdminBundle:AccountCenter:index.html.twig', array(
             'dates' => $weekAndMonthDate
         ));
@@ -19,15 +24,14 @@ class AccountController extends BaseController
 
     public function accountAnalysisAction(Request $request)
     {
-        $weekTimeStart = strtotime(date("Y-m-d", time()- 6 * 24 * 60 * 60));
-        $weekTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $weekTimeStart = $this->getStartTime('week');
+        $weekTimeEnd   = strtotime(date("Y-m-d", time()));
         $weekTotalPrice = $this->getAccountAnalysisData($weekTimeStart, $weekTimeEnd);
 
-        $monthTimeStart = strtotime(date("Y-m-d", time()- 30 * 24 * 60 * 60));
-        $monthTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $monthTimeStart = $this->getStartTime('month');
+        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
         $monthTotalPrice = $this->getAccountAnalysisData($monthTimeStart, $monthTimeEnd);
 
-        
         return $this->render('TopxiaAdminBundle:AccountCenter:account-analysis-dashbord.html.twig', array(
             'weekTotalPrice' => $weekTotalPrice,
             'monthTotalPrice' => $monthTotalPrice,
@@ -56,18 +60,33 @@ class AccountController extends BaseController
     public function rankAction(Request $request)
     {
         $type = $request->query->get('type');
-        $monthTimeStart = strtotime(date("Y-m-d", time()- 30 * 24 * 60 * 60));
-        $monthTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $monthTimeStart = $this->getStartTime('month');
+        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
+
         $conditions = array(
             'targetType' => $type,
             'paidStartTime' => $monthTimeStart,
             'paidEndTime' => $monthTimeEnd,
             'status' => 'paid',
         );
+
         if ($type == 'all') {
             unset($conditions['targetType']);
         }
-        $analysisAmounts = $this->getOrderService()->analysisAmountData('title', $conditions, array('count', 'DESC'), 0, 10);
+
+        $analysisAmounts = $this->getOrderService()->analysisAmountData(
+            'title',
+            $conditions,
+            array('count', 'DESC'),
+            0,
+            10,
+            'sum(amount) as count, userId, title, targetType, targetId'
+        );
+
+        foreach ($analysisAmounts as $key => $analysisAmount) {
+            $analysisAmounts[$key]['title'] = preg_replace('/^购买/', '', $analysisAmount['title']);
+            $analysisAmounts[$key]['title'] = preg_replace('/个月([\x{4e00}-\x{9fa5}])*/u', '个月', $analysisAmounts[$key]['title']);
+        }
 
         return $this->render('TopxiaAdminBundle:AccountCenter:account-analysis-rank-tr.html.twig', array(
             'analysisAmounts' => $analysisAmounts
@@ -77,19 +96,30 @@ class AccountController extends BaseController
     public function paymentRankAction(Request $request)
     {
         $type = $request->query->get('type');
-        $monthTimeStart = strtotime(date("Y-m-d", time()- 30 * 24 * 60 * 60));
-        $monthTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $monthTimeStart = $this->getStartTime('month');
+        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
+
         $conditions = array(
             'paidStartTime' => $monthTimeStart,
             'paidEndTime' => $monthTimeEnd,
             'status' => 'paid',
         );
+
         if ($type == 'cash') {
             $conditions['cashPayment'] = 'coin';
         } else {
             $conditions['payment'] = 'coin';
         }
-        $amounts = $this->getOrderService()->analysisAmountData('userId', $conditions, array('count', 'DESC'), 0, 10);
+
+        $amounts = $this->getOrderService()->analysisAmountData(
+            'userId',
+            $conditions,
+            array('count', 'DESC'),
+            0,
+            10,
+            'sum(amount) as count, userId, title, targetType, targetId'
+        );
+
         $userIds = ArrayToolkit::column($amounts, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -101,34 +131,72 @@ class AccountController extends BaseController
 
     public function accountStatisticAction(Request $request, $period)
     {
-        $series    = array();
-        $days      = $this->getDaysDiff($period);
-        $timeRange = $this->getTimeRange($period);
+        $series = array();
+        $startTime = $this->getStartTime($period);
+        $endTime = time();
+        $days = floor(($endTime-$startTime)/3600/24);
 
+        $conditions = array(
+            'paidStartTime' => $startTime,
+            'paidEndTime' => $endTime,
+            'status' => 'paid',
+            'payment' => 'coin',
+        );
 
-        $conditions              = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
-        $newOrders               = $this->getOrderService()->analysisOrderDate($conditions);
-        $series['newOrderCount'] = $newOrders;
-
-        $conditions['totalPriceGreaterThan'] = 0;
-        $newPaidOrders                       = $this->getOrderService()->analysisOrderDate($conditions);
-        $series['newPaidOrderCount']         = $newPaidOrders;
-
-        $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
-        return $this->createJsonResponse($userAnalysis);
+        $series['coinAmounts'] = $this->getOrderService()->analysisAmountData(
+            'from_unixtime(`paidTime`,\'%Y-%m-%d\')',
+            $conditions,
+            array('count', 'DESC'),
+            0,
+            10,
+            'from_unixtime(paidTime,\'%Y-%m-%d\') date, sum(amount) as count'
+        );
+        
+        unset($conditions['payment']);
+        $conditions['cashPayment'] = 'coin';
+        $series['cashAmounts'] = $this->getOrderService()->analysisAmountData(
+            'from_unixtime(`paidTime`,\'%Y-%m-%d\')',
+            $conditions,
+            array('count', 'DESC'),
+            0,
+            10,
+            'from_unixtime(paidTime,\'%Y-%m-%d\') date, sum(amount) as count'
+        );
+        
+        $amountAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
+        
+        return $this->createJsonResponse($amountAnalysis);
     }
 
-    private function getDaysDiff($period)
+    protected function getStartTime($period)
     {
-        $days = $period == 'week' ? 6 : 29;
-        return $days;
-    }
+        switch ($period) {
+            case 'day':
+                $startTime = strtotime(date('Y-m-d',time()));
+                break;
+            
+            case 'week':
+                $startTime = mktime(0, 0, 0, date('m'), date('d')-date('w')+1, date('Y'));
+                break;
 
-    protected function getTimeRange($period)
-    {
-        $days = $this->getDaysDiff($period);
+            case 'month':
+                $startTime = mktime(0, 0, 0, date('m'), 1, date('Y'));
+                break;
 
-        return array('startTime' => strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
+            case 'quarter':
+                $startTime = mktime(0, 0, 0, floor((date('m')-1)/3)*3+1, 1,date('Y')); 
+                break;
+
+            case 'year':
+                $startTime = mktime(0, 0, 0, 1, 1, date('Y'));
+                break;
+
+            default:
+                
+                break;
+        }
+        
+        return $startTime;
     }
 
     protected function getOrderService()

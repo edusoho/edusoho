@@ -12,10 +12,8 @@
     <tr>
       <td>{{ loop.index }}</td>
       <td>
-        <a class="link-primary" {% if analysisAmount.targetType != 'vip' %}
-           target="_blank" href="{{path(analysisAmount.targetType~'_show', {id:analysisAmount.targetId})}}"{% endif %}>{{analysisAmount.title}}</a>
-      }
-      }
+        <a class="link-primary" 
+           target="_blank" href="{% if analysisAmount.targetType == 'vip' %}{{path('vip')}}{% else %}{{path(analysisAmount.targetType~'_show', {id:analysisAmount.targetId})}}{% endif %}">{{analysisAmount.title}}</a>
       </td>
       <td class="text-right prl">{{analysisAmount.count}}</td>
     </tr>

@@ -258,6 +258,7 @@ class DefaultController extends BaseController
         $series['newPaidOrderCount']         = $newPaidOrders;
 
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
+        var_dump($series);exit();
         return $this->createJsonResponse($userAnalysis);
 
     }
