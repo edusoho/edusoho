@@ -17,13 +17,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
     public function getMaxTaskSeqByCourseId($courseId)
     {
-        $sql = "SELECT max(seq) FROM coruse_task WHERE `courseId` = ? LIMIT 1";
+        $sql = "SELECT max(seq) FROM {$this->table()} WHERE `courseId` = ? LIMIT 1";
         return $this->db()->fetchColumn($sql, array($courseId));
     }
 
     public function getByCourseIdAndSeq($courseId, $seq)
     {
-        $sql = "SELECT * FROM `course_task` WHERE `courseId`= ? AND `seq` = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `seq` = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($courseId, $seq));
     }
 

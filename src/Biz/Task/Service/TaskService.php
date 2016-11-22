@@ -23,7 +23,7 @@ interface TaskService
     public function tryTakeTask($taskId);
 
     /**
-     * return next Task that can be learned of the  course plan
+     * return next Task that can be learned of the  course plan, or return empty array()
      * @param $taskId
      * @return mixed
      *

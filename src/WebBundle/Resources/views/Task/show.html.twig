@@ -104,7 +104,7 @@
               {% if task.isOptional %}
                 <span class="label label-success mrm">选修</span>
               {% endif %}
-              <a class="text-overflow"  {% if task_lock %} data-url {% else  %} href= {% endif %}"{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
+              <a class="text-overflow"  {% if task_lock %} data-url {% else  %} href {% endif %} ="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
               {% if task_lock %}
                 <span class="right-menu mouse-leave">{{task['activityMeta']['length'] | default('')}}
                   <i class="es-icon {{task['activityMeta']['icon']}} mlm"></i>

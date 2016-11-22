@@ -18,9 +18,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getTask($id)
     {
         $task = $this->getTaskDao()->get($id);
-        if (empty($task)) {
-            throw new NotFoundException("task does not exist");
-        }
         return $task;
     }
 
@@ -39,10 +36,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
+        $currentSeq              = $this->getCurrentTaskSeq($activity['fromCourseId']);
+        $fields['seq']           = $currentSeq + 1;
+
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
-            'preTaskId',
+            'seq',
             'courseChapterId',
             'activityId',
             'title',
@@ -53,7 +53,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status',
             'createdUserId'
         ));
-
         return $this->getTaskDao()->create($fields);
     }
 
@@ -191,16 +190,19 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw new AccessDeniedException("fggg");
+            throw new AccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
+
+        if (empty($task)) {
+            throw new NotFoundException("task does not exist");
+        }
         return $task;
     }
 
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-
         if ($this->isLastTask($task)) {
             return array();
         }
@@ -208,23 +210,30 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->canLearnTask($taskId)) {
             return array();
         }
+
+        //if the task is first, when get next task, we need to know if the task if finish, if not  return null;
+        if ($this->isFirstTask($task)) {
+            $isTaskLearned = $this->isTaskLearned($taskId);
+            if (!$isTaskLearned) {
+                return array();
+            }
+        }
         return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
     }
 
 
-    public function canLearnTask($taskId)
+    public function canLearnTask($taskId, $finished = false)
     {
         $task = $this->getTask($taskId);
 
         $this->getCourseService()->tryTakeCourse($task['courseId']);
 
-        $canLearnTask = false;
         if ($this->isFirstTask($task)) {
-            $canLearnTask = true;
+            return true;
         }
 
         if ($task['isOptional']) {
-            $canLearnTask = true;
+            return true;
         }
 
         //获取教学方法策略 新的 course 中应该纪录当前的教方法 teach method: freedom|order
@@ -235,10 +244,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
         $isTaskLearned = $this->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {
-            $canLearnTask = true;
+            return true;
         }
-        return $canLearnTask;
-        // return $canLearnTask ? $task : false;
+        return false;
     }
 
     public function isTaskLearned($taskId)
@@ -293,7 +301,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function isFirstTask($task)
     {
-        return 0 === $task['seq'];
+        return 1 == $task['seq'];
     }
 
     protected function isLastTask($task)
