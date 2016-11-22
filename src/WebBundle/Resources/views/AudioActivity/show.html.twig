@@ -6,7 +6,7 @@
 {% block content %}
   <div class="dashboard-body">
     <div class="audio-content" id="audio-content" data-role="audio-content" >
-      {{ render(controller('TopxiaWebBundle:Player:show', {id: activity.ext.mediaId})) }}
+      {{ render(controller('WebBundle:Player:show', {id: activity.ext.mediaId})) }}
     </div>
   </div>
 {% endblock %}
