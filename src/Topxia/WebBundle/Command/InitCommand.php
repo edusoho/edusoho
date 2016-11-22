@@ -1,15 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
 
 class InitCommand extends BaseCommand
 {
@@ -51,12 +51,12 @@ class InitCommand extends BaseCommand
 
     private function initFolders()
     {
-        $rootDir = realpath($this->getServiceKernel()->getParameter('kernel.root_dir').'/..');
+        $rootDir = realpath($this->getServiceKernel()->getParameter('kernel.root_dir') . '/..');
 
         $folders = array(
-            $rootDir.'/app/data/udisk',
-            $rootDir.'/app/data/private_files',
-            $rootDir.'/web/files'
+            $rootDir . '/app/data/udisk',
+            $rootDir . '/app/data/private_files',
+            $rootDir . '/web/files'
         );
 
         $filesystem = new Filesystem();
@@ -464,8 +464,8 @@ EOD;
     public function initInstallLock($output)
     {
         $output->write('  初始化install.lock');
-        touch($this->getContainer()->getParameter('kernel.root_dir').'/data/install.lock');
-        touch($this->getContainer()->getParameter('kernel.root_dir').'/config/routing_plugins.yml');
+        touch($this->getContainer()->getParameter('kernel.root_dir') . '/data/install.lock');
+        touch($this->getContainer()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
 
         $output->writeln(' ...<info>成功</info>');
     }
@@ -473,16 +473,16 @@ EOD;
     public function initBlock($output)
     {
         $output->write('  初始化编辑区');
-        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/web/themes/block.json';
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
-        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/web/themes/default/block.json';
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/default/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
-        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/web/themes/autumn/block.json';
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
-        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/web/themes/jianmo/block.json';
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/jianmo/block.json';
         BlockToolkit::init($json, $this->getContainer());
     }
 
@@ -490,48 +490,21 @@ EOD;
     {
         $output->write('  初始化CrontabJob');
 
-// $this->getCrontabService()->createJob(array(
+        $this->getCrontabService()->createJob(array(
+            'name' => 'CancelOrderJob',
+            'cycle' => 'everyhour',
+            'jobClass' => 'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+            'nextExcutedTime' => time(),
+            'createdTime' => time()
+        ));
 
-//     'name'=>'CancelOrderJob',
-
-//     'cycle'=>'everyhour',
-
-//     'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
-
-//     'nextExcutedTime'=>time(),
-
-//     'createdTime'=>time()
-
-// ));
-
-// $this->getCrontabService()->createJob(array(
-
-//     'name'=>'DeleteExpiredTokenJob',
-
-//     'cycle'=>'everyhour',
-
-//     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
-
-//     'nextExcutedTime'=>time(),
-
-//     'createdTime'=>time()
-
-// ));
-
-// $this->getCrontabService()->createJob(array(
-
-//     'name'=>'DeleteSessionJob',
-
-//     'cycle'=>'everyhour',
-
-//     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteSessionJob',
-
-//     'jobParams'=>'',
-
-//     'nextExcutedTime'=>time(),
-
-//     'createdTime'=>time()
-        // ));
+        $this->getCrontabService()->createJob(array(
+            'name' => 'DeleteExpiredTokenJob',
+            'cycle' => 'everyhour',
+            'jobClass' => 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+            'nextExcutedTime' => time(),
+            'createdTime' => time()
+        ));
 
         $this->getCrontabService()->setNextExcutedTime(time());
 
