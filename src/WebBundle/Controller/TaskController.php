@@ -44,7 +44,7 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId)
     {
         $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->tryTakeTask($taskId);
 
         if (empty($task)) {
             throw $this->createResourceNotFoundException('task', $taskId);
