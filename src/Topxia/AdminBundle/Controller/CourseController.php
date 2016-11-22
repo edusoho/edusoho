@@ -204,10 +204,6 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        // if ($course['status'] == 'published') {
-        //     throw $this->createAccessDeniedException($this->getServiceKernel()->trans('发布课程，不能删除！'));
-        // }
-
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
 
         if (!empty($subCourses)) {
