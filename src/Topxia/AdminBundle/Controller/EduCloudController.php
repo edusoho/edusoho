@@ -1313,6 +1313,7 @@ class EduCloudController extends BaseController
             $overview    = $api->get("/me/live/overview");
             $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
             if ((isset($overview['isBuy']) && $overview['isBuy'] == false)||$liveCourseSetting['live_course_enabled'] == 0) {
+                $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
                 return $this->render('TopxiaAdminBundle:EduCloud/Live:without-enable.html.twig', array(
                     'overview'  => $overview
                 ));
