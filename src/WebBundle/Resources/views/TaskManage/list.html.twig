@@ -44,7 +44,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+                <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'lesson'}) }}">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
                   {{'添加课时'|trans}}
                 </a>
@@ -58,7 +58,7 @@
           {% if item.itemType == 'task' %}
             {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:item} %}
           {% elseif item.itemType == 'chapter' %}
-            {% include 'WebBundle:TaskManage:list-chapter-item.html.twig' with {chapter:item} %}
+            {% include 'WebBundle:CourseChapterManage:list-item.html.twig' with {chapter:item} %}
           {% endif %}
         {% endfor %}
       </ul>

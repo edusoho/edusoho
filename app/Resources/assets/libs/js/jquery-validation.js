@@ -3,6 +3,9 @@ import 'jquery-validation';
 $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
   errorElement: 'p',
+  onkeyup: false,
+  ignore: "",
+  ajax: false,
   highlight: function(element, errorClass, validClass) {
     let $row = $(element).closest('.form-group');
     $row.addClass('has-error');
@@ -32,11 +35,24 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
+  submitSuccess: function(data) {
+    
+  },
   submitHandler: function(form) {
-    let $submitBtn = $(form).find('[type="submit"][data-loading-text]');
+    let formObj = $(form);
+    let $submitBtn = formObj.find('[type="submit"][data-loading-text]');
     $submitBtn.attr('disabled', 'disabled');
     $submitBtn.text($submitBtn.data('loadingText'));
-    form.submit();
+    let validate = formObj.validate();
+    if(validate.settings.ajax) {
+      $.post(formObj.attr('action'), formObj.serializeArray(), function(data) {
+        validate.settings.submitSuccess(data);
+      }).error(function(){
+        $submitBtn.removeAttr('disabled');
+      });
+    } else {
+      form.submit();
+    }
   }
 });
 

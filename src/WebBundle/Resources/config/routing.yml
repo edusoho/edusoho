@@ -11,6 +11,19 @@ course_manage_items_sort:
   defaults: { _controller: WebBundle:CourseManage:courseItemsSort }
   methods: ['POST']
 
+course_manage_chapter_create:
+    path:  /course/{id}/manage/chapter/create
+    defaults: { _controller: WebBundle:CourseChapterManage:create }
+
+course_manage_chapter_edit:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: WebBundle:CourseChapterManage:edit }
+
+course_manage_chapter_delete:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: WebBundle:CourseChapterManage:delete }
+    methods: [POST]
+
 course_manage_task_create:
   path:  /course/{courseId}/task
   defaults: { _controller: WebBundle:TaskManage:create}

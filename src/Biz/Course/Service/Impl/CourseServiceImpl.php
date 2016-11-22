@@ -76,6 +76,97 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     }
 
+    public function createChapter($chapter)
+    {
+        $argument = $chapter;
+
+        if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
+            throw $this->createServiceException($this->getKernel()->trans('章节类型不正确，添加失败！'));
+        }
+
+        if (in_array($chapter['type'], array('unit', 'lesson'))) {
+            list($chapter['number'], $chapter['parentId']) = $this->getNextNumberAndParentId($chapter['courseId']);
+        } else {
+            $chapter['number']   = $this->getNextChapterNumber($chapter['courseId']);
+            $chapter['parentId'] = 0;
+        }
+
+        $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
+        $chapter['createdTime'] = time();
+        $chapter                = $this->getChapterDao()->create($chapter);
+        return $chapter;
+    }
+
+    protected function getNextNumberAndParentId($courseId)
+    {
+        $lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
+
+        $parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
+
+        $num = 1 + $this->getChapterDao()->getChapterCountByCourseIdAndTypeAndParentId($courseId, 'unit', $parentId);
+
+        return array($num, $parentId);
+    }
+
+    protected function getNextChapterNumber($courseId)
+    {
+        $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
+        return $counter + 1;
+    }
+
+    protected function getNextCourseItemSeq($courseId)
+    {
+        $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
+        $taskMaxSeq  = $this->getTaskService()->getMaxSeqByCourseId($courseId);
+        return ($chapterMaxSeq > $taskMaxSeq ? $chapterMaxSeq : $taskMaxSeq) + 1;
+    }
+
+    public function updateChapter($courseId, $chapterId, $fields)
+    {
+        $argument = $fields;
+        $course = $this->tryManageCourse($courseId);
+        $chapter  = $this->getChapterDao()->get($chapterId);
+
+        if (empty($chapter) || $chapter['courseId'] != $courseId) {
+            throw $this->createServiceException($this->getKernel()->trans('章节#%chapterId%不存在！', array('%chapterId%' => $chapterId)));
+        }
+
+        $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
+        $chapter = $this->getChapterDao()->update($chapterId, $fields);
+
+        $this->dispatchEvent("chapter.update", array('argument' => $argument, 'chapter' => $chapter));
+        return $chapter;
+    }
+
+    public function deleteChapter($courseId, $chapterId)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        $deletedChapter = $this->getChapterDao()->get($chapterId);
+
+        if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('章节(ID:%s)不存在，删除失败！'), $chapterId));
+        }
+
+        $this->getChapterDao()->delete($deletedChapter['id']);
+
+        $prevChapter = array('id' => 0);
+
+        foreach ($this->getCourseChapters($course['id']) as $chapter) {
+            if ($chapter['number'] < $deletedChapter['number']) {
+                $prevChapter = $chapter;
+            }
+        }
+
+        $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
+
+        foreach ($tasks as $task) {
+            $this->getTaskService()->updateTask($task['id'], array('courseChapterId' => $prevChapter['id']));
+        }
+
+        $this->dispatchEvent("chapter.delete", $deletedChapter);
+    }
+
     protected function hasCourseManagerRole($courseId, $userId)
     {
         return true;

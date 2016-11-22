@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 interface TaskDao extends GeneralDaoInterface
 {
     public function findByCourseId($courseId);
+
+    public function getMaxSeqByCourseId($courseId);
 }
