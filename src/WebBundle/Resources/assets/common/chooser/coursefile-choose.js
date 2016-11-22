@@ -11,7 +11,6 @@ class CourseFileChoose extends Chooser {
         this.container = $container;
         this._init();
         this._initEvent();
-        $('.chooser-list').perfectScrollbar();
     }
 
     _init() {
@@ -21,14 +20,13 @@ class CourseFileChoose extends Chooser {
     _initEvent() {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-
         $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
-        let $containter = $('.chooser-list');
+        let $containter = $('.course-file-browser');
         let url = $containter.data('url');
-        $.get(url, {'type': $("input[name=type]").val()}, function (html) {
+        $.get(url, {'type': $("input[name=type]").val()}, html=>{
             $containter.html(html);
         });
     }

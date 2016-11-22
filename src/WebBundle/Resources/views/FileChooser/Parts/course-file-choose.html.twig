@@ -1,9 +1,8 @@
 {#{% do script (['web/file-chooser/chooser/coursefile-choose.js']) %}#}
 
-<div data-role="course-file-browser"
-     data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}">
-</div>
-<input type="hidden" name="type" value="{{ fileType|default('') }}">
+  <div class="course-file-browser chooser-list" data-role="course-file-browser"
+     data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}"></div>
+  <input type="hidden" name="type" value="{{ fileType|default('') }}">
 
 
 {#<!--1、默认显示20条数据； 2、分他人共享的和自己上传的，3、视觉可见4条，最多显示20条，超过20条提示“调整关键词”-->
