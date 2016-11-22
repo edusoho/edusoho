@@ -49,7 +49,7 @@ courseset_manage_course_delete:
 
 courseset_manage_course_publish:  
   path: /courseset/{courseSetId}/course/{courseId}/publish
-  defaults: {_controller: WebBundle:CourseManage:publish}
+  defaults: {_controller: WebBundle:CourseManage:preparePublishment}
 
 course_manage_tasks:
   path:  /course/{courseId}/tasks

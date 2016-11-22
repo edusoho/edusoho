@@ -13,6 +13,11 @@ class CourseDaoImpl extends SoftDeleteDaoImpl implements CourseDao
         return $this->findInField('courseSetId', array($courseSetId));
     }
 
+    public function findCoursesByTitle($title)
+    {
+        return $this->findInField('title', array($title));
+    }
+
     public function declares()
     {
     }

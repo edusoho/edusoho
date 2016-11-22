@@ -118,20 +118,42 @@ class CourseManageController extends BaseController
 
     public function closeAction(Request $request, $courseSetId, $courseId)
     {
-        //TODO
-        return $this->createJsonResponse(array('success' => true));
+        try {
+            $this->getCourseService()->closeCourse($courseId);
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
     }
 
-    public function preparePublishment(Request $request, $courseSetId, $courseId)
+    public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        //TODO
-        return $this->createJsonpResponse(array('success' => true));
+        try {
+            $this->getCourseService()->deleteCourse($courseId);
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
     }
 
-    public function auditPublishment(Request $request, $courseSetId, $courseId)
+    public function preparePublishmentAction(Request $request, $courseSetId, $courseId)
     {
-        //管理员进行审核
-        return $this->createJsonResponse(array('success' => true));
+        try {
+            $this->getCourseService()->preparePublishment($courseId, $this->getUser()->getId());
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
+    public function auditPublishmentAction(Request $request, $courseSetId, $courseId)
+    {
+        try {
+            $this->getCourseService()->auditPublishment($courseId, $this->getUser()->getId());
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
     }
 
     protected function getCourseSetService()
