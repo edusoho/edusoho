@@ -311,7 +311,7 @@ admin:
                     name: 分类管理
                     children:
                         admin_course_category_manage:
-                            name: 分类管理
+                            name: 课程分类
                             router_name: admin_course_category
                             disable: true
                             children:
