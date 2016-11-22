@@ -21,6 +21,12 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
 
+    public function findTasksByChapterId($chapterId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseChapterId = ? ";
+        return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
+    }
+
     public function declares()
     {
         return array();

@@ -216,6 +216,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
     }
 
+    public function findTasksByChapterId($chapterId)
+    {
+        return $this->getTaskDao()->findTasksByChapterId($chapterId);
+    }
+
     /**
      * @return TaskDao
      */

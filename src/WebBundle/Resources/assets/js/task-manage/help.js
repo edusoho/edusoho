@@ -1,7 +1,7 @@
 import notify from 'common/notify';
 
 export const deleteTask = ()=> {
-  $('body').on('click','.delete-task',function(evt){
+  $('body').on('click','.delete-item',function(evt){
     if (!confirm(Translator.trans('是否确定删除任务？')))
       return;
     $.post($(evt.target).data('url'), function(data) {
@@ -15,7 +15,6 @@ export const deleteTask = ()=> {
     });
   });
 }
-
 
 export const sortList = () => {
   var $list = $("#sortable-list").sortable({

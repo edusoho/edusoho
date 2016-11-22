@@ -60,7 +60,7 @@ class CourseChapterManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $this->getCourseService()->deleteChapter($course['id'], $chapterId);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('success' => true));
     }
 
     protected function getCourseService()

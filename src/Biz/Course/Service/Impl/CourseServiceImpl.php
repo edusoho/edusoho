@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
+use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -134,7 +135,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
 
-        $this->dispatchEvent("chapter.update", array('argument' => $argument, 'chapter' => $chapter));
         return $chapter;
     }
 
@@ -152,7 +152,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $prevChapter = array('id' => 0);
 
-        foreach ($this->getCourseChapters($course['id']) as $chapter) {
+        foreach ($this->getChapterDao()->findChaptersByCourseId($course['id']) as $chapter) {
             if ($chapter['number'] < $deletedChapter['number']) {
                 $prevChapter = $chapter;
             }
@@ -163,8 +163,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         foreach ($tasks as $task) {
             $this->getTaskService()->updateTask($task['id'], array('courseChapterId' => $prevChapter['id']));
         }
+    }
 
-        $this->dispatchEvent("chapter.delete", $deletedChapter);
+    public function getChapter($courseId, $chapterId) 
+    {
+        $chapter = $this->getChapterDao()->get($chapterId);
+        $course = $this->getCourseDao()->get($courseId);
+        if($course['id'] == $chapter['courseId']) {
+            return $chapter;
+        }
+        return array();
     }
 
     protected function hasCourseManagerRole($courseId, $userId)

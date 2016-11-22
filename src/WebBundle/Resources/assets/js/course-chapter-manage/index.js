@@ -28,55 +28,55 @@ let validator = $form.validate({
   },
   ajax: true,
   submitSuccess: function(data) {
-    console.log(data);
+    document.location.reload();
   }
 });
 
-let formValidated = function(error, msg, $form) {
-  if (error) {
-      return ;
-  }
-  $('#course-chapter-btn').button('submiting').addClass('disabled');
+// let formValidated = function(error, msg, $form) {
+//   if (error) {
+//       return ;
+//   }
+//   $('#course-chapter-btn').button('submiting').addClass('disabled');
 
-  $.post($form.attr('action'), $form.serialize(), function(html) {
+//   $.post($form.attr('action'), $form.serialize(), function(html) {
 
-      let id = '#' + $(html).attr('id'),
-          $item = $(id);
-      let $parent = $('#'+$form.data('parentid'));
-      let $panel = $('.lesson-manage-panel');
-      $panel.find('.empty').remove();
-      if ($item.length) {
-          $item.replaceWith(html);
-          Notify.success(Translator.trans('信息已保存'));
-      } else {
-         if($parent.length){
-          let add = 0;
-           $parent.nextAll().each(function(){
-             if($(this).hasClass('js-chapter')){
-                $(this).before(html);
-                add = 1;
-                return false;
-              }
+//       let id = '#' + $(html).attr('id'),
+//           $item = $(id);
+//       let $parent = $('#'+$form.data('parentid'));
+//       let $panel = $('.lesson-manage-panel');
+//       $panel.find('.empty').remove();
+//       if ($item.length) {
+//           $item.replaceWith(html);
+//           Notify.success(Translator.trans('信息已保存'));
+//       } else {
+//          if($parent.length){
+//           let add = 0;
+//            $parent.nextAll().each(function(){
+//              if($(this).hasClass('js-chapter')){
+//                 $(this).before(html);
+//                 add = 1;
+//                 return false;
+//               }
              
-          });
-             if(add != 1 )
-                $("#course-item-list").append(html);
+//           });
+//              if(add != 1 )
+//                 $("#course-item-list").append(html);
            
-            let $list = $("#course-item-list");
-            sortList($list);
+//             let $list = $("#course-item-list");
+//             sortList($list);
            
-         }else{
-            $("#course-item-list").append(html);
-            $(".lesson-manage-panel").find('.empty').remove();
-         }
+//          }else{
+//             $("#course-item-list").append(html);
+//             $(".lesson-manage-panel").find('.empty').remove();
+//          }
 
-          Notify.success(Translator.trans('添加成功'));
+//           Notify.success(Translator.trans('添加成功'));
 
-      }
-      $(id).find('.btn-link').tooltip();
-      $form.parents('.modal').modal('hide');
-  });
+//       }
+//       $(id).find('.btn-link').tooltip();
+//       $form.parents('.modal').modal('hide');
+//   });
 
-};
+// };
 
 

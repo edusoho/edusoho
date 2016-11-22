@@ -21,7 +21,7 @@
       {% if type == 'unit' %}
         <label for="chapter-title-field">{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{{'标题'|trans}}</label>
       {% elseif type == 'lesson' %}
-        <label for="chapter-title-field">课时</label>
+        <label for="chapter-title-field">{{'课时'|trans}}</label>
       {% else %}
         <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{{'标题'|trans}}</label>
       {% endif %}
