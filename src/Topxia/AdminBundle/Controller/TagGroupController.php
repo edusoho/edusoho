@@ -90,7 +90,7 @@ class TagGroupController extends BaseController
 
         foreach ($tags as $tag) {
             if (!$this->getTagService()->getTagByName($tag)) {
-                $this->getTagService()->addTag($tag);
+                $this->getTagService()->addTag(array('name' => $tag));
             }
         }
 
