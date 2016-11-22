@@ -29,8 +29,8 @@ class MaterialLibChoose extends Chooser {
 
     _loadList() {
         let url = $('.js-browser-search').data('url');
-        $.get(url, this._getParams(), function (html) {
-            $('.js-material-list').html(html);
+        $.get(url, this._getParams(), html =>  {
+            this.container.find('.js-material-list').html(html);
         });
     }
 

@@ -1,18 +1,11 @@
 
 @font-face {font-family: "es-icon";
-<<<<<<< HEAD
   src: url('es-icon.eot'); /* IE9*/
   src: url('es-icon.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
   url('es-icon.woff') format('woff'), /* chrome, firefox */
   url('es-icon.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
   url('es-icon.svg#es-icon') format('svg'); /* iOS 4.1- */
-=======
-  src: url('iconfont.eot?t=1479713667'); /* IE9*/
-  src: url('iconfont.eot?t=1479713667#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1479713667') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1479713667') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1479713667#es-icon') format('svg'); /* iOS 4.1- */
->>>>>>> feature/course2.0-activity
+
 }
 
 .es-icon {
@@ -49,13 +42,9 @@
 .es-icon-angledoubleleft:before { content: "\e67e"; }
 
 .es-icon-playcircleoutline:before { content: "\e66d"; }
-<<<<<<< HEAD
 
 .es-icon-zhongchuan:before { content: "\e7cc"; }
 
-=======
-.es-icon-zhongchuan:before { content: "\e7cc"; }
->>>>>>> feature/course2.0-activity
 .es-icon-portrait:before { content: "\e65e"; }
 
 .es-icon-accesstime:before { content: "\e658"; }
@@ -291,13 +280,9 @@
 .es-icon-check:before { content: "\e60c"; }
 
 .es-icon-doing:before { content: "\e648"; }
-<<<<<<< HEAD
 
 .es-icon-diqiu:before { content: "\e6c5"; }
 
-=======
-.es-icon-diqiu:before { content: "\e6c5"; }
->>>>>>> feature/course2.0-activity
 .es-icon-icattachfileblack24px:before { content: "\e681"; }
 
 .es-icon-morehoriz:before { content: "\e665"; }
@@ -331,13 +316,9 @@
 .es-icon-loading:before { content: "\e68d"; }
 
 .es-icon-calendarok:before { content: "\e6a5"; }
-<<<<<<< HEAD
 
 .es-icon-self:before { content: "\e6c4"; }
 
-=======
-.es-icon-self:before { content: "\e6c4"; }
->>>>>>> feature/course2.0-activity
 .es-icon-trophy:before { content: "\e691"; }
 
 .es-icon-arrowdropleft:before { content: "\e68f"; }
@@ -399,17 +380,11 @@
 .es-icon-zhibokecheng:before { content: "\e6b2"; }
 
 .es-icon-zhibokecheng2:before { content: "\e6b3"; }
-<<<<<<< HEAD
 
 .es-icon-ting:before { content: "\e6b8"; }
 
 .es-icon-sun:before { content: "\e6c3"; }
 
-=======
-.es-icon-zanting1:before { content: "\e6c6"; }
-.es-icon-ting:before { content: "\e6b8"; }
-.es-icon-sun:before { content: "\e6c3"; }
->>>>>>> feature/course2.0-activity
 .es-icon-sousuo:before { content: "\e6b4"; }
 
 .es-icon-yulan:before { content: "\e6b5"; }
@@ -435,18 +410,9 @@
 .es-icon-replay5:before { content: "\e6af"; }
 
 .es-icon-replay10:before { content: "\e6c0"; }
-<<<<<<< HEAD
 
 .es-icon-rewardsolid:before { content: "\e6c2"; }
 
 .es-icon-zhouqikechengtubiao1:before { content: "\e6c1"; }
 
 .es-icon-subtitle:before { content: "\e783"; }
-
-=======
-.es-icon-rewardsolid:before { content: "\e6c2"; }
-.es-icon-zhouqikechengtubiao1:before { content: "\e6c1"; }
-.es-icon-subtitle:before { content: "\e783"; }
-.es-icon--check-circle:before { content: "\e6c7"; }
-.es-icon-undone-check:before { content: "\e6c8"; }
->>>>>>> feature/course2.0-activity
