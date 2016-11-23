@@ -93,9 +93,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->canManageCourse($task['courseId'])) {
             throw new AccessDeniedException();
         }
-
+        $currentSeq = $task['seq'];
         $result = $this->getTaskDao()->delete($id);
         $this->getActivityService()->deleteActivity($task['activityId']);
+        $this->getTaskDao()->waveSeqBiggerThanSeq($currentSeq, -1);
 
         return $result;
     }
@@ -156,7 +157,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function startTask($taskId)
     {
-        $task = $this->tryTakeTask($taskId);
+        $task = $this->getTask($taskId);
 
         $user = $this->getCurrentUser();
 
