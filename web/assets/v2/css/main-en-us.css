@@ -9707,7 +9707,6 @@ textarea {
 }
 .lesson-list .item-lesson {
   margin-left: 20px;
-  cursor: move;
 }
 .lesson-list .item-line {
   border-bottom: 2px solid #ccc;
@@ -9845,14 +9844,12 @@ textarea {
   cursor: pointer;
 }
 .dashboard-panel .course-dashboard-ul {
-  height: 80px;
-  margin: 0;
-  padding: 0;
   list-style-type: none;
 }
 .dashboard-panel .course-dashboard-ul li {
   width: 33%;
   float: left;
+  margin: 20px auto;
   padding: 0 5px;
   text-align: center;
 }
@@ -12593,9 +12590,6 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
-.es-share.top .ml30-o {
-  margin-left: -30px;
-}
 @-webkit-keyframes boxshow {
   0% {
     box-shadow: 0 0 15px #2db7f5;
@@ -13363,152 +13357,6 @@ textarea {
 }
 .mark-questions-modal .question-stem-fill-blank {
   color: #313131;
-}
-.caption-uploader {
-  height: 34px;
-  background: transparent;
-  display: inline-block;
-}
-.caption-notify {
-  line-height: 28px;
-}
-.text-track-overview {
-  overflow-y: scroll;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.text-track-overview p {
-  font-size: 14px;
-  line-height: 30px;
-  color: #919191;
-}
-.text-track-overview p.active {
-  color: #f5f5f5;
-}
-.text-track-select-form-group {
-  margin-bottom: 0px !important;
-}
-.track-select-parent {
-  position: relative;
-}
-.track-select-parent .track-select-show {
-  width: 100%;
-  background: white;
-  border: 1px solid #CCC;
-  color: #919191;
-  font-size: 14px;
-  line-height: 32px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.track-select-parent .track-select-show.active {
-  border-color: #46c37b;
-}
-.track-select-parent .track-select-show .data-show {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  min-height: 32px;
-  padding-right: 20px;
-}
-.track-select-parent .track-select-show .track-selcet-open-arrow,
-.track-select-parent .track-select-show .track-selcet-close-arrow {
-  position: absolute;
-  top: 0px;
-  right: 10px;
-}
-.track-select-parent .track-selcet-list {
-  padding-left: 0px;
-  position: absolute;
-  top: 34px;
-  width: 100%;
-  background: white;
-  border-radius: 2px;
-  border: 1px solid #CCC;
-}
-.track-select-parent .track-selcet-list li {
-  position: relative;
-  list-style: none;
-  padding-left: 10px;
-  padding-right: 10px;
-  color: #919191;
-  line-height: 34px;
-}
-.track-select-parent .track-selcet-list li .value {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding-right: 110px;
-}
-.track-select-parent .track-selcet-list li .convertStatus {
-  position: absolute;
-  line-height: 1.2;
-  padding: 2px 10px;
-  border-radius: 5px;
-  right: 40px;
-  top: 8px;
-  color: white;
-}
-.track-select-parent .track-selcet-list li .convertStatus.convert-success {
-  background: #46c37b;
-}
-.track-select-parent .track-selcet-list li .convertStatus.convert-error {
-  background: red;
-}
-.track-select-parent .track-selcet-list li .convertStatus.convert-doing {
-  background: blue;
-}
-.track-select-parent .track-selcet-list li .convertStatus.convert-waiting {
-  background: #AAA;
-}
-.track-select-parent .track-selcet-list li .convertStatus.convert-none {
-  background: #AAA;
-}
-.track-select-parent .track-selcet-list li:hover {
-  background: #f5f5f5;
-}
-.track-select-parent .track-selcet-list li:hover .delete {
-  display: inline;
-}
-.track-select-parent .track-selcet-list li .delete {
-  display: none;
-  position: absolute;
-  top: 8px;
-  right: 10px;
-}
-.track-select-parent .track-selcet-list li.active {
-  color: #46c37b;
-}
-.subtitle-transcode-status {
-  color: white;
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 3px;
-  line-height: 1;
-  text-align: center;
-  min-width: 72px;
-}
-.subtitle-transcode-status.waiting,
-.subtitle-transcode-status.none {
-  background: #919191;
-}
-.subtitle-transcode-status.doing {
-  background: #2db7f5;
-}
-.subtitle-transcode-status.success {
-  background: #46c37b;
-}
-.subtitle-transcode-status.error {
-  background: #e83d2c;
-}
-.subtitle-name {
-  width: 300px;
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 .user-center-header {
   position: relative;
@@ -15377,18 +15225,6 @@ textarea {
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;
-}
-.media-preview .media-preview-content .title {
-  padding-top: 35px;
-  text-align: center;
-  font-size: 30px;
-}
-.media-preview .media-preview-content .media-preview-player {
-  position: absolute;
-  top: 120px;
-  bottom: 60px;
-  left: 120px;
-  right: 120px;
 }
 html {
   height: 100%;
