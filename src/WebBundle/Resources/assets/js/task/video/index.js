@@ -2,7 +2,7 @@
  * Created by Simon on 08/11/2016.
  */
 import  swfobject from 'es-swfobject';
-import  EsMessager from '../../player/util/messenger';
+import  EsMessenger from '../../../common/messenger';
 class VideoPlay {
     constructor() {
         this.player = {};
@@ -26,7 +26,7 @@ class VideoPlay {
     }
 
     _playVideo() {
-        var messenger = new EsMessager({
+        var messenger = new EsMessenger({
             name: 'parent',
             project: 'PlayerProject',
             children: [],

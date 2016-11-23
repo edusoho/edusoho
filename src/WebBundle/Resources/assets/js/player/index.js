@@ -1,5 +1,5 @@
 import  PlayerFactory from './player-factory';
-import  EsMessager from './util/messenger';
+import  EsMessenger from '../../common/messenger';
 import DurationStorage from './util/duration-storage';
 
 class Show {
@@ -84,7 +84,7 @@ class Show {
     }
 
     initMesseger() {
-        return new EsMessager({
+        return new EsMessenger({
             name: 'parent',
             project: 'PlayerProject',
             type: 'child'

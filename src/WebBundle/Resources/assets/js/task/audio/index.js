@@ -1,4 +1,4 @@
-import  EsMessager from '../../player/util/messenger';
+import  EsMessenger from '../../../common/messenger';
 class VideoPlay {
     constructor(elment) {
         this.dom = $(elment);
@@ -7,7 +7,7 @@ class VideoPlay {
     }
 
     play() {
-        var messenger = new EsMessager({
+        var messenger = new EsMessenger({
             name: 'parent',
             project: 'PlayerProject',
             children: [],
