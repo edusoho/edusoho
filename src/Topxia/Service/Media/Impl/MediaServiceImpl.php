@@ -18,7 +18,7 @@ class MediaServiceImpl extends BaseService implements MediaService
         );
 
         $options = array_merge($defaultOptions, $options);
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
         if (empty($file)) {
             throw $this->createNotFoundException($this->trans('无效文件'));
         }
@@ -34,14 +34,14 @@ class MediaServiceImpl extends BaseService implements MediaService
 
                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                     'data'     => array(
-                        'id'      => $file['id'],
+                        'id'      => $file['no'],
                         'fromApi' => $options['fromApi']
                     ),
                     'times'    => $options['times'],
                     'duration' => $options['duration']
                 ));
 
-                $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format={$options['format']}&line=".$options['line'];
+                $url = $this->getHttpHost()."/hls/{$file['no']}/playlist/{$token['token']}.m3u8?format={$options['format']}&line=".$options['line'];
             } else {
                 $url = $client->generateHLSQualitiyListUrl($file['metas2'], $options['duration']);
             }
