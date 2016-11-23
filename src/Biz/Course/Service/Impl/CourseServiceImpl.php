@@ -145,18 +145,24 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw new AccessDeniedException('只允许发布未发布教学计划');
         }
 
-        $audit = array(
-            'courseId'    => $course['id'],
-            'courseSetId' => $course['courseSetId'],
-            'status'      => 'committed',
-            'creator'     => $userId,
-            'remark'      => '提交审核'
-        );
-
-        $this->getCourseAuditDao()->create($audit);
+        // XXX 先直接发布，忽略审核操作
         $this->getCourseDao()->update($id, array(
-            'auditStatus' => 'committed'
+            'status'      => 'published',
+            'auditStatus' => 'accept'
         ));
+
+        // $audit = array(
+        //     'courseId'    => $course['id'],
+        //     'courseSetId' => $course['courseSetId'],
+        //     'status'      => 'committed',
+        //     'creator'     => $userId,
+        //     'remark'      => '提交审核'
+        // );
+
+        // $this->getCourseAuditDao()->create($audit);
+        // $this->getCourseDao()->update($id, array(
+        //     'auditStatus' => 'committed'
+        // ));
     }
 
     public function auditPublishment($id, $userId, $reject, $remark)
