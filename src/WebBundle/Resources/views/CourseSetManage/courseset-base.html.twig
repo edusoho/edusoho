@@ -1,7 +1,51 @@
 {% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 
-{% block title %}{{ '课程基础信息'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '基本信息'|trans }} - {{ parent() }}{% endblock %}
 
 {% block main %}
-	TODO 课程基础信息表单
+	<div class="panel panel-default">
+    <div class="panel-heading">{{ '基本信息'|trans }}</div>
+    <div class="panel-body">
+      <form class="form-horizontal" id="course-form" method="post">
+        {{ web_macro.flash_messages() }}
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '标题'|trans }}</label>
+          <div class="col-md-8">
+            <input type="text" id="course_title" name="title" required="required" class="form-control"
+                   value="{{ course.title|default('') }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '副标题'|trans }}</label>
+          <div class="col-md-8">
+            <textarea id="course_subtitle" name="subtitle" required="required"class="form-control">{{ course.subtitle|default('') }}</textarea>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '标签'|trans }}</label>
+          <div class="col-md-8">
+            <input type="text" id="course_tags" name="tags" required="required" class="width-full select2-offscreen"tabindex="-1" value=""data-explain="{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}">
+            <div class="help-block">{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '分类'|trans }}</label>
+          <div class="col-md-8 controls">
+            <select id="course_categoryId" name="categoryId" required="required"class="form-control width-input width-input-large">
+              {{('分类'|trans) }}
+            </select>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ '连载状态'|trans }}</label>
+          <div class="col-md-8 radios">
+            {{ radios('serializeMode', {'none':'非连载课程'|trans, 'serialize':'更新中'|trans, 'finished':'已完结'|trans}, course.serializeMode|default('none') ) }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

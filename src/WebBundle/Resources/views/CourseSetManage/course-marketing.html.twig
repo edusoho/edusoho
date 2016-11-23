@@ -27,32 +27,40 @@
       </ul>
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="col-sm-2 control-label">收费免费加入方式</label>
+          <label class="col-sm-2 control-label">收费免费</label>
           <div class="col-sm-8 radios">
             <label><input type="radio" name="type">收费</label>
             <label><input type="radio" name="type">免费</label>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-2 control-label">学习有效期加入方式</label>
+          <label class="col-sm-2 control-label">学习有效期</label>
           <div class="col-sm-4">
             <input class="form-control" type="" name="" style="">
           </div>
           <div class="col-sm-4 form-control-static">天</div>
-          <div class="col-sm-8 col-sm-offset-2 help-block">从加入的当前起，学员可在此有效期内学习，过期后无法学习。系统会在到期前10天提醒学员。设置为0则无时间限制</div>
+          <div class="col-sm-8 col-sm-offset-2"><div class="help-block">从加入的当前起，学员可在此有效期内学习，过期后无法学习。系统会在到期前10天提醒学员。设置为0则无时间限制</div></div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">加入方式</label>
-          <div class="col-sm-8">
-            <label><input type="" name="type">学员自己加入学习，也可以由老师来添加学员</label>
-            <label><input type="" name="type">只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学</label>
+          <div class="col-sm-10 radios">
+            <label><input type="radio" name="type">学员自己加入学习，也可以由老师来添加学员</label>
+            <label><input type="radio" name="type">只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学</label>
           </div>
         </div>
         <div class="form-group">
+            <label class="col-md-2 control-label">{{ '实名认证'|trans }}</label>
+            <div class="col-md-8 controls radios">
+              <label><input type="radio" name="type">是</label>
+              <label><input type="radio" name="type">否</label>
+              <div class="help-block">{{ '设置该值后，学员购买课程前，必须先去申请实名认证。'|trans }}</div>
+            </div>
+          </div>
+        <div class="form-group">
           <label class="col-sm-2 control-label">开启视频试看</label>
-          <div class="col-sm-8">
-            <label><input type="" name="type">是</label>
-            <label><input type="" name="type">否</label>
+          <div class="col-sm-8 radios">
+            <label><input type="radio" name="type">是</label>
+            <label><input type="radio" name="type">否</label>
             <div class="help-block">常用于收费视频内容的前几分钟免费试看</div>
           </div>
         </div>

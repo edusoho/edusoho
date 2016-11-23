@@ -11,7 +11,7 @@
       {% set side_nav = side_nav|default(null) %}
       <div class="sidenav locked">
         <ul class="list-group">
-          <li class="list-group-heading">{{'课程信息'|trans}}</li>
+          <li class="list-group-heading">{{'课程设置'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
             <a href="{{ path('courseset_manage_base', {id:courseSet.id}) }}">
               <span></span>{{'基本信息'|trans}}
