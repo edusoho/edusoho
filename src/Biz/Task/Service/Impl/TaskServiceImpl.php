@@ -53,7 +53,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status',
             'createdUserId'
         ));
-        return $this->getTaskDao()->create($fields);
+        $task = $this->getTaskDao()->create($fields);
+        return $task;
     }
 
     public function updateTask($id, $fields)
