@@ -1175,8 +1175,8 @@ course_lesson_question_marker_search:
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
 
 media_play:
-    pattern:  /media/{mediaId}/play
-    defaults: { _controller: TopxiaWebBundle:Media/Index:play }
+    pattern:  /media/{mediaId}/play/{type}
+    defaults: { _controller: TopxiaWebBundle:Media/Index:play, type:'edit' }
 
 media_preview:
     pattern:  /media/{mediaId}/preview

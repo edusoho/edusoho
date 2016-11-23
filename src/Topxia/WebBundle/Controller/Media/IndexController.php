@@ -8,13 +8,18 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class IndexController extends BaseController
 {
-    public function playAction($mediaId)
+    public function playAction($mediaId, $type)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
+        if ($type == 'preview') {
+            $context = array('hideQuestion' => 1);
+        } else {
+            $context = array('hideQuestion' => 1, 'hideBeginning' => true);
+        }
 
-        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId, 'context' => array('hideQuestion' => 1, 'hideBeginning' => true)));
+        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId, 'context' => $context));
     }
 
     public function previewAction($mediaId)
