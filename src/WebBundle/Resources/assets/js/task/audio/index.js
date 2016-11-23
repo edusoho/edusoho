@@ -10,35 +10,29 @@ class VideoPlay {
         var messenger = new EsMessager({
             name: 'parent',
             project: 'PlayerProject',
-            children: [document.querySelector('iframe[id=task-content-iframe]')],
+            children: [],
             type: 'parent'
         });
 
-        messenger.on("ended", function () {
-            console.log('messenger------------', 'ended')
-            var player = self.player;
-            player.playing = false;
-            self.player = player;
-            self._onFinishLearnLesson();
+        messenger.on("ended", (msg)=> {
+            this.player.playing = false;
+            this._onFinishLearnTask();
         });
 
-        messenger.on("playing", function () {
-            console.log('messenger------------', 'playing')
-            var player = self.player;
-            player.playing = true;
-            self.player = player;
+        messenger.on("playing", (msg) => {
+            this.player.playing = true;
         });
 
-        messenger.on("paused", function () {
-            console.log('messenger------------', 'paused')
-            var player = self.player;
-            player.playing = false;
-            self.player = player;
+        messenger.on("paused", (msg)=> {
+            this.player.playing = false;
         });
+
+        messenger.on("timechange", (msg)=> {
+        })
     }
 
-    _onFinishLearnLesson() {
-        console.log('messenger------------', '_onFinishLearnLesson')
+    _onFinishLearnTask() {
+        console.log('messenger------------', '_onFinishLearnTask')
     }
 
 

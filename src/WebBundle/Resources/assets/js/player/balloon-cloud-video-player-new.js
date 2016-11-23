@@ -6,8 +6,8 @@ class BalloonCloudVideoPlayer extends Emitter {
     constructor(options) {
         super();
         this.options = options;
+        this.player = {};
         this.setup();
-        this.palyer = '';
     }
 
     setup() {
@@ -21,10 +21,10 @@ class BalloonCloudVideoPlayer extends Emitter {
 
         var self = this;
 
-        var extConfig = {};
+        let extConfig = {};
 
         if (self.options.watermark != '') {
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 watermark: {
                     file: self.options.watermark,
                     pos: 'top.right',//top.right, bottom.right, bottom.left, center
@@ -35,7 +35,7 @@ class BalloonCloudVideoPlayer extends Emitter {
         }
 
         if (self.options.fingerprint != '') {
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 fingerprint: {
                     html: self.options.fingerprint,
                     duration: self.options.fingerprintTime
@@ -44,7 +44,7 @@ class BalloonCloudVideoPlayer extends Emitter {
         }
 
         if (self.options.timelimit != '') {
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 pluck: {
                     timelimit: self.options.timelimit,
                     text: "免费试看结束，购买后可完整观看",
@@ -54,7 +54,7 @@ class BalloonCloudVideoPlayer extends Emitter {
         }
 
         if (self.options.enablePlaybackRates != false && self.isBrowserSupportPlaybackRates()) {
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 playbackRates: {
                     enable: true,
                     source: 'hls',
@@ -64,14 +64,14 @@ class BalloonCloudVideoPlayer extends Emitter {
         }
 
         if (self.options.controlBar != '') {
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 controlBar: self.options.controlBar
             });
         }
 
         if (self.options.statsInfo != '') {
             var statsInfo = self.options.statsInfo;
-            extConfig = $.extend(extConfig, {
+            extConfig = Object.assign(extConfig, {
                 statsInfo: {
                     accesskey: statsInfo.accesskey,
                     globalId: statsInfo.globalId,
@@ -80,20 +80,23 @@ class BalloonCloudVideoPlayer extends Emitter {
                 }
             });
         }
-        var player = new VideoPlayerSDK($.extend({
+
+        extConfig = Object.assign(extConfig, {
             id: $(self.options.element).attr('id'),
             disableControlBar: self.options.disableControlBar,
             disableProgressBar: self.options.disableProgressBar,
             playlist: self.options.url,
             remeberLastPos: self.options.remeberLastPos,
             videoHeaderLength: self.options.videoHeaderLength
-        }, extConfig));
+        })
+        var player = new VideoPlayerSDK(extConfig);
 
         player.on('ready', function (e) {
             self.trigger("ready", e);
         });
 
         player.on("timeupdate", function (e) {
+         //    player.__events get all the event;
             self.trigger("timechange", e);
         });
 
@@ -116,9 +119,7 @@ class BalloonCloudVideoPlayer extends Emitter {
             self.trigger("answered", data);
         });
 
-       this.palyer = player;
-
-        window.BalloonPlayer = this;
+        this.player = player;
     }
 
     play() {

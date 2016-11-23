@@ -5,7 +5,7 @@ class LocalVideoPlayer extends Emitter {
     constructor(options) {
         super();
         this.options = options;
-        this.player = '';
+        this.player = {};
         this.setup();
     }
 
@@ -22,6 +22,7 @@ class LocalVideoPlayer extends Emitter {
                 swf: '/build/libs/video-js.swf'
             },
         });
+
         player.dimensions('100%', '100%');
         player.src(this.options.url);
 
@@ -59,8 +60,6 @@ class LocalVideoPlayer extends Emitter {
         });
 
         this.player = player;
-
-        window.player = this;
     }
 
     checkHtml5() {
