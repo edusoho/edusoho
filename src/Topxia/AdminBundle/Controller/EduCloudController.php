@@ -420,6 +420,7 @@ class EduCloudController extends BaseController
                 $items['date'][] = $value['date'];
                 $items['count'][] = $value['count'];
             }
+            $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked']));
             $smsInfo = $api->get('/me/sms_account');
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
                 'account' => $overview['account'],
