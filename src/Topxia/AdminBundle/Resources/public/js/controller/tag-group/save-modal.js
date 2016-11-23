@@ -19,6 +19,11 @@ define(function(require, exports, module) {
             return ;
         }
 
+        if ($('#s2id_tags').find('.select2-search-choice').length == 0) {
+            Notify.danger(Translator.trans('标签组内标签不能为空'));
+            return;
+        }
+
         $('#tag-group-create-btn').button('submiting').addClass('disabled');
 
         $.post($form.attr('action'), $form.serialize(), function(html){
