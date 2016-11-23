@@ -14,7 +14,6 @@ class PlayerFactory {
                 break;
         }
     }
-
 }
 
 export default PlayerFactory;

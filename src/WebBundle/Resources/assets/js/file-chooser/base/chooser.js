@@ -1,6 +1,3 @@
-/**
- * Created by Simon on 03/11/2016.
- */
 import Emitter from 'es6-event-emitter';
 
 class Chooser extends Emitter {

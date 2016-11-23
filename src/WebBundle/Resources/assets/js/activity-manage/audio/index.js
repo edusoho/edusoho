@@ -1,4 +1,4 @@
-import  FileChooser from '../../../common/file-choose';
+import FileChooser from '../../file-chooser/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");

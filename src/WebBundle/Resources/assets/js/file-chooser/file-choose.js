@@ -1,7 +1,7 @@
-import MaterialLibChoose from '../common/chooser/materiallib-choose';
-import VideoImport from '../common/chooser/import-video';
-import CourseFileChoose from '../common/chooser/coursefile-choose';
-import UploadChooser from '../common/chooser/upload-chooser';
+import MaterialLibChoose from './base/materiallib-choose';
+import VideoImport from './base/import-video';
+import CourseFileChoose from './base/coursefile-choose';
+import UploadChooser from './base/upload-chooser';
 import Emitter from 'es6-event-emitter';
 
 class FileChooser extends Emitter {

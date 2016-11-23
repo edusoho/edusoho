@@ -1,8 +1,4 @@
-/**
- * Created by Simon on 31/10/2016.
- */
-
-import Chooser from '../chooser';
+import Chooser from './chooser';
 
 class MaterialLibChoose extends Chooser {
 

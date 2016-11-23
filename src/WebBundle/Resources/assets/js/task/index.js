@@ -7,7 +7,6 @@ class TaskShow extends Emitter {
   constructor({element, courseId, taskId}) {
     super();
     this.element = $(element);
-    this.learnState = new LearnState(this.element);
     this.courseId = courseId;
     this.taskId = taskId;
     this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));

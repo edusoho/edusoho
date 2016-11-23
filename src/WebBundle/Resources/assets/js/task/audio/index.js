@@ -1,4 +1,4 @@
-import  EsMessager from '../../../common/messenger';
+import  EsMessager from '../../player/util/messenger';
 class VideoPlay {
     constructor(elment) {
         this.dom = $(elment);

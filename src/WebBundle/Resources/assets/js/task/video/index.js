@@ -2,7 +2,7 @@
  * Created by Simon on 08/11/2016.
  */
 import  swfobject from 'es-swfobject';
-import  EsMessager from '../../../common/messenger';
+import  EsMessager from '../../player/util/messenger';
 class VideoPlay {
     constructor() {
         this.player = {};
