@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -55,26 +56,73 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function sortCourseItems($courseId, $ids)
     {
         $this->tryManageCourse($courseId);
-        $parentChapterId = 0;
+        
+        $parentChapters = array(
+            'lesson'    => array(),
+            'unit'      => array(),
+            'chapter'   => array(),
+        );
+
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+
         foreach ($ids as $key => $id) {
             if(strpos($id, 'chapter') === 0) {
                 $id = str_replace('chapter-', '', $id);
-                $fileds = array('seq' => $key);
                 $chapter = $this->getChapterDao()->get($id);
-                if($chapter['type'] != 'chapter'){
-                    $fileds['parentId'] = $parentChapterId;
-                } else {
-                    $parentChapterId = $id;
+                $fileds = array('seq' => $key);
+
+                $index = $chapterTypes[$chapter['type']];
+                switch ($index) {
+                    case 3:
+                        $fileds['parentId'] = 0;
+                        break;
+                    case 2:
+                        if(!empty($parentChapters['chapter'])) {
+                            $fileds['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    case 1:
+                        if(!empty($parentChapters['unit'])) {
+                            $fileds['parentId'] = $parentChapters['unit']['id'];
+                        } elseif (!empty($parentChapters['chapter'])) {
+                            $fileds['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                $this->getChapterDao()->update($id, $fileds);
+
+                if(!empty($parentChapters[$chapter['type']])) {
+                    $fileds['number'] = $parentChapters[$chapter['type']]['number'] + 1;
+                } else {
+                    $fileds['number'] = 1;
+                }
+
+                foreach ($chapterTypes as $type => $value) {
+                    if($value < $index) {
+                        $parentChapters[$type] = array();
+                    }
+                }
+                
+                $chapter = $this->getChapterDao()->update($id, $fileds);
+                $parentChapters[$chapter['type']] = $chapter;
             }
 
             if(strpos($id, 'task') === 0) {
                 $id = str_replace('task-', '', $id);
-                $this->getTaskService()->updateSeq($id, array('seq' => $key, 'courseChapterId' => $parentChapterId));    
+
+                foreach ($parentChapters as $parent) {
+                    if(!empty($parent)) {
+                        $this->getTaskService()->updateSeq($id, array(
+                            'seq' => $key, 
+                            'courseChapterId' => $parent['id']
+                        ));
+                        break;
+                    }
+                }
+
             }
         }
-
     }
 
     public function createChapter($chapter)
@@ -180,6 +228,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');

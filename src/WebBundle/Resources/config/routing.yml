@@ -57,10 +57,6 @@ course_activity_trigger:
   defaults: { _controller: WebBundle:Activity:trigger }
   methods: [POST]
 
-course_task_player:
-    path:  /course/{courseId}/task/{taskId}/player
-    defaults: { _controller: WebBundle:Task:player }
-
 media_materiallib_choose:
     path: /media/materiallib/choose
     defaults: { _controller: WebBundle:FileChooser:materialChoose }

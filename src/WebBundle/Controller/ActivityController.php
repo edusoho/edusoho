@@ -70,17 +70,6 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function playerAction(Request $request, $id, $courseId)
-    {
-        $activity         = $this->getActivityService()->getActivity($id);
-        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $createController = $config->getAction('player');
-
-        return $this->forward($createController, array(
-            'id'       => $activity['id'],
-            'courseId' => $courseId
-        ));
-    }
 
     /**
      * @return ActivityService
