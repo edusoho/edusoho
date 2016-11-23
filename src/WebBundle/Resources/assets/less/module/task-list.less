@@ -1,0 +1,131 @@
+.task-list {
+  list-style: none;
+  padding: 0;
+  >.task-item {
+    position: relative;
+    padding: 12px 0 12px 30px;
+    line-height: 1;
+    cursor: pointer;
+    >a {
+      display: inline-block;
+      max-width: 280px;
+      color: @gray-dark;
+    }
+    .left-menu {
+      position: absolute;
+      left: 0;
+      top: 11px;
+    }
+    .right-menu {
+      position: absolute;
+      top:14px;
+      right: 0;
+    }
+    &:hover,
+    &.active{
+      >a,
+      .left-menu
+       {
+        color: @brand-primary
+      }
+    }
+    &.task-title {
+      color: @gray;
+      cursor: default;
+      >a {
+        color: @gray;
+        cursor: default;
+      }
+      &:hover {
+        >a,
+        .left-menu
+         {
+          color:@gray;
+        }
+      }
+    }
+  }
+}
+
+.task-manage-list {
+  margin: 0 10px 0 40px;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid #ccc;
+  .task-manage-item  {
+    border: 1px solid #ccc;
+    background: #fff;
+    line-height: 42px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+    cursor: move;
+    &:hover {
+      background: #f3f3f3;
+      .item-actions {
+        visibility: visible;;
+      }
+    }
+  }
+  .task-manage-chapter {
+    position: relative;
+    margin-left: -40px;
+  }
+  .task-manage-unit {
+    margin-left: -20px;
+  }
+  .item-line {
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+    display: inline-block;
+    height: 21px;
+    width: 21px;
+    margin-left: -21px;
+    float: left;
+  }
+  .item-content {
+    padding-left: 10px;
+    overflow: hidden;
+    height: 42px;
+    line-height: 42px;
+    float: left;
+    width: 100%;
+  }
+  .item-actions {
+    position: absolute;
+    right: 11px;
+    padding-right: 0;
+    visibility: hidden;
+    background: #f3f3f3;
+    border-left: 1px solid #ddd;
+    .btn,
+    .dropdown-menu > li > a {
+      -webkit-transition: none;
+      -o-transition: none;
+      -moz-transition: none;
+      transition: none;
+    }
+    a.dropdown-toggle:hover,
+    a.dropdown-toggle:focus,
+    .btn-link:hover,
+     .btn-link:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.mouse-control {
+  >.mouse-leave {
+    display: inline-block;
+  }
+  >.mouse-enter {
+    display: none;
+  }
+  &:hover {
+    >.mouse-leave {
+      display: none;
+    }
+    >.mouse-enter {
+      display: inline-block;
+    }
+  }
+}

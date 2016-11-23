@@ -53,6 +53,7 @@
     text-decoration: none;
   }
 }
+
 .btn-default {
   color: @gray-dark;
   background-color: #f5f5f5;
@@ -236,6 +237,34 @@
     .es-transition;
   }
 }
+
+.btn-transparent {
+  position: relative;
+  border-color: @brand-primary;
+  color: @brand-primary;
+  background-color: transparent;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 0;
+    background-color: @brand-primary;
+    .es-transition;
+  }
+  &:hover,
+  &.active {
+    color: #fff;
+    &:after {
+      z-index: -1;
+      width: 100%;
+      .es-transition;
+    }
+  }
+}
+
+
 
 // 将会弃用
 .btn-fat {

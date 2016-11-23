@@ -1,53 +1,33 @@
-{#{% extends 'TopxiaWebBundle::layout.html.twig' %}
-
-{% set script_controller = 'taskbundle/controller/task-manage/tasks' %}
-
-{% block title %}{{'教学计划管理'|trans}} - {{ parent() }}{% endblock %}
-
-{% block content %}
-	<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="glyphicon glyphicon-plus"></i> 任务 </button>
-
-	<ul id="course-tasks">
-		{% for task in tasks %}
-			{% include 'TaskBundle:TaskManage:list-item.html.twig' with {task:task} %}
-		{% endfor %}
-	</ul>
-	
-{% endblock %}#}
-
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'WebBundle:CourseManage:layout.html.twig' %}
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
-{% set use_webapck_loader = true %}
 
-{% do css(['web.css']) %}
-{% do script(['web/task-manage/index.js']) %}
+{% set side_nav = 'task' %}
+{% do script(['libs/jquery-sortable.js','web/task-manage/index.js']) %}
+
 
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      {{'教学计划管理'|trans}}
+      {{'默认教学计划/教学计划管理'|trans}}
       <button class="btn btn-success btn-sm pull-right">发布计划</button>
     </div>
     <div class="panel-body">
-      {#<ul class="lesson-list sortable-list js-period-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
-      {% for id, item in items %}
-        {% if 'chapter' in id %}
-          {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
-        {% elseif 'lesson' in id  %}
-          {% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-        {% endif %}
-      {% endfor %}
-      </ul>#}
-
       <!-- TODO  删除返回的课程数据，为任务加章节数据 -->
-      <div class="task-manage-header clearfix">
+      <ul class="nav nav-pills mbl">
+        <li class="active"><a>计划任务</a></li>
+        <li class=""><a>计划设置</a></li>
+        <li class=""><a>营销设置</a></li>
+        <li class=""><a>教师设置</a></li>
+        <li class=""><a>学员管理</a></li>
+      </ul>
+      <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
         <div class="pull-right">
           <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> 任务 </button>
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
-              {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}
+              {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}/课时
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
@@ -63,55 +43,23 @@
                   {{'添加%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节')})}}
                 </a>
               </li>
+              <li>
+                <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'lesson'}) }}">
+                  <i class="es-icon es-icon-anonymous-iconfont"></i>
+                  {{'添加课时'|trans}}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
-      
-      <ul class="task-manage-list">
-        <li class="task-manage-item task-manage-chapter clearfix">
-          <div class="item-content">
-            <i class="es-icon es-icon-importexport mrm"></i>第<span class="number">1</span>章：11
-          </div>
-          <div class="item-actions">
-            <span class="dropdown">
-              <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-addcircle mrs"></i>添加
-              </a>
-              <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-                <li>
-                  <a>添加节</a>
-                </li>
-                <li>
-                  <a>添加任务</a>
-                </li>
-              </ul>
-            </span>
-            <a class="btn btn-gray">
-              <i class="es-icon es-icon-edit mrs"></i>编辑
-            </a>
-            <a class="btn btn-gray delete-chapter-btn">
-              <i class="es-icon es-icon-delete mrs"></i>删除
-            </a>
-          </div>
-        </li>
-        <li class="task-manage-item task-manage-unit clearfix">
-          <div class="item-content">
-            <i class="es-icon es-icon-importexport mrm"></i>第<span class="number">1</span>节：111
-          </div>
-          <div class="item-actions">
-            <a class="btn btn-gray">
-              <i class="es-icon es-icon-addcircle mrs"></i>添加
-            </a>
-            <a class="btn btn-gray">
-              <i class="es-icon es-icon-edit mrs"></i>编辑
-            </a>
-            <a class="btn btn-gray">
-              <i class="es-icon es-icon-delete mrs"></i>删除
-            </a>
-          </div>
-        </li>
-        {% for task in tasks %}
-          {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:task} %}
+      <ul class="task-manage-list sortable-list" id="sortable-list" data-sort-url='{{path("course_manage_items_sort",{courseId:1})}}'>
+        {% for key, item in items %}
+          {% if item.itemType == 'task' %}
+            {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:item} %}
+          {% elseif item.itemType == 'chapter' %}
+            {% include 'WebBundle:CourseChapterManage:list-item.html.twig' with {chapter:item, course:course} %}
+          {% endif %}
         {% endfor %}
       </ul>
     </div>

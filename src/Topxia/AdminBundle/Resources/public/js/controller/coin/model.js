@@ -40,6 +40,8 @@ define(function(require, exports, module) {
 
                 $('.deduction').removeClass('hidden');
 
+                $('.none').addClass('hidden');
+
                 $('.currency').addClass('hidden');
             }
 
@@ -47,14 +49,20 @@ define(function(require, exports, module) {
 
                 $('.currency').removeClass('hidden');
 
+                $('.none').addClass('hidden');
+
                 $('.deduction').addClass('hidden');
             }
 
             if($(this).data('modle')=="none"){
 
+                $('.none').removeClass('hidden');
+
                 $('.currency').addClass('hidden');
 
                 $('.deduction').addClass('hidden');
+
+
             }
 
         });

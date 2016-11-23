@@ -3,12 +3,12 @@ import loadAnimation from 'common/load-animation'
 class Editor {
     constructor($modal) {
         this.$element = $modal;
-        this.$task_manage_content = $('#task-manage-content');
-        this.$task_manage_type = $('#task-manage-type');
+        this.$task_manage_content = $('#task-create-content');
+        this.$task_manage_type = $('#task-create-type');
         this.$frame = null;
         this.$iframe_body = null;
         this.iframe_jQuery = null;
-        this.iframe_name = 'task-manage-content-iframe';
+        this.iframe_name = 'task-create-content-iframe';
         this.mode = this.$task_manage_type.data('editorMode');
         this.type = this.$task_manage_type.data('editorType');
         this.step = 1;
@@ -75,10 +75,11 @@ class Editor {
         let postData = $('#step1-form').serializeArray()
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
             .concat(this.$iframe_body.find("#step3-form").serializeArray());
+            console.log(postData);
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                location.reload();
+                // location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');
@@ -117,14 +118,12 @@ class Editor {
     _initIframe() {
         let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"></iframe>';
         this.$task_manage_content.html(html).show(); 
-        this.$frame = $('#'+this.iframe_name);
-        // this.$frame.iFrameResize([{log: true}]);
+        this.$frame = $('#'+this.iframe_name).iFrameResize();
         let loadiframe = () => {
             this.loaded = true;
             let validator = {};
             this.iframe_jQuery = this.$frame[0].contentWindow.$;
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
-            // this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
             this.$iframe_body.find("#step2-form").data('validator', validator);
             this.$iframe_body.find("#step3-form").data('validator', validator); 
@@ -157,9 +156,7 @@ class Editor {
             var $from = this.$iframe_body.find("#step" + step + "-form");
             validator = this.iframe_jQuery.data($from[0], 'validator');
         }
-
         if (validator && !validator.form()) {
-            this.loaded ? this.$frame.height(this.$iframe_body.height()) : "";
             return false;
         }
         return true;
@@ -197,8 +194,8 @@ class Editor {
     }
 
     _renderStep(step) {
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
-        $('#task-manage-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
+        $('#task-create-step').find('li:eq(' + (step - 1) + ')').addClass('doing').prev().addClass('done').removeClass('doing');
+        $('#task-create-step').find('li:eq(' + (step - 1) + ')').next().removeClass('doing').removeClass('done');
     }
 
     _renderContent(step) {

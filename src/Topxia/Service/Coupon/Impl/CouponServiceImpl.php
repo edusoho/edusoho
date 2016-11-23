@@ -144,7 +144,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不存在', array('%code%' => $code))
+                'message' => ''
             );
         }
 
@@ -172,14 +172,14 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                'message' => ''
             );
         }
 
         if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                'message' => ''
             );
         }
 
@@ -187,7 +187,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
                     'useable' => 'no',
-                    'message' => $this->getKernel()->trans('优惠券%code%不可用', array('%code%' => $code))
+                    'message' => ''
                 );
             }
         }
@@ -317,6 +317,11 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->createService('System.SettingService');
     }
 
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:Classroom.ClassroomService');
+    }
+
     private function getLogService()
     {
         return $this->createService('System.LogService');
@@ -325,6 +330,11 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getNotificationService()
     {
         return $this->createService('User.NotificationService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
     private function getUserService()

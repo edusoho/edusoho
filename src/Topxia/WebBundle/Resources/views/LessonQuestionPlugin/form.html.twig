@@ -1,6 +1,6 @@
-<form id="lesson-question-plugin-form" method="post" action="{{ path('course_lesson_plugin_question_create') }}">
+<form class="lesson-question-plugin-form" id="lesson-question-plugin-form" method="post" action="{{ path('course_lesson_plugin_question_create') }}">
 
-	<div class="form-group">
+	<div class="form-group mb0">
 		<div class="controls">
 	    {{ form_widget(form.title, {attr:{class:'form-control expand-form-trigger', placeholder:'我要提问'|trans, 'data-display':'标题'|trans}}) }}
     </div>
