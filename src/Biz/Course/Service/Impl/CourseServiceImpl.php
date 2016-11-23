@@ -42,22 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'learnMode',
             'expiryMode'
         ));
-        if ($course['expiryMode'] == 'days') {
-            unset($course['expiryStartDate']);
-            unset($course['expiryEndDate']);
-        } else {
-            unset($course['expiryDays']);
-            if (isset($course['expiryStartDate'])) {
-                $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
-            }
-            if (isset($course['expiryEndDate'])) {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
-            }
-        }
-
-        if (empty($course['title'])) {
-            throw new InvalidArgumentException('标题不能为空');
-        }
+        $course = $this->validateCourse($course);
         //TODO 确认下是否需要判重，另外，应该查找同一个courseSetId下的courses
         $existCourses = $this->getCourseDao()->findCoursesByTitle($course['title']);
         if (!empty($existCourses)) {
@@ -72,7 +57,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        //TODO validator
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'summary',
+            'goals',
+            'audiences'
+        ));
+        $course = $this->getCourseDao()->get($id);
+        if (empty($course)) {
+            throw new ResourceNotFoundException('Course', $id);
+        }
+        if ($course['status'] == 'published') {
+            unset($fields['learnMode']);
+            unset($fields['expiryMode']);
+            unset($fields['expiryDays']);
+            unset($fields['expiryStartDate']);
+            unset($fields['expiryEndDate']);
+        }
+        $fields = $this->validateCourse($fields);
 
         return $this->getCourseDao()->update($id, $fields);
     }
@@ -177,6 +185,35 @@ class CourseServiceImpl extends BaseService implements CourseService
             $courseResult['status'] = 'published';
         }
         $this->getCourseDao()->update($id, $courseResult);
+    }
+
+    protected function validateCourse($course)
+    {
+        if ($course['expiryMode'] == 'days') {
+            unset($course['expiryStartDate']);
+            unset($course['expiryEndDate']);
+        } else {
+            unset($course['expiryDays']);
+            if (isset($course['expiryStartDate'])) {
+                $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+            } else {
+                throw new InvalidArgumentException('有效期的开始日期不能为空');
+            }
+            if (isset($course['expiryEndDate'])) {
+                $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
+            } else {
+                throw new InvalidArgumentException('有效期的截止日期不能为空');
+            }
+            if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
+                throw new InvalidArgumentException('有效期的截止日期需晚于开始日期');
+            }
+        }
+
+        if (empty($course['title'])) {
+            throw new InvalidArgumentException('标题不能为空');
+        }
+
+        return $course;
     }
 
     protected function getCourseAuditDao()
