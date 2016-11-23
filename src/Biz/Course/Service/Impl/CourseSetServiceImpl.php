@@ -16,6 +16,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         //TODO validator
 
+        //TODO  同时创建默认的教学计划
+
         return $this->getCourseSetDao()->create($course);
     }
 

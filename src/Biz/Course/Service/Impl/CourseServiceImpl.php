@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -35,13 +36,36 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createCourse($course)
     {
-        //TODO validator
+        $course = ArrayToolkit::parts($course, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode'
+        ));
         if ($course['expiryMode'] == 'days') {
             unset($course['expiryStartDate']);
             unset($course['expiryEndDate']);
         } else {
             unset($course['expiryDays']);
+            if (isset($course['expiryStartDate'])) {
+                $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
+            }
+            if (isset($course['expiryEndDate'])) {
+                $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
+            }
         }
+
+        if (empty($course['title'])) {
+            throw new InvalidArgumentException('标题不能为空');
+        }
+        //TODO 确认下是否需要判重，另外，应该查找同一个courseSetId下的courses
+        $existCourses = $this->getCourseDao()->findCoursesByTitle($course['title']);
+        if (!empty($existCourses)) {
+            throw new InvalidArgumentException('标题已被占用');
+        }
+
+        $course['status']      = 'draft';
+        $course['auditStatus'] = 'draft';
 
         return $this->getCourseDao()->create($course);
     }
@@ -66,8 +90,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteCourse($id)
     {
-        //TODO
-        //validator if course can be deleted
+        $course = $this->getCourseDao()->get($id);
+        if (empty($course)) {
+            throw new ResourceNotFoundException('Course', $id);
+        }
+        if ($course['status'] == 'published') {
+            throw new AccessDeniedException('已发布的教学计划不允许删除');
+        }
 
         return $this->getCourseDao()->delete($id);
     }
@@ -77,6 +106,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
             throw new ResourceNotFoundException('Course', $id);
+        }
+        if ($course['status'] != 'published') {
+            throw new AccessDeniedException('教学计划尚未发布');
         }
         $course['status'] = 'closed';
 
@@ -101,8 +133,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw new ResourceNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'draft') {
-            //TODO change to IllegalOperationException
-            throw new AccessDeniedException('Course', $id, 'Audit');
+            throw new AccessDeniedException('只允许发布未发布教学计划');
         }
 
         $audit = array(
@@ -115,7 +146,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getCourseAuditDao()->create($audit);
         $this->getCourseDao()->update($id, array(
-            'auditStatus' => 'process'
+            'auditStatus' => 'committed'
         ));
     }
 
@@ -126,10 +157,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw new ResourceNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'committed') {
-            //TODO change to IllegalOperationException
-            throw new AccessDeniedException('Course', $id, 'Audit');
+            throw new AccessDeniedException('无法审核该教学计划');
         }
-        $result = $reject ? 'reject' : 'pass';
+        $result = $reject ? 'reject' : 'accept';
         $audit  = array(
             'courseId'    => $course['id'],
             'courseSetId' => $course['courseSetId'],
@@ -139,10 +169,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $this->getCourseAuditDao()->create($audit);
-        $this->getCourseDao()->update($id, array(
+        $courseResult = array(
             'auditStatus' => $result,
             'auditRemark' => $remark
-        ));
+        );
+        if ($reject) {
+            $courseResult['status'] = 'published';
+        }
+        $this->getCourseDao()->update($id, $courseResult);
     }
 
     protected function getCourseAuditDao()
