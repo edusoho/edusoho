@@ -80,6 +80,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             $this->getSettingService()->set('user_partner', $setting);
+            $this->getLogService()->info('upgrade', 'discuz_config', 'move discuz config', $setting);
         }
 
 
@@ -121,6 +122,15 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
+
+    /**
+     * @return \Topxia\Service\System\LogService
+     */
+    private function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
+    }
+
 }
 
 abstract class AbstractUpdater
