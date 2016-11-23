@@ -11,34 +11,6 @@ define(function(require, exports, module) {
 
         $("[data-toggle='popover']").popover();
 
-         var spaceItemChart = echarts.init(document.getElementById('spaceItemChart'));
-         var option = {
-            title: {
-                text: ''
-            },
-            tooltip: {},
-            legend: {
-                data:['时间']
-            },
-            xAxis: {
-                data: ["2016/02","2016/03","2016/04","2016/05","2016/05","2016/06"]
-            },
-            yAxis: {},
-            series: [{
-                name: '容量(G)',
-                type: 'bar',
-                data: [50, 220, 136, 110, 10, 90]
-            }],
-            color:['#428BCA'],
-            grid:{
-                show:true,
-                borderColor:'#fff',
-                backgroundColor:'#fff'
-            }
-        };
-        spaceItemChart.setOption(option);
-        
-
         var $form = $("#cloud-setting-form");
         var uploader = new Uploader({
             trigger: '#cloud-video-watermark-upload',
@@ -132,7 +104,6 @@ define(function(require, exports, module) {
 
         function initUploader()
         {
-            console.log(12);
             var $el = $('#balloon-uploader');
             var uploader = new BatchUploader({
                 element: $el,

@@ -1,6 +1,14 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="">升级</a>｜<a href="">续费</a>  
+    <a href="">升级</a>｜
+    {% if overview.video.renewVideo.status == true %} 
+      <span class="text-muted">已续费</span>
+      <span class="text-danger pts">
+        {{overview.video.renewVideo.status.message|default('')}}
+      </span>
+    {% else %}
+      <a href="">续费</a>
+    {% endif %}
   </div>
   <div class="panel-body">
     <div class="row pvm">
@@ -9,44 +17,56 @@
       </div>
       <div class="col-xs-7">
         <div class="progress mbm cloud-progress">
-          <div class="progress-bar progress-bar-storage progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+          <div class="progress-bar progress-bar-storage progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{overview.space.usedPercentage}}%">
             <span class="sr-only">100% Complete</span>
           </div>
         </div>
-        <span class="text-danger">20GB</span>/190GB
+        <span class="text-danger">{{overview.space.usedSpace}}GB</span>/{{overview.space.freeSpace}}GB
       </div>
-      <div class="col-xs-1" style="width:100px;padding-left:0">
-        <div class="progress mbm cloud-progress">
-          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
-            <span class="sr-only">100% Complete</span>
+      {% if overview.space.overUsedSpace != 0 %}
+        <div class="col-xs-1" style="width:100px;padding-left:0">
+          <div class="progress mbm cloud-progress">
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
+              <span class="sr-only">100% Complete</span>
+            </div>
           </div>
+          <div class="text-danger text-center">超额{{overview.space.overUsedSpace}}GB</div>
         </div>
-        <div class="text-danger text-center">超额20GB</div>
-      </div>
+      {% endif %}
     </div>
     <div class="row pvm">
       <div class="col-sm-2 text-right">
-        存储空间
+        本月流量
       </div>
       <div class="col-xs-7">
         <div class="progress mbm cloud-progress">
-          <div class="progress-bar progress-bar-storage" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+          <div class="progress-bar progress-bar-storage" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{overview.flow.usedPercentage}}%">
             <span class="sr-only">60% Complete</span>
           </div>
         </div>
-        <span>20GB</span>/190GB
+        <span class="text-danger">{{overview.flow.usedFlow}}GB</span>/{{overview.flow.freeFlow}}GB
       </div>
+      {% if overview.flow.overUsedFlow != 0 %}
+        <div class="col-xs-1" style="width:100px;padding-left:0">
+          <div class="progress mbm cloud-progress">
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
+              <span class="sr-only">100% Complete</span>
+            </div>
+          </div>
+          <div class="text-danger text-center">超额{{overview.space.overUsedSpace}}GB</div>
+        </div>
+      {% endif %}
     </div>
     <div class="row pvm">
       <div class="col-sm-2 text-right">
       服务期限
       </div>
       <div class="col-sm-7">
-         2016-01-10 ~ 2017-01-10
+         {{overview.video.firstday}} ~ {{overview.video.lastday}}
       </div>
       <div class="col-sm-offset-2 col-sm-7">
         <div class="text-danger">
-        云视频包已过期，请尽快续费
+          {{overview.video.message}}
         </div>
       </div>
     </div>

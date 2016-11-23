@@ -11,11 +11,11 @@
         </div>
         <div class="col-sm-7">
           <div class="progress mbm cloud-progress">
-            <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:80%">
+            <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{overview.yearPackage.usedPercentage}}%">
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <span class="color-danger">20GB</span>/100GB<span style="color:#aeaeae !important;">（剩余70GB）</span>
+          <span class="text-danger">{{overview.yearPackage.totalAmount-overview.yearPackage.amount}}GB</span>/{{overview.yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">（剩余{{overview.yearPackage.amount}}GB）</span>
         </div>
       </div>
       <div class="row pvm">
@@ -23,11 +23,11 @@
         服务期限
         </div>
         <div class="col-sm-7">
-         2017-10-21~2017-11-11
+         {{overview.yearPackage.startTime}}~{{overview.yearPackage.endTime}}
         </div>
         <div class="col-sm-offset-2 col-sm-7">
           <div class="text-danger">
-          您的流量年包已过期，请尽快续购（0571-28022356）
+            {{overview.yearPackage.message}}
           </div>
         </div>
       </div>
