@@ -352,8 +352,8 @@ define(function(require, exports, module) {
         var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
             var $container = $form.find('#subtitle-form-group');
-            $container.find('.js-subtitle-list').html('加载字幕...');
-            if ($container.length > 0) {
+            if ($container.length > 0 && 'id' in media) {
+                $container.find('.js-subtitle-list').html('加载字幕...');
                 $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
                     $container.find('.js-subtitle-list').html(html);
                     subtitleDialog = new SubtitleDialog({
