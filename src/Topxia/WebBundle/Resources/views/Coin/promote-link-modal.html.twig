@@ -5,7 +5,7 @@
 {% set title = 'ES网校' %}
 {% set picture = asset('assets/img/default/MAIN_icon.png') %}
 {% if setting('site.logo') %}
-{% set picture = filepath('../' ~ setting('site.logo'),'') %}
+{% set picture = asset(logo) %}
 {% else %}
 {% set picture = asset('assets/img/default/MAIN_icon.png') %}
 {% endif %}
