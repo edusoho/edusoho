@@ -52,7 +52,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
 
-        $courses = $this->getCourseDao()->searchCourses(array('courseIds' => $courseIds, 'status' => $status), $orderBy, $start, $limit);
+        $courses = $this->getCourseDao()->findNormalCoursesByStatusAndCourseIds($courseIds, $status, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($courses, 'id');
     }
