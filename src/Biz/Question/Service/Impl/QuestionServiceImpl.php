@@ -3,6 +3,7 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
@@ -36,7 +37,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveSubCount($question['parentId'], array('subCount' => '1'));
         }
 
-        $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -58,7 +59,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -83,7 +84,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->dispatchEvent("question.delete", array('question' => $question));
+        $this->dispatchEvent('question.delete', new Event($question));
 
         return $result;
     }

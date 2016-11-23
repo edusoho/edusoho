@@ -69,7 +69,8 @@ class QuestionManageController extends BaseController
             $data = $request->request->all();
 
             $data['courseId'] = $courseId;
-            $question         = $this->getQuestionService()->create($data);
+
+            $question = $this->getQuestionService()->create($data);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));

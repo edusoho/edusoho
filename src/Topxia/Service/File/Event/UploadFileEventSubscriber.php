@@ -21,9 +21,9 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
             'open.course.delete'        => 'onOpenCourseDelete',
 
             'article.delete'            => 'onArticleDelete',
-            'question.create'           => 'onQuestionCreate',
-            'question.update'           => 'onQuestionUpdate',
-            'question.delete'           => 'onQuestionDelete',
+            //'question.create'           => 'onQuestionCreate',
+            //'question.update'           => 'onQuestionUpdate',
+            //'question.delete'           => 'onQuestionDelete',
             'group.thread.post.delete'  => 'onGroupThreadPostDelete',
             'group.thread.delete'       => 'onGroupThreadDelete',
             'course.thread.delete'      => 'onCourseThreadDelete',
@@ -39,43 +39,43 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
         $this->deleteAttachment('article', $article['id']);
     }
 
-    public function onQuestionCreate(ServiceEvent $event)
+    /*public function onQuestionCreate(ServiceEvent $event)
     {
-        $context    = $event->getSubject();
-        $argument   = $context['argument'];
-        $question   = $context['question'];
-        $attachment = $argument['attachment'];
+    $context    = $event->getSubject();
+    $argument   = $context['argument'];
+    $question   = $context['question'];
+    $attachment = $argument['attachment'];
 
-        if (empty($attachment)) {
-            return false;
-        }
+    if (empty($attachment)) {
+    return false;
+    }
 
-        $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
-        $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+    $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+    $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
     }
 
     public function onQuestionUpdate(ServiceEvent $event)
     {
-        $context    = $event->getSubject();
-        $argument   = $context['argument'];
-        $question   = $context['question'];
-        $attachment = $argument['fields']['attachment'];
+    $context    = $event->getSubject();
+    $argument   = $context['argument'];
+    $question   = $context['question'];
+    $attachment = $argument['fields']['attachment'];
 
-        if (empty($attachment)) {
-            return false;
-        }
+    if (empty($attachment)) {
+    return false;
+    }
 
-        $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
-        $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+    $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+    $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
     }
 
     public function onQuestionDelete(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $question = $context['question'];
+    $context  = $event->getSubject();
+    $question = $context['question'];
 
-        $this->deleteAttachment('question.stem,question.analysis', $question['id']);
-    }
+    $this->deleteAttachment('question.stem,question.analysis', $question['id']);
+    }*/
 
     public function onGroupThreadPostDelete(ServiceEvent $event)
     {

@@ -37,16 +37,18 @@ class FillQuestionController extends BaseController
         $course      = $this->getCourseService()->getCourse($courseId);
         $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
 
+        $parentId       = $request->query->get('parentId', 0);
+        $parentQuestion = $this->getQuestionService()->get($parentId);
+
+        $features = array();
         if ($this->container->hasParameter('enabled_features')) {
             $features = $this->container->getParameter('enabled_features');
-        } else {
-            $features = array();
         }
         $enabledAudioQuestion = in_array('audio_question', $features);
 
         return $this->render('WebBundle:FillQuestion:form.html.twig', array(
             'course'               => $course,
-            'parentQuestion'       => null,
+            'parentQuestion'       => $parentQuestion,
             'enabledAudioQuestion' => $enabledAudioQuestion,
             'courseTasks'          => $courseTasks,
             'type'                 => $type
