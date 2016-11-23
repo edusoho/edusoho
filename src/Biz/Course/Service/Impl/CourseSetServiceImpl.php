@@ -21,13 +21,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'type',
             'title'
         ));
-        $this->getCourseSetDao()->create($course);
+        $created = $this->getCourseSetDao()->create($courseSet);
 
         // 同时创建默认的教学计划
         // XXX
         // 1. 是否创建默认教学计划应该是可配的；
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = array(
+            'courseSetId' => $created['id'],
             'title'       => '默认教学计划',
             'expiryMode'  => 'days',
             'expiryDays'  => 0,
@@ -37,6 +38,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'auditStatus' => 'draft'
         );
         $this->getCourseDao()->create($defaultCourse);
+
+        return $created;
     }
 
     public function updateCourseSet($id, $fields)

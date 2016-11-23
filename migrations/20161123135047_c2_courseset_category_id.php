@@ -12,7 +12,7 @@ class C2CoursesetCategoryId extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-            ALTER TABLE c2_course_set CHANGE categories categoryId int NOT NULL
+            ALTER TABLE c2_course_set CHANGE categories categoryId int
         ");
     }
 

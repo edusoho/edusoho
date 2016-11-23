@@ -10,8 +10,7 @@ class CourseSetController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            var_dump($data);
+            $data      = $request->request->all();
             $courseSet = $this->getCourseSetService()->createCourseSet($data);
             return $this->redirect($this->generateUrl('courseset_manage', array(
                 'id' => $courseSet['id']
