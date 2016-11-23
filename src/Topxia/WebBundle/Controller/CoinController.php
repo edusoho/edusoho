@@ -231,31 +231,6 @@ class CoinController extends BaseController
         return $recordTime;
     }
 
-    public function promoteLinkAction(Request $request)
-    {
-        $user          = $this->getCurrentUser();
-        $message       = null;
-        $site          = $this->getSettingService()->get('site', array());
-        $inviteSetting = $this->getSettingService()->get('invite', array());
-
-        $urlContent  = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
-
-        if ($inviteSetting['inviteInfomation_template']) {
-            $variables = array(
-                'siteName'    => $site['name'],
-                'registerUrl' => $registerUrl
-            );
-            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
-        }
-
-        return $this->render('TopxiaWebBundle:Coin:promote-link-modal.html.twig',
-            array(
-                'code'                      => $user['inviteCode'],
-                'inviteInfomation_template' => $message
-            ));
-    }
-
     public function writeInvitecodeAction(Request $request)
     {
         $user = $this->getCurrentUser();
