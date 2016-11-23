@@ -35,7 +35,6 @@ class VideoActivity extends Activity
             'create' => 'WebBundle:VideoActivity:create',
             'edit'   => 'WebBundle:VideoActivity:edit',
             'show'   => 'WebBundle:VideoActivity:show',
-            'player' => 'WebBundle:VideoActivity:player',
         );
     }
 

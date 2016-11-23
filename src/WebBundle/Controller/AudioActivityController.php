@@ -21,18 +21,6 @@ class AudioActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
-
-    public function playerAction(Request $request, $id, $courseId)
-    {
-        $activity = $this->getActivityService()->getActivity($id);
-        $context  = $request->query->all();
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'      => $activity['ext']["mediaId"],
-            'context' => $context
-        ));
-    }
-
-
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);

@@ -68,7 +68,6 @@ class AudioActivity extends Activity
             'create' => 'WebBundle:AudioActivity:create',
             'edit'   => 'WebBundle:AudioActivity:edit',
             'show'   => 'WebBundle:AudioActivity:show',
-            'player' => 'WebBundle:AudioActivity:player',
         );
     }
 

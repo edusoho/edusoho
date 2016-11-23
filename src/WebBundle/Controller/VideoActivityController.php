@@ -61,17 +61,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
-    public function playerAction(Request $request, $id, $courseId)
-    {
-        $activity = $this->getActivityService()->getActivity($id);
-        $context  = $request->query->all();
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'      => $activity['ext']["mediaId"],
-            'context' => $context
-        ));
-    }
-
-
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
