@@ -44,12 +44,10 @@ class VideoActivityController extends BaseController implements ActivityActionIn
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $task     = $this->tryLearnTask($courseId, $id);
         $activity = $this->getActivityService()->getActivity($id);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
             'activity' => $activity,
-            'task'     => $task,
             'courseId' => $courseId
         ));
     }
@@ -68,22 +66,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
             $activity['second'] = intval($activity['length'] % 60);
         }
         return $activity;
-    }
-
-
-    protected function tryLearnTask($courseId, $taskId)
-    {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($taskId);
-
-        if (empty($task)) {
-            throw $this->createResourceNotFoundException('task', $taskId);
-        }
-
-        if ($task['courseId'] != $courseId) {
-            throw $this->createAccessDeniedException();
-        }
-        return $task;
     }
 
     /**
