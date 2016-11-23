@@ -11,9 +11,16 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
     public function findByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ";
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq";
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
+
+    public function getByCourseIdAndSeq($courseId, $seq)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `seq` = ? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($courseId, $seq));
+    }
+
 
     public function getMaxSeqByCourseId($courseId)
     {
@@ -25,6 +32,12 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseChapterId = ? ";
         return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
+    }
+
+    public function waveSeqBiggerThanSeq($seq, $diff)
+    {
+        $sql = "UPDATE {$this->table()} SET seq = seq + ?  WHERE seq >?";
+        return $this->db()->executeUpdate($sql, array($diff, $seq));
     }
 
     public function declares()
