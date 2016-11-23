@@ -26,7 +26,7 @@ export const sortList = () => {
       console.log(data);
       //排序URL
       $.post($list.data('sortUrl'), {ids:data}, function(response){
-       
+        document.location.reload();
       });
     },
     serialize: function(parent, children, isContainer) {
