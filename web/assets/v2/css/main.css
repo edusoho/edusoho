@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3410,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -9685,6 +9685,15 @@ textarea {
   top: 50%;
   margin-top: -15px;
 }
+.lesson-list-wrapper.pbs {
+  padding-bottom: 100px !important;
+}
+.lesson-list-wrapper.pbm {
+  padding-bottom: 150px !important;
+}
+.lesson-list-wrapper.pbl {
+  padding-bottom: 200px !important;
+}
 .lesson-list {
   margin: 0 10px 0 40px;
   padding: 0;
@@ -10965,7 +10974,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
