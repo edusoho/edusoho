@@ -68,7 +68,7 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     private function getHttpHost()
     {
-        return $this->getKernel()->getEnvVariable('host');
+        return $this->getKernel()->getEnvVariable('schemeAndHost');
     }
 
     protected function getUploadFileService()
