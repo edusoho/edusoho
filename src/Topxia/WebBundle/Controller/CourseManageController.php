@@ -47,7 +47,6 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            // var_dump($data);exit();
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程基本信息已保存！'));
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));

@@ -480,10 +480,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields = $this->fillOrgId($fields);
-        var_dump($fields);
-        $fields = CourseSerialize::serialize($fields);
-        var_dump($fields);exit();
+        $fields        = $this->fillOrgId($fields);
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
