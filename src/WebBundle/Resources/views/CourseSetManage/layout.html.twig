@@ -2,6 +2,7 @@
 
 {% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
 {% do css(['web.css']) %}
+{% set use_webapck_loader = true %}
 
 {% block content %}
 {{ render(controller('TopxiaWebBundle:Course:header', {course:courseSet, manage: true})) }}

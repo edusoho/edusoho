@@ -9,8 +9,17 @@ class CourseSetController extends BaseController
     public function showAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseId  = $request->query->get('courseId', 0);
+        $course    = array();
+        if ($courseId > 0) {
+            $course = $this->getCourseService()->getCourse($courseId);
+        } else {
+            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        }
+        //do other things
         return $this->render('WebBundle:CourseSet:show.html.twig', array(
-            'courseSet' => $courseSet
+            'courseSet' => $courseSet,
+            'course'    => $course
         ));
     }
 
