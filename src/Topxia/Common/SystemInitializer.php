@@ -17,6 +17,7 @@ use Topxia\Service\Content\ContentService;
 use Topxia\Service\Content\FileService;
 use Topxia\Service\Content\NavigationService;
 use Topxia\Service\Crontab\CrontabService;
+use Topxia\Service\Dictionary\DictionaryService;
 use Topxia\Service\System\SettingService;
 use Topxia\Service\Taxonomy\CategoryService;
 use Topxia\Service\Taxonomy\TagService;
@@ -54,6 +55,7 @@ class SystemInitializer
         $this->_initCrontabJob();
         $this->_initOrg();
         $this->_initRole();
+        $this->_initDictionary();
 
         $this->_initDefaultSetting();
         $this->_initMagicSetting();
@@ -63,6 +65,32 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+    }
+
+    protected function _initDictionary()
+    {
+        $this->output->write('  初始化字典  ');
+        
+        $dictionary = $this->getDictionaryService()->addDictionary(array(
+            'name' => '退学原因',
+            'type' => 'refund_reason'
+        ));
+
+        $this->getDictionaryService()->addDictionaryItem(array(
+            'type' => $dictionary['type'],
+            'name' => '课程内容质量差',
+            'createdTime' => time(),
+            'updateTime' => time()
+        ));
+
+        $this->getDictionaryService()->addDictionaryItem(array(
+            'type' => $dictionary['type'],
+            'name' => '老师服务态度不好',
+            'createdTime' => time(),
+            'updateTime' => time()
+        ));
+
+        $this->output->writeln(' ...<info>成功</info>');
     }
 
     public function initAdminUser($fields)
@@ -610,10 +638,17 @@ EOD;
 
     protected function _initOrg()
     {
+        $org = $this->getOrgService()->getOrgByCode('FullSite');
+
+        if(!empty($org)){
+            return;
+        }
+
         $org = array(
             'name' => '全站',
             'code' => 'FullSite'
         );
+
         $this->getOrgService()->createOrg($org);
     }
 
@@ -736,6 +771,14 @@ EOD;
     protected function getRoleService()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+    }
+
+    /**
+     * @return DictionaryService
+     */
+    protected function getDictionaryService()
+    {
+        return ServiceKernel::instance()->createService('Dictionary.DictionaryService');
     }
 }
 
