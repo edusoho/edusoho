@@ -96,7 +96,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $currentSeq = $task['seq'];
         $result = $this->getTaskDao()->delete($id);
         $this->getActivityService()->deleteActivity($task['activityId']);
-        $this->getTaskDao()->decreaseSeq($currentSeq);
+        $this->getTaskDao()->waveSeqBiggerThan($currentSeq, -1);
 
         return $result;
     }
