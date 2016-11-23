@@ -18,7 +18,7 @@ class MediaServiceImpl extends BaseService implements MediaService
         );
 
         $options = array_merge($defaultOptions, $options);
-        $file = $this->getCloudFileService()->getByGlobalId($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
         if (empty($file)) {
             throw $this->createNotFoundException($this->trans('无效文件'));
         }
