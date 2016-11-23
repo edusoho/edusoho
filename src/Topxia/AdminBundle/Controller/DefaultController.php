@@ -15,8 +15,26 @@ use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
-
     public function indexAction(Request $request)
+    {
+        $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
+        $permissionNames = ArrayToolkit::column($permissions, 'code');
+        if (in_array('admin_homepage', $permissionNames)) {
+            return $this->redirect($this->generateUrl('admin_homepage'));
+        }
+
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permissions[0]);
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+
+        if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
+            $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+        }
+
+        $permissionPath = $this->container->get('permission.twig.permission_extension')->getPermissionPath($this, array('needs_context' => true, 'needs_environment' => true), $tabMenu);
+        return $this->redirect($permissionPath);
+    }
+
+    public function homepageAction(Request $request)
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
@@ -582,5 +600,10 @@ class DefaultController extends BaseController
     protected function isPluginInstalled($name)
     {
         return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
+    }
+
+    protected function getRoleService()
+    {
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 }
