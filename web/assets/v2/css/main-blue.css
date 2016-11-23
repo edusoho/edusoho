@@ -6962,6 +6962,48 @@ textarea {
   margin-bottom: 30px;
   background-color: #ffffff;
 }
+.tabs-wrapper .tabs-mark-group {
+  border-bottom: 1px dashed #e4ecf3;
+}
+.tabs-wrapper .tabs-mark-group .title {
+  width: 90px;
+  margin-top: 3px;
+  float: left;
+}
+.tabs-wrapper .tabs-mark-group .classify {
+  margin-top: 3px;
+}
+.tabs-wrapper .tabs-mark-group .classify i {
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark-group .classify a {
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark-group .classify a:hover,
+.tabs-wrapper .tabs-mark-group .classify a:focus {
+  color: #0081e6;
+}
+.tabs-wrapper .tabs-mark-group .content {
+  margin-left: 100px;
+}
+.tabs-wrapper .tabs-mark {
+  margin: 0 4px;
+}
+.tabs-wrapper .tabs-mark a {
+  border: 1px solid #e4ecf3;
+  padding: 2px 5px;
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark:hover a,
+.tabs-wrapper .tabs-mark:focus a,
+.tabs-wrapper .tabs-mark.active a {
+  color: #0081e6;
+  border: 1px solid #0081e6;
+}
+.tabs-wrapper .tabs-mark i {
+  font-size: 10px;
+  margin-left: 5px;
+}
 .tabs-wrapper .tabs-group {
   padding: 0 60px 0 15px;
   position: relative;
@@ -7001,9 +7043,6 @@ textarea {
 .tabs-wrapper .tabs-group .content > li:focus > a,
 .tabs-wrapper .tabs-group .content > li.active > a {
   color: #0081e6;
-}
-.tabs-wrapper .tabs-group .content > li:first-child {
-  padding-left: 0;
 }
 .tabs-wrapper .tabs-group .tabs-toggle {
   position: absolute;
