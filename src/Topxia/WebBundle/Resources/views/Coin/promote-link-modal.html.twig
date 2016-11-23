@@ -2,6 +2,8 @@
 
 {% set url = inviteInfomation_template %}
 {% set message = setting('default.inviteShareContent') %}
+{% set title = 'ES网校' %}
+{% set picture = asset('assets/img/default/MAIN_icon.png') %}
 
 {% block title %}{{'分享邀请链接'|trans}}{% endblock %}
 {% block body %}
@@ -15,13 +17,15 @@
 </div>
 <script>app.load('coin/invite-content-copy')</script>
 {% endblock %}
-{% block footer %}
-    <div class="js-social-share-params" data-title="aaa" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
 
-    <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="{{'分享到微信'|trans}}" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><i class="es-icon es-icon-weixin"></i></a>
-    <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="{{'分享到新浪微博'|trans}}" data-share="weibo"><i class="es-icon es-icon-weibo"></i></a>
-    <a href="javascript:;" class="js-social-share" data-cmd="qq" title="{{'分享到QQ好友'|trans}}" data-share="qq"><i class="es-icon es-icon-qq"></i></a>
-    <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="{{'分享到QQ空间'|trans}}" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
+{% block footer %}
+    <div class='pull-right'>
+      <div class="js-social-share-params pull-left mrm mts es-share" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
+      <a href="javascript:;" class="js-social-share color-gray" data-cmd="weixin" title="{{'分享到微信'|trans}}" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><i class="es-icon es-icon-weixin"></i></a>
+      <a href="javascript:;" class="js-social-share color-gray" data-cmd="tsina" title="{{'分享到新浪微博'|trans}}" data-share="weibo"><i class="es-icon es-icon-weibo"></i></a>
+      <a href="javascript:;" class="js-social-share color-gray" data-cmd="qq" title="{{'分享到QQ好友'|trans}}" data-share="qq"><i class="es-icon es-icon-qq"></i></a>
+      <a href="javascript:;" class="js-social-share color-gray" data-cmd="qzone" title="{{'分享到QQ空间'|trans}}" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
+        </div>
+      <button class="btn-sm btn btn-primary pull-left" id='copy'>{{'复制到剪贴板'|trans}}</button>
     </div>
-    <button class="btn-sm btn btn-primary" id='copy'>{{'复制到剪贴板'|trans}}</button>
 {% endblock %}
