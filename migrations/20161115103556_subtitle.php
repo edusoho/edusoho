@@ -12,9 +12,8 @@ class Subtitle extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        if (!$this->isFieldExist('course_member', 'finishedTime')) {
-            $db->exec("ALTER TABLE `course_member` ADD `finishedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '完成课程时间' AFTER `isLearned`");
-        }
+
+        $db->exec("ALTER TABLE `course_member` ADD `finishedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '完成课程时间' AFTER `isLearned`");
 
         $now = time();
         $db->exec("UPDATE `course_member` SET finishedTime = {$now} WHERE isLearned = 1");
@@ -29,13 +28,10 @@ class Subtitle extends Migration
                 PRIMARY KEY (`id`)
             ) COMMENT='字幕关联表';");
 
-        if ($this->isFieldExist('upload_files', 'type')) {
-            $db->exec("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
-        }
 
-        if ($this->isFieldExist('upload_file_inits', 'type')) {
-            $db->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
-        }
+        $db->exec("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+        $db->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+
     }
 
     /**
@@ -43,16 +39,12 @@ class Subtitle extends Migration
      */
     public function down()
     {
-
-    }
-
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql    = "DESCRIBE `{$table}` `{$filedName}`;";
         $biz = $this->getContainer();
-        $db = $biz['db'];
-        $result = $db->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
+        $db  = $biz['db'];
 
+        $db->exec("DROP TABLE IF EXISTS `subtitle`;");
+        $db->exec("ALTER TABLE `course_member` DROP COLUMN `finishedTime`");
+        $db->exec("ALTER TABLE `upload_file_inits` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+        $db->exec("ALTER TABLE `upload_files` CHANGE COLUMN `type` `type` enum('document','video','audio','image','ppt','other','flash') NOT NULL DEFAULT 'other' COMMENT '文件类型';");
+    }
 }

@@ -23,7 +23,7 @@ npm-debug.log
 /plugins/*
 !/plugins/.gitkeep
 /build/
-/bin/
+/bin/*
 !/bin/phpmig
 /composer.phar
 /scripts

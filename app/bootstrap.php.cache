@@ -1055,6 +1055,10 @@ public function isMethodSafe()
 {
 return in_array($this->getMethod(), array('GET','HEAD','OPTIONS','TRACE'));
 }
+public function isMethodCacheable()
+{
+return in_array($this->getMethod(), array('GET','HEAD'));
+}
 public function getContent($asResource = false)
 {
 $currentContentIsResource = is_resource($this->content);
@@ -1337,49 +1341,4 @@ return $clientIps ? array_reverse($clientIps) : array($firstTrustedIp);
 }
 }
 }
-namespace Symfony\Component\ClassLoader
-{
-class ApcClassLoader
-{
-private $prefix;
-protected $decorated;
-public function __construct($prefix, $decorated)
-{
-if (!function_exists('apcu_fetch')) {
-throw new \RuntimeException('Unable to use ApcClassLoader as APC is not installed.');
-}
-if (!method_exists($decorated,'findFile')) {
-throw new \InvalidArgumentException('The class finder must implement a "findFile" method.');
-}
-$this->prefix = $prefix;
-$this->decorated = $decorated;
-}
-public function register($prepend = false)
-{
-spl_autoload_register(array($this,'loadClass'), true, $prepend);
-}
-public function unregister()
-{
-spl_autoload_unregister(array($this,'loadClass'));
-}
-public function loadClass($class)
-{
-if ($file = $this->findFile($class)) {
-require $file;
-return true;
-}
-}
-public function findFile($class)
-{
-$file = apcu_fetch($this->prefix.$class, $success);
-if (!$success) {
-apcu_store($this->prefix.$class, $file = $this->decorated->findFile($class) ?: null);
-}
-return $file;
-}
-public function __call($method, $args)
-{
-return call_user_func_array(array($this->decorated, $method), $args);
-}
-}
-}
+namespace {require __DIR__.'/../vendor/symfony/symfony/src/Symfony/Component/ClassLoader/ApcClassLoader.php';}
