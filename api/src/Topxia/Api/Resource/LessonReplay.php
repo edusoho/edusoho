@@ -36,13 +36,32 @@ class LessonReplay extends BaseResource
         }
 
         $user = $this->getCurrentUser();
+        $response = array(
+            'url' => '',
+            'provider' => $lesson['provider'],
+            'lessonId' => $lesson['id']
+        );
         try {
-            $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+            // play es replay
+            if ($lesson['provider'] == 5) {
+                //获取globalid
+                $res = $this->getCourseService()->entryReplay($lesson['id'], $$visableReplays[0]['replayId']);
+                $globalId = empty($res['resourceNo']) ? 0 : $res['resourceNo'];
+                $options = array(
+                    'fromApi' => true,
+                    'times' => 2
+                );
+                $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
+            } else {
+                $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+                $response['url'] = $res['url'];
+            }
+            
         } catch (Exception $e) {
             return $this->error('503', '获取回放失败！');
         }
 
-        return $res;
+        return $response;
     }
 
     public function filter($res)
@@ -53,6 +72,11 @@ class LessonReplay extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getMediaService()
+    {
+        return $this->getServiceKernel()->createService('Media.MediaService');
     }
 
     protected function sendRequest($method, $url, $headers = array(), $params = array())
