@@ -3,8 +3,8 @@
 {% set url = inviteInfomation_template %}
 {% set message = setting('default.inviteShareContent') %}
 {% set title = 'ES网校' %}
-{% if logo|default('') %}
-{% set picture = asset(logo) %}
+{% if setting('site.logo') %}
+{% set picture = asset(setting('site.logo')) %}
 {% else %}
 {% set picture = asset('assets/img/default/MAIN_icon.png') %}
 {% endif %}

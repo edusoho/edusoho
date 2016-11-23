@@ -251,7 +251,6 @@ class CoinController extends BaseController
 
         return $this->render('TopxiaWebBundle:Coin:promote-link-modal.html.twig',
             array(
-                'logo'                      => $site['logo'],
                 'code'                      => $user['inviteCode'],
                 'inviteInfomation_template' => $message
             ));
