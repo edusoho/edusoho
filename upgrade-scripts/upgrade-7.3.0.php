@@ -34,11 +34,11 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    private function updateScheme($index)
     {
         $connection = $this->getConnection();
 
-        $connection->exec("update course_member cm1 LEFT JOIN classroom_member cm2 ON cm1.classroomId = cm2.classroomId and cm1.userId=cm2.userId and cm1.joinedType='classroom' set cm1.levelId=cm2.levelId where cm1.joinedType='classroom'");
+        $connection->exec("update course_member cm1 set cm1.levelId=(select levelId from classroom_member cm2 where cm1.classroomId = cm2.classroomId and cm1.userId=cm2.userId) where cm1.joinedType='classroom';");
 
         $setting = $this->getSettingService()->get('user_partner');
         if(!empty($setting['mode']) && $setting['mode'] == 'phpwind') {

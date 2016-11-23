@@ -83,7 +83,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return array(
                 'index'    => 1,
                 'message'  => '正在升级数据...',
-                'progress' => 4.4
+                'progress' => 0
             );
         }
 
@@ -100,7 +100,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return array(
                 'index'    => $index + 1,
                 'message'  => '正在升级数据...',
-                'progress' => 4.4
+                'progress' => 0
             );
         }
     }

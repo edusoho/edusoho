@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return array(
                     'index' => 9,
                     'message' => '正在解压下载后的文件',
-                    'progress' => 4.4
+                    'progress' => 0
                 );
             }
 
@@ -68,7 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return array(
             'index' => $index,
             'message' => '下载文件'.intval($index/9*100).'%',
-            'progress' => 4.4
+            'progress' => 0
         );
     }
 

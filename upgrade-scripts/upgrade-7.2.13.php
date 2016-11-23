@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return array(
                     'index'    => 19,
                     'message'  => '正在解压下载后的文件',
-                    'progress' => 4.4
+                    'progress' => 0
                 );
             }
 
@@ -29,7 +29,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return array(
                     'index'    => 20,
                     'message'  => '正在执行升级脚本',
-                    'progress' => 4.4
+                    'progress' => 0
                 );
             }
 
