@@ -138,7 +138,6 @@ class Show {
         });
 
         player.on("paused", () => {
-            console.log('paused------------');
             messenger.sendToParent("paused", {pause: true});
         });
 

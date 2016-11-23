@@ -7,7 +7,9 @@ import 'bootstrap-notify';
 import 'common/bootstrap-modal-hack';
 
 
-$('[data-toggle="popover"]').popover();
+$('[data-toggle="popover"]').popover({
+  html:true,
+});
 
 $('[data-toggle="tooltip"]').tooltip();
 

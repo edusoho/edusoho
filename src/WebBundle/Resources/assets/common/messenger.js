@@ -15,18 +15,16 @@ class EsMessager extends Emitter {
     setup() {
         let self = this;
         var messenger = new Messenger(this.name, this.project);
-        if (this.type == "child") {
-            messenger.addTarget(window.parent, 'parent');
-            console.log('-child',messenger.targets)
-        } else if (this.type == "parent") {
-            console.log('--parent',messenger.targets, this.children );
+        if (this.type == 'child') {
+            messenger.addTarget(window.self, 'parent');
+        } else if (this.type == 'parent') {
+            messenger.addTarget(window.self, 'child');
             var children = this.children;
             for (var i = children.length - 1; i >= 0; i--) {
                 messenger.addTarget(children[i].contentWindow, children[i].id);
             }
         }
         messenger.listen(function (msg) {
-            console.log('listen',msg);
             msg = JSON.parse(msg);
             self.trigger(msg.eventName, msg.args);
         });
@@ -34,7 +32,6 @@ class EsMessager extends Emitter {
     }
 
     sendToParent(eventName, args) {
-        console.log('sendToParent',eventName, args,this.messenger.targets);
         this.messenger.targets['parent'].send(
             this.convertToString(eventName, args)
         );

@@ -1,9 +1,3 @@
-/**
- * Created by Simon on 10/11/2016.
- */
-/**
- * Created by Simon on 08/11/2016.
- */
 import  EsMessager from '../../../common/messenger';
 class VideoPlay {
     constructor(elment) {

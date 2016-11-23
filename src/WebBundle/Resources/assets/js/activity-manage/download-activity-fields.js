@@ -30,7 +30,6 @@ $('#step2-form').on('click', '.close.delete-btn', function () {
     let $parent = $(this).parents('.list-group-item');
     let mediaId = $parent.data('id');
     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-    console.log(items, items[mediaId], 'd------');
     if (items && items[mediaId]) {
         delete items[mediaId];
         $("#materials").val(JSON.stringify(items));
@@ -48,14 +47,11 @@ $('#step2-form').on('click', '.js-download-material-add', function () {
             size: 0
         };
         $("#media").val(JSON.stringify(data));
-        console.log('link', $("#media").val());
     }
 
     let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
 
     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-
-    console.log(isEmpty($("#materials").val()), $("#materials").val(), media, items)
 
     if (isEmpty(media)) {
         alert('add file first')
@@ -63,7 +59,6 @@ $('#step2-form').on('click', '.js-download-material-add', function () {
     }
 
     if (!isEmpty(items) && items[media.id]) {
-        console.log('已存在该资源')
         $("#media").val(null);
         return;
     }
@@ -116,9 +111,5 @@ const fileSelect = file => {
 }
 
 const fileChooser = new FileChooser();
-
-// const action = data => {
-//     console.log('action triggered', data);
-// }
 
 fileChooser.on('select', fileSelect);
