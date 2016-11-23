@@ -57,10 +57,6 @@ class TaskController extends BaseController
         ));
     }
 
-    public function finishAction(Request $request, $courseId, $id)
-    {
-    }
-
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {

@@ -86,26 +86,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         return $task;
     }
 
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android", "HTC");
-
-        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
-            return strpos($userAgent, $agent) > -1;
-        });
-    }
-
-    protected function isHiddenVideoHeader($isHidden = false)
-    {
-        $storage = $this->setting("storage");
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     /**
      * @return ActivityService
      */
