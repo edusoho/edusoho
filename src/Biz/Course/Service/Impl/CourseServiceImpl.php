@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
