@@ -60,6 +60,10 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourse($data['id'], $data);
+        }
         $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course        = $this->getCourseService()->getCourse($courseId);
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
