@@ -120,16 +120,14 @@ class DoTest
 			values[questionId] = answer;
 		})
 
-		$.post($target.data('url'),{data:values,usedTime:0},function(response){
-			if (response.result) {
-				console.log(emitter);
-				emitter.emit('finish').then(() => {
-		      console.log('testpaper.finish');
-		    }).catch((error) => {
-		      console.error(error);
-		    });
-			}
-		})
+		$.post($target.data('url'),{data:values,usedTime:0})
+			.done((response) => {
+				if (response.result) {
+					emitter.emit('finish');
+				}
+
+				
+			})
 	}
 }
 

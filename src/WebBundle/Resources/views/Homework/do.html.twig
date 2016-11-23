@@ -3,7 +3,7 @@
 {% block paper_body %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      {{ title|default('作业')|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':0}) }}</small>
+      {{ '作业'|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':0}) }}</small>
     </div>
 
     <div class="panel-body">
@@ -20,6 +20,10 @@
     </div>
 
   </div>
+{% endblock %}
+
+{% block finish_dialog_btn %}
+  <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('homework_result_show', { resultId: paperResult.id|default(0) }) }}">{{'确认提交'|trans}}</button>
 {% endblock %}
 
 {% block paper_sidebar %}

@@ -66,7 +66,9 @@
           </div>
           <div class="modal-footer">
             <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-            <button class="btn btn-primary" id="testpaper-finish-btn" data-saving-text="{{'正在交卷, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}">{{'确认交卷'|trans}}</button>
+            {% block finish_dialog_btn %}
+              <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在交卷, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">{{'确认交卷'|trans}}</button>
+            {% endblock %}
           </div>
         </div>
       </div>

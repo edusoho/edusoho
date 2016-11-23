@@ -99,6 +99,61 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $filtedFields;
     }
 
+    public function updateSubmitedResult($resultId, $usedTime)
+    {
+        $result      = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $homework    = $this->getTestpaperService()->getTestpaper($result['testId']);
+        $items       = $this->getTestpaperService()->findItemsByTestId($result['testId']);
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
+
+        $fields = array(
+            'status' => $hasEssay ? 'reviewing' : 'finished'
+        );
+
+        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['objectiveScore'] = $accuracy['sumScore'];
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        $fields['score'] = 0;
+
+        if (!$hasEssay) {
+            $fields['score'] = $fields['objectiveScore'];
+
+            $rightPercent           = number_format($accuracy['rightItemCount'] / $homework['itemCount'], 2) * 100;
+            $fields['passedStatus'] = $this->getPassedStatus($rightPercent, $homework);
+        }
+
+        $fields['usedTime'] = $usedTime + $result['usedTime'];
+        $fields['endTime']  = time();
+
+        return $this->getTestpaperService()->updateTestpaperResult($result['id'], $fields);
+    }
+
+    protected function getPassedStatus($rightPercent, $homework)
+    {
+        if (empty($homework['passedCondition'])) {
+            return 'none';
+        }
+
+        if ($rightPercent < $homework['passedCondition'][0]) {
+            $passedStatus = 'unpassed';
+        } elseif ($rightPercent >= $homework['passedCondition'][0] && $rightPercent < $homework['passedCondition'][1]) {
+            $passedStatus = 'passed';
+        } elseif ($rightPercent >= $homework['passedCondition'][1] && $rightPercent < $homework['passedCondition'][2]) {
+            $passedStatus = 'good';
+        } elseif ($rightPercent >= $homework['passedCondition'][2]) {
+            $passedStatus = 'excellent';
+        } else {
+            $passedStatus = 'none';
+        }
+
+        return $passedStatus;
+    }
+
     protected function createQuestionItems($homeworkId, $questionIds)
     {
         $homeworkItems = array();

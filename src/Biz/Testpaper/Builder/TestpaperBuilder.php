@@ -139,6 +139,41 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $filtedFields;
     }
 
+    public function updateSubmitedResult($resultId, $usedTime)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $testpaper       = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $items           = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
+
+        $fields = array(
+            'status' => $hasEssay ? 'reviewing' : 'finished'
+        );
+
+        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['objectiveScore'] = $accuracy['sumScore'];
+
+        $fields['score'] = 0;
+
+        if (!$hasEssay) {
+            $fields['score']       = $fields['objectiveScore'];
+            $fields['checkedTime'] = time();
+        }
+
+        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
+
+        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime']  = time();
+
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
+    }
+
     protected function createQuestionItems($questions)
     {
         $testpaperItems = array();

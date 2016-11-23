@@ -47,11 +47,14 @@ class HomeworkController extends BaseController
 
         $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
+        $activity = $this->getActivityService()->getActivity($result['lessonId']);
+
         return $this->render('WebBundle:Homework:do.html.twig', array(
             'paper'       => $homework,
             'questions'   => $questions,
             'course'      => $course,
             'paperResult' => $result,
+            'activity'    => $activity,
             'showTypeBar' => 0,
             'showHeader'  => 0
         ));
@@ -135,24 +138,20 @@ class HomeworkController extends BaseController
         return $set;
     }
 
-    public function submitAction(Request $request, $courseId, $homeworkResultId)
+    public function submitAction(Request $request, $resultId)
     {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
+            return $this->createJsonResponse(array('result' => false, 'message' => '作业已提交，不能再修改答案！'));
+        }
+
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $data = !empty($data['data']) ? $data['data'] : array();
+            $formData = $request->request->all();
 
-            //$homeworkResult = $this->getHomeworkService()->getResult($homeworkResultId);
-            $homeworkResult = $this->getHomeworkService()->submitHomework($homeworkResultId, $data);
+            $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
 
-            if (!empty($homeworkResult) && !empty($homeworkResult['lessonId'])) {
-                return $this->createJsonResponse(array(
-                    'courseId'         => $courseId,
-                    'lessonId'         => $homeworkResult['lessonId'],
-                    'homeworkId'       => $homeworkResult['homeworkId'],
-                    'homeworkResultId' => $homeworkResult['id'],
-                    'userId'           => $homeworkResult['userId']
-                ));
-            }
+            return $this->createJsonResponse(array('result' => true, 'message' => ''));
         }
     }
 
@@ -487,6 +486,11 @@ class HomeworkController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     protected function getUserService()

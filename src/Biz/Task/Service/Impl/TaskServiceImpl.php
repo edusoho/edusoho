@@ -159,7 +159,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $taskResult = array(
-            'activityId'   => $task['id'],
+            'activityId'   => $task['activityId'],
             'courseId'     => $task['courseId'],
             'courseTaskId' => $task['id'],
             'userId'       => $user['id']

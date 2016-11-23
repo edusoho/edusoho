@@ -178,7 +178,10 @@ homework_result_show:
     pattern: /homework/result/{resultId}/show
     defaults: { _controller: WebBundle:Homework:showResult }
 
-
+homework_finish:
+  path: /homework/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Homework:submit }
+  methods: [POST]
 
 #exercise
 course_manage_exercise_create:
@@ -202,7 +205,10 @@ exercise_result_show:
     pattern: /exercise/result/{resultId}/show
     defaults: { _controller: WebBundle:Exercise:showResult }
 
-
+exercise_finish:
+  path: /exercise/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Exercise:submit }
+  methods: [POST]
 
 
 

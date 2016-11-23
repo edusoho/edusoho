@@ -36,7 +36,7 @@
 	</div>
 	<div class="panel-footer">
 		{% if paperResult.id|default(0) > 0 %}
-			<button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'我要交卷'|trans}}</button>
+			<button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'我要交卷'|trans}}</button>
 		{% else %}
 			<button class="btn btn-success btn-block" disabled="disabled">{{'我要交卷'|trans}}</button>
 		{% endif %}

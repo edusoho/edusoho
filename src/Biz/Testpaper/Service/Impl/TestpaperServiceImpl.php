@@ -223,7 +223,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $this->submitAnswers($result['id'], $answers);
 
-        $paperResult = $this->countItemsScore($result['id'], $formData['usedTime']);
+        $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult($result['id'], $formData['usedTime']);
 
         $this->dispatchEvent('testpaper.finish', new ServiceEvent($paperResult));
 
@@ -521,43 +521,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->findItemResultsByResultId($testpaperResult['id']);
     }
 
-    //new
-    protected function countItemsScore($resultId, $usedTime)
-    {
-        $testpaperResult = $this->getTestpaperResult($resultId);
-        $testpaper       = $this->getTestpaper($testpaperResult['testId']);
-        $items           = $this->findItemsByTestId($testpaperResult['testId']);
-        $itemResults     = $this->findItemResultsByResultId($testpaperResult['id']);
-
-        $questionIds = ArrayToolkit::column($items, 'questionId');
-
-        $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
-
-        $fields = array(
-            'status' => $hasEssay ? 'reviewing' : 'finished'
-        );
-
-        $accuracy                 = $this->sumScore($itemResults);
-        $fields['objectiveScore'] = $accuracy['sumScore'];
-
-        $fields['score'] = 0;
-
-        if (!$hasEssay) {
-            $fields['score']       = $fields['objectiveScore'];
-            $fields['checkedTime'] = time();
-        }
-
-        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
-
-        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
-        $fields['endTime']  = time();
-
-        $fields['rightItemCount'] = $accuracy['rightItemCount'];
-
-        return $this->updateTestpaperResult($testpaperResult['id'], $fields);
-    }
-
-    protected function sumScore($itemResults)
+    public function sumScore($itemResults)
     {
         $score          = 0;
         $rightItemCount = 0;

@@ -90,6 +90,26 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         return $filtedFields;
     }
 
+    public function updateSubmitedResult($resultId, $usedTime)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+
+        $fields = array(
+            'status' => 'finished'
+        );
+
+        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['score']          = $accuracy['sumScore'];
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        $fields['usedTime']    = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime']     = time();
+        $fields['checkedTime'] = time();
+
+        return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
+    }
+
     protected function formatQuestions($questions, $questionResults)
     {
         $formatQuestions = array();
