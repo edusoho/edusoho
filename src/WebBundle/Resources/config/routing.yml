@@ -1,35 +1,54 @@
+courseset_show:
+  path: /courseset/{courseSetId}
+  defaults: {_controller: WebBundle:CourseSet:show}
+
+courseset_preview:
+  path: /courseset/{courseSetId}/preview
+  defaults: {_controller: WebBundle:CourseSet:preview}
+
 courseset_manage:
-  path: /courseset/{id}
+  path: /courseset/{id}/manage
   defaults: {_controller: WebBundle:CourseSetManage:index}
 
+courseset_manage_create:
+  path: /courseset/{id}/manage/create
+  defaults: {_controller: WebBundle:CourseSetManage:create}
+
+courseset_manage_base:
+  path: /courseset/{id}/manage/base
+  defaults: {_controller: WebBundle:CourseSetManage:base}
+
+courseset_manage_detail:
+  path: /courseset/{id}/manage/detail
+  defaults: {_controller: WebBundle:CourseSetManage:detail}
+
+courseset_manage_cover:
+  path: /courseset/{id}/manage/cover
+  defaults: {_controller: WebBundle:CourseSetManage:cover}
+
 courseset_manage_courses:
-  path: /courseset/{courseSetId}/courses
+  path: /courseset/{courseSetId}/manage/courses
   defaults: {_controller:WebBundle:CourseManage:list}
 
 courseset_manage_course_create:
-  path: /courseset/{courseSetId}/course/create
+  path: /courseset/{courseSetId}/manage/course/create
   defaults: {_controller: WebBundle:CourseManage:create}
 
 courseset_manage_course_copy:
-  path: /courseset/{courseSetId}/course/{courseId}/copy
+  path: /courseset/{courseSetId}/manage/course/{courseId}/copy
   defaults: {_controller: WebBundle:CourseManage:copy}
 
 courseset_manage_course_info:
-  path: /courseset/{courseSetId}/course/{courseId}/info
+  path: /courseset/{courseSetId}/manage/course/{courseId}/info
   defaults: {_controller: WebBundle:CourseManage:info}
 
 courseset_manage_course_tasks:
-  path: /courseset/{courseSetId}/course/{courseId}/tasks
+  path: /courseset/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: WebBundle:CourseManage:tasks}
 
-
 courseset_manage_course_marketing:
-  path: /courseset/{courseSetId}/course/{courseId}/marketing
+  path: /courseset/{courseSetId}/manage/course/{courseId}/marketing
   defaults: {_controller: WebBundle:CourseManage:marketing}
-
-courseset_manage_course_preview:
-  path: /courseset/{courseSetId}/course/{courseId}/preview
-  defaults: {_controller: WebBundle:CourseManage:preview}
 
 courseset_manage_course_teachers:
   path: /courseset/{courseSetId}/course/{courseId}/teachers
