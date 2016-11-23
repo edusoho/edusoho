@@ -135,14 +135,13 @@ class Editor {
     _inItStep1form() {
         let $step1_form = $("#step1-form");
         let validator = $step1_form.validate({
-            onkeyup: false,
             rules: {
                 mediaType: {
                     required: true,
                 },
             },
             messages: {
-                mediaType: "请选择分类",
+                mediaType: "请选择%display%",
             }
         });
         $step1_form.data('validator', validator);
