@@ -455,7 +455,7 @@ class CourseController extends CourseBaseController
         );
         $this->dispatchEvent(
             'learning.quit',
-            new ServiceEvent($learningQuit , array('userId' => $user['id']))
+            new ServiceEvent($learningQuit , array('userId' => $user['id'], 'operationTime' => time()))
         );
         return $this->createJsonResponse(true);
     }

@@ -484,7 +484,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})");
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
+            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member, 'operationTime' => time()))
         );
     }
 
@@ -1224,7 +1224,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $userId, 'member' => $member))
+            new ServiceEvent($classroom, array('userId' => $userId, 'member' => $member, 'operationTime' => time()))
         );
     }
 
