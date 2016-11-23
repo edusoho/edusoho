@@ -1,5 +1,5 @@
-import esWebpackPlanDev from 'es-webpack-plan';
+import esWebpackEngine from 'es-webpack-engine';
 
-import config from './config';
+import options from './options';
 
-esWebpackPlanDev(config);
+esWebpackEngine(options);

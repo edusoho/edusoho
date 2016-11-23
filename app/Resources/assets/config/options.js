@@ -1,25 +1,22 @@
-/**
- * todo
- * 1. Is it better to delete `registeredBundles` by auto scan the `src` dir?
- * 2. How to specify the plugin's output path? or the same with system bundles? And also how to construct assets folders for themes ?
- * 3. How to name the output path folder and source code folder in each bundle?
- */
-const parameters = {
+// 配置文件
+
+const options = {
   // registeredBundles: [ //register php bundles
   //   // 'src/Topxia/WebBundle',
   //   'plugins/CrmPlugin'
   //   // 'src/Topxia/AdminBundle',
   // ],
+  // currentPath: __dirname,
   output: {
-    path: '../../../../web/build', //file output path, relative to this file
-    buildpath: '../../../../',
+    path: 'web/build', //file output path, relative to this file
+    buildpath: './',
     publicPath: '/build/' //relative to website domain
   },
   libs: {
-    vendor: ['../libs/vendor.js'], //can be a js file
+    vendor: ['libs/vendor.js'], //can be a js file
     "fix-ie": ['html5shiv', 'respond-js'],
-    "jquery-validation": ['../libs/js/jquery-validation.js'],
-    "jquery-insertAtCaret": ['../libs/js/jquery-insertAtCaret.js'],
+    "jquery-validation": ['libs/js/jquery-validation.js'],
+    "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
@@ -44,9 +41,10 @@ const parameters = {
     }
   ],
   // defaultValue 'common'
-  // commonsChunkFilename: 'common',
+  commonsChunkFilename: 'common',
   // defaultValue 'main'
   // bundleMainname: 'main'
+  port: 3030
 }
 
-export default parameters;
+export default options;

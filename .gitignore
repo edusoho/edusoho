@@ -60,3 +60,4 @@ web/assets/img/default/video.png
 *.css.map
 *.codekit
 web/php-performance.php
+chunk-manifest.json
