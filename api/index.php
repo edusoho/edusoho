@@ -37,11 +37,16 @@ $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 //     'charset'      => 'utf8'
 // ));
 
-
+$request = Request::createFromGlobals();
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
 $serviceKernel->setConnectionFactory(new AppConnectionFactory());
-
+$serviceKernel->setEnvVariable(array(
+    'host'          => $request->getHttpHost(),
+    'schemeAndHost' => $request->getSchemeAndHttpHost(),
+    'basePath'      => $request->getBasePath(),
+    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
+));
 include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();

@@ -2,7 +2,8 @@
 namespace Topxia\Service\Media\Impl;
 
 use Topxia\Service\Media\MediaService;
-use use Topxia\Service\Util\CloudClientFactory;;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Util\CloudClientFactory;
 
 class MediaServiceImpl extends BaseService implements MediaService
 {
@@ -41,7 +42,7 @@ class MediaServiceImpl extends BaseService implements MediaService
                     'duration' => $options['duration']
                 ));
 
-                $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format={options['format']}&line=".$options['line'];
+                $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format={$options['format']}&line=".$options['line'];
             } else {
                 $url = $client->generateHLSQualitiyListUrl($file['metas2'], $options['duration']);
             }
