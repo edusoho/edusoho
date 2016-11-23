@@ -70,16 +70,6 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function previewAction(Request $request, $courseSetId, $courseId)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getCourse($courseId);
-        return $this->render('WebBundle:CourseSet:preview.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
-        ));
-    }
-
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);

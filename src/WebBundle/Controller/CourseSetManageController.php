@@ -15,23 +15,39 @@ class CourseSetManageController extends BaseController
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
             'courseSet'     => $courseSet,
             'courses'       => $courses,
-            'defaultCourse' => $defualtCourse
+            'defaultCourse' => $defaultCourse
         ));
     }
 
     public function createAction(Request $request)
     {
-        return $this->render('WebBundle:CourseSetManage:create.html.twig', array(
+        return $this->render('WebBundle:CourseSetManage:courseset-create.html.twig', array(
             //params
         ));
     }
 
-    public function previewAction(Request $request, $id)
+    //基础信息
+    public function baseAction(Request $request, $id)
     {
-        // 预览courseSet
+        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+        return $this->render('WebBundle:CourseSetManage:courseset-base.html.twig', array(
+            'courseSet'     => $courseSet,
+            'defaultCourse' => $defaultCourse
+        ));
     }
 
-    public function deleteAction(Request $request, $courseSetId)
+    public function detailAction(Request $request, $id)
+    {
+        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+        return $this->render('WebBundle:CourseSetManage:courseset-detail.html.twig', array(
+            'courseSet'     => $courseSet,
+            'defaultCourse' => $defaultCourse
+        ));
+    }
+
+    public function deleteAction(Request $request, $id)
     {
         //delete..
     }
@@ -44,10 +60,5 @@ class CourseSetManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
-    }
-
-    protected function getPermissionExtension()
-    {
-        return $this->container->get('permission.twig.permission_extension');
     }
 }
