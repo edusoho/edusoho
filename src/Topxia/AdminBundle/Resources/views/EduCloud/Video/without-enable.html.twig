@@ -9,7 +9,10 @@
   <i class="es-icon es-icon-infooutline text-primary"></i>
   <div class="text-md mbl">尚未启用云视频</div>
   <div class="color-gray notice-desc">云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。<a href="">点击这里</a>了解详情。</div>
-  <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+  <form class="form-horizontal" role="form" method="post" action="{{ path('admin_cloud_video_switch') }}">
+  <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud">立即启用</button>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
 </div>
 </div>
 {% endblock %}

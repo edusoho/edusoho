@@ -192,7 +192,7 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
-        $storageSetting['upload_mode'] = 'cloud';
+        // $storageSetting['upload_mode'] = 'cloud';
         if ($storageSetting['upload_mode'] == 'local') {   
             return $this->render('TopxiaAdminBundle:EduCloud/Video:without-enable.html.twig');
         }
@@ -208,6 +208,17 @@ class EduCloudController extends BaseController
             'spaceItems' => $spaceItems,
             'flowItems'  => $flowItems
         ));
+    }
+    public function videoSwitchAction(Request $request)
+    {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        if ($request->getMethod() == 'POST') {
+            $set = $request->request->all();
+            $storageSetting = array_merge($storageSetting, $set);
+            $this->getSettingService()->set('storage', $storageSetting);
+            
+            return $this->redirect($this->generateUrl('admin_setting_cloud_video'));
+        }        
     }
 
     private function dealData($data)
@@ -239,7 +250,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
-            // var_dump($set);exit();
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
@@ -252,9 +262,6 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
-
-        $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
