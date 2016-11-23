@@ -18,9 +18,8 @@ class ActivityController extends BaseController
 
         $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $showController = $config->getAction('show');
-
         return $this->forward($showController, array(
-            '$id'      => $id,
+            'id'      => $id,
             'courseId' => $courseId,
         ));
     }

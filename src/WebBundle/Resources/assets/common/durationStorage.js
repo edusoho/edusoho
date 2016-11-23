@@ -1,12 +1,12 @@
 /**
  * Created by Simon on 2016/11/18.
  */
-import store from 'store';
+import 'store';
 
 class DurationStorage {
 
     static  set(userId, fileId, duration) {
-        var durations = store.get("durations");
+        var durations = store.get("durations", {});
         if (!durations || !(durations instanceof Array)) {
             durations = new Array();
         }
@@ -23,7 +23,7 @@ class DurationStorage {
     }
 
     static get(userId, fileId) {
-        var durationTmpArray = store.get("durations");
+        var durationTmpArray = store.get("durations", {});
         if (durationTmpArray) {
             for (var i = 0; i < durationTmpArray.length; i++) {
                 var index = durationTmpArray[i].indexOf(userId + "-" + fileId);

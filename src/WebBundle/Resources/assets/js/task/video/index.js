@@ -31,7 +31,7 @@ class VideoPlay {
         var messenger = new EsMessager({
             name: 'parent',
             project: 'PlayerProject',
-            children: [$('iframe[id=task-content-iframe]')],
+            children: [document.querySelector('iframe[id=task-content-iframe]')],
             type: 'parent'
         });
 

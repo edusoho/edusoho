@@ -2,7 +2,6 @@ import  PlayerFactory from './player-factory';
 import  EsMessager from '../../common/messenger';
 import DurationStorage from '../../common/durationStorage';
 
-
 class Show {
 
     constructor(element) {
@@ -139,6 +138,7 @@ class Show {
         });
 
         player.on("paused", () => {
+            console.log('paused------------');
             messenger.sendToParent("paused", {pause: true});
         });
 

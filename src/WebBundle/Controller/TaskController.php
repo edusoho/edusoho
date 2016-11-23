@@ -36,7 +36,6 @@ class TaskController extends BaseController
         $task = $this->tryLearnTask($courseId, $id);
         return $this->forward('WebBundle:Activity:show', array(
             'id'       => $task['activityId'],
-            'taskId'   => $task['id'],
             'courseId' => $courseId
         ));
     }
@@ -61,9 +60,8 @@ class TaskController extends BaseController
     public function playerAction(Request $request, $courseId, $taskId)
     {
         $task = $this->tryLearnTask($courseId, $taskId);
-        return $this->forward('WebBundle:Activity:player', array(
+        return $this->forward('WebBundle:Player:show', array(
             'id'       => $task['activityId'],
-            'courseId' => $courseId
         ));
     }
 
