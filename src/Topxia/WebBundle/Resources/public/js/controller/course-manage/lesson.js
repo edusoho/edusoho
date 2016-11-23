@@ -124,12 +124,15 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).find('.item-content').append('<span class="unpublish-warning text-warning">('+Translator.trans('未发布')+')</span>');
-                $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
-                $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
-                $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
-                $(id).find('.btn-link').tooltip();
-                Notify.success(Translator.trans('课时已取消发布！'));
+
+                if ( $(id).find('.item-content').find('.unpublish-warning').length == 0) {
+                    $(id).find('.item-content').append('<span class="unpublish-warning text-warning">('+Translator.trans('未发布')+')</span>');
+                    $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
+                    $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
+                    $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
+                    $(id).find('.btn-link').tooltip();
+                    Notify.success(Translator.trans('课时已取消发布！'));
+                }
             });
         });
 
