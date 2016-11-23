@@ -38,7 +38,7 @@ class LessonReplay extends BaseResource
         $user = $this->getCurrentUser();
         $response = array(
             'url' => '',
-            'liveProvider' => $lesson['liveProvider'],
+            'provider' => '',
             'lessonId' => $lesson['id']
         );
         try {
@@ -52,9 +52,11 @@ class LessonReplay extends BaseResource
                     'times' => 2
                 );
                 $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
+                $response['provider'] = 'longinus';
             } else {
                 $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
                 $response['url'] = $res['url'];
+                $response['provider'] = $res['provider'];
             }
             
         } catch (Exception $e) {
