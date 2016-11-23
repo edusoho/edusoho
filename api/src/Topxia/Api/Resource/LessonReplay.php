@@ -38,12 +38,12 @@ class LessonReplay extends BaseResource
         $user = $this->getCurrentUser();
         $response = array(
             'url' => '',
-            'provider' => $lesson['provider'],
+            'liveProvider' => $lesson['liveProvider'],
             'lessonId' => $lesson['id']
         );
         try {
             // play es replay
-            if ($lesson['provider'] == 5) {
+            if ($lesson['liveProvider'] == 5) {
                 //获取globalid
                 $res = $this->getCourseService()->entryReplay($lesson['id'], $$visableReplays[0]['replayId']);
                 $globalId = empty($res['resourceNo']) ? 0 : $res['resourceNo'];
