@@ -26,105 +26,103 @@
         	<a href="{{path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">学员管理</a>
         </li>
       </ul>
-      <div class="content">
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label for="" class="col-sm-2 control-label">计划名称</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control"></div>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">计划名称</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control"></div>
+        </div>
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">学习模式</label>
+          <div class="col-sm-8 radios">
+            <label><input  data-role="tab" data-tab-content="#learn-type-free" type="radio" name="type" checked="checked">自由模式</label>
+            <label><input  data-role="tab" data-tab-content="#learn-type-task" type="radio" name="type">任务式学习</label>
+            <p class="help-block" data-role="tab-content" id="learn-type-free">学习过程自由安排</p>
+            <p class="help-block hidden" data-role="tab-content" id="learn-type-task">根据计划预定的顺序学习</p>
           </div>
-          <div class="form-group">
-            <label for="" class="col-sm-2 control-label">学习模式</label>
-            <div class="col-sm-8 radios">
-              <label><input  data-role="tab" data-tab-content="#learn-type-free" type="radio" name="type" checked="checked">自由模式</label>
-              <label><input  data-role="tab" data-tab-content="#learn-type-task" type="radio" name="type">任务式学习</label>
-              <p class="help-block" data-role="tab-content" id="learn-type-free">学习过程自由安排</p>
-              <p class="help-block hidden" data-role="tab-content" id="learn-type-task">根据计划预定的顺序学习</p>
-            </div>
-          </div>
-          <div class="form-group">
-           <label class="col-sm-2 control-label">学习有效期模式</label>
-           <div class="col-sm-8 radios">
-             <label><input data-role="tab" data-tab-content="#learn-data-free" type="radio" name="data" checked="checked">随到随学</label>
-             <label><input data-role="tab" data-tab-content="#learn-data-task" type="radio" name="data">指定日期学习</label>
-             <div class="mbm mtm" id="learn-data-free" data-role="tab-content">学习有效期<input class="form-control mhm" type="" style="display:inline-block;width:150px">天<span class="color-gray mll">设置为0天则无限制</span></div>
-             <div class="mbm mtm hidden" id="learn-data-task" data-role="tab-content">
-               开始日期
-               <input class="form-control" type="" name="" style="display:inline-block;width:150px">
-               结束日期
-               <input class="form-control" type="" name="" style="display:inline-block;width:150px">
-               <p class="help-block">过期后将无法观看内容，系统默认会在到期前10天提醒学员。</p>
-             </div>
+        </div>
+        <div class="form-group">
+         <label class="col-sm-2 control-label">学习有效期模式</label>
+         <div class="col-sm-8 radios">
+           <label><input data-role="tab" data-tab-content="#learn-data-free" type="radio" name="data" checked="checked">随到随学</label>
+           <label><input data-role="tab" data-tab-content="#learn-data-task" type="radio" name="data">指定日期学习</label>
+           <div class="mbm mtm" id="learn-data-free" data-role="tab-content">学习有效期<input class="form-control mhm" type="" style="display:inline-block;width:150px">天<span class="color-gray mll">设置为0天则无限制</span></div>
+           <div class="mbm mtm hidden" id="learn-data-task" data-role="tab-content">
+             开始日期
+             <input class="form-control" type="" name="" style="display:inline-block;width:150px">
+             结束日期
+             <input class="form-control" type="" name="" style="display:inline-block;width:150px">
+             <p class="help-block">过期后将无法观看内容，系统默认会在到期前10天提醒学员。</p>
            </div>
+         </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+            <label>{{'计划简介'|trans}}</label>
           </div>
-          <div class="form-group">
-            <div class="col-md-2 control-label">
-              <label>{{'计划简介'|trans}}</label>
-            </div>
-            <div class="col-md-8 controls">
-              <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'about') }}</textarea>
-            </div>
+          <div class="col-md-8 controls">
+            <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'about') }}</textarea>
           </div>
-          <div class="form-group dynamic-collection" id="course-goals-form-group">
-            <div class="col-md-2 control-label">
-              <label>{{'课程目标'|trans}}</label>
-            </div>
-            <div class="col-md-8 controls">
-              <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
-              <div class="input-group">
-                <input id="teacher-input" type="text" data-role="item-input" class="form-control">          
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
-                </span>
-              </div>
-              <script type="text/plain" data-role="model">{{ course.goals|json_encode|raw }}</script>
-              <script type="text/x-handlebars-template" data-role="item-template">
-                {% verbatim %}
-                  <li class="list-group-item clearfix" data-role="item">
-                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                    {{ this }}
-                    <input type="hidden" name="goals[]" value="{{ this }}">
-                    <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
-                  </li>
-                {% endverbatim %}
-              </script>
-            </div>
+        </div>
+        <div class="form-group dynamic-collection" id="course-goals-form-group">
+          <div class="col-md-2 control-label">
+            <label>{{'课程目标'|trans}}</label>
           </div>
-          <div class="form-group" id="course-audiences-form-group">
-            <div class="col-md-2 control-label">
-              <label>{{'适应人群'|trans}}</label>
+          <div class="col-md-8 controls">
+            <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
+            <div class="input-group">
+              <input id="teacher-input" type="text" data-role="item-input" class="form-control">          
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
+              </span>
             </div>
-            <div class="col-md-8 controls">
+            <script type="text/plain" data-role="model">{{ course.goals|json_encode|raw }}</script>
+            <script type="text/x-handlebars-template" data-role="item-template">
+              {% verbatim %}
+                <li class="list-group-item clearfix" data-role="item">
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  {{ this }}
+                  <input type="hidden" name="goals[]" value="{{ this }}">
+                  <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
+                </li>
+              {% endverbatim %}
+            </script>
+          </div>
+        </div>
+        <div class="form-group" id="course-audiences-form-group">
+          <div class="col-md-2 control-label">
+            <label>{{'适应人群'|trans}}</label>
+          </div>
+          <div class="col-md-8 controls">
 
-              <ul class="list-group sortable-list  dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
-              <div class="input-group">
-                <input id="teacher-input" type="text" data-role="item-input" class="form-control">          
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
-                </span>
-              </div>
+            <ul class="list-group sortable-list  dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
+            <div class="input-group">
+              <input id="teacher-input" type="text" data-role="item-input" class="form-control">          
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
+              </span>
+            </div>
 
-              <script type="text/plain" data-role="model">{{ course.audiences|json_encode|raw }}</script>
-              <script type="text/x-handlebars-template" data-role="item-template">
-                {% verbatim %}
-                  <li class="list-group-item clearfix" data-role="item">
-                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                    {{ this }}
-                    <input type="hidden" name="audiences[]" value="{{ this }}">
-                    <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
-                  </li>
-                {% endverbatim %}
-              </script>
-            </div>
+            <script type="text/plain" data-role="model">{{ course.audiences|json_encode|raw }}</script>
+            <script type="text/x-handlebars-template" data-role="item-template">
+              {% verbatim %}
+                <li class="list-group-item clearfix" data-role="item">
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  {{ this }}
+                  <input type="hidden" name="audiences[]" value="{{ this }}">
+                  <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
+                </li>
+              {% endverbatim %}
+            </script>
           </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-8">
-              <a class="btn btn-primary">保存</a>
-              <div class="color-warning mtm">课程首次发布后“学习模式”和“学习有效期方式”将不能再修改</div>
-            </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <a class="btn btn-primary">保存</a>
+            <div class="color-warning mtm">课程首次发布后“学习模式”和“学习有效期方式”将不能再修改</div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 {% endblock %}
