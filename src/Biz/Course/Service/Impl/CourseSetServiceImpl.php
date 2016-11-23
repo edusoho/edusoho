@@ -25,7 +25,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         //TODO validator
 
-        return $this->getCourseSetDao()->update($id, $course);
+        return $this->getCourseSetDao()->update($id, $fields);
     }
 
     public function deleteCourseSet($id)
