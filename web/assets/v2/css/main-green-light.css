@@ -12593,6 +12593,9 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+.js-social-share-params .icon-font {
+  font-size: 30px !important;
+}
 @-webkit-keyframes boxshow {
   0% {
     box-shadow: 0 0 15px #2db7f5;
