@@ -10,6 +10,12 @@
     {% endfor %}
     <li class="active">{{ course.title|raw }}</li>
   </ol>#}
+
+
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    <li class="active">{{ course.title|raw }}</li>
+  </ol>
 {% endblock %}
 
 {% block content %}
