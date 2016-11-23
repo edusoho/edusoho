@@ -61,6 +61,14 @@
                 </a>
               </div>
             {% endif %}
+            {% if overview['services']['email'] == true %}
+              <div class="col-md-4">
+                <a href="" class="my-products-item">
+                  <i class="es-icon es-icon-search"></i>
+                  云邮件
+                </a>
+              </div>
+            {% endif %}
             </div>
           </div>
       {% endif %}
@@ -103,6 +111,14 @@
               <a href="" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
                 云搜索
+              </a>
+            </div>
+          {% endif %}
+          {% if overview['services']['email'] == false %}
+            <div class="col-md-4">
+              <a href="" class="my-products-item">
+                <i class="es-icon es-icon-search"></i>
+                云邮件
               </a>
             </div>
           {% endif %}

@@ -91,7 +91,6 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
-        unset($overview['services']['email']);
         $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked']));
         $overviewValue = array_values($overview['services']);
         if (in_array(true, $overviewValue)) {
