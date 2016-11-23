@@ -4,8 +4,9 @@ $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
   errorElement: 'p',
   onkeyup: false,
-  ignore: "",
+  ignore: '',
   ajax: false,
+  currentDom: null, 
   highlight: function(element, errorClass, validClass) {
     let $row = $(element).closest('.form-group');
     $row.addClass('has-error');
@@ -39,17 +40,19 @@ $.validator.setDefaults({
     
   },
   submitHandler: function(form) {
-    let formObj = $(form);
-    let $submitBtn = formObj.find('[type="submit"][data-loading-text]');
-    $submitBtn.attr('disabled', 'disabled');
-    $submitBtn.text($submitBtn.data('loadingText'));
-    let validate = formObj.validate();
-    if(validate.settings.ajax) {
-      $.post(formObj.attr('action'), formObj.serializeArray(), function(data) {
-        validate.settings.submitSuccess(data);
-      }).error(function(){
-        $submitBtn.removeAttr('disabled');
+    let $form = $(form);
+    let settings = this.settings;
+
+    settings.currentDom ? settings.currentDom.button('loading'): '';
+
+    if(settings.ajax) {
+      $.post($form.attr('action'), $form.serializeArray(), (data) => {
+        settings.submitSuccess(data);
+
+      }).error(() => {
+        settings.currentDom ? settings.currentDom.button('reset'): '';
       });
+      
     } else {
       form.submit();
     }

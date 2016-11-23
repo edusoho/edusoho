@@ -21,16 +21,27 @@ let sortList = function($list) {
     });
 };
 
-let $form = $('#course-chapter-form');
-let validator = $form.validate({
-  rules: {
-    title: 'required'
-  },
-  ajax: true,
-  submitSuccess: function(data) {
-    document.location.reload();
-  }
-});
+
+
+$('#course-chapter-btn').on('click',function(){
+    let $this = $(this);
+    let $form = $('#course-chapter-form');
+
+    let validator = $form.validate({
+      rules: {
+        title: 'required'
+      },
+      ajax: true,
+      currentDom: $this,
+      submitSuccess: function(data) {
+        // document.location.reload();
+        $this.closest('.modal').modal('hide');
+        
+        $("#sortable-list").append(data);
+      },
+    });
+})
+
 
 // let formValidated = function(error, msg, $form) {
 //   if (error) {
