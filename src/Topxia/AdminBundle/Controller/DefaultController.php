@@ -601,9 +601,4 @@ class DefaultController extends BaseController
     {
         return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
     }
-
-    protected function getRoleService()
-    {
-        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
-    }
 }
