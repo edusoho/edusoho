@@ -183,7 +183,7 @@ class CourseLessonController extends BaseController
         }
         $this->dispatchEvent(
             'course.preview',
-            new ServiceEvent($course, array('userId' => $user['id'], 'previewTime' => time()))
+            new ServiceEvent($course, array('userId' => $user['id']))
         );
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,

@@ -459,7 +459,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $this->dispatchEvent(
                 'learning.quit',
-                new ServiceEvent($refund, array('userId' => $refund['userId'], 'operationTime' => time()))
+                new ServiceEvent($refund, array('userId' => $refund['userId']))
             );
 
             $this->getOrderDao()->updateOrder($order['id'], array(

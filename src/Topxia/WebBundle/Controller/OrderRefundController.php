@@ -47,7 +47,7 @@ class OrderRefundController extends BaseController
             if ($refund['status'] == 'success') {
             $this->dispatchEvent(
                 'learning.quit',
-                new ServiceEvent($refund, array('userId' => $user['id'], 'operationTime' => time()))
+                new ServiceEvent($refund, array('userId' => $user['id']))
             );            
             }
             return $this->createJsonResponse(true);

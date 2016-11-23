@@ -2452,7 +2452,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
-            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member, 'operationTime' => time()))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
