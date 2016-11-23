@@ -113,7 +113,16 @@
         <td>使用网站余额支付</td>
         <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
         <td>自动单发</td>
-        <td><input type="hidden" name="sms_user_pay" value="on">默认开启</td>
+        <td>
+          <label>
+            <input type="radio" name="sms_user_pay" value="on"
+              {% if (setting('cloud_sms.sms_user_pay')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+          </label>
+          <label>
+            <input type="radio" name="sms_user_pay" value="off"
+              {% if (setting('cloud_sms.sms_user_pay')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+          </label>
+        </td>
       </tr>
       <tr>
         <td>通知类</td>
