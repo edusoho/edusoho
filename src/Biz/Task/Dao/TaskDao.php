@@ -14,5 +14,5 @@ interface TaskDao extends GeneralDaoInterface
 
     public function findTasksByChapterId($chapterId);
 
-    public function waveSeqBiggerThan($seq, $count);
+    public function waveSeqBiggerThanSeq($seq, $diff);
 }
