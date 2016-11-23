@@ -14,11 +14,15 @@
     <legend>课程规则</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'给新'|trans}}{% if setting('default.user_name') %}{{'%user_name%发送欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</label>
+        <label >
+          {{'给新'|trans}}{{'%user_name%发送欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}
+        </label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('welcome_message_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.welcome_message_enabled) }}
-      <p class="help-block">{{'开启后，新'|trans}}{% if setting('default.user_name') %}{{'%user_name%加入课程后，会收到教师的欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</p>
+      <p class="help-block">
+        {{'开启后，新'|trans}}{{'%user_name%加入课程后，会收到教师的欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}
+      </p>
       </div>
     </div>
 
@@ -73,7 +77,7 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师添加/移除'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}</label>
+        <label >{{'允许教师添加/移除'|trans}}{{setting('default.user_name')|default('学员'|trans)}}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('teacher_manage_student', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_manage_student) }}
@@ -82,7 +86,7 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师导出'|trans}}{% if setting('default.user_name') %}{{'%user_name%资料'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</label>
+        <label >{{'允许教师导出'|trans}}{{'%user_name%资料'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('teacher_export_student', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_export_student) }}
@@ -95,11 +99,11 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许'|trans}}{% if setting('default.user_name') %}{{'%user_name%下载课时的音视频'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</label>
+        <label >{{'允许'|trans}}{{'%user_name%下载课时的音视频'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('student_download_media', {0:'不允许'|trans, 1:'允许'|trans}, courseSetting.student_download_media) }}
-        <div class="help-block">{{'开启此项设置后，'|trans}}{% if setting('default.user_name') %}{{'%user_name%可在课时学习界面侧栏的"资料"面板中下载。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</div>
+        <div class="help-block">{{'开启此项设置后，'|trans}}{{'%user_name%可在课时学习界面侧栏的"资料"面板中下载。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</div>
       </div>
     </div>
 
