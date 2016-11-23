@@ -1246,7 +1246,7 @@ class AnalysisController extends BaseController
 
             foreach ($zeroData as $key => $value) {
                 foreach ($userSumData as $userKey => $val) {
-                    if ($userKey != 0 && ($value['date'] < $val['date']) && ($value['date'] > $userSumData[($userKey + 1)]['date'])) {
+                    if ($userKey != 0 && ($value['date'] < $val['date']) && (isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date'])) {
                         $countTmp = $userSumData[($userKey + 1)]['count'];
                     }
                 }
