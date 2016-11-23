@@ -29,6 +29,10 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseSetService()->updateCourseSet($id, $data);
+        }
         $courseSet     = $this->getCourseSetService()->getCourseSet($id);
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
         return $this->render('WebBundle:CourseSetManage:courseset-base.html.twig', array(
