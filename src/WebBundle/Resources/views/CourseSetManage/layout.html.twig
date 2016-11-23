@@ -36,22 +36,6 @@
               <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程图片'|trans}}
             </a>
           </li>
-          <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
-            <a href="{% if course.locked|default(0) == 1 %}
-            {{ path('course_manage_course_sync', {id:course.id,type:'lesson'}) }}{% else %}
-            {{ path('course_manage_lesson', {id:course.id}) }}
-            {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课时管理'|trans}}
-            </a>
-          </li>
-          {% if course.type == 'live' %}
-            <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
-              <a href="{% if course.locked|default(0) == 1 %}
-            {{ path('course_manage_course_sync', {id:course.id,type:'replay'}) }}{% else %}
-            {{ path('live_course_manage_replay', {id:course.id}) }}
-            {% endif %}"><span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'录播管理'|trans}}</a>
-            </li>
-          {% endif %}
           <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
             <a href="{% if course.locked|default(0) == 1 %}
             {{ path('course_manage_course_sync', {id:course.id,type:'files'}) }}{% else %}
