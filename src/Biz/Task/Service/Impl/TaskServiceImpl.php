@@ -156,7 +156,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function startTask($taskId)
     {
-        $task = $this->tryTakeTask($taskId);
+        $task = $this->getTask($taskId);
 
         $user = $this->getCurrentUser();
 

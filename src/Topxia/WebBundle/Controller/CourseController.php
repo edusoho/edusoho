@@ -516,7 +516,6 @@ class CourseController extends CourseBaseController
         } catch (Exception $e) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('抱歉，未发布课程不能学习！'));
         }
-
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
             'course'    => $course,
             'starttime' => $starttime

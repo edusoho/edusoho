@@ -10,12 +10,13 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $task     = $this->tryLearnTask($courseId, $id);
+        $preview = $request->query->get('preview');
 
+        $task     = $this->tryLearnTask($courseId, $id, $preview);
         $tasks    = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
-        if(empty($activity)){
+        if (empty($activity)) {
             throw $this->createNotFoundException("activity not found");
         }
 
@@ -27,13 +28,15 @@ class TaskController extends BaseController
             'task'     => $task,
             'tasks'    => $tasks,
             'activity' => $activity,
+            'preview'  => $preview,
             'types'    => $this->getActivityService()->getActivityTypes()
         ));
     }
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
-        $task = $this->tryLearnTask($courseId, $id);
+        $preview = $request->query->get('preview');
+        $task    = $this->tryLearnTask($courseId, $id, $preview);
 
         return $this->forward('WebBundle:Activity:show', array(
             'id'       => $task['activityId'],
@@ -41,10 +44,18 @@ class TaskController extends BaseController
         ));
     }
 
-    protected function tryLearnTask($courseId, $taskId)
+    protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->tryTakeTask($taskId);
+        if ($preview) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            }
+            $task = $this->getTaskService()->getTask($taskId);
+        } else {
+            $this->getCourseService()->tryLearnCourse($courseId);
+            $task = $this->getTaskService()->tryTakeTask($taskId);
+        }
 
         if (empty($task)) {
             throw $this->createResourceNotFoundException('task', $taskId);
