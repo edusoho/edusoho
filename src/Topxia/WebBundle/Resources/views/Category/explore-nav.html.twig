@@ -1,33 +1,34 @@
 {% do load_script('category/nav') %}
 
+{% set tagMarks = data('TagMarks', {tags:tags}) %}
+{% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory}) %}
+
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm">
     <div class="title">所有分类：</div>
+
     <ul class="content list-unstyled list-inline">
+      {% if categoryMarks[0]|default('') %}
       <li class="classify">
-        <a href="">
-          一级分类 <i class="es-icon es-icon-chevronright"></i>
-        </a>
+        <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
       </li>
+      {% endif %}
+
+      {% if categoryMarks[1]|default('') %}
       <li class="classify">
-        <a href="">
-          二级分类 <i class="es-icon es-icon-chevronright"></i>
-        </a>
+        <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[1].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
       </li>
-      <li class="classify">
-        <a href="">
-          三级分类
-          <i class="es-icon es-icon-chevronright"></i>
-        </a>
-      </li>
-      <li class="tabs-mark">
-        <a class="btn btn-link" href="javascript:;">英语<i class="glyphicon glyphicon-remove"></i></a>
-      </li>
-      <li class="tabs-mark">
-        <a class="btn btn-link" href="javascript:;">四级<i class="glyphicon glyphicon-remove"></i></a>
-      </li>
+      {% endif %}
+
+      {% for tagMark in tagMarks|default('') %}
+        <li class="tabs-mark">
+          <a class="btn btn-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags, selectedTag:{group:tagMark.groupId, tag:tagMark.tagId}}, filter:filter, orderBy:orderBy}) }}">{{ tagMark.tagName }}<i class="glyphicon glyphicon-remove"></i></a>
+        </li>     
+      {% endfor %}
     </ul>
+
   </div>
+
   <div class="tabs-group">
     <div class="title">分类:</div>
       <ul class="content clearfix">
