@@ -20,10 +20,17 @@ class DefaultController extends BaseController
         $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
         $permissionNames = ArrayToolkit::column($permissions, 'code');
         if (in_array('admin_homepage', $permissionNames)) {
-            return $this->redirect($this->generateUrl('admin_homepage'));
+            return $this->forward('TopxiaAdminBundle:Default:homepage');
         }
 
-        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permissions[0]);
+        return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
+            'permission' => $permissions[0]
+        ));
+    }
+
+    public function renderCurrentAdminHomepageAction($permission)
+    {
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
 
         if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
