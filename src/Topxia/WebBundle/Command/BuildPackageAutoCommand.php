@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -360,7 +361,7 @@ class BuildPackageAutoCommand extends BaseCommand
     protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
     {
         if ($this->getHelperSet()->has('question')) {
-            return $this->getHelper('question')->ask($input, $output, new ConfirmationQuestion($question));
+            return $this->getHelper('question')->ask($input, $output, new ConfirmationQuestion($question, false));
         } else {
             return $this->getHelper('dialog')->askConfirmation($output, '<question>'.$question.'</question>', false);
         }
