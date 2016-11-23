@@ -1,17 +1,6 @@
-{#{% do script(['web/file-chooser/chooser/materiallib-choose.js']) %}#}
 <div class="chooser-content mbm">
   <div class="row ">
     <div class="col-xs-5 radios">
-      {#
-      <div class="btn-group">
-        <a type="button" class="btn btn-default btn-sm js-material-type active"
-         data-type="my">{{ '来自上传'|trans }}</a>
-        <a type="button" class="btn btn-default btn-sm js-material-type" data-type="sharing"
-         data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">{{ '来自分享'|trans }}</a>
-        <a type="button" class="btn btn-default btn-sm js-material-type" data-type="public">{{ '公共资料'|trans }}</a>
-        <a type="button" class="btn btn-default btn-sm js-material-type" data-type="favorite">{{ '我的收藏'|trans }}</a>
-      </div>
-      #}
       <label class="js-material-type prm"  data-type="my">
         <input type="radio" name="file-browser-video-source" value="upload" checked="">来自上传</label>
       <label class="js-material-type prm" data-type="sharing"

@@ -1,18 +1,15 @@
-{#
-{% do script(['web/file-chooser/chooser/import-video.js']) %}
-#}
-
 <div class="tab-pane" id="video-chooser-import-pane">
   {% if lesson|default(null) %}
     <div>原地址：{{ lesson.mediaUri }}</div>
   {% endif %}
   <div class="import-content">
     <div class="input-group">
-      <input class="form-control border-gray mb0" type="text" placeholder="{{ '支持优酷、土豆、腾讯、网易公开课的视频页面地址导入'|trans }}" data-role="import-url" value="{{ activity.ext.mediaUri|default(null) }}">
+      <input class="form-control border-gray mb0" type="text" placeholder="{{ '支持优酷、土豆、腾讯、网易公开课的视频页面地址导入'|trans }}"
+             data-role="import-url" value="{{ activity.ext.mediaUri|default(null) }}">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default js-video-import" data-role="import"
-          data-url="{{ path('course_manage_media_import', {id:courseId}) }}"
-          data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
+                data-url="{{ path('course_manage_media_import', {id:courseId}) }}"
+                data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
       </span>
     </div>
     <div class="text-warning mts">* {{ '腾讯和网易的视频不支持手机端播放'|trans }}</div>

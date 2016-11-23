@@ -1,6 +1,3 @@
-{% import "TopxiaWebBundle::macro.html.twig" as macro %}
-
-
 <table class="table table-striped table-hover">
   <tbody>
   {% for file in files %}
@@ -18,66 +15,5 @@
   {% else %}
     <div class="empty">没有资源...</div>
   {% endfor %}
-  {#<tr>#}
-    {#<td>在线教育云计算技术在线教育云计.mp4</td>#}
-    {#<td>01:13:05</td>#}
-    {#<td class="text-right"><a class="btn-gray" href="javascript:;" data-container="body" data-toggle="tooltip"#}
-                              {#data-placement="top" title="他人分享"><i class="es-icon es-icon-diqiu"></i></a></td>#}
-  {#</tr>#}
-  {#<tr>#}
-    {#<td class="mlm">在线教育云计算技术在线教育云.mp4</td>#}
-    {#<td>01:13:05</td>#}
-    {#<td class="text-right"><a class="btn-gray" href="javascript:;" data-container="body" data-toggle="tooltip"#}
-                              {#data-placement="top" title="我上传的"><i class="es-icon es-icon-self"></i></a></td>#}
-  {#</tr>#}
-  {#<tr>#}
-    {#<td class="mlm">在线教育云计算技术在线教育云.mp4</td>#}
-    {#<td>01:13:05</td>#}
-    {#<td class="text-right"><a class="btn-gray" href="javascript:;" data-container="body" data-toggle="tooltip"#}
-                              {#data-placement="top" title="我上传的"><i class="es-icon es-icon-self"></i></a></td>#}
-  {#</tr>#}
-  {#<tr>#}
-    {#<td class="mlm text-warning" colspan="3">还有100个结果未显示，请调整关键词以缩小搜索范围。</td>#}
-  {#</tr>#}
   </tbody>
 </table>
-
-
-{#<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">#}
-  {#<thead>#}
-  {#<tr>#}
-    {#<th>{{ '文件名'|trans }}</th>#}
-    {#<th>{{ '大小'|trans }}</th>#}
-    {#<th>{{ '上传时间'|trans }}</th>#}
-    {#<th>{{ '上传者'|trans }}</th>#}
-  {#</tr>#}
-  {#</thead>#}
-  {#<tbody>#}
-  {#{% for file in files %}#}
-    {#<tr id="material-table-tr-{{ file.id }}" class="file-browser-item"#}
-        {#data-id="{{ file.id }}"#}
-        {#data-name="{{ file.filename }}"#}
-        {#data-status="{{ file.convertStatus }}"#}
-        {#data-source="self"#}
-        {#data-length="{{ file.length }}"#}
-        {#data-size="{{ file.fileSize }}"#}
-    {#>#}
-      {#<td>#}
-        {#{{ file.filename }}#}
-      {#</td>#}
-      {#<td>#}
-        {#{{ file.fileSize|file_size }}#}
-      {#</td>#}
-      {#<td>#}
-        {#{{ file.createdTime|date('Y-m-d') }}#}
-      {#</td>#}
-      {#<td>#}
-        {#{{ createdUsers[file.createdUserId].nickname }}#}
-      {#</td>#}
-    {#</tr>#}
-  {#{% else %}#}
-    {#<div class="empty">没有资源...</div>#}
-  {#{% endfor %}#}
-  {#</tbody>#}
-{#</table>#}
-{#{{ macro.paginator(paginator|default(null)) }}#}

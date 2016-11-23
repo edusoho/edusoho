@@ -1,22 +1,3 @@
-{#{% do script (['web/file-chooser/chooser/coursefile-choose.js']) %}#}
-
-  <div class="course-file-browser chooser-list" data-role="course-file-browser"
-     data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}"></div>
-  <input type="hidden" name="type" value="{{ fileType|default('') }}">
-
-
-{#<!--1、默认显示20条数据； 2、分他人共享的和自己上传的，3、视觉可见4条，最多显示20条，超过20条提示“调整关键词”-->
-<div class="chooser-content">
-  <div class="input-group">
-    <input class="form-control border-gray mb0" type="text" name="keyWord" placeholder="请输入关键词，从已上传的文件中搜索选择" style="
-    margin-bottom: 0;">  
-    <span class="input-group-btn">
-      <button type="button" class="btn btn-default js-file-choose" >搜索</button>
-    </span>
-  </div>
-  {#<div class="chooser-list"  data-url="{{ path('media_file_choose',{courseId:courseId}) }}" >
-  <div class="chooser-list"  data-url="{{ path('media_corusefile_choose',{courseId:courseId}) }}" >
-
-
-  </div>
-</div>#}
+<div class="course-file-browser chooser-list" data-role="course-file-browser"
+     data-url="{{ path('media_course_file_choose', {courseId:courseId, type:'video', courseType:'course'}) }}"></div>
+<input type="hidden" name="type" value="{{ fileType|default('') }}">

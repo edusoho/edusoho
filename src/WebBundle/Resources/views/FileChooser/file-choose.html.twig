@@ -22,17 +22,7 @@
       </li>
     {% endif %}
   </ul>
-  {#<ul class="nav nav-tabs  nav-tabs-radio" id="material">
-    <li role="presentation"><a
-      href="#chooser-upload-panel"><input class="radio" type="radio" name="type" value="video" checked="checked">本地上传</a></li>
-    <li role="presentation"><a href="#chooser-course-panel"><input  class="radio" type="radio" name="type" value="video" >选择文件</a></li>
-    {% if mediaType == 'video' %}
-    <li role="presentation"><a href="#import-video-panel"><input  class="radio" type="radio" name="type" value="video" >导入网路视频</a></li>
-    {% endif %}
-    {% if mediaType == 'download' %}
-    <li role="presentation"><a href="#import-link-panel"><input  class="radio" type="radio" name="type" value="video" >网络连接</a></li>
-    {% endif %}
-  </ul>#}
+
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
       {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' %}

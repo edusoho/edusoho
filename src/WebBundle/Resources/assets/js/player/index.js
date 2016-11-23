@@ -1,6 +1,6 @@
 import  PlayerFactory from './player-factory';
 import  EsMessager from '../../common/messenger';
-import DurationStorage from '../../common/durationStorage';
+import DurationStorage from '../../common/duration-storage';
 
 class Show {
 

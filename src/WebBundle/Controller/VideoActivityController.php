@@ -94,11 +94,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    protected function getTaskService()
-    {
-        return $this->getBiz()->service('Task:TaskService');
-    }
-
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
