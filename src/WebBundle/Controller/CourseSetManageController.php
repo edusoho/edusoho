@@ -21,13 +21,6 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function createAction(Request $request)
-    {
-        return $this->render('WebBundle:CourseSetManage:courseset-create.html.twig', array(
-            //params
-        ));
-    }
-
     //基础信息
     public function baseAction(Request $request, $id)
     {
