@@ -65,6 +65,15 @@ class CategoryController extends BaseController
         return $subCategories;
     }
 
+    protected function makeThirdCategories($category)
+    {
+        $thirdCategories = array();
+
+        $parentCategory = $this->getCategoryService()->getCategoryByCode($category['subCategory']);
+
+        return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);        
+    }
+
     public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest', $group = 'course')
     {
         $categories = $this->makeCategories($group);
@@ -73,16 +82,20 @@ class CategoryController extends BaseController
 
         $subCategories = $this->makeSubCategories($category);
 
+        $thirdLevelCategories = $this->makeThirdCategories($category);
+
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            'selectedCategory'    => $category['category'],
-            'selectedSubCategory' => $category['subCategory'],
-            'categories'          => $categories,
-            'subCategories'       => $subCategories,
-            'path'                => $path,
-            'filter'              => $filter,
-            'orderBy'             => $orderBy,
-            'tagGroups'           => $tagGroups,
-            'tags'                => $tags,
+            'selectedCategory'     => $category['category'],
+            'selectedSubCategory'  => $category['subCategory'],
+            'selectedthirdLevelCategory'   => $category['thirdLevelCategory'],
+            'thirdLevelCategories' => $thirdLevelCategories,
+            'categories'           => $categories,
+            'subCategories'        => $subCategories,
+            'path'                 => $path,
+            'filter'               => $filter,
+            'orderBy'              => $orderBy,
+            'tagGroups'            => $tagGroups,
+            'tags'                 => $tags,
         ));
     }
 

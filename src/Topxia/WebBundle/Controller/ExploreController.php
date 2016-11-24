@@ -84,8 +84,9 @@ class ExploreController extends CourseBaseController
 
         unset($conditions['tag']);
 
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
-
+        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['thirdLevelCategory']) ? null : $conditions['thirdLevelCategory'];
+        
         if (!empty($conditions['subCategory'])) {
             $conditions['code'] = $subCategory;
         } else {
@@ -99,8 +100,9 @@ class ExploreController extends CourseBaseController
         }
 
         $category = array(
-            'category'    => $category,
-            'subCategory' => $subCategory
+            'category'           => $category,
+            'subCategory'        => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
         );
 
         unset($conditions['code']);
