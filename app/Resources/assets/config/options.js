@@ -1,11 +1,10 @@
 // 配置文件
 
-/* 默认值
+/* 默认值,可在options中重写
 * defaultOptions = {
     commonsChunkFilename: 'common', 
     bundleMainname: 'main',
     entryFileName: 'index',
-    port: 3030,
     registeredBundles: [ // default auto forEach
       'plugins/CrmPlugin'
       'src/WebBundle',
@@ -23,7 +22,9 @@
     buildDir: 'Resources/build',
 
     libsDevOutputDir: 'libs',
-    libsBuildOutputDir: 'web/build/libs'
+    libsBuildOutputDir: 'web/build/libs',
+
+    port: 3030
   }
 */
 
@@ -35,7 +36,7 @@ const options = {
   },
   libs: {
     vendor: ['libs/vendor.js'], //can be a js file
-    "fix-ie": ['html5shiv', 'respond-js'],
+    "fix-ie": ['html5shiv', 'respond-js'], //can be a node_modules package
     "jquery-validation": ['libs/js/jquery-validation.js'],
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
