@@ -1357,8 +1357,15 @@ class EduCloudController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
             return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
         }
-
-        return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/live/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig', array(
+            'account'  => $overview['account']
+        ));
     }
     // 添加重建索引模态框
     public function modalAction(Request $request)
