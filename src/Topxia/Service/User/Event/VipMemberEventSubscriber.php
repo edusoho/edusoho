@@ -9,16 +9,16 @@ class VipMemberEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            'admin.update_vipMember' => 'updateUserUpdatedTime'
-        );
+		return array(
+			'admin.operate.vip_member' => 'onOperateVipMember'
+		);
     }
 
-    public function updateUserUpdatedTime(ServiceEvent $event)
-    {
-        $vipMember = $event->getSubject();
-        $this->getUserService()->updateUserUpdatedTime($vipMember['userId'], array());
-    }
+	public function onOperateVipMember(ServiceEvent $event)
+	{
+		$vipMember = $event->getSubject();
+		$this->getUserService()->updateUserUpdatedTime($vipMember['userId'], array());
+	}
 
     private function getUserService()
     {

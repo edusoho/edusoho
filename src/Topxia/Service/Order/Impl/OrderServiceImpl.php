@@ -458,7 +458,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             ));
 
             $this->dispatchEvent(
-                'learn.refund',
+                'learning.quit',
                 new ServiceEvent($refund, array('userId' => $refund['userId']))
             );
 
@@ -591,6 +591,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (isset($conditions['amount'])) {
             $tmpConditions['amount'] = $conditions['amount'];
         }
+
+		if (isset($conditions['totalPrice_GT'])){
+			$tmpConditions['totalPrice_GT'] = $conditions['totalPrice_GT'];
+		}
+
+		if (isset($conditions['updatedTime_GE'])){
+			$tmpConditions['updatedTime_GE'] = $conditions['updatedTime_GE'];
+		}
 
         $conditions = array_filter($conditions);
         $conditions = array_merge($conditions, $tmpConditions);

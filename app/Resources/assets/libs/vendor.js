@@ -10,5 +10,15 @@ $(document).ajaxSend(function(a, b, c) {
 });
 
 $('#modal').on('show.bs.modal', function (e) {
-  $(this).load($(e.relatedTarget).data('url'));
+  let url = $(e.relatedTarget).data('url');
+  let $this = $(this);
+
+  if(!$this.html()) {
+    localStorage.removeItem("modalUrl");
+  }
+  
+  if(localStorage.getItem("modalUrl") != url ) {
+    $this.empty().load(url);
+    localStorage.setItem("modalUrl",url);
+  }
 })

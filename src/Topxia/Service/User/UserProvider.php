@@ -28,12 +28,15 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
-        $forbidden = AuthenticationHelper::checkLoginForbidden($this->container->get('request'));
+        $request = $this->container->get('request');
+        
+        $forbidden = AuthenticationHelper::checkLoginForbidden($request);
         if ($forbidden['status'] == 'error') {
             throw new AuthenticationException($forbidden['message']);
         }
-        $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+
+        $user['currentIp'] = $request->getClientIp();
+        $user['org']       = $this->loadOrg($request, $user);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
@@ -41,6 +44,17 @@ class UserProvider implements UserProviderInterface
         $biz['user'] = $currentUser;
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;
+    }
+
+    protected function loadOrg($request, $user)
+    {
+        $org = $request->getSession()->get('currentUserOrg', array());
+        if(empty($org) || $org['orgCode'] != $user['orgCode']) {
+            $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+            $request->getSession()->set('currentUserOrg', $org);
+        }
+
+        return $org;
     }
 
     public function refreshUser(UserInterface $user)
