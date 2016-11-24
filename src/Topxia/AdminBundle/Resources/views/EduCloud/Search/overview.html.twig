@@ -2,6 +2,7 @@
 
 {% set menu = 'admin_edu_cloud_search' %}
 {% set script_controller = 'setting/search' %}
+{% set script_arguments = {items: items}  %}
 
 {% block main %}
 <div class="panel panel-default">
@@ -11,11 +12,11 @@
   <div class="panel-body">
     <div class="pll pbl">
       累计搜索次数：
-      <span class="h3 text-primary plm prs">12345</span>次
+      <span class="h3 text-primary plm prs">{{searchOverview.total}}</span>次
     </div>
     <div class="pll pbm">
       今日搜索次数：
-      <span class="color-gray phm text-md">1700 条</span>
+      <span class="color-gray phm text-md">{{searchOverview.todayUsed}} 条</span>
     </div>
   </div>
 </div>

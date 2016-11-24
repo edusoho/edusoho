@@ -1931,8 +1931,3 @@ admin_setting_cloud_edulive:
 admin_cloud_setting_edulive:
     pattern:  /cloud/edulive/setting
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
-
-# 添加重建索引模态框
-admin_cloud_buildindex_modal:
-    pattern:  /setting/cloud/buildindex/modal
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:modal }

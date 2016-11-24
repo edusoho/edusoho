@@ -740,8 +740,9 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
 
-            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
-
+            $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
+            $searchOverview = $api->get("/me/search/overview");
+            // var_dump($searchOverview);exit();
             $this->isSearchInited($api);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
@@ -750,20 +751,30 @@ class EduCloudController extends BaseController
         }
 
         //是否接入教育云
-        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
-            $data['status'] = 'unconnect';
-        } elseif (empty($overview['user']['licenseDomains'])) {
+        if (empty($userOverview['user']['licenseDomains'])) {
             $data['status'] = 'unbinded';
         } else {
             $currentHost = $request->server->get('HTTP_HOST');
-            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+            if (!in_array($currentHost, explode(';', $userOverview['user']['licenseDomains']))) {
                 $data['status'] = 'binded_error';
             }
         }
-
-        return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
+        // $data['search_enabled'] = 0;
+        if ($data['search_enabled'] == 1 && $data['status'] == 'ok') {
+            foreach ($searchOverview['thirtyDays'] as $value) {
+                $items['date'][] = $value['date'];
+                $items['amount'][] = $value['amount'];            
+            }
+            return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
+                'searchOverview' => $searchOverview,
+                'items'          => $items
+            ));
+        } else {
+            return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
             'data' => $data
-        ));
+            ));
+        }
+
     }
 
     public function searchReapplyAction(Request $request)
@@ -799,9 +810,7 @@ class EduCloudController extends BaseController
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => array('status' => 'success')
-        ));
+        return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
     }
 
     public function searchCloseAction()
@@ -813,9 +822,7 @@ class EduCloudController extends BaseController
             'status'         => $cloud_search_settting['status']
         ));
 
-        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => array('status' => 'success')
-        ));
+        return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
     }
 
     public function keyApplyAction(Request $request)
@@ -1313,10 +1320,5 @@ class EduCloudController extends BaseController
     public function liveSettingAction(Request $request)
     {
         return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');
-    }
-    // 添加重建索引模态框
-    public function modalAction(Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:EduCloud:part/buildindex-modal.html.twig');
     }
 }
