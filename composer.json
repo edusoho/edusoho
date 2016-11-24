@@ -41,7 +41,7 @@
 		"flexihash/flexihash": "~2.0.2",
 		"endroid/qrcode-bundle": "v1.6.3",
 		"bshaffer/oauth2-server-bundle": "^0.3.0",
-		"codeages/biz-framework": "~0.1.7",
+		"codeages/biz-framework": "~0.1.2",
 		"codeages/rest-api-client": "^0.1.2"
 	},
 	"require-dev": {
