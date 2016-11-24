@@ -77,6 +77,8 @@ interface ClassroomService
 
     public function findClassroomsByCoursesIds($courseIds);
 
+    public function getClassroomByCourseId($courseId);
+
     // 内部方法
     public function updateClassroomTeachers($id);
 

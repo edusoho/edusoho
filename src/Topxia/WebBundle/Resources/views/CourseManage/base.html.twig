@@ -47,24 +47,21 @@ isCoursePublished: course.status,
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="col-md-2 control-label">{{ '课程购买'|trans }}</label>
-          <div class="col-md-8 controls radios">
-            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
-            <div class="help-block">{{ '关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans }}</div>
-          </div>
-        </div>
-
         {% if course.type == 'live' %}
 
           <div class="form-group">
             <label class="col-md-2 control-label"
-                   for="maxStudentNum-field">{{ '直播最大%user_name%数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}</label>
+                   for="maxStudentNum-field">课程人数</label>
             <div class="col-md-8 controls">
               <input type="text" id="maxStudentNum-field" name="maxStudentNum"
                      class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(20) }}"
                      data-live-capacity-url="{{ path('live_capacity',{id:course.id}) }}"> {{ '人'|trans }}
-              <div class="help-block" style="display:none;"></div>
+              <div class="help-block">
+                <p>1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。</p>
+                <p>2.课程人数≠购买的直播人数，每场直播参与的最大人数≤购买的直播人数。</p>
+                <p>3.若课程人数＞购买的直播人数，可能会出现部分用户无法进入直播教室的情况。</p>
+                <p>4.若直播有回放视频，未参与直播过程的用户，只要加入课程，也可观看回放。</p>
+              </div>
             </div>
           </div>
 
@@ -79,7 +76,7 @@ isCoursePublished: course.status,
             {% else %}
               {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, course.expiryMode|default('none')) }}
             {% endif %}
-            <div class="help-block">{{ '有效期方式一旦选定，课程发布后无法更改。'|trans }}</div>
+            <div class="help-block">{{ '已发布课程无法修改有效期方式，如需要修改，请关闭课程后再设置；有效期变更，不影响已经加入课程的学员。'|trans }}</div>
           </div>
         </div>
         <div class="form-group expiry-day-js {% if course.expiryMode|default('none') == 'none' %} hidden {% endif %}">

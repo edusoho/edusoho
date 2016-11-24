@@ -17,10 +17,9 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($data);
     }
 
-
-    protected function makeCategories()
+    protected function makeCategories($group)
     {
-        $group = $this->getCategoryService()->getGroupByCode('course');
+        $group = $this->getCategoryService()->getGroupByCode($group);
 
         if (empty($group)) {
             $categories = array();
@@ -66,9 +65,9 @@ class CategoryController extends BaseController
         return $subCategories;
     }
 
-    public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
+    public function treeNavAction(Request $request, $category, $tags, $path, $filter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest', $group = 'course')
     {
-        $categories = $this->makeCategories();
+        $categories = $this->makeCategories($group);
 
         $tagGroups = $this->makeTags();
 

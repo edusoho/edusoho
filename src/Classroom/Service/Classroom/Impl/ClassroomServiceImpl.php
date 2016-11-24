@@ -42,11 +42,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::column($results, 'classroomId');
     }
 
+    /**
+     * @deprecated
+     */
     public function findClassroomsByCourseId($courseId)
     {
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
         return $this->findClassroomsByIds($classroomIds);
     }
+
+    public function getClassroomByCourseId($courseId)
+    {
+        $classroomIds = $this->findClassroomIdsByCourseId($courseId);
+        if(empty($classroomIds)) {
+            return array();
+        }
+        
+        return $this->getClassroom($classroomIds[0]);
+    }
+
 
     public function findClassroomByCourseId($courseId)
     {
@@ -594,7 +608,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if (empty($courseMember)) {
                 $info = array(
                     'orderId'   => empty($order) ? 0 : $order['id'],
-                    'orderNote' => empty($order['note']) ? '' : $order['note']
+                    'orderNote' => empty($order['note']) ? '' : $order['note'],
+                    'levelId' => empty($member['levelId']) ? 0 : $member['levelId']
                 );
                 $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
@@ -1115,30 +1130,30 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function canLookClassroom($id)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+        
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
             return false;
         }
 
-        $user = $this->getCurrentUser();
-
-        if ($user->isAdmin()) {
-            return true;
-        }
-
         $member = $this->getClassroomMember($id, $user['id']);
-
-        if ($member) {
-            return true;
-        }
 
         if ($classroom['showable'] && !$member['locked']) {
             return true;
         }
 
-        if (!$user->isLogin()) {
-            return false;
+        if ($member) {
+            return true;
         }
 
         return false;

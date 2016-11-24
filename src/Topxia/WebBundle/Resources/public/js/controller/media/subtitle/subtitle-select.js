@@ -1,11 +1,15 @@
 define(function(require,exports,module){
+
+    var convertStatus = require('./convert-status-map');
+
     var Select = {
-        init:function(id){
-            this.$el = $('#'+id);
+        init:function(options){
+            this.$el = $(options.id);
             if(!this.$el.length){
                 throw new Error('id 不存在');
             }
             this.options = [];
+            this.optionsLimit = options.optionsLimit || false;
             this.eventManager = {};
             this.initParent();
             this.initEvent();
@@ -42,6 +46,9 @@ define(function(require,exports,module){
                 this.$dataShow.attr('title',this.getValue().name);
             });
             this.on('listchange',function(){
+                if(this.optionsLimit && this.options.length >= this.optionsLimit ){
+                    this.trigger('optionlimit');
+                }
                 this.$list.html(this.getOptionsStr());
                 this.setValue(this.getDefaultOption())
             });
@@ -64,7 +71,7 @@ define(function(require,exports,module){
                     '</ul>'+
                 '</div>';
         },
-        getDefaultOption() {
+        getDefaultOption: function() {
             if(this.options.length){
                 return this.options[0];
             }else{
@@ -83,7 +90,7 @@ define(function(require,exports,module){
                     '<div class="value" title="'+ option.name +'" url="'+option.url+'">'+
                         option.name+
                     '</div>'+
-                    '<span class="convertStatus convert-'+ option.convertStatus +'">'+_self.convertStatus[option.convertStatus]+ '</span>'+
+                    '<span class="convertStatus convert-'+ option.convertStatus +'">'+convertStatus(option.convertStatus)+ '</span>'+
                     '<i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i>'+
                 '</li>';
             })
@@ -127,7 +134,7 @@ define(function(require,exports,module){
             this.trigger('listchange',this.options);
             e.stopPropagation();
         },
-        handleOptionEmpty(){
+        handleOptionEmpty: function(){
             this.value = '';
             this.trigger('valuechange',false);
         },
@@ -149,12 +156,12 @@ define(function(require,exports,module){
             this.options = optionsArray;
             this.trigger('listchange',this.options);
         },
-        convertStatus:{
-            waiting:'等待转码',
-            doing:'正在转码',
-            success:'转码成功',
-            error:'转码失败',
-            none:'等待转码'
+        addOption:function(option){
+            if ( !option.convertStatus ){
+                option.convertStatus = 'waiting';
+            }
+            this.options.push(option);
+            this.trigger('listchange');
         }
     }
     module.exports = Select;

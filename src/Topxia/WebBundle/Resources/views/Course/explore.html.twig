@@ -18,11 +18,16 @@
       </div>
 
       {% set classrooms = data('Classrooms',{count:1}) %}
-      {% if classrooms|default(null) %}
-        <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-          {{'查看%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
+      <div class="more">
+        {% if classrooms|default(null) %}
+          <a class="btn btn-primary btn-lg" href="{{path('classroom_explore')}}">
+            {{'查看%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
+          </a>
+        {% endif %}
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{'查看公开课'|trans}}
         </a>
-      {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}

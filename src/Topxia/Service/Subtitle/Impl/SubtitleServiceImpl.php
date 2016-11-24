@@ -18,18 +18,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             return array();
         }
 
-        $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
-
-        $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true);
-        foreach ($files as $file) {
-            if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
-                continue;
-            }
-            $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id']);
-            $subtitles[$file['id']]['url'] = $downloadFile['url'];
-            $subtitles[$file['id']]['convertStatus'] = $file['convertStatus'];
-        }
+        $subtitles = $this->fillMetas($subtitles);
 
         return array_values($subtitles);
     }
@@ -51,7 +40,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
     }
 
     public function addSubtitle($subtitle)
-    {   
+    {
         if (empty($subtitle)) {
             throw new InvalidArgumentException('添加失败');
         }
@@ -64,7 +53,9 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         }
 
         $subtitle = $this->filterSubtitleFields($subtitle);
-        return $this->getSubtitleDao()->addSubtitle($subtitle);
+        $record = $this->getSubtitleDao()->addSubtitle($subtitle);
+        $subtitles = $this->fillMetas(array($record));
+        return array_pop($subtitles);
     }
 
     public function deleteSubtitle($id)
@@ -74,17 +65,10 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             throw new ResourceNotFoundException('subtitle', $id);
         }
 
-        $fileId = $subtitle['subtitleId'];
-        $file = $this->getUploadFileService()->getFile($fileId);
-        if (empty($file) || $file["type"] != "subtitle") {
-            throw new ResourceNotFoundException('subtitleUploadFile', $fileId);
-        }
+        $this->getSubtitleDao()->deleteSubtitle($id);
+        $this->getUploadFileService()->deleteFile($subtitle['subtitleId']);
 
-        if ($this->getSubtitleDao()->deleteSubtitle($id) && $this->getUploadFileService()->deleteFile($file['id'])) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     protected function filterSubtitleFields($fields)
@@ -96,7 +80,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
 
         $subtitle = array();
 
-        $subtitle['name'] = $fields['name'];
+        $subtitle['name'] = rtrim($fields['name'], '.srt');
         if (empty($fields['ext'])) {
             $subtitle['ext'] = (string) substr(strrchr($fields['name'], '.'), 1);
         } else {
@@ -107,6 +91,24 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $subtitle['createdTime'] = time();
 
         return $subtitle;
+    }
+
+    protected function fillMetas($subtitles)
+    {
+        $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
+
+        $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
+        foreach ($files as $file) {
+            if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
+                continue;
+            }
+            $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id']);
+            $subtitles[$file['id']]['url'] = $downloadFile['url'];
+            $subtitles[$file['id']]['convertStatus'] = $file['convertStatus'];
+        }
+
+        return $subtitles;
     }
 
     protected function getSubtitleDao()

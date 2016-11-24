@@ -25,9 +25,9 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
 
 use Symfony\Component\Debug\Debug;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Common\AppConnectionFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\AppConnectionFactory;
 
 fix_gpc_magic();
 

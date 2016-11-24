@@ -15,8 +15,33 @@ use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
-
     public function indexAction(Request $request)
+    {
+        $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
+        $permissionNames = ArrayToolkit::column($permissions, 'code');
+        if (in_array('admin_homepage', $permissionNames)) {
+            return $this->forward('TopxiaAdminBundle:Default:homepage');
+        }
+
+        return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
+            'permission' => $permissions[0]
+        ));
+    }
+
+    public function renderCurrentAdminHomepageAction($permission)
+    {
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+
+        if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
+            $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+        }
+
+        $permissionPath = $this->container->get('permission.twig.permission_extension')->getPermissionPath($this, array('needs_context' => true, 'needs_environment' => true), $tabMenu);
+        return $this->redirect($permissionPath);
+    }
+
+    public function homepageAction(Request $request)
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
@@ -467,7 +492,6 @@ class DefaultController extends BaseController
         array_walk($result, function (&$data, $key) {
             $data = array('count' => count(array_unique($data)), 'date' => $key);
         });
-        //var_dump($result);
 
         return $result; //array_values($result);
     }

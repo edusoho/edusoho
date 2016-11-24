@@ -13,7 +13,7 @@
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
   </head>
-  <body style="overflow:hidden;border:0px;">
+  <body style="overflow:hidden;border:0px;background: black;">
     {% if file|default(null) %}
       {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <div class="alert alert-danger">{{'转码失败，请联系管理员。'|trans}}</div>
@@ -28,7 +28,9 @@
           data-file-id="{{file.id}}"
           data-file-type="{{file.type}}"
           data-url="{{url}}"
-          data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
+          {% if context.hideBeginning|default(0) == 0 %}
+            data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
+          {% endif %}
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"
