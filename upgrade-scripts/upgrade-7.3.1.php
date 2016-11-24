@@ -86,6 +86,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isTableExist('tag_group_tag')) {
+
             $connection->exec("
                 CREATE TABLE `tag_group_tag` (
                     `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -144,18 +145,29 @@ class EduSohoUpgrade extends AbstractUpdater
         return ServiceKernel::instance()->createService('Permission:Role.RoleService');
     }
 
+    protected function getRoleDao()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleDao');
+    }
+
     protected function updateRole()
     {
         $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
+        file_put_contents('log.txt', 'before update ROLE_ADMIN'." {$role['id']} \n",FILE_APPEND);
         if (!in_array('admin_homepage', $role['data'])) {
             $role['data'][] = 'admin_homepage';
-            $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+            file_put_contents('log.txt',json_encode($role['data'])."\n",FILE_APPEND);
+            $this->getRoleDao()->updateRole($role['id'], array('data' => $role['data']));
+            file_put_contents('log.txt', 'after update ROLE_ADMIN'."\n",FILE_APPEND);
         }
 
         $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
+        file_put_contents('log.txt', 'before update ROLE_SUPER_ADMIN'." {$role['id']} \n",FILE_APPEND);
         if (!in_array('admin_homepage', $role['data'])) {
             $role['data'][] = 'admin_homepage';
-            $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+            file_put_contents('log.txt', json_encode($role['data'])."\n",FILE_APPEND);
+            $this->getRoleDao()->updateRole($role['id'], array('data' => $role['data']));
+            file_put_contents('log.txt', 'after update ROLE_SUPER_ADMIN'."\n",FILE_APPEND);
         }
     }
 
@@ -257,8 +269,11 @@ class TagDataMigration
     );
 
     protected $ownerType = array(
+        'content'            => 'content',
         'article'            => 'article',
         'course'             => 'course',
+        'course_lesson'      => 'course_lesson',
+        'open_course_lesson' => 'open_course_lesson',
         'open_course'        => 'openCourse',
         'classroom'          => 'classroom'
     );
@@ -288,7 +303,8 @@ class TagDataMigration
         foreach ($targets as $target) {
             if (!empty($target[$column])) {
                 $tags = $this->unserialize($target[$column]);
-                $userId = empty($target['userId']) ? $target['headTeacherId'] : $target['userId'];
+                $headTeacherId = empty($target['headTeacherId']) ? 0:$target['headTeacherId'];
+                $userId = empty($target['userId']) ? $headTeacherId: $target['userId'];
                 $fields = array(
                     'userId'    => empty($userId) ? 0:$userId,
                     'tags'      => $tags,
