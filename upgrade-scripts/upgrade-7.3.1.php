@@ -14,20 +14,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if ($index == 0) {
                 $this->updateScheme();
-                return array(
-                    'index' => 1
-                );
             }
 
             $migration->exec($index);
 
-            $index++;
+            $this->getConnection()->commit();
 
-            if ($index == 8) {
-                $this->getConnection()->commit();
-            } else {
-                return array('index' => $index);
-            }
+            return array('index' => ++$index);
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -130,6 +123,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
+
+    protected function migrateCategroy()
+    {
+        
+    }
 }
 
 abstract class AbstractUpdater
@@ -189,7 +187,10 @@ class TagDataMigration
     }
 
     public function exec($index)
-    {   
+    {
+        if (empty($this->columns[$index])) {
+            return;
+        }
         $table  = $this->columns[$index][0];
         $column = $this->columns[$index][1];
 
