@@ -223,10 +223,12 @@ class EduCloudController extends BaseController
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
         return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
-            'storageSetting' => $storageSetting,
-            'headLeader'     => $headLeader,
-            'videoInfo'      => $videoInfo,
-            'info'           => $info
+            'video'   => $overview['video'],
+            'space'   => $overview['space'],
+            'flow'    => $overview['flow'],
+            'yearPackage' => $overview['yearPackage'],
+            'spaceItems' => $spaceItems,
+            'flowItems'  => $flowItems
         ));
     }
 

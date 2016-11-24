@@ -3,6 +3,15 @@
 {% set menu = 'admin_edu_cloud_setting_search' %}
 {% set script_controller = 'setting/search-setting' %}
 
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% block main %}
 <!-- 设置 -->
 <div class="page-heading">
