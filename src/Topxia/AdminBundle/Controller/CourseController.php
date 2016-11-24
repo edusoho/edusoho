@@ -206,9 +206,9 @@ class CourseController extends BaseController
 
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
 
-        if ($conurse['status'] == 'published') {
+        if ($course['status'] == 'published') {
             $this->getCourseService()->closeCourse($courseId);
-            $course['status'] = closed;
+            $course['status'] = 'closed';
         }
 
         if (!empty($subCourses)) {
