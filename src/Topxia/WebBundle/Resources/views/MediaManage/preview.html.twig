@@ -9,7 +9,7 @@
   <div  class="media-preview-content">
     <p class="title">视频预览</p>
     <div class="media-preview-player">
-      <iframe src="{{ path('media_play', {mediaId:mediaId, type:'preview'}) }}" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px">
+      <iframe src="{{ path('media_play',{mediaId:mediaId, context:{'hideQuestion': 1}}) }}" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px">
       </iframe>
     </div>
   </div>
