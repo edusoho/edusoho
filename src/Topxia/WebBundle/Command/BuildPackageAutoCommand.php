@@ -329,7 +329,7 @@ class BuildPackageAutoCommand extends BaseCommand
         $this->output->writeln("<info>  使用 git  diff --name-status  v{$this->fromVersion} release{$this->version} > build/diff-{$this->version} 生成差异文件：build/diff-{$this->version}</info>");
 
         chdir($rootDir);
-        $command = "git diff --name-status develop release/{$this->version} > build/diff-{$this->version}";
+        $command = "git diff --name-status v{$this->fromVersion} release/{$this->version} > build/diff-{$this->version}";
         exec($command);
     }
 
@@ -342,7 +342,7 @@ class BuildPackageAutoCommand extends BaseCommand
         chdir($rootDir);
         $currentCommitHash = exec("git submodule status {$submodule}");
         list($_, $currentCommitHash) = preg_split('/\s+/', $currentCommitHash);
-        exec("git checkout develop");
+        exec("git checkout v{$this->fromVersion}");
         exec("git submodule update");
         $lastCommitHash = exec("git submodule status {$submodule}");
 
