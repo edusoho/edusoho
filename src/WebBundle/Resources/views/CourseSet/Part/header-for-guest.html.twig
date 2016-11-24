@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Course:Part/normal-header-layout.html.twig' %}
+{% extends 'WebBundle:CourseSet:Part/header-layout.html.twig' %}
 
 {% set layoutClass = 'before' %}
 
@@ -18,31 +18,33 @@
   </ol>
 {% endblock %}
 
+{%  set courseVip = null %}
+{% set hasFavorited = null %}
+
 {% block content %}
+
+  {{header_macro.title(course)}}
 
   {{ header_macro.picture(course, previewLesson) }}
 
   {{ header_macro.info(course, member, userVipStatus) }}
-  <div class="course-operation clearfix">
-    {{ header_macro.student_num(course) }}
-    <ul class="course-data clearfix {% if courseVip and course.parentId == '0' %}active{% endif %}">
+  <!-- <div class="course-operation clearfix"> -->
+    <ul class="course-operation clearfix {% if courseVip and course.parentId == '0' %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
-      {% if courseVip and course.parentId == '0' %}
-        <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
-          <i class="es-icon es-icon-crown"></i><br>
-          {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
-        </li>
-      {% endif %}
+      {{ header_macro.setting_btn(course) }}
+      {{ header_macro.courseVip_btn(courseVip) }}
+      
     </ul>
-    <div class="buy">
+   
+  <!-- </div> -->
+   <div class="buy">
       {% if source|default("") == "classroom" %}
         {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: course.id})) }}
       {% else %}
-        {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
+        {#{% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}#}
       {% endif %}
     </div>
-  </div>
 
 {% endblock %}
 

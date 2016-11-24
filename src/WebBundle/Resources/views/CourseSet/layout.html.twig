@@ -16,6 +16,9 @@
   {#{{ render(controller('WebBundle:CourseSet:Part/header',{course: courseSet, member: null})) }}#}
   {#{% endcache %}#}
 
+  <div>{{dump(courseSet)}}</div>
+  <div>{{dump(course)}}</div>
+
   {% include 'WebBundle:CourseSet:Part/header.html.twig' with {course: courseSet, member: null} %}
 {% endblock %}
 {#

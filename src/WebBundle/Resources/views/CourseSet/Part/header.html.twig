@@ -1,8 +1,12 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import _self as header_macro %}
 
-<!-- @TODO 添加previewLesson -->
+<!-- @TODO 获取previewLesson -->
 {% set previewLesson = {id:1}%}
+<!-- @TODO 获取userVipStatus -->
+{% set userVipStatus = "ok" %}
+
+
 
 {% if member %}
   {% cache 'course/' ~ course.id ~ 'normal/header/for/member' 600 %}
@@ -18,7 +22,28 @@
   {% endcache %}
 {% endif %}
 
-
+{% macro title(course) %}
+  <div class="course-detail-header">
+    <span class="tags">{% if course.serializeMode != 'serialized' %}
+      <span class="tag-serialing"></span>
+    {% elseif course.serializeMode == 'finished' %}
+      <span class="tag-finished"></span>
+      {% endif %}</span>
+    <div class="course-detail-title">
+      <h1>
+        {{ course.title }}
+        <span class="es-qrcode top" data-url="{{path('course_qrcode',{id: course.id})}}"> <i class="es-icon es-icon-qrcode"></i>
+          <span class="qrcode-popover">
+            <img src="" alt="">      
+            {{'扫二维码继续学习'|trans}}
+          {{'二维码时效为半小时'|trans}}
+          </span>
+        </span>
+      </h1>
+      <div class="gray-dark">sdfsdf{{ course.subtitle }}</div>
+    </div>
+  </div>
+{% endmacro %}
 
 {% macro picture(course, previewLesson) %}
   <div class="course-img">
@@ -27,42 +52,35 @@
         <i class="es-icon es-icon-playcircleoutline"></i>
       </a>
     {% endif %}
-
     <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" alt="{{ course.title }}">
-    <div class="tags">
-      {% if course.serializeMode == 'serialized' %}
-        <span class="tag-serialing"></span>
-      {% elseif course.serializeMode == 'finished' %}
-        <span class="tag-finished"></span>
+    <div class="student-num hidden-xs">
+    {#{% if setting('course.show_student_num_enabled', '1') == 1  %}
+      <i class="es-icon es-icon-people"></i>{{'%studentNum%人'|trans({'%studentNum%': course.studentNum}) }}
+      {% if course.maxStudentNum > 0 %}
+        {% if course.studentNum >= course.maxStudentNum %}
+          <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
+        {% else %}
+          <small class="hidden-sm text-sm">({{'%maxStudentNum%名额'|trans({'%maxStudentNum%': course.maxStudentNum}) }})</small>
+        {% endif %}
       {% endif %}
-      {% if course.type == 'live' %}
-        <span class="tag-live"></span>
-      {% endif %}
+    {% else %}
+      <i class="es-icon es-icon-accesstime"></i>{{'%lessonNum%课时'|trans({'%lessonNum%': course.lessonNum}) }}
+    {% endif %}#}
     </div>
+    <div class="score">
+        {#{{ web_macro.star(course.rating) }}
+        <span>({{ course.ratingNum }}{{' 评论'|trans}})</span>#}
+        显示评分
+      </div>
   </div>
 {% endmacro %}
 
-{% macro info(course, member, userVipStatus) %}
-  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-  <div class="course-info">
-    <h2 class="title">
-      {{ course.title }}
-      <span class="es-qrcode top" data-url="{{path('course_qrcode',{id: course.id})}}">
-        <i class="es-icon es-icon-qrcode"></i>
-        <span class="qrcode-popover">
-          <img src="" alt="">
-          {{'扫二维码继续学习'|trans}}
-          {{'二维码时效为半小时'|trans}}
-        </span>
-      </span>
-    </h2>
-    <div class="subtitle">{{ course.subtitle }}</div>
-    <div class="metas">
-      <div class="score">
-        {{ web_macro.star(course.rating) }}
-        <span>({{ course.ratingNum }}{{' 评论'|trans}})</span>
-      </div>
+  
 
+
+{% macro info(course, member, userVipStatus) %}
+  <div class="course-info">
+    <div class="metas">
       {% if member and member.deadline > 0 %}
         {% if member.deadline > 'now'|date('U') %}
           <p class="expiry-date hidden-sm">
@@ -82,13 +100,10 @@
           </div>
         {% endif %}
       {% endif %}
-
-
       {% if not member %}
-        {% if course.buyExpiryTime %}
+        {#{% if course.buyExpiryTime %}
           <p class="expiry-date hidden-sm">{{ '购买截止日期: '|trans }}{{ course.buyExpiryTime|date('Y-m-d H:i') }}</p>
         {% endif %}
-
         {% if course.expiryDay %}
           <p class="expiry-date hidden-sm">
             {% if course.expiryMode|default(null) == 'date' %}
@@ -118,10 +133,9 @@
               </span>
             </p>
           {% endif %}
-        {% endif %}
-
+        {% endif %}#}
+        购买前信息
       {% endif %}
-
     </div>
 
     {% if not member.fake|default(false) and member and member.role == 'student' and member.levelId > 0 and userVipStatus != 'ok' %}
@@ -155,47 +169,53 @@
   </div>
 {% endmacro %}
 
-{% macro student_num(course) %}
-  <div class="student-num hidden-xs">
-    {% if setting('course.show_student_num_enabled', '1') == 1  %}
-      <i class="es-icon es-icon-people"></i>{{'%studentNum%人'|trans({'%studentNum%': course.studentNum}) }}
-      {% if course.maxStudentNum > 0 %}
-        {% if course.studentNum >= course.maxStudentNum %}
-          <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
-        {% else %}
-          <small class="hidden-sm text-sm">({{'%maxStudentNum%名额'|trans({'%maxStudentNum%': course.maxStudentNum}) }})</small>
-        {% endif %}
-      {% endif %}
-    {% else %}
-      <i class="es-icon es-icon-accesstime"></i>{{'%lessonNum%课时'|trans({'%lessonNum%': course.lessonNum}) }}
-    {% endif %}
-  </div>
-{% endmacro %}
-
 {% macro favorite_btn(course, hasFavorited) %}
   <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;" class="color-primary">
-      <p><i class="es-icon es-icon-bookmark"></i></p>
-      <p>{{'已收藏'|trans}}</p>
+    <a class="btn btn-default btn-xs " href="javascript:;" class="color-primary">
+     <i class="es-icon es-icon-bookmark"></i>
     </a>
   </li>
-
   <li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;">
-      <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
-      <p>{{'收藏'|trans}}</p>
+    <a class="btn btn-default btn-xs  " href="javascript:;">
+      <i class="es-icon es-icon-bookmarkoutline"></i>
     </a>
   </li>
 {% endmacro %}
 
 {% macro share_btn(course) %}
-  <li>
-    <span class="es-share top">
-      <a class="dropdown-toggle" href="" data-toggle="dropdown">
-        <p><i class="es-icon es-icon-share"></i></p>
-        <p>{{'分享'|trans}}</p>
-      </a>
-      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
-    </span>
+  <li class="es-share top">
+    <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share"></i>
+    </a>
+    {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
   </li>
 {% endmacro %}
+
+{% macro setting_btn(course) %}
+  {% if member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
+    <li>
+      <a class="btn btn-default btn-xs " href="{{ path('course_manage', {id:course.id}) }}" title="{{'课程管理'|trans}}"> <i class="es-icon es-icon-setting"></i>
+      </a>
+    </li>
+  {% endif %}
+{% endmacro %}
+
+{% macro courseVip_btn(courseVip) %}
+  {% if courseVip and course.parentId == '0' %}
+    <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+      <i class="es-icon es-icon-crown"></i><br>
+      {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
+    </li>
+  {% endif %}
+{% endmacro %}
+
+
+
+
+
+       
+
+
+
+
+
