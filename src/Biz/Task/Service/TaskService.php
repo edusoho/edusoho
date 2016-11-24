@@ -14,6 +14,8 @@ interface TaskService
 
     public function findTasksByCourseId($courseId);
 
+    public function findUserTasksFetchActivityByCourseId($courseId);
+
     public function findUserTasksFetchActivityAndResultByCourseId($courseId);
 
     public function startTask($taskId);
@@ -45,5 +47,7 @@ interface TaskService
     public function isTaskLearned($taskId);
 
     public function getMaxSeqByCourseId($courseId);
+
+    public function findTasksByChapterId($chapterId)
 }
 
