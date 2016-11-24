@@ -189,11 +189,12 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/me/storage/overview");
             // var_dump($overview['video']['spaceItems']);exit();
+            // var_dump($overview);exit();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
         // $storageSetting['upload_mode'] = 'cloud';
-        if ($storageSetting['upload_mode'] == 'local') {   
+        if ((isset($storageSetting['upload_mode']) && $storageSetting['upload_mode'] == 'local') || !isset($storageSetting['upload_mode'])) {   
             return $this->render('TopxiaAdminBundle:EduCloud/Video:without-enable.html.twig');
         }
 
