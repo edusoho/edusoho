@@ -30,7 +30,7 @@
 
       {% for tagMark in tagMarks|default('') %}
         <li class="tabs-mark">
-          <a class="btn btn-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags, selectedTag:{group:tagMark.groupId, tag:tagMark.tagId}}, filter:filter, orderBy:orderBy}) }}">{{ tagMark.tagName }}<i class="glyphicon glyphicon-remove"></i></a>
+          <a class="btn btn-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory, tag:{tags:tags, selectedTag:{group:tagMark.groupId, tag:tagMark.tagId}}, filter:filter, orderBy:orderBy}) }}">{{ tagMark.tagName }}<i class="glyphicon glyphicon-remove"></i></a>
         </li>     
       {% endfor %}
     </ul>
