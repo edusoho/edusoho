@@ -2,6 +2,8 @@
 
 {% set tagMarks = data('TagMarks', {tags:tags}) %}
 {% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory}) %}
+{% set selectedTagGroups = data('SelectedTagGroups', {tags:tags}) %}
+
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm">
@@ -53,14 +55,16 @@
 
   {% for tagGroup in tagGroups %}
     {% if 'course' in tagGroup.scope %}
-      <div class="tabs-group">
+      {% if tagGroup.id not in selectedTagGroups %}
+        <div class="tabs-group">
           <div class="title">{{ tagGroup.name }}:</div>
           <ul class="content clearfix">
             {% for sub in tagGroup.subs %}
               <li class="{% if tag_equal(tags, sub.id, tagGroup.id) %}active{% endif %}" ><a class="nav-link tag" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags, selectedTag:{group:tagGroup.id, tag:sub.id}}, filter:filter, orderBy:orderBy}) }}">{{ sub.name }}</a></li>
             {% endfor %}
           </ul>
-      </div>
+        </div>
+      {% endif %}
     {% endif %}
   {% endfor %}
 </div>
