@@ -18,6 +18,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $migration->exec($index);
 
+            if ($index == 8) {
+                $this->migrateCategroy($index);
+            }
             $this->getConnection()->commit();
 
             return array('index' => ++$index);
@@ -124,9 +127,61 @@ class EduSohoUpgrade extends AbstractUpdater
         return ServiceKernel::instance()->createService('System.SettingService');
     }
 
+    protected function getCategoryService()
+    {
+        return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
+    }
+
     protected function migrateCategroy()
     {
-        
+        //创建班级分类
+        $classroomGroup = $this->getCategoryService()->getGroupByCode('classroom');
+        if (empty($classroomGroup)) {
+            $classroomGroup = $this->getCategoryService()->addGroup(array(
+                'name'  => '班级分类',
+                'code'  => 'classroom',
+                'depth' => 3
+            ));
+        }
+
+        //复制一级课程分类到班级分类
+        $group = $this->getCategoryService()->getGroupByCode('course');
+        $firstLevelCategorys = $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0);
+
+        //处理一级
+        foreach ($firstLevelCategorys as $firstCategory) {
+            $clsFirstCategory = $this->copyCategory($classroomGroup['id'], $firstCategory, 0);
+            $twoLevelCategorys = $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], $firstCategory['id']);
+            //处理二级
+            foreach ($twoLevelCategorys as $twoLevelCategory) {
+                $clsTwoCategory = $this->copyCategory($classroomGroup['id'], $twoLevelCategory, $clsFirstCategory['id']);
+                $thirdLevelCategorys = $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], $twoLevelCategory['id']);
+                //处理三级
+                foreach ($thirdLevelCategorys as $thirdLevelCategory) {
+                    $this->copyCategory($classroomGroup['id'], $thirdLevelCategory, $clsTwoCategory['id']);
+                }
+            }
+        }
+
+    }
+
+    protected function copyCategory($groupId, $category, $parentId)
+    {
+        $code = 'classroom'.$category['code'];
+        $classroomCategory = $this->getCategoryService()->getCategoryByCode($code);
+        if (!$classroomCategory) {
+            $classroomCategory = $this->getCategoryService()->createCategory(array(
+                'name'     => $category['name'],
+                'code'     => $code,
+                'weight'   => $category['weight'],
+                'groupId'  => $groupId,
+                'parentId' => $parentId
+            ));
+        }
+
+        $this->getConnection()->exec('UPDATE classroom SET categoryId = '.$classroomCategory['id'].' WHERE categoryId = '.$category['id']);
+
+        return $classroomCategory;
     }
 }
 
