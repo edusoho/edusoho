@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {

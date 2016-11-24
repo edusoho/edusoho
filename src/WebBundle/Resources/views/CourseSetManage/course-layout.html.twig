@@ -5,7 +5,7 @@
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
       <a href="{{path('courseset_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
-      <button class="btn btn-success btn-sm pull-right">{{'发布计划'|trans}}</button>
+      <button class="btn btn-success btn-sm pull-right js-publish-course" data-url="{{path('courseset_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">{{'发布计划'|trans}}</button>
     </div>
     <div class="panel-body">
       <ul class="nav nav-pills mbl">

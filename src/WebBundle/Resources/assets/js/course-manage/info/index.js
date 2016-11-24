@@ -1,4 +1,4 @@
-import { TabChange } from '../help';
+import { TabChange, publishCourse } from '../help';
 
 class InfoEditor {
 	constructor() {
@@ -10,6 +10,7 @@ class InfoEditor {
 		this._initDatePicker('#expiryStartDate');
 		this._initDatePicker('#expiryEndDate');
         TabChange();
+        publishCourse();
 
 		CKEDITOR.replace('summary', {
 		  allowedContent: true,
