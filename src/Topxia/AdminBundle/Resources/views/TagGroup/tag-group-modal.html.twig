@@ -17,10 +17,10 @@
     <div class="form-group">
       <label class="col-md-3 control-label">{{'用于'|trans}}</label>
       <div class="col-md-6 controls" style="padding-top: 7px;">
-        <input type="checkbox" data-role="batch-select" name="scope[]" value="course" {% if 'course' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
-        <label class="required">课程列表筛选</label>
-        <input type="checkbox" data-role="batch-select" name="scope[]" value="classroom" {% if 'classroom' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
-        <label class="required">班级列表筛选</label>
+      <label class="required"><input type="checkbox" data-role="batch-select" name="scope[]" value="course" {% if 'course' in tagGroup.scope|default('') %}checked="checked"{% endif %}>课程列表筛选</label>
+      
+      <label class="required"><input type="checkbox" data-role="batch-select" name="scope[]" value="classroom" {% if 'classroom' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
+        班级列表筛选</label>
       </div>
     </div>
   
