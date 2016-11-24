@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'分享邀请链接'|trans}}{% endblock %}
+{% block body %}
+<div class="form-horizontal">
+
+  <div class="form-group">
+    <div class="col-md-offset-1 col-md-10 controls">
+    <textarea rows="3" class="form-control" id="content" readonly="true">{{inviteInfomation_template}}</textarea>
+    </div>
+  </div>
+</div>
+<script>app.load('coin/invite-content-copy')</script>
+{% endblock %}
+{% block footer %}
+    <button class="btn-sm btn btn-primary" id='copy'>{{'复制到剪贴板'|trans}}</button>
+{% endblock %}

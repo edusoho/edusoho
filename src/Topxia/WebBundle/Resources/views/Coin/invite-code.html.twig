@@ -2,10 +2,11 @@
 {% block title %}{{'我的邀请码'|trans}} - {{ parent() }}{% endblock %}
 
 
-{% do load_script('topxiawebbundle/controller/coin/share') %}
 
 {% set side_nav = 'my-invite-code' %}
 
+{#
+{% do load_script('topxiawebbundle/controller/coin/share') %}
 {% set url = inviteInfomation_template %}
 {% set message = ds|default('我正在%site%学习，邀请你也来体验下。')|trans({'%site%':setting('site.name')}) %}
 {% set title = setting('site.name') %}
@@ -14,14 +15,26 @@
 {% else %}
 {% set picture = asset('assets/img/default/MAIN_icon.png') %}
 {% endif %}
+#}
 
 {% block main %}
   <div class="es-section">
   {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
   {% if setting('invite.invite_code_setting') == 1 %}
+    <p class="clearfix">
+      <span class="label label-primary label-md mrl">{{'我的邀请码'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
+     
+      {% if record == null %}
+     
+      <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'TA的邀请码'|trans}}</a>   
+      {% endif %}
+     
+      <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'邀请好友'|trans}}</a>
+    </p>
+    {#
     <div class="clearfix">
       <span class="label label-primary label-md mrl">{{'我的邀请码'|trans}}</span><span class="mrl text-xlg">{{code}}</span>
-  
+    
       {% if record == null %}
       <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'TA的邀请码'|trans}}</a>
       {% endif %}
@@ -36,6 +49,7 @@
         </div>
       </div>
     </div>
+    #}
 
     <br>
     <div class="alert alert-warning">
