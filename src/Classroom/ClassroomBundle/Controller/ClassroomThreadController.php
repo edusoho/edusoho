@@ -91,8 +91,11 @@ class ClassroomThreadController extends BaseController
         }
 
         $thread = $this->getThreadService()->getThread($threadId);
-
         $user   = $this->getCurrentUser();
+        if($thread['userId'] != $user['id']) {
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        }
+
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
