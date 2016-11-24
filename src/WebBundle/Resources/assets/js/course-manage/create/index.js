@@ -10,26 +10,71 @@ class Creator{
 		this._initDatePicker('#expiryStartDate');
 		this._initDatePicker('#expiryEndDate');
         TabChange();
-		//init validator
-        $("#course-create-form").validate({
+
+		
+        let $form = $("#course-create-form");
+        //init validator
+        let validator = $form.validate({
             onkeyup: false,
+            groups: {
+                date: 'expiryStartDate expiryEndDate'
+            },
             rules: {
                 title: {
                     required: true
-                    // minlength:2,
-                    // maxlength: 50,
                 },
                 expiryDays: {
-                	range: [0, 1000000],
-                	digits: true
+                    required: '#expiryByDays:checked',
+                    digits:true
+                },
+                expiryStartDate: {
+                    required: '#expiryByDate:checked',
+                    date:true,
+                    before: '#expiryEndDate'
+                },
+                expiryEndDate: {
+                    required: '#expiryByDate:checked',
+                    date:true,
+                    after: '#expiryStartDate'
                 }
             },
             messages: {
-                title: "请输入计划名称",
-                expiryDays: '请输入0或正整数'
+                title: Translator.trans('请输入教学计划课程标题'),
+                expiryDays: Translator.trans('请输入学习有效期'),
+                expiryStartDate: {
+                    required: Translator.trans('请输入开始日期'),
+                    before: Translator.trans('开始日期应早于结束日期')
+                },
+                expiryEndDate: {
+                    required: Translator.trans('请输入结束日期'),
+                    after: Translator.trans('结束日期应晚于开始日期')
+                }
+            }
+        });
+
+        $.validator.addMethod(
+            "before",
+            function(value, element, params) {
+                // console.log(value, element, params, this.optional(element), $(params).val() > value);
+                return this.optional(element) || $(params).val() > value;
             },
-            submitHandler: function(form){
-            	$(form).ajaxSubmit();
+            Translator.trans('开始日期应早于结束日期')
+        );
+
+        $.validator.addMethod(
+            "after",
+            function(value, element, params) {
+                // console.log(value, element, params, this.optional(element), $(params).val() < value);
+                return this.optional(element) || $(params).val() < value;
+            },
+            Translator.trans('结束日期应晚于开始日期')
+        );
+
+        $('#course-submit').click(function(evt){
+            if(validator.form()){
+                console.log('valid');
+                $(evt.currentTarget).button('loading');
+                $form.submit();
             }
         });
 	}

@@ -58,6 +58,49 @@ class Base
 		    },
 		    maximumSelectionSize: 20
 		});
+
+		var $form = $("#courseset-create-form");
+		$form.validate({
+            onkeyup: false,
+            rules: {
+                title: {
+                    required: true
+                },
+                expiryDays: {
+                	required: '#expiryModeDays:checked',
+                	digits:true
+                },
+                expiryStartDate: {
+                	required: '#expiryModeDate:checked',
+                	date:true
+                },
+                expiryEndDate: {
+                	required: '#expiryModeDate:checked',
+                	date:true,
+                	after: '#expiryStartDate'
+                }
+            },
+            messages: {
+                title: "请输入教学计划课程标题",
+                expiryDays: '请输入学习有效期',
+                expiryStartDate: '请输入开始日期',
+                expiryEndDate: {
+                	required: '请输入结束日期',
+                	after: '结束日期应晚于开始日期'
+                }
+            }
+        });
+
+        $.validator.addMethod(
+	        "after",
+	        function(value, element, params) {
+	            console.log(value, element, params);
+	            return this.optional(element) || $(params).value() > value;
+	        },
+	        "Please check your input."
+		);
+
+		
 	}
 
 }

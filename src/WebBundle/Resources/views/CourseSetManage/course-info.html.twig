@@ -71,7 +71,7 @@
             </label>
             <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days" data-role="tab-content">
             {{'学习有效期'|trans}}
-              <input class="form-control mhm" type="text" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
+              <input class="form-control mhm" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
               <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
             </div>
             <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date" data-role="tab-content">
@@ -148,7 +148,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
-            <button id="course-submit" type="submit" class="btn btn-primary" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+            <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
           </div>
         </div>
       </form>

@@ -41,7 +41,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'title',
             'courseSetId',
             'learnMode',
-            'expiryMode'
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate'
         ));
         $course = $this->validateCourse($course);
         //TODO 确认下是否需要判重，另外，应该查找同一个courseSetId下的courses

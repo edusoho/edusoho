@@ -25,24 +25,6 @@
             <input class="form-control" type="text" id="title" name="title" class="form-group col-sm-9" placeholder="">
           </div>
         </div>        
-        {#<div class="form-group">
-          <div class="col-sm-2 control-label">
-            <label for="learnMode">{{'学习模式'|trans}}</label>
-          </div>
-          <div class="col-sm-10">
-            <div class="col-sm-12">
-              <input type="radio" id="learnFreeOrder" name="learnMode" value="freeOrder" {% if course.learnMode|default('freeOrder') == 'freeOrder' %}checked{% endif %}>
-              <label for="learnFreeOrder">{{'自由式学习'|trans}}</label>
-              <span class="help-block">{{'学员自由安排学习过程'|trans}}</span>
-            </div>
-            <div class="col-sm-12">
-              <input type="radio" id="learnByOrder" name="learnMode" value="byOrder" {% if course.learnMode|default('freeOrder') == 'byOrder' %}checked{% endif %}>
-              <label for="learnByOrder">{{'任务式学习'|trans}}</label>
-              <span class="help-block">{{'根据既定顺序逐个解锁学习'|trans}}</span>
-            </div>
-            <p class="help-block"><i class="es-icon es-icon-warning"></i>{{'确定创建后“学习模式”将不能修改'|trans}}</p>
-          </div>
-        </div>#}
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
           <div class="col-sm-8 radios">
@@ -58,35 +40,6 @@
             <div class="color-warning">{{'确定创建后“学习模式”将不能修改'|trans}}</div>
           </div>
         </div>
-        {#<div class="form-group">
-          <div class="col-sm-2 control-label">
-            <label>{{'学习有效期模式'|trans}}</label>
-          </div>
-          <div class="col-sm-8">
-            <div class="col-sm-12">
-              <input type="radio" id="expiryByDays" name="expiryMode" value="days" {% if course.expiryMode|default('days') == 'days' %}checked{% endif %}>
-              <label for="expiryByDays">{{'随到随学'|trans}}</label>
-              <div class="inline">
-                <span>{{'学习有效期'|trans}}</span>
-                <input type="text" name="expiryDays" value="{{course.expiryDays|default('0')}}">
-                <span>{{'天'|trans}}</span>
-              </div>
-              <p class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。设置为0表示无限制。'|trans}}</p>
-            </div>
-            <div class="col-sm-12">
-              <input type="radio" id="expiryByDate" name="expiryMode" value="date" {% if course.expiryMode|default('days') == 'date' %}checked{% endif %}>
-              <label for="expiryByDate">{{'指定日期'|trans}}</label>
-              <div>
-                <span>{{'开始日期'|trans}}</span>
-                <input type="text" id="expiryStartDate" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}">
-                <span>{{'结束日期'|trans}}</span>
-                <input type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}">
-              </div>
-              <p class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。学习开始5天后不可再加入学习。'|trans}}</p>
-            </div>
-            <p class="help-block"><i class="es-icon es-icon-warning"></i>{{'课程首次发布后“学习模式”和“学习有效期方式”将不能再修改'|trans}}</p>
-          </div>
-        </div>#}
         <div class="form-group">
          <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
          <div class="col-sm-8 radios">
@@ -120,6 +73,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="course-submit" type="submit" class="btn btn-primary pull-right" data-submiting-text="{{ '正在创建...'|trans }}">{{ '确定创建'|trans }}</button>
+  <button id="course-submit" type="button" class="btn btn-primary pull-right" data-submiting-text="{{ '正在创建...'|trans }}">{{ '确定创建'|trans }}</button>
   <button id="course-cancel" type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
 {% endblock %}
