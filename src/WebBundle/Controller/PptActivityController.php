@@ -36,9 +36,11 @@ class PptActivityController extends BaseController implements ActivityActionInte
 
         $result = $this->getMaterialLibService()->player($file['globalId']);
 
+        $slides = isset($result['images']) ? $result['images'] : array();
+
         return $this->render('WebBundle:PptActivity:show.html.twig', array(
             'ppt'      => $ppt,
-            'slides'   => $result['images'],
+            'slides'   => $slides,
             'error'    => $error,
             'courseId' => $courseId,
         ));

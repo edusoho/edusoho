@@ -14,16 +14,33 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
     {
         return array(
             'activity.start'  => 'onActivityStart',
+            'activity.doing'  => 'onActivityDoing',
             'activity.finish' => 'onActivityFinish'
         );
     }
 
     public function onActivityStart(Event $event)
     {
-        $activity = $event->getSubject();
         $task = $event->getArgument('task');
 
         $this->getTaskService()->startTask($task['id']);
+    }
+
+    public function onActivityDoing(Event $event)
+    {
+        $taskId = $event->getArgument('taskId');
+
+        if(!$event->hasArgument('timeStep')){
+            $time = TaskService::LEARN_TIME_STEP;
+        }else{
+            $time = $event->getArgument('timeStep');
+        }
+
+        if(empty($taskId)){
+            return;
+        }
+
+        $this->getTaskService()->doingTask($taskId, $time);
     }
 
     public function onActivityFinish(Event $event)

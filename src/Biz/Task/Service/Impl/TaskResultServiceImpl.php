@@ -57,7 +57,16 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
     public function updateTaskResult($id, $taskResult)
     {
+        $taskResult['updatedTime'] = time();
         return $this->getTaskResultDao()->update($id, $taskResult);
+    }
+
+    public function waveLearnTime($id, $time)
+    {
+        $this->updateTaskResult($id, array());
+        return $this->getTaskResultDao()->wave(array($id), array(
+            'time' => $time
+        ));
     }
 
     public function findUserProgressingTaskResultByActivityId($activityId)
