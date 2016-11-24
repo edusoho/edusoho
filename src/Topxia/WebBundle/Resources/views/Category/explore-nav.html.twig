@@ -8,17 +8,17 @@
     <div class="title">所有分类：</div>
 
     <ul class="content list-unstyled list-inline">
-      {% if categoryMarks[0]|default('') %}
       <li class="classify">
-        <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% if categoryMarks[0]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
       </li>
-      {% endif %}
 
-      {% if categoryMarks[1]|default('') %}
       <li class="classify">
-        <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[1].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% if categoryMarks[1]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[1].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
       </li>
-      {% endif %}
 
       {% for tagMark in tagMarks|default('') %}
         <li class="tabs-mark">
