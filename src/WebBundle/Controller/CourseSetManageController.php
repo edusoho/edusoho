@@ -21,6 +21,16 @@ class CourseSetManageController extends BaseController
         ));
     }
 
+    public function headerAction($courseSet)
+    {
+        $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
+
+        return $this->render('WebBundle:CourseSetManage:header.html.twig', array(
+            'courseSet' => $courseSet,
+            'users'     => $users
+        ));
+    }
+
     //基础信息
     public function baseAction(Request $request, $id)
     {

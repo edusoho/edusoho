@@ -5,7 +5,7 @@
 {% set use_webapck_loader = true %}
 
 {% block content %}
-{{ render(controller('TopxiaWebBundle:Course:header', {course:courseSet, manage: true})) }}
+{{ render(controller('WebBundle:CourseSetManage:header', {courseSet:courseSet, manage: true})) }}
 <div class="row">
   <div class="col-md-3">
     {% block side %}
