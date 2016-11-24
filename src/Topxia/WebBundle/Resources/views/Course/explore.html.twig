@@ -39,7 +39,7 @@
   {% set currentLevelId = filter.currentLevelId|default('all')%}
 
 
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{tags:tags, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{tags:tags, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy, group:'course'})) }}
 
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">

@@ -95,7 +95,8 @@ class CategoryController extends BaseController
             'filter'                     => $filter,
             'orderBy'                    => $orderBy,
             'tagGroups'                  => $tagGroups,
-            'tags'                       => $tags
+            'tags'                       => $tags,
+            'group'                      => $group
         ));
     }
 

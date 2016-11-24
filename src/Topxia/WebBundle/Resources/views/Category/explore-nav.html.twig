@@ -73,7 +73,7 @@
   {% endif %}
 
   {% for tagGroup in tagGroups %}
-    {% if 'course' in tagGroup.scope %}
+    {% if group in tagGroup.scope %}
       {% if tagGroup.id not in selectedTagGroups %}
         <div class="tabs-group">
           <div class="title">{{ tagGroup.name }}:</div>
