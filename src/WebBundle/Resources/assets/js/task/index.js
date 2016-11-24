@@ -36,7 +36,7 @@ class TaskShow extends Emitter{
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
     this.delay('doing', (timeStep) => {
-      learnedTime += timeStep;
+      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
       this.eventEmitter.emit('doing', {
         timeStep: timeStep,
         learnedTime: learnedTime,
