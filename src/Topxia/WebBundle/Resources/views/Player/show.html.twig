@@ -13,7 +13,7 @@
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
   </head>
-  <body style="overflow:hidden;border:0px;background: black;">
+  <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}
       {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <div class="alert alert-danger">{{'转码失败，请联系管理员。'|trans}}</div>
