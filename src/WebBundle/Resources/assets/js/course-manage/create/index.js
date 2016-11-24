@@ -72,7 +72,6 @@ class Creator{
 
         $('#course-submit').click(function(evt){
             if(validator.form()){
-                console.log('valid');
                 $(evt.currentTarget).button('loading');
                 $form.submit();
             }

@@ -69,8 +69,8 @@ class CourseManageController extends BaseController
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:course-info.html.twig', array(
             'courseSet'     => $courseSet,
-            'course'        => $course,
-            'defaultCourse' => $defaultCourse
+            'course'        => $this->formatCourseDate($course),
+            'defaultCourse' => $this->formatCourseDate($defaultCourse)
         ));
     }
 
@@ -148,6 +148,18 @@ class CourseManageController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
         }
+    }
+
+    protected function formatCourseDate($course)
+    {
+        if (isset($course['expiryStartDate'])) {
+            $course['expiryStartDate'] = date('Y-m-d', $course['expiryStartDate']);
+        }
+        if (isset($course['expiryEndDate'])) {
+            $course['expiryEndDate'] = date('Y-m-d', $course['expiryEndDate']);
+        }
+
+        return $course;
     }
 
     protected function getCourseSetService()
