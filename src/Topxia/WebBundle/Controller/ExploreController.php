@@ -84,10 +84,13 @@ class ExploreController extends CourseBaseController
 
         unset($conditions['tag']);
 
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
-        if (!empty($conditions['subCategory'])) {
+        if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
             $conditions['code'] = $subCategory;
+        } elseif (!empty($conditions['selectedthirdLevelCategory']) ) {
+            $conditions['code'] = $thirdLevelCategory;
         } else {
             $conditions['code'] = $category;
         }
@@ -99,8 +102,9 @@ class ExploreController extends CourseBaseController
         }
 
         $category = array(
-            'category'    => $category,
-            'subCategory' => $subCategory
+            'category'           => $category,
+            'subCategory'        => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
         );
 
         unset($conditions['code']);
@@ -240,11 +244,10 @@ class ExploreController extends CourseBaseController
             'consultDisplay'           => true,
             'path'                     => 'course_explore',
             'categoryArray'            => $categoryArray,
-            'group'                    => $group,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
-            'tags'                     => $tags,
+            'tags'                     => $tags
         ));
     }
 
@@ -324,10 +327,13 @@ class ExploreController extends CourseBaseController
             unset($conditions['tagIds']);
         }
         
-        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
-
-        if (!empty($conditions['subCategory'])) {
+        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
+        
+        if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
             $conditions['code'] = $subCategory;
+        } elseif (!empty($conditions['selectedthirdLevelCategory']) ) {
+            $conditions['code'] = $thirdLevelCategory;
         } else {
             $conditions['code'] = $category;
         }
@@ -339,8 +345,9 @@ class ExploreController extends CourseBaseController
         }
 
         $category = array(
-            'category'    => $category,
-            'subCategory' => $subCategory
+            'category'           => $category,
+            'subCategory'        => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
         );
 
         unset($conditions['code']);
@@ -432,6 +439,7 @@ class ExploreController extends CourseBaseController
             'levels'                   => $levels,
             'orderBy'                  => $orderBy[0],
             'tags'                     => $tags,
+            'group'                    => 'classroom'
         ));
     }
 
