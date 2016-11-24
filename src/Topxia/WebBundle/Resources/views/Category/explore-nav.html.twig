@@ -1,6 +1,34 @@
 {% do load_script('category/nav') %}
 
-<div class="tabs-wrapper bg-blank">
+{% set tagMarks = data('TagMarks', {tags:tags}) %}
+{% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory}) %}
+
+<div class="tabs-wrapper">
+  <div class="tabs-mark-group plm ptm">
+    <div class="title">所有分类：</div>
+
+    <ul class="content list-unstyled list-inline">
+      <li class="classify">
+        {% if categoryMarks[0]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
+      </li>
+
+      <li class="classify">
+        {% if categoryMarks[1]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[1].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
+      </li>
+
+      {% for tagMark in tagMarks|default('') %}
+        <li class="tabs-mark">
+          <a class="btn btn-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags, selectedTag:{group:tagMark.groupId, tag:tagMark.tagId}}, filter:filter, orderBy:orderBy}) }}">{{ tagMark.tagName }}<i class="glyphicon glyphicon-remove"></i></a>
+        </li>     
+      {% endfor %}
+    </ul>
+
+  </div>
+
   <div class="tabs-group">
     <div class="title">分类:</div>
       <ul class="content clearfix">

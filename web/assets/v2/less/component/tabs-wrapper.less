@@ -3,6 +3,53 @@
   border-radius: 4px;
   margin-bottom: 30px;
   background-color: #ffffff;
+  .tabs-mark-group {
+    border-bottom: 1px dashed  @border-color;
+    .title {
+      width: 90px;
+      margin-top: 3px;
+      float: left;
+    }
+    
+    .classify {
+      margin-top: 3px; 
+      i {
+        color: @gray;
+      }
+      a {
+        color: @gray;
+        &:hover,&:focus {
+          color: @brand-primary;
+        }
+
+      }
+    }
+
+    .content {
+      margin-left: 100px;
+    }
+  } 
+  .tabs-mark {
+    a {
+      border: 1px solid @border-color;
+      padding: 2px 5px;     
+      color: @gray;
+    }
+    margin: 0 4px;
+    &:hover,
+    &:focus,
+    &.active {
+      a {
+        color: @brand-primary;
+        border: 1px solid @brand-primary;        
+      }
+    }
+
+    i {
+      font-size: 10px;
+      margin-left: 5px;
+    }
+  }
   .tabs-group {
     padding: 0 60px 0 15px;
     position: relative;
@@ -32,9 +79,6 @@
           > a {
             color: @brand-primary;
           }
-        }
-        &:first-child {
-          padding-left: 0;
         }
       }
     }

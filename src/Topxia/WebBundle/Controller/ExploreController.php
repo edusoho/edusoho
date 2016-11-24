@@ -99,7 +99,7 @@ class ExploreController extends CourseBaseController
         }
 
         $category = array(
-            'category'    => $conditions['code'],
+            'category'    => $category,
             'subCategory' => $subCategory
         );
 
@@ -339,7 +339,7 @@ class ExploreController extends CourseBaseController
         }
 
         $category = array(
-            'category'    => $conditions['code'],
+            'category'    => $category,
             'subCategory' => $subCategory
         );
 
