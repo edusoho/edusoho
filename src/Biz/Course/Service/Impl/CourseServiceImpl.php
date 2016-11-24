@@ -5,9 +5,6 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
-use Topxia\Common\Exception\AccessDeniedException;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -50,7 +47,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //TODO 确认下是否需要判重，另外，应该查找同一个courseSetId下的courses
         $existCourses = $this->getCourseDao()->findCoursesByTitle($course['title']);
         if (!empty($existCourses)) {
-            throw new InvalidArgumentException('标题已被占用');
+            throw $this->createInvalidArgumentException('标题已被占用');
         }
 
         $course['status']      = 'draft';
@@ -75,7 +72,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw new ResourceNotFoundException('Course', $id);
+            throw $this->createNotFoundException('Course', $id);
         }
         if ($course['status'] == 'published') {
             unset($fields['learnMode']);
@@ -104,10 +101,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw new ResourceNotFoundException('Course', $id);
+            throw $this->createNotFoundException('Course', $id);
         }
         if ($course['status'] == 'published') {
-            throw new AccessDeniedException('已发布的教学计划不允许删除');
+            throw $this->createAccessDeniedException('已发布的教学计划不允许删除');
         }
 
         return $this->getCourseDao()->delete($id);
@@ -117,10 +114,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw new ResourceNotFoundException('Course', $id);
+            throw $this->createNotFoundException('Course', $id);
         }
         if ($course['status'] != 'published') {
-            throw new AccessDeniedException('教学计划尚未发布');
+            throw $this->createAccessDeniedException('教学计划尚未发布');
         }
         $course['status'] = 'closed';
 
@@ -130,7 +127,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function saveCourseMarketing($courseMarketing)
     {
         //TODO validator
-
         if (isset($courseMarketing)) {
             $this->getCourseMarketingDao()->create($courseMarketing);
         } else {
@@ -142,10 +138,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw new ResourceNotFoundException('Course', $id);
+            throw $this->createNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'draft') {
-            throw new AccessDeniedException('只允许发布未发布教学计划');
+            throw $this->createAccessDeniedException('只允许发布未发布教学计划');
         }
 
         // XXX 先直接发布，忽略审核操作
@@ -172,10 +168,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw new ResourceNotFoundException('Course', $id);
+            throw $this->createNotFoundException('Course', $id);
         }
         if ($course['auditStatus'] !== 'committed') {
-            throw new AccessDeniedException('无法审核该教学计划');
+            throw $this->createAccessDeniedException('无法审核该教学计划');
         }
         $result = $reject ? 'reject' : 'accept';
         $audit  = array(
@@ -199,28 +195,38 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function validateCourse($course)
     {
-        if ($course['expiryMode'] == 'days') {
+        if (isset($course['status']) && $course['status'] === 'published') {
+            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
+                throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+            }
+            return;
+        }
+        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'learnMode', 'expiryMode'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+        }
+        if (!in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的学习模式'));
+        }
+        if ($course['expiryMode'] === 'days') {
             unset($course['expiryStartDate']);
             unset($course['expiryEndDate']);
-        } else {
+        } elseif ($course['expiryMode'] === 'date') {
             unset($course['expiryDays']);
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
-                throw new InvalidArgumentException('有效期的开始日期不能为空');
+                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的开始日期不能为空'));
             }
             if (isset($course['expiryEndDate'])) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
             } else {
-                throw new InvalidArgumentException('有效期的截止日期不能为空');
+                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的结束日期不能为空'));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                throw new InvalidArgumentException('有效期的截止日期需晚于开始日期');
+                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的结束日期需晚于开始日期'));
             }
-        }
-
-        if (empty($course['title'])) {
-            throw new InvalidArgumentException('标题不能为空');
+        } else {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的有效期类型'));
         }
 
         return $course;
@@ -239,6 +245,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
 

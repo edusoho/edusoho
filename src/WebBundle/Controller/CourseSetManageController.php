@@ -54,7 +54,12 @@ class CourseSetManageController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        //delete..
+        try {
+            $this->getCourseSetService()->deleteCourseSet($id, $this->getUser()->getId());
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
     }
 
     protected function getCourseService()

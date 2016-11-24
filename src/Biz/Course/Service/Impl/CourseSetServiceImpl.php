@@ -16,7 +16,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
-        //TODO validator
+        $this->validateCourseSet($courseSet);
+
         $courseSet = ArrayToolkit::parts($courseSet, array(
             'type',
             'title'
@@ -44,7 +45,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSet($id, $fields)
     {
-        //TODO validator
+        $this->validateCourseSet($courseSet);
 
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
@@ -60,7 +61,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function deleteCourseSet($id)
     {
+        //TODO
+        //1. 判断该课程能否被删除
+        //2. 删除时需级联删除课程下的教学计划、用户信息等等
         return $this->getCourseSetDao()->delete($id);
+    }
+
+    protected function validateCourseSet($courseSet)
+    {
+        if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+        }
+        if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的课程类型'));
+        }
     }
 
     protected function getCourseSetDao()
@@ -75,7 +89,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return $this->getKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
 

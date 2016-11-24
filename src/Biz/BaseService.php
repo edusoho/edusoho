@@ -2,16 +2,17 @@
 
 namespace Biz;
 
-
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
     /**
-     * @param $alias
+     * @param  $alias
      * @return GeneralDaoInterface
      */
     protected function createDao($alias)
@@ -40,12 +41,22 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
-    protected function createResourceNotFoundService($resourceType, $resourceId)
+    protected function createNotFoundException($resourceType, $resourceId)
     {
-        return new ResourceNotFoundException($resourceType, $resourceId);
+        return new NotFoundException($resourceType, $resourceId);
     }
 
-    protected function createServiceException($message='')
+    protected function createAccessDeniedException($message = '')
+    {
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '')
+    {
+        return new InvalidArgumentException($message);
+    }
+
+    protected function createServiceException($message = '')
     {
         return new ServiceException($message);
     }

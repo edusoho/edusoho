@@ -35,7 +35,7 @@ class CourseSetController extends BaseController
         } else {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
         }
-        //do other things
+
         return $this->render('WebBundle:CourseSet:show.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
