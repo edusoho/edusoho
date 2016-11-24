@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
     var SubtitleDialog = Widget.extend({
         uploader: null,
+        media: null,
         attrs:{
             subtitleUploader:$('#subtitle-uploader')
         },
@@ -13,13 +14,23 @@ define(function(require, exports, module) {
             'click .js-subtitle-delete':'subtitleDelete'
         },
         setup: function(){
-            this.initUploader();
+        },
+        show: function()
+        {
+            if ('id' in this.media) {
+                this.element.html('加载字幕...');
+                var self = this;
+                $.get(this.element.data('dialogUrl'), {mediaId:this.media.id}, function(html){
+                    self.element.html(html);
+                    self.initUploader();
+                });
+            }
         },
         initUploader: function()
         {
             var _self = this;
             var $elem = this.$('#subtitle-uploader');
-            var mediaId = this.element.data('mediaId');
+            var mediaId = this.$('.js-subtitle-dialog').data('mediaId');
             var uploader = new UploaderSDK({
                 initUrl:$elem.data('initUrl'),
                 finishUrl:$elem.data('finishUrl'),

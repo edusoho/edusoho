@@ -338,15 +338,12 @@ define(function(require, exports, module) {
          */
         var subtitleDialog = null;
         var displaySubtitleManage = function(media) {
-            var $container = $form.find('#subtitle-form-group');
-            $container.find('.js-subtitle-list').html('加载字幕...');
-            if ($container.length > 0) {
-                $.get($container.data('dialogUrl'), {mediaId:media.id}, function(html){
-                    $container.find('.js-subtitle-list').html(html);
-                    subtitleDialog = new SubtitleDialog({
-                        element: '.js-subtitle-dialog'
-                    });
+            if ($('.js-subtitle-list').length > 0) {
+                subtitleDialog = new SubtitleDialog({
+                    element: '.js-subtitle-list'
                 });
+                subtitleDialog.media = media;
+                subtitleDialog.show();
             }
         }
 
