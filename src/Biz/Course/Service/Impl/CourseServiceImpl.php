@@ -62,7 +62,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'courseSetId',
-            'learnMode',
+            // 'learnMode', //一旦创建，学习模式不允许变更
             'expiryMode',
             'expiryDays',
             'expiryStartDate',
@@ -75,8 +75,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException('Course', $id);
         }
+
         if ($course['status'] == 'published') {
-            unset($fields['learnMode']);
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);

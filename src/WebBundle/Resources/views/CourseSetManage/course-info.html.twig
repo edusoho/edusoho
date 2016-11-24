@@ -42,12 +42,12 @@
             <label>
               <input type="radio" id="learnModeFreeOrder" name="learnMode" value="freeOrder" 
               {% if course.learnMode|default('freeOrder') == 'freeOrder' %}checked{% endif %}
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %} data-role="tab" data-tab-content="#learnFreeOrderHelp" >{{'自由模式'|trans}}
+              disabled data-role="tab" data-tab-content="#learnFreeOrderHelp" >{{'自由模式'|trans}}
             </label>
             <label>
               <input type="radio" name="learnMode" value="byOrder" 
               {% if course.learnMode|default('freeOrder') == 'byOrder' %}checked{% endif %}
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %} data-role="tab" data-tab-content="#learnByOrderHelp">
+              disabled data-role="tab" data-tab-content="#learnByOrderHelp">
               {{'任务式学习'|trans}}
             </label>
             <p class="help-block {% if course.learnMode|default('freeOrder') == 'byOrder' %}hidden{% endif %}"  id="learnFreeOrderHelp" data-role="tab-content">{{'学习过程自由安排'|trans}}</p>
