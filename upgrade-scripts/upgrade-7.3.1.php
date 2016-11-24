@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $migration->exec($index);
 
                 if ($index == 8) {
-                    $this->migrateCategroy($index);
+                    $this->migrateCategroy();
                 }
 
                 if ($index == 9) {
@@ -147,13 +147,16 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateRole()
     {
         $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
-        $role['data'][] = 'admin_homepage';
-
-        $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+        if (!in_array($role['data'], 'admin_homepage')) {
+            $role['data'][] = 'admin_homepage';
+            $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+        }
 
         $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
-        $role['data'][] = 'admin_homepage';
-        $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+        if (!in_array($role['data'], 'admin_homepage')) {
+            $role['data'][] = 'admin_homepage';
+            $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+        }
     }
 
     protected function migrateCategroy()
