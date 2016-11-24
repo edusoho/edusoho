@@ -145,9 +145,13 @@ class ThreadController extends BaseController
 
     public function updateAction(Request $request, $target, $thread)
     {
+        $user = $this->getCurrentUser();
+        if($thread['userId'] != $user['id']) {
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        }
+
         if ($request->getMethod() == 'POST') {
             try {
-                $user = $this->getCurrentUser();
                 $data = $request->request->all();
 
                 if (isset($data['maxUsers']) && empty($data['maxUsers'])) {
