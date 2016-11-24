@@ -44,21 +44,21 @@ define(function(require, exports, module) {
     });
 
     validator.addItem({
-        element: '#tag-group-name-field',
-        required: true,
-        rule: 'remote'
+      element: '#tag-group-name-field',
+      required: true,
+      rule: 'remote byte_maxlength{max:20}'
     });
 
-        $modal.find('.delete-tag-group').on('click', function() {
-          if (!confirm(Translator.trans('真的要删除该标签组吗？'))) {
-              return ;
-          }
+    $modal.find('.delete-tag-group').on('click', function() {
+    if (!confirm(Translator.trans('真的要删除该标签组吗？'))) {
+      return ;
+    }
 
-          var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
-          $.post($(this).data('url'), function(html) {
-              $modal.modal('hide');
-              $table.find(trId).remove();
-          });
+    var trId = '#tag-group-tr-' + $(this).data('tagGroupId');
+    $.post($(this).data('url'), function(html) {
+      $modal.modal('hide');
+      $table.find(trId).remove();
+    });
 
     });
 
@@ -110,6 +110,7 @@ define(function(require, exports, module) {
         },
         width: 'off',
         maximumSelectionSize: 50,
+        maximumInputLength: 10,
         placeholder: Translator.trans('请输入标签'),
         multiple: true,
         tokenSeparators: [",", " "],
