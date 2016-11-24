@@ -9,22 +9,19 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomName = $this->setting('classroom.name');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-
-        $user = $this->getCurrentUser();
-
-        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
+            $classroomName = $this->setting('classroom.name', '班级');
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
-        if ($member && $member['locked'] == '0') {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
-        }
+        $user = $this->getCurrentUser();
+        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+
+        $layout = ($member && $member['locked'] == '0') ? 'ClassroomBundle:Classroom:join-layout.html.twig' : 'ClassroomBundle:Classroom:layout.html.twig';
+
         if (!$classroom) {
             $classroomDescription = array();
         } else {

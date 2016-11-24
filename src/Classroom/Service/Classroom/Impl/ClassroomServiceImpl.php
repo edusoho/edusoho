@@ -1013,6 +1013,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         if ($user->hasPermission($permission)) {
             return true;
         }
@@ -1119,25 +1123,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function canLookClassroom($id)
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return false;
-        }
-
-        if ($user->isAdmin()) {
-            return true;
-        }
-        
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
             return false;
         }
 
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin() && $classroom['showable']) {
+            return true;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         $member = $this->getClassroomMember($id, $user['id']);
 
-        if ($classroom['showable'] && !$member['locked']) {
+        if (empty($member) && $classroom['showable']) {
             return true;
         }
 
