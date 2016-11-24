@@ -51,8 +51,11 @@ export const publishCourse = () => {
 	});
 }
 
-export default {
-	closeCourse,
-	deleteCourse,
-	publishCourse
+export const TabChange = () => {
+	$('[data-role="tab"]').click(function(){
+	  let $this = $(this);
+	  console.log($($this.data('tab-content')));
+	  let $tabContent =$($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
+		console.log($tabContent);
+	});
 }
