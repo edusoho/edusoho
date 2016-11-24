@@ -27,7 +27,6 @@ define(function(require,exports,module){
         optionsLimit:4
     });
     select.on('valuechange',function(data){
-        console.log(data);
         if(!data){
             $textTrackDisplay.html('当前无字幕');
             return;
