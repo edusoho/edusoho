@@ -11,11 +11,11 @@
         </div>
         <div class="col-sm-7">
           <div class="progress mbm cloud-progress">
-            <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{overview.yearPackage.usedPercentage}}%">
+            <div class="progress-bar progress-bar-flow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{yearPackage.usedPercentage}}%">
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <span class="text-danger">{{overview.yearPackage.totalAmount-overview.yearPackage.amount}}GB</span>/{{overview.yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">（剩余{{overview.yearPackage.amount}}GB）</span>
+          <span class="text-danger">{{yearPackage.totalAmount-yearPackage.amount}}GB</span>/{{yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">（剩余{{yearPackage.amount}}GB）</span>
         </div>
       </div>
       <div class="row pvm">
@@ -23,11 +23,11 @@
         服务期限
         </div>
         <div class="col-sm-7">
-         {{overview.yearPackage.startTime}}~{{overview.yearPackage.endTime}}
+         {{yearPackage.startTime}}~{{yearPackage.endTime}}
         </div>
         <div class="col-sm-offset-2 col-sm-7">
           <div class="text-danger">
-            {{overview.yearPackage.message}}
+            {{yearPackage.message}}
           </div>
         </div>
       </div>

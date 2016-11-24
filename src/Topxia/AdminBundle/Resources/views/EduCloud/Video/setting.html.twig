@@ -4,6 +4,19 @@
 {% set script_controller = 'setting/cloud' %}
 {#{% block tabs %}{% endblock %}#}
 
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif video.status|default() == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{'
+    您的云视频服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% block main %}
   <style>
     .webuploader-container {
@@ -203,7 +216,11 @@
           <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
         </div>
         <div class="help-block">
-          云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。<a href="">点击这里</a>了解详情。
+          1. 专注教育——提供视频随堂练习、视频字幕、视频弹幕等多项针对在线教育的视频教学手段，让视频教学更有乐趣。
+          2. 稳定安全——提供视频水印、视频指纹等多项安全措施，防止视频盗录，有效阻止视频盗播和恶意下载。稳定可靠的视频云存储服务，保障数据安全，防止物理丢失。
+          3. 高性价比——针对在线教育的视频动态转码技术，以及浏览器缓存播放、移动端离线播放等多项功能，大大压缩视频流量成本。
+          4. 优质视听体验——采用CDN（内容分发网络）技术，200多个国内外优质节点，保障高清流畅的视听体验。多种清晰度自由切换，不同的网络环境都能流畅观看。多终端全平台完美支持，随时随地观看精彩视频。
+          5. 单价￥1.5/GB，购买云视频包享受更多优惠，立即 <a href=""> 了解详情</a>。
         </div>
       </div>
     </div>

@@ -188,8 +188,6 @@ class EduCloudController extends BaseController
         try {
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/me/storage/overview");
-            // var_dump($overview['video']['spaceItems']);exit();
-            // var_dump($overview);exit();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
@@ -203,9 +201,11 @@ class EduCloudController extends BaseController
 
         $spaceItems = isset($overview['video']['spaceItems']) ? $this->dealData($overview['video']['spaceItems']) : false;
         $flowItems = isset($overview['video']['flowItems']) ? $this->dealData($overview['video']['flowItems']) : false;
-
         return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
-            'overview'   => $overview,
+            'video'   => $overview['video'],
+            'space'   => $overview['space'],
+            'flow'    => $overview['flow'],
+            'yearPackage' => $overview['yearPackage'],
             'spaceItems' => $spaceItems,
             'flowItems'  => $flowItems
         ));
@@ -259,7 +259,7 @@ class EduCloudController extends BaseController
         //云端视频判断
         try {
             $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
+            $overview = $api->get("/me/storage/overview");
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
@@ -268,7 +268,8 @@ class EduCloudController extends BaseController
 
         return $this->render('TopxiaAdminBundle:EduCloud/Video:setting.html.twig', array(
             'storageSetting' => $storageSetting,
-            'headLeader'     => $headLeader
+            'headLeader'     => $headLeader,
+            'video'          => $overview['video']
         ));        
     }
 

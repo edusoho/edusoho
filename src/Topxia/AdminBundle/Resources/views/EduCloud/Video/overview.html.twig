@@ -3,25 +3,38 @@
 {% set menu = 'admin_setting_cloud_video' %}
 {% set script_controller = 'setting/cloud-video-overview.js' %}
 
-{% if overview.video.isBuy == true %}
+{% if video.isBuy == true %}
   {% set script_arguments = {spaceItems: spaceItems, flowItems: flowItems}  %}
 {% endif %}
 {#{% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}#}
 
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif video.status|default() == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{'
+    您的云视频服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% block main %}
-{% if overview.video.isBuy == true %}
+{% if video.isBuy == true %}
   {% include 'TopxiaAdminBundle:EduCloud/Video:video-show.html.twig' %}
 {% else %}
   {% include 'TopxiaAdminBundle:EduCloud/Video:video-buy.html.twig' %}
 {% endif %}
 
-{% if overview.yearPackage.isBuy == true %}
+{% if yearPackage.isBuy == true %}
   {% include 'TopxiaAdminBundle:EduCloud/Video:flow-show.html.twig' %}
 {% else %}
   {% include 'TopxiaAdminBundle:EduCloud/Video:flow-buy.html.twig' %}
 {% endif %}
 
-{% if overview.video.isBuy == true %}
+{% if video.isBuy == true %}
   <div class="panel panel-default panel-chart">
       <div class="panel-heading">存储空间使用趋势<span class="text-muted">（最近7个月）</span><a class="pull-right" href="">更多&ensp;></a></div>
       <div class="panel-body">
