@@ -30,7 +30,8 @@ class OpenCourseManageController extends BaseController
             return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
         }
 
-        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags    = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $id));
+
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig', array(

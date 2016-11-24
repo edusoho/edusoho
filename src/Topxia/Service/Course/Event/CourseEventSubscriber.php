@@ -6,6 +6,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class CourseEventSubscriber implements EventSubscriberInterface
 {
@@ -195,6 +196,9 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         $argument  = $context['argument'];
         $course    = $context['course'];
+        $tagIds    = $context['tagIds'];
+        $userId    = $context['userId'];
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds && $argument) {
@@ -202,6 +206,9 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }
         }
+
+        $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
+        $tagOwnerManager->update();
     }
 
     public function onCoursePriceUpdate(ServiceEvent $event)
