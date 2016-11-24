@@ -18,7 +18,7 @@ class CourseManageController extends BaseController
         $tasks       = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
 
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
+        return $this->render('WebBundle:CourseManage:task-list.html.twig', array(
             'tasks'  => $tasks,
             'course' => $course,
             'items'  => $courseItems
