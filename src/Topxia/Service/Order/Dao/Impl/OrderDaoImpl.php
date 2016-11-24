@@ -253,11 +253,33 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function analysisAmountData($group, $conditions, $orderBy, $start, $limit, $select)
+    public function analysisAmountsDataByTime($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select($select)
-            ->groupBy($group)
+            ->select("from_unixtime(paidTime,'%Y-%m-%d') date, sum(amount) as count")
+            ->groupBy("from_unixtime(`paidTime`,'%Y-%m-%d')")
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('sum(amount) as count, userId, title, targetType, targetId')
+            ->groupBy('title')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('sum(amount) as count, userId, title, targetType, targetId')
+            ->groupBy('userId')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);

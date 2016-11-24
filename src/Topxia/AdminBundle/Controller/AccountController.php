@@ -74,13 +74,11 @@ class AccountController extends BaseController
             unset($conditions['targetType']);
         }
 
-        $analysisAmounts = $this->getOrderService()->analysisAmountData(
-            'title',
+        $analysisAmounts = $this->getOrderService()->analysisAmountsDataByTitle(
             $conditions,
             array('count', 'DESC'),
             0,
-            10,
-            'sum(amount) as count, userId, title, targetType, targetId'
+            10
         );
 
         foreach ($analysisAmounts as $key => $analysisAmount) {
@@ -111,13 +109,11 @@ class AccountController extends BaseController
             $conditions['payment'] = 'coin';
         }
 
-        $amounts = $this->getOrderService()->analysisAmountData(
-            'userId',
+        $amounts = $this->getOrderService()->analysisAmountsDataByUserId(
             $conditions,
             array('count', 'DESC'),
             0,
-            10,
-            'sum(amount) as count, userId, title, targetType, targetId'
+            10
         );
 
         $userIds = ArrayToolkit::column($amounts, 'userId');
@@ -143,24 +139,20 @@ class AccountController extends BaseController
             'payment' => 'coin',
         );
 
-        $series['coinAmounts'] = $this->getOrderService()->analysisAmountData(
-            'from_unixtime(`paidTime`,\'%Y-%m-%d\')',
+        $series['coinAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
             array('count', 'DESC'),
             0,
-            10,
-            'from_unixtime(paidTime,\'%Y-%m-%d\') date, sum(amount) as count'
+            10
         );
         
         unset($conditions['payment']);
         $conditions['cashPayment'] = 'coin';
-        $series['cashAmounts'] = $this->getOrderService()->analysisAmountData(
-            'from_unixtime(`paidTime`,\'%Y-%m-%d\')',
+        $series['cashAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
             array('count', 'DESC'),
             0,
-            10,
-            'from_unixtime(paidTime,\'%Y-%m-%d\') date, sum(amount) as count'
+            10
         );
         
         $amountAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
