@@ -207,33 +207,9 @@ class CoinController extends BaseController
                 20
             );
         }
-
+  
         $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-        return $this->render('TopxiaWebBundle:Coin:invite-code.html.twig', array(
-            'code'          => $user['inviteCode'],
-            'record'        => $record,
-            'inviteSetting' => $inviteSetting,
-            'invitedUsers'  => $invitedUsers,
-            'inviteReward'  => $inviteReward,
-            'paginator'     => $paginator
-        ));
-    }
 
-    private function getInviteTime($userIds)
-    {
-        $recordTime = array();
-
-        foreach ($userIds as $key => $id) {
-            $record       = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
-            $recordTime[] = $record['inviteTime'];
-        }
-
-        return $recordTime;
-    }
-
-    public function promoteLinkAction(Request $request)
-    {
-        $user          = $this->getCurrentUser();
         $message       = null;
         $site          = $this->getSettingService()->get('site', array());
         $inviteSetting = $this->getSettingService()->get('invite', array());
@@ -249,11 +225,27 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:promote-link-modal.html.twig',
-            array(
-                'code'                      => $user['inviteCode'],
-                'inviteInfomation_template' => $message
-            ));
+        return $this->render('TopxiaWebBundle:Coin:invite-code.html.twig', array(
+            'inviteInfomation_template' => $message,
+            'code'                      => $user['inviteCode'],
+            'record'                    => $record,
+            'inviteSetting'             => $inviteSetting,
+            'invitedUsers'              => $invitedUsers,
+            'inviteReward'              => $inviteReward,
+            'paginator'                 => $paginator
+        ));
+    }
+
+    private function getInviteTime($userIds)
+    {
+        $recordTime = array();
+
+        foreach ($userIds as $key => $id) {
+            $record       = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
+            $recordTime[] = $record['inviteTime'];
+        }
+
+        return $recordTime;
     }
 
     public function writeInvitecodeAction(Request $request)

@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_homepage:
+    pattern:  /homepage
+    defaults: { _controller: TopxiaAdminBundle:Default:homepage }
+
 admin_notice_modal:
     pattern:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
@@ -1719,6 +1723,27 @@ admin_order_manage_export_csv:
 admin_order_manage_export_coin_csv:
     pattern: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
+
+admin_account_center:
+    path:     /account/center
+    defaults: { _controller: TopxiaAdminBundle:Account:index }
+
+admin_account_analysis:
+    path:     /account/analysis
+    defaults: { _controller: TopxiaAdminBundle:Account:accountAnalysis }
+
+admin_account_rank:
+    path:     /account/rank
+    defaults: { _controller: TopxiaAdminBundle:Account:rank }
+
+admin_payment_rank:
+    path:     /account/payment/rank
+    defaults: { _controller: TopxiaAdminBundle:Account:paymentRank }
+
+admin_account_statistic:
+    pattern: /account/statistic/{period}
+    defaults: { _controller: TopxiaAdminBundle:Account:accountStatistic }
+    permissions: [admin]
 
 admin_coin_user_records:
     path:     /coin/records/user

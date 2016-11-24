@@ -18,6 +18,9 @@ admin:
     name: 后台管理员
     parent: null
     children:
+        admin_homepage:
+            name: 后台首页
+            router_name: admin_homepage
         admin_user:
             name: 用户
             children:
@@ -485,6 +488,12 @@ admin:
         admin_finance:
             name: 账务
             children:
+                admin_accounts_center:
+                    name: 账务中心
+                    children:
+                        admin_account_center:
+                            name: 账务中心
+                            disable: true
                 admin_bills:
                     name: 账单管理
                     children:
