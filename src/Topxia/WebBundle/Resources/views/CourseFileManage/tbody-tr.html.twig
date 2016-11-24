@@ -58,7 +58,12 @@
   </td>
   <td>
     {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
-    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('course_manage_files', {id:course.id})}) }}">字幕管理</a>
+      {% if course.type == 'open' %}
+        {% set goto = path('open_course_manage_files', {id:course.id}) %}
+      {% else %}
+        {% set goto = path('course_manage_files', {id:course.id}) %}
+      {% endif %}
+    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
     {% endif %}
   </td>
 

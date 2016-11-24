@@ -121,8 +121,20 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify'))
+            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
+            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal'))
         );
+    }
+
+    public function tag_equal($tags, $target_tagId, $target_tagGroupId)
+    {
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $target_tagGroupId && $tagId == $target_tagId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function pluginUpdateNotify()
