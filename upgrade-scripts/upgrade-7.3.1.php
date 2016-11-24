@@ -62,9 +62,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 CREATE TABLE `tag_owner` (
                     `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '标签ID',
                     `ownerType` varchar(255) NOT NULL DEFAULT '' COMMENT '标签拥有者类型',
-                    `ownerId` int(10) NOT NULL DEFAULT '0' COMMENT '标签拥有者id',
-                    `tagId` int(10) NOT NULL DEFAULT '0' COMMENT '标签id',
-                    `userId` int(10) NOT NULL DEFAULT '' COMMENT '操作用户id',
+                    `ownerId` int(10) NOT NULL DEFAULT 0 COMMENT '标签拥有者id',
+                    `tagId` int(10) NOT NULL DEFAULT 0 COMMENT '标签id',
+                    `userId` int(10) NOT NULL DEFAULT 0 COMMENT '操作用户id',
                     `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签关系表';
@@ -285,9 +285,9 @@ class TagDataMigration
         foreach ($targets as $target) {
             if (!empty($target[$column])) {
                 $tags = $this->unserialize($target[$column]);
-
+                $userId = empty($target['userId']) ? $target['headTeacherId'] : $target['userId'];
                 $fields = array(
-                    'userId'    => empty($target['userId']) ? $target['headTeacherId'] : $target['userId'],
+                    'userId'    => empty($userId) ? 0:$userId,
                     'tags'      => $tags,
                     'ownerType' => $this->ownerType[$table],
                     'ownerId'   => $target['id']
@@ -300,10 +300,11 @@ class TagDataMigration
     }
 
     protected function moveTagData($fields)
-    {   
+    {
         $fields['tags'] = array_filter($fields['tags']);
         foreach ($fields['tags'] as $tag) {
-            
+            $exist = $this->getTagService()->getTagOwnerRelationByTagIdAndOwner($tag, array('ownerType' => $fields['ownerType'], 'ownerId' => $fields['ownerId']));
+            if (!$exist) {
                 $this->getTagService()->addTagOwnerRelation(array(
                     'ownerType'   => $fields['ownerType'],
                     'ownerId'     => $fields['ownerId'],
@@ -311,6 +312,8 @@ class TagDataMigration
                     'userId'      => $fields['userId'],
                     'createdTime' => time()
                 ));
+            }
+            
         }
     }
 
