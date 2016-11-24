@@ -23,7 +23,7 @@
 
 {% block content %}
   {{header_macro.title(courseSet)}}
-  {{ header_macro.picture(courseSet, previewLesson) }}
+  {{ header_macro.picture(courseSet, previewLesson,true) }}
   {{ header_macro.info(courseSet, member, userVipStatus) }}
   {{header_macro.bottom(courseSet)}}
   <ul class="course-operation clearfix {% if courseVip and courseSet.parentId == '0' %}active{% endif %}">

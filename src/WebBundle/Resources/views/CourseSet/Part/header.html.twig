@@ -17,8 +17,10 @@
 {% else %}
   {% cache 'course/' ~ courseSet.id ~ '/not/classroom/course/normal/header/for/guest' 600 %}
     {% include 'WebBundle:CourseSet:Part/header-for-guest.html.twig' %}
+    {% include 'WebBundle:CourseSet:Part/header-for-member.html.twig' %}
   {% endcache %}
 {% endif %}
+
 
 {% macro title(courseSet) %}
   <div class="course-detail-header">
@@ -43,7 +45,7 @@
   </div>
 {% endmacro %}
 
-{% macro picture(courseSet, previewLesson) %}
+{% macro picture(courseSet, previewLesson,showStudentNum) %}
   <div class="course-detail-img">
     {% if previewLesson %}
       <a href="#modal" data-toggle="modal" data-url="{{ path('course_lessons_preview', {courseId: courseSet.id, lessonId:previewLesson.id }) }}" class="course-img-cover">
@@ -52,7 +54,9 @@
     {% endif %}
     <img class="img-responsive" src="{{ filepath(courseSet.largePicture, 'courseSet.png') }}" alt="{{ courseSet.title }}">
     <div class="course-detail-remask">
-      112
+      {% if showStudentNum == true %}
+        {{_self.studentNum(courseSet)}}
+      {% endif %}
     {#{% if setting('courseSet.show_student_num_enabled', '1') == 1  %} <i class="es-icon es-icon-people"></i>
         {{'%studentNum%人'|trans({'%studentNum%': courseSet.studentNum}) }}
       {% if courseSet.maxStudentNum > 0 %}
@@ -84,24 +88,6 @@
       <span class="text-blod gray-darker">¥</span>
       <span class="discount-price">75</span>¥<span class="original-price">118</span>
     </div>
-    {#{% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}#}
-       {#{% if courseSet.discountId > 0 %}
-      <p class="old-price hidden-sm">
-        <label>{{'原价'|trans}}</label>
-        {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
-      </p>
-      {% if courseSet.discountObj|default(null) %}
-        <p class="activity">
-          <label>{{'活动'|trans}}</label>
-          <span class="name">{{ courseSet.discountObj.name }}</span>
-          <span>
-            <i class="es-icon es-icon-accesstime"></i>
-            <span id="discount-endtime-countdown" class="text-muted" data-remaintime="{{ courseSet.discountObj.endTime - 'now'|date('U') }}"
-            ></span>
-          </span>
-        </p>
-      {% endif %}
-    {% endif %}#}
     <div class="course-detail-content">
       <div class="course-detail-item">
         <span class="course-detail-title">{{'教学计划'|trans}}</span>
@@ -119,69 +105,6 @@
         <span class="gray-dark">180天</span>
       </div>
     </div>
-    {#<div class="metas">
-      {% if member and member.deadline > 0 %}
-        {% if member.deadline > 'now'|date('U') %}
-          <p class="expiry-date hidden-sm">
-            <span class="mrm">{{'有效期至'|trans}}</span>
-            <span>{{ member.deadline|date('Y-m-d H:i') }}</span>
-          </p>
-        {% else %}
-         <div class="alert alert-danger alert-dismissable">
-            {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
-              <a href="{{path('course_member_deadline_reach',{courseId:courseSet.id})}}">
-              {% if courseSet.price>0 %}
-              {{'重新购买'|trans}}
-              {% else %}
-              {{'重新加入'|trans}}
-              {% endif %}
-              </a>。
-          </div>
-        {% endif %}
-      {% endif %}
-      {% if not member %}
-        {% if courseSet.buyExpiryTime %}
-          <p class="expiry-date hidden-sm">{{ '购买截止日期: '|trans }}{{ courseSet.buyExpiryTime|date('Y-m-d H:i') }}</p>
-        {% endif %}
-        {% if courseSet.expiryDay %}
-          <p class="expiry-date hidden-sm">
-            {% if courseSet.expiryMode|default(null) == 'date' %}
-              {{'学习有效期至: '|trans}}{{courseSet.expiryDay|date('Y-m-d H:i')}}
-            {% else %}
-              {{'学习有效期: '|trans}} {{courseSet.expiryDay}}{{'天'|trans}}
-            {% endif %}
-          </p>
-        {% endif %}
-        购买前信息
-      {% endif %}
-    </div>
-    {% if not member.fake|default(false) and member and member.role == 'student' and member.levelId > 0 and userVipStatus != 'ok' %}
-      <div class="alert alert-danger">
-        {% if userVipStatus == 'not_member' %}
-          {{'您已经不是会员，不能学习此课程！'|trans}}
-          {% if courseSet.price > 0 %}
-            {{'请重新'|trans}}<a class="btn-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
-          {% else %}
-            {% if member.joinedType == 'course' %}
-              <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:courseSet.id }) }}" data-go="{{ path('course_show', { id:courseSet.id }) }}">{{'返回课程首页'|trans}}</a>
-            {% elseif member.joinedType == 'classroom' %}
-              <a class="btn-link js-exit-course" data-url="{{ path('classroom_exit', { id:member.classroomId }) }}" data-go="{{ path('classroom_show', { id:member.classroomId }) }}">{{'退出' ~ setting('classroom.name', '班级')|trans}}</a>
-            {% endif %}
-          {% endif %}！
-        {% elseif userVipStatus == 'member_expired' %}
-          {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="btn-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
-        {% elseif userVipStatus == 'level_low' %}
-          {{'会员等级不够，不能学习此课程。请先'|trans}}<a class="btn-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
-        {% else %}
-          {% if member.joinedType == 'course' %}
-            {{'此课程已不支持会员免费学，请退出课程后重新购买。'|trans}}
-          {% elseif member.joinedType == 'classroom' %}
-            {{'此' ~ setting('classroom.name', '班级') ~ '课程已不支持会员免费学，'|trans}}<a class="btn-link js-exit-course" href="javascript:;" data-url="{{ path('classroom_exit', { id:member.classroomId }) }}" data-go="{{ path('classroom_show', { id:member.classroomId }) }}">{{'退出' ~ setting('classroom.name', '班级')|trans}}</a>
-          {% endif %}
-
-        {% endif %}
-      </div>
-    {% endif %}#}
   </div>
 {% endmacro %}
 
@@ -190,15 +113,18 @@
   {% if source|default("") == "classroom" %}
     {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: courseSet.id})) }}
   {% else %}
-    <a class="btn btn-default mrm">会员</a>
-    <a class="btn btn-primary">购买课程</a>
-    {#{% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}#}
+    <a class="btn btn-default btn-lg mrm">会员</a>
+    <a class="btn btn-primary btn-lg">购买课程</a>
   {% endif %}
   </div>
 {% endmacro %}
 
-
-
+{% macro studentNum(courseSet) %}
+  <span class="gray-color mrl">
+    <i class="es-icon es-icon-people mrm"></i>
+    122222 人
+  </span>
+{% endmacro %}
 
 {% macro favorite_btn(courseSet, hasFavorited) %}
   <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:courseSet.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>

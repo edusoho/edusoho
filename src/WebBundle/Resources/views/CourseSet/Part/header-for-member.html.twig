@@ -1,0 +1,72 @@
+{% extends 'WebBundle:CourseSet:Part/header-layout.html.twig' %}
+
+{% set layoutClass = 'after' %}
+
+{% block before_content %}
+  {#<ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    <li class="active">{{ courseSet.title|raw }}</li>
+  </ol>#}
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    <li class="active">{{ courseSet.title|raw }}</li>
+  </ol>
+{% endblock %}
+
+{%  set courseVip = null %}
+{% set hasFavorited = null %}
+
+{% block content %}
+  {{header_macro.title(courseSet)}}
+  <ul class="course-operation clearfix {% if courseVip and courseSet.parentId == '0' %}active{% endif %}">
+    {{ header_macro.favorite_btn(courseSet, hasFavorited) }}
+    {{ header_macro.share_btn(courseSet) }}
+    {{ header_macro.setting_btn(courseSet) }}
+    {{ header_macro.courseVip_btn(courseVip,courseSet) }}
+  </ul>
+  <section class="course-freelearn-section">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="progress">我的进度65%</div>
+      </div>
+      <div class="col-sm-7">
+        <ul class="course-learn-list">
+          <li>
+            <p class="mbs color-gray"><i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成</p>
+            <span class="color-primary">09</span>／<span class="mrl">24</span>课时
+          </li>
+          <li>
+            <p class="mbs color-gray"><i class="es-icon es-icon-today mrm"></i>学习有效期</p>
+            2016-0-28
+          </li>
+          <li><p class="mbs color-gray"><i class="es-icon es-icon-book"></i>下一课</p>
+          PS移动工具
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-2 text-center">
+      <a class="btn btn-primary btn-lg">继续学习</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="row course-orderlearn-section">
+    <div class="col-sm-5">
+      <span class="progress-img">我的进度</span>
+      <ul class="progress-info">
+        <li>已完成<span class="color-primary">3</span>／45个任务</li>
+        <li>计划完成5个任务，落后计划5%</li>
+        <li>学习有效期</li>
+        <li>2015-08-09 ~ 2025-23-23</li>
+      </ul>
+    </div>
+    <div class="col-sm-7">
+      <div class="task-list"></div>
+    </div>
+  </section>
+{% endblock %}
+
+
