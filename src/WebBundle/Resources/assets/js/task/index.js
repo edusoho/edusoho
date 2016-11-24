@@ -48,6 +48,12 @@ class TaskShow extends Emitter{
 
     this.trigger('doing', timeStep);
 
+    this.element.on('click', '.js-btn-learn', event => {
+      this.eventEmitter.emit('finish').then(() => {
+        this.ui.learned();
+        //@TODO 弹框
+      })
+    });
     this.bindEmitterEvent();
   }
 
