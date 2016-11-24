@@ -277,7 +277,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function LessonListAction(Request $request, $id)
+    public function lessonListAction(Request $request, $id)
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 

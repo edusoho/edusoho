@@ -16,7 +16,8 @@ class ClassroomThreadController extends BaseController
 
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
@@ -35,7 +36,7 @@ class ClassroomThreadController extends BaseController
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
             'classroom'            => $classroom,
             'filters'              => $this->getThreadSearchFilters($request),
-            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'canLook'              => $canLook,
             'service'              => $this->getThreadService(),
             'layout'               => $layout,
             'member'               => $member,
@@ -129,7 +130,8 @@ class ClassroomThreadController extends BaseController
         }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
         if (empty($thread)) {
@@ -148,7 +150,7 @@ class ClassroomThreadController extends BaseController
             'member'    => $member,
             'layout'    => $layout,
             'filter'    => $filter,
-            'canLook'   => $this->getClassroomService()->canLookClassroom($classroom['id'])
+            'canLook'   => $canLook
         ));
     }
 
