@@ -7,7 +7,10 @@
 
   <div class="form-group">
     <select class="form-control" name="target" style="width:200px;">
-      {{ select_options({}, app.request.query.get('type'), '本课程'|trans) }}
+      <option value="0" {% if not app.request.query.get('target') %}selected{% endif %}>{{'本课程'|trans}}</option>
+      {% for courseTask in courseTasks if courseTask%}
+        <option value="{{ courseTask.id }}" {% if app.request.query.get('target') == courseTask.id%}selected{% endif %}>{{ courseTask.title}}</option>
+      {% endfor %}
     </select>
   </div>
 

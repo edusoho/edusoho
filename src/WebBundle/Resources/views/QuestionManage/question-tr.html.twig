@@ -7,7 +7,7 @@
     </a>
     <div>
       {% if question.lessonId|default(0) > 0 %}
-        <small class="text-muted">{{'从属于%simple_name%'|trans({'%simple_name%': question.lessonId})}}</small>
+        <small class="text-muted">{{'从属于%simple_name%'|trans({'%simple_name%': courseTasks[question.lessonId].title })}}</small>
       {% else %}
         <small class="text-muted">{{'从属于 本课程'|trans}}</small>
       {% endif %}

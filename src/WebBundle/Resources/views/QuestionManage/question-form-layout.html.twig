@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 
 {% block title %}
   {% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} - {{ parent() }}
@@ -36,7 +36,10 @@
             <div class="col-md-2 control-label"><label>{{'从属'|trans}}</label></div>
             <div class="col-md-8 controls">
               <select class="form-control width-input width-input-large" name="target" data-role="target">
-                {{ select_options(courseTasks|default([]), question.lessonId|default(0),'本课程'|trans) }}
+                <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'本课程'|trans}}</option>
+                {% for courseTask in courseTasks if courseTask%}
+                  <option value="{{ courseTask.id }}" {% if question.lessonId|default(0) == courseTask.id %}selected{% endif %}>{{ courseTask.title }}</option>
+                {% endfor %}
               </select>
               <div class="help-block">{{'可以针对本课程或者某个课时出题'|trans}}</div>
             </div>

@@ -140,11 +140,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return array_keys($questions);
     }
 
-    public function findCourseTasks($courseId)
-    {
-        return array();
-    }
-
     public function judgeQuestions(array $answers, $refreshStats = false)
     {
         $questions = $this->findQuestionsByIds(array_keys($answers));
@@ -172,10 +167,5 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
-    }
-
-    private function getCourseTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

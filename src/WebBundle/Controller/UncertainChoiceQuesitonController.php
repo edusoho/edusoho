@@ -15,7 +15,7 @@ class UncertainChoiceQuesitonController extends BaseController
     public function editAction(Request $request, $courseId, $questionId)
     {
         $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
         $question    = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -35,7 +35,7 @@ class UncertainChoiceQuesitonController extends BaseController
     public function createAction(Request $request, $courseId, $type)
     {
         $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
 
         $parentId       = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);
@@ -55,9 +55,14 @@ class UncertainChoiceQuesitonController extends BaseController
         ));
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getCourseService()

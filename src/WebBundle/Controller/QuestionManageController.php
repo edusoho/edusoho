@@ -23,8 +23,13 @@ class QuestionManageController extends BaseController
             $conditions['stem'] = $conditions['keyword'];
         }
 
+        if (!empty($conditions['type']) && $conditions['type'] == 0) {
+            unset($conditions['type']);
+        }
+
         if (!empty($conditions['target'])) {
             $conditions['lessonId'] = $conditions['target'];
+            unset($conditions['target']);
         }
 
         $parentQuestion = array();
@@ -50,6 +55,9 @@ class QuestionManageController extends BaseController
         $users         = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $questionTypes = $this->getQuestionService()->getQuestionTypes();
 
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+
         return $this->render('WebBundle:QuestionManage:index.html.twig', array(
             'course'         => $course,
             'questions'      => $questions,
@@ -57,7 +65,8 @@ class QuestionManageController extends BaseController
             'paginator'      => $paginator,
             'parentQuestion' => $parentQuestion,
             'conditions'     => $conditions,
-            'questionTypes'  => $questionTypes
+            'questionTypes'  => $questionTypes,
+            'courseTasks'    => $courseTasks
         ));
     }
 
@@ -267,7 +276,7 @@ class QuestionManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
@@ -277,9 +286,9 @@ class QuestionManageController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getUploadFileService()
+    protected function getCourseTaskService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->createService('Task:TaskService');
     }
 
     protected function getServiceKernel()
