@@ -23,7 +23,7 @@ class Creator
             }
         });
 
-        this.$courseSetType.click( event => {
+        this.$courseSetType.click(event => {
             this.$courseSetType.removeClass('active');
             this.$currentCourseSetType = $(event.currentTarget);
             this.$currentCourseSetType.addClass('active');
