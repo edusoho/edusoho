@@ -10,12 +10,36 @@ namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id,  $courseId)
     {
-        // TODO: Implement showAction() method.
+        $activity = $this->getActivityService()->getActivity($id);
+        if ($this->getMediaSource($activity) == 'self') {
+            return $this->render('WebBundle:VideoActivity:show.html.twig', array(
+                'activity' => $activity,
+                'courseId' => $courseId
+            ));
+        } else {
+            return $this->render('WebBundle:VideoActivity:swf-show.html.twig', array(
+                'activity' => $activity,
+            ));
+        }
+    }
+
+    /**
+     * 获取当前视频活动的文件来源
+     * @param $activity
+     * @return mediaSource
+     */
+    protected function getMediaSource($activity)
+    {
+        return $activity['ext']['mediaSource'];
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -35,7 +59,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
-
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
@@ -53,5 +76,14 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
 
 }

@@ -32,41 +32,41 @@ class SideBar {
 
   _initPlugin() {
     let html = '';
-    $.each(this.activePlugins, (i,name)=>{
+    $.each(this.activePlugins, (i, name)=> {
       let plugin = this.plugins[name];
       html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
-    $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]',(event)=>{
+    $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]', (event)=> {
       let $this = $(event.currentTarget);
       if ($this.hasClass('active')) {
-        this._rendBar($this,false);
+        this._rendBar($this, false);
         this._renderSiderBar(false);
         return;
       }
-      if(!this._currentPane || $this.data('plugin') != this._currentPane ) {
+      if (!this._currentPane || $this.data('plugin') != this._currentPane) {
         this.plugins[$this.data('plugin')].execute();
       }
-      this._rendBar($this,true);
+      this._rendBar($this, true);
       this._renderSiderBar(true);
     });
   }
 
-  _renderSiderBar(show,time='') {
+  _renderSiderBar(show, time = '') {
     let sider_right = '0px';
     let content_right = '379px';
-    if(!show) {
-      sider_right = '-'+this.$dashboardsidebar.width()+'px';
+    if (!show) {
+      sider_right = '-' + this.$dashboardsidebar.width() + 'px';
       content_right = '26px';
     }
     this.$dashboardsidebar.animate({
       right: sider_right,
-    },time);
+    }, time);
     this.$dashboardcontent.animate({
       right: content_right,
-    },time);
+    }, time);
   }
 
-  _rendBar($item,show) {
+  _rendBar($item, show) {
     show ? $item.addClass('active').siblings('li').removeClass('active') : $item.removeClass('active');
   }
 
@@ -83,20 +83,19 @@ class SideBar {
   }
 
   _isRenderSiderBar() {
-    if(!store.get('USER-START-LEARN')) {
+    if (!store.get('USER-START-LEARN')) {
       store.set('USER-START-LEARN', true);
-      this._renderSiderBar(true,'2000'); 
-      window.setTimeout(()=>{ 
-        this._renderSiderBar(false,'2000'); 
-      },2000); 
+      this._renderSiderBar(true, '2000');
+      window.setTimeout(()=> {
+        this._renderSiderBar(false, '2000');
+      }, 2000);
     }
-    console.log(store.get('USER-START-LEARN'));
   }
 
   createPane(name) {
     let $pane = this._getPane(name);
     if (!$pane) {
-      $pane = $('<div data-pane="' + name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this._getPaneContainer());
+      $pane = $('<div data-pane="' + name + '" class="dashboard-pane ' + name + '-pane"></div>').appendTo(this._getPaneContainer());
     }
     return $pane;
   }

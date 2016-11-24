@@ -1068,19 +1068,6 @@ course_manage_testpaper_get_question_num:
     path: /course/{courseId}/manage/testpaper/get_question_num
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
 
-course_manage_chapter_create:
-    path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: TopxiaWebBundle:CourseChapterManage:create }
-
-course_manage_chapter_edit:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseChapterManage:edit }
-
-course_manage_chapter_delete:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseChapterManage:delete }
-    methods: [POST]
-
 course_manage_material:
     path:  /course/{courseId}/manage/lesson/{lessonId}/material
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:index }

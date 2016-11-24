@@ -39,7 +39,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
-            $sign = $this->getSignEncoder()->encodeSign($urls[$i], $api->getAccessKey());
+            $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
             $sign = rawurlencode($sign);
             $urls[$i] .= '&sign='.$sign;
         }

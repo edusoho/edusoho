@@ -42,7 +42,10 @@ class VideoActivity extends Activity
     {
         $videoActivity = $fields['ext'];
         if (empty($videoActivity)) {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException('');
+        }
+        if (empty($videoActivity['mediaId'])) {
+            $videoActivity['mediaId'] = 0;
         }
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
         return $videoActivity;

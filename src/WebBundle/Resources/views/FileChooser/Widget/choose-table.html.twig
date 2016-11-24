@@ -1,39 +1,19 @@
-{% import "TopxiaWebBundle::macro.html.twig" as macro %}
-<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
-  <thead>
-  <tr>
-    <th>{{ '文件名'|trans }}</th>
-    <th>{{ '大小'|trans }}</th>
-    <th>{{ '上传时间'|trans }}</th>
-    <th>{{ '上传者'|trans }}</th>
-  </tr>
-  </thead>
+<table class="table table-striped table-hover">
   <tbody>
   {% for file in files %}
     <tr id="material-table-tr-{{ file.id }}" class="file-browser-item"
-        data-id="{{ file.id }}"
-        data-name="{{ file.filename }}"
-        data-status="{{ file.convertStatus }}"
-        data-source="self"
-        data-length="{{ file.length }}"
-        data-size="{{ file.fileSize }}"
-    >
-      <td>
-        {{ file.filename }}
-      </td>
-      <td>
-        {{ file.fileSize|file_size }}
-      </td>
-      <td>
-        {{ file.createdTime|date('Y-m-d') }}
-      </td>
-      <td>
-        {{ createdUsers[file.createdUserId].nickname }}
-      </td>
+      data-id="{{ file.id }}"
+      data-name="{{ file.filename }}"
+      data-status="{{ file.convertStatus }}"
+      data-source="self"
+      data-length="{{ file.length }}"
+      data-size="{{ file.fileSize }}">
+      <td class="mlm"> {{ file.filename }}</td>
+      <td> {{ file.fileSize|file_size }}</td>
+      <td> {{ file.createdTime|date('Y-m-d') }}</td>
     </tr>
   {% else %}
     <div class="empty">没有资源...</div>
   {% endfor %}
   </tbody>
 </table>
-{{ macro.paginator(paginator|default(null)) }}
