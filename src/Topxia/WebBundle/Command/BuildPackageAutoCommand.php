@@ -350,7 +350,7 @@ class BuildPackageAutoCommand extends BaseCommand
         exec("git checkout release/{$this->version}");
         exec("git submodule update");
         var_dump($currentCommitHash, $lastCommitHash);
-        exit();
+        
         chdir($submoduleDir);
         $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
         exec($command);
