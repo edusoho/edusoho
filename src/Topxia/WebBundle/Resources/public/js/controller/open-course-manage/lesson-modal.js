@@ -337,19 +337,16 @@ define(function(require, exports, module) {
          * 视频字幕
          */
         var subtitleDialog = null;
-        var displaySubtitleManage = function(media) {
-            if ($('.js-subtitle-list').length > 0) {
-                subtitleDialog = new SubtitleDialog({
-                    element: '.js-subtitle-list'
-                });
-                subtitleDialog.media = media;
-                subtitleDialog.show();
-            }
+        if ($('.js-subtitle-list').length > 0) {
+            subtitleDialog = new SubtitleDialog({
+                element: '.js-subtitle-list'
+            });
         }
 
         //显示字幕编辑组件
-        if (choosedMedia && 'id' in choosedMedia) {
-            displaySubtitleManage(choosedMedia);
+        if (choosedMedia && 'id' in choosedMedia && choosedMedia.id > 0) {
+            subtitleDialog.media = choosedMedia;
+            subtitleDialog.renderHTML();
         }
 
         videoChooser.on('change', function(item) {
@@ -358,7 +355,8 @@ define(function(require, exports, module) {
 
             updateDuration(item.length);
             fillTitle(item.name);
-            displaySubtitleManage(item);
+            subtitleDialog.media = item;
+            subtitleDialog.renderHTML();
         });
 
         audioChooser.on('change', function(item) {
