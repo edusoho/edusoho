@@ -1,4 +1,4 @@
-import FileChooser from '../file-chooser/file-choose';
+import FileChooser from '../../file-chooser/file-choose';
 jQuery.validator.addMethod("url", function (value, element) {
     return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
