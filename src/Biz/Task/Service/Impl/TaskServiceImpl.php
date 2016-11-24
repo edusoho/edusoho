@@ -144,10 +144,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($key != $task['id']) {
                     continue;
                 }
-
-                if (empty($task['resultStatus']) || 'finish' == $result['status']) {
-                    $task['resultStatus'] = $result;
-                }
+                $task['result'] = $result;
             }
         });
         return $tasks;
@@ -284,17 +281,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function canManageCourse($courseId)
     {
         return true;
-    }
-
-    protected function formatActivityLength($len)
-    {
-        if (empty($len) || $len == 0) {
-            return null;
-        }
-        $h = floor($len / 60);
-        $m = fmod($len, 60);
-        //TODO 目前没考虑秒
-        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':00';
     }
 
     protected function invalidTask($task)
