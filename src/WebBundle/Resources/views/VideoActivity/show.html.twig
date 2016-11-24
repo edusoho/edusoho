@@ -3,22 +3,12 @@
 {% do script(['web/task/video/index.js']) %}
 
 
-{% block content %}
+{% block body %}
   <div class="dashboard-body">
-    <div class="lesson-content" id="video-content" data-role="lesson-content"
-         data-course-id="{{ activity.courseId }}"
-         data-task-id="{{ activity.taskId }}"
-         data-media="{{ activity.ext|json_encode }}"
-        {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-          data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
-        {% endif %}
-        {% if setting('storage.video_fingerprint') and app.user %}
-          data-fingerprint="{{ finger_print() }}"
-        {% endif %}
-         data-user-id="{{ app.user.id }}"
-         data-balloon-player="1"
-    >
-      <div class="watermarkEmbedded"></div>
+    <div class="lesson-content" id="video-content" data-role="lesson-content">
+      {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
+      {{ render(controller('WebBundle:Player:show', {id: activity.ext.mediaId})) }}
+
     </div>
   </div>
 {% endblock %}

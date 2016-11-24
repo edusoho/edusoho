@@ -39,8 +39,9 @@
   app.cloudSdkCdn = '{{ setting("developer.cloud_sdk_cdn") }}';
   app.lang = '{{ app.request.locale }}';
 </script>
-{% if setting('cdn.enabled') %} {% set cdnUrl = setting('cdn.url') %} {% else %} {% set cdnUrl = '' %} {% endif %}
-<script src="{{ cdnUrl }}{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ url('bazinga_jstranslation_js') }}"></script>
+
+<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+<script src="{{ url('bazinga_jstranslation_js', {'domain': 'js'}) }}"></script>
+
 
 {% include 'TopxiaWebBundle::js_loader.html.twig' %}

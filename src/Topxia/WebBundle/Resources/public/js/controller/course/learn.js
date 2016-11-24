@@ -839,7 +839,9 @@ define(function(require, exports, module) {
         _playESLiveReplay: function(playerUrl)
         {
             var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-            $("#lesson-live-content").html(html);
+            $('#lesson-live-content').hide();
+            $('#lesson-video-content').show();
+            $('#lesson-video-content').html(html);
         },
         _videoPlay: function(lesson){
             var self = this;

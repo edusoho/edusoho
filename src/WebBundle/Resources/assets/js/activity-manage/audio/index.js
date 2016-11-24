@@ -1,4 +1,4 @@
-import  FileChooser from '../../../common/file-choose';
+import FileChooser from '../../file-chooser/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -11,8 +11,6 @@ function _inItStep2form() {
     var $step1_form = $('#step2-form');
     var validator = $step1_form.data('validator', validator);
     validator = $step1_form.validate({
-        onkeyup: false,
-        ignore: "",
         rules: {
             content: 'required',
             minute: 'required unsigned_integer',

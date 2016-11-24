@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TextActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $taskId, $courseId)
+    public function showAction(Request $request, $id,  $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         return $this->render('WebBundle:TextActivity:show.html.twig', array(

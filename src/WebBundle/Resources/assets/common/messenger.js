@@ -1,32 +1,24 @@
-import Messenger from 'messengerjs';
+import Messenger from 'es-messenger';
 import Emitter from 'es6-event-emitter';
 
-class EsMessager extends Emitter {
-    constructor(name, project, children, type) {
+class EsMessenger extends Emitter {
+    constructor(options) {
         super();
-        this.name = name | '';
-        this.project = project | '';
-        this.children = children | [];
-        this.type = type | '';
-        this.messenger = ''
 
+        this.name = options.name;
+        this.project = options.project;
+        this.children = options.children;
+        this.type = options.type;
         this.setup();
-    }
-
-    setMessenger(messenger) {
-        this.messenger = messenger
-    }
-
-    getMessenger() {
-        return this.messenger;
     }
 
     setup() {
         let self = this;
         var messenger = new Messenger(this.name, this.project);
-        if (this.type == "child") {
-            messenger.addTarget(window.parent, 'parent');
-        } else if (this.type == "parent") {
+        if (this.type == 'child') {
+            messenger.addTarget(window.self, 'parent');
+        } else if (this.type == 'parent') {
+            messenger.addTarget(window.self, 'child');
             var children = this.children;
             for (var i = children.length - 1; i >= 0; i--) {
                 messenger.addTarget(children[i].contentWindow, children[i].id);
@@ -35,19 +27,19 @@ class EsMessager extends Emitter {
         messenger.listen(function (msg) {
             msg = JSON.parse(msg);
             self.trigger(msg.eventName, msg.args);
-        })
-        this.setMessenger(messenger);
+        });
+        this.messenger = messenger;
     }
 
     sendToParent(eventName, args) {
-        this.getMessenger().targets['parent'].send(
+        this.messenger.targets['parent'].send(
             this.convertToString(eventName, args)
         );
     }
 
 
     sendToChild(child, eventName, args) {
-        this.getMessenger().targets[child.id].send(
+        this.messenger.targets[child.id].send(
             this.convertToString(eventName, args)
         );
     }
@@ -60,4 +52,4 @@ class EsMessager extends Emitter {
 
 }
 
-module.exports = EsMessager;
+export default  EsMessenger;

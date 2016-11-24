@@ -1,0 +1,25 @@
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
+{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default panel-col lesson-manage-panel">
+    <div class="panel-heading">
+      {{'默认教学计划/教学计划管理'|trans}}
+      <button class="btn btn-success btn-sm pull-right">发布计划</button>
+    </div>
+    <div class="panel-body">
+      <!-- TODO  删除返回的课程数据，为任务加章节数据 -->
+      <ul class="nav nav-pills mbl">
+        <li {% if content_tab == 'task-list' %}class="active"{% endif %}><a>计划任务</a></li>
+        <li class=""><a>计划设置</a></li>
+        <li class=""><a>营销设置</a></li>
+        <li class=""><a>教师设置</a></li>
+        <li class=""><a>学员管理</a></li>
+      </ul>
+      {% block task_manage %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
+
+

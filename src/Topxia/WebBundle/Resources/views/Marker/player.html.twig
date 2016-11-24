@@ -1,9 +1,6 @@
-{% block stylesheets %}
-  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
-{% endblock %}
 <div class="manage-player-body">
   <div class="manage-player-header">
-    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
+    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回</a>
     <ol class="breadcrumb breadcrumb-o">
       <li>
         {{course.title}}
@@ -19,8 +16,7 @@
       data-fingerprint="{{ finger_print() }}"
     {% endif %}
       data-user-id="{{ app.user.id }}"
-  >
-  </div>
+  ></div>
   <div class="mask hidden" data-role="player-mask"></div>
   <div class="watermarkEmbedded"></div>
 </div>

@@ -1,8 +1,8 @@
 {% for path in script()  %}
   {% if path starts with 'http://' %}
-    <script src="{{ path }}"></script>
+    <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
   {% else %}
-    <script src="{{ asset('build/' ~ path, 'webpack') }}" ansync="true"></script>
+    <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
   {% endif %}
 {% endfor %}
 

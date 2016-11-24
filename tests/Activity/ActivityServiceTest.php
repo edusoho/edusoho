@@ -1,11 +1,12 @@
 <?php
 
-namespace Tests;
+namespace Tests\Activity;
 
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Course\CourseService;
 
 class ActivityServiceTest extends BaseTestCase
 {
@@ -82,10 +83,15 @@ class ActivityServiceTest extends BaseTestCase
 
     public function testFinishTrigger()
     {
+        $course = array(
+            'title' => 'test'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+
         $task = array(
             'title'           => 'test1 task',
             'mediaType'       => 'text',
-            'fromCourseId'    => 1,
+            'fromCourseId'    => $course['id'],
             'fromCourseSetId' => 1
         );
         $savedTask = $this->getTaskService()->createTask($task);
@@ -93,6 +99,8 @@ class ActivityServiceTest extends BaseTestCase
         $data = array(
             'task' => $savedTask
         );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
         $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
     }
 
@@ -110,5 +118,13 @@ class ActivityServiceTest extends BaseTestCase
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

@@ -10,14 +10,20 @@
 {% set mode = mode|default(['my']) %}
   <thead>
     <tr>
-      <th>{{'名称'|trans}}</th>
+      <th>{{'订单名称'|trans}}</th>
       <th>{{'创建时间'|trans}}</th>
       <th>{{'状态'|trans}}</th>
       <th>{{'实付(元)'|trans}}</th>
       {% if mode in ['course', 'admin'] %}
         <th>{{'购买者'|trans}}</th>
       {% endif %}
-      <th>{{'支付方式'|trans}}</th>
+      <th>{{'支付方式'|trans}}
+      <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
+        <div class="popover-content hidden"  style="width:100px;">
+          <div class="popover-item">
+            <div class="content">{{'站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付'|trans}}</div>
+          </div>
+        </div></th>
       <th style="min-width:100px">{{'操作'|trans}}</th>
     </tr>
   </thead>

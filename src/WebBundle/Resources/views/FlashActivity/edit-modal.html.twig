@@ -9,7 +9,9 @@
     <div class="hidden-data">
       <input type="hidden" value="{{ flash.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
     </div>
-    {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+    <div class="col-xs-10">
+      {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+    </div>
   </div>
 {% endblock %}
 

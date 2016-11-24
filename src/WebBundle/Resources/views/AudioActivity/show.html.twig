@@ -5,13 +5,8 @@
 
 {% block content %}
   <div class="dashboard-body">
-    <div class="audio-content" id="audio-content" data-role="audio-content"
-         data-course-id="{{ activity.courseId }}"
-         data-task-id="{{ activity.taskId }}"
-         data-media="{{ activity.ext|json_encode }}"
-         data-user-id="{{ app.user.id }}"
-         data-balloon-player="1"
-    >
+    <div class="audio-content" id="audio-content" data-role="audio-content" >
+      {{ render(controller('WebBundle:Player:show', {id: activity.ext.mediaId})) }}
     </div>
   </div>
 {% endblock %}

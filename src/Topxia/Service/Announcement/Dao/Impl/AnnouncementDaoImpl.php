@@ -19,7 +19,11 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ?: array();
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
+
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     public function searchAnnouncementsCount($conditions)
