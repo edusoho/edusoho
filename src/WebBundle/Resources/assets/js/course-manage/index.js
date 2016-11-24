@@ -3,4 +3,7 @@ import sortable from 'common/sortable';
 
 deleteTask();
 
-sortable('#sortable-list');
+sortable({
+  element : '#sortable-list'
+});
+

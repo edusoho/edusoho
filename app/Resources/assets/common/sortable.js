@@ -1,20 +1,24 @@
-const sortList = (element,options,callback) => {
+const sortList = (options) => {
   let defaultOptions = {
+    element: '#sortable-list',
     distance: 20,
     itemSelector: "li.drag",
+    // success: (response) => {},
   }
 
-  let $list = $(element).sortable(Object.assign({}, defaultOptions, options, {
+  let settings = Object.assign({}, defaultOptions, options);
+
+  let $list = $(settings.element).sortable(Object.assign({}, settings, {
 
     onDrop: function (item, container, _super) {
       _super(item, container);
-      
+
       let data = $list.sortable("serialize").get();
 
       //排序URL
       $.post($list.data('sortUrl'), {ids: data}, (response) => {
 
-        callback ? callback(response) : document.location.reload();
+        settings.success ? settings.success(response) : document.location.reload();
         
       });
     },
