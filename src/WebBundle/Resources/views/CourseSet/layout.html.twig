@@ -3,20 +3,19 @@
 {% block title %}{{ courseSet.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {# courseSet 没有tag #}
   {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: courseSet} %}
 {% endblock %}
 
 {#{% block description %}{{ courseSet.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}#}
 
 {% set bodyClass = 'course-dashboard-page' %}
-{% set script_arguments = {course_uri: path('courseset_show', {id:courseSet.id})} %}
+{% set script_arguments = {course_uri: path('course_show', {id:courseSet.id})} %}
 
 {% block top_content %}
   {#{% cache 'course/' ~ courseSet.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 600 %}#}
   {#{{ render(controller('WebBundle:CourseSet:Part/header',{course: courseSet, member: null})) }}#}
   {#{% endcache %}#}
-  {% include 'WebBundle:CourseSet:Part/header.html.twig' with {course: courseSet, member: null} %}
+  {% include 'WebBundle:CourseSet:Part/header.html.twig' with {courseSet: courseSet, member: null,course:course,} %}
 {% endblock %}
 {#
 
