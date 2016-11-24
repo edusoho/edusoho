@@ -20,6 +20,23 @@ class TagServiceTest extends BaseTestCase
         $this->assertGreaterThan(0, $tag['createdTime']);
     }
 
+    public function testAddTagGroup()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1,2),
+            'tagNum' => 2
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(2, $tagGroup['tagNum']);
+    }
+
     /**
      * @group add
      * @expectedException Topxia\Service\Common\ServiceException
@@ -65,6 +82,17 @@ class TagServiceTest extends BaseTestCase
 
         $this->assertEquals('测试标签', $foundTag['name']);
         $this->assertGreaterThan(0, $foundTag['createdTime']);
+    }
+
+    public function testGetTagGroup()
+    {
+        $tagGroup = $this->getTagService()->addTagGroup(array(
+            'name'        => '测试标签组',
+            'tagNum'      => 0
+        ));
+
+        $foundTagGroup = $this->getTagService()->getTagGroup($tagGroup['id']);
+        $this->assertEquals('测试标签组', $foundTagGroup['name']);
     }
 
     public function testGetTagWithNotExistTagId()
@@ -161,6 +189,24 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(2, count($tags));
     }
 
+    public function testFindTagsByGroupId()
+    {   
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1,2),
+            'tagNum' => 2
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $count = count($this->getTagService()->findTagsByGroupId($tagGroup['id']));
+        $this->assertEquals(2, $count);
+    }
+
     /**
      * @group get
      */
@@ -228,6 +274,25 @@ class TagServiceTest extends BaseTestCase
         $this->getTagService()->updateTag($tag['id'], $updateTag);
     }
 
+    public function testUpdateTagGroup()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1,2),
+            'tagNum' => 2
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $updateTagGroup = $this->getTagService()->updateTagGroup($tagGroup['id'], array('name' => '标签组测试'));
+
+        $this->assertEquals('标签组测试', $updateTagGroup['name']);
+    }
+
     /**
      * @group current
      */
@@ -247,9 +312,83 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(0, $this->getTagService()->deleteTag(999));
     }
 
+    public function testDeleteTagGroup()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1,2),
+            'tagNum' => 2
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+
+        $this->getTagService()->deleteTagGroup($tagGroup['id']);
+        $this->assertNull($this->getTagService()->deleteTag($tagGroup['id']));
+    }
+
+    public function testFindTagGroups()
+    {
+        $tagGroup = array(
+            'name' => '测试标签组'
+        );
+
+        $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(1, count($this->getTagService()->findTagGroups()));
+    }
+
+    public function testFindTagRelationsByTagIds()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $tagGroup = array(
+            'name' => '测试标签组',
+            'tagIds' => array(1,2),
+            'tagNum' => 2
+        );
+
+        $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(2, count($this->getTagService()->findTagRelationsByTagIds(array(1,2))));
+    }
+
+    public function testSearchTags()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+
+        $this->assertEquals(2, count($this->getTagService()->searchTags(array(), 0, 2)));
+    }
+
+    public function testSearchTagCount()
+    {
+        $tagA = array('name' => '测试标签1');
+        $tagB = array('name' => '测试标签2');
+        $tagA = $this->getTagService()->addTag($tagA);
+        $tagB = $this->getTagService()->addTag($tagB);
+        $this->assertEquals(2, $this->getTagService()->searchTagCount(array()));
+    }
+
+    public function testIsTagGroupNameAvalieable()
+    {
+        $tagGroup = array(
+            'name' => '测试标签组'
+        );
+
+        $this->getTagService()->addTagGroup($tagGroup);
+        $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvalieable('测试标签组', '测试标签组2'));
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
-
 }

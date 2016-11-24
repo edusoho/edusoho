@@ -22,15 +22,22 @@ class LessonReplay extends BaseResource
         }
 
         $device = $request->query->get('device');
-        $replay = $this->getCourseService()->getCourseLessonReplayByLessonId($id);
+        $replaysLesson = $this->getCourseService()->getCourseLessonReplayByLessonId($id);
 
-        if (!$replay) {
+        if (!$replaysLesson) {
             return $this->error('500', '课时回放不存在！');
+        }
+
+        $visableReplays = array();
+        foreach ($replaysLesson as $replay) {
+            if ($replay['hidden'] == 0) {
+                $visableReplays[] = $replay;
+            }
         }
 
         $user = $this->getCurrentUser();
         try {
-            $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $replay[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+            $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
         } catch (Exception $e) {
             return $this->error('503', '获取回放失败！');
         }

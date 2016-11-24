@@ -98,7 +98,7 @@ define(function(require, exports, module) {
                     userId : userId,
                     userName : userName
                 },
-                videoHeaderLength: videoHeaderLength,
+                videoHeaderLength: videoHeaderLength || 0,
                 textTrack: subtitles
             }
         );

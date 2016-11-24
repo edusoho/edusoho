@@ -18,6 +18,9 @@ admin:
     name: 后台管理员
     parent: null
     children:
+        admin_homepage:
+            name: 后台首页
+            router_name: admin_homepage
         admin_user:
             name: 用户
             children:
@@ -248,7 +251,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
-                                    visable: ( course.status in ['closed', 'draft'])
+                                    visable: ( course.status in ['closed', 'draft', 'published'])
                         admin_course_recommend_list:
                             name: 课程推荐
                         admin_course_data:
@@ -311,7 +314,7 @@ admin:
                     name: 分类管理
                     children:
                         admin_course_category_manage:
-                            name: 分类管理
+                            name: 课程分类
                             router_name: admin_course_category
                             disable: true
                             children:
@@ -333,6 +336,19 @@ admin:
                                 admin_course_tag_add:
                                     name: '新增标签'
                                     router_name: admin_tag_create
+                                    mode: modal
+                                    group: topBtn
+                admin_course_tag_group:
+                    name: '标签组管理'
+                    children:
+                        admin_course_tag_group_manage:
+                            name: '标签组管理'
+                            router_name: admin_tag_group
+                            disable: true
+                            children:
+                                admin_course_tag_group_add:
+                                    name: '新建标签组'
+                                    router_name: admin_tag_group_create
                                     mode: modal
                                     group: topBtn
         admin_operation:
@@ -485,6 +501,12 @@ admin:
         admin_finance:
             name: 账务
             children:
+                # admin_accounts_center:
+                #     name: 账务中心
+                #     children:
+                #         admin_account_center:
+                #             name: 账务中心
+                #             disable: true
                 admin_bills:
                     name: 账单管理
                     children:

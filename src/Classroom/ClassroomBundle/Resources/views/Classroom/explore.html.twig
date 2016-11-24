@@ -29,10 +29,11 @@
   {% set price = filter.price|default('all')%}
   {% set orderBy = orderBy|default('createdTime')%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore',filter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy})) }}
+  
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, tags:tags, path:path, filter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy,group:'classroom'})) }}
   <div class="es-filter">
     <ul class="nav nav-sort">
-      <li><a href="{{ path('classroom_explore', {category:category, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} active {% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'推荐'|trans}}</a></li>
+      <li><a href="{{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} active {% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'推荐'|trans}}</a></li>
     </ul>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
@@ -42,9 +43,9 @@
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category, filter: {price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
           {% for level in levels %}
-            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category, filter: {price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>
@@ -52,9 +53,9 @@
       <label class="checkbox-inline hidden-xs">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
-          {{ path('classroom_explore', {category:category, filter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %} 
-          {{ path('classroom_explore', {category:category, filter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('classroom_explore', {category:category['category'], tag:{tags:tags}, filter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
         "> {{'免费%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
       </label>

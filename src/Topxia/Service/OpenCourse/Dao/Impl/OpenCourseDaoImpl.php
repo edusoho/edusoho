@@ -11,7 +11,6 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 
     public $serializeFields = array(
         'teacherIds' => 'saw',
-        'tags'       => 'saw'
     );
 
     public function getCourse($id)
@@ -125,16 +124,6 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             unset($conditions['title']);
         }
 
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
-
-            if (!empty($tagId)) {
-                $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-            }
-
-            unset($conditions['tagId']);
-        }
-
         if (empty($conditions['status']) || $conditions['status'] == "") {
             unset($conditions['status']);
         }
@@ -147,7 +136,6 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             ->andWhere('type = :type')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
-            ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')
@@ -161,19 +149,9 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('id IN ( :courseIds )')
+            ->andWhere('id IN ( :openCourseIds )')
             ->andWhere('recommended = :recommended')
             ->andWhere('locked = :locked');
-
-        if (isset($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-
-            foreach ($tagIds as $key => $tagId) {
-                $conditions['tagIds_'.$key] = '%|'.$tagId.'|%';
-                $builder->andWhere('tags LIKE :tagIds_'.$key);
-            }
-
-            unset($conditions['tagIds']);
-        }
 
         return $builder;
     }

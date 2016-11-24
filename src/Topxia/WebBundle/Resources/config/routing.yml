@@ -358,7 +358,7 @@ live_capacity:
 
 course_explore:
     pattern:  /course/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
+    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
 
 course_archive:
     pattern:  /archive/course
@@ -1178,9 +1178,9 @@ media_play:
     pattern:  /media/{mediaId}/play
     defaults: { _controller: TopxiaWebBundle:Media/Index:play }
 
-media_preview:
-    pattern:  /media/{mediaId}/preview
-    defaults: { _controller: TopxiaWebBundle:Media/Index:preview }
+media_subtitle_preview:
+    pattern:  /media/{mediaId}/subtitles/preview
+    defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
 
 media_subtitle_manage:
     pattern:  /media/{mediaId}/subtitles/manage
@@ -1375,10 +1375,6 @@ location_all:
     pattern: /location/all
     defaults: { _controller: TopxiaWebBundle:Location:all }
 
-tag:
-    pattern: /tag
-    defaults: { _controller: TopxiaWebBundle:Tag:index }
-
 tag_all:
     pattern: /tag/all_jsonm
     defaults: { _controller: TopxiaWebBundle:Tag:all }
@@ -1386,10 +1382,6 @@ tag_all:
 tag_match:
     pattern: /tag/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
-
-tag_show:
-    pattern: /tag/{name}
-    defaults: { _controller: TopxiaWebBundle:Tag:show }
 
 following_match_bynickname:
     pattern: /following/bynickname/match_jsonp
@@ -1909,9 +1901,6 @@ my_coin:
 my_invite_code:
     path:     /my/invitecode
     defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
 
 write_invitecode:
     path:     /my/invitecode/writeinvitecode

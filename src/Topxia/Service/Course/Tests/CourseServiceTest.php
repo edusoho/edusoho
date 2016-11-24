@@ -132,26 +132,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(count($randomCourses), 5);
     }
 
-    public function testFindCoursesByTagIdsAndStatus()
-    {
-        $tags = array(
-            'name' => 'tags1',
-            'name' => 'tags2',
-            'name' => 'tags3'
-        );
-        $this->getTagService()->addTag($tags);
-        $course = array(
-            'title' => 'online test course 1',
-            'tags'  => array('1', '2')
-        );
-        $this->getCourseService()->createCourse($course);
-
-        $conditions = array('tagIds' => array('1'), 'status' => 'draft');
-        $result     = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, 1);
-        $this->assertNotEmpty($result);
-        $this->assertEquals($result[0]['title'], $course['title']);
-    }
-
     public function testFindNormalCoursesByAnyTagIdsAndStatus()
     {
         $tags = array(
@@ -162,9 +142,9 @@ class CourseServiceTest extends BaseTestCase
         $this->getTagService()->addTag($tags);
         $course = array(
             'title' => 'online test course 1',
-            'tags'  => array('1', '2')
         );
-        $this->getCourseService()->createCourse($course);
+        $course = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->updateCourse($course['id'], array('tagIds' => array(1)));
         $result = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus(array('1'), 'draft', array('Rating', 'DESC'), 0, 1);
         $this->assertNotEmpty($result);
         $this->assertEquals($result[1]['title'], $course['title']);
