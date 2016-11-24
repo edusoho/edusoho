@@ -21,9 +21,9 @@ class Version20161116102956 extends AbstractMigration
             CREATE TABLE `tag_owner` (
                 `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '标签ID',
                 `ownerType` varchar(255) NOT NULL DEFAULT '' COMMENT '标签拥有者类型',
-                `ownerId` int(10) NOT NULL DEFAULT '0' COMMENT '标签拥有者id',
-                `tagId` int(10) NOT NULL DEFAULT '0' COMMENT '标签id',
-                `userId` int(10) NOT NULL COMMENT '操作用户id',
+                `ownerId` int(10) NOT NULL DEFAULT 0 COMMENT '标签拥有者id',
+                `tagId` int(10) NOT NULL DEFAULT 0 COMMENT '标签id',
+                `userId` int(10) NOT NULL DEFAULT 0 COMMENT '操作用户id',
                 `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标签关系表';
