@@ -13,7 +13,7 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
 
         $task     = $this->tryLearnTask($courseId, $id, $preview);
-        $tasks    = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
+        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
