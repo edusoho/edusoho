@@ -107,6 +107,21 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseId($courseId);
     }
 
+    public function findTasksFetchActivityByCourseId($courseId)
+    {
+        $tasks = $this->findTasksByCourseId($courseId);
+        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
+        $activities      = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        array_walk($tasks, function (&$task) use ($activities) {
+            $activity     = $activities[$task['activityId']];
+            $task['activity'] = $activity;
+        });
+
+        return $tasks;
+    }
+
     public function findTasksWithLearningResultByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
@@ -114,7 +129,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return array();
         }
 
-        $tasks = $this->findTasksByCourseId($courseId);
+        $tasks = $this->findTasksFetchActivityByCourseId($courseId);
 
         if (empty($tasks)) {
             return array();
@@ -123,15 +138,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-
-        $activityConfigs = $this->getActivityService()->getActivityTypes();
-        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
         $that            = $this;
-        $activities      = $this->getActivityService()->findActivities($activityIds);
-
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        array_walk($tasks, function (&$task) use ($taskResults, $activityConfigs, $activities, $that) {
+        array_walk($tasks, function (&$task) use ($taskResults, $that) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
                     continue;
@@ -141,17 +149,6 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $task['resultStatus'] = $result;
                 }
             }
-            $activity     = $activities[$task['activityId']];
-            $config       = $activityConfigs[$activity['mediaType']];
-            $length       = $that->formatActivityLength($activity['length']);
-            $activityMeta = array(
-                'mediaType' => $activity['mediaType'],
-                'startTime' => $activity['startTime'],
-                'endTime'   => $activity['endTime'],
-                'length'    => $length
-            );
-
-            $task['activityMeta'] = array_merge($config->getMetas(), $activityMeta);
         });
         return $tasks;
     }
