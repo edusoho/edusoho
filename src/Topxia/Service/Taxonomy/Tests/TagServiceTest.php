@@ -119,6 +119,20 @@ class TagServiceTest extends BaseTestCase
         $this->assertFalse($foundTag);
     }
 
+    public function testGetTagOwnerRelationByTagIdAndOwner()
+    {
+        $fields = array(
+            'tagId'     => 1,
+            'ownerType' => 'course',
+            'ownerId'   => 1
+        );
+
+        $this->getTagService()->addTagOwnerRelation($fields);
+
+        $tagOwner = $this->getTagService()->getTagOwnerRelationByTagIdAndOwner(1, array('ownerType' => 'course', 'ownerId' => 1));
+        $this->assertEquals(1, count($tagOwner));
+    }
+
     public function testfindAllTagsAndGetTagsCount()
     {
         $tagA = array('name' => '测试标签1');
