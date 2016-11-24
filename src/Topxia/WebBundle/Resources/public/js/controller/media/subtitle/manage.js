@@ -77,12 +77,18 @@ define(function(require,exports,module){
             "subtitleId": file.id,
             "mediaId": mediaId
         }).success(function (data) {
-            console.log(data);
             if(!data){
                 return;
             }
             select.addOption(data);
             Notify.success(Translator.trans('字幕上传成功！'));
+            setTimeout(function(){
+                $.get('/media/'+ mediaId +'/subtitles').done(function(data){
+                    if(data.subtitles){
+                        select.resetOptions(data.subtitles);
+                    }
+                })
+            },5000);
         }).error(function (data){
             Notify.danger(Translator.trans(data.responseJSON.error.message));
         });
