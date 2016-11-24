@@ -488,6 +488,12 @@ admin:
         admin_finance:
             name: 账务
             children:
+                admin_accounts_center:
+                    name: 账务中心
+                    children:
+                        admin_account_center:
+                            name: 账务中心
+                            disable: true
                 admin_bills:
                     name: 账单管理
                     children:

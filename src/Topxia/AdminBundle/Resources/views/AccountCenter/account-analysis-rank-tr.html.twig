@@ -1,0 +1,24 @@
+
+<table class="table table-condensed table-noborder table-overflow">
+  <thead>
+    <tr>
+      <th width="10%"></th>
+      <th width="70%">{{ '商品名称'|trans }}</th>
+      <th class="text-right prl" width="25%">{{ '收入金额'|trans }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for analysisAmount in analysisAmounts %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>
+        <a class="link-primary" 
+           target="_blank" href="{% if analysisAmount.targetType == 'vip' %}{{path('vip')}}{% else %}{{path(analysisAmount.targetType~'_show', {id:analysisAmount.targetId})}}{% endif %}">{{analysisAmount.title}}</a>
+      </td>
+      <td class="text-right prl">{{analysisAmount.count}}</td>
+    </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'暂无商品'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
