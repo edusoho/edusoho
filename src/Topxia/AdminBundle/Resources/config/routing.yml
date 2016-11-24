@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_homepage:
+    pattern:  /homepage
+    defaults: { _controller: TopxiaAdminBundle:Default:homepage }
+
 admin_notice_modal:
     pattern:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
