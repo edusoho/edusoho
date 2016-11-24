@@ -337,8 +337,15 @@ class BuildPackageAutoCommand extends BaseCommand
 
         $submoduleDir = $rootDir . $submodule;
 
+        chdir($rootDir);
+        $currentCommitHash = exec("git submodule status {$submodule}");
+
+        exec("git checkout v{$this->fromVersion}");
+        $lastCommitHash = exec("git submodule status {$submodule}");
+        exec("git checkout release/{$this->version}");
+
         chdir($submoduleDir);
-        $command = "git diff --name-status v{$this->fromVersion} HEAD > ../build/diff-{$submodule}-{$this->version}";
+        $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
         exec($command);
 
         return $rootDir . "build/diff-{$submodule}-{$this->version}";
