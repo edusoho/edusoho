@@ -11,6 +11,8 @@ class TagMarksDataTag extends CourseBaseDataTag implements DataTag
     {
         $tagMarks = array();
 
+        krsort($arguments['tags']);
+
         foreach ($arguments['tags'] as $groupId => $tagId) {
             $tag     = $this->getTagService()->getTag($tagId);
             $tagName = $tag['name'];
