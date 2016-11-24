@@ -44,6 +44,19 @@ class TaskController extends BaseController
         ));
     }
 
+    public function triggerAction(Request $request, $courseId, $id, $eventName)
+    {
+        $task         = $this->tryLearnTask($courseId, $id);
+        $data         = $request->request->all();
+        $data['task'] = $task;
+
+        return $this->forward('WebBundle:Activity:trigger', array(
+            'id'        => $task['activityId'],
+            'eventName' => $eventName,
+            'data'      => $data
+        ));
+    }
+
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {

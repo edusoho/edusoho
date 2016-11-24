@@ -69,7 +69,7 @@ class FileChooserController extends BaseController
     }
 
 
-    public function CourseFileChooseAction(Request $request, $courseId)
+    public function courseFileChooseAction(Request $request, $courseId)
     {
         $currentUser = $this->getUser();
 

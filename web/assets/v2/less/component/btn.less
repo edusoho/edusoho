@@ -44,8 +44,19 @@
     text-decoration: none;
   }
 }
+
 .btn-gray {
-  color: @gray-dark;
+  color: @gray;
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+    text-decoration: none;
+  }
+}
+
+.btn-graylight {
+  color: @gray-light;
   &:hover, 
   &:focus,
   &.focus {

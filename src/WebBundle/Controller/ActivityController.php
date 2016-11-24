@@ -2,26 +2,25 @@
 namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Course\CourseService;
 
 class ActivityController extends BaseController
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity         = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
 
-        if(empty($activity)){
+        if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
 
-        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $showController = $config->getAction('show');
-
         return $this->forward($showController, array(
+            'id'      => $id,
             'courseId' => $courseId,
-            'id'       => $id
         ));
     }
 
@@ -51,13 +50,13 @@ class ActivityController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($activityId);
 
-        if(empty($activity)){
+        if (empty($activity)) {
             throw $this->createResourceNotFoundException('activity', $activityId);
         }
 
         $eventName = $request->request->get('eventName');
 
-        if(empty($eventName)){
+        if (empty($eventName)) {
             throw $this->createNotFoundException('activity event is empty');
         }
 
@@ -71,6 +70,7 @@ class ActivityController extends BaseController
         ));
     }
 
+
     /**
      * @return ActivityService
      */
@@ -80,8 +80,14 @@ class ActivityController extends BaseController
     }
 
     /**
-     * @return CourseService
+     * @return TaskService
      */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
