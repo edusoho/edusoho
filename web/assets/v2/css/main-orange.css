@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3410,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -9685,6 +9685,15 @@ textarea {
   top: 50%;
   margin-top: -15px;
 }
+.lesson-list-wrapper.pbs {
+  padding-bottom: 100px !important;
+}
+.lesson-list-wrapper.pbm {
+  padding-bottom: 150px !important;
+}
+.lesson-list-wrapper.pbl {
+  padding-bottom: 200px !important;
+}
 .lesson-list {
   margin: 0 10px 0 40px;
   padding: 0;
@@ -10965,7 +10974,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -12593,6 +12602,9 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+.es-share.top .ml30-o {
+  margin-left: -30px;
+}
 @-webkit-keyframes boxshow {
   0% {
     box-shadow: 0 0 15px #2db7f5;
@@ -13477,6 +13489,35 @@ textarea {
 }
 .track-select-parent .track-selcet-list li.active {
   color: #46c37b;
+}
+.subtitle-transcode-status {
+  color: white;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  line-height: 1;
+  text-align: center;
+  min-width: 72px;
+}
+.subtitle-transcode-status.waiting,
+.subtitle-transcode-status.none {
+  background: #919191;
+}
+.subtitle-transcode-status.doing {
+  background: #2db7f5;
+}
+.subtitle-transcode-status.success {
+  background: #ff7200;
+}
+.subtitle-transcode-status.error {
+  background: #e83d2c;
+}
+.subtitle-name {
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user-center-header {
   position: relative;
@@ -15345,6 +15386,18 @@ textarea {
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;
+}
+.media-preview .media-preview-content .title {
+  padding-top: 35px;
+  text-align: center;
+  font-size: 30px;
+}
+.media-preview .media-preview-content .media-preview-player {
+  position: absolute;
+  top: 120px;
+  bottom: 60px;
+  left: 120px;
+  right: 120px;
 }
 html {
   height: 100%;

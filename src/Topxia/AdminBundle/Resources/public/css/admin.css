@@ -221,6 +221,8 @@ input.LargeInput {width: 600px;}
 }
 
 .admin-notice-list {
+  height: 85px;
+  overflow: auto;
   padding-left: 0;
 }
 .admin-notice-list li {

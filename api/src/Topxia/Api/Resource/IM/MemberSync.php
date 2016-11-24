@@ -79,6 +79,7 @@ class MemberSync extends BaseResource
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $courseIds)) {
+                $this->addDebug('MemberSync', 'syncCourseConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
@@ -94,6 +95,7 @@ class MemberSync extends BaseResource
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $classroomIds)) {
+                $this->addDebug('MemberSync', 'syncClassroomConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
@@ -130,11 +132,13 @@ class MemberSync extends BaseResource
                 if (++$cnt > MemberSync::MAX_CREATION_PER_TIME) {
                     break;
                 }
+                $this->addDebug('MemberSync', 'joinConversations & create : targetType='.$targetType.', targetId='.$id.', userId='.$user['id']);
                 $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));
             } else {
                 if (!isset($targetConvsMap[$id])) {
                     continue;
                 }
+                $this->addDebug('MemberSync', 'joinConversations & join : targetType='.$targetType.',convNo='.$targetConvsMap[$id]['no'].',targetId='.$id);
                 $this->getConversationService()->joinConversation($targetConvsMap[$id]['no'], $user['id']);
             }
         }
@@ -144,7 +148,12 @@ class MemberSync extends BaseResource
     {
         $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
         foreach ($targetIds as $id) {
-            $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
+            try {
+                $this->addDebug('MemberSync', 'quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
+                $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
+            } catch (\Exception $e) {
+                $this->addError('MemberSync', 'quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id.', error = '.$e->getMessage());
+            }
         }
     }
 

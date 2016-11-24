@@ -238,7 +238,14 @@ class PartnerDiscuzController extends BaseController
         //set_magic_quotes_runtime(0);
 
         defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
-        require_once realpath($this->container->getParameter('kernel.root_dir')) . '/config/uc_client_config.php';
+
+        $setting = $this->getSettingService()->get('user_partner');
+        $discuzConfig = $setting['partner_config']['discuz'];
+
+        foreach ($discuzConfig as $key => $value) {
+            define(strtoupper($key), $value);
+        }
+
         $this->requireClientFile('client.php');
     }
 
@@ -278,4 +285,8 @@ class PartnerDiscuzController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

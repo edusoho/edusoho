@@ -103,7 +103,6 @@ $app->error(function (\Exception $exception, $code) use ($app) {
             foreach ($e['trace'] as $position => $trace) {
                 $content = sprintf('%s. ', $position+1);
                 if ($trace['function']) {
-                    // var_dump($trace['args']);
                     $content .= sprintf('at %s%s%s(%s)', $trace['class'], $trace['type'], $trace['function'], '...args...');
                 }
                 if (isset($trace['file']) && isset($trace['line'])) {

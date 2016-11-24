@@ -570,7 +570,6 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     private function doRead($sessionId)
     {
-        //var_dump($sessionId);
         $this->sessionExpired = false;
 
         if (self::LOCK_ADVISORY === $this->lockMode) {

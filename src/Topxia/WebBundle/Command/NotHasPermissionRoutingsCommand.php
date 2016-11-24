@@ -56,28 +56,11 @@ class NotHasPermissionRoutingsCommand extends BaseCommand
 
             foreach ($routings as $key => $routing) {
                 if(!isset($routing['permissions'])){
-                    var_dump($key);
+                    echo $key.'\n';
                 }
             }
         }
 
-    }
-
-    protected function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', true);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
-
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 0,
-            'nickname' => '游客',
-            'currentIp' =>  '127.0.0.1',
-            'roles' => array(),
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
     }
 
 }

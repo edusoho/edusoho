@@ -241,6 +241,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             $liveJobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('live_lesson', $lesson['id']);
+
             if ($liveJobs) {
                 $this->deleteJob($liveJobs);
             }
@@ -783,9 +784,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function deleteJob($jobs)
     {
         foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'PushNotificationOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
+            $this->getCrontabService()->deleteJob($job['id']);
         }
     }
 
