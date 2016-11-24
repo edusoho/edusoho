@@ -25,6 +25,11 @@ class Course extends BaseResource
         //temp fix for app, will be remove when new app version published
         $res['expiryDay'] = '0';
 
+        $res['tags'] = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $res['id']
+        ));
+
         return $res;
     }
 
@@ -58,5 +63,10 @@ class Course extends BaseResource
     protected function getConversationService()
     {
         return $this->getServiceKernel()->createService('IM.ConversationService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

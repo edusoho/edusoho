@@ -1178,9 +1178,9 @@ media_play:
     pattern:  /media/{mediaId}/play
     defaults: { _controller: TopxiaWebBundle:Media/Index:play }
 
-media_preview:
-    pattern:  /media/{mediaId}/preview
-    defaults: { _controller: TopxiaWebBundle:Media/Index:preview }
+media_subtitle_preview:
+    pattern:  /media/{mediaId}/subtitles/preview
+    defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
 
 media_subtitle_manage:
     pattern:  /media/{mediaId}/subtitles/manage

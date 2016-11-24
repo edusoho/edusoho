@@ -85,17 +85,17 @@ class CategoryController extends BaseController
         $thirdLevelCategories = $this->makeThirdCategories($category);
 
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
-            'selectedCategory'     => $category['category'],
-            'selectedSubCategory'  => $category['subCategory'],
-            'selectedthirdLevelCategory'   => $category['thirdLevelCategory'],
-            'thirdLevelCategories' => $thirdLevelCategories,
-            'categories'           => $categories,
-            'subCategories'        => $subCategories,
-            'path'                 => $path,
-            'filter'               => $filter,
-            'orderBy'              => $orderBy,
-            'tagGroups'            => $tagGroups,
-            'tags'                 => $tags,
+            'selectedCategory'           => $category['category'],
+            'selectedSubCategory'        => $category['subCategory'],
+            'selectedthirdLevelCategory' => $category['thirdLevelCategory'],
+            'thirdLevelCategories'       => $thirdLevelCategories,
+            'categories'                 => $categories,
+            'subCategories'              => $subCategories,
+            'path'                       => $path,
+            'filter'                     => $filter,
+            'orderBy'                    => $orderBy,
+            'tagGroups'                  => $tagGroups,
+            'tags'                       => $tags
         ));
     }
 
