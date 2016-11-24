@@ -14,6 +14,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if ($index == 0) {
                 $this->updateScheme();
+                return array(
+                    'index' => 1
+                );
             }
 
             $migration->exec($index);
@@ -164,13 +167,13 @@ class TagDataMigration
     protected $connection;
 
     protected $columns = array(
-        0 => array('content', 'tagIds'),
-        1 => array('article', 'tagIds'),
-        2 => array('course', 'tags'),
-        3 => array('open_course', 'tags'),
-        4 => array('course_lesson', 'tags'),
-        5 => array('open_course_lesson', 'tags'),
-        6 => array('classroom', 'tags')
+        1 => array('content', 'tagIds'),
+        2 => array('article', 'tagIds'),
+        3 => array('course', 'tags'),
+        4 => array('open_course', 'tags'),
+        5 => array('course_lesson', 'tags'),
+        6 => array('open_course_lesson', 'tags'),
+        7 => array('classroom', 'tags')
     );
 
     protected $ownerType = array(
