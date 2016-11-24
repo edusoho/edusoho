@@ -5,6 +5,9 @@ namespace Biz\Activity\Config;
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\Exception\UnexpectedValueException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 abstract class Activity
 {
@@ -93,6 +96,21 @@ abstract class Activity
         }
 
         return $listener;
+    }
+
+    protected function createNotFoundService($message = '')
+    {
+        return new NotFoundException($message);
+    }
+
+    protected function createAccessDeniedException($message = '') 
+    {
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '') 
+    {
+        return new InvalidArgumentException($message);
     }
 
     /**

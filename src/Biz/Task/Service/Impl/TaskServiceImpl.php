@@ -23,11 +23,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function createTask($fields)
     {
         if ($this->invalidTask($fields)) {
-            throw new \InvalidArgumentException('task is invalid');
+            throw $this->createInvalidArgumentException('task is invalid');
         }
 
         if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权创建任务');
         }
 
         $activity = $this->getActivityService()->createActivity($fields);
@@ -35,7 +35,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
-        $currentSeq              = $this->getMaxSeqByCourseId($activity['fromCourseId']);
+        $currentSeq              = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['seq']           = $currentSeq + 1;
 
 
@@ -61,7 +61,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $savedTask = $this->getTask($id);
 
         if (!$this->canManageCourse($savedTask['courseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权更新任务');
         }
         $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
@@ -91,7 +91,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->canManageCourse($task['courseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权删除任务');
         }
         $currentSeq = $task['seq'];
         $result = $this->getTaskDao()->delete($id);
@@ -178,7 +178,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw new AccessDeniedException('该任务不在进行状态');
+            throw $this->createAccessDeniedException('该任务不在进行状态');
         }
 
         if ($taskResult['status'] === 'finish') {
@@ -194,12 +194,12 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw new AccessDeniedException("the Task is Locked");
+            throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 
         if (empty($task)) {
-            throw new NotFoundException("task does not exist");
+            throw $this->createNotFoundException("task does not exist");
         }
         return $task;
     }
@@ -243,7 +243,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         //先按照默认实现
         $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
         if (empty($preTask)) {
-            throw new NotFoundException("previous task does is lost");
+            throw $this->createNotFoundException("previous task does is lost");
         }
         $isTaskLearned = $this->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {
@@ -319,7 +319,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

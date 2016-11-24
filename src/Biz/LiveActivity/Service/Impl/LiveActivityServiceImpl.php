@@ -21,7 +21,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         //创建直播室
         $speaker = $this->getUserService()->getUser($activity['fromUserId']);
         if (empty($speaker)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('教师不存在！'));
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('教师不存在！'));
         }
 
         $speaker = $speaker['nickname'];
@@ -45,11 +45,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         ));
 
         if (empty($live)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('创建直播教室失败，请重试！'));
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('云直播创建失败，请重试！'));
         }
 
         if (isset($live['error'])) {
-            throw new \RuntimeException($live['error']);
+            throw $this->createServiceException($live['error']);
         }
 
         $activity['liveId']       = $live['id'];
