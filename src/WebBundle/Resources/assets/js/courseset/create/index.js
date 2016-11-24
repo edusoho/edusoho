@@ -1,13 +1,16 @@
 class Creator
 {
-	constructor() {
-		this.init();
+	constructor(props) {
+        this.$element = props;
+        this.$courseSetType = this.$element.find('.js-courseSetType');
+        this.$currentCourseSetType = this.$element.find('.js-courseSetType.active');;
+        this.init();
 	}
 
 	init(){
 		this._extendValidator();
-		var $form = $("#courseset-create-form");
-		$form.validate({
+        console.log(this.$element);
+		let validator = this.$element.validate({
             onkeyup: false,
             rules: {
                 title: {
@@ -20,36 +23,25 @@ class Creator
             }
         });
 
-        $('[data-toggle="tooltip"]').tooltip();
-
-        $("#courseset-create-form .course-select").click(function (evt) {
-            var $this = $(evt.target);
-            if(!$this.hasClass('course-select')){
-            	$this = $this.parent('.course-select');
-            }
-            var courseType = $this.data('type');
-            $this.not('.disabled').addClass('active').parent().siblings().find('.course-select').removeClass('active');
-            $('input[name="type"]').val(courseType);
+        this.$courseSetType.click(event => {
+            this.$courseSetType.removeClass('active');
+            this.$currentCourseSetType = $(event.currentTarget);
+            this.$currentCourseSetType.addClass('active');
+            $('input[name="type"]').val( this.$currentCourseSetType.data('type'));
         });
 
-        $('#courseset-create-btn').click(function(evt){
-        	console.log('#courseset-create-form : submit');
-        	if($form.validate()){
-        		$(evt.target).button('loading');
-        		$form.submit();	
+        $('#courseset-create-btn').click(event => {
+        	if(validator.form()){
+        		$(event.currentTarget).button('loading');
+        		this.$element.submit();	
         	}
         });
 	}
 
 	_extendValidator(){
+        let $currentCourseSetType = this.$currentCourseSetType;
 		$.validator.addMethod("open_live_course_title", function(value, element, params) {
-			console.log('value , element, params: ', value, element, params);
-		    var $courseType = $("#courseset-create-form .course-select.active");
-	        var courseType = $courseType.data('type');
-	        var title = value;
-	        console.log('courseType : ', courseType);
-	        if (courseType === 'liveOpen' && !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(title)) {
-	            // commit(false, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
+	        if ($currentCourseSetType.data('type') === 'liveOpen' && !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value)) {
 	            return false;
 	        } else {
 	            return true;
@@ -58,4 +50,8 @@ class Creator
 	}
 }
 
-new Creator();
+new Creator($('#courseset-create-form'));
+
+
+
+
