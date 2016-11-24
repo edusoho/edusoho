@@ -1,6 +1,6 @@
-import {deleteTask,sortList} from './help'
+import { deleteTask } from './help';
+import sortable from 'common/sortable';
 
 deleteTask();
-sortList();
 
-//
+sortable('#sortable-list');

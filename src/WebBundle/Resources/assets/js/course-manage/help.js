@@ -16,28 +16,4 @@ export const deleteTask = ()=> {
   });
 }
 
-export const sortList = () => {
-  var $list = $("#sortable-list").sortable({
-    distance: 20,
-    itemSelector: 'li.drag',
-    onDrop: function (item, container, _super) {
-      _super(item, container);
-      var data = $list.sortable("serialize").get();
-      console.log(data);
-      //排序URL
-      $.post($list.data('sortUrl'), {ids:data}, function(response){
-        document.location.reload();
-      });
-    },
-    serialize: function(parent, children, isContainer) {
-      return isContainer ? children : parent.attr('id');
-    },
-  });
-}
-
-
-export default {
-  deleteTask,
-  sortList
-}
 
