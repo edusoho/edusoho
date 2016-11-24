@@ -319,15 +319,17 @@ class BuildPackageAutoCommand extends BaseCommand
         $gitTag   = exec("git tag | grep v{$this->fromVersion}");
         $gitRelease = exec("git branch | grep release/{$this->version}");
         if (empty($gitTag)) {
-            echo "标签 v{$this->fromVersion} 不存在, 无法生成差异文件\n";
+            $this->output->writeln("标签 v{$this->fromVersion} 不存在, 无法生成差异文件");
         }
         if (empty($gitRelease)) {
-            echo "分支 release/{$this->version} 不存在, 无法生成差异文件\n";exit;
+            $this->output->writeln("分支 release/{$this->version} 不存在, 无法生成差异文件");
+            exit();
         }
+
         $this->output->writeln("<info>  使用 git  diff --name-status  v{$this->fromVersion} release{$this->version} > build/diff-{$this->version} 生成差异文件：build/diff-{$this->version}</info>");
 
         chdir($rootDir);
-        $command = "git diff --name-status v{$this->fromVersion} release/{$this->version} > build/diff-{$this->version}";
+        $command = "git diff --name-status feature/x8 release/{$this->version} > build/diff-{$this->version}";
         exec($command);
     }
 
@@ -339,11 +341,16 @@ class BuildPackageAutoCommand extends BaseCommand
 
         chdir($rootDir);
         $currentCommitHash = exec("git submodule status {$submodule}");
-
-        exec("git checkout v{$this->fromVersion}");
+        list($_, $currentCommitHash) = preg_split('/\s+/', $currentCommitHash);
+        //exec("git checkout v{$this->fromVersion}");
+        var_dump(exec("git checkout feature/x8"));
+        exec("git submodule update");
         $lastCommitHash = exec("git submodule status {$submodule}");
+        list($_, $lastCommitHash) = preg_split('/\s+/', $lastCommitHash);
         exec("git checkout release/{$this->version}");
-
+        exec("git submodule update");
+        var_dump($currentCommitHash, $lastCommitHash);
+        exit();
         chdir($submoduleDir);
         $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
         exec($command);
