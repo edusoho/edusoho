@@ -1,7 +1,12 @@
 define(function(require, exports, module) {
+
+    var Notify = require('common/bootstrap-notify');
     require('echarts-debug');
 
+
     exports.run = function() {
+        $("[data-toggle='popover']").popover();
+        
         //改版图表
         var searchChart = echarts.init(document.getElementById('searchChart'));
         var items = app.arguments.items;
