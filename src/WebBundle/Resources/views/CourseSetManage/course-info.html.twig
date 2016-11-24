@@ -40,18 +40,18 @@
           <label for="" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
           <div class="col-sm-8 radios">
             <label>
-              <input data-role="tab" data-tab-content="#learn-free-order" type="radio" id="learnModeFreeOrder" name="learnMode" value="freeOrder" 
+              <input type="radio" id="learnModeFreeOrder" name="learnMode" value="freeOrder" 
               {% if course.learnMode|default('freeOrder') == 'freeOrder' %}checked{% endif %}
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'自由模式'|trans}}
+              {% if course.status|default('draft') == 'published' %}disabled{% endif %} data-role="tab" data-tab-content="#learnFreeOrderHelp" >{{'自由模式'|trans}}
             </label>
             <label>
-              <input data-role="tab" data-tab-content="#learn-by-order" type="radio" name="learnMode" value="byOrder" 
+              <input type="radio" name="learnMode" value="byOrder" 
               {% if course.learnMode|default('freeOrder') == 'byOrder' %}checked{% endif %}
-              {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
+              {% if course.status|default('draft') == 'published' %}disabled{% endif %} data-role="tab" data-tab-content="#learnByOrderHelp">
               {{'任务式学习'|trans}}
             </label>
-            <p class="help-block {% if course.learnMode|default('freeOrder') == 'byOrder' %}hidden{% endif %}" data-role="tab-content" id="learn-free-order">{{'学习过程自由安排'|trans}}</p>
-            <p class="help-block {% if course.learnMode|default('freeOrder') == 'freeOrder' %}hidden{% endif %}" data-role="tab-content" id="learn-by-order">{{'根据计划预定的顺序学习'|trans}}</p>
+            <p class="help-block {% if course.learnMode|default('freeOrder') == 'byOrder' %}hidden{% endif %}"  id="learnFreeOrderHelp" data-role="tab-content">{{'学习过程自由安排'|trans}}</p>
+            <p class="help-block {% if course.learnMode|default('freeOrder') == 'freeOrder' %}hidden{% endif %}" id="learnByOrderHelp" data-role="tab-content" >{{'根据计划预定的顺序学习'|trans}}</p>
           </div>
         </div>
         <div class="form-group">
@@ -81,8 +81,9 @@
              {{'结束日期'|trans}}
               <input class="form-control" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px"
               {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
-              <p class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
             </div>
+            <p class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
+            <div class="color-warning">{{'课程首次发布后“学习模式”和“学习有效期方式”将不能再修改'|trans}}</div>
          </div>
         </div>
         <div class="form-group">
@@ -148,7 +149,6 @@
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
             <button id="course-submit" type="submit" class="btn btn-primary" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
-            <div class="color-warning mtm">{{'课程首次发布后“学习模式”和“学习有效期方式”将不能再修改'|trans}}</div>
           </div>
         </div>
       </form>

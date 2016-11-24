@@ -1,3 +1,5 @@
+import { TabChange } from '../help';
+
 class InfoEditor {
 	constructor() {
 		this.init();
@@ -7,17 +9,12 @@ class InfoEditor {
 		//init UI
 		this._initDatePicker('#expiryStartDate');
 		this._initDatePicker('#expiryEndDate');
+        TabChange();
 
 		CKEDITOR.replace('summary', {
 		  allowedContent: true,
 		  toolbar: 'Detail',
 		  filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-		});
-
-
-		$('[data-role="tab"]').click(function(){
-		  let $this = $(this);
-		  let $tabContent =$($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
 		});
 
 		//init validator

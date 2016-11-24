@@ -1,3 +1,5 @@
+import { TabChange } from '../help';
+
 class Creator{
 	constructor() {
 		this.init();
@@ -7,7 +9,7 @@ class Creator{
 		//init UI
 		this._initDatePicker('#expiryStartDate');
 		this._initDatePicker('#expiryEndDate');
-
+        TabChange();
 		//init validator
         $("#course-create-form").validate({
             onkeyup: false,
