@@ -16,8 +16,8 @@ class TagController extends BaseController
 
         foreach ($tags as &$tag) {
             $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
-            $groupNames = ArrayToolkit::column($tagGroups, 'name');
 
+            $groupNames = ArrayToolkit::column($tagGroups, 'name');
             if (!empty($groupNames)) {
                 $tag['groupNames'] = $groupNames;
             } else {

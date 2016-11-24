@@ -3,7 +3,7 @@
   <td>{{ tag.name }}</td>
   <td>
   {% for groupName in tag.groupNames|default('') %}
-    {{ groupName }}
+    《{{ groupName }}》
   {% endfor %}
   </td>
   <td>{{ tag.createdTime|date('Y-m-d H:i') }}</td>
