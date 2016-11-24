@@ -57,6 +57,8 @@ interface TestpaperService
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
+    public function findPaperResultsStatusNumGroupByStatus($testId);
+
     public function addTestpaperResult($fields);
 
     public function updateTestpaperResult($id, $fields);

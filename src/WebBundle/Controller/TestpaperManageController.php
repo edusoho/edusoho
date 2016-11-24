@@ -67,14 +67,13 @@ class TestpaperManageController extends BaseController
             );
         }
 
-        $conditions["types"]    = ArrayToolkit::column($types, "key");
-        $conditions["courseId"] = $course["id"];
+        $conditions['types']    = ArrayToolkit::column($types, "key");
+        $conditions['courseId'] = $course["id"];
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
 
         $conditions                              = array();
-        $conditions['target']                    = 'course'.'-'.$course["id"];
         $conditions['type']                      = 'material';
         $conditions['subCount']                  = 0;
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
@@ -84,6 +83,93 @@ class TestpaperManageController extends BaseController
             'ranges'       => $this->getQuestionRanges($course),
             'types'        => $types,
             'questionNums' => $questionNums
+        ));
+    }
+
+    public function checkListAction(Request $request, $courseId, $type)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $conditions = array(
+            'status'   => 'open',
+            'courseId' => $course['id'],
+            'type'     => $type
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->searchTestpaperCount($conditions),
+            1
+        );
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($testpapers as $key => $testpaper) {
+            $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id']);
+        }
+
+        return $this->render('WebBundle:TestpaperManage:check-list.html.twig', array(
+            'course'     => $course,
+            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'paginator'  => $paginator
+        ));
+    }
+
+    public function resultListAction(Request $request, $testpaperId)
+    {
+        $user = $this->getUser();
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (!$testpaper) {
+            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+        }
+
+        $status  = $request->query->get('status', 'finished');
+        $keyword = $request->query->get('keyword', '');
+
+        if (!in_array($status, array('all', 'finished', 'reviewing', 'doing'))) {
+            $status = 'all';
+        }
+
+        $conditions = array('testId' => $testpaper['id']);
+        if ($status != 'all') {
+            $conditions['status'] = $status;
+        }
+
+        if (!empty($keyword)) {
+            $searchUser           = $this->getUserService()->getUserByNickname($keyword);
+            $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
+        }
+
+        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id']);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            10
+        );
+
+        $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions,
+            array('endTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($testpaperResults, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('WebBundle:TestpaperManage:result-list.html.twig', array(
+            'testpaper'    => $testpaper,
+            'status'       => $status,
+            'paperResults' => $testpaperResults,
+            'paginator'    => $paginator,
+            'users'        => $users
         ));
     }
 

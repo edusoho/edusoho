@@ -134,12 +134,20 @@ course_manage_testpaper_create:
   defaults: { _controller: WebBundle:TestpaperManage:create }
 
 course_manage_testpaper_publish:
-    path: /course/{courseId}/manage/testpaper/{id}/publish
-    defaults: { _controller: WebBundle:TestpaperManage:publish }
+  path: /course/{courseId}/manage/testpaper/{id}/publish
+  defaults: { _controller: WebBundle:TestpaperManage:publish }
 
 course_manage_testpaper_close:
-    path: /course/{courseId}/manage/testpaper/{id}/close
-    defaults: { _controller: WebBundle:TestpaperManage:close }
+  path: /course/{courseId}/manage/testpaper/{id}/close
+  defaults: { _controller: WebBundle:TestpaperManage:close }
+
+course_manage_testpaper_check:
+  path: /course/{courseId}/manage/testpaper/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:checkList }
+
+course_manage_testpaper_result_list:
+  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: WebBundle:CourseTestpaperManage:resultList }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items

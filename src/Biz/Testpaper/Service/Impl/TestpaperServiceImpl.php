@@ -163,6 +163,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
     }
 
+    public function findPaperResultsStatusNumGroupByStatus($testId)
+    {
+        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId);
+        if (!$numInfo) {
+            return array();
+        }
+
+        $statusInfo = array();
+        foreach ($numInfo as $info) {
+            $statusInfo[$info['status']] = $info['num'];
+        }
+
+        return $statusInfo;
+    }
+
     public function addTestpaperResult($fields)
     {
         return $this->getTestpaperResultDao()->create($fields);
