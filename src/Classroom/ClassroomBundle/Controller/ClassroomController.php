@@ -622,10 +622,6 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
         }
 
-        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
-        }
-
         if (!empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }

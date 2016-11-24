@@ -997,10 +997,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param  $id
-     * @param  $classroomPermission
+     * @param  $permission
      * @return bool
      */
-    public function canManageClassroom($id, $classroomPermission = null)
+    public function canManageClassroom($id, $permission = 'admin_classroom_content_manage')
     {
         $classroom = $this->getClassroom($id);
 
@@ -1013,8 +1013,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        $defaultPermission = 'admin_classroom_content_manage';
-        if ($user->hasPermission($defaultPermission) || $user->hasPermission($classroomPermission)) {
+        if ($user->hasPermission($permission)) {
             return true;
         }
 
@@ -1038,7 +1037,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function canTakeClassroom($id, $isStudentOrAuditor = false)
+    public function canTakeClassroom($id, $includeAuditor = false)
     {
         $classroom = $this->getClassroom($id);
 
@@ -1052,7 +1051,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($user->isAdmin() && !$isStudentOrAuditor) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -1062,22 +1061,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'assistant', 'auditor', 'teacher', 'headTeacher'))) {
-                return true;
-            }
-        } else {
-            if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
-                return true;
-            }
+        if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
+            return true;
+        }
+
+        if ($includeAuditor && in_array('auditor', $member['role'])) {
+            return true;
         }
 
         return false;
     }
 
-    public function tryTakeClassroom($id)
+    public function tryTakeClassroom($id, $includeAuditor = false)
     {
-        if (!$this->canTakeClassroom($id)) {
+        if (!$this->canTakeClassroom($id, $includeAuditor)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
         }
     }
