@@ -1,11 +1,12 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script([ 'web/activity-manage/download-activity-fields.js']) %}
+{% do script([ 'web/activity-manage/download/index.js']) %}
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('download') %}
   <div class="form-group">
     <div class="form-group">
-      <div class="col-md-10 col-md-offset-1  controls">
+      <div class="col-xs-2 control-label"></div>
+      <div class="col-xs-10">
         <ul class="list-group" id="material-list">
           {% for media in activity.ext.materials|default(null) %}
             <li class="list-group-item clearfix" data-id="{{ media.link|default(media.id) }}">
@@ -57,7 +58,7 @@
     </div>
   </div>
   <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
-  <input id="materials" class="form-control" type="text" name="materials"
+  <input id="materials" class="form-control" type="hidden" name="materials"
       {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
   <input id="media" type="hidden" name="media" value="">
 {% endblock %}
