@@ -15,6 +15,12 @@ class TagOwnerDaoImpl extends BaseDao implements TagOwnerDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: array();
     }
 
+    public function getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $ownerType, $ownerId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE tagId = ? and ownerType = ? and ownerId = ?";
+        return $this->getConnection()->fetchAll($sql, array($tagId, $ownerType, $ownerId)) ?: array();
+    }
+
     public function findByOwnerTypeAndOwnerId($ownerType, $ownerId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE ownerType = ? and ownerId = ?";
