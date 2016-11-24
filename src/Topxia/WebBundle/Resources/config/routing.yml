@@ -1902,6 +1902,10 @@ my_invite_code:
     path:     /my/invitecode
     defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
 
+invite_promote_link:
+    path:     /my/invitecode/promotelink
+    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
+
 write_invitecode:
     path:     /my/invitecode/writeinvitecode
     defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
