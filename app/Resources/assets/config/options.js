@@ -1,14 +1,35 @@
 // 配置文件
 
+/* 默认值
+* defaultOptions = {
+    commonsChunkFilename: 'common', 
+    bundleMainname: 'main',
+    entryFileName: 'index',
+    port: 3030,
+    registeredBundles: [ // default auto forEach
+      'plugins/CrmPlugin'
+      'src/WebBundle',
+    ],
+    registeredDirs: ['src','plugins'],
+
+    globalAssetsDir: 'app/Resources/assets',
+    srcDir: 'src',
+    pluginsDir: 'plugins',
+    nodeModulesDir: 'node_modules',
+    libsDir: 'app/Resources/assets/libs',
+    commonDir: 'app/Resources/assets/common',
+
+    assetsDir: 'Resources/assets',
+    buildDir: 'Resources/build',
+
+    libsDevOutputDir: 'libs',
+    libsBuildOutputDir: 'web/build/libs'
+  }
+*/
+
 const options = {
-  // registeredBundles: [ //register php bundles
-  //   // 'src/Topxia/WebBundle',
-  //   'plugins/CrmPlugin'
-  //   // 'src/Topxia/AdminBundle',
-  // ],
-  // currentPath: __dirname,
   output: {
-    path: 'web/build', //file output path, relative to this file
+    path: 'web/build/', //file output path, relative to this file
     buildpath: './',
     publicPath: '/build/' //relative to website domain
   },
@@ -40,11 +61,6 @@ const options = {
       ]
     }
   ],
-  // defaultValue 'common'
-  commonsChunkFilename: 'common',
-  // defaultValue 'main'
-  // bundleMainname: 'main'
-  port: 3030
 }
 
 export default options;
