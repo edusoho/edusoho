@@ -2,6 +2,8 @@
 
 namespace WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetManageController extends BaseController
@@ -19,13 +21,6 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function createAction(Request $request)
-    {
-        return $this->render('WebBundle:CourseSetManage:courseset-create.html.twig', array(
-            //params
-        ));
-    }
-
     //基础信息
     public function baseAction(Request $request, $id)
     {
@@ -35,9 +30,15 @@ class CourseSetManageController extends BaseController
         }
         $courseSet     = $this->getCourseSetService()->getCourseSet($id);
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+
+        $tags = array();
+        if (!empty($courseSet['tags'])) {
+            $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
+        }
         return $this->render('WebBundle:CourseSetManage:courseset-base.html.twig', array(
             'courseSet'     => $courseSet,
-            'defaultCourse' => $defaultCourse
+            'defaultCourse' => $defaultCourse,
+            'tags'          => ArrayToolkit::column($tags, 'name')
         ));
     }
 
@@ -64,5 +65,10 @@ class CourseSetManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getTagService()
+    {
+        return ServiceKernel::instance()->createService('Taxonomy.TagService');
     }
 }
