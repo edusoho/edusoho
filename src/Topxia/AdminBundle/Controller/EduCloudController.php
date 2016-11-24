@@ -408,15 +408,16 @@ class EduCloudController extends BaseController
         try {
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
+            // var_dump($overview);exit();
             $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
-            if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || $cloudSmsSettings['sms_enabled'] == 0) {
+            if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled'])) {
                 $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
                 return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
                     'overview' => $overview,
                     'cloudSmsSettings' => $cloudSmsSettings
                 ));               
             }
-            foreach ($overview['items'] as $key => $value) {
+            foreach ($overview['items'] as $value) {
                 $items['date'][] = $value['date'];
                 $items['count'][] = $value['count'];
             }
