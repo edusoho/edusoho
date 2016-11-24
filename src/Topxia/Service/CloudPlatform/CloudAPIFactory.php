@@ -38,10 +38,10 @@ class CloudAPIFactory
             $api->setLogger($logger);
         } else {
             $api = new FailoverCloudAPI(array(
-                'accessKey' => 'vPb16d4L9YFm9mqlvTyoCo0Y5og1vZL',
-                'secretKey' => 'XSc2XhZM0AmKdx3f9y0WCYI2893sqDbLz',
-                'apiUrl'    => '124.160.104.74:8098',
-                'debug'     =>  false
+                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+                'apiUrl'    => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
+                'debug'     => empty($developer['debug']) ? false : true
             ));
             $api->setLogger($logger);
 
