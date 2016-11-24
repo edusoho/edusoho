@@ -12,7 +12,7 @@
     <ul class="content list-unstyled list-inline">
       <li class="classify">
         {% if categoryMarks[0]|default('') %}
-          <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+          <a href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
         {% endif %}
       </li>
 
