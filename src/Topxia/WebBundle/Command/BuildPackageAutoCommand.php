@@ -345,7 +345,13 @@ class BuildPackageAutoCommand extends BaseCommand
         exec("git checkout develop");
         exec("git submodule update");
         $lastCommitHash = exec("git submodule status {$submodule}");
-        list($_, $lastCommitHash) = preg_split('/\s+/', $lastCommitHash);
+
+        if(empty($lastCommitHash)){
+            $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
+        }else{
+            list($_, $lastCommitHash) = preg_split('/\s+/', $lastCommitHash);
+        }
+
         exec("git checkout release/{$this->version}");
         exec("git submodule update");
         
