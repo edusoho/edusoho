@@ -244,7 +244,6 @@ class ExploreController extends CourseBaseController
             'consultDisplay'           => true,
             'path'                     => 'course_explore',
             'categoryArray'            => $categoryArray,
-            'group'                    => $group,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
             'levels'                   => $levels,
