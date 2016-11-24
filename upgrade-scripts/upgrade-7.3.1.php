@@ -8,28 +8,35 @@ class EduSohoUpgrade extends AbstractUpdater
 {
     public function update($index = 0)
     {
-        $this->getConnection()->beginTransaction();
-        try {
-            $migration = new TagDataMigration($this->getConnection());
+        if ($index <= 9) {
+            $this->getConnection()->beginTransaction();
+            try {
+                $migration = new TagDataMigration($this->getConnection());
 
-            if ($index == 0) {
-                $this->updateScheme();
+                if ($index == 0) {
+                    $this->updateScheme();
+                }
+
+                $migration->exec($index);
+
+                if ($index == 8) {
+                    $this->migrateCategroy($index);
+                }
+
+                if ($index == 9) {
+                    $this->updateRole();
+                }
+                $this->getConnection()->commit();
+
+                return array('index' => ++$index, 'message' => '正在升级数据库', 'progress' => 0);
+            } catch (\Exception $e) {
+                $this->getConnection()->rollback();
+                throw $e;
             }
-
-            $migration->exec($index);
-
-            if ($index == 8) {
-                $this->migrateCategroy($index);
-            }
-            $this->getConnection()->commit();
-
-            return array('index' => ++$index);
-        } catch (\Exception $e) {
-            $this->getConnection()->rollback();
-            throw $e;
         }
 
         try {
+
             $dir        = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir') . "../web/install");
             $filesystem = new Filesystem();
 
@@ -130,6 +137,23 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getCategoryService()
     {
         return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getRoleService()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+    }
+
+    protected function updateRole()
+    {
+        $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
+        $role['data'][] = 'admin_homepage';
+
+        $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
+
+        $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
+        $role['data'][] = 'admin_homepage';
+        $this->getConnection()->exec('UPDATE role SET data = \''.json_encode($role['data']).'\' WHERE id='.$role['id']);
     }
 
     protected function migrateCategroy()
@@ -273,19 +297,13 @@ class TagDataMigration
             }
         }
 
-        $this->dropTagField($table, $column);
-    }
-
-    protected function dropTagField($table, $column)
-    {   
-        $sql = "ALTER TABLE {$table} DROP COLUMN {$column}";
-        $this->connection->exec($sql);
     }
 
     protected function moveTagData($fields)
     {   
         $fields['tags'] = array_filter($fields['tags']);
         foreach ($fields['tags'] as $tag) {
+            
                 $this->getTagService()->addTagOwnerRelation(array(
                     'ownerType'   => $fields['ownerType'],
                     'ownerId'     => $fields['ownerId'],
