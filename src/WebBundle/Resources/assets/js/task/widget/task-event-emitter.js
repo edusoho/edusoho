@@ -14,20 +14,19 @@ export default class TaskEventEmitter {
     this.receiveMessenger.listen(message => {
       let {event, data} = JSON.parse(message);
       let listeners = this.eventMap.receives[event];
-
-      if(this.element.data('eventUrl')){
+      if (this.element.data('eventUrl')) {
         let postData = data || {};
         postData.eventName = event;
         $.post(this.element.data('eventUrl'), postData)
-            .done(({event, data}) => {
-              if (typeof listeners !== 'undefined') {
-                listeners.forEach(callback => callback(data));
-              }
-              this.receiveMessenger.send(JSON.stringify({event: event, data: data}));
-            })
-            .fail((error) => {
-              this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
-            })
+          .done(({event, data}) => {
+            if (typeof listeners !== 'undefined') {
+              listeners.forEach(callback => callback(data));
+            }
+            this.receiveMessenger.send(JSON.stringify({event: event, data: data}));
+          })
+          .fail((error) => {
+            this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
+          })
 
       }
     });
