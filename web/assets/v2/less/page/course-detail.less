@@ -1,5 +1,6 @@
 .course-detail-section {
   position: relative;
+
   .course-detail-header {
     position: relative;
     min-height: 50px;
@@ -12,22 +13,11 @@
       }
     }
   }
-  .course-operation {
-    position: absolute;
-    list-style-type: none;
-    right: 15px;
-    top: 15px;
-    >li {
-      float: left;
-      >a {
-        margin-right: 10px;
-      }
-    }
-  }
 
-  .course-img {
+  .course-detail-img {
     position: relative;
     float: left;
+    width: 480px;
     background-color: #fff;
     @media (max-width: @screen-xs-max) {
       .border-top-left-radius();
@@ -57,11 +47,78 @@
         margin-top: -50px;
       }
     }
-    .img-responsive {
-      width: 100%;
-      @media (max-width: @screen-xs-max) {
-        .border-top-left-radius();
-        .border-top-right-radius(); 
+    .course-detail-remask {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: #fff;
+    }
+  }
+
+  .course-detail-info {
+    padding-left: 60px;
+    margin-left: 480px;
+    color: @gray;
+    .course-detail-content {
+      background-color: @bg-color;
+      margin-left: -60px;
+      margin-right: -15px;
+      padding: 25px 0 5px;
+      padding-left: 60px;
+    }
+    .course-detail-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .course-detail-nav {
+      position: absolute;
+      top:-5px;
+      left: 70px;
+      right: 0;
+    }
+    .course-detail-title {
+      width: 70px;
+      display: inline-block;
+      text-align: left;
+      font-size: 12px;
+    }
+    .discount-price {
+      font-size: 24px;
+      color: @gray-darker;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    .original-price {
+      position: relative;
+      margin-left: 4px;
+      &:after {
+        content: '';
+        position: absolute;
+        left: -2px;
+        top:50%;
+        right: -2px;
+        height: 1px;
+        background-color: @gray;
+      }
+    }
+  }
+
+  .course-detail-bottom {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .course-operation {
+    position: absolute;
+    list-style-type: none;
+    right: 15px;
+    top: 15px;
+    >li {
+      float: left;
+      >a {
+        margin-right: 10px;
       }
     }
   }
@@ -178,15 +235,6 @@
       width: 100%;
       padding: 10px 10px 0 10px;
     }
-    .student-num {
-      border-bottom: 1px solid #f1f1f1;
-      @media (max-width: @screen-sm-max) {
-        float: left;
-        width: 33.33%;
-        border: none;
-        margin-top: 10px;
-      }
-    }
     .buy {
       padding: 26px 0;
       text-align: center;
@@ -274,14 +322,6 @@
     @media (max-width: @screen-xs-max) {
       width: 100%;
     }
-    .student-num {
-      padding: 15px 0;
-      border-bottom: 1px solid @gray-lighter;
-      @media (max-width: @screen-md-max) {
-        font-size: 20px;
-        padding: 10px 0;
-      }
-    } 
   }
   .course-data {
     padding: 16px 0;

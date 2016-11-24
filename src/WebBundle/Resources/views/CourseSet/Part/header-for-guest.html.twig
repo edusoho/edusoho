@@ -25,19 +25,13 @@
   {{header_macro.title(courseSet)}}
   {{ header_macro.picture(courseSet, previewLesson) }}
   {{ header_macro.info(courseSet, member, userVipStatus) }}
+  {{header_macro.bottom(courseSet)}}
   <ul class="course-operation clearfix {% if courseVip and courseSet.parentId == '0' %}active{% endif %}">
     {{ header_macro.favorite_btn(courseSet, hasFavorited) }}
     {{ header_macro.share_btn(courseSet) }}
     {{ header_macro.setting_btn(courseSet) }}
     {{ header_macro.courseVip_btn(courseVip,courseSet) }}
   </ul>
-   <div class="buy">
-      {% if source|default("") == "classroom" %}
-        {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: courseSet.id})) }}
-      {% else %}
-        {#{% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}#}
-      {% endif %}
-    </div>
 {% endblock %}
 
 
