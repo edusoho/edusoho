@@ -15,6 +15,7 @@
           <div class="col-md-8">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             <input type="hidden" name="id" value="{{courseSet.id}}">
+            <input type="hidden" id="courseSetType" name="type" value="{{courseSet.type}}">
             <input type="text" id="courseSet_title" name="title" required="required" class="form-control"
                    value="{{ courseSet.title|default('') }}">
             <div class="help-block" style="display:none;"></div>
@@ -51,7 +52,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
-            <button id="courseset-base-submit" type="submit" class="btn btn-primary" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+            <button id="courseset-base-submit" type="button" class="btn btn-primary" data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
           </div>
         </div>
       </form>

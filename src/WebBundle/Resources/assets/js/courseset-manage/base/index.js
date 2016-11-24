@@ -59,48 +59,34 @@ class Base
 		    maximumSelectionSize: 20
 		});
 
-		var $form = $("#courseset-create-form");
-		$form.validate({
+		let $form = $('#courseset-form');
+		let validator = $form.validate({
             onkeyup: false,
             rules: {
                 title: {
-                    required: true
-                },
-                expiryDays: {
-                	required: '#expiryModeDays:checked',
-                	digits:true
-                },
-                expiryStartDate: {
-                	required: '#expiryModeDate:checked',
-                	date:true
-                },
-                expiryEndDate: {
-                	required: '#expiryModeDate:checked',
-                	date:true,
-                	after: '#expiryStartDate'
+                    required: true,
+                    open_live_course_title: true
                 }
             },
             messages: {
-                title: "请输入教学计划课程标题",
-                expiryDays: '请输入学习有效期',
-                expiryStartDate: '请输入开始日期',
-                expiryEndDate: {
-                	required: '请输入结束日期',
-                	after: '结束日期应晚于开始日期'
-                }
+                title: "请输入有效的课程标题（直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符）"
             }
         });
 
-        $.validator.addMethod(
-	        "after",
-	        function(value, element, params) {
-	            console.log(value, element, params);
-	            return this.optional(element) || $(params).value() > value;
-	        },
-	        "Please check your input."
-		);
+        $.validator.addMethod("open_live_course_title", function(value, element, params) {
+	        if ($('#courseSetType').val() === 'liveOpen' && !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value)) {
+	            return false;
+	        } else {
+	            return true;
+	        }
+		}, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));		
 
-		
+        $('#courseset-base-submit').click(event => {
+        	if(validator.form()){
+        		$(event.currentTarget).button('loading');
+        		$form.submit();	
+        	}
+        });
 	}
 
 }
