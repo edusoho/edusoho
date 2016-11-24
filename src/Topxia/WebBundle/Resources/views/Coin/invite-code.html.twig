@@ -7,7 +7,7 @@
 {% set side_nav = 'my-invite-code' %}
 
 {% set url = inviteInfomation_template %}
-{% set message = setting('default.inviteShareContent') %}
+{% set message = ds|default('我正在%site%学习，邀请你也来体验下。')|trans({'%site%':setting('site.name')}) %}
 {% set title = setting('site.name') %}
 {% if setting('site.logo') %}
 {% set picture = asset(setting('site.logo')) %}
