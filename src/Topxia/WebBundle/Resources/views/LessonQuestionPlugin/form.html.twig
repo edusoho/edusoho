@@ -6,13 +6,13 @@
     </div>
 	</div>
 
-	<div class="form-group detail-form-group hide">
+	<div class="form-group js-detail-form-group mtm  hide">
 		<div class="controls">
 	    {{ form_widget(form.content, {attr:{class:'form-control', rows:5, placeholder:'详细描述你的问题'|trans, 'data-image-upload-url': path('editor_upload', {token:upload_token('course')}) }}) }}
 	  </div>
 	</div>
 
-	<div class="form-group detail-form-group hide">
+	<div class="form-group js-detail-form-group mtm hide">
 		<div class="controls clearfix">
 			<button class="btn btn-primary btn-sm pull-right" type="submit">{{'提问'|trans}}</button>
 			<button class="btn btn-link btn-sm collapse-form-btn pull-right" type="button">{{'取消'|trans}}</button>

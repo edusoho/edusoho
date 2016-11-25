@@ -61,8 +61,8 @@ class TaskShow {
 
   sidebar() {
     var sideBar = new SideBar({
-      element:'.dashboard-sidebar-content',
-      activePlugins:["note","question",'task'],
+      element:'.js-task-dashboard-page',
+      activePlugins:['task',"note","question"],
       courseId: 1,
     });
   }

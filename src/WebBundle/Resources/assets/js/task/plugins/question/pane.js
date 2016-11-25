@@ -75,7 +75,7 @@ class QuestionPane {
     //     Notify.danger(response.error.message);
     //   });
     // }
-    this.createFormElement.find('.detail-form-group').removeClass('hide');
+    this.createFormElement.find('.js-detail-form-group').removeClass('hide');
   }
   collapseForm() {
     this.createFormElement.removeClass('form-expanded');
@@ -84,7 +84,7 @@ class QuestionPane {
     }
     // Validator.query(this.createFormElement).destroy();
     this.clearForm();
-    this.createFormElement.find('.detail-form-group').addClass('hide');
+    this.createFormElement.find('.js-detail-form-group').addClass('hide');
   }
   clearForm() {
     this.createFormElement.find('input[type=text],textarea').each(function(){

@@ -19,6 +19,7 @@ class NotePane {
       lessonId: toolbar.taskId,
     }, (html)=>{
       this.$element.html(html);
+      
       this.editor = CKEDITOR.replace('note_content', {
         toolbar: 'Simple',
         filebrowserImageUploadUrl: this.$element.find('#note_content').data('imageUploadUrl'),

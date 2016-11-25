@@ -5,6 +5,7 @@ import 'store';
 
 class SideBar {
   constructor(option) {
+    this.$element = $(option.element);
     this.courseId = option.courseId;
     this.taskId = null;
     this.task = null;
@@ -12,7 +13,8 @@ class SideBar {
     this.plugins = {};
     this._tasks = {};
     this._currentPane = null;
-    this.$dashboardsidebar = $('#dashboard-sidebar');
+    this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
+    // this.$dashboardPane = this.$element.find('#dashboard-pane');
     this.$dashboardcontent = $('#dashboard-content');
     this._init();
   }
@@ -74,7 +76,7 @@ class SideBar {
   }
 
   _getPaneContainer() {
-    return $('.dashboard-sidebar-content');
+    return this.$element;
   }
 
   _getPane(name) {
@@ -93,13 +95,12 @@ class SideBar {
         this._renderSiderBar(false,'2000'); 
       },2000); 
     }
-    console.log(store.get('USER-START-LEARN'));
   }
 
   createPane(name) {
     let $pane = this._getPane(name);
     if (!$pane) {
-      $pane = $('<div data-pane="' + name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this._getPaneContainer());
+      $pane = $('<div data-pane="'+ name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this.$dashboardsidebar);
     }
     return $pane;
   }

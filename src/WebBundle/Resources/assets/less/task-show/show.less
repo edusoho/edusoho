@@ -1,8 +1,12 @@
 .task-dashboard-page {
+  position: fixed;
+  left: 0;
+  top:0;
+  width: 100%;
   background-color: #111111;
   height: 100%;
   padding-right: 360px;
-  overflow: hidden;
+  // overflow: hidden;
   .dashboard-content {
     position: absolute;
     left: 26px;
@@ -92,8 +96,11 @@
     width: 360px;
     right: -360px;
     .dashboard-sidebar-content {
-      position: relative;
-      height: 100%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
     }
   }
   .dashboard-toolbar {
@@ -127,14 +134,19 @@
         }
       }
     }
-  }
-  .dashboard-pane {
-    height: 100%;
-    overflow: hidden;
-    background-color: #333333;
+    .dashboard-pane {
+      height: 100%;
+      background-color: #333333;
+    }
   }
   .task-pane {
     padding: 15px 17px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
   .note-pane {
     padding: 20px 15px;
@@ -143,6 +155,9 @@
     }
   }
   .question-pane {
+    height: 100%;
+    // overflow: hidden;
+    // padding-top: 10px;
     // background-color: #272727;
     .lesson-question-plugin-form {
       margin-bottom: 0;
