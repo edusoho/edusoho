@@ -61,20 +61,14 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $this->biz['db']->rollback();
     }
 
-    protected function getLogger($name)
+    protected function getLogger()
     {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
-
-        return $this->logger;
+        return $this->biz['logger'];
     }
 
-    protected function createAccessDeniedException($message = '') 
+    protected function createAccessDeniedException($message, $context = array()) 
     {
+        $this->getLogger()->error($message, $context);
         return new AccessDeniedException($message);
     }
 
