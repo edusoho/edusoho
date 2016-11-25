@@ -551,12 +551,16 @@ admin:
                         admin_edu_cloud_setting_sms:
                             name: 设置
                             disable: true
-                # admin_edu_cloud_email:
-                #     name: 云邮件设置
-                #     children:
-                #         admin_edu_cloud_email_seeting:
-                #             name: 云邮件设置
-                #             router_name: admin_edu_cloud_email
+                admin_edu_cloud_email:
+                    name: 云邮件
+                    children:
+                        admin_edu_cloud_email_overview:
+                            name: 概览
+                            router_name: admin_edu_cloud_email
+                            disable: true
+                        admin_edu_cloud_email_setting:
+                            name: 设置
+                            disable: true
                 admin_edu_cloud_search_setting:
                     name: 云搜索
                     router_name: admin_edu_cloud_search
