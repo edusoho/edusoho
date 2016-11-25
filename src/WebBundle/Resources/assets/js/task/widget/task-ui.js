@@ -1,6 +1,6 @@
 export default class TaskUi {
   constructor(option) {
-    this.element = $(option.element);
+    this.element = $(option);
     this.learningPrompt = this.element.find('.js-learning-prompt');
     this.learnedPrompt = this.element.find('.js-learned-prompt');
     this.learnprompt = this.element.find('.js-learn-prompt');
@@ -16,11 +16,12 @@ export default class TaskUi {
   learnedWeakPrompt() {
     this.learnprompt.removeClass('open');
     this.learningPrompt.addClass('moveup');
-    window.setTimeout(()=>{ 
+    window.setTimeout(()=> {
       this.learningPrompt.removeClass('moveup');
       this.learnedPrompt.addClass('moveup');
-    },2000); 
+    }, 2000);
   }
+
 
   learned() {
     this.btnLearn.toggleClass('active');

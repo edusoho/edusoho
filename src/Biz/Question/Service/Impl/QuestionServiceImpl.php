@@ -3,6 +3,7 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -35,7 +36,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -57,7 +58,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -82,7 +83,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->dispatchEvent("question.delete", array('question' => $question));
+        $this->dispatchEvent('question.delete', new Event($question));
 
         return $result;
     }
@@ -136,11 +137,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $questions = QuestionFactory::all($this->biz);
 
         return array_keys($questions);
-    }
-
-    public function findCourseTasks($courseId)
-    {
-        return array();
     }
 
     public function waveCount($id, $diffs)
@@ -220,10 +216,5 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question:QuestionFavoriteDao');
-    }
-
-    private function getCourseTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

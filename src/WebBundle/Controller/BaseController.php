@@ -28,9 +28,7 @@ class BaseController extends Controller
     protected function createJsonpResponse($data = null, $callback = 'callback', $status = 200, $headers = array())
     {
         $response = $this->createJsonResponse($data, $status, $headers);
-        return $response
-            ->setCallback($callback)
-        ;
+        return $response->setCallback($callback);
     }
 
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
@@ -63,6 +61,16 @@ class BaseController extends Controller
         ));
     }
 
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+    }
+
     /**
      * @param  string        $alias
      * @return BaseService
@@ -71,10 +79,5 @@ class BaseController extends Controller
     {
         $biz = $this->getBiz();
         return $biz->service($alias);
-    }
-
-    protected function setFlashMessage($level, $message)
-    {
-        $this->get('session')->getFlashBag()->add($level, $message);
     }
 }

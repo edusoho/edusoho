@@ -15,7 +15,7 @@ class DetermineQuestionController extends BaseController
     public function editAction(Request $request, $courseId, $questionId)
     {
         $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
         $question    = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -35,27 +35,34 @@ class DetermineQuestionController extends BaseController
     public function createAction(Request $request, $courseId, $type)
     {
         $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
 
+        $parentId       = $request->query->get('parentId', 0);
+        $parentQuestion = $this->getQuestionService()->get($parentId);
+
+        $features = array();
         if ($this->container->hasParameter('enabled_features')) {
             $features = $this->container->getParameter('enabled_features');
-        } else {
-            $features = array();
         }
         $enabledAudioQuestion = in_array('audio_question', $features);
 
         return $this->render('WebBundle:DetermineQuestion:form.html.twig', array(
             'course'               => $course,
-            'parentQuestion'       => null,
+            'parentQuestion'       => $parentQuestion,
             'enabledAudioQuestion' => $enabledAudioQuestion,
             'courseTasks'          => $courseTasks,
             'type'                 => $type
         ));
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getCourseService()

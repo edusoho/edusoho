@@ -1,6 +1,3 @@
-{#{% do script (['web/file-chooser/chooser/coursefile-choose.js']) %}#}
-
-<div data-role="course-file-browser"
-     data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}">
-</div>
+<div class="course-file-browser chooser-list" data-role="course-file-browser"
+     data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:'course'}) }}"></div>
 <input type="hidden" name="type" value="{{ fileType|default('') }}">

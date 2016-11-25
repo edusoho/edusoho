@@ -6,3 +6,18 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+    upload_file_event_subscriber:
+        class: Biz\File\Event\UploadFileEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+    question_event_subscriber:
+        class: Biz\Question\Event\QuestionEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+    web.twig.activity_extension:
+        class: WebBundle\Twig\ActivityExtension
+        arguments:    ['@biz']
+        tags:
+            - { name: twig.extension }

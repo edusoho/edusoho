@@ -188,7 +188,7 @@ services:
 
     topxia.twig.file_cache:
         class: Topxia\Service\Common\FilesystemCache
-        arguments:    ['%kernel.root_dir%/cache']
+        arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter

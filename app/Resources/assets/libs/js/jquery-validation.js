@@ -1,8 +1,13 @@
+
 import 'jquery-validation';
 
 $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
-  errorElement: 'div',
+  errorElement: 'p',
+  onkeyup: false,
+  ignore: '',
+  ajax: false,
+  currentDom: null, 
   highlight: function(element, errorClass, validClass) {
     let $row = $(element).closest('.form-group');
     $row.addClass('has-error');
@@ -34,16 +39,74 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
+  submitSuccess: function(data) {
+    
+  },
   submitHandler: function(form) {
-    let $submitBtn = $(form).find('[type="submit"][data-loading-text]');
-    $submitBtn.attr('disabled', 'disabled');
-    $submitBtn.text($submitBtn.data('loadingText'));
-    form.submit();
+    let $form = $(form);
+    let settings = this.settings;
+
+    settings.currentDom ? settings.currentDom.button('loading'): '';
+
+    if(settings.ajax) {
+      $.post($form.attr('action'), $form.serializeArray(), (data) => {
+        settings.submitSuccess(data);
+
+      }).error(() => {
+        settings.currentDom ? settings.currentDom.button('reset'): '';
+      });
+      
+    } else {
+      form.submit();
+    }
   }
 });
 
+$.extend( $.validator.prototype, {
+  defaultMessage: function( element, rule ) {
+    if ( typeof rule === "string" ) {
+      rule = { method: rule };
+    }
+
+    var message = this.findDefined(
+        this.customMessage( element.name, rule.method ),
+        this.customDataMessage( element, rule.method ),
+
+        // 'title' is never undefined, so handle empty string as undefined
+        !this.settings.ignoreTitle && element.title || undefined,
+        $.validator.messages[ rule.method ],
+        "<strong>Warning: No message defined for " + element.name + "</strong>"
+      ),
+      theregex = /\$?\{(\d+)\}/g,
+      displayregex = /%display%/g;
+    if ( typeof message === "function" ) {
+      message = message.call( this, rule.parameters, element );
+    } else if ( theregex.test( message ) ) {
+      message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
+    }
+
+    if ( displayregex.test( message ) ) {
+      var labeltext, name;
+      var id = $(element).attr( "id" );
+      if ( id ) {
+        labeltext = $( "label[for=" + id + "]" ).text();
+        if ( labeltext ) {
+          labeltext = labeltext.replace(/^[\*\s\:\：]*/, "").replace(/[\*\s\:\：]*$/, "");
+        }
+      }
+
+      name = $(element).attr("name");
+      message = message.replace( displayregex,labeltext || name )
+    }
+
+    return message;
+  }
+
+}); 
+
+
 $.extend($.validator.messages, {
-  required: "这是必填字段",
+  required: "请输入%display%",
   remote: "请修正此字段",
   email: "请输入有效的电子邮件地址",
   url: "请输入有效的网址",
