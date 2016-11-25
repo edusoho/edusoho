@@ -17,7 +17,7 @@
   {#{% endcache %}#}
   {% include 'WebBundle:CourseSet:Part/header.html.twig' with {courseSet: courseSet, member: null,course:course,} %}
 {% endblock %}
-{#
+
 
 {% block content %}
 
@@ -27,24 +27,25 @@
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
 
-      {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
+      {#{% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}#}
 
       <section class="es-section">
 
         {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id|default(0) ~ '/normal-nav' 600 %}
-          {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+          {% set member = null %}
+          {% include 'WebBundle:CourseSet:Part/nav.html.twig' %}
         {% endcache %}
 
         {% block course_main %}{% endblock %}
       </section>
-      {% block dashboard_relatedCoursesBlock %}
+      {#{% block dashboard_relatedCoursesBlock %}
         {% if setting('course.relatedCourses') == 1 %}
           {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
         {% endif %}
-      {% endblock %}
+      {% endblock %}#}
     </div>
 
-    <div class="col-lg-3 col-md-4  course-sidebar">
+    {#<div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
         {% if member|default(null) %}
           {% cache 'course/' ~ course.id ~ '/sidebar/belongClassrooms/for/member' 600 %}
@@ -71,18 +72,18 @@
         {% endcache %}
 
       {% endblock %}
-    </div>
+    </div>#}
   </div>
 
   {% if is_plugin_installed('HowzhiPopAd') %}
     {{ render(controller('HowzhiPopAdBundle:HowzhiPop:index')) }}
   {% endif %}
 
-  {% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
+  {#{% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
   'title': course.title,
   'desc': course.about|striptags|purify_and_trim_html,
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
-  } %}
+  } %}#}
 
-{% endblock %}#}
+{% endblock %}
