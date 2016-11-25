@@ -44,12 +44,12 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
-    protected function createNotFoundService($message = '')
+    protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
     }
 
-    protected function createServiceService($message = '')
+    protected function createServiceException($message = '')
     {
         return new ServiceException($message);
     }
