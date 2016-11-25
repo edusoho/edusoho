@@ -181,6 +181,9 @@
     </a>
   </li>
 
+{% if is_plugin_installed('FavoriteReward') %}
+  <a href="#modal" class="reward-modal hidden" data-toggle="modal" data-url="{{ path('favorite_reward') }}" ><span class=""></span></a>
+{% endif %}
 
 <li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
   <a href="javascript:;">
