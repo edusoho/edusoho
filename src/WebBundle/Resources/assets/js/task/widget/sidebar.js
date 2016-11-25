@@ -19,9 +19,9 @@ class SideBar {
 
   _init() {
     this.taskId= 1;//@TODO 获取当前任务的ID
+    this._registerPlugin(new TaskPlugin(this));
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
-    this._registerPlugin(new TaskPlugin(this));
     this._initPlugin();
     this._isRenderSiderBar();
   }
