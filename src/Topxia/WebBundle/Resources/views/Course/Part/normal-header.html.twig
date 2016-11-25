@@ -187,9 +187,9 @@
     {% if is_plugin_installed('FavoriteReward') %}
       {% include 'FavoriteRewardBundle:Widget:favorite.html.twig' %}
     {% else %}
-    <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+      <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+      <p>{{'收藏'|trans}}</p>
     {% endif %}
-    <p>{{'收藏'|trans}}</p>
   </a>
 </li>
 {% endmacro %}
