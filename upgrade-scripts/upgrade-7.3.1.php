@@ -153,21 +153,15 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateRole()
     {
         $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
-        file_put_contents('log.txt', 'before update ROLE_ADMIN'." {$role['id']} \n",FILE_APPEND);
         if (!in_array('admin_homepage', $role['data'])) {
             $role['data'][] = 'admin_homepage';
-            file_put_contents('log.txt',json_encode($role['data'])."\n",FILE_APPEND);
             $this->getRoleDao()->updateRole($role['id'], array('data' => $role['data']));
-            file_put_contents('log.txt', 'after update ROLE_ADMIN'."\n",FILE_APPEND);
         }
 
         $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
-        file_put_contents('log.txt', 'before update ROLE_SUPER_ADMIN'." {$role['id']} \n",FILE_APPEND);
         if (!in_array('admin_homepage', $role['data'])) {
             $role['data'][] = 'admin_homepage';
-            file_put_contents('log.txt', json_encode($role['data'])."\n",FILE_APPEND);
             $this->getRoleDao()->updateRole($role['id'], array('data' => $role['data']));
-            file_put_contents('log.txt', 'after update ROLE_SUPER_ADMIN'."\n",FILE_APPEND);
         }
     }
 
