@@ -105,7 +105,7 @@ class QuestionPane {
   _showListPane() {
       $('[data-role=show-pane]').hide();
       $('[data-role=list-pane]').show();
-      // $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
+      this.$element.perfectScrollbar({wheelSpeed:50});
       return $('[data-role=list-pane]');
   }
   _showItemPane() {

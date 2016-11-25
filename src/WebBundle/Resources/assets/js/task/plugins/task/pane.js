@@ -7,13 +7,10 @@ class TaskPane {
   }
 
   init() {
-    console.log(this.$element);
     this.$element.perfectScrollbar();
     $.get('http://www.esdev.com/lessonplugin/lesson/list', {
           courseId:toolbar.courseId,
     },html=> {
-      console.log(html);
-      console.log("123");
       // that.element.html(html).show();
       // that._setLessonItemActive(toolbar.get('lessonId'));
 

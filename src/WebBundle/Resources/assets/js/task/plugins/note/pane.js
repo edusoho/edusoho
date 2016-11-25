@@ -13,6 +13,7 @@ class NotePane {
     let plugin = this.plugin,
     toolbar = plugin.toolbar;
     toolbar.showPane(this.plugin.code);
+    this.$element.perfectScrollbar({wheelSpeed:50});
     //@todo url 
     $.get('http://www.esdev.com/lessonplugin/note/init', {
       courseId: toolbar.courseId,
