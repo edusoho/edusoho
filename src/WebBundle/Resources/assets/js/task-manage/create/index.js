@@ -59,10 +59,9 @@ class Editor {
         let type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
-        this.type !== type  ? (this.loaded = false) : (this.loaded = true);
+        this.type !== type ? (this.loaded = false) : (this.loaded = true);
         this.type = type;
         this._renderNext(true);
-        console.log("type");
     }
 
     _onSave(event) {
@@ -70,12 +69,10 @@ class Editor {
             return;
         }
 
-        let $this = $(event.currentTarget).attr('disabled','disabled');
-        let length = this._getLength();
+        $(event.currentTarget).attr('disabled', 'disabled');
         let postData = $('#step1-form').serializeArray()
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
             .concat(this.$iframe_body.find("#step3-form").serializeArray());
-            console.log(postData);
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
@@ -96,25 +93,6 @@ class Editor {
         }
     }
 
-    _getLength() {
-        let lenEle = this.$iframe_body.find('#step2-form').find('#length');
-        if(lenEle.length > 0){
-            return lenEle.val();
-        }
-        let postData = this.$iframe_body.find('#step2-form').serializeArray()
-        let minute = 0;
-        let second = 0;
-        postData.forEach(function (element) {
-            if (element.name == 'minute') {
-                minute = parseInt(element.value);
-            }
-            if (element.name == 'second') {
-                second = parseInt(element.value);
-            }
-        });
-        return minute * 60 + second;
-    }
-
     _initIframe() {
         let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"></iframe>';
         this.$task_manage_content.html(html).show(); 
@@ -126,23 +104,22 @@ class Editor {
             this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
             this._rendButton(2);
             this.$iframe_body.find("#step2-form").data('validator', validator);
-            this.$iframe_body.find("#step3-form").data('validator', validator); 
+            this.$iframe_body.find("#step3-form").data('validator', validator);
 
         };
-        this.$frame.load(loadAnimation(loadiframe,this.$task_manage_content));
+        this.$frame.load(loadAnimation(loadiframe, this.$task_manage_content));
     }
 
     _inItStep1form() {
         let $step1_form = $("#step1-form");
         let validator = $step1_form.validate({
-            onkeyup: false,
             rules: {
                 mediaType: {
                     required: true,
                 },
             },
             messages: {
-                mediaType: "请选择分类",
+                mediaType: "请选择%display%",
             }
         });
         $step1_form.data('validator', validator);

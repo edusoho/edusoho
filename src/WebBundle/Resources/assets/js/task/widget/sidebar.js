@@ -3,13 +3,13 @@ import QuestionPlugin from '../plugins/question/plugin';
 import 'store';
 
 class SideBar {
-  constructor(option) {
-    this.courseId = option.courseId;
-    this.taskId = null;
-    this.task = null;
-    this.activePlugins = option.activePlugins;
+  constructor({courseId, taskId, activePlugins}) {
+    this.courseId = courseId;
+    this.taskId = taskId;
+
+    this.activePlugins = activePlugins;
     this.plugins = {};
-    this._tasks = {};
+
     this._currentPane = null;
     this.$dashboardsidebar = $('#dashboard-sidebar');
     this.$dashboardcontent = $('#dashboard-content');
@@ -17,7 +17,6 @@ class SideBar {
   }
 
   _init() {
-    this.taskId = 1;//@TODO 获取当前任务的ID
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();

@@ -1,8 +1,4 @@
-/**
- * Created by Simon on 31/10/2016.
- */
-
-import Chooser from '../chooser';
+import Chooser from './chooser';
 
 class VideoImport extends Chooser {
     constructor(container) {
@@ -57,8 +53,7 @@ class VideoImport extends Chooser {
     _onChange(file) {
         this._close();
         var value = file ? JSON.stringify(file) : '';
-        console.log('begin videoImportChoose:select');
-        this.trigger('select', file);
+        this.trigger('file.select', file);
         $('[data-role="placeholder"]').html(file.name);
     }
 }

@@ -1,8 +1,4 @@
-/**
- * Created by Simon on 31/10/2016.
- */
-
-import Chooser from '../chooser';
+import Chooser from './chooser';
 
 class CourseFileChoose extends Chooser {
 
@@ -20,14 +16,13 @@ class CourseFileChoose extends Chooser {
     _initEvent() {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-
         $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
-        let $containter = $('[data-role=course-file-browser]');
+        let $containter = $('.course-file-browser');
         let url = $containter.data('url');
-        $.get(url, {'type': $("input[name=type]").val()}, function (html) {
+        $.get(url, {'type': $("input[name=type]").val()}, html=>{
             $containter.html(html);
         });
     }

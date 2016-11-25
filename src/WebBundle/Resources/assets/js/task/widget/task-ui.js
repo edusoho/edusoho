@@ -1,4 +1,4 @@
-class LearnState {
+export default class TaskUi {
   constructor(option) {
     this.element = $(option);
     this.learningPrompt = this.element.find('.js-learning-prompt');
@@ -9,26 +9,21 @@ class LearnState {
   }
 
   init() {
-    $('.js-test').click(event=>this.learnedPromptMethod());
-    this.btnLearn.click(event=>this.clickBtnLearn());
+    $('.js-test').click(event=>this.learnedWeakPrompt());
+    this.btnLearn.click(event=>this.learned());
   }
 
-  learnedPromptMethod() {
+  learnedWeakPrompt() {
     this.learnprompt.removeClass('open');
     this.learningPrompt.addClass('moveup');
-    window.setTimeout(()=>{ 
+    window.setTimeout(()=> {
       this.learningPrompt.removeClass('moveup');
       this.learnedPrompt.addClass('moveup');
-    },2000); 
+    }, 2000);
   }
 
-  clickBtnLearn() {
-    this.btnLearnRender(true);
-  }
 
-  btnLearnRender(done) {
-    done ? this.btnLearn.addClass('active') : this.btnLearn.removeClass('active');
+  learned() {
+    this.btnLearn.toggleClass('active');
   }
 }
-
-export default LearnState;

@@ -35,7 +35,7 @@
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-    <button id="course-chapter-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{ setting('default.chapter_name')|default('章'|trans) }}" data-part="{{ setting('default.part_name')|default('节'|trans) }}">{% if chapter %}{{'保存'|trans}}{% else %}{{'添加'|trans}}{% endif %}</button>
+    <button id="course-chapter-btn" data-loading-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{ setting('default.chapter_name')|default('章'|trans) }}" data-part="{{ setting('default.part_name')|default('节'|trans) }}">{% if chapter %}{{'保存'|trans}}{% else %}{{'添加'|trans}}{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

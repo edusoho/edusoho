@@ -21,11 +21,10 @@ class AudioActivity extends Activity
      */
     public function create($fields)
     {
-        $audioActivity = $fields['ext'];
-        if (empty($audioActivity)) {
-            throw new InvalidArgumentException();
+        if (empty($fields['ext'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
         }
-        $audioActivity = $this->getAudioActivityDao()->create($audioActivity);
+        $audioActivity = $this->getAudioActivityDao()->create($fields['ext']);
         return $audioActivity;
     }
 
@@ -38,7 +37,7 @@ class AudioActivity extends Activity
 
         $audioActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
         if (empty($audioActivity)) {
-            throw  new ResourceNotFoundException();
+            throw $this->createNotFoundException('教学活动不存在');
         }
         $audioActivity = $this->getAudioActivityDao()->update($fields['mediaId'], $audioActivityFields);
         return $audioActivity;

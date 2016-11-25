@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
 {
-	public function tasksAction(Request $request, $courseId)
+    public function tasksAction(Request $request, $courseId)
     {
         $course      = $this->getCourseService()->tryManageCourse($courseId);
-        $tasks       = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
+        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
 
         return $this->render('WebBundle:CourseManage:task-list.html.twig', array(
