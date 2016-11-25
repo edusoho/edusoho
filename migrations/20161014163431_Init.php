@@ -9,7 +9,7 @@ class Init extends Migration
      */
     public function up()
     {
-        $sql1 = "
+        $sql = "
             CREATE TABLE IF NOT EXISTS `article` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
               `title` varchar(255) NOT NULL COMMENT '文章标题',
@@ -496,9 +496,7 @@ class Init extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '评价创建时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-      ";
 
-      $sql2="
             CREATE TABLE IF NOT EXISTS `course_thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程话题ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题所属课程ID',
@@ -985,9 +983,6 @@ class Init extends Migration
               `reason` text COMMENT '失败原因',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
-      ";
-
-      $sql3="
 
             CREATE TABLE IF NOT EXISTS `upload_files` (
               `id` int(10) unsigned NOT NULL COMMENT '上传文件ID',
@@ -1357,7 +1352,7 @@ class Init extends Migration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题最后一次被编辑或回复时间',
               PRIMARY KEY (`id`),
-              KEY `updatedTime` (`updatedTime`)
+              KEY `updateTime` (`updateTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
             CREATE TABLE IF NOT EXISTS `thread_post` (
@@ -1504,8 +1499,7 @@ class Init extends Migration
               `seq` INT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级课程顺序',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-      ";
-      $sql4="
+
             CREATE TABLE IF NOT EXISTS `classroom_member` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `classroomId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
@@ -2013,10 +2007,7 @@ class Init extends Migration
         ";
 
         $container = $this->getContainer();
-        $container['db']->exec($sql1);
-        $container['db']->exec($sql2);
-        $container['db']->exec($sql3);
-        $container['db']->exec($sql4);
+        $container['db']->exec($sql);
 
     }
 
