@@ -27,7 +27,7 @@ class TaskShow extends Emitter{
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({
       html: true,
-      trigger: 'click',
+      trigger: 'hover',
     });
   }
 
