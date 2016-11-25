@@ -1,19 +1,32 @@
 import PptPlayer from '../../../common/ppt-player';
 import ActivityEmitter from "../activity-emitter";
 
-let watermarkUrl = $('#activity-ppt-content').data('watermarkUrl');
+
 let emitter = new ActivityEmitter();
+let $content = $('#activity-ppt-content');
+let watermarkUrl = $content.data('watermarkUrl');
+let finishTime = parseInt($content.data('finishDetail'));
 
 let createPPT = (watermark) => {
   let ppt = new PptPlayer({
     element: '#activity-ppt-content',
-    slides: $('#activity-ppt-content').data('slides').split(','),
+    slides: $content.data('slides').split(','),
     watermark: watermark
   });
 
-  return ppt.once('end', () => {
-    emitter.emit('finish');
-  });
+  if($content.data('finishType') === 'end'){
+    ppt.once('end', () => {
+      emitter.emit('finish');
+    });
+  }else{
+    emitter.receive('doing', (data) => {
+      if(data.learnedTime >= finishTime){
+        emitter.emit('finish');
+      }
+    })
+  }
+
+  return ppt;
 };
 
 if (watermarkUrl === undefined) {
