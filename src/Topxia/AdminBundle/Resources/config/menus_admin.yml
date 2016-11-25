@@ -18,9 +18,9 @@ admin:
     name: 后台管理员
     parent: null
     children:
-        admin_homepage:
-            name: 后台首页
-            router_name: admin_homepage
+        # admin_homepage:
+        #     name: 后台首页
+        #     router_name: admin_homepage
         admin_user:
             name: 用户
             children:

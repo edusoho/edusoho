@@ -15,22 +15,22 @@ use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
-        if (empty($permissions)) {
-            return $this->render('PermissionBundle:Admin:permission-error.html.twig');
-        }
+    // public function indexAction(Request $request)
+    // {
+    //     $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
+    //     if (empty($permissions)) {
+    //         return $this->render('PermissionBundle:Admin:permission-error.html.twig');
+    //     }
 
-        $permissionNames = ArrayToolkit::column($permissions, 'code');
-        if (in_array('admin_homepage', $permissionNames)) {
-            return $this->forward('TopxiaAdminBundle:Default:homepage');
-        }
+    //     $permissionNames = ArrayToolkit::column($permissions, 'code');
+    //     if (in_array('admin_homepage', $permissionNames)) {
+    //         return $this->forward('TopxiaAdminBundle:Default:homepage');
+    //     }
 
-        return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
-            'permission' => $permissions[0]
-        ));
-    }
+    //     return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
+    //         'permission' => $permissions[0]
+    //     ));
+    // }
 
     public function renderCurrentAdminHomepageAction($permission)
     {
@@ -45,7 +45,7 @@ class DefaultController extends BaseController
         return $this->redirect($permissionPath);
     }
 
-    public function homepageAction(Request $request)
+    public function indexAction(Request $request)
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
