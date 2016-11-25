@@ -63,7 +63,8 @@ class CourseController extends CourseBaseController
     {
         $course   = $this->getCourseService()->getCourse($id);
         $lessons  = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
+        $tagIds = $this->getTagIdsByCourse($course);
+        $tags     = $this->getTagService()->findTagsByIds($tagIds);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
 
         if (!$course) {
@@ -89,8 +90,8 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-
-        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $tagIds = $this->getTagIdsByCourse($course);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         if ($lessonId == '' && $lessons != null) {
             $currentLesson = $lessons[0];
@@ -611,7 +612,8 @@ var_dump($member);
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+            $tagIds = $this->getTagIdsByCourse($course);
+            $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
             $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
@@ -747,6 +749,13 @@ var_dump($member);
         }
 
         return true;
+    }
+
+    protected function getTagIdsByCourse($course)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+        return ArrayToolkit::column($tags, 'id');
     }
 
     protected function getTokenService()
