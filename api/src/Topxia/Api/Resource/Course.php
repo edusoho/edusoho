@@ -30,6 +30,9 @@ class Course extends BaseResource
             'ownerId'   => $res['id']
         ));
 
+        //先把标签unset掉，下一个迭代来修改这个bug
+        unset($res['tags']);
+
         return $res;
     }
 
