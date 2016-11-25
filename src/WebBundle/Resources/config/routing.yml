@@ -71,8 +71,26 @@ courseset_manage_course_publish:
   defaults: {_controller: WebBundle:CourseManage:preparePublishment}
 
 course_manage_tasks:
-  path:  /course/{courseId}/tasks
-  defaults: { _controller: WebBundle:TaskManage:tasks }
+  path:  /course/{courseId}/manage/tasks
+  defaults: { _controller: WebBundle:CourseManage:tasks }
+
+course_manage_items_sort:
+  path:  /course/{courseId}/manage/items/sort
+  defaults: { _controller: WebBundle:CourseManage:courseItemsSort }
+  methods: ['POST']
+
+course_manage_chapter_create:
+    path:  /course/{id}/manage/chapter/create
+    defaults: { _controller: WebBundle:CourseChapterManage:create }
+
+course_manage_chapter_edit:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: WebBundle:CourseChapterManage:edit }
+
+course_manage_chapter_delete:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: WebBundle:CourseChapterManage:delete }
+    methods: [POST]
 
 course_manage_task_create:
   path:  /course/{courseId}/task
@@ -115,9 +133,9 @@ media_materiallib_contacts:
     path: /media/materiallib/contacts
     defaults: { _controller: WebBundle:FileChooser:findMySharingContacts }
 
-media_corusefile_choose:
+media_course_file_choose:
     path: /media/corusefile/{courseId}/choose
-    defaults: { _controller: WebBundle:FileChooser:CourseFileChoose }
+    defaults: { _controller: WebBundle:FileChooser:courseFileChoose }
 
 media_video_import:
     path: /media/course/{courseId}/import

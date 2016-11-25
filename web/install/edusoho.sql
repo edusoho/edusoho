@@ -790,6 +790,7 @@ CREATE TABLE `course_member` (
   `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
   `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',
   `isLearned` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否已学完',
+  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成课程时间',
   `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序序号',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '可见与否，默认为可见',
@@ -1825,8 +1826,22 @@ CREATE TABLE `status` (
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '动态发布时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  KEY `createdTime` (`createdTime`)
+  KEY `createdTime` (`createdTime`),
+  KEY `courseId_createdTime` (`courseId`,`createdTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `subtitle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `subtitle` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT '字幕名称',
+  `subtitleId` int(10) unsigned NOT NULL COMMENT 'subtitle的uploadFileId',
+  `mediaId` int(10) unsigned NOT NULL COMMENT 'video/audio的uploadFileId',
+  `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字幕关联表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2097,7 +2112,7 @@ CREATE TABLE `upload_file_inits` (
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
   `metas` text,
   `metas2` text,
-  `type` enum('document','video','audio','image','ppt','flash','other') NOT NULL DEFAULT 'other',
+  `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL,
   `convertParams` text COMMENT '文件转换参数',
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
@@ -2130,7 +2145,7 @@ CREATE TABLE `upload_files` (
   `convertParams` text COMMENT '文件转换参数',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
-  `type` enum('document','video','audio','image','ppt','other','flash') NOT NULL DEFAULT 'other' COMMENT '文件类型',
+  `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
@@ -2236,11 +2251,24 @@ CREATE TABLE `user` (
   `inviteCode` varchar(255) DEFAULT NULL COMMENT '邀请码',
   `orgId` int(10) unsigned DEFAULT '1',
   `orgCode` varchar(255) DEFAULT '1.' COMMENT '组织机构内部编码',
+  `registeredWay` varchar(64) NOT NULL DEFAULT '' COMMENT '注册设备来源(web/ios/android)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `nickname` (`nickname`),
   KEY `updatedTime` (`updatedTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_active_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_active_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `userId` int(11) NOT NULL COMMENT '用户Id',
+  `activeTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '激活时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `createdTime` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活跃用户记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_approval`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

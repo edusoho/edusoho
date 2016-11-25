@@ -16,9 +16,9 @@ class UserRegisterWay extends Migration
     public function up()
     {
         $db = $this->getDb();
-        if (!$this->isFieldExist('user', 'registeredWay')) {
-            $db->exec("ALTER TABLE `user` ADD `registeredWay` varchar(64) NOT NULL DEFAULT '' COMMENT '注册设备来源(web/ios/android)'");
-        }
+
+        $db->exec("ALTER TABLE `user` ADD `registeredWay` varchar(64) NOT NULL DEFAULT '' COMMENT '注册设备来源(web/ios/android)'");
+
     }
 
     /**
@@ -26,15 +26,8 @@ class UserRegisterWay extends Migration
      */
     public function down()
     {
+        $db = $this->getDb();
 
+        $db->exec("ALTER TABLE `user` DROP COLUMN `registeredWay`");
     }
-
-    private function isFieldExist($table, $field)
-    {
-        $db     = $this->getDb();
-        $sql    = "DESCRIBE `{$table}` `{$field}`;";
-        $result = $db->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
 }

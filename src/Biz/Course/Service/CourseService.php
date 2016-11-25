@@ -25,4 +25,14 @@ interface CourseService
     public function preparePublishment($id, $userId);
 
     public function auditPublishment($id, $userId, $reject, $remark);
+
+    public function getCourseItems($courseId);
+
+    public function tryManageCourse($courseId);
+
+    public function getNextNumberAndParentId($courseId);
+
+    public function tryTakeCourse($courseId);
+
+    public function isCourseStudent($courseId, $userId);
 }

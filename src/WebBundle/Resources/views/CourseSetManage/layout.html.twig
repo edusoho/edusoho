@@ -6,6 +6,7 @@
 
 {% block content %}
 {{ render(controller('WebBundle:CourseSetManage:header', {courseSet:courseSet, manage: true})) }}
+
 <div class="row">
   <div class="col-md-3">
     {% block side %}
@@ -56,7 +57,7 @@
           </li> #}
         </ul>
         <ul class="list-group">
-          <li class="list-group-heading">{{'默认教学计划'|trans}}</li>
+         {#  <li class="list-group-heading">{{'默认教学计划'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'task' %}active{% endif %}">
             <a href="{{ path('courseset_manage_course_tasks', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{{'计划任务'|trans}}</a>
@@ -78,7 +79,7 @@
             <a href="{{ path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}{{'管理'|trans}}
             </a>
-          </li>
+          </li> #}
          {#  {% if is_plugin_installed('Homework') %}
             <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
               <a href="{{ path('course_homework_check_list', {courseId:defaultCourse.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>

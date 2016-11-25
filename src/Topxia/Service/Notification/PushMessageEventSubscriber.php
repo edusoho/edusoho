@@ -76,14 +76,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
-    public function onUserChangeNickname(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $user    = $context;
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $result  = $this->pushCloud('user.update', $this->convertUser($user, $profile));
-    }
-
     /**
      * User相关
      */

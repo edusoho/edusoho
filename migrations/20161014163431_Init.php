@@ -10,7 +10,7 @@ class Init extends Migration
     public function up()
     {
         $sql = "
-            CREATE TABLE `article` (
+            CREATE TABLE IF NOT EXISTS `article` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
               `title` varchar(255) NOT NULL COMMENT '文章标题',
               `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '栏目',
@@ -34,11 +34,11 @@ class Init extends Migration
               `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-            ALTER TABLE `article` ADD INDEX(`updatedTime`);
 
-            CREATE TABLE `article_category` (
+            CREATE TABLE IF NOT EXISTS `article_category` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(255) NOT NULL COMMENT '栏目名称',
               `code` varchar(64) NOT NULL COMMENT 'URL目录名称',
@@ -54,7 +54,7 @@ class Init extends Migration
               UNIQUE KEY `code` (`code`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `block` (
+            CREATE TABLE IF NOT EXISTS `block` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(11) NOT NULL COMMENT '用户Id',
               `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID',
@@ -69,7 +69,7 @@ class Init extends Migration
               KEY `block_code_orgId_index` (`code`,`orgId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `block_template` (
+            CREATE TABLE IF NOT EXISTS `block_template` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模版ID',
               `title` varchar(255) NOT NULL COMMENT '标题',
               `mode` ENUM('html','template') NOT NULL DEFAULT 'html' COMMENT '模式' ,
@@ -88,7 +88,7 @@ class Init extends Migration
               UNIQUE KEY `code` (`code`)                  
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';
 
-            CREATE TABLE `block_history` (
+            CREATE TABLE IF NOT EXISTS `block_history` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
               `blockId` int(11) NOT NULL COMMENT 'blockId',
               `templateData` text COMMENT '模板历史数据',
@@ -99,7 +99,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表';
 
-            CREATE TABLE `cache` (
+            CREATE TABLE IF NOT EXISTS `cache` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '缓存ID',
               `name` varchar(128) NOT NULL DEFAULT '' COMMENT '缓存名称',
               `data` longblob COMMENT '缓存数据',
@@ -111,7 +111,7 @@ class Init extends Migration
               KEY `expiredTime` (`expiredTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `category` (
+            CREATE TABLE IF NOT EXISTS `category` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类ID',
               `code` varchar(64) NOT NULL DEFAULT '' COMMENT '分类编码',
               `name` varchar(255) NOT NULL COMMENT '分类名称',
@@ -127,7 +127,7 @@ class Init extends Migration
               UNIQUE KEY `uri` (`code`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `category_group` (
+            CREATE TABLE IF NOT EXISTS `category_group` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类组ID',
               `code` varchar(64) NOT NULL COMMENT '分类组编码',
               `name` varchar(255) NOT NULL COMMENT '分类组名称',
@@ -135,7 +135,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `cloud_app` (
+            CREATE TABLE IF NOT EXISTS `cloud_app` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '云应用ID',
               `name` varchar(255) NOT NULL COMMENT '云应用名称',
               `code` varchar(64) NOT NULL COMMENT '云应用编码',
@@ -154,7 +154,7 @@ class Init extends Migration
               UNIQUE KEY `code` (`code`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装的应用';
 
-            CREATE TABLE `cloud_app_logs` (
+            CREATE TABLE IF NOT EXISTS `cloud_app_logs` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '云应用运行日志ID',
               `code` varchar(32) NOT NULL DEFAULT '' COMMENT '应用编码',
               `name` varchar(32) NOT NULL DEFAULT '' COMMENT '应用名称',
@@ -171,7 +171,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='应用升级日志';
 
-            CREATE TABLE `comment` (
+            CREATE TABLE IF NOT EXISTS `comment` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `objectType` varchar(32) NOT NULL,
               `objectId` int(10) unsigned NOT NULL,
@@ -182,7 +182,7 @@ class Init extends Migration
               KEY `objectType` (`objectType`,`objectId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `content` (
+            CREATE TABLE IF NOT EXISTS `content` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '内容ID',
               `title` varchar(255) NOT NULL COMMENT '内容标题',
               `editor` enum('richeditor','none') NOT NULL DEFAULT 'richeditor' COMMENT '编辑器选择类型字段',
@@ -215,7 +215,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course` (
+            CREATE TABLE IF NOT EXISTS `course` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
               `title` varchar(1024) NOT NULL COMMENT '课程标题',
               `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '课程副标题',
@@ -275,11 +275,11 @@ class Init extends Migration
               `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
               `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
 
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
-            ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
 
-            CREATE TABLE `announcement` (
+            CREATE TABLE IF NOT EXISTS `announcement` (
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '课程公告ID',
               `userId` int(10) unsigned NOT NULL COMMENT '公告发布人ID',
               `targetType` varchar(64) NOT NULL DEFAULT 'course' COMMENT '公告类型',
@@ -296,7 +296,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_chapter` (
+            CREATE TABLE IF NOT EXISTS `course_chapter` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程章节ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '章节所属课程ID',
               `type` enum('chapter','unit') NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元。',
@@ -309,7 +309,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_draft` (
+            CREATE TABLE IF NOT EXISTS `course_draft` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(255) NOT NULL COMMENT '标题',
               `summary` text COMMENT '摘要',
@@ -321,7 +321,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `course_favorite` (
+            CREATE TABLE IF NOT EXISTS `course_favorite` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '收藏ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '收藏课程的ID',
               `userId` int(10) unsigned NOT NULL COMMENT '收藏人的ID',
@@ -331,7 +331,7 @@ class Init extends Migration
               KEY `course_favorite_userId_courseId_type_index` (`userId`,`courseId`,`type`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
 
-            CREATE TABLE `course_lesson` (
+            CREATE TABLE IF NOT EXISTS `course_lesson` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课时所属课程ID',
               `chapterId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时所属章节ID',
@@ -370,11 +370,11 @@ class Init extends Migration
               `suggestHours` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '建议学习时长',
               `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式',
               `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-            ALTER TABLE `course_lesson` ADD INDEX `updatedTime` (`updatedTime`);
 
-            CREATE TABLE `course_lesson_learn` (
+            CREATE TABLE IF NOT EXISTS `course_lesson_learn` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '学员课时学习记录ID',
               `userId` int(10) unsigned NOT NULL COMMENT '学员ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
@@ -392,7 +392,7 @@ class Init extends Migration
               KEY `userId_courseId` (`userId`,`courseId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE  `course_lesson_replay` (
+            CREATE TABLE IF NOT EXISTS  `course_lesson_replay` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `lessonId` int(10) unsigned NOT NULL COMMENT '所属课时',
               `courseId` int(10) unsigned NOT NULL COMMENT '所属课程',
@@ -405,7 +405,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `course_lesson_view` (
+            CREATE TABLE IF NOT EXISTS `course_lesson_view` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `courseId` int(10) NOT NULL,
               `lessonId` int(10) NOT NULL,
@@ -418,7 +418,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_material` (
+            CREATE TABLE IF NOT EXISTS `course_material` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课程ID',
               `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课时ID',
@@ -437,7 +437,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_member` (
+            CREATE TABLE IF NOT EXISTS `course_member` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
               `classroomId` INT(10) NOT NULL DEFAULT '0'  COMMENT '班级ID',
@@ -463,7 +463,7 @@ class Init extends Migration
               KEY `courseId_role_createdTime` (`courseId`,`role`,`createdTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_note` (
+            CREATE TABLE IF NOT EXISTS `course_note` (
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '笔记ID',
               `userId` int(10) NOT NULL COMMENT '笔记作者ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程ID',
@@ -477,7 +477,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_note_like` (
+            CREATE TABLE IF NOT EXISTS `course_note_like` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `noteId` int(11) NOT NULL,
               `userId` int(11) NOT NULL,
@@ -485,7 +485,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_review` (
+            CREATE TABLE IF NOT EXISTS `course_review` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程评价ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价人ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '被评价的课程ID',
@@ -497,7 +497,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_thread` (
+            CREATE TABLE IF NOT EXISTS `course_thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程话题ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题所属课程ID',
               `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题所属课时ID',
@@ -516,11 +516,12 @@ class Init extends Migration
               `latestPostTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题创建时间',
               `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-            ALTER TABLE `course_thread` ADD INDEX `updatedTime` (`updatedTime`);
+            
 
-            CREATE TABLE `course_thread_post` (
+            CREATE TABLE IF NOT EXISTS `course_thread_post` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程话题回复ID',
               `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复所属课程ID',
               `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复所属课时ID',
@@ -532,7 +533,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `file` (
+            CREATE TABLE IF NOT EXISTS `file` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '上传文件ID',
               `groupId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传文件组ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传人ID',
@@ -545,7 +546,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `file_group` (
+            CREATE TABLE IF NOT EXISTS `file_group` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '上传文件组ID',
               `name` varchar(255) NOT NULL COMMENT '上传文件组名称',
               `code` varchar(255) NOT NULL COMMENT '上传文件组编码',
@@ -553,7 +554,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `friend` (
+            CREATE TABLE IF NOT EXISTS `friend` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '关注ID',
               `fromId` int(10) unsigned NOT NULL COMMENT '关注人ID',
               `toId` int(10) unsigned NOT NULL COMMENT '被关注人ID',
@@ -562,7 +563,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE  `groups` (
+            CREATE TABLE IF NOT EXISTS  `groups` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '小组id',
               `title` varchar(100) NOT NULL COMMENT '小组名称',
               `about` text COMMENT '小组介绍',
@@ -577,7 +578,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `groups_member` (
+            CREATE TABLE IF NOT EXISTS `groups_member` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '成员id主键',
               `groupId` int(10) unsigned NOT NULL COMMENT '小组id',
               `userId` int(10) unsigned NOT NULL COMMENT '用户id',
@@ -588,7 +589,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `groups_thread` (
+            CREATE TABLE IF NOT EXISTS `groups_thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '话题id',
               `title` varchar(1024) NOT NULL COMMENT '话题标题',
               `content` text COMMENT '话题内容',
@@ -605,11 +606,11 @@ class Init extends Migration
               `hitNum` int(10) unsigned NOT NULL DEFAULT '0',
               `rewardCoin` INT(10) UNSIGNED NOT NULL DEFAULT '0' ,
               `type` VARCHAR(255) NOT NULL DEFAULT 'default',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ALTER TABLE `groups_thread` ADD INDEX `updatedTime` (`updatedTime`);
 
-            CREATE TABLE `groups_thread_post` (
+            CREATE TABLE IF NOT EXISTS `groups_thread_post` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id主键',
               `threadId` int(11) unsigned NOT NULL COMMENT '话题id',
               `content` text NOT NULL COMMENT '回复内容',
@@ -621,7 +622,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `location` (
+            CREATE TABLE IF NOT EXISTS `location` (
               `id` bigint(20) unsigned NOT NULL,
               `parentId` bigint(20) NOT NULL DEFAULT '0',
               `name` varchar(255) NOT NULL,
@@ -629,7 +630,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `log` (
+            CREATE TABLE IF NOT EXISTS `log` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统日志ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作人ID',
               `module` varchar(32) NOT NULL COMMENT '日志所属模块',
@@ -643,7 +644,7 @@ class Init extends Migration
               KEY `userId` (`userId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `message` (
+            CREATE TABLE IF NOT EXISTS `message` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '私信Id',
               `type` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型',
               `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
@@ -653,7 +654,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `message_conversation` (
+            CREATE TABLE IF NOT EXISTS `message_conversation` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '会话Id',
               `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
               `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
@@ -669,7 +670,7 @@ class Init extends Migration
               KEY `toId_latestMessageTime` (`toId`,`latestMessageTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `message_relation` (
+            CREATE TABLE IF NOT EXISTS `message_relation` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '消息关联ID',
               `conversationId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关联的会话ID',
               `messageId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关联的消息ID',
@@ -677,12 +678,12 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `migration_versions` (
+            CREATE TABLE IF NOT EXISTS `migration_versions` (
               `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
               PRIMARY KEY (`version`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-            CREATE TABLE `mobile_device` (
+            CREATE TABLE IF NOT EXISTS `mobile_device` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '设备ID',
               `imei` varchar(255) NOT NULL COMMENT '串号',
               `platform` varchar(255) NOT NULL COMMENT '平台',
@@ -692,7 +693,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `navigation` (
+            CREATE TABLE IF NOT EXISTS `navigation` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '导航ID',
               `name` varchar(255) NOT NULL COMMENT '导航名称',
               `url` varchar(300) NOT NULL COMMENT '链接地址',
@@ -709,7 +710,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
-            CREATE TABLE `notification` (
+            CREATE TABLE IF NOT EXISTS `notification` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '通知ID',
               `userId` int(10) unsigned NOT NULL COMMENT '被通知的用户ID',
               `type` varchar(64) NOT NULL DEFAULT 'default' COMMENT '通知类型',
@@ -720,7 +721,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `orders` (
+            CREATE TABLE IF NOT EXISTS `orders` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
               `sn` varchar(32) NOT NULL COMMENT '订单编号',
               `status` enum('created','paid','refunding','refunded','cancelled') NOT NULL COMMENT '订单状态',
@@ -752,7 +753,7 @@ class Init extends Migration
               UNIQUE KEY `sn` (`sn`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `order_log` (
+            CREATE TABLE IF NOT EXISTS `order_log` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单日志ID',
               `orderId` int(10) unsigned NOT NULL COMMENT '订单ID',
               `type` varchar(32) NOT NULL COMMENT '订单日志类型',
@@ -765,7 +766,7 @@ class Init extends Migration
               KEY `orderId` (`orderId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `order_refund` (
+            CREATE TABLE IF NOT EXISTS `order_refund` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单退款记录ID',
               `orderId` int(10) unsigned NOT NULL COMMENT '退款订单ID',
               `userId` int(10) unsigned NOT NULL COMMENT '退款人ID',
@@ -782,7 +783,7 @@ class Init extends Migration
               UNIQUE KEY `id` (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `question` (
+            CREATE TABLE IF NOT EXISTS `question` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目ID',
               `type` varchar(64) NOT NULL DEFAULT '' COMMENT '题目类型',
               `stem` text COMMENT '题干',
@@ -804,7 +805,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='问题表';
 
-            CREATE TABLE `question_category` (
+            CREATE TABLE IF NOT EXISTS `question_category` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目类别ID',
               `name` varchar(255) NOT NULL COMMENT '类别名称',
               `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
@@ -815,7 +816,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库类别表';
 
-            CREATE TABLE `question_favorite` (
+            CREATE TABLE IF NOT EXISTS `question_favorite` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目收藏ID',
               `questionId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '被收藏的题目ID',
               `target` varchar(255) NOT NULL DEFAULT '' COMMENT '题目所属对象',
@@ -824,7 +825,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `sessions` (
+            CREATE TABLE IF NOT EXISTS `sessions` (
               `sess_id` VARBINARY(128) NOT NULL PRIMARY KEY,
               `sess_user_id` INT UNSIGNED NOT NULL DEFAULT  '0',
               `sess_data` BLOB NOT NULL,
@@ -832,7 +833,7 @@ class Init extends Migration
               `sess_lifetime` MEDIUMINT NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `setting` (
+            CREATE TABLE IF NOT EXISTS `setting` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统设置ID',
               `name` varchar(64) NOT NULL DEFAULT '' COMMENT '系统设置名',
               `value` longblob COMMENT '系统设置值',
@@ -841,7 +842,7 @@ class Init extends Migration
               UNIQUE KEY `name` (`name`, `namespace`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `shortcut` (
+            CREATE TABLE IF NOT EXISTS `shortcut` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL,
               `title` varchar(255) NOT NULL DEFAULT '',
@@ -850,7 +851,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `status` (
+            CREATE TABLE IF NOT EXISTS `status` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL COMMENT '动态发布的人',
               `courseId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程Id',
@@ -869,7 +870,7 @@ class Init extends Migration
               KEY `createdTime` (`createdTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `tag` (
+            CREATE TABLE IF NOT EXISTS `tag` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '标签ID',
               `name` varchar(64) NOT NULL COMMENT '标签名称',
               `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
@@ -880,7 +881,7 @@ class Init extends Migration
               UNIQUE KEY `name` (`name`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `testpaper` (
+            CREATE TABLE IF NOT EXISTS `testpaper` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷ID',
               `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
               `description` text COMMENT '试卷说明',
@@ -900,7 +901,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `testpaper_item` (
+            CREATE TABLE IF NOT EXISTS `testpaper_item` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷条目ID',
               `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属试卷',
               `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目顺序',
@@ -912,7 +913,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `testpaper_item_result` (
+            CREATE TABLE IF NOT EXISTS `testpaper_item_result` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷题目做题结果ID',
               `itemId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷条目ID',
               `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷ID',
@@ -928,7 +929,7 @@ class Init extends Migration
               KEY `testPaperResultId` (`testPaperResultId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `testpaper_result` (
+            CREATE TABLE IF NOT EXISTS `testpaper_result` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷结果ID',
               `paperName` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
               `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷ID',
@@ -952,7 +953,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `theme_config` (
+            CREATE TABLE IF NOT EXISTS `theme_config` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `name` varchar(255) NOT NULL DEFAULT '',
               `config` text,
@@ -964,7 +965,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `upgrade_logs` (
+            CREATE TABLE IF NOT EXISTS `upgrade_logs` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `remoteId` int(11) NOT NULL COMMENT 'packageId',
               `installedId` int(11) DEFAULT NULL COMMENT '本地已安装id',
@@ -983,7 +984,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
 
-            CREATE TABLE `upload_files` (
+            CREATE TABLE IF NOT EXISTS `upload_files` (
               `id` int(10) unsigned NOT NULL COMMENT '上传文件ID',
               `globalId` VARCHAR(32) NOT NULL DEFAULT '0' COMMENT '云文件ID',
               `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
@@ -1016,7 +1017,7 @@ class Init extends Migration
               UNIQUE KEY `hashId` (`hashId`(120))
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `upload_file_inits` (
+            CREATE TABLE IF NOT EXISTS `upload_file_inits` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `globalId` varchar(32) NOT NULL DEFAULT '0' COMMENT '云文件ID',
               `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
@@ -1043,7 +1044,7 @@ class Init extends Migration
               UNIQUE KEY `hashId` (`hashId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `user` (
+            CREATE TABLE IF NOT EXISTS `user` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
               `email` varchar(128) NOT NULL COMMENT '用户邮箱',
               `verifiedMobile` varchar(32) NOT NULL DEFAULT  '',
@@ -1088,11 +1089,11 @@ class Init extends Migration
 
               PRIMARY KEY (`id`),
               UNIQUE KEY `email` (`email`),
-              UNIQUE KEY `nickname` (`nickname`)
+              UNIQUE KEY `nickname` (`nickname`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-            ALTER TABLE `user` ADD INDEX `updatedTime` (`updatedTime`);
 
-            CREATE TABLE `user_approval` (
+            CREATE TABLE IF NOT EXISTS `user_approval` (
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '用户认证ID',
               `userId` int(10) NOT NULL COMMENT '用户ID',
               `idcard` varchar(24) NOT NULL DEFAULT '' COMMENT '身份证号',
@@ -1106,7 +1107,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户认证表';
 
-            CREATE TABLE `user_bind` (
+            CREATE TABLE IF NOT EXISTS `user_bind` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户绑定ID',
               `type` varchar(64) NOT NULL COMMENT '用户绑定类型',
               `fromId` varchar(32) NOT NULL COMMENT '来源方用户ID',
@@ -1120,7 +1121,7 @@ class Init extends Migration
               UNIQUE KEY `type_2` (`type`,`toId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `user_field` (
+            CREATE TABLE IF NOT EXISTS `user_field` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `fieldName` varchar(100) NOT NULL DEFAULT '',
               `title` varchar(1024) NOT NULL DEFAULT '',
@@ -1130,7 +1131,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `user_fortune_log` (
+            CREATE TABLE IF NOT EXISTS `user_fortune_log` (
               `id` int(10) NOT NULL AUTO_INCREMENT,
               `userId` int(11) NOT NULL,
               `number` int(10) NOT NULL,
@@ -1141,7 +1142,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `user_profile` (
+            CREATE TABLE IF NOT EXISTS `user_profile` (
               `id` int(10) unsigned NOT NULL COMMENT '用户ID',
               `truename` varchar(255) NOT NULL DEFAULT '' COMMENT '真实姓名',
               `idcard` varchar(24) NOT NULL DEFAULT '' COMMENT '身份证号码',
@@ -1201,7 +1202,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `user_token` (
+            CREATE TABLE IF NOT EXISTS `user_token` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'TOKEN编号',
               `token` varchar(64) NOT NULL COMMENT 'TOKEN值',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN关联的用户ID',
@@ -1215,7 +1216,7 @@ class Init extends Migration
               UNIQUE KEY `token` (`token`(60))
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `cash_orders_log` (
+            CREATE TABLE IF NOT EXISTS `cash_orders_log` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `orderId` int(10) unsigned NOT NULL,
               `message` text,
@@ -1227,7 +1228,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `cash_orders` (
+            CREATE TABLE IF NOT EXISTS `cash_orders` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `sn` varchar(32) NOT NULL COMMENT '订单号',
               `status` enum('created','paid','cancelled') NOT NULL,
@@ -1244,7 +1245,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `cash_account` (
+            CREATE TABLE IF NOT EXISTS `cash_account` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL,
               `cash` float(10,2) NOT NULL DEFAULT '0.00',
@@ -1252,7 +1253,7 @@ class Init extends Migration
               UNIQUE KEY `userId` (`userId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `cash_flow` (
+            CREATE TABLE IF NOT EXISTS `cash_flow` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
               `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
@@ -1271,7 +1272,7 @@ class Init extends Migration
               UNIQUE KEY `tradeNo` (`sn`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='帐目流水' AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `groups_thread_collect` (
+            CREATE TABLE IF NOT EXISTS `groups_thread_collect` (
               `id` int(10) unsigned NOT NULL auto_increment COMMENT 'id主键',
               `threadId` int(11) unsigned NOT NULL COMMENT '收藏的话题id',
               `userId` int(10) unsigned NOT NULL COMMENT '收藏人id',
@@ -1279,7 +1280,7 @@ class Init extends Migration
               PRIMARY KEY  (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `groups_thread_trade` (
+            CREATE TABLE IF NOT EXISTS `groups_thread_trade` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `threadId` int(10) unsigned DEFAULT '0',
               `goodsId` int(10) DEFAULT '0',
@@ -1288,7 +1289,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `groups_thread_goods` (
+            CREATE TABLE IF NOT EXISTS `groups_thread_goods` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` text NOT NULL,
               `description` text,
@@ -1303,7 +1304,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `upload_files_share` (
+            CREATE TABLE IF NOT EXISTS `upload_files_share` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `sourceUserId` int(10) UNSIGNED NOT NULL COMMENT '上传文件的用户ID',
               `targetUserId` int(10) UNSIGNED NOT NULL COMMENT '文件分享目标用户ID',
@@ -1313,7 +1314,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `user_secure_question` (
+            CREATE TABLE IF NOT EXISTS `user_secure_question` (
             `id` int(10) unsigned NOT NULL auto_increment ,
             `userId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '用户ID',
             `securityQuestionCode` varchar(64) NOT NULL DEFAULT '' COMMENT '问题的code',
@@ -1323,7 +1324,7 @@ class Init extends Migration
             PRIMARY KEY  (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `thread` (
+            CREATE TABLE IF NOT EXISTS `thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `targetType` varchar(255) NOT NULL DEFAULT 'classroom' COMMENT '所属 类型',
               `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属类型 ID',
@@ -1350,11 +1351,11 @@ class Init extends Migration
               `categoryId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类ID' , 
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题最后一次被编辑或回复时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-            ALTER TABLE `thread` ADD INDEX(`updateTime`);
 
-            CREATE TABLE `thread_post` (
+            CREATE TABLE IF NOT EXISTS `thread_post` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `threadId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题ID',
               `content` text NOT NULL COMMENT '内容',
@@ -1370,7 +1371,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `sign_target_statistics` (
+            CREATE TABLE IF NOT EXISTS `sign_target_statistics` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
               `targetType` varchar(255) NOT NULL DEFAULT '' COMMENT '签到目标类型',
               `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到目标id',
@@ -1380,7 +1381,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-            CREATE TABLE `sign_user_log` (
+            CREATE TABLE IF NOT EXISTS `sign_user_log` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
               `targetType` varchar(255) NOT NULL DEFAULT '' COMMENT '签到目标类型',
@@ -1390,7 +1391,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-            CREATE TABLE `sign_user_statistics` (
+            CREATE TABLE IF NOT EXISTS `sign_user_statistics` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
               `targetType` varchar(255) NOT NULL DEFAULT '' COMMENT '签到目标类型',
@@ -1400,7 +1401,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-            CREATE TABLE `sign_card` (
+            CREATE TABLE IF NOT EXISTS `sign_card` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL DEFAULT '0',
               `cardNum` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1408,7 +1409,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `thread_vote` (
+            CREATE TABLE IF NOT EXISTS `thread_vote` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `threadId` int(10) unsigned NOT NULL COMMENT '话题ID',
               `postId` int(10) unsigned NOT NULL COMMENT '回帖ID',
@@ -1419,7 +1420,7 @@ class Init extends Migration
               UNIQUE KEY `postId` (`threadId`,`postId`,`userId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='话题投票表';
 
-            CREATE TABLE `crontab_job` (
+            CREATE TABLE IF NOT EXISTS `crontab_job` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
               `name` varchar(1024) NOT NULL COMMENT '任务名称',
               `cycle` ENUM('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
@@ -1436,7 +1437,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `thread_member` (
+            CREATE TABLE IF NOT EXISTS `thread_member` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统Id',
               `threadId` int(10) unsigned NOT NULL COMMENT '话题Id',
               `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
@@ -1447,7 +1448,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
 
-            CREATE TABLE `classroom` (
+            CREATE TABLE IF NOT EXISTS `classroom` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(255) NOT NULL COMMENT '标题',
               `status` enum('closed','draft','published') NOT NULL DEFAULT 'draft' COMMENT '状态关闭，未发布，发布',
@@ -1489,7 +1490,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `classroom_courses` (
+            CREATE TABLE IF NOT EXISTS `classroom_courses` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `classroomId` int(10) unsigned NOT NULL COMMENT '班级ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
@@ -1499,7 +1500,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `classroom_member` (
+            CREATE TABLE IF NOT EXISTS `classroom_member` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `classroomId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
@@ -1514,7 +1515,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `classroom_review` (
+            CREATE TABLE IF NOT EXISTS `classroom_review` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
               `classroomId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
@@ -1525,7 +1526,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `article_like` (
+            CREATE TABLE IF NOT EXISTS `article_like` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
              `articleId` int(10) unsigned NOT NULL COMMENT '资讯id',
              `userId` int(10) unsigned NOT NULL COMMENT '用户id',
@@ -1533,7 +1534,7 @@ class Init extends Migration
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='资讯点赞表';
 
-            CREATE TABLE `ip_blacklist` (
+            CREATE TABLE IF NOT EXISTS `ip_blacklist` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `ip` varchar(32) NOT NULL,
             `type` ENUM('failed','banned') NOT NULL COMMENT '禁用类型',
@@ -1543,7 +1544,7 @@ class Init extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-            CREATE TABLE `blacklist` (
+            CREATE TABLE IF NOT EXISTS `blacklist` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
             `userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
             `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
@@ -1551,7 +1552,7 @@ class Init extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
 
-            CREATE TABLE `task` (
+            CREATE TABLE IF NOT EXISTS `task` (
             `id` int(10) NOT NULL AUTO_INCREMENT,
             `title` varchar(255) DEFAULT NULL COMMENT '任务标题',
             `description` text COMMENT '任务描述',
@@ -1571,7 +1572,7 @@ class Init extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `batch_notification` (
+            CREATE TABLE IF NOT EXISTS `batch_notification` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '群发通知id',
               `type` enum('text', 'image', 'video', 'audio')  NOT NULL DEFAULT 'text' COMMENT '通知类型' ,
               `title` text NOT NULL COMMENT '通知标题',
@@ -1585,7 +1586,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
 
-            CREATE TABLE `card` (
+            CREATE TABLE IF NOT EXISTS `card` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `cardId` varchar(255)  NOT NULL DEFAULT '' COMMENT '卡的ID',
               `cardType` varchar(255) NOT NULL DEFAULT '' COMMENT '卡的类型',
@@ -1597,7 +1598,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-            CREATE TABLE `coupon` (
+            CREATE TABLE IF NOT EXISTS `coupon` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `code` varchar(255) NOT NULL COMMENT '优惠码',
               `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
@@ -1615,7 +1616,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 
-            CREATE TABLE `invite_record` (
+            CREATE TABLE IF NOT EXISTS `invite_record` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `inviteUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者',
               `invitedUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者',
@@ -1625,14 +1626,14 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='邀请记录表';
 
-            CREATE TABLE `cash_change` (
+            CREATE TABLE IF NOT EXISTS `cash_change` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL,
               `amount` double(10,2) NOT NULL DEFAULT '0.00',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-            CREATE TABLE `recent_post_num` (
+            CREATE TABLE IF NOT EXISTS `recent_post_num` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
              `ip` varchar(20) NOT NULL COMMENT 'IP',
              `type` varchar(255) NOT NULL COMMENT '类型',
@@ -1642,7 +1643,7 @@ class Init extends Migration
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
 
-            CREATE TABLE  `user_pay_agreement` (
+            CREATE TABLE IF NOT EXISTS  `user_pay_agreement` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(11) NOT NULL COMMENT '用户Id',
               `type` int(8) NOT NULL DEFAULT '0' COMMENT '0:储蓄卡1:信用卡',
@@ -1656,7 +1657,7 @@ class Init extends Migration
                PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户授权银行';
 
-            CREATE TABLE  `marker` (
+            CREATE TABLE IF NOT EXISTS  `marker` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `second` int(10) unsigned NOT NULL COMMENT '驻点时间',
               `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
@@ -1665,7 +1666,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='驻点';
 
-            CREATE TABLE  `question_marker` (
+            CREATE TABLE IF NOT EXISTS  `question_marker` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
                 `questionId` int(10) unsigned NOT NULL COMMENT '问题Id',
@@ -1681,7 +1682,7 @@ class Init extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='弹题';
 
-            CREATE TABLE  `question_marker_result` (
+            CREATE TABLE IF NOT EXISTS  `question_marker_result` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
                 `questionMarkerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '弹题ID',
@@ -1694,7 +1695,7 @@ class Init extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE  `keyword` (
+            CREATE TABLE IF NOT EXISTS  `keyword` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(64) CHARACTER SET utf8 NOT NULL,
               `state` ENUM('replaced','banned') NOT NULL DEFAULT 'replaced',
@@ -1704,7 +1705,7 @@ class Init extends Migration
               UNIQUE KEY `name` (`name`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE  `keyword_banlog` (
+            CREATE TABLE IF NOT EXISTS  `keyword_banlog` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `keywordId` int(10) unsigned NOT NULL,
               `keywordName` varchar(64) NOT NULL DEFAULT '',
@@ -1717,7 +1718,7 @@ class Init extends Migration
               KEY `keywordId` (`keywordId`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `discovery_column` (
+            CREATE TABLE IF NOT EXISTS `discovery_column` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(255) NOT NULL,
               `type` varchar(32) NOT NULL COMMENT '栏目类型',
@@ -1730,7 +1731,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '发现页栏目';
 
-            CREATE TABLE `upload_files_collection` (
+            CREATE TABLE IF NOT EXISTS `upload_files_collection` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `fileId` int(10) unsigned NOT NULL COMMENT '文件Id',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏者',
@@ -1739,14 +1740,14 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='文件收藏表';
 
-            CREATE TABLE `upload_files_tag` (
+            CREATE TABLE IF NOT EXISTS `upload_files_tag` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
               `fileId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件ID',
               `tagId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '标签ID',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件与标签的关联表';
 
-            CREATE TABLE `upload_files_share_history` (
+            CREATE TABLE IF NOT EXISTS `upload_files_share_history` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
              `sourceUserId` int(10) NOT NULL COMMENT '分享用户的ID',
              `targetUserId` int(10) NOT NULL COMMENT '被分享的用户的ID',
@@ -1755,7 +1756,7 @@ class Init extends Migration
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `cloud_data` (
+            CREATE TABLE IF NOT EXISTS `cloud_data` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(255) NOT NULL,
               `body` text NOT NULL,
@@ -1766,7 +1767,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `dictionary_item` (
+            CREATE TABLE IF NOT EXISTS `dictionary_item` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
              `type` varchar(255) NOT NULL COMMENT '字典类型',
              `code` varchar(64) DEFAULT NULL COMMENT '编码',
@@ -1777,7 +1778,7 @@ class Init extends Migration
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `dictionary` (
+            CREATE TABLE IF NOT EXISTS `dictionary` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
              `name` varchar(255) NOT NULL COMMENT '字典名称',
              `type` varchar(255) NOT NULL COMMENT '字典类型',
@@ -1785,7 +1786,7 @@ class Init extends Migration
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-            CREATE TABLE   `org` (
+            CREATE TABLE IF NOT EXISTS   `org` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
               `name` varchar(255) NOT NULL COMMENT '名称',
               `parentId` int(11) NOT NULL DEFAULT '0' COMMENT '组织机构父ID',
@@ -1803,7 +1804,7 @@ class Init extends Migration
               UNIQUE KEY(`code`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
-            CREATE TABLE `im_conversation` (
+            CREATE TABLE IF NOT EXISTS `im_conversation` (
                 `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `no` varchar(64) NOT NULL COMMENT 'IM云端返回的会话id',
                 `memberIds` text NOT NULL COMMENT '会话中用户列表(用户id按照小到大排序，竖线隔开)',
@@ -1812,7 +1813,7 @@ class Init extends Migration
                 PRIMARY KEY (`id`)
             ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='IM云端会话记录表';
 
-            CREATE TABLE `im_my_conversation` (
+            CREATE TABLE IF NOT EXISTS `im_my_conversation` (
                 `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `no` varchar(64) NOT NULL,
                 `userId` int(10) UNSIGNED NOT NULL,
@@ -1821,7 +1822,7 @@ class Init extends Migration
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='用户个人的会话列表';
 
-            CREATE TABLE `open_course_recommend` (
+            CREATE TABLE IF NOT EXISTS `open_course_recommend` (
               `id` int(10) NOT NULL AUTO_INCREMENT,
               `openCourseId` int(10) NOT NULL COMMENT '公开课id',
               `recommendCourseId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐课程id',
@@ -1832,7 +1833,7 @@ class Init extends Migration
               KEY `open_course_recommend_openCourseId_index` (`openCourseId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公开课推荐课程表';
 
-            CREATE TABLE `open_course` (
+            CREATE TABLE IF NOT EXISTS `open_course` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
               `title` varchar(1024) NOT NULL COMMENT '课程标题',
               `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '课程副标题',
@@ -1862,7 +1863,7 @@ class Init extends Migration
               KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
-            CREATE TABLE `open_course_lesson` (
+            CREATE TABLE IF NOT EXISTS `open_course_lesson` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课时所属课程ID',
               `chapterId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时所属章节ID',
@@ -1905,7 +1906,7 @@ class Init extends Migration
               KEY `updatedTime` (`updatedTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `open_course_member` (
+            CREATE TABLE IF NOT EXISTS `open_course_member` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员ID',
@@ -1923,7 +1924,7 @@ class Init extends Migration
               KEY `open_course_member_ip_courseId_index` (`ip`,`courseId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `referer_log` (
+            CREATE TABLE IF NOT EXISTS `referer_log` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `targetId` VARCHAR(64)  DEFAULT NUll COMMENT '模块ID',
               `targetType` varchar(64) NOT NULL COMMENT '模块类型',
@@ -1941,7 +1942,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
 
-            CREATE TABLE `order_referer_log` (
+            CREATE TABLE IF NOT EXISTS `order_referer_log` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `refererLogId` int(11) NOT NULL COMMENT '促成订单的访问日志ID',
               `orderId` int(10) unsigned  DEFAULT '0'  COMMENT '订单ID',
@@ -1954,7 +1955,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单促成日志';
 
-            CREATE TABLE `upgrade_notice` (
+            CREATE TABLE IF NOT EXISTS `upgrade_notice` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(11) NOT NULL,
               `code` varchar(100) NOT NULL COMMENT '编码',
@@ -1963,7 +1964,7 @@ class Init extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户升级提示查看';
 
-            CREATE TABLE `order_referer` (
+            CREATE TABLE IF NOT EXISTS `order_referer` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `uv` VARCHAR(64) NOT NULL ,
               `data` text NOT NULL ,
@@ -1973,7 +1974,7 @@ class Init extends Migration
               KEY `order_referer_uv_expiredTime_index` (`uv`,`expiredTime`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';
 
-            CREATE TABLE `file_used` (
+            CREATE TABLE IF NOT EXISTS `file_used` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `type` varchar(32) NOT NULL,
                 `fileId` int(11) NOT NULL COMMENT 'upload_files id',
@@ -1986,14 +1987,14 @@ class Init extends Migration
                 KEY `file_used_fileId_index` (`fileId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-            CREATE TABLE `course_lesson_extend` (
+            CREATE TABLE IF NOT EXISTS `course_lesson_extend` (
               `id` int(10) NOT NULL COMMENT '课时ID',
               `courseId` int(10) NOT NULL DEFAULT '0' COMMENT '课程ID',
               `doTimes` int(10) NOT NULL DEFAULT '0' COMMENT '可考试次数',
               `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)'
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课时扩展表';
 
-            CREATE TABLE  `role` (
+            CREATE TABLE IF NOT EXISTS  `role` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(32)  NOT NULL COMMENT '权限名称',
               `code` varchar(32)  NOT NULL COMMENT '权限代码',

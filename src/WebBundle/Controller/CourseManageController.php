@@ -1,5 +1,4 @@
 <?php
-
 namespace WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +56,19 @@ class CourseManageController extends BaseController
             'defaultCourse' => $defaultCourse
         ));
     }
+
+    // public function tasksAction(Request $request, $courseId)
+    // {
+    //     $course      = $this->getCourseService()->tryManageCourse($courseId);
+    //     $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+    //     $courseItems = $this->getCourseService()->getCourseItems($courseId);
+
+    //     return $this->render('WebBundle:CourseManage:task-list.html.twig', array(
+    //         'tasks'  => $tasks,
+    //         'course' => $course,
+    //         'items'  => $courseItems
+    //     ));
+    // }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
@@ -150,6 +162,13 @@ class CourseManageController extends BaseController
         }
     }
 
+    public function courseItemsSortAction(Request $request, $courseId)
+    {
+        $ids = $request->request->get("ids");
+        $this->getCourseService()->sortCourseItems($courseId, $ids);
+        return $this->createJsonResponse(array('result' => true));
+    }
+
     protected function formatCourseDate($course)
     {
         if (isset($course['expiryStartDate'])) {
@@ -167,13 +186,13 @@ class CourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }
