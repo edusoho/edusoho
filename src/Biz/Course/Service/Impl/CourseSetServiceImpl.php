@@ -16,7 +16,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
-        $this->validateCourseSet($courseSet);
+        if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+        }
+        if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的课程类型'));
+        }
 
         $courseSet = ArrayToolkit::parts($courseSet, array(
             'type',
@@ -45,7 +50,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSet($id, $fields)
     {
-        $this->validateCourseSet($courseSet);
+        if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+        }
+        if (!in_array($fields['serializeMode'], array('none', 'serialized', 'finished'))) {
+            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的连载类型'));
+        }
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'subtitle',
+            'tags',
+            'categoryId',
+            'serializeMode',
+            // 'summary',
+            'smallPicture',
+            'middlePicture',
+            'largePicture'
+        ));
 
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
