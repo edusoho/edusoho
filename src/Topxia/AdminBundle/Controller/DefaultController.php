@@ -428,7 +428,7 @@ class DefaultController extends BaseController
         $dayRegisterTotal = $userAnalysis['series']['registerTotalCount'];
         $activeUserCount  = $userAnalysis['series']['activeUserCount'];
         array_walk($dayRegisterTotal, function ($value, $index) use (&$lostUserCount, $activeUserCount) {
-            $lostUserCount[] = $value - $activeUserCount[$index];
+            $lostUserCount[] = ($value - $activeUserCount[$index]) <= 0 ? 0 : ($value - $activeUserCount[$index]);
         });
 
         return $lostUserCount;
