@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 25/11/2016
- * Time: 09:36
- */
 
 namespace Biz\DownloadActivity\Dao\Impl;
 

@@ -32,7 +32,7 @@ class TaskShow extends Emitter {
   }
 
   bindEvent() {
-    let minute = 6 * 1000;
+    let minute = 60 * 1000;
     let timeStep = 2; // 分钟
     this.delay('doing', () => {
       let eventUrl = this.element.find('#task-content-iframe').data('eventUrl');
