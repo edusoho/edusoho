@@ -84,7 +84,7 @@ class AbstractCloudAPI
 
     protected function _request($method, $uri, $params, $headers)
     {
-        $requestId = substr(md5(uniqid('', true)), -16);
+		$requestId = substr(md5(uniqid('', true)), -16);
 
         $url = 'http://124.160.104.74:8098'.'/'.self::VERSION.$uri;
         if ($this->isWithoutNetwork()) {
