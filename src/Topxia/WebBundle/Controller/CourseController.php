@@ -42,7 +42,11 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+
+            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+            $tagIds = ArrayToolkit::column($tags, 'id');
+
+            $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
             $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
