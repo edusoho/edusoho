@@ -3,13 +3,14 @@
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Topxia\Service\Common\ServiceKernel;
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 define("INSTALL_URI", "\/install\/start-install.php");
+define("ROOT_DIR", realpath(__DIR__ . '/../app'));
 
 $serviceKernel = ServiceKernel::create('prod', true);
 $serviceKernel->setParameterBag(new ParameterBag(array(
-    'kernel.root_dir' => realpath(__DIR__ . '/../app')
+    'kernel.root_dir' => ROOT_DIR
 )));
 
 
@@ -28,11 +29,11 @@ $biz = new \Codeages\Biz\Framework\Context\Biz(array(
         'driver'   => $parameters['database_driver'],
         'charset'  => 'UTF8'
     ),
-    'cache_directory'    => "%kernel.root_dir%/../var/cache",
-    'tmp_directory'      => "%kernel.root_dir%/../var/tmp",
-    'log_directory'      => "%kernel.root_dir%/../var/logs",
-    'plugin.directory'   => "%kernel.root_dir%/../plugins",
-    'plugin.config_file' => "%kernel.root_dir%/config/plugin_installed.php"
+    'cache_directory'    => ROOT_DIR . '/cache',
+    'tmp_directory'      => ROOT_DIR . '/tmp',
+    'log_directory'      => ROOT_DIR . '/logs',
+    'plugin.directory'   => ROOT_DIR . '/../plugins',
+    'plugin.config_file' => ROOT_DIR . '/config/plugin_installed.php'
 ));
 
 $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';

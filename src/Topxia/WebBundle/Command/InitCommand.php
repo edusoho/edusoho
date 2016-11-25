@@ -21,7 +21,7 @@ class InitCommand extends BaseCommand
 
         $this->installAssets($output);
         $this->initServiceKernel();
-        $initializer = new SystemInitializer($input, $output);
+        $initializer = new SystemInitializer($output);
         $fields = array(
             'email'     => 'test@edusoho.com',
             'nickname'  => '测试管理员',

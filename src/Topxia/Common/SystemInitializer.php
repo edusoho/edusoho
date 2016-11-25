@@ -9,7 +9,9 @@ use Permission\Service\Role\RoleService;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\BlockService;
@@ -26,19 +28,23 @@ use Topxia\Service\User\UserService;
 
 class SystemInitializer
 {
-    protected $input;
     protected $output;
 
-    public function __construct(InputInterface $input=null, OutputInterface $output=null)
+    public function __destruct()
     {
-        if($input === null){
-            $input = new EmptyInput();
+        if(isset($this->outputFd) && is_resource($this->outputFd)){
+            @fclose($this->outputFd);
+        }
+    }
+
+    public function __construct(OutputInterface $output=null)
+    {
+        if($output === null){
+            global $biz;
+            $this->outputFd = @fopen($biz['log_directory'] . '/install.log', 'w');
+            $output = new StreamOutput($this->outputFd);
         }
 
-        if($output === null){
-            $output = new EmptyOutput();
-        }
-        $this->input  = $input;
         $this->output = $output;
     }
 
@@ -779,106 +785,5 @@ EOD;
     protected function getDictionaryService()
     {
         return ServiceKernel::instance()->createService('Dictionary.DictionaryService');
-    }
-}
-
-
-
-
-class EmptyInput implements InputInterface
-{
-    public function getFirstArgument()
-    {
-    }
-
-    public function hasParameterOption($values)
-    {
-    }
-
-    public function getParameterOption($values, $default = false)
-    {
-    }
-
-    public function bind(InputDefinition $definition)
-    {
-    }
-
-    public function validate()
-    {
-    }
-
-    public function getArguments()
-    {
-    }
-
-    public function getArgument($name)
-    {
-    }
-
-    public function setArgument($name, $value)
-    {
-    }
-
-    public function hasArgument($name)
-    {
-    }
-
-    public function getOptions()
-    {
-    }
-
-    public function getOption($name)
-    {
-    }
-
-    public function setOption($name, $value)
-    {
-    }
-
-    public function hasOption($name)
-    {
-    }
-
-    public function isInteractive()
-    {
-    }
-
-    public function setInteractive($interactive)
-    {
-    }
-}
-
-class EmptyOutput implements OutputInterface
-{
-    public function write($messages, $newline = false, $options = 0)
-    {
-    }
-
-    public function writeln($messages, $options = 0)
-    {
-    }
-
-    public function setVerbosity($level)
-    {
-    }
-
-    public function getVerbosity()
-    {
-    }
-
-    public function setDecorated($decorated)
-    {
-    }
-
-    public function isDecorated()
-    {
-    }
-
-    public function setFormatter(OutputFormatterInterface $formatter)
-    {
-    }
-
-    public function getFormatter()
-    {
     }
 }

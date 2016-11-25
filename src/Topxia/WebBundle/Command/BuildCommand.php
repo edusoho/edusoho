@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +36,13 @@ class BuildCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName('topxia:build');
+        $this->setName('build:install-package')
+            ->setDescription('自动编制安装包（含演示数据）')
+            ->addArgument('domain', InputArgument::REQUIRED, '演示站点域名')
+            ->addArgument('user', InputArgument::REQUIRED, '演示站点数据库用户')
+            ->addArgument('password', InputArgument::REQUIRED, '数据库密码')
+            ->addArgument('database', InputArgument::REQUIRED, '演示站数据库')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -105,10 +112,10 @@ class BuildCommand extends BaseCommand
 
         $input = new ArrayInput(array(
             'command' => 'topxia:dump-init-data',
-            'domain'  => 'exam.edusoho.cn',
-            'user'    => 'exam.edusoho.cn',
-            'password'=> 'edusoho',
-            'database'=> 'exam.edusoho.cn'
+            'domain'  => $this->input->getArgument('domain'),
+            'user'    => $this->input->getArgument('user'),
+            'password'=> $this->input->getArgument('password'),
+            'database'=> $this->input->getArgument('database')
         ));
 
         $returnCode = $dumpCommand->run($input, $this->output);
@@ -125,7 +132,7 @@ class BuildCommand extends BaseCommand
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
-            '请确认已经将演示数据sql中的cloud_access_key和cloud_secret_key修改为12345（值前面表示字符串长度的数字s:5也要改）/ Y:N',
+            '请确认已经将演示数据sql中的cloud_access_key和cloud_secret_key修改为12345（值前面表示字符串长度的数字s:5也要改) Y/N:',
             false
         );
 
