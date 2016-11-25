@@ -40,8 +40,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'  => 0,
             'learnMode'   => 'freeOrder',
             'isDefault'   => 1,
-            'status'      => 'draft',
-            'auditStatus' => 'draft'
+            'status'      => 'draft'
         );
         $this->getCourseDao()->create($defaultCourse);
 

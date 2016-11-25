@@ -10,7 +10,10 @@ class CourseServiceTest extends BaseTestCase
     {
         $course = array(
             'title'       => '第一个教学计划',
-            'courseSetId' => 1
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -21,10 +24,12 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCreateAndGet()
     {
-        //TODO
         $course = array(
             'title'       => '第一个教学计划',
-            'courseSetId' => 1
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -38,12 +43,16 @@ class CourseServiceTest extends BaseTestCase
     {
         $course = array(
             'title'       => '第一个教学计划',
-            'courseSetId' => 1
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
         );
 
         $result = $this->getCourseService()->createCourse($course);
 
         $result['title'] = '第一个教学计划(改)';
+        unset($result['learnMode']);
 
         $updated = $this->getCourseService()->updateCourse($result['id'], $result);
 
@@ -54,7 +63,10 @@ class CourseServiceTest extends BaseTestCase
     {
         $course = array(
             'title'       => '第一个教学计划',
-            'courseSetId' => 1
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -64,36 +76,18 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($deleted, 1);
     }
 
-    public function testCopyCourse()
-    {
-        //add a course and copy it
-        $course = array(
-            'title'       => '第一个教学计划',
-            'courseSetId' => 1
-        );
-
-        $result = $this->getCourseService()->createCourse($course);
-
-        //可修改基本信息
-        $courseCopy = array(
-            'title'       => '第一个教学计划(复制)',
-            'courseSetId' => 1
-        );
-        $copyed = $this->getCourseService()->copyCourse($result['id'], $courseCopy);
-
-        $this->assertNotNull($copyed);
-        $this->assertEquals($copyed['copyCourseId'], $result['id']);
-    }
-
     public function testCloseCourse()
     {
         $course = array(
             'title'       => '第一个教学计划',
-            'courseSetId' => 1
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
         );
 
         $result = $this->getCourseService()->createCourse($course);
-
+        $this->getCourseService()->publishCourse($result['id'], 1);
         $this->getCourseService()->closeCourse($result['id']);
 
         $closed = $this->getCourseService()->getCourse($result['id']);
@@ -101,59 +95,22 @@ class CourseServiceTest extends BaseTestCase
         $this->assertTrue($closed['status'] == 'closed');
     }
 
-    public function testSaveCourseMarketing()
+    public function testPublishCourse()
     {
-        // $course = array(
-        //     'title'       => '第一个教学计划',
-        //     'courseSetId' => 1
-        // );
+        $course = array(
+            'title'       => '第一个教学计划',
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
+        );
 
-        // $result = $this->getCourseService()->createCourse($course);
+        $result = $this->getCourseService()->createCourse($course);
 
-        // $marketing = array(
-        //     'courseId'      => $result['id'],
-        //     'isFree'        => 0,
-        //     'price'         => 11.9,
-        //     'joinMode'      => 1,
-        //     'enableTrylook' => 1,
-        //     'trylookLength' => 10,
-        //     'services'      => "['absc','edf','ggg']"
-        // );
+        $this->getCourseService()->publishCourse($result['id'], 1);
 
-        // $saved = $this->getCourseService()->saveCourseMarketing($marketing);
-
-        // $this->assertNotNull($saved['id']);
-        // $this->assertEquals($saved['courseId'], $result['id']);
-    }
-
-    public function testPreparePublishment()
-    {
-        // $course = array(
-        //     'title'       => '第一个教学计划',
-        //     'courseSetId' => 1
-        // );
-
-        // $result = $this->getCourseService()->createCourse($course);
-
-        // $this->getCourseService()->preparePublishment($result['id'], 1);
-
-        // $prepared = $this->getCourseService()->getCourse($result['id']);
-        // $this->assertEquals($prepared['auditStatus'], 'committed');
-    }
-
-    public function testAuditPublishment()
-    {
-        // $course = array(
-        //     'title'       => '第一个教学计划',
-        //     'courseSetId' => 1,
-        //     'auditStatus' => 'committed'
-        // );
-
-        // $result = $this->getCourseService()->createCourse($course);
-        // $this->getCourseService()->auditPublishment($result['id'], 1, true, '异议！驳回！');
-
-        // $rejected = $this->getCourseService()->getCourse($result['id']);
-        // $this->assertEquals($rejected['auditStatus'], 'rejected');
+        $published = $this->getCourseService()->getCourse($result['id']);
+        $this->assertEquals($published['status'], 'published');
     }
 
     protected function getCourseService()

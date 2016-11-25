@@ -51,8 +51,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('标题已被占用');
         }
 
-        $course['status']      = 'draft';
-        $course['auditStatus'] = 'draft';
+        $course['status'] = 'draft';
 
         return $this->getCourseDao()->create($course);
     }
@@ -87,17 +86,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
-    public function copyCourse($copyId, $course)
-    {
-        //TODO
-        //validator basic info of $course
-        //copy tasks、marketing from copyCourse
-        //save basic info,tasks,marketing
-
-        $course['copyCourseId'] = $copyId;
-        return $this->getCourseDao()->create($course);
-    }
-
     public function deleteCourse($id)
     {
         $course = $this->getCourseDao()->get($id);
@@ -125,73 +113,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->update($id, $course);
     }
 
-    public function saveCourseMarketing($courseMarketing)
-    {
-        //TODO validator
-        if (isset($courseMarketing)) {
-            $this->getCourseMarketingDao()->create($courseMarketing);
-        } else {
-            $this->getCourseMarketingDao()->update($id, $courseMarketing);
-        }
-    }
-
-    public function preparePublishment($id, $userId)
+    public function publishCourse($id, $userId)
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
             throw $this->createNotFoundException('Course', $id);
         }
-        if ($course['auditStatus'] !== 'draft') {
-            throw $this->createAccessDeniedException('只允许发布未发布教学计划');
-        }
 
-        // XXX 先直接发布，忽略审核操作
         $this->getCourseDao()->update($id, array(
-            'status'      => 'published',
-            'auditStatus' => 'accept'
+            'status' => 'published'
         ));
-
-        // $audit = array(
-        //     'courseId'    => $course['id'],
-        //     'courseSetId' => $course['courseSetId'],
-        //     'status'      => 'committed',
-        //     'creator'     => $userId,
-        //     'remark'      => '提交审核'
-        // );
-
-        // $this->getCourseAuditDao()->create($audit);
-        // $this->getCourseDao()->update($id, array(
-        //     'auditStatus' => 'committed'
-        // ));
-    }
-
-    public function auditPublishment($id, $userId, $reject, $remark)
-    {
-        $course = $this->getCourseDao()->get($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException('Course', $id);
-        }
-        if ($course['auditStatus'] !== 'committed') {
-            throw $this->createAccessDeniedException('无法审核该教学计划');
-        }
-        $result = $reject ? 'reject' : 'accept';
-        $audit  = array(
-            'courseId'    => $course['id'],
-            'courseSetId' => $course['courseSetId'],
-            'status'      => $result,
-            'creator'     => $userId,
-            'remark'      => $remark
-        );
-
-        $this->getCourseAuditDao()->create($audit);
-        $courseResult = array(
-            'auditStatus' => $result,
-            'auditRemark' => $remark
-        );
-        if ($reject) {
-            $courseResult['status'] = 'published';
-        }
-        $this->getCourseDao()->update($id, $courseResult);
     }
 
     protected function validateCourse($course, $id = 0)
@@ -528,16 +459,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getChapterDao()
     {
         return $this->createDao('Course:CourseChapterDao');
-    }
-
-    protected function getCourseAuditDao()
-    {
-        return $this->createDao('Course:CourseAuditDao');
-    }
-
-    protected function getCourseMarketingDao()
-    {
-        return $this->createDao('Course:CourseMarketingDao');
     }
 
     protected function getCourseDao()
