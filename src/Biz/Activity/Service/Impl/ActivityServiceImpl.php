@@ -63,15 +63,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
-            throw new InvalidArgumentException('activity is invalid');
+            throw $this->createInvalidArgumentException('activity is invalid');
         }
 
         if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权创建教学活动');
         }
 
         if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权创建教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
@@ -114,7 +114,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $savedActivity = $this->getActivity($id);
 
         if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权更新教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
@@ -149,7 +149,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         if (!$this->canManageCourse($activity['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权删除教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);

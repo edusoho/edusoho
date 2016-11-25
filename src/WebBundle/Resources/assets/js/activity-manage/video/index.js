@@ -1,4 +1,4 @@
-import  FileChooser from '../../common/file-choose';
+import FileChooser from '../../file-chooser/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -8,18 +8,19 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 }, "秒数只能在0-59之间");
 
 function _inItStep2form() {
-    var $step1_form = $('#step2-form');
-    var validator = $step1_form.validate({
+    var $step2_form = $('#step2-form');
+    var validator = $step2_form.data('validator');
+    $step2_form.validate({
         onkeyup: false,
         ignore: "",
         rules: {
-            content: 'required',
+            title: 'required',
             minute: 'required unsigned_integer',
             second: 'second_range',
-            media: 'required'
+            'ext[mediaSource]': 'required'
         },
         messages: {
-            content: "请输入简介",
+            title: "请输入标题",
             minute: {
                 required: '请输入时长',
                 unsigned_integer: '时长必须为非负整数',
@@ -27,14 +28,22 @@ function _inItStep2form() {
             second: {
                 unsigned_integer: '时长必须为非负整数',
             },
-            media: "请选择或者上传视频"
+            'ext[mediaSource]': "请选择或者上传视频"
         }
     });
-    $step1_form.data('validator', validator);
+    $step2_form.data('validator', validator);
 }
 
 _inItStep2form();
 
+$(".js-length").blur(function () {
+    let validator = $("#step2-form").data('validator');
+    if (validator && validator.form()) {
+        const minute = parseInt($('#minute').val()) | 0;
+        const second = parseInt($('#second').val()) | 0;
+        $("#length").val(minute * 60 + second);
+    }
+});
 
 const fileChooser = new FileChooser();
 
@@ -45,8 +54,13 @@ const onSelectFile = file => {
         $("#minute").val(minute);
         $("#second").val(second);
     }
-    $("#ext_mediaId").val(file.id);
-}
+    $("#ext_mediaSource").val(file.source);
+    if (file.source == 'self') {
+        $("#ext_mediaId").val(file.id);
+    } else {
+        $("#ext_mediaUri").val(file.uri)
+    }
+};
 
 fileChooser.on('select', onSelectFile);
 
