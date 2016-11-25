@@ -30,21 +30,8 @@ class SystemInitializer
 {
     protected $output;
 
-    public function __destruct()
+    public function __construct(OutputInterface $output)
     {
-        if(isset($this->outputFd) && is_resource($this->outputFd)){
-            @fclose($this->outputFd);
-        }
-    }
-
-    public function __construct(OutputInterface $output=null)
-    {
-        if($output === null){
-            global $biz;
-            $this->outputFd = @fopen($biz['log_directory'] . '/install.log', 'w');
-            $output = new StreamOutput($this->outputFd);
-        }
-
         $this->output = $output;
     }
 

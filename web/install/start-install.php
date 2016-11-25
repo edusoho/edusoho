@@ -164,8 +164,11 @@ function install_step3($init_data = 0)
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 
         $biz['db']->beginTransaction();
-        $initializer = new \Topxia\Common\SystemInitializer();
+        $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
+        $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
+        $initializer = new \Topxia\Common\SystemInitializer($output);
         try {
+
             if (!empty($init_data)) {
                 $biz['db']->exec("delete from `user` where id=1;");
                 $biz['db']->exec("delete from `user_profile` where id=1;");
@@ -196,6 +199,8 @@ function install_step3($init_data = 0)
         } catch (\Exception $e) {
             echo $e->getMessage();
             $biz['db']->rollBack();
+        } finally{
+            @fclose($installLogFd);
         }
     }
 
