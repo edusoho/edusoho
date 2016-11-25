@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{'标签'|trans}}{% if tag %}:{{ tag.name }}{% endif %} - {{ parent() }}{% endblock %}
+{% block keywords %}{% if tag %}{{ tag.name }}{% endif %},{{ setting('site.seo_keywords') }}{% endblock %}
+{% block content %}
+
+<div class="es-section">
+  <div class="section-header">
+    <h1>{{'标签'|trans}}{% if tag %}:{{ tag.name }}{% endif %}</h1>
+    <a href="{{ path('tag') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+  </div>
+  {% if tag %}
+    {% if courses %}
+      {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+      {{ web_macro.paginator(paginator) }}
+    {% else %}
+      <div class="empty">{{'没有搜到相关课程，请换个标签试试！'|trans}}</div>
+    {% endif %}
+  {% else %}
+    <div class="empty">{{'标签不存在，请重新输入！'|trans}}</div>
+  {% endif %}
+</div>
+{% endblock %}

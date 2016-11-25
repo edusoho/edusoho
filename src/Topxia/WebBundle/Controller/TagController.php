@@ -24,6 +24,48 @@ class TagController extends BaseController
         return $this->createJsonmResponse($data);
     }
 
+    public function indexAction()
+    {   
+        $tags = $this->getTagService()->findAllTags(0, 100);
+
+        return $this->render('TopxiaWebBundle:Tag:index.html.twig',array(
+            'tags'=>$tags
+        ));
+    }
+
+    public function showAction(Request $request,$name)
+    {   
+        $courses = $paginator = null;
+
+        $tag = $this->getTagService()->getTagByName($name);
+
+        if($tag) {  
+            $conditions = array(
+                'status' => 'published',
+                'tagId' => $tag['id'],
+                'parentId' => 0
+            );
+
+            $paginator = new Paginator(
+                $this->get('request'),
+                $this->getCourseService()->searchCourseCount($conditions)
+                , 12
+            );       
+
+            $courses = $this->getCourseService()->searchCourses(
+                $conditions,
+                'latest',
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+        return $this->render('TopxiaWebBundle:Tag:show.html.twig',array(
+            'tag'=>$tag,
+            'courses'=>$courses,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function matchAction(Request $request)
     {
         $data = array();
