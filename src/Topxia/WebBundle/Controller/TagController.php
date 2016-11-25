@@ -40,10 +40,18 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTagByName($name);
 
         if($tag) {  
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'course');
+
+            $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+            if (empty($courseIds)) {
+                $courseIds = array(0);
+            }
+
             $conditions = array(
-                'status' => 'published',
-                'tagId' => $tag['id'],
-                'parentId' => 0
+                'status'    => 'published',
+                'courseIds' => $courseIds,
+                'parentId'  => 0
             );
 
             $paginator = new Paginator(
