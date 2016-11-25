@@ -9,6 +9,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Topxia\Service\Common\Lock;
 use Topxia\Service\User\CurrentUser;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
@@ -54,6 +55,42 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function createServiceException($message = '')
     {
         return new ServiceException($message);
+    }
+
+    protected function beginTransaction()
+    {
+        $this->biz['db']->beginTransaction();
+    }
+
+    protected function commit()
+    {
+        $this->biz['db']->commit();
+    }
+
+    protected function rollback()
+    {
+        $this->biz['db']->rollback();
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock();
+        }
+
+        return $this->lock;
+    }
+
+    protected function getLogger($name)
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 
     protected function createAccessDeniedException($message = '') 

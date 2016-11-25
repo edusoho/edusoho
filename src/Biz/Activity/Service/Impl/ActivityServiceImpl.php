@@ -62,48 +62,55 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function createActivity($fields)
     {
-        if ($this->invalidActivity($fields)) {
-            throw $this->createInvalidArgumentException('activity is invalid');
-        }
+        try {
+            $this->beginTransaction();
 
-        if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权创建教学活动');
-        }
+            if ($this->invalidActivity($fields)) {
+                throw $this->createInvalidArgumentException('activity is invalid');
+            }
 
-        if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
-            throw $this->createAccessDeniedException('无权创建教学活动');
-        }
+            if (!$this->canManageCourse($fields['fromCourseId'])) {
+                throw $this->createAccessDeniedException('无权创建教学活动');
+            }
 
-        $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
-        $media          = $activityConfig->create($fields);
+            if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
+                throw $this->createAccessDeniedException('无权创建教学活动');
+            }
 
-        if (!empty($media)) {
-            $fields['mediaId'] = $media['id'];
-        }
+            $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
+            $media          = $activityConfig->create($fields);
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'remark',
-            'mediaId',
-            'mediaType',
-            'content',
-            'length',
-            'fromCourseId',
-            'fromCourseSetId',
-            'fromUserId',
-            'startTime',
-            'endTime'
-        ));
+            if (!empty($media)) {
+                $fields['mediaId'] = $media['id'];
+            }
 
-        if (isset($fields['startTime']) && isset($fields['length'])) {
-            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
-        }
+            $fields = ArrayToolkit::parts($fields, array(
+                'title',
+                'remark',
+                'mediaId',
+                'mediaType',
+                'content',
+                'length',
+                'fromCourseId',
+                'fromCourseSetId',
+                'fromUserId',
+                'startTime',
+                'endTime'
+            ));
 
-        $activity = $this->getActivityDao()->create($fields);
+            if (isset($fields['startTime']) && isset($fields['length'])) {
+                $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+            }
 
-        $listener = $activityConfig->getListener('activity.created');
-        if (!empty($listener)) {
-            $listener->handle($activity, array());
+            $activity = $this->getActivityDao()->create($fields);
+
+            $listener = $activityConfig->getListener('activity.created');
+            if (!empty($listener)) {
+                $listener->handle($activity, array());
+            }
+            $this->commit();
+        } catch(\Exception $e) {
+            $this->rollback();
         }
 
         return $activity;
