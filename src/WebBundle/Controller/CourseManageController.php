@@ -44,31 +44,18 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        // $course      = $this->tryManageCourse($courseId);
-        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course        = $this->getCourseService()->getCourse($courseId);
-        $tasks         = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'         => $tasks,
-            'course'        => $course,
-            'courseSet'     => $courseSet,
-            'defaultCourse' => $defaultCourse
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course      = $this->getCourseService()->tryManageCourse($courseId);
+        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+
+        return $this->render('WebBundle:CourseSetManage:course-tasks.html.twig', array(
+            'tasks'     => $tasks,
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'items'     => $courseItems
         ));
     }
-
-    // public function tasksAction(Request $request, $courseId)
-    // {
-    //     $course      = $this->getCourseService()->tryManageCourse($courseId);
-    //     $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-    //     $courseItems = $this->getCourseService()->getCourseItems($courseId);
-
-    //     return $this->render('WebBundle:CourseManage:task-list.html.twig', array(
-    //         'tasks'  => $tasks,
-    //         'course' => $course,
-    //         'items'  => $courseItems
-    //     ));
-    // }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {

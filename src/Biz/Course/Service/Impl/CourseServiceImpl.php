@@ -82,7 +82,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
-        $fields = $this->validateCourse($fields);
+        $fields = $this->validateCourse($fields, $id);
 
         return $this->getCourseDao()->update($id, $fields);
     }
@@ -194,7 +194,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->update($id, $courseResult);
     }
 
-    protected function validateCourse($course)
+    protected function validateCourse($course, $id = 0)
     {
         if (isset($course['status']) && $course['status'] === 'published') {
             if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
@@ -202,10 +202,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             return;
         }
-        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'learnMode', 'expiryMode'))) {
+        $requiredFields = array('title', 'courseSetId', 'expiryMode');
+        if ($id <= 0) {
+            $requiredFields[] = 'learnMode';
+        }
+        if (!ArrayToolkit::requireds($course, $requiredFields)) {
             throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
         }
-        if (!in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
+        if ($id <= 0 && !in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
             throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的学习模式'));
         }
         if ($course['expiryMode'] === 'days') {
