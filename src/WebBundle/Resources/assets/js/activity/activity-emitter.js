@@ -29,6 +29,9 @@ export default class ActivityEmitter {
         data: data
       });
 
+      messenger.addTarget(window.parent, 'parent');
+      messenger.send(message);
+
       this.emitMessenger.send(message);
 
       this.emitMessenger.listen((message) => {

@@ -1,0 +1,21 @@
+{% extends 'WebBundle:Activity:content-layout.html.twig' %}
+
+{% do script(['web/task/download/index.js']) %}
+
+
+{% block content %}
+  <div class="dashboard-body">
+    {#<div class="summary">{{ activity.content }}</div>#}
+    {% for file in activity.ext.materials|default(null) %}
+      <li class="media list-item">
+        <div class="media-body list-item-body">
+          <div class="title">
+            <a href="/course/1/material/30/download" target="_blank">{{ file.title }}</a>
+            <span class="meta">({{ file.fileSize|file_size }})</span>
+          </div>
+        </div>
+      </li>
+
+    {% endfor %}
+  </div>
+{% endblock %}

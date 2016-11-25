@@ -3,10 +3,10 @@
 {% set chapter = chapter|default(null) %}
 
 {% block title %}
-  {% if chapter %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{% else %}{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{% endif %}
+  {% if chapter %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{% elseif type == 'lesson' %}课时{% else %}{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{% endif %}
 {% endblock %}
-{% block body %}
 
+{% block body %}
 <form id="course-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if chapter %}
 	  action="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"
@@ -18,6 +18,8 @@
     <div class="col-md-3 control-label">
       {% if type == 'unit' %}
         <label for="chapter-title-field">{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{{'标题'|trans}}</label>
+      {% elseif type == 'lesson' %}
+        <label for="chapter-title-field">课时</label>
       {% else %}
         <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{{'标题'|trans}}</label>
       {% endif %}
