@@ -9,7 +9,6 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Service\Common\Lock;
 use Topxia\Service\User\CurrentUser;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
@@ -47,16 +46,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
-    protected function createNotFoundException($message = '')
-    {
-        return new NotFoundException($message);
-    }
-
-    protected function createServiceException($message = '')
-    {
-        return new ServiceException($message);
-    }
-
     protected function beginTransaction()
     {
         $this->biz['db']->beginTransaction();
@@ -70,15 +59,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function rollback()
     {
         $this->biz['db']->rollback();
-    }
-
-    protected function getLock()
-    {
-        if (!$this->lock) {
-            $this->lock = new Lock();
-        }
-
-        return $this->lock;
     }
 
     protected function getLogger($name)
@@ -101,5 +81,15 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function createInvalidArgumentException($message = '') 
     {
         return new InvalidArgumentException($message);
+    }
+
+    protected function createNotFoundException($message = '')
+    {
+        return new NotFoundException($message);
+    }
+
+    protected function createServiceException($message = '')
+    {
+        return new ServiceException($message);
     }
 }
