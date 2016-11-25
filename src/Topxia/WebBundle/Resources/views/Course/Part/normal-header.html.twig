@@ -172,17 +172,26 @@
 {% macro favorite_btn(course, hasFavorited) %}
   <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
     <a href="javascript:;" class="color-primary">
-      <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% if is_plugin_installed('FavoriteReward') %}
+        {% include 'FavoriteRewardBundle:Widget:unfavorite.html.twig' %}
+      {% else %}
+        <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% endif %}
       <p>{{'已收藏'|trans}}</p>
     </a>
   </li>
 
-  <li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;">
-      <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
-      <p>{{'收藏'|trans}}</p>
-    </a>
-  </li>
+
+<li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+  <a href="javascript:;">
+    {% if is_plugin_installed('FavoriteReward') %}
+      {% include 'FavoriteRewardBundle:Widget:favorite.html.twig' %}
+    {% else %}
+    <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+    {% endif %}
+    <p>{{'收藏'|trans}}</p>
+  </a>
+</li>
 {% endmacro %}
 
 {% macro share_btn(course) %}
