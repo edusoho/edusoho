@@ -66,28 +66,10 @@
     <div class="dashboard-sidebar-content">
       <div class="dashboard-toolbar">
         <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
-          <li class="active" data-pane="#task-pane">
-            <a href="javascript:;"> <i class="es-icon es-icon-menu"></i>
-              <br/>      
-              课程
-            </a>
-          </li>
-          <li class="" data-pane="#question-pane">
-            <a href="javascript:;"> <i class="es-icon es-icon-help"></i>
-              <br/>      
-              问答
-            </a>
-          </li>
-          <li class="" data-pane="#note-pane">
-            <a href="javascript:;">
-              <i class="es-icon es-icon-edit"></i>
-              <br/>      
-              笔记
-            </a>
-          </li>
+          
         </ul>
       </div>
-      <div data-pane='task' class="dashboard-pane task-pane" id="task-pane" >
+      <div data-pane="task" class="dashboard-pane task-pane">
         <ul class="task-list ">
           {% for task in tasks %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
@@ -188,6 +170,7 @@
             <span class="text-success">已完成了整个课程的18%，加油吧！</span>
           </div>
           <div class="footer text-right">
+            <a class="btn btn-info mrm">分享</a>
             <a class="btn btn-primary">下一任务</a>
           </div>
         </div>

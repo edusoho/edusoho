@@ -1,5 +1,6 @@
 import NotePlugin from '../plugins/note/plugin';
 import QuestionPlugin from '../plugins/question/plugin';
+import TaskPlugin from '../plugins/task/plugin';
 import 'store';
 
 class SideBar {
@@ -20,6 +21,7 @@ class SideBar {
     this.taskId= 1;//@TODO 获取当前任务的ID
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
+    this._registerPlugin(new TaskPlugin(this));
     this._initPlugin();
     this._isRenderSiderBar();
   }
@@ -37,7 +39,7 @@ class SideBar {
       let plugin = this.plugins[name];
       html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
-    $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]',(event)=>{
+    $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]',(event)=>{
       let $this = $(event.currentTarget);
       if ($this.hasClass('active')) {
         this._rendBar($this,false);
