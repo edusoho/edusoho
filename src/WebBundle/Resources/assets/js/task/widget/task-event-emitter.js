@@ -8,11 +8,12 @@ export default class TaskEventEmitter {
       receives: {}
     };
 
-    this.receiveMessenger = new Messenger('parent', 'ActivityEvent');
+    this.receiveMessenger = new Messenger('TaskMessenger', 'ActivityEvent');
     this.receiveMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
     this.receiveMessenger.listen(message => {
       let {event, data} = JSON.parse(message);
+      console.log("event, data",event, data);
       let listeners = this.eventMap.receives[event];
       if (this.element.data('eventUrl')) {
         let postData = data || {};
@@ -31,7 +32,7 @@ export default class TaskEventEmitter {
       }
     });
 
-    this.emitMessenger = new Messenger('parent', 'TaskEvent');
+    this.emitMessenger = new Messenger('TaskMessenger', 'TaskEvent');
     this.emitMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
   }

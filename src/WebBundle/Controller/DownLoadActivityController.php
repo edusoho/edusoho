@@ -8,7 +8,11 @@
 namespace WebBundle\Controller;
 
 
+use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Course\CourseService;
 
 class DownLoadActivityController extends BaseController implements ActivityActionInterface
 {
@@ -18,6 +22,7 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         $activity['courseId'] = $courseId;
         return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
             'activity' => $activity,
+            'courseId' => $courseId
         ));
     }
 
@@ -37,8 +42,30 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         ));
     }
 
-    public function downloadFileAction(Request $request, $activity, $fileId)
+    public function downloadFileAction(Request $request, $courseId, $activityId)
     {
+
+        $this->getCourseService()->tryLearnCourse($courseId);
+        $mediaId  = $request->query->get('fileId');
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        $medias = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
+        if (empty($medias)) {
+            return $this->createNotFoundException('activity not found');
+        }
+        $medias = ArrayToolkit::index($medias, 'id');
+        if (empty($medias[$mediaId])) {
+            return $this->createNotFoundException('file not found');
+        }
+
+        $response = null;
+        if (!empty($medias[$mediaId]['link'])) {
+            $response = $this->redirect($medias[$mediaId]['link']);
+        } else {
+            $response = $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $medias[$mediaId]['fileId']));
+        }
+        $this->getDownloadActivityService()->createDownloadFileRecord($medias[$mediaId]);
+        return $response;
 
     }
 
@@ -54,4 +81,20 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    /**
+     * @return DownloadActivityService
+     */
+    protected function getDownloadActivityService()
+    {
+        return $this->getBiz()->service('DownloadActivity:DownloadActivityService');
+    }
 }

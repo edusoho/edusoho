@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
-    static $implementor = array(
-        'local' => 'File.LocalFileImplementor',
-        'cloud' => 'File.CloudFileImplementor'
-    );
+    static $implementor
+        = array(
+            'local' => 'File.LocalFileImplementor',
+            'cloud' => 'File.CloudFileImplementor'
+        );
 
     public function getFile($id)
     {
@@ -562,8 +563,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $cloudFileConditions = array(
             'processStatus' => $conditions['processStatus']
         );
-        $globalArray = array_chunk($globalIds, 20);
-        $count       = 0;
+        $globalArray         = array_chunk($globalIds, 20);
+        $count               = 0;
 
         foreach ($globalArray as $key => $globals) {
             $cloudFileConditions['nos'] = implode(',', $globals);
@@ -783,7 +784,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function tryAccessFile($fileId)
     {
         $file = $this->getFullFile($fileId);
-
+    var_dump($fileId,$file);
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -804,12 +805,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $shares = $this->findShareHistory($file['createdUserId']);
 
-        foreach ($shares as $share) {
-            if ($share['targetUserId'] == $user['id']) {
-                return $file;
-            }
+        $targetUserIds = ArrayToolkit::column($shares, 'targetUserId');
+        if (!in_array($user['id'], $targetUserIds)) {
+            return $file;
         }
-
         throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此文件！'));
     }
 
@@ -1127,7 +1126,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     protected function findCreatedFileIds($fileIds, $targetType, $targetId)
     {
-        $conditions = array(
+        $conditions    = array(
             'targetType' => $targetType,
             'targetId'   => $targetId
         );

@@ -44,6 +44,10 @@ course_task_show:
   path:  /course/{courseId}/task/{id}/show
   defaults: { _controller: WebBundle:Task:show }
 
+course_activity_download:
+    path: /course/{courseId}/activiy/{activityId}/download
+    defaults: { _controller: WebBundle:DownLoadActivity:downloadFile }
+
 course_task_activity_show:
   path:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: WebBundle:Task:taskActivity }

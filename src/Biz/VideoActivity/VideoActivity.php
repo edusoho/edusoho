@@ -25,6 +25,7 @@ class VideoActivity extends Activity
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
+            'video.doing' => 'Biz\\VideoActivity\\Listener\\VideoDoingListener',
             'video.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
         );
     }
