@@ -207,16 +207,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.6",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "9938d9ea4781df5ef7f642b4c452a14900406329"
+                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/9938d9ea4781df5ef7f642b4c452a14900406329.zip",
-                "reference": "9938d9ea4781df5ef7f642b4c452a14900406329",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/69eb16e1bf90b80567d88aa88aab697ee292a5a6.zip",
+                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2016-10-31 16:27:18"
+            "time": "2016-11-22 08:31:24"
         },
         {
             "name": "codeages/rest-api-client",

@@ -8,7 +8,7 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
@@ -167,6 +167,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
 
         $this->getTaskResultService()->createTaskResult($taskResult);
+    }
+
+    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if(empty($taskResult)){
+            throw new AccessDeniedException('任务不在进行状态');
+        }
+
+        $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
     }
 
     public function finishTask($taskId)

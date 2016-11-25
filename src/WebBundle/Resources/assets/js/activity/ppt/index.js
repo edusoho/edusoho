@@ -12,11 +12,7 @@ let createPPT = (watermark) => {
   });
 
   return ppt.once('end', () => {
-    emitter.emit('finish').then(() => {
-      console.log('ppt.finish');
-    }).catch((error) => {
-      console.error(error);
-    });
+    emitter.emit('finish');
   });
 };
 

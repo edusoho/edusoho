@@ -137,7 +137,8 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
 
     public function getPlugins()
     {
-        return $this->pluginConfigurationManager->getInstalledPlugins();
+        return $this->plugins;
+        // return $this->pluginConfigurationManager->getInstalledPlugins();
     }
 
     public function getPluginConfigurationManager()

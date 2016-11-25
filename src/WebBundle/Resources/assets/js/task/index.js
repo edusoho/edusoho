@@ -32,27 +32,28 @@ class TaskShow extends Emitter{
   }
 
   bindEvent(){
+    let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
-    this.delay('doing', () => {
-      let eventUrl = this.element.find('#task-content-iframe').data('eventUrl');
-      if(eventUrl === undefined){
-        return;
-      }
-      let postData = {
-        eventName: 'doing',
-        data: {
-          taskId: this.taskId,
-        }
-      };
-      $.post(eventUrl, postData).done((currentTime) => {
-        this.eventEmitter.emit('doing', {currentTime: currentTime});
-        this.trigger('doing');
-      });
+    this.delay('doing', (timeStep) => {
+      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
+      this.eventEmitter.emit('doing', {
+        timeStep: timeStep,
+        learnedTime: learnedTime,
+        taskId: this.taskId
+      }).then(data => {
+        this.trigger('doing', timeStep);
+      })
     }, timeStep * minute);
 
-    this.trigger('doing');
+    this.trigger('doing', timeStep);
 
+    this.element.on('click', '.js-btn-learn', event => {
+      this.eventEmitter.emit('finish', {taskId: this.taskId}).then(() => {
+        this.ui.learned();
+        //@TODO 弹框
+      })
+    });
     this.bindEmitterEvent();
   }
 
