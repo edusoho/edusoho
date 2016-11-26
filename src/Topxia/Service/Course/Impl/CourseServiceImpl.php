@@ -2098,6 +2098,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
       
         $this->getMemberDao()->deleteMember($member['id']);
+		$this->dispatchEvent(
+			'learning.quit',
+			new ServiceEvent($course, array('userId' => $userId))
+		);
 
         $this->getCourseDao()->updateCourse($courseId, array(
             'studentNum' => $this->getCourseStudentCount($courseId)
