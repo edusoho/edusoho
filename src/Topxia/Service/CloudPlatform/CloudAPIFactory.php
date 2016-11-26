@@ -45,6 +45,7 @@ class CloudAPIFactory
             ));
             $api->setLogger($logger);
 
+
             $serverConfigFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/api_server.json';
             $api->setApiServerConfigPath($serverConfigFile);
             $api->setApiType($type);

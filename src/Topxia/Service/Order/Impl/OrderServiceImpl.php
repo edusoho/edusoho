@@ -450,21 +450,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
-            $refund = $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
                 'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
 
-            $this->dispatchEvent(
-                'learning.quit',
-                new ServiceEvent($refund, array('userId' => $refund['userId']))
-            );
-
             $this->getOrderDao()->updateOrder($order['id'], array(
                 'status' => 'refunded'
             ));
+
             $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('退款申请(ID:%id%)已审核通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
