@@ -37,13 +37,13 @@ class CloudAPIFactory
             ));
             $api->setLogger($logger);
         } else {
-			$api = new EventCloudAPI(array(
+			$api = new FailoverCloudAPI(array(
 				'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
 				'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-				'apiUrl'    => empty($storage['cloud_api_event_server']) ? 'http://event.edusoho.net' : $storage['cloud_api_event_server'],
+				'apiUrl'    => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
 				'debug'     => empty($developer['debug']) ? false : true
 			));
-            $api->setLogger($logger);
+			$api->setLogger($logger);
 
             $serverConfigFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/api_server.json';
             $api->setApiServerConfigPath($serverConfigFile);
