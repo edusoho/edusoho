@@ -26,7 +26,7 @@
     <div class="pll pbl">
       邮件余额：
       <span class="h3 text-primary plm prs">{{account.remainCount}}</span>条
-      <a href="" class="btn btn-sm btn-primary">购买</a>
+      <a href="{{path('admin_cloud_buy', {type:'email'})}}" class="btn btn-sm btn-primary">购买</a>
       <div class="text-danger pts">
       {{account.message}}
       </div>
