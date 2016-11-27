@@ -516,7 +516,7 @@ admin:
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
             children:
                 admin_my_cloud:
-                    name: 教育云概览
+                    name: 概览
                     children:
                         admin_my_cloud_overview:
                             name: 教育云概览

@@ -5,19 +5,19 @@
     <div class="col-md-8">
       <div class="edu-user clearfix">
         <div class="user-part pull-left">
-          <img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}>
-          <div class="user-name text-md pts">Hi,<span class="text-primary">{{ isBinded.name }}</span></div>
+          <a href="{{path('admin_cloud_access')}}" target="_blank"><img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}></a>
+          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name }}</span></a></div>
         </div>
         <div class="user-part pull-left">
           <div class="ptm">余额</div>
           <div class="money">{{ overview.cashAccount }}</div>
-          <button class="btn btn-primary btn-xs mrs">充值</button> 
-          <a href="">费用中心</a>
+          <a href="{{path('admin_cloud_recharge')}}" target="_blank" class="btn btn-primary btn-xs mrs">充值</a> 
+          <a href="{{path('admin_cloud_cost_center')}}" target="_blank">费用中心</a>
         </div>
         <div class="user-part pull-left">
           <div class="ptm">代金券</div>
           <div class="money">{{ overview.couponAccount }}</div>
-          <a href="">代金券管理</a>
+          <a href="{{path('admin_cloud_cash_coupon')}}" target="_blank">代金券管理</a>
         </div>
       </div>
 
@@ -29,41 +29,41 @@
               <div class="panel-title">已开通服务</div>
             </div>
             <div class="panel-body">
-            {% if overview['services']['video'] == true %}
+            {% if overview.services.video == true %}
               <div class="col-md-4">
-                <a href="" class="my-products-item">
+                <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-playcircleoutline"></i>
                   云视频
                 </a>
               </div>
             {% endif %}
-            {% if overview['services']['live'] == true %}
+            {% if overview.services.live == true %}
               <div class="col-md-4">
-                <a href="" class="my-products-item">
+                <a href="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-zhibokecheng"></i>
                   云直播
                 </a>
               </div>
             {% endif %}
-            {% if overview['services']['sms'] == true %}
+            {% if overview.services.sms == true %}
               <div class="col-md-4">
-                <a href="" class="my-products-item">
+                <a href="{{path('admin_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-textsms"></i>
                   云短信
                 </a>
               </div>
             {% endif %}
-            {% if overview['services']['search'] == true %}
+            {% if overview.services.search == true %}
               <div class="col-md-4">
-                <a href="" class="my-products-item">
+                <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-search"></i>
                   云搜索
                 </a>
               </div>
             {% endif %}
-            {% if overview['services']['email'] == true %}
+            {% if overview.services.email == true %}
               <div class="col-md-4">
-                <a href="" class="my-products-item">
+                <a href="{{path('admin_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-search"></i>
                   云邮件
                 </a>
@@ -82,41 +82,41 @@
             <div class="panel-title">需要开通／购买的服务</div>
           </div>
           <div class="panel-body">
-          {% if overview['services']['video'] == false %}
+          {% if overview.services.video == false %}
             <div class="col-md-4">
-              <a href="" class="my-products-item">
+              <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-playcircleoutline"></i>
                 云视频
               </a>
             </div>
           {% endif %}
-          {% if overview['services']['live'] == false %}
+          {% if overview.services.live == false %}
             <div class="col-md-4">
-              <a href="" class="my-products-item">
+              <a hhref="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-zhibokecheng"></i>
                 云直播
               </a>
             </div>
           {% endif %}
-          {% if overview['services']['sms'] == false %}
+          {% if overview.services.sms == false %}
             <div class="col-md-4">
-              <a href="" class="my-products-item">
+              <a href="{{path('admin_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-textsms"></i>
                 云短信
               </a>
             </div>
           {% endif %}
-          {% if overview['services']['search'] == false %}
+          {% if overview.services.search == false %}
             <div class="col-md-4">
-              <a href="" class="my-products-item">
+              <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
                 云搜索
               </a>
             </div>
           {% endif %}
-          {% if overview['services']['email'] == false %}
+          {% if overview.services.email == false %}
             <div class="col-md-4">
-              <a href="" class="my-products-item">
+              <a href="{{path('admin_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
                 云邮件
               </a>

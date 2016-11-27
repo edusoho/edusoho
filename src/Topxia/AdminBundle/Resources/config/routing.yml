@@ -994,6 +994,21 @@ admin_cloud_recharge:
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_cost_center:
+    pattern:  /cloud/cost/center
+    defaults: { _controller: TopxiaAdminBundle:Cloud:costCenter }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_cash_coupon:
+    pattern:  /cloud/cash/coupon
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cashCoupon }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_service_overview:
+    pattern:  /cloud/service/{type}/overview
+    defaults: { _controller: TopxiaAdminBundle:Cloud:serviceOverview }
+    permissions: [admin_my_cloud_overview]
+
 admin_cloud_detail:
     pattern:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
