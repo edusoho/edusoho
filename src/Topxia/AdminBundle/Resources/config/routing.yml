@@ -1043,6 +1043,10 @@ admin_cloud_video_renew:
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_search_detail:
+    pattern: /cloud/search/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:searchDetail }
+
 # admin_customer_service:
 #     pattern: /customer/service
 #     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
