@@ -53,6 +53,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_buy', $params);
     }
 
+    public function videoDetailsAction()
+    {
+        return $this->redirectUrl('service_storage_chart');
+    }
+
     public function tlpAction(Request $request)
     {
         $params = array('type' => 'tlp');
