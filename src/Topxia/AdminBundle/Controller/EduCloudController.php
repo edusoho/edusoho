@@ -502,7 +502,6 @@ class EduCloudController extends BaseController
         try {
             $api         = CloudAPIFactory::create('root');
             $overview        = $api->get('/me/email/overview');
-            // var_dump($overview);exit();
             $emailSettings = $this->getSettingService()->get('cloud_email', array());
 
             if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status']) || (isset($overview['isBuy']) && $overview['isBuy'] == false)) {
@@ -518,7 +517,7 @@ class EduCloudController extends BaseController
             }
             return $this->render('TopxiaAdminBundle:EduCloud/email:overview.html.twig', array(
                 'account' => $overview['account'],
-                'items'   => $items
+                'items'   => isset($items) ? $items : null
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());

@@ -30,34 +30,36 @@ define(function(require, exports, module) {
   //               errormessageRequired: Translator.trans('签名3-8字，建议使用汉字')
   //           });
   //       });
-        var emailSendChart = echarts.init(document.getElementById('emailSendChart'));
-        var items = app.arguments.items;
-
-         var option = {
-            title: {
-                text: ''
-            },
-            tooltip: {},
-            legend: {
-                data:['时间']
-            },
-            xAxis: {
-                data: items.date
-            },
-            yAxis: {},
-            series: [{
-                name: '发送量(条)',
-                type: 'bar',
-                data: items.count
-            }],
-            color:['#428BCA'],
-            grid:{
-                show:true,
-                borderColor:'#fff',
-                backgroundColor:'#fff'
-            }
-        };
-        emailSendChart.setOption(option);
+        var emailSendChart = document.getElementById('emailSendChart');
+        if (emailSendChart != null) {
+            var emailSendChart = echarts.init(emailSendChart);
+            var items = app.arguments.items;
+            var option = {
+                title: {
+                    text: ''
+                },
+                tooltip: {},
+                legend: {
+                    data:['时间']
+                },
+                xAxis: {
+                    data: items.date
+                },
+                yAxis: {},
+                series: [{
+                    name: '发送量(条)',
+                    type: 'bar',
+                    data: items.count
+                }],
+                color:['#428BCA'],
+                grid:{
+                    show:true,
+                    borderColor:'#fff',
+                    backgroundColor:'#fff'
+                }
+            };
+            emailSendChart.setOption(option);
+        }
 	}
 	
 });
