@@ -224,6 +224,9 @@ class EduCloudController extends BaseController
 
     private function dealData($data)
     {
+        if (empty($data)) {
+            return null;
+        }
         foreach ($data as $value) {
             $items['date'][] = $value['date'];
             $items['amount'][] = $value['amount'];            
