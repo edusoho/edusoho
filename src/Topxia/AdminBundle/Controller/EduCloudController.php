@@ -1325,7 +1325,7 @@ class EduCloudController extends BaseController
             }
             return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
                 'account'  => $overview['account'],
-                'items'  => $items
+                'items'  => isset($items) ? $items : null
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
