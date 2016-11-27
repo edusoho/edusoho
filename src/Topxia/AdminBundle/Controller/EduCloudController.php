@@ -719,7 +719,7 @@ class EduCloudController extends BaseController
             }
             return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
                 'searchOverview' => $searchOverview,
-                'items'          => $items
+                'items'          => isset($items) ? $items : null
             ));
         } else {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
