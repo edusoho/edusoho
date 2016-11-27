@@ -22,10 +22,10 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <a href="">升级</a>｜
-    {% if account.renewInfo['status'] == true %} 
+    {% if account.renewInfo.status == true %} 
       <span class="text-muted">已续费</span>
       <span class="text-danger pts">
-        {{account.renewInfo['message']|default('')}}
+        {{account.renewInfo.message|default('')}}
       </span>
     {% else %}
       <a href="">续费</a>
@@ -51,7 +51,7 @@
   <div class="panel-heading">
     直播峰值趋势
     <span class="text-muted">（最近1个月）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    <a class="pull-right" href="{{path('admin_cloud_live_details')}}" target="_blank">更多&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="liveTopChart" style="width: 100%;height:400px;"></div>
