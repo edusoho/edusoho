@@ -87,6 +87,21 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_renew');
     }
 
+    public function smsDetailAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_list_detail');
+    }
+
+    public function smsSendTrendAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_count');
+    }
+
+    public function smsSettingAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_setting');
+    }
+
     protected function redirectUrl($routingName, $params = array())
     {
         $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);

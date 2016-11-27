@@ -1043,6 +1043,18 @@ admin_cloud_video_renew:
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_sms_detail:
+    pattern: /cloud/sms/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsDetail }
+
+admin_cloud_sms_send_trend:
+    pattern: /cloud/sms/send/trend
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSendTrend }
+
+admin_cloud_sms_setting:
+    pattern: /cloud/sms/setting
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSetting }
+
 # admin_customer_service:
 #     pattern: /customer/service
 #     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }

@@ -31,7 +31,7 @@
       短信余额：
       <span class="h3 text-primary plm prs">{{account.remainCount}}</span>条
       <span class="color-gray">（信用额度剩余: {{account.creditLimit}}条）</span>
-      <a href="" class="btn btn-sm btn-primary">购买</a>
+      <a href="{{ path('admin_cloud_buy', {type:'sms'}) }}" target="_blank" class="btn btn-sm btn-primary">购买</a>
       <div class="text-danger pts">
       {{account.message}}
       </div>
@@ -39,17 +39,16 @@
     <div class="pll pbm">
       今日发送：
       <span class="color-gray phm text-md">{{account.todayUsed}} 条</span>
-      <a href="">发送记录</a>｜<a href="">发送明细</a> 
+      <a href="{{path('admin_cloud_sms_account')}}" target="_blank">发送记录</a>｜<a href="{{path('admin_cloud_sms_detail')}}" target="_blank">发送明细</a> 
     </div>
   </div>
 </div>
 
 <div class="panel panel-default panel-chart">
-  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
   <div class="panel-heading">
     短信发送趋势
     <span class="text-muted">（最近1个月）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    <a class="pull-right" href="{{path('admin_cloud_sms_send_trend')}}" target="_blank">更多&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="smsSendChart" style="width: 100%;height:400px;"></div>
