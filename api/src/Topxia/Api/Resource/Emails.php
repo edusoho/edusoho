@@ -23,7 +23,7 @@ class Emails extends BaseResource
 
         $token['rawPassword'] = array(
             'salt'     => $salt,
-            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
+            'password' => $this->getPasswordEncoder()->encodePassword($token['password'], $salt)
         );
 
         $site  = $this->setting('site', array());
