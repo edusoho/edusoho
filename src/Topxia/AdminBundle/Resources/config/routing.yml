@@ -1928,12 +1928,12 @@ admin_cloud_attachment_render:
     permissions: [admin_cloud_attachment_manage]
 
 # 添加云直播
-admin_setting_cloud_edulive:
+admin_cloud_edulive_overview:
     pattern:  /cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
 
-admin_cloud_setting_edulive:
-    pattern:  /cloud/edulive/setting
+admin_setting_cloud_edulive:
+    pattern:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
 
 # 添加重建索引模态框

@@ -1355,7 +1355,7 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
             $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
-            return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
+            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
         try {
             $api         = CloudAPIFactory::create('root');
