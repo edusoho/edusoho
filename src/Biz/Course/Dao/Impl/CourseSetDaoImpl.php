@@ -3,8 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseSetDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class CourseSetDaoImpl extends SoftDeleteDaoImpl implements CourseSetDao
+class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 {
     protected $table = 'c2_course_set';
 

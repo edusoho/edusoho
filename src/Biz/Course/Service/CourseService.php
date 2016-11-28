@@ -14,15 +14,19 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
-    public function copyCourse($copyId, $course);
-
     public function deleteCourse($id);
 
     public function closeCourse($id);
 
-    public function saveCourseMarketing($courseMarketing);
+    public function publishCourse($id, $userId);
 
-    public function preparePublishment($id, $userId);
+    public function getCourseItems($courseId);
 
-    public function auditPublishment($id, $userId, $reject, $remark);
+    public function tryManageCourse($courseId);
+
+    public function getNextNumberAndParentId($courseId);
+
+    public function tryTakeCourse($courseId);
+
+    public function isCourseStudent($courseId, $userId);
 }

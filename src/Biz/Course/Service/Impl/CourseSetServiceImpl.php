@@ -17,10 +17,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function createCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+            throw $this->createInvalidArgumentException("Lack of required fields");
         }
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的课程类型'));
+            throw $this->createInvalidArgumentException("Invalid Param: type");
         }
 
         $courseSet = ArrayToolkit::parts($courseSet, array(
@@ -40,10 +40,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'  => 0,
             'learnMode'   => 'freeOrder',
             'isDefault'   => 1,
-            'status'      => 'draft',
-            'auditStatus' => 'draft'
+            'status'      => 'draft'
         );
-        $this->getCourseDao()->create($defaultCourse);
+        $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;
     }
@@ -51,10 +50,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateCourseSet($id, $fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+            throw $this->createInvalidArgumentException("Lack of required fields");
         }
         if (!in_array($fields['serializeMode'], array('none', 'serialized', 'finished'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的连载类型'));
+            throw $this->createInvalidArgumentException("Invalid Param: serializeMode");
         }
 
         $fields = ArrayToolkit::parts($fields, array(
@@ -92,10 +91,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+            throw $this->createInvalidArgumentException("Lack of Required Fields");
         }
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的课程类型'));
+            throw $this->createInvalidArgumentException("Invalid Param: type");
         }
     }
 
@@ -104,9 +103,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createDao('Course:CourseSetDao');
     }
 
-    protected function getCourseDao()
+    protected function getCourseService()
     {
-        return $this->createDao('Course:CourseDao');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTagService()

@@ -10,7 +10,7 @@
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
     {{'教学计划列表'|trans}}
-    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('courseset_manage_course_create', {courseSetId: courseSet.id})}}"><i class="es-icon es-icon-anonymous-iconfont"></i>{{'创建教学计划'|trans}}</button>
+    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}"><i class="es-icon es-icon-anonymous-iconfont"></i>{{'创建教学计划'|trans}}</button>
   </div>
 
   <div class="panel-body">
@@ -34,27 +34,27 @@
       			<td>course.price</td>
       			<td>
       				<div class="btn-group">
-		                <a class="btn btn-default btn-sm" href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
+		                <a class="btn btn-default btn-sm" href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
 		                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 		                  <span class="caret"></span>
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('courseset_preview', {id: courseSet.id, courseId: course.id})}}">{{'预览'|trans}}</a>
+		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}">{{'预览'|trans}}</a>
 		                  </li>
 	      				  <li>
-	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('courseset_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
+	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
 	      				  </li>
                     {% if course.status|default('') == 'published' %}
       				      <li>
-      				      	<a href="javascript:;" data-url="{{path('courseset_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course">{{'关闭'|trans}}</a>
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course">{{'关闭'|trans}}</a>
       				      </li>
                     {% else %}
       				      <li>
-      				      	<a href="javascript:;" data-url="{{path('courseset_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-delete-course">{{'删除'|trans}}</a>
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-delete-course">{{'删除'|trans}}</a>
       				      </li>
       				      <li>
-      				      	<a href="javascript:;" data-url="{{path('courseset_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-publish-course">{{'发布'|trans}}</a><!-- 已发布的不能删除，可关闭 -->
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-publish-course">{{'发布'|trans}}</a><!-- 已发布的不能删除，可关闭 -->
       				      </li>
                     {% endif %}
 		                </ul>

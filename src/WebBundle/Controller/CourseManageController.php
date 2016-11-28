@@ -1,5 +1,4 @@
 <?php
-
 namespace WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -45,16 +44,16 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        // $course      = $this->tryManageCourse($courseId);
-        $courseSet     = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course        = $this->getCourseService()->getCourse($courseId);
-        $tasks         = $this->getTaskService()->findUserTasksByCourseId($courseId, $this->getUser()->getId());
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'         => $tasks,
-            'course'        => $course,
-            'courseSet'     => $courseSet,
-            'defaultCourse' => $defaultCourse
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course      = $this->getCourseService()->tryManageCourse($courseId);
+        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+
+        return $this->render('WebBundle:CourseManage:tasks.html.twig', array(
+            'tasks'     => $tasks,
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'items'     => $courseItems
         ));
     }
 
@@ -130,24 +129,21 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function preparePublishmentAction(Request $request, $courseSetId, $courseId)
+    public function publishAction(Request $request, $courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->preparePublishment($courseId, $this->getUser()->getId());
+            $this->getCourseService()->publishCourse($courseId, $this->getUser()->getId());
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 
-    public function auditPublishmentAction(Request $request, $courseSetId, $courseId)
+    public function courseItemsSortAction(Request $request, $courseId)
     {
-        try {
-            $this->getCourseService()->auditPublishment($courseId, $this->getUser()->getId());
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        $ids = $request->request->get("ids");
+        $this->getCourseService()->sortCourseItems($courseId, $ids);
+        return $this->createJsonResponse(array('result' => true));
     }
 
     protected function formatCourseDate($course)
@@ -167,13 +163,13 @@ class CourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

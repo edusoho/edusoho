@@ -16,6 +16,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
         $this->assertTrue(sizeof($courses) === 1);
+        $this->assertTrue($courses[0]['isDefault'] == 1);
     }
 
     public function testUpdate()
