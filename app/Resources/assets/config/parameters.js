@@ -44,6 +44,16 @@ const parameters = {
         '**/samples/**',
         // '**/lang/!(zh-cn.js)',
       ]
+    },
+    {
+      name: 'justgage',
+      ignore: [
+        '**/examples/**',
+        'bower.json',
+        'package.json',
+        'README.md',
+        'LICENSE',
+      ]
     }
   ]
 }
