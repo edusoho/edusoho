@@ -80,7 +80,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
 
         $subtitle = array();
 
-        $subtitle['name'] = $fields['name'];
+        $subtitle['name'] = rtrim($fields['name'], '.srt');
         if (empty($fields['ext'])) {
             $subtitle['ext'] = (string) substr(strrchr($fields['name'], '.'), 1);
         } else {

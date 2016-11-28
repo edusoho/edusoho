@@ -4,7 +4,7 @@
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block main %}
 	{% set goto = path('classroom_reviews',{id:classroom.id}) %}
-	{% set canAccess = (member and 'headTeacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+	{% set canAccess = (member and 'headTeacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default(null) or 'ROLE_ADMIN' in app.user.roles|default(null) %}
 
   {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
 
