@@ -5,38 +5,56 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\CurlToolkit;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class ShortMessages extends BaseResource
 {
-    private $errorMessage = array(
-        '5001' => '手机号未验证',
-        ''     => ''
-    );
-
     public function post(Application $app, Request $request)
     {
         $data = $request->query->all();
 
         $token = json_decode($data);
 
-        if (!$this->getUserService()->getUserByVerifiedMobile($token['mobile'])) {
-            return $this->returnError('5001');
+        //登录用户，重置密码
+        if (!empty($token['userId'])) {
+            return $this->sendVerify($token);
         }
 
-        $params = array(
-            'mobile'       => $token['mobile'],
-            'category'     => 'sms_kuozhi_verify',
-            'captcha_code' => $token['captchaCode']
-        );
+        //同一个ip访问次数超过5次
+        if () {
+        }
 
-        $result = CurlToolkit::request('POST', 'open.edusoho.com/sms/verify', $params);
+        if (!$this->getUserService()->getUserByVerifiedMobile($token['mobile'])) {
+            return $this->error('5001', '手机号未验证');
+        }
 
-        return $result;
+        return $this->sendVerify($token);
     }
 
-    public function returnError($code)
+    protected function sendVerify($token)
     {
-        return $this->errorMessage[$code];
+        $smsCode = $this->generateSmsCode();
+
+        $api    = CloudAPIFactory::create('leaf');
+        $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
+            'mobile'      => $token['mobile'], 
+            'category'    => $token['category'], 
+            'description' => '发送手机验证码', 
+            'verify'      => $smsCode
+        ));
+
+        return $result;   
+    }
+
+    protected function generateSmsCode($length = 6)
+    {
+        $code = rand(0, 9);
+
+        for ($i = 1; $i < $length; $i++) {
+            $code = $code.rand(0, 9);
+        }
+
+        return $code;
     }
 
     protected function getUserService()
