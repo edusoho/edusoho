@@ -1359,6 +1359,10 @@ password_reset_update:
     pattern:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+raw_password_reset_update:
+    pattern: /raw/password/reset/update
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:changeRawPassword}
+
 password_reset_check_mobile:
     pattern:  /password/reset/check/mobile
     defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }

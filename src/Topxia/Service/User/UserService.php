@@ -81,6 +81,14 @@ interface UserService
     public function changePassword($id, $password);
 
     /**
+     * 变更原始密码
+     *
+     * @param [integer] $id       用户ID
+     * @param [string]  $password 新密码
+     */
+    public function changeRawPassword($id, $password);
+
+    /**
      * 校验密码是否正确
      *
      * @param  [integer] $id                                                   用户ID

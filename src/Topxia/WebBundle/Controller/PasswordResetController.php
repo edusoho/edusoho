@@ -119,6 +119,19 @@ class PasswordResetController extends BaseController
         ));
     }
 
+    public function changeRawPassword(Request $request)
+    {
+        $token = $request->query->all();
+
+        $id = $token['userId'];
+
+        $flag = $this->getUserService()->changeRawPassword($id, $token['rawPassword']);
+
+        if ($flag ) {
+            
+        }
+    }
+
     public function resetBySmsAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

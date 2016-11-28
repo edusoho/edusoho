@@ -412,6 +412,27 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function changeRawPassword($id, $rawPassword)
+    {
+        if (empty($rawPassword)) {
+            throw new InvalidArgumentException('参数不正确，更改密码失败');
+        }
+
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            throw new ResourceNotFoundException('User', $id);
+        }
+
+        $this->getUserDao()->updateUser($id, $rawPassword);
+
+        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+
+        $this->getLogService()->info('user', 'password-changed', sprintf('用户%s(ID:%u)重置密码成功', $user['email'], $user['id']));
+
+        return true;
+    }
+
     public function changePayPassword($userId, $newPayPassword)
     {
         if (empty($newPayPassword)) {
