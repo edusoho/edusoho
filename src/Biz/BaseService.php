@@ -2,24 +2,28 @@
 
 namespace Biz;
 
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceException;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\Common\AccessDeniedException;
-use Topxia\Service\Common\ResourceNotFoundException;
+use Topxia\Service\User\CurrentUser;
+use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
     /**
      * @param  $alias
-     * @return GeneralDaoImpl
+     * @return GeneralDaoInterface
      */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
     }
 
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];
@@ -30,38 +34,39 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz->service($alias);
     }
 
-    /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
-     */
-    protected function createServiceException($message = 'Service Exception', $code = 0)
+    protected function getDispatcher()
     {
-        return new ServiceException($message, $code);
-    }
-
-    /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
-     */
-    protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
-    {
-        return new AccessDeniedException($message, null, $code);
-    }
-
-    /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
-     */
-    protected function createNotFoundException($message = 'Not Found', $code = 0)
-    {
-        return new ResourceNotFoundException($message, $code);
+        return $this->biz['dispatcher'];
     }
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
 
-        return ServiceKernel::dispatcher()->dispatch($eventName, $event);
+        return $this->getDispatcher()->dispatch($eventName, $event);
+    }
+
+    protected function createNotFoundException($message = '')
+    {
+        return new NotFoundException($message);
+    }
+
+    protected function createServiceException($message = '')
+    {
+        return new ServiceException($message);
+    }
+
+    protected function createAccessDeniedException($message = '')
+    {
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '')
+    {
+        return new InvalidArgumentException($message);
     }
 }

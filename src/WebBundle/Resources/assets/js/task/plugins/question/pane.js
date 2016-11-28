@@ -1,4 +1,4 @@
-import ThreadShowWidget from '../../course-thread/show-widget'
+// import ThreadShowWidget from '../../course-thread/show-widget'
 
 class QuestionPane {
   constructor(option) {
@@ -11,21 +11,22 @@ class QuestionPane {
     this._init();
   }
   _init() {
-    $('.expand-form-trigger').focusin(event=>this.expandForm(event));
+    this.$element.on('focusin','.expand-form-trigger',event=>this.expandForm(event));
     $('.collapse-form-btn').click(event=>this.collapseForm(event));
     $('.show-question-item').click(event=>this.showItem(event));
     $('.back-to-list').click(event=>this.backToList(event));
   }
+
   showList() {
     let toolbar = this.plugin.toolbar;
-    $.get(this.plugin.api.init, {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
+    $.get('http://www.esdev.com/lessonplugin/question/init', {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
         this._dataInitialized = true;
-        this.element.html(html);
+        this.$element.html(html);
         this.createFormElement = $('#' + this.createFormId);
         this._showListPane();
-        this._showWidget = new ThreadShowWidget({
-            element: $('[data-role=show-pane]')
-        });
+        // this._showWidget = new ThreadShowWidget({
+        //     element: $('[data-role=show-pane]')
+        // });
     });
   }
   show() {
@@ -33,6 +34,7 @@ class QuestionPane {
     this.showList();
   }
   expandForm() {
+    console.log("expandForm");
     let $form = this.createFormElement;
     if ($form.hasClass('form-expanded')) {
         return ;
@@ -46,33 +48,33 @@ class QuestionPane {
 
     this.editor = editor;
 
-    let validator = $form.validate({
-      onkeyup: false,
-      rules: {
-          'question[title]': {
-            required: true,
-          },
-          length: {
-            required: true,
-            digits: true,
-            max: 300
-          },
-          remark: {
-            maxlength: 1000
-          },
-      },
-    });
+    // let validator = $form.validate({
+    //   onkeyup: false,
+    //   rules: {
+    //       'question[title]': {
+    //         required: true,
+    //       },
+    //       length: {
+    //         required: true,
+    //         digits: true,
+    //         max: 300
+    //       },
+    //       remark: {
+    //         maxlength: 1000
+    //       },
+    //   },
+    // });
 
-    if(validator.form()) {
-      $.post($form.attr('action'), $form.serialize(), function(html) {
-        pane.$('[data-role=list]').prepend(html);
-        pane.$('.empty-item').remove();
-        pane.collapseForm();
-      }).error(function(response){
-        var response = $.parseJSON(response.responseText);
-        Notify.danger(response.error.message);
-      });
-    }
+    // if(validator.form()) {
+    //   $.post($form.attr('action'), $form.serialize(), function(html) {
+    //     pane.$('[data-role=list]').prepend(html);
+    //     pane.$('.empty-item').remove();
+    //     pane.collapseForm();
+    //   }).error(function(response){
+    //     var response = $.parseJSON(response.responseText);
+    //     Notify.danger(response.error.message);
+    //   });
+    // }
     this.createFormElement.find('.detail-form-group').removeClass('hide');
   }
   collapseForm() {
@@ -101,9 +103,9 @@ class QuestionPane {
     this.showList();
   }
   _showListPane() {
-      this.$('[data-role=show-pane]').hide();
-      this.$('[data-role=list-pane]').show();
-      $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
+      $('[data-role=show-pane]').hide();
+      $('[data-role=list-pane]').show();
+      // $('.question-list-pane').perfectScrollbar({wheelSpeed:50});
       return $('[data-role=list-pane]');
   }
   _showItemPane() {
@@ -113,6 +115,7 @@ class QuestionPane {
 
 }
 
+export default QuestionPane;
 
 
 

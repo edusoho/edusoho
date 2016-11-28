@@ -81,6 +81,50 @@ class SettingController extends BaseController
         ));
     }
 
+    public function mobileIapProductAction(Request $request)
+    {
+        $products = $this->getSettingService()->get('mobile_iap_product', array());
+        if ($request->getMethod() == 'POST') {
+            $fileds = $request->request->all();
+
+            //新增校验
+            if (empty($fileds['productId']) || empty($fileds['title']) || empty($fileds['price']) || !is_numeric($fileds['price'])) {
+                $this->setFlashMessage('danger', $this->trans('产品ID或商品名称或价格输入不正确'));
+                return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
+            }
+
+            //新增
+            $products[$fileds['productId']] = array(
+                'productId' => $fileds['productId'],
+                'title' => $fileds['title'],
+                'price' => $fileds['price']
+            );
+            $this->getSettingService()->set('mobile_iap_product', $products);
+
+            $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
+            $this->setFlashMessage('success', $this->trans('IOS内购产品设置已保存'));
+            return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
+            
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile-iap-product.html.twig', array(
+            'products'     => $products
+        ));
+    }
+
+    public function mobileIapProductDeleteAction(Request $request, $productId)
+    {
+        $products = $this->getSettingService()->get('mobile_iap_product', array());
+
+        if (array_key_exists($productId, $products)) {
+            unset($products[$productId]);
+        }
+
+        $this->getSettingService()->set('mobile_iap_product', $products);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function mobilePictureUploadAction(Request $request, $type)
     {
         $fileId = $request->request->get('id');
@@ -472,76 +516,6 @@ class SettingController extends BaseController
 
         return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
             'customerServiceSetting' => $customerServiceSetting
-        ));
-    }
-
-    public function userCenterAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('user_partner', array());
-
-        $default = array(
-            'mode'             => 'default',
-            'nickname_enabled' => 0,
-            'avatar_alert'     => 'none',
-            'email_filter'     => ''
-        );
-
-        $setting = array_merge($default, $setting);
-
-        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
-        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
-
-        if ($request->getMethod() == 'POST') {
-            $data                 = $request->request->all();
-            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
-            $setting              = array('mode' => $data['mode'],
-                'nickname_enabled'                   => $data['nickname_enabled'],
-                'avatar_alert'                       => $data['avatar_alert'],
-                'email_filter'                       => $data['email_filter']
-            );
-            $this->getSettingService()->set('user_partner', $setting);
-
-            $discuzConfig  = $data['discuz_config'];
-            $phpwindConfig = $data['phpwind_config'];
-
-            if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
-                    goto response;
-                }
-
-                file_put_contents($discuzConfigPath, $discuzConfig);
-            } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->trans("配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。", array('%phpwindConfigPath%' => $phpwindConfigPath)));
-                    goto response;
-                }
-
-                file_put_contents($phpwindConfigPath, $phpwindConfig);
-            }
-
-            $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
-            $this->setFlashMessage('success', $this->trans('用户中心设置已保存！'));
-        }
-
-        if (file_exists($discuzConfigPath)) {
-            $discuzConfig = file_get_contents($discuzConfigPath);
-        } else {
-            $discuzConfig = '';
-        }
-
-        if (file_exists($phpwindConfigPath)) {
-            $phpwindConfig = file_get_contents($phpwindConfigPath);
-        } else {
-            $phpwindConfig = '';
-        }
-
-        response:
-        return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
-            'setting'       => $setting,
-            'discuzConfig'  => $discuzConfig,
-            'phpwindConfig' => $phpwindConfig
         ));
     }
 

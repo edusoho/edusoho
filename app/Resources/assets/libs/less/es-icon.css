@@ -1,4 +1,3 @@
-
 @font-face {font-family: "es-icon";
   src: url('fonts/es-icon.eot');
   src: url('fonts/es-icon.eot#iefix') format('embedded-opentype'), 
@@ -7,6 +6,8 @@
   url('fonts/es-icon.svg#es-icon') format('svg'); 
 }
 
+<<<<<<< HEAD
+=======
 .es-icon {
   font-family:"es-icon" !important;
   font-size:16px;
@@ -15,6 +16,8 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+
+>>>>>>> feature/course2.0-activity
 .es-icon-qrcode:before { content: "\e615"; }
 .es-icon-time:before { content: "\e69d"; }
 .es-icon-videocam:before { content: "\e678"; }
@@ -28,6 +31,7 @@
 .es-icon-angledoubleright:before { content: "\e67d"; }
 .es-icon-angledoubleleft:before { content: "\e67e"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
+.es-icon-zhongchuan:before { content: "\e7cc"; }
 .es-icon-portrait:before { content: "\e65e"; }
 .es-icon-accesstime:before { content: "\e658"; }
 .es-icon-accountcircle:before { content: "\e668"; }
@@ -146,6 +150,7 @@
 .es-icon-web:before { content: "\e67c"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
+.es-icon-diqiu:before { content: "\e6c5"; }
 .es-icon-icattachfileblack24px:before { content: "\e681"; }
 .es-icon-morehoriz:before { content: "\e665"; }
 .es-icon-introduction1:before { content: "\e673"; }
@@ -163,6 +168,7 @@
 .es-icon-viewcomfy:before { content: "\e68c"; }
 .es-icon-loading:before { content: "\e68d"; }
 .es-icon-calendarok:before { content: "\e6a5"; }
+.es-icon-self:before { content: "\e6c4"; }
 .es-icon-trophy:before { content: "\e691"; }
 .es-icon-arrowdropleft:before { content: "\e68f"; }
 .es-icon-hd:before { content: "\e6bb"; }
@@ -194,7 +200,9 @@
 .es-icon-putongkecheng:before { content: "\e6b1"; }
 .es-icon-zhibokecheng:before { content: "\e6b2"; }
 .es-icon-zhibokecheng2:before { content: "\e6b3"; }
+.es-icon-zanting1:before { content: "\e6c6"; }
 .es-icon-ting:before { content: "\e6b8"; }
+.es-icon-sun:before { content: "\e6c3"; }
 .es-icon-sousuo:before { content: "\e6b4"; }
 .es-icon-yulan:before { content: "\e6b5"; }
 .es-icon-xinxi:before { content: "\e6b6"; }
@@ -208,3 +216,12 @@
 .es-icon-forward10:before { content: "\e6ae"; }
 .es-icon-replay5:before { content: "\e6af"; }
 .es-icon-replay10:before { content: "\e6c0"; }
+.es-icon-rewardsolid:before { content: "\e6c2"; }
+.es-icon-zhouqikechengtubiao1:before { content: "\e6c1"; }
+<<<<<<< HEAD
+.es-icon-subtitle:before { content: "\e783"; }
+=======
+.es-icon-subtitle:before { content: "\e783"; }
+.es-icon--check-circle:before { content: "\e6c7"; }
+.es-icon-undone-check:before { content: "\e6c8"; }
+>>>>>>> feature/course2.0-activity

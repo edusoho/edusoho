@@ -5,8 +5,6 @@ namespace Topxia\Service\Common;
 use Codeages\Biz\Framework\Context\Biz;
 use Mockery;
 use Topxia\Service\User\CurrentUser;
-
-
 use Permission\Common\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase

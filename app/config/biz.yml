@@ -9,9 +9,8 @@ parameters:
             port: "%database_port%"
             driver: pdo_mysql
             charset: UTF8
-        cache_directory: "%kernel.root_dir%/../var/cache"
-        tmp_directory: "%kernel.root_dir%/../var/tmp"
-        log_directory: "%kernel.root_dir%/../var/logs"
+        cache_directory: "%kernel.cache_dir%"
+        log_directory: "%kernel.logs_dir%"
         plugin.directory: "%kernel.root_dir%/../plugins"
         plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
 

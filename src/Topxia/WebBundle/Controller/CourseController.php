@@ -343,15 +343,13 @@ class CourseController extends CourseBaseController
             }
         }     
 
-        if ($course['parentId']) {
+        if ($course['parentId'] && empty($member)) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
-        }
 
-        if (empty($member)) {
             $user   = $this->getCurrentUser();
             $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
 
@@ -359,6 +357,7 @@ class CourseController extends CourseBaseController
                 $course['studentNum']++;
             }
         }
+
 
         $this->getCourseService()->hitCourse($id);
 
@@ -440,7 +439,6 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user                  = $this->getCurrentUser();
-
         if (empty($member)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
@@ -448,7 +446,7 @@ class CourseController extends CourseBaseController
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
-
+        
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
@@ -504,14 +502,20 @@ class CourseController extends CourseBaseController
             }
 
             if ($member && $member['levelId'] > 0) {
-                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                if($member['joinedType'] == 'course'){
+                    $vipLevelId = $course['vipLevelId'];
+                } elseif ($member['joinedType'] == 'classroom') {
+                    $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+                    $vipLevelId = $classroom['vipLevelId'];
+                }
+
+                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $vipLevelId) != 'ok') {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
                 }
             }
         } catch (Exception $e) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('抱歉，未发布课程不能学习！'));
         }
-
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
             'course'    => $course,
             'starttime' => $starttime
@@ -619,42 +623,11 @@ class CourseController extends CourseBaseController
      */
     public function headerAction($course, $manage = false)
     {
-        $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-        if (empty($member)) {
-            $member['deadline'] = 0;
-            $member['levelId']  = 0;
-        }
-
-        $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
-
-        if ($member['levelId'] > 0) {
-            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
-        } else {
-            $vipChecked = 'ok';
-        }
-
-        if ($this->isBecomeStudentFromCourse($member)
-            || $this->isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)) {
-            $canExit = true;
-        } else {
-            $canExit = false;
-        }
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course'       => $course,
-            'canManage'    => $this->getCourseService()->canManageCourse($course['id']),
-            'canExit'      => $canExit,
-            'member'       => $member,
-            'users'        => $users,
-            'manage'       => $manage,
-            'isNonExpired' => $isNonExpired,
-            'vipChecked'   => $vipChecked,
-            'isAdmin'      => $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')
+            'users'        => $users
         ));
     }
 
@@ -829,11 +802,15 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function rebuyAction(Request $request, $courseId)
+    public function deadlineReachAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();
 
-        $this->getCourseService()->removeStudent($courseId, $user['id']);
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getCourseService()->quitCourseByDeadlineReach($user['id'], $courseId);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
     }

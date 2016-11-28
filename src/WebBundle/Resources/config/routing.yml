@@ -1,6 +1,28 @@
+course_manage_course_set:
+  path: /course_set/{courseId}/courses
+  defaults: {_controller:WebBundle:TaskManage:courseSet}
+
 course_manage_tasks:
-  path:  /course/{courseId}/tasks
-  defaults: { _controller: WebBundle:TaskManage:tasks }
+  path:  /course/{courseId}/manage/tasks
+  defaults: { _controller: WebBundle:CourseManage:tasks }
+
+course_manage_items_sort:
+  path:  /course/{courseId}/manage/items/sort
+  defaults: { _controller: WebBundle:CourseManage:courseItemsSort }
+  methods: ['POST']
+
+course_manage_chapter_create:
+    path:  /course/{id}/manage/chapter/create
+    defaults: { _controller: WebBundle:CourseChapterManage:create }
+
+course_manage_chapter_edit:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: WebBundle:CourseChapterManage:edit }
+
+course_manage_chapter_delete:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: WebBundle:CourseChapterManage:delete }
+    methods: [POST]
 
 course_manage_task_create:
   path:  /course/{courseId}/task
@@ -25,12 +47,14 @@ course_task_show:
 course_task_activity_show:
   path:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: WebBundle:Task:taskActivity }
+
 task_live_entry:
   path: /course/{courseId}/activity/{id}/live_entry
   defaults: {_controller: WebBundle:LiveActivity:liveEntry}
-course_task_trigger:
-  path:  /course/{courseId}/task/{id}/trigger/{eventName}
-  defaults: { _controller: WebBundle:Task:trigger }
+
+course_activity_trigger:
+  path: /course/{courseId}/activity/{activityId}/trigger
+  defaults: { _controller: WebBundle:Activity:trigger }
   methods: [POST]
 
 media_materiallib_choose:
@@ -41,9 +65,9 @@ media_materiallib_contacts:
     path: /media/materiallib/contacts
     defaults: { _controller: WebBundle:FileChooser:findMySharingContacts }
 
-media_corusefile_choose:
+media_course_file_choose:
     path: /media/corusefile/{courseId}/choose
-    defaults: { _controller: WebBundle:FileChooser:CourseFileChoose }
+    defaults: { _controller: WebBundle:FileChooser:courseFileChoose }
 
 media_video_import:
     path: /media/course/{courseId}/import

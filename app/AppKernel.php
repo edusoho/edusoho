@@ -137,7 +137,8 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
 
     public function getPlugins()
     {
-        return $this->pluginConfigurationManager->getInstalledPlugins();
+        return $this->plugins;
+        // return $this->pluginConfigurationManager->getInstalledPlugins();
     }
 
     public function getPluginConfigurationManager()
@@ -164,19 +165,8 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
         if(!$this->isServiceKernelInit){
             $container     = $this->getContainer();
             $biz = $container->get('biz');
-            $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
-            $serviceKernel->setEnvVariable(array(
-                'host'          => $this->request->getHttpHost(),
-                'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
-                'basePath'      => $this->request->getBasePath(),
-                'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
-                ->setTranslatorEnabled(true)
-                ->setTranslator($container->get('translator'))
-                ->setParameterBag($container->getParameterBag())
-                ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
-                ->setConnection($biz['db']);
 
-            $serviceKernel->getConnection()->exec('SET NAMES UTF8');
+            $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
             $currentUser = new CurrentUser();
             $currentUser->fromArray(array(
@@ -185,8 +175,21 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
                 'currentIp' => $this->request->getClientIp(),
                 'roles'     => array()
             ));
+
             $biz['user'] = $currentUser;
-            $serviceKernel->setCurrentUser($currentUser);
+            $serviceKernel
+                ->setBiz($biz)
+                ->setCurrentUser($currentUser)
+                ->setEnvVariable(array(
+                    'host'          => $this->request->getHttpHost(),
+                    'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+                    'basePath'      => $this->request->getBasePath(),
+                    'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+                ->setTranslatorEnabled(true)
+                ->setTranslator($container->get('translator'))
+                ->setParameterBag($container->getParameterBag())
+                ->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+
             $this->isServiceKernelInit = true;
         }
     }

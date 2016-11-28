@@ -11,39 +11,62 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
 
     public function getApp($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function getAppByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($code)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($code)) ? : null;
+        });
     }
 
     public function findAppsByCodes(array $codes)
     {
+        $codes = array_unique($codes);
+
         if (empty($codes)) { 
             return array(); 
         }
 
-        $marks = str_repeat('?,', count($codes) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE code IN ({$marks});";
+        $that = $this;
+        sort($codes);
+        $key = 'codes:'.implode("-", $codes);
+        return $this->fetchCached($key, $codes, function ($codes) use ($that) {
+            $marks = str_repeat('?,', count($codes) - 1) . '?';
+            $sql ="SELECT * FROM {$that->getTable()} WHERE code IN ({$marks});";
 
-        return $this->getConnection()->fetchAll($sql, $codes);
+            return $that->getConnection()->fetchAll($sql, $codes);
+        });
     }
 
     public function findApps($start, $limit)
     {
-         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} ORDER BY installedTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql);       
+        $that = $this;
+        $this->filterStartLimit($start, $limit);
+
+        return $this->fetchCached("apps:{$start}:{$limit}", $start, $limit, function ($start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} ORDER BY installedTime DESC LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAll($sql);       
+        });
     }
 
     public function findAppCount()
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table}";
-        return $this->getConnection()->fetchColumn($sql);
+        $that = $this;
+
+        return $this->fetchCached("count", function () use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()}";
+            return $that->getConnection()->fetchColumn($sql);
+        });
     }
 
     public function addApp($app)
@@ -52,17 +75,21 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert App error.');
         }
+        $this->clearCached();
         return $this->getApp($this->getConnection()->lastInsertId());
     }
 
     public function updateApp($id,$app)
     {
         $this->getConnection()->update($this->table, $app, array('id' => $id));
+        $this->clearCached();
         return $this->getApp($id);
     }
 
 	public function deleteApp($id)
 	{
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
 	}
 }

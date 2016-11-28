@@ -1,0 +1,11 @@
+{% extends 'TopxiaWebBundle:CourseManage/Dashboard:layout.html.twig' %}
+
+{% set submenu = 'lesson_dashboard' %}
+
+{% do load_script('course-manage/dashboard/lesson') %}
+
+{% block dashboard %}
+  
+  <div id="lesson-dashboard-container" data-lesson-num="{{ lessonTitles|length }}" data-titles="{{ lessonTitles|json_encode }}" data-learn-num="{{ learnNum|json_encode }}" data-finished-num="{{ finishedNum|json_encode }}" data-finished-rate="{{ finishedRate|json_encode }}"></div>
+
+{% endblock %}

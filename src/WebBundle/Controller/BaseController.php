@@ -28,9 +28,7 @@ class BaseController extends Controller
     protected function createJsonpResponse($data = null, $callback = 'callback', $status = 200, $headers = array())
     {
         $response = $this->createJsonResponse($data, $status, $headers);
-        return $response
-            ->setCallback($callback)
-        ;
+        return $response->setCallback($callback);
     }
 
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
@@ -61,6 +59,11 @@ class BaseController extends Controller
             'duration' => $duration,
             'goto'     => $goto
         ));
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
     /**

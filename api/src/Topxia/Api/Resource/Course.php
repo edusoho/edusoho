@@ -22,6 +22,9 @@ class Course extends BaseResource
 
         $res['convNo'] = $this->getConversation($res['id']);
 
+        //temp fix for app, will be remove when new app version published
+        $res['expiryDay'] = '0';
+
         return $res;
     }
 

@@ -1,33 +1,89 @@
-import SideBar from './sidebar';
+import SideBar from './widget/sidebar';
+import TaskUi from './widget/task-ui';
+import TaskEventEmitter from './widget/task-event-emitter';
+import Emitter from 'common/es-event-emitter'
 
-class TaskShow {
-  constructor() {
+class TaskShow extends Emitter {
+  constructor({element, courseId, taskId}) {
+    super();
+    this.element = $(element);
+    this.courseId = courseId;
+    this.taskId = taskId;
+    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
+    this.ui = new TaskUi({
+      element: '.js-task-dashboard-page',
+    });
+
     this.init();
   }
 
   init() {
-    this._initPlugin();
-    this._sidebar();
+    this.initPlugin();
+    this.sidebar();
+    this.bindEvent();
   }
 
-  _initPlugin() {
+  initPlugin() {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({
       html: true,
-      trigger: 'hover',
+      trigger: 'click',
     });
   }
 
-  _sidebar() {
-    var sideBar = new SideBar({
-      element:'.dashboard-sidebar-content',
-      activePlugins:["note"],
-      courseId: 1,
+  bindEvent() {
+    let minute = 60 * 1000;
+    let timeStep = 2; // 分钟
+    this.delay('doing', () => {
+      let eventUrl = this.element.find('#task-content-iframe').data('eventUrl');
+      if (eventUrl === undefined) {
+        return;
+      }
+      let postData = {
+        eventName: 'doing',
+        data: {
+          taskId: this.taskId,
+        }
+      };
+      $.post(eventUrl, postData).done((currentTime) => {
+        this.eventEmitter.emit('doing', {currentTime: currentTime});
+        this.trigger('doing');
+      });
+    }, timeStep * minute);
+
+    this.trigger('doing');
+
+    this.bindEmitterEvent();
+  }
+
+  bindEmitterEvent() {
+    this.eventEmitter.receive('finish', (data) => {
+      this.onActivityFinish();
+    });
+  }
+
+  onActivityFinish(transition) {
+    if (transition === 'url') {
+
+    }
+    this.ui.learnedWeakPrompt();
+    this.ui.learned();
+  }
+
+  sidebar() {
+    this.sideBar = new SideBar({
+      element: '.dashboard-sidebar-content',
+      activePlugins: ["note", "question"],
+      courseId: this.courseId,
     });
   }
 }
 
-new TaskShow();
+new TaskShow({
+  element: $('body'),
+  courseId: $('body').find('#hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#hidden-data [name="task-id"]').val()
+});
 
 
 

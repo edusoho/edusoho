@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MemberSync extends BaseResource
 {
+    /*每次请求允许创建的最大会话数量*/
+    const MAX_CREATION_PER_TIME = 20;
+
     public function post(Application $app, Request $request)
     {
         $setting = $this->getSettingservice()->get('app_im', array());
@@ -18,8 +21,8 @@ class MemberSync extends BaseResource
 
         $user = $this->getCurrentUser();
 
-        $this->syncCourseConversationMembers($user);
-        $this->syncClassroomConversationMember($user);
+        $this->syncClassroomConversations($user);
+        $this->syncCourseConversations($user);
 
         return $this->joinGlobalConversation($user);
     }
@@ -49,44 +52,119 @@ class MemberSync extends BaseResource
         }
     }
 
-    protected function syncCourseConversationMembers($user)
+    protected function syncCourseConversations($user)
+    {
+        $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
+
+        $this->syncTargetConversations($user, $courseIds, 'course');
+        $this->syncCourseConversationMembers($user, $courseIds);
+    }
+
+    protected function syncClassroomConversations($user)
+    {
+        $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
+        $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
+
+        $this->syncTargetConversations($user, $classroomIds, 'classroom');
+        $this->syncClassroomConversationMembers($user, $classroomIds);
+    }
+
+    protected function syncCourseConversationMembers($user, $courseIds)
     {
         $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course');
 
         if (!$convMembers) {
-            return false;
+            return;
         }
-
-        $courseIds = $this->getCourseService()->findUserJoinedCourseIds($user['id'], $joinedType = 'course');
-        $courseIds = ArrayToolkit::column($courseIds, 'courseId');
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $courseIds)) {
+                $this->addDebug('MemberSync', 'syncCourseConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
-
-        return true;
     }
 
-    protected function syncClassroomConversationMember($user)
+    protected function syncClassroomConversationMembers($user, $classroomIds)
     {
         $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'classroom');
 
         if (!$convMembers) {
-            return false;
+            return;
         }
-
-        $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
-        $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $classroomIds)) {
+                $this->addDebug('MemberSync', 'syncClassroomConversationMembers quitConversation : convNo='.$convMember['convNo'].',targetId='.$convMember['targetId']);
                 $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
+    }
 
-        return true;
+    protected function syncTargetConversations($user, $targetIds, $targetType)
+    {
+        $userConvs = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], $targetType.'-push');
+
+        $userConvIds = ArrayToolkit::column($userConvs, 'targetId');
+
+        $this->joinConversations(array_diff($targetIds, $userConvIds), $targetType, $user);
+        $this->quitConversations(array_diff($userConvIds, $targetIds), $userConvs, $user);
+    }
+
+    protected function joinConversations($targetIds, $targetType, $user)
+    {
+        $params = array(
+            'targetIds'   => $targetIds,
+            'targetTypes' => array($targetType.'-push')
+        );
+        $count       = $this->getConversationService()->searchConversationCount($params);
+        $targetConvs = $this->getConversationService()->searchConversations($params, array('createdTime', 'desc'), 0, $count);
+
+        $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
+        $targetConvIds  = ArrayToolkit::column($targetConvs, 'targetId');
+
+        $toCreate = array_diff($targetIds, $targetConvIds);
+
+        $cnt = 0;
+        foreach ($targetIds as $id) {
+            if (in_array($id, $toCreate)) {
+                // 防止请求过于频繁造成服务器压力过大
+                if (++$cnt > MemberSync::MAX_CREATION_PER_TIME) {
+                    break;
+                }
+                $this->addDebug('MemberSync', 'joinConversations & create : targetType='.$targetType.', targetId='.$id.', userId='.$user['id']);
+                $this->getConversationService()->createConversation('推送：'.$this->getTargetTitle($id, $targetType), $targetType.'-push', $id, array($user));
+            } else {
+                if (!isset($targetConvsMap[$id])) {
+                    continue;
+                }
+                $this->addDebug('MemberSync', 'joinConversations & join : targetType='.$targetType.',convNo='.$targetConvsMap[$id]['no'].',targetId='.$id);
+                $this->getConversationService()->joinConversation($targetConvsMap[$id]['no'], $user['id']);
+            }
+        }
+    }
+
+    protected function quitConversations($targetIds, $userConvs, $user)
+    {
+        $userConvsMap = ArrayToolkit::index($userConvs, 'targetId');
+        foreach ($targetIds as $id) {
+            try {
+                $this->addDebug('MemberSync', 'quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id);
+                $this->getConversationService()->quitConversation($userConvsMap[$id]['convNo'], $user['id']);
+            } catch (\Exception $e) {
+                $this->addError('MemberSync', 'quitConversations : targetType='.$userConvsMap[$id]['targetType'].',convNo='.$userConvsMap[$id]['convNo'].',targetId='.$id.', error = '.$e->getMessage());
+            }
+        }
+    }
+
+    protected function getTargetTitle($id, $targetType)
+    {
+        if ($targetType == 'course') {
+            $course = $this->getCourseService()->getCourse($id);
+            return $course['title'];
+        }
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        return $classroom['title'];
     }
 
     protected function getConversationService()

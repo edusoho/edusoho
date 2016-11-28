@@ -1,29 +1,29 @@
 <li class="task-manage-item drag clearfix " id="task-{{task.id}}">
   <div class="item-line"></div>
   <div class="item-content text-overflow">
-    <i class="es-icon {{task['activity_meta']['icon']}} mrm"></i>
+    <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     {{task.title}}
-    {% if task['activity_meta']['mediaType'] is same as('live') %}
-      {% if task['activity_meta']['finished'] %}
+    {% if task.activity.mediaType is same as('live') %}
+      {% if task.result.status|default('') == 'finished' %}
         <span class="color-gray mls">已结束</span>
       {% else %}
         <span class="color-success mls">
-        {{ task['activity_meta']['startTime']|date('Y-n-j H:i'|trans) }} ~ {{ task['activity_meta']['endTime']|date('H:i'|trans) }}</span>
+        {{ task.activity.startTime|date('Y-n-j H:i'|trans) }} ~ {{ task.activity.endTime|date('H:i'|trans) }}</span>
       {% endif %}
     {% else %}
-      {% if task['activity_meta']['length'] %}<span class="color-gray mls">（{{task['activity_meta']['length'] | default('')}}）</span>{% endif %}
+      {% if task.activity.length|activity_length_format %}<span class="color-gray mls">（{{task.activity.length|activity_length_format}}）</span>{% endif %}
     {% endif %}
   </div>
   <div class="item-actions">
   <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
-  <a class="btn btn-gray" href="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}" target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
+  <a class="btn btn-gray" href="{{path('course_task_show', {id:task.id,courseId:task.courseId,preview:1})}}" target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
   <span class="dropdown">
     <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown mrs"aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}
     </a>
     <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
       <li>
-        <a class='delete-task' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
+        <a class='delete-item' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
       </li>
     </ul>
   </span>
