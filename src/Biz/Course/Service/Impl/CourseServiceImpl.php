@@ -5,7 +5,6 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -136,7 +135,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
         if ($id <= 0 && !in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Invalid: LearnMode"));
+            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
         if ($course['expiryMode'] === 'days') {
             unset($course['expiryStartDate']);
@@ -146,18 +145,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Required: expiryStartDate"));
+                throw $this->createInvalidArgumentException("Param Required: expiryStartDate");
             }
             if (isset($course['expiryEndDate'])) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
             } else {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Required: expiryEndDate"));
+                throw $this->createInvalidArgumentException("Param Required: expiryEndDate");
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans("Value of Params expiryEndDate must later than expiryStartDate"));
+                throw $this->createInvalidArgumentException("Value of Params expiryEndDate must later than expiryStartDate");
             }
         } else {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Invalid: expiryMode"));
+            throw $this->createInvalidArgumentException("Param Invalid: expiryMode");
         }
 
         return $course;
@@ -459,76 +458,5 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-}
-
-class CourseSerialize
-{
-    public static function serialize(array &$course)
-    {
-        if (isset($course['goals'])) {
-            if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|'.implode('|', $course['goals']).'|';
-            } else {
-                $course['goals'] = '';
-            }
-        }
-
-        if (isset($course['audiences'])) {
-            if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
-            } else {
-                $course['audiences'] = '';
-            }
-        }
-
-        if (isset($course['teacherIds'])) {
-            if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
-            } else {
-                $course['teacherIds'] = null;
-            }
-        }
-
-        return $course;
-    }
-
-    public static function unserialize(array $course = null)
-    {
-        if (empty($course)) {
-            return $course;
-        }
-
-        if (empty($course['goals'])) {
-            $course['goals'] = array();
-        } else {
-            $course['goals'] = explode('|', trim($course['goals'], '|'));
-        }
-
-        if (empty($course['audiences'])) {
-            $course['audiences'] = array();
-        } else {
-            $course['audiences'] = explode('|', trim($course['audiences'], '|'));
-        }
-
-        if (empty($course['teacherIds'])) {
-            $course['teacherIds'] = array();
-        } else {
-            $course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
-        }
-
-        return $course;
-    }
-
-    public static function unserializes(array $courses)
-    {
-        return array_map(function ($course) {
-            return CourseSerialize::unserialize($course);
-        }, $courses);
     }
 }

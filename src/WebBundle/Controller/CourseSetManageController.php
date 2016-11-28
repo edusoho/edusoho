@@ -13,7 +13,7 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data      = $request->request->all();
             $courseSet = $this->getCourseSetService()->createCourseSet($data);
-            return $this->redirect($this->generateUrl('courseset_manage', array(
+            return $this->redirect($this->generateUrl('course_set_manage', array(
                 'id' => $courseSet['id']
             )));
         }
@@ -63,7 +63,7 @@ class CourseSetManageController extends BaseController
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
         }
-        return $this->render('WebBundle:CourseSetManage:courseset-base.html.twig', array(
+        return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
             'courseSet'     => $courseSet,
             'defaultCourse' => $defaultCourse,
             'tags'          => ArrayToolkit::column($tags, 'name')
@@ -74,7 +74,7 @@ class CourseSetManageController extends BaseController
     {
         $courseSet     = $this->getCourseSetService()->getCourseSet($id);
         $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
-        return $this->render('WebBundle:CourseSetManage:courseset-detail.html.twig', array(
+        return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
             'courseSet'     => $courseSet,
             'defaultCourse' => $defaultCourse
         ));
@@ -102,7 +102,7 @@ class CourseSetManageController extends BaseController
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
     protected function getUserService()
