@@ -544,7 +544,7 @@ admin:
                 admin_edu_cloud_sms:
                     name: 云短信
                     children:
-                        admin_edu_cloud_sms_setting:
+                        admin_edu_cloud_sms_overview:
                             name: 概览
                             router_name: admin_edu_cloud_sms
                             disable: true
