@@ -1,6 +1,6 @@
 {% extends 'WebBundle:Activity:content-layout.html.twig' %}
 
-{% if not error is empty %}
+{% if error is empty %}
   {% do script(['web/activity/ppt/index.js']) %}
 {% endif %}
 
