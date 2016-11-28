@@ -12,7 +12,7 @@ class InitCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('topxia:init');
+        $this->setName('system:init');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

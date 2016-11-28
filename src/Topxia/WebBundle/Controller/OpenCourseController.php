@@ -47,6 +47,9 @@ class OpenCourseController extends BaseOpenCourseController
         $course      = $this->getOpenCourseService()->getCourse($courseId);
         $preview     = $request->query->get('as');
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
+
+        $tagIds = ArrayToolkit::column($tags, 'id');
 
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
@@ -61,8 +64,8 @@ class OpenCourseController extends BaseOpenCourseController
             $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
             return $this->createMessageResponse('error', $message);
             }*/
-
             return $this->render($template, array(
+                'tagIds'       => $tagIds,
                 'course'       => $course,
                 'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id'])
             ));
@@ -80,6 +83,7 @@ class OpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $response = $this->renderView($template, array(
+            'tagIds'   => $tagIds,
             'course'   => $course,
             'lessonId' => $lessonId
         ));
@@ -774,6 +778,11 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->getUserService()->findUsersByIds($userIds);
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getOpenCourseService()

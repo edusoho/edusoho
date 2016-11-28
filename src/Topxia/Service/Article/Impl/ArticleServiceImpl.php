@@ -99,22 +99,31 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function createArticle($article)
     {
+        $user = $this->getCurrentUser();
+
         if (empty($article)) {
             throw $this->createServiceException($this->getKernel()->trans('文章内容为空，创建文章失败！'));
         }
 
         $article = $this->filterArticleFields($article, 'add');
+
+        $tagIds = $article['tagIds'];
+
+        unset($article['tagIds']);
+
         $article = $this->getArticleDao()->addArticle($article);
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
-        $this->dispatchEvent('article.create', $article);
+        $this->dispatchEvent('article.create', array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id']));
 
         return $article;
     }
 
     public function updateArticle($id, $article)
     {
+        $user = $this->getCurrentUser();
+
         $checkArticle = $this->getArticle($id);
 
         if (empty($checkArticle)) {
@@ -123,10 +132,20 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->filterArticleFields($article);
 
+        if (!empty($article['tagIds'])) {
+            $tagIds = $article['tagIds'];
+
+            unset($article['tagIds']);
+        } else {
+            $tagIds = array();
+            unset($article['tagIds']);
+        }
+
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
-        $this->dispatchEvent('article.update', new ServiceEvent($article));
+
+        $this->dispatchEvent('article.update', new ServiceEvent(array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id'])));
 
         return $article;
     }
@@ -301,7 +320,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
         $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
-        $this->dispatchEvent('article.publish', $article);
+        $this->dispatchEvent('article.publish', array('article' => $article));
     }
 
     public function unpublishArticle($id)
@@ -336,7 +355,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count)
     {
-        return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
+        $articles = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
+
+        return $this->getArticleDao()->searchArticles(array('articleIds' => ArrayToolkit::column($articles, 'id'), 'status' => 'published'), array('publishedTime' => 'DESC'), 0, $count);
     }
 
     public function viewArticle($id)
@@ -364,17 +385,28 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $self = $this;
 
-        $relativeArticles = array_map(function ($tagId) use ($article, $self) {
+        $tags = $this->getTagService()->findTagsByOwner(array("ownerType" => 'article',"ownerId" => $articleId));
+
+        $tagIds = ArrayToolkit::column($tags, 'id');
+
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
+        $articleIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+        foreach ($articleIds as $key => $articleId) {
+            if ($articleId == $article['id']) {
+                unset($articleIds[$key]);
+            }
+        }
+
+        $relativeArticles = array_map(function ($articleId) use ($article, $self) {
             $conditions = array(
-                'tagId'      => $tagId,
-                'idNotEqual' => $article['id'],
+                'articleId'  => $articleId,
                 'hasThumb'   => true,
                 'status'     => 'published'
             );
-            $count    = $self->searchArticlesCount($conditions);
-            $articles = $self->searchArticles($conditions, 'normal', 0, $count);
+            $articles = $self->searchArticles($conditions, 'normal', 0, PHP_INT_MAX);
             return ArrayToolkit::index($articles, 'id');
-        }, $article['tagIds']);
+        }, $articleIds);
 
         $ret = array_reduce($relativeArticles, function ($ret, $articles) {
             return array_merge($ret, $articles);

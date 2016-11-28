@@ -6735,14 +6735,11 @@ textarea {
     width: 800px;
   }
 }
-<<<<<<< HEAD
-=======
 @media (min-width: 992px) {
   .modal-sm {
     width: 520px;
   }
 }
->>>>>>> feature/course2.0-activity
 .nav-mini > li > a {
   padding: 1px 10px;
 }
@@ -7081,6 +7078,66 @@ textarea {
   right: 0;
   top: 5px;
   color: #c1c1c1;
+}
+.tabs-wrapper {
+  border: 1px solid #e4ecf3;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  background-color: #ffffff;
+}
+.tabs-wrapper .tabs-group {
+  padding: 0 60px 0 15px;
+  position: relative;
+  overflow-y: hidden;
+}
+.tabs-wrapper .tabs-group .title {
+  float: left;
+  padding: 15px 0;
+  width: 100px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.tabs-wrapper .tabs-group .content {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0 100px;
+}
+.tabs-wrapper .tabs-group .content > li {
+  float: left;
+  padding: 10px 12px;
+}
+.tabs-wrapper .tabs-group .content > li > a {
+  display: block;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  color: #919191;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.tabs-wrapper .tabs-group .content > li:hover > a,
+.tabs-wrapper .tabs-group .content > li:focus > a,
+.tabs-wrapper .tabs-group .content > li.active > a {
+  color: #46c37b;
+}
+.tabs-wrapper .tabs-group .content > li:first-child {
+  padding-left: 0;
+}
+.tabs-wrapper .tabs-group .tabs-toggle {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tabs-wrapper .tabs-group + .tabs-group {
+  border-top: 1px dashed #e4ecf3;
 }
 .class-serve > ul {
   padding: 20px 10px;

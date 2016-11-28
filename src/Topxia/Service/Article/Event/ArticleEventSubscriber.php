@@ -4,6 +4,7 @@ namespace Topxia\Service\Article\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class ArticleEventSubscriber implements EventSubscriberInterface
 {
@@ -11,11 +12,20 @@ class ArticleEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'article.liked' => 'onArticleLike',
-            'article.cancelLike' => 'onArticleCancelLike',
+            'article.liked'       => 'onArticleLike',
+            'article.delete'      => 'onArticleDelete',
+            'article.cancelLike'  => 'onArticleCancelLike',
             'article.post_create' => 'onPostCreate',
             'article.post_delete' => 'onPostDelete',
         );
+    }
+
+    public function onArticleDelete(ServiceEvent $event)
+    {
+        $article = $event->getSubject();
+
+        $tagOwnerManager = new TagOwnerManager('article', $article['id']);
+        $tagOwnerManager->delete();
     }
 
     public function onArticleLike(ServiceEvent $event)
