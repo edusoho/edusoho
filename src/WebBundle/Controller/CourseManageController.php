@@ -57,11 +57,14 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
+        $course = array();
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            $this->getCourseService()->updateCourse($data['id'], $data);
+            $data   = $request->request->all();
+            $course = $this->getCourseService()->updateCourse($data['id'], $data);
+        } else {
+            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         }
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('WebBundle:CourseManage:info.html.twig', array(
             'courseSet' => $courseSet,
