@@ -204,11 +204,12 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if ($course['status'] == 'published') {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('发布课程，不能删除！'));
-        }
-
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
+
+        if ($course['status'] == 'published') {
+            $this->getCourseService()->closeCourse($courseId);
+            $course['status'] = 'closed';
+        }
 
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => $this->getServiceKernel()->trans('请先删除班级课程')));

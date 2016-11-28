@@ -38,7 +38,8 @@ class Articles extends BaseResource
     {
         $tagIds = array();
         foreach ($articles as $article) {
-            $tagIds = array_merge($tagIds, $article['tagIds']);
+            $tempTagIds = $this->getTagIdsByArticle($article);
+            $tagIds = array_merge($tagIds, $tempTagIds);
         }
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
@@ -82,6 +83,13 @@ class Articles extends BaseResource
             $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
+    }
+
+    protected function getTagIdsByArticle($article)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $article['id']));
+
+        return ArrayToolkit::column($tags, 'id');
     }
 
     protected function getArticleService()
