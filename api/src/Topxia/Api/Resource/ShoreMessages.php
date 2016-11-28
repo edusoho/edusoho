@@ -15,16 +15,18 @@ class ShortMessages extends BaseResource
 
     public function post(Application $app, Request $request)
     {
-        $conditions = $request->query->all();
+        $data = $request->query->all();
 
-        if (!$this->getUserService()->getUserByVerifiedMobile($conditions['mobile'])) {
+        $token = json_decode($data);
+
+        if (!$this->getUserService()->getUserByVerifiedMobile($token['mobile'])) {
             return $this->returnError('5001');
         }
 
         $params = array(
-            'mobile'       => $conditions['mobile'],
+            'mobile'       => $token['mobile'],
             'category'     => 'sms_kuozhi_verify',
-            'captcha_code' => $conditions['captchaCode']
+            'captcha_code' => $token['captchaCode']
         );
 
         $result = CurlToolkit::request('POST', 'open.edusoho.com/sms/verify', $params);
