@@ -67,6 +67,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['expiryEndDate']);
         }
         $fields = $this->validateCourse($fields, $id);
+
         return $this->getCourseDao()->update($id, $fields);
     }
 
@@ -101,12 +102,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function validateCourse($course, $id = 0)
     {
-        if (isset($course['status']) && $course['status'] === 'published') {
-            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException("Lack of required fields");
+        if ($id > 0) {
+            $existCourse = $this->getCourse($id);
+            if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
+                if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
+                    throw $this->createInvalidArgumentException("Lack of required fields");
+                }
+                return $course;
             }
-            return $course;
         }
+
         $requiredFields = array('title', 'courseSetId', 'expiryMode');
         if ($id <= 0) {
             $requiredFields[] = 'learnMode';
@@ -118,10 +123,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
         if ($course['expiryMode'] === 'days') {
-            unset($course['expiryStartDate']);
-            unset($course['expiryEndDate']);
+            $course['expiryStartDate'] = null;
+            $course['expiryEndDate']   = null;
         } elseif ($course['expiryMode'] === 'date') {
-            unset($course['expiryDays']);
+            $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
