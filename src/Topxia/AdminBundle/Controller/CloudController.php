@@ -103,7 +103,7 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_renew');
     }
 
-    public function liveDetailsAction(Request $request)
+    public function liveMoreAction(Request $request)
     {
         return $this->redirectUrl('service_live_count');
     }

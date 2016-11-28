@@ -1019,9 +1019,9 @@ admin_cloud_buy:
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_live_details:
-    pattern: /cloud/live/details
-    defaults: { _controller: TopxiaAdminBundle:Cloud:liveDetails }
+admin_cloud_live_more:
+    pattern: /cloud/live/more
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveMore }
 
 admin_cloud_tlp:
     pattern:  /cloud/tlp
