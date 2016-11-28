@@ -35,12 +35,12 @@ class InfoEditor {
                 expiryStartDate: {
                     required: '#expiryByDate:checked',
                     date:true,
-                    before: ['#expiryByDate', '#expiryEndDate']
+                    before: '#expiryEndDate'
                 },
                 expiryEndDate: {
                     required: '#expiryByDate:checked',
                     date:true,
-                    after: ['#expiryByDate', '#expiryStartDate']
+                    after: '#expiryStartDate'
                 }
             },
             messages: {
@@ -60,11 +60,10 @@ class InfoEditor {
         $.validator.addMethod(
             "before",
             function(value, element, params) {
-                if(!$(params[0]).checked){
+                if($('input[name="expiryMode"]:checked').val() !== 'date'){
                     return true;
                 }
-                // console.log(value, element, params, this.optional(element), $(params).val() > value);
-                return this.optional(element) || $(params[1]).val() > value;
+                return !!value || $(params).val() > value;
             },
             Translator.trans('开始日期应早于结束日期')
         );
@@ -72,19 +71,16 @@ class InfoEditor {
         $.validator.addMethod(
             "after",
             function(value, element, params) {
-                if(!$(params[0]).checked){
+                if($('input[name="expiryMode"]:checked').val() !== 'date'){
                     return true;
                 }
-                // console.log(value, element, params, this.optional(element), $(params).val() < value);
-                return this.optional(element) || $(params[1]).val() < value;
+                return !!value || $(params).val() < value;
             },
             Translator.trans('结束日期应晚于开始日期')
         );
 
         $('#course-submit').click(function(evt){
-            console.log('submit', validator.form());
             if(validator.form()){
-                console.log('validated');
                 $(evt.currentTarget).button('loading');
                 $form.submit();
             }

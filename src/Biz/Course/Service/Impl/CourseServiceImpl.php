@@ -37,7 +37,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryStartDate',
             'expiryEndDate'
         ));
-        $course = $this->validateCourse($course);
+
+        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
+            throw $this->createInvalidArgumentException("Lack of required fields");
+        }
+        if (!in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
+            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
+        }
+
+        $course = $this->validateExpiryMode($course);
 
         $course['status'] = 'draft';
 
@@ -66,7 +74,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
         }
-        $fields = $this->validateCourse($fields, $id);
+
+        $existCourse = $this->getCourse($id);
+        if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
+            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
+                throw $this->createInvalidArgumentException("Lack of required fields");
+            }
+        } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
+            throw $this->createInvalidArgumentException("Lack of required fields");
+        } else {
+            $fields = $this->validateExpiryMode($fields);
+        }
+
         return $this->getCourseDao()->update($id, $fields);
     }
 
@@ -99,29 +118,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
-    protected function validateCourse($course, $id = 0)
+    protected function validateExpiryMode($course)
     {
-        if (isset($course['status']) && $course['status'] === 'published') {
-            if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException("Lack of required fields");
-            }
-            return $course;
-        }
-        $requiredFields = array('title', 'courseSetId', 'expiryMode');
-        if ($id <= 0) {
-            $requiredFields[] = 'learnMode';
-        }
-        if (!ArrayToolkit::requireds($course, $requiredFields)) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
-        }
-        if ($id <= 0 && !in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
-            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
-        }
         if ($course['expiryMode'] === 'days') {
-            unset($course['expiryStartDate']);
-            unset($course['expiryEndDate']);
+            $course['expiryStartDate'] = null;
+            $course['expiryEndDate']   = null;
         } elseif ($course['expiryMode'] === 'date') {
-            unset($course['expiryDays']);
+            $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
@@ -165,7 +168,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $items;
     }
 
-    public function tryManageCourse($courseId)
+    public function tryManageCourse($courseId, $courseSetId = 0)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -175,9 +178,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->get($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course($courseId) Not Found");
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-
+        if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
+            throw $this->createInvalidArgumentException('Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}');
+        }
         if (!$this->hasCourseManagerRole($courseId)) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
@@ -201,11 +206,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course($courseId) Not Found");
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
 
         if (!$this->canTakeCourse($course)) {
-            throw $this->createAccessDeniedException("You have no access to the course($courseId) before you buy it");
+            throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
 
         $user   = $this->getCurrentUser();
@@ -368,7 +373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter  = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
+            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
 
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -384,7 +389,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
+            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);
@@ -417,6 +422,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
+        //TODO
         //1. courseId为空，判断是否有创建教学计划的权限
         //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;

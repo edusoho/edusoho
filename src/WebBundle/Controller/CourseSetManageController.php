@@ -104,7 +104,7 @@ class CourseSetManageController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getBiz()->service('Taxonomy:TagService');
+        return ServiceKernel::instance()->createService('Taxonomy.TagService');
     }
 
     protected function getUserService()

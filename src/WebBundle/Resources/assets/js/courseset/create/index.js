@@ -9,7 +9,6 @@ class Creator
 
 	init(){
 		this._extendValidator();
-        console.log(this.$element);
 		let validator = this.$element.validate({
             onkeyup: false,
             rules: {
