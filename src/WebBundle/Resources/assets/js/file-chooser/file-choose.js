@@ -31,11 +31,11 @@ class FileChooser extends Emitter {
     const materialLibChoose = new MaterialLibChoose($('#chooser-material-panel'));
     const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
     const videoImport = new VideoImport($('#import-video-panel'));
-    // const uploader = new UploadChooser();
+    const uploader = new UploadChooser();
     materialLibChoose.on('select', this.fileSelect.bind(this));
     courseFileChoose.on('select', this.fileSelect.bind(this));
     videoImport.on('file.select', this.fileSelect.bind(this));
-    //  uploader.on('select', this.fileSelect.bind(this));
+    uploader.on('select', this.fileSelect.bind(this));
   }
 
   fileSelect(file) {
