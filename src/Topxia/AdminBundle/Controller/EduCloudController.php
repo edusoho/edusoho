@@ -218,7 +218,7 @@ class EduCloudController extends BaseController
             $storageSetting = array_merge($storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             
-            return $this->redirect($this->generateUrl('admin_setting_cloud_video'));
+            return $this->redirect($this->generateUrl('admin_cloud_video_overview'));
         }        
     }
 
