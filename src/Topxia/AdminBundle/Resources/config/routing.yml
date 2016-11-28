@@ -1947,6 +1947,11 @@ admin_cloud_edulive_overview:
     pattern:  /cloud/edulive/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
 
+admin_cloud_upload_live_logo:
+    pattern: /cloud/edulive/upload
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:uploadLiveLogo }
+    methods: [POST]
+
 admin_setting_cloud_edulive:
     pattern:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }

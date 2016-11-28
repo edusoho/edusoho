@@ -1288,25 +1288,17 @@ class EduCloudController extends BaseController
 
     public function liveSettingAction(Request $request)
     {
+        $client            = new EdusohoLiveClient();
+        $capacity          = $client->getCapacity();
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+
         if ($request->getMethod() == 'POST') {
             $courseSetting     = $this->getSettingService()->get('course', array());
-            $client            = new EdusohoLiveClient();
-            $capacity          = $client->getCapacity();
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
             $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
-
-            $hiddenMenus = $this->getSettingService()->get('menu_hiddens', array());
-            if ($liveCourseSetting['live_course_enabled']) {
-                unset($hiddenMenus['admin_live_course_add']);
-                unset($hiddenMenus['admin_live_course']);
-            } else {
-                $hiddenMenus['admin_live_course_add'] = true;
-                $hiddenMenus['admin_live_course']     = true;
-            }
-            $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
@@ -1318,9 +1310,30 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
         }
         return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig', array(
-            'account'  => $overview['account']
+            'account'  => $overview['account'],
+            'liveCourseSetting' => $liveCourseSetting,
+            'capacity' => $capacity
         ));
     }
+
+    public function uploadLiveLogoAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+            $courseSetting     = $this->getSettingService()->get('course', array()); 
+
+            $liveLogo = $request->request->all();
+            $liveCourseSetting = array_merge($liveCourseSetting, $liveLogo);
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
+
+            $courseSetting = array_merge($courseSetting, $liveCourseSetting);
+            $this->getSettingService()->set('course', $courseSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('直播logo已保存！'));
+
+            return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
+        }
+    }
+
     // 添加重建索引模态框
     public function modalAction(Request $request)
     {
