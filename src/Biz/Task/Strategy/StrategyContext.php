@@ -32,4 +32,10 @@ class StrategyContext
     {
         return $this->strategy->canLearnTask($task);
     }
+
+    public function findCourseItems($courseId)
+    {
+        return $this->strategy->getCourseItems($courseId);
+    }
+
 }

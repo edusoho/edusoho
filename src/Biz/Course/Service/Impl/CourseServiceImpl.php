@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 
@@ -144,8 +145,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getCourseItems($courseId)
     {
+
         $items = array();
-        $user  = $this->getCurrentUser();
         $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
@@ -164,6 +165,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $items;
     }
+
+    public function findCourseList($courseId)
+    {
+        $course   = $this->getCourse($courseId);
+        $strategy = new StrategyContext($course['learnMode'], $this->biz);
+
+        list($courseItems, $courseListRenderPage) = $strategy->findCourseItems($courseId);
+        return array($courseItems, $courseListRenderPage);
+    }
+
 
     public function tryManageCourse($courseId)
     {

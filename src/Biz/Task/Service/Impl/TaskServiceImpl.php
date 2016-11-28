@@ -260,18 +260,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findTasksByChapterId($chapterId);
     }
 
-    protected function getTaskStrategy($course)
-    {
-        switch ($course['method']) {
-            case 'freedom':
-                return 1;
-                break;
-            case  'lock':
-                return 2;
-                break;
-        }
-    }
-
     /**
      * @return TaskDao
      */

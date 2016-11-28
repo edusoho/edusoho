@@ -3,25 +3,28 @@
 namespace Biz\Task\Strategy\Impl;
 
 
-use Biz\Task\Strategy\StrategyInterface;
+use Biz\Task\Strategy\LearningStrategy;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Service\Task\TaskService;
 
-class ByOrderStrategy implements StrategyInterface
+class ByOrderStrategy implements LearningStrategy
 {
     private $biz = null;
+
+    const COURSE_ITEM_RENDER_PAGE = 'WebBundle:CourseManage/Parts:list-item-byOrder.html.twig';
 
     public function __construct($biz)
     {
         $this->biz = $biz;
     }
 
+
     /**
      * 任务学习
      * @param $task
      * @return bool
-     * @throws AccessDeniedException
+     * @throws NotFoundException
      */
     public function canLearnTask($task)
     {
@@ -29,12 +32,11 @@ class ByOrderStrategy implements StrategyInterface
             return true;
         }
 
-        if ($task['isOptional']) {
-            return true;
-        }
-
         $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
 
+        if ($preTask['isOptional']) {
+            return true;
+        }
         if (empty($preTask)) {
             throw new NotFoundException('previous task does not exist');
         }
@@ -44,6 +46,12 @@ class ByOrderStrategy implements StrategyInterface
         }
 
         return false;
+    }
+
+    public function getCourseItems($courseId)
+    {
+        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        return array($courseItems, self::COURSE_ITEM_RENDER_PAGE);
     }
 
     protected function isFirstTask($task)
@@ -62,6 +70,11 @@ class ByOrderStrategy implements StrategyInterface
     protected function getTaskDao()
     {
         return $this->biz->service('Task:TaskDao');
+    }
+
+    protected function getCourseService()
+    {
+        return  $this->biz->service('Course:CourseService');
     }
 
 }

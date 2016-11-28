@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  {% include 'WebBundle:CourseManage/Parts:list-item-'~ course.learnMode ~'.html.twig' with {course: course, items: items} %}
+  {{ render(controller('WebBundle:CourseManage:courseList', {courseId: course.id})) }}
 {% endblock %}
 
 

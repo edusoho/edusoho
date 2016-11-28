@@ -9,7 +9,9 @@
 namespace Biz\Task\Strategy;
 
 
-interface StrategyInterface
+interface LearningStrategy
 {
     public function canLearnTask($task);
+
+    public function getCourseItems($courseId);
 }

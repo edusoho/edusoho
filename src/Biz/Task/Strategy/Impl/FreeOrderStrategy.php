@@ -9,11 +9,14 @@
 namespace Biz\Task\Strategy\Impl;
 
 
-use Biz\Task\Strategy\StrategyInterface;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Strategy\LearningStrategy;
 
-class FreeOrderStrategy implements StrategyInterface
+class FreeOrderStrategy implements LearningStrategy
 {
     private $biz = null;
+
+    const COURSE_ITEM_RENDER_PAGE = 'WebBundle:CourseManage/Parts:list-item-freeOrder.html.twig';
 
     public function __construct($biz)
     {
@@ -27,7 +30,21 @@ class FreeOrderStrategy implements StrategyInterface
      */
     public function canLearnTask($task)
     {
-       return true;
+        return true;
+    }
+
+    public function getCourseItems($courseId)
+    {
+        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        return array($courseItems, self::COURSE_ITEM_RENDER_PAGE);
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 
 }
