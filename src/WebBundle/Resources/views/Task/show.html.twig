@@ -8,6 +8,12 @@
 {% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','web/task/index.js']) %}
 
 {% block body %}
+
+  <div id="js-hidden-data">
+    <input type="hidden" name="course-id" value="{{ task.courseId }}">
+    <input type="hidden" name="task-id" value="{{ task.id }}">
+  </div>
+
   <div class="task-dashboard-page js-task-dashboard-page">
     <div class="dashboard-content" id="dashboard-content">
       <div class="dashboard-header">

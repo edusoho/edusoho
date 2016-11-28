@@ -1,7 +1,7 @@
-import FileChooser from '../../../common/file-choose';
+import FileChooser from '../../file-chooser/file-choose';
 
 let onConditionTimeType = () => {
-  var $step3_form = $("#step3-form");
+  let $step3_form = $("#step3-form");
   let validator = $step3_form.validate({
     onkeyup: false,
     rules: {
