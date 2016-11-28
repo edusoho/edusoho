@@ -27,7 +27,7 @@ class C2CourseSet extends Migration
             `updated` int(11) DEFAULT '0',
             `deleted` int(11) NOT NULL DEFAULT '0',
             PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+          ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
         ");
     }
 
