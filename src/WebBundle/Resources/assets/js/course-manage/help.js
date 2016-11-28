@@ -51,6 +51,17 @@ export const publishCourse = () => {
 	});
 }
 
+export const showSettings = () => {
+  $("#sortable-list").on('click','.js-item-content',event=>{
+    var $this = $(event.currentTarget).closest('.js-task-manage-item');
+    $this.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').slideToggle();
+    $this.addClass('active').find('.js-settings-list').slideToggle();
+  }) ;
+  // $("#sortable-list").on('click','.js-settings-item.active',event=>{
+  //   return false;
+  // });
+}
+
 export const TabChange = () => {
 	$('[data-role="tab"]').click(function(){
 	  let $this = $(this);
