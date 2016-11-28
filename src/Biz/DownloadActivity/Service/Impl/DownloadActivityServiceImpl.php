@@ -25,12 +25,36 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         return $this->getDownloadFileRecordDao()->create($record);
     }
 
+    public function downloadActivityFile($activityId, $fileId)
+    {
+        $activity = $this->getActivityService()->getActivityFetchExt($activityId);
+
+        $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
+        if (empty($medias)) {
+            return $this->createNotFoundException('activity not found');
+        }
+        $downloadFiles = ArrayToolkit::index($materials, 'id');
+        $downloadFile  = $downloadFiles[$fileId];
+        if (empty($downloadFile)) {
+            return $this->createNotFoundException('file not found');
+        }
+        $this->createDownloadFileRecord($downloadFile);
+
+        return $downloadFile;
+    }
+
+
     /**
      * @return DownloadFileRecordDao
      */
     protected function getDownloadFileRecordDao()
     {
         return $this->createDao('DownloadActivity:DownloadFileRecordDao');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 
 }

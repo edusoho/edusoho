@@ -1,13 +1,9 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 03/11/2016
- * Time: 10:05
- */
 
 namespace WebBundle\Controller;
 
 
+use Biz\Activity\Service\ActivityService;
 use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
@@ -18,7 +14,7 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivity($id);
+        $activity             = $this->getActivityService()->getActivityFetchExt($id);
         $activity['courseId'] = $courseId;
         return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
             'activity' => $activity,
@@ -44,29 +40,16 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 
     public function downloadFileAction(Request $request, $courseId, $activityId)
     {
-
         $this->getCourseService()->tryLearnCourse($courseId);
-        $mediaId  = $request->query->get('fileId');
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $fileId = $request->query->get('fileId');
 
-        $medias = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
-        if (empty($medias)) {
-            return $this->createNotFoundException('activity not found');
-        }
-        $medias = ArrayToolkit::index($medias, 'id');
-        if (empty($medias[$mediaId])) {
-            return $this->createNotFoundException('file not found');
-        }
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityMedia($activityId, $fileId);
 
-        $response = null;
-        if (!empty($medias[$mediaId]['link'])) {
-            $response = $this->redirect($medias[$mediaId]['link']);
+        if (!empty($downloadFile['link'])) {
+            return $this->redirect($downloadFile['link']);
         } else {
-            $response = $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $medias[$mediaId]['fileId']));
+            return $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $downloadFile['fileId']));
         }
-        $this->getDownloadActivityService()->createDownloadFileRecord($medias[$mediaId]);
-        return $response;
-
     }
 
     public function createAction(Request $request, $courseId)
@@ -76,6 +59,9 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         ));
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');

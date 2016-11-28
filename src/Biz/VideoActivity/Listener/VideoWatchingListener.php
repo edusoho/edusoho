@@ -11,11 +11,10 @@ namespace Biz\VideoActivity\Listener;
 
 use Biz\Activity\Listener\Listener;
 
-class VideoDoingListener extends Listener
+class VideoWatchingListener extends Listener
 {
     public function handle($activity, $data)
     {
-        var_dump('VideoDoingListener', $activity, $data);
     }
 
 

@@ -784,7 +784,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function tryAccessFile($fileId)
     {
         $file = $this->getFullFile($fileId);
-    var_dump($fileId,$file);
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -806,7 +805,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $shares = $this->findShareHistory($file['createdUserId']);
 
         $targetUserIds = ArrayToolkit::column($shares, 'targetUserId');
-        if (!in_array($user['id'], $targetUserIds)) {
+        if (in_array($user['id'], $targetUserIds)) {
             return $file;
         }
         throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此文件！'));
