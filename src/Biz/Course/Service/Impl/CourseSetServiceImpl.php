@@ -16,6 +16,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
+        if (!$this->hasCourseSetManagerRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
@@ -49,6 +52,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSet($id, $fields)
     {
+        if (!$this->hasCourseSetManagerRole($id)) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
@@ -83,7 +89,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //TODO
         //1. 判断该课程能否被删除
         //2. 删除时需级联删除课程下的教学计划、用户信息等等
+        if (!$this->hasCourseSetManagerRole($id)) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
         return $this->getCourseSetDao()->delete($id);
+    }
+
+    protected function hasCourseSetManagerRole($courseSetId = 0)
+    {
+        $userId = $this->getCurrentUser()->getId();
+        //1. courseSetId为空，判断是否有创建课程的权限
+        //2. courseSetId不为空，判断是否有该课程的管理权限
+        return true;
     }
 
     protected function validateCourseSet($courseSet)

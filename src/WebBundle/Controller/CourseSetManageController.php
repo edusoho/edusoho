@@ -49,7 +49,6 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $sideNav)
     {
-        //add default course if needed
         return $this->render('WebBundle:CourseSetManage:sidebar.html.twig', array(
             'id'       => $courseSetId,
             'side_nav' => $sideNav

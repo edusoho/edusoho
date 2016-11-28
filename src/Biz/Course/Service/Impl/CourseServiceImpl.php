@@ -20,20 +20,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
-        $courses = $this->findCoursesByCourseSetId($courseSetId);
-        if (empty($courses)) {
-            return null;
-        }
-        foreach ($courses as $course) {
-            if ($course['isDefault']) {
-                return $course;
-            }
-        }
-        return null;
+        $courses = $this->getDefaultCourseByCourseSetId($courseSetId);
     }
 
     public function createCourse($course)
     {
+        if (!$this->hasCourseManagerRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Management');
+        }
         $course = ArrayToolkit::parts($course, array(
             'title',
             'courseSetId',
@@ -52,6 +46,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
+        $course = $this->tryManageCourse($id);
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'courseSetId',
@@ -64,10 +59,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'goals',
             'audiences'
         ));
-        $course = $this->getCourseDao()->get($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course($id) Not Found");
-        }
 
         if ($course['status'] == 'published') {
             unset($fields['expiryMode']);
@@ -81,10 +72,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteCourse($id)
     {
-        $course = $this->getCourseDao()->get($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course($id) Not Found");
-        }
+        $course = $this->tryManageCourse($id);
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException("Deleting published Course is not allowed");
         }
@@ -94,10 +82,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function closeCourse($id)
     {
-        $course = $this->getCourseDao()->get($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course($id) Not Found");
-        }
+        $course = $this->tryManageCourse($id);
         if ($course['status'] != 'published') {
             throw $this->createAccessDeniedException('Course has not bean published');
         }
@@ -108,11 +93,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function publishCourse($id, $userId)
     {
-        $course = $this->getCourseDao()->get($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course($id) Not Found");
-        }
-
+        $course = $this->tryManageCourse($id);
         $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
@@ -187,8 +168,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function tryManageCourse($courseId)
     {
-        $user = $this->getCurrentUser();
-
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
@@ -199,7 +178,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException("Course($courseId) Not Found");
         }
 
-        if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
+        if (!$this->hasCourseManagerRole($courseId)) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
 
@@ -435,8 +414,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    protected function hasCourseManagerRole($courseId, $userId)
+    protected function hasCourseManagerRole($courseId = 0)
     {
+        $userId = $this->getCurrentUser()->getId();
+        //1. courseId为空，判断是否有创建教学计划的权限
+        //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;
     }
 
