@@ -45,11 +45,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryEndDate'
         ));
         $course = $this->validateCourse($course);
-        //TODO 确认下是否需要判重，另外，应该查找同一个courseSetId下的courses
-        $existCourses = $this->getCourseDao()->findCoursesByTitle($course['title']);
-        if (!empty($existCourses)) {
-            throw $this->createInvalidArgumentException('标题已被占用');
-        }
 
         $course['status'] = 'draft';
 
@@ -72,7 +67,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course', $id);
+            throw $this->createNotFoundException("Course($id) Not Found");
         }
 
         if ($course['status'] == 'published') {
@@ -90,10 +85,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course', $id);
+            throw $this->createNotFoundException("Course($id) Not Found");
         }
         if ($course['status'] == 'published') {
-            throw $this->createAccessDeniedException('已发布的教学计划不允许删除');
+            throw $this->createAccessDeniedException("Deleting published Course is not allowed");
         }
 
         return $this->getCourseDao()->delete($id);
@@ -103,10 +98,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course', $id);
+            throw $this->createNotFoundException("Course($id) Not Found");
         }
         if ($course['status'] != 'published') {
-            throw $this->createAccessDeniedException('教学计划尚未发布');
+            throw $this->createAccessDeniedException('Course has not bean published');
         }
         $course['status'] = 'closed';
 
@@ -117,7 +112,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->get($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course', $id);
+            throw $this->createNotFoundException("Course($id) Not Found");
         }
 
         $this->getCourseDao()->update($id, array(
@@ -129,7 +124,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         if (isset($course['status']) && $course['status'] === 'published') {
             if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+                throw $this->createInvalidArgumentException("Lack of required fields");
             }
             return;
         }
@@ -138,10 +133,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $requiredFields[] = 'learnMode';
         }
         if (!ArrayToolkit::requireds($course, $requiredFields)) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('缺少必要字段'));
+            throw $this->createInvalidArgumentException("Lack of required fields");
         }
         if ($id <= 0 && !in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的学习模式'));
+            throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Invalid: LearnMode"));
         }
         if ($course['expiryMode'] === 'days') {
             unset($course['expiryStartDate']);
@@ -151,18 +146,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的开始日期不能为空'));
+                throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Required: expiryStartDate"));
             }
             if (isset($course['expiryEndDate'])) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
             } else {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的结束日期不能为空'));
+                throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Required: expiryEndDate"));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                throw $this->createInvalidArgumentException($this->getKernel()->trans('有效期的结束日期需晚于开始日期'));
+                throw $this->createInvalidArgumentException($this->getKernel()->trans("Value of Params expiryEndDate must later than expiryStartDate"));
             }
         } else {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('无效的有效期类型'));
+            throw $this->createInvalidArgumentException($this->getKernel()->trans("Param Invalid: expiryMode"));
         }
 
         return $course;
@@ -196,17 +191,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
+            throw $this->createAccessDeniedException("Unauthorized");
         }
 
         $course = $this->getCourseDao()->get($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程#%chapterId%不存在'), array('%chapterId%' => $chapterId));
+            throw $this->createNotFoundException("Course($courseId) Not Found");
         }
 
         if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程的教师或管理员，无权操作！'));
+            throw $this->createAccessDeniedException("Unauthorized");
         }
 
         return $course;
@@ -228,11 +223,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundService('course', $courseId);
+            throw $this->createNotFoundException("Course($courseId) Not Found");
         }
 
         if (!$this->canTakeCourse($course)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能查看课程内容，请先购买课程！'));
+            throw $this->createAccessDeniedException("You have no access to the course($courseId) before you buy it");
         }
 
         $user   = $this->getCurrentUser();
@@ -348,7 +343,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $argument = $chapter;
 
         if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
-            throw $this->createInvalidArgumentException($this->getKernel()->trans('章节类型不正确，添加失败！'));
+            throw $this->createInvalidArgumentException("Invalid Chapter Type");
         }
 
         if (in_array($chapter['type'], array('unit', 'lesson'))) {
@@ -395,7 +390,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter  = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException($this->getKernel()->trans('章节#%chapterId%不存在！', array('%chapterId%' => $chapterId)));
+            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
         }
 
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -411,7 +406,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException($this->getKernel()->trans('章节#%chapterId%不存在，删除失败！', array('%chapterId%' => $chapterId)));
+            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);

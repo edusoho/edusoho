@@ -49,7 +49,7 @@ class CourseManageController extends BaseController
         $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
 
-        return $this->render('WebBundle:CourseSetManage:course-tasks.html.twig', array(
+        return $this->render('WebBundle:CourseManage:tasks.html.twig', array(
             'tasks'     => $tasks,
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -129,20 +129,10 @@ class CourseManageController extends BaseController
         }
     }
 
-    public function preparePublishmentAction(Request $request, $courseSetId, $courseId)
+    public function publishAction(Request $request, $courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->preparePublishment($courseId, $this->getUser()->getId());
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
-    }
-
-    public function auditPublishmentAction(Request $request, $courseSetId, $courseId)
-    {
-        try {
-            $this->getCourseService()->auditPublishment($courseId, $this->getUser()->getId());
+            $this->getCourseService()->publishCourse($courseId, $this->getUser()->getId());
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

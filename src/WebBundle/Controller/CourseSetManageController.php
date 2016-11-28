@@ -8,6 +8,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetManageController extends BaseController
 {
+    public function createAction(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $data      = $request->request->all();
+            $courseSet = $this->getCourseSetService()->createCourseSet($data);
+            return $this->redirect($this->generateUrl('courseset_manage', array(
+                'id' => $courseSet['id']
+            )));
+        }
+        $user        = $this->getUser();
+        $userProfile = $this->getUserService()->getUserProfile($user->getId());
+        $user        = $this->getUserService()->getUser($user->getId());
+        return $this->render('WebBundle:CourseSet:create.html.twig', array(
+            'user'        => $user,
+            'userProfile' => $userProfile
+        ));
+    }
+
     public function indexAction(Request $request, $id)
     {
         $courseSet     = $this->getCourseSetService()->getCourseSet($id);
@@ -85,5 +103,10 @@ class CourseSetManageController extends BaseController
     protected function getTagService()
     {
         return ServiceKernel::instance()->createService('Taxonomy.TagService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

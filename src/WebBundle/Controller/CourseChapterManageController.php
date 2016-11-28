@@ -18,14 +18,14 @@ class CourseChapterManageController extends BaseController
             $chapter             = $this->getCourseService()->createChapter($chapter);
             return $this->render('WebBundle:CourseChapterManage:list-item.html.twig', array(
                 'course'  => $course,
-                'chapter' => $chapter,
+                'chapter' => $chapter
             ));
         }
 
         return $this->render('WebBundle:CourseChapterManage:chapter-modal.html.twig', array(
             'course'   => $course,
             'type'     => $type,
-            'parentId' => $parentId,
+            'parentId' => $parentId
         ));
     }
 
@@ -35,7 +35,7 @@ class CourseChapterManageController extends BaseController
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
 
         if (empty($chapter)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('章节(#%chapterId%)不存在！', array('%chapterId%' =>$chapterId )));
+            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
         }
 
         if ($request->getMethod() == 'POST') {
@@ -51,7 +51,7 @@ class CourseChapterManageController extends BaseController
         return $this->render('WebBundle:CourseChapterManage:chapter-modal.html.twig', array(
             'course'  => $course,
             'chapter' => $chapter,
-            'type'    => $chapter['type'],
+            'type'    => $chapter['type']
         ));
     }
 

@@ -2,29 +2,10 @@
 
 namespace WebBundle\Controller;
 
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetController extends BaseController
 {
-    public function createAction(Request $request)
-    {
-        if ($request->isMethod('POST')) {
-            $data      = $request->request->all();
-            $courseSet = $this->getCourseSetService()->createCourseSet($data);
-            return $this->redirect($this->generateUrl('courseset_manage', array(
-                'id' => $courseSet['id']
-            )));
-        }
-        $user        = $this->getUser();
-        $userProfile = $this->getUserService()->getUserProfile($user->getId());
-        $user        = $this->getUserService()->getUser($user->getId());
-        return $this->render('WebBundle:CourseSet:create.html.twig', array(
-            'user'        => $user,
-            'userProfile' => $userProfile
-        ));
-    }
-
     public function showAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
@@ -66,10 +47,5 @@ class CourseSetController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
-    }
-
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

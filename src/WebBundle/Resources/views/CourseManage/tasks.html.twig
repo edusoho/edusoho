@@ -4,29 +4,29 @@
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      <a href="{{path('courseset_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
-      <button class="btn btn-success btn-sm pull-right js-publish-course" data-url="{{path('courseset_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">{{'发布计划'|trans}}</button>
+      <a href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
+      <button class="btn btn-success btn-sm pull-right js-publish-course" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">{{'发布计划'|trans}}</button>
     </div>
     <div class="panel-body">
       <ul class="nav nav-pills mbl">
         <li class="active">
-        	<a href="javascript:;">{{'计划任务'|trans}}</a>
+          <a href="javascript:;">{{'计划任务'|trans}}</a>
         </li>
         <li class="">
-        	<a href="{{path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划设置'|trans}}</a>
+          <a href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划设置'|trans}}</a>
         </li>
         <li class="">
-        	<a href="{{path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
+          <a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
         </li>
         <li class="">
-        	<a href="{{path('courseset_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">{{'教师设置'|trans}}</a>
+          <a href="{{path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">{{'教师设置'|trans}}</a>
         </li>
         <li class="">
-        	<a href="{{path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学员管理'|trans}}</a>
+          <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学员管理'|trans}}</a>
         </li>
       </ul>
       <div class="content">
-      	{{'计划任务列表'|trans}}
+        {{'计划任务列表'|trans}}
       </div>
 
       {% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}

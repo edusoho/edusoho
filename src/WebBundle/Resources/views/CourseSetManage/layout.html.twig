@@ -15,68 +15,37 @@
         <ul class="list-group">
           <li class="list-group-heading">{{'课程设置'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_base', {id:courseSet.id}) }}">
+            <a href="{{ path('course_set_manage_base', {id:courseSet.id}) }}">
               <span></span>{{'基本信息'|trans}}
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'detail' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_detail', {id:courseSet.id}) }}">
+            <a href="{{ path('course_set_manage_detail', {id:courseSet.id}) }}">
               <span></span>{{'详细信息'|trans}}
             </a>
           </li>
-          <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
-            <a href="{{ path('course_manage_picture', {id:courseSet.id}) }}">
-              <span></span>{{'课程图片'|trans}}
-            </a>
-          </li>
-          {# <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
-            <a href="{{ path('course_manage_lesson', {id:courseSet.id}) }}">
-              <span></span>{{'课时管理'|trans}}
-            </a>
-          </li> #}
-          {# {% if courseSet.type == 'live' %}
-            <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
-              <a href="{{ path('live_course_manage_replay', {id:courseSet.id}) }}">
-                <span></span>{{'录播管理'|trans}}</a>
-            </li>
-          {% endif %} #}
-          {# <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_files', {id:courseSet.id}) }}">
-              <span></span>{{'课程文件'|trans}}
-            </a>
-          </li> #}
-         {#  <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
-            <a href="{{ path('course_manage_question', {courseId:courseSet.id}) }}">
-              <span></span>{{'题目管理'|trans}}
-            </a>
-          </li> #}
-          {# <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
-            <a href="{{ path('course_manage_testpaper', {courseId:courseSet.id}) }}">
-              <span></span>{{'试卷管理'|trans}}
-            </a>
-          </li> #}
         </ul>
         <ul class="list-group">
          {#  <li class="list-group-heading">{{'默认教学计划'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'task' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_course_tasks', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
+            <a href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{{'计划任务'|trans}}</a>
           </li>
           <li class="list-group-item {% if side_nav == 'info' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_course_info', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
+            <a href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{{'计划设置'|trans}}</a>
           </li>
           <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_course_marketing', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
+            <a href="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{{'营销设置'|trans}}</a>
           </li>
           <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_course_teachers', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
+            <a href="{{ path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{{'教师设置'|trans}}
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
-            <a href="{{ path('courseset_manage_course_students', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
+            <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: defaultCourse.id}) }}">
               <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}{{'管理'|trans}}
             </a>
           </li> #}
@@ -101,7 +70,7 @@
         <ul class="list-group">
           <li class="list-group-heading">{{'教学计划管理'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-           <a href="{{ path('courseset_manage_courses', {courseSetId: courseSet.id}) }}">
+           <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
               <span></span>{{'教学计划列表'|trans}}</a>
           </li>
         </ul>

@@ -8,7 +8,7 @@
 	<div class="panel panel-default">
     <div class="panel-heading">{{ '基本信息'|trans }}</div>
     <div class="panel-body">
-      <form class="form-horizontal" id="courseset-form" action="{{path('courseset_manage_base', {id: courseSet.id})}}" method="post">
+      <form class="form-horizontal" id="courseset-form" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
         {{ web_macro.flash_messages() }}
         <div class="form-group">
           <label class="col-md-2 control-label">{{ '标题'|trans }}</label>

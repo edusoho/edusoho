@@ -1,14 +1,14 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
  {{ load_script('courseSet-manage/header') }}
 <div class="es-section course-manage-header clearfix">
-  <a href="{{ path('courseset_show', {id:courseSet.id}) }}">
+  <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
     <img class="picture" src="{{ filepath(courseSet.largePicture, 'courseSet.png') }}" />
   </a>
   <h1 class="title">
     {% if courseSet.type != 'normal' %}
       [{{ dict('courseType')[courseSet.type] }}]
     {% endif %}
-    <a class="link-dark" href="{{ path('courseset_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+    <a class="link-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     {% if courseSet.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif courseSet.status=='draft' %}
@@ -35,15 +35,15 @@
   <div class="toolbar hidden-xs">
     {% if courseSet.status == 'published' %}
       <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="{{ path('courseset_show', {id:courseSet.id}) }}">{{'返回课程主页'|trans}}</a>
+        <a class="btn btn-default btn-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{'返回课程主页'|trans}}</a>
       </div>
     {% endif %}
 
     <div class="btn-group">
       <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'预览'|trans}} <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right">
-        <li><a href="{{ path('courseset_show', {id:courseSet.id, previewAs:'member'}) }}" target="_blank">{{'作为 已购买用户'|trans}}</a></li>
-        <li><a href="{{ path('courseset_show', {id:courseSet.id, previewAs:'guest'}) }}" target="_blank">{{'作为 未购买用户'|trans}}</a></li>
+        <li><a href="{{ path('course_set_show', {id:courseSet.id, previewAs:'member'}) }}" target="_blank">{{'作为 已购买用户'|trans}}</a></li>
+        <li><a href="{{ path('course_set_show', {id:courseSet.id, previewAs:'guest'}) }}" target="_blank">{{'作为 未购买用户'|trans}}</a></li>
       </ul>
     </div>
 
