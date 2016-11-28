@@ -58,7 +58,6 @@ class Creator{
                 if(!$(params[0]).checked){
                     return true;
                 }
-                // console.log(value, element, params, this.optional(element), $(params).val() > value);
                 return this.optional(element) || $(params[1]).val() > value;
             },
             Translator.trans('开始日期应早于结束日期')
@@ -70,7 +69,6 @@ class Creator{
                 if(!$(params[0]).checked){
                     return true;
                 }
-                // console.log(value, element, params, this.optional(element), $(params).val() < value);
                 return this.optional(element) || $(params[1]).val() < value;
             },
             Translator.trans('结束日期应晚于开始日期')
