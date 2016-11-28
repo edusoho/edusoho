@@ -35,9 +35,10 @@ export const sortList = () => {
   });
 }
 
-
-export default {
-  deleteTask,
-  sortList
+export const showSettings = () => {
+  $("#sortable-list").on('click','li',event=>{
+    var $this = $(event.currentTarget).toggleClass('active');
+    $this.find('.js-item-settings').slideToggle();
+  }) 
 }
 
