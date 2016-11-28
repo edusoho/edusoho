@@ -20,7 +20,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
-        $courses = $this->getDefaultCourseByCourseSetId($courseSetId);
+        return $this->getDefaultCourseByCourseSetId($courseSetId);
     }
 
     public function createCourse($course)
