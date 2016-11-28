@@ -1,6 +1,8 @@
 {% extends 'WebBundle:Activity:content-layout.html.twig' %}
 
-{% do script(['web/activity/ppt/index.js']) %}
+{% if not error is empty %}
+  {% do script(['web/activity/ppt/index.js']) %}
+{% endif %}
 
 {% block body %}
   <div id="activity-ppt-content"
@@ -9,37 +11,37 @@
        data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
       {{ error.message|raw }}
+    {% else %}
+      <div class="slide-player">
+        <div class="slide-player-body loading-background"></div>
+        <div class="slide-notice">
+          <div class="header">{{ '已经到最后一张图片了哦'|trans }}
+            <button type="button" class="close">×</button>
+          </div>
+        </div>
+        <div class="slide-player-control clearfix">
+          <a href="javascript:" class="goto-first">
+            <span class="glyphicon glyphicon-step-backward"></span>
+          </a>
+          <a href="javascript:" class="goto-prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+          <a href="javascript:" class="goto-next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+          <a href="javascript:" class="goto-last">
+            <span class="glyphicon glyphicon-step-forward"></span>
+          </a>
+          <a href="javascript:" class="fullscreen">
+            <span class="glyphicon glyphicon-fullscreen"></span>
+          </a>
+          <div class="goto-index-input">
+            <input type="text" class="goto-page form-control input-sm" value="1">&nbsp;/&nbsp;
+            <span class="total"></span>
+          </div>
+        </div>
+      </div>
     {% endif %}
-
-    <div class="slide-player">
-      <div class="slide-player-body loading-background"></div>
-      <div class="slide-notice">
-        <div class="header">{{ '已经到最后一张图片了哦'|trans }}
-          <button type="button" class="close">×</button>
-        </div>
-      </div>
-      <div class="slide-player-control clearfix">
-        <a href="javascript:" class="goto-first">
-          <span class="glyphicon glyphicon-step-backward"></span>
-        </a>
-        <a href="javascript:" class="goto-prev">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a href="javascript:" class="goto-next">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-        <a href="javascript:" class="goto-last">
-          <span class="glyphicon glyphicon-step-forward"></span>
-        </a>
-        <a href="javascript:" class="fullscreen">
-          <span class="glyphicon glyphicon-fullscreen"></span>
-        </a>
-        <div class="goto-index-input">
-          <input type="text" class="goto-page form-control input-sm" value="1">&nbsp;/&nbsp;
-          <span class="total"></span>
-        </div>
-      </div>
-    </div>
   </div>
 
 {% endblock %}

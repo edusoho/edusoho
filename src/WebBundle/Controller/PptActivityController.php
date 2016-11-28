@@ -41,6 +41,11 @@ class PptActivityController extends BaseController implements ActivityActionInte
 
         $result = $this->getMaterialLibService()->player($file['globalId']);
 
+        if(isset($result['error'])){
+            $error['code'] = 'error';
+            $error['message'] = $result['error'];
+        }
+
         $slides = isset($result['images']) ? $result['images'] : array();
 
         return $this->render('WebBundle:PptActivity:show.html.twig', array(
