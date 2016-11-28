@@ -48,14 +48,11 @@ class Emails extends BaseResource
                 'code' => 0
             );
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'raw_password_reset_update', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
-            throw $e;
+            return array(
+                'code'    => '5004',
+                'message' => '邮箱发送失败'
+            );   
         }
-
-        return array(
-            'code'    => '5004',
-            'message' => '邮箱发送失败'
-        );
     }
 
     protected function getPasswordEncoder()
