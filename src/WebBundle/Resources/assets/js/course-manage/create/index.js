@@ -30,12 +30,12 @@ class Creator{
                 expiryStartDate: {
                     required: '#expiryByDate:checked',
                     date:true,
-                    before: '#expiryEndDate'
+                    before: ['#expiryByDate', '#expiryStartDate']
                 },
                 expiryEndDate: {
                     required: '#expiryByDate:checked',
                     date:true,
-                    after: '#expiryStartDate'
+                    after: ['#expiryByDate', '#expiryStartDate']
                 }
             },
             messages: {
@@ -55,8 +55,11 @@ class Creator{
         $.validator.addMethod(
             "before",
             function(value, element, params) {
+                if(!$(params[0]).checked){
+                    return true;
+                }
                 // console.log(value, element, params, this.optional(element), $(params).val() > value);
-                return this.optional(element) || $(params).val() > value;
+                return this.optional(element) || $(params[1]).val() > value;
             },
             Translator.trans('开始日期应早于结束日期')
         );
@@ -64,13 +67,17 @@ class Creator{
         $.validator.addMethod(
             "after",
             function(value, element, params) {
+                if(!$(params[0]).checked){
+                    return true;
+                }
                 // console.log(value, element, params, this.optional(element), $(params).val() < value);
-                return this.optional(element) || $(params).val() < value;
+                return this.optional(element) || $(params[1]).val() < value;
             },
             Translator.trans('结束日期应晚于开始日期')
         );
 
         $('#course-submit').click(function(evt){
+            console.log('submit : ', validator);
             if(validator.form()){
                 $(evt.currentTarget).button('loading');
                 $form.submit();
