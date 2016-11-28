@@ -7,6 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class User extends BaseResource
 {
+    private $errorMessage = array(
+        '5001' => '手机号未验证',
+        ''     => ''
+    );
+
     private $_unsetFields = array(
         'password', 'salt', 'payPassword', 'payPasswordSalt'
     );
@@ -43,6 +48,25 @@ class User extends BaseResource
         $user['profile'] = $this->getUserService()->getUserProfile($id);
 
         return $this->filter($user);
+    }
+
+    public function sendVerificationCode(Application $app, Request $request)
+    {
+        $data = $request->query->all();
+
+        $token = json_decode($data);
+
+        if (!$this->getUserService()->getUserByVerifiedMobile($token['verifiedMobile'])) {
+            $this->returnError('5001');
+        }
+
+        
+
+    }
+
+    public function returnError($code)
+    {
+        return $this->errorMessage[$code];
     }
 
     public function filter($res)
