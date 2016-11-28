@@ -26,18 +26,36 @@ class Emails extends BaseResource
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
         );
 
-        $mailOptions = array(
-            'to'       => $token['email'],
-            'template' => 'email_reset_password',
-            'params'   => array(
-                'nickname'  => $user['nickname'],
-                'verifyurl' => $this->generateUrl('raw_password_reset_update', array('token' => $token), true),
-                'sitename'  => $site['name'],
-                'siteurl'   => $site['url']
-            )
+        $site  = $this->setting('site', array());
+
+        try {
+            $mailOptions = array(
+                'to'       => $token['email'],
+                'template' => 'effect_email_reset_password',
+                'params'   => array(
+                    'nickname'  => $user['nickname'],
+                    'verifyurl' => $this->generateUrl('raw_password_reset_update', array('token' => $token), true),
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
+                )
+            );
+
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
+            $this->getLogService()->info('user', 'raw_password_reset_update', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+
+            return array(
+                'code' => 0
+            );
+        } catch (\Exception $e) {
+            $this->getLogService()->error('user', 'raw_password_reset_update', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
+            throw $e;
+        }
+
+        return array(
+            'code'    => '5004',
+            'message' => '邮箱发送失败'
         );
-
-
     }
 
     protected function getPasswordEncoder()

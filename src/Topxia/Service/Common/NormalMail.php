@@ -59,6 +59,14 @@ class NormalMail extends Mail
         }
     }
 
+    private function on_effect_email_reset_password()
+    {
+        return array(
+            'title' => $this->getKernel()->trans(),
+            'body'  => $this->renderBody('TopxiaWebBundle:PasswordReset:effect-reset.txt.twig');
+        );
+    }
+
     private function on_email_reset_password()
     {
         return array(
