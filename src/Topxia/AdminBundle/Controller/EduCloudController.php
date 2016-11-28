@@ -87,70 +87,24 @@ class EduCloudController extends BaseController
     {
         try {
             $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
-
-            if (isset($info['licenseDomains'])) {
-                $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
-            }
-
             $isBinded = $this->getAppService()->getBinded();
-
-            $isBinded['email'] = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
-
-            $eduSohoOpenClient = new EduSohoOpenClient;
-            $overview          = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
-
-        $videoInfo = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
-        $liveInfo  = isset($overview['service']['live']) ? $overview['service']['live'] : null;
-        $smsInfo   = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
-        $emailInfo = isset($overview['service']['email']) ? $overview['service']['email'] : null;
-        $chartInfo = array(
-            'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
-            'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
-            'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
-            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null),
-            'imUsedInfo'    => json_encode($this->getImUsedInfo())
-        );
-
-        if (isset($overview['service']['storage']['startMonth'])
-            && isset($overview['service']['storage']['endMonth'])
-            && $overview['service']['storage']['startMonth']
-            && $overview['service']['storage']['endMonth']
-        ) {
-            $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
-
-            $endMonthFormated                           = $this->dateFormat($videoInfo['endMonth']);
-            $overview['service']['storage']['endMonth'] = strtotime($endMonthFormated.'-'.$this->monthDays($endMonthFormated));
-        }
-
-        $notices = $eduSohoOpenClient->getNotices();
-        $notices = json_decode($notices, true);
-
-        if ($this->getWebExtension()->isTrial()) {
-            $trialHtml = $this->getCloudCenterExperiencePage();
-        }
-
-        try {
-            $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
-        } catch (\RuntimeException $e) {
-            $imUsedTotal['count'] = 0;
-        }
-
-        if (!empty($imUsedTotal['error'])) {
-            $imUsedTotal['count'] = 0;
+        $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
+        foreach ($overview['services'] as $key => $value) {
+            if ($value == true) {
+                $paidService[] = $overview['services'][$key];
+            } else {
+                $unPaidService[] = $overview['services'][$key];
+            }
         }
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
-            'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-            'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-            'notices'     => $notices,
             'isBinded'    => $isBinded,
-            'chartInfo'   => $chartInfo,
-            'accessCloud' => $this->isAccessEduCloud(),
             'overview'    => $overview,
-            'imUsedTotal' => $imUsedTotal
+            'paidService' => isset($paidService) ? $paidService : false,
+            'unPaidService' => isset($unPaidService) ? $unPaidService : false
         ));
     }
 

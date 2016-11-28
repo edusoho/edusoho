@@ -32,6 +32,22 @@ class CloudController extends BaseController
         return $this->redirectUrl('order_recharge');
     }
 
+    public function accountPersonAction(Request $request)
+    {
+        return $this->redirectUrl('account_person');
+    }
+
+    public function listCouponAction(Request $request)
+    {
+        return $this->redirectUrl('list_coupon');
+    }
+
+    public function serviceOverviewAction(Request $request, $type)
+    {
+        $url = 'service_'.$type.'_overview';
+        return $this->redirectUrl($url);
+    }
+
     public function detailAction(Request $request)
     {
         return $this->redirectUrl('bill_list');
