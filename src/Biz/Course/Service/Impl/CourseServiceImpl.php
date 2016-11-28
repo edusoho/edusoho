@@ -166,7 +166,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $items;
     }
 
-    public function tryManageCourse($courseId)
+    public function tryManageCourse($courseId, $courseSetId = 0)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -176,9 +176,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->get($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course($courseId) Not Found");
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-
+        if ($courseSetId > 0 && $course['courseSetId'] !== $courseSetId) {
+            throw $this->createInvalidArgumentException('Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}');
+        }
         if (!$this->hasCourseManagerRole($courseId)) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
@@ -202,11 +204,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("Course($courseId) Not Found");
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
 
         if (!$this->canTakeCourse($course)) {
-            throw $this->createAccessDeniedException("You have no access to the course($courseId) before you buy it");
+            throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
 
         $user   = $this->getCurrentUser();
@@ -369,7 +371,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter  = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
+            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
 
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -385,7 +387,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
+            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);
@@ -418,6 +420,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
+        //TODO
         //1. courseId为空，判断是否有创建教学计划的权限
         //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;

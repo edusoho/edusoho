@@ -9,6 +9,26 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
+    public function tryManageCourseSet($id)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException("Unauthorized");
+        }
+
+        $courseSet = $this->getCourseSetDao()->get($id);
+
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException("CourseSet#{$id} Not Found");
+        }
+
+        if (!$this->hasCourseSetManagerRole($id)) {
+            throw $this->createAccessDeniedException("Unauthorized");
+        }
+
+        return $courseSet;
+    }
+
     public function getCourseSet($id)
     {
         return $this->getCourseSetDao()->get($id);
@@ -98,6 +118,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
+        //TODO
         //1. courseSetId为空，判断是否有创建课程的权限
         //2. courseSetId不为空，判断是否有该课程的管理权限
         return true;
@@ -125,7 +146,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getTagService()
     {
-        // return $this->biz->service('Taxonomy:TagService');
         return ServiceKernel::instance()->createService('Taxonomy.TagService');
     }
 }
