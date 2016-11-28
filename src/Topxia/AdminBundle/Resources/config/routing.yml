@@ -994,14 +994,14 @@ admin_cloud_recharge:
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_cost_center:
-    pattern:  /cloud/cost/center
-    defaults: { _controller: TopxiaAdminBundle:Cloud:costCenter }
+admin_cloud_account_person:
+    pattern:  /cloud/account/person
+    defaults: { _controller: TopxiaAdminBundle:Cloud:accountPerson }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_cash_coupon:
-    pattern:  /cloud/cash/coupon
-    defaults: { _controller: TopxiaAdminBundle:Cloud:cashCoupon }
+admin_cloud_list_coupon:
+    pattern:  /cloud/list/coupon
+    defaults: { _controller: TopxiaAdminBundle:Cloud:listCoupon }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_service_overview:

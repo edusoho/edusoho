@@ -32,12 +32,12 @@ class CloudController extends BaseController
         return $this->redirectUrl('order_recharge');
     }
 
-    public function costCenterAction(Request $request)
+    public function accountPersonAction(Request $request)
     {
         return $this->redirectUrl('account_person');
     }
 
-    public function cashCouponAction(Request $request)
+    public function listCouponAction(Request $request)
     {
         return $this->redirectUrl('list_coupon');
     }
