@@ -1265,25 +1265,25 @@ class EduCloudController extends BaseController
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
-            $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
-            $liveEnabled = $liveCourseSetting['live_course_enabled'];
-            if ((isset($overview['isBuy']) && $overview['isBuy'] == false)||(isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
-                $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
-                return $this->render('TopxiaAdminBundle:EduCloud/Live:without-enable.html.twig', array(
-                    'overview'  => $overview
-                ));
-            }
-            foreach ($overview['items'] as $key => $value) {
-                $items['date'][] = $value['date'];
-                $items['count'][] = $value['count'];
-            }
-            return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
-                'account'  => $overview['account'],
-                'items'  => isset($items) ? $items : null
-            ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
         }
+        $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
+        $liveEnabled = $liveCourseSetting['live_course_enabled'];
+        if ((isset($overview['isBuy']) && $overview['isBuy'] == false)||(isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
+            $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:without-enable.html.twig', array(
+                'overview'  => $overview
+            ));
+        }
+        foreach ($overview['items'] as $key => $value) {
+            $items['date'][] = $value['date'];
+            $items['count'][] = $value['count'];
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
+            'account'  => $overview['account'],
+            'items'  => isset($items) ? $items : null
+        ));
     }
 
     public function liveSettingAction(Request $request)
