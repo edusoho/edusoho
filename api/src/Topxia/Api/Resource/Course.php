@@ -22,6 +22,19 @@ class Course extends BaseResource
 
         $res['convNo'] = $this->getConversation($res['id']);
 
+        //temp fix for app, will be remove when new app version published
+        $res['expiryDay'] = '0';
+
+        $res['tags'] = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $res['id']
+        ));
+
+        //在版本7.3.2,先把标签unset掉
+        //redmine编号17640
+        //下一个迭代来修改这个bug
+        unset($res['tags']);
+
         return $res;
     }
 
@@ -55,5 +68,10 @@ class Course extends BaseResource
     protected function getConversationService()
     {
         return $this->getServiceKernel()->createService('IM.ConversationService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

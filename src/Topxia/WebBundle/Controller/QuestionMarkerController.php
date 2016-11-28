@@ -325,6 +325,11 @@ class QuestionMarkerController extends BaseController
         return $this->getServiceKernel()->createService('Marker.MarkerService');
     }
 
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
+    }
+
     protected function getQuestionMarkerResultService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');

@@ -294,10 +294,10 @@ class ClassroomManageController extends BaseController
 
         $reason = array(
             'type'     => 'other',
-            'note'     => '手动移除',
+            'note'     => '"'.$user['nickname'].'"'.' 手动移除',
             'operator' => $user['id']
         );
-        $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],
@@ -645,14 +645,22 @@ class ClassroomManageController extends BaseController
 
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
+            $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('基本信息设置成功！'));
         }
 
+        $tags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+        
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
-            'classroom' => $classroom));
+            'classroom' => $classroom,
+            'tags'      => ArrayToolkit::column($tags, 'name')
+        ));
     }
 
     public function setPriceAction(Request $request, $id)
@@ -991,6 +999,14 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    private function getTagIdsFromRequest($request)
+    {
+        $tags = $request->request->get('tags');
+        $tags = explode(',', $tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
+        return ArrayToolkit::column($tags, 'id');
+    }
+
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses            = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -1112,6 +1128,11 @@ class ClassroomManageController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     private function getWebExtension()

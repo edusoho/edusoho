@@ -26,8 +26,7 @@ class CourseTaskResult extends Migration
 
         $connection->exec("CREATE TABLE `activity_learn_log` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-            `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学活动id',
-            `courseTaskId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务id',
+            `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学活动id',          
             `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
             `event` varchar(255) NOT NULL DEFAULT '' COMMENT '',
             `data` text COMMENT '',

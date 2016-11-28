@@ -16,17 +16,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     public function getActivity($id)
     {
-        $activity = $this->getActivityDao()->get($id);
+        return $this->getActivityDao()->get($id);
+    }
 
+    public function getActivityFetchExt($id)
+    {
+        $activity = $this->getActivity($id);
         if (!empty($activity['mediaId'])) {
             $activityConfig  = ActivityFactory::create($this->biz, $activity['mediaType']);
             $media           = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
         }
-        return $activity;
     }
 
-    public function getActivities($ids)
+    public function findActivities($ids)
     {
         return $this->getActivityDao()->findByIds($ids);
     }
@@ -35,16 +38,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
 
+        if (empty($activity)) {
+            return;
+        }
+
         if (in_array($eventName, array('start', 'doing', 'finish'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
-        $listeners   = array();
-        $listener    = new ActivityLearnLogListener($this->biz);
-        $listeners[] = $listener;
+        $logListener = new ActivityLearnLogListener($this->biz);
 
-        $eventName        = $activity['mediaType'].'.'.$eventName;
-        $data['event']    = $eventName;
+        $logData          = $data;
+        $logData['event'] = $activity['mediaType'].'.'.$eventName;
+        $logListener->handle($activity, $logData);
+
+        $listeners        = array();
         $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
         if (!is_null($activityListener)) {
             $listeners[] = $activityListener;
@@ -58,15 +66,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
-            throw new InvalidArgumentException('activity is invalid');
+            throw $this->createInvalidArgumentException('activity is invalid');
         }
 
         if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权创建教学活动');
         }
 
         if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权创建教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
@@ -109,7 +117,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $savedActivity = $this->getActivity($id);
 
         if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权更新教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
@@ -144,7 +152,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         if (!$this->canManageCourse($activity['fromCourseId'])) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权删除教学活动');
         }
 
         $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);

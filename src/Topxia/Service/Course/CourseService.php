@@ -277,6 +277,8 @@ interface CourseService
 
     public function isCourseStudent($courseId, $userId);
 
+    public function isCourseMember($courseId, $userId);
+
     public function setCourseTeachers($courseId, $teachers);
 
     public function cancelTeacherInAllCourses($userId);
@@ -289,7 +291,9 @@ interface CourseService
 
     public function deleteMemberByCourseId($courseId);
 
-    public function findUserJoinedCourseIds($userId, $joinedType = 'course');
+    public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course');
+
+    public function quitCourseByDeadlineReach($userId, $courseId);
 
     /**
      * 成为学员，即加入课程的学习

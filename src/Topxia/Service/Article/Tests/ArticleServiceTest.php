@@ -106,7 +106,7 @@ class ArticleServiceTest extends BaseTestCase
             'categoryId'    => '1',
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
-            'tags'          => 'default'
+            'tags'          => ''
         );
         $article = $this->getArticleService()->createArticle($fileds);
         $this->assertEquals('test article', $article['title']);
@@ -134,7 +134,7 @@ class ArticleServiceTest extends BaseTestCase
             'categoryId'    => '1',
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
-            'tags'          => 'default'
+            'tags'          => '1,2'
         );
         $article = $this->getArticleService()->updateArticle($newArticle['id'], $fields);
         $this->assertEquals('正午时分2', $article['body']);
@@ -361,7 +361,6 @@ class ArticleServiceTest extends BaseTestCase
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
             'tags'          => 'default',
-            'tagIds'        => 'default'
         );
         return $this->getArticleService()->createArticle($fileds);
     }

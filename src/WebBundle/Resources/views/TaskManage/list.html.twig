@@ -1,19 +1,34 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
-{% set use_webapck_loader = true %}
 
-{% do css(['web.css']) %}
+{% set side_nav = 'task' %}
 {% do script(['libs/jquery-sortable.js','web/task-manage/index.js']) %}
+
 
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      {{'教学计划管理'|trans}}
+      <a href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
       <button class="btn btn-success btn-sm pull-right">发布计划</button>
     </div>
     <div class="panel-body">
       <!-- TODO  删除返回的课程数据，为任务加章节数据 -->
-      <div class="task-manage-header clearfix">
+      <ul class="nav nav-pills mbl">
+        <li class="active"><a href="javascript:;">计划任务</a></li>
+        <li class="">
+          <a href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">计划设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">营销设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">教师设置</a>
+        </li>
+        <li class="">
+          <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">学员管理</a>
+        </li>
+      </ul>
+      <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
         <div class="pull-right">
           <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> 任务 </button>

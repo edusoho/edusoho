@@ -50,7 +50,7 @@
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'上传'|trans}}</a>
         <button class="btn btn-default" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
-        <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。'|trans}}</p>
+        <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,'|trans}}<a href="{{ path('homepage') }}" target="_blank">点击查看</a></p>
         <input type="hidden" name="logo" value="{{ site.logo }}">
       </div>
     </div>
@@ -134,13 +134,9 @@
 
         <textarea id="analytics" name="analytics" class="form-control" rows="4">{{site.analytics}}</textarea>
 
-        <p class="help-block">
-          {{'建议使用下列统计分析的一种：'|trans}}
-          <a href="http://www.google.cn/intl/zh-CN_ALL/analytics/" target="_blank">{{'谷歌分析'|trans}}</a>、
-          <a href="http://tongji.baidu.com/" target="_blank">{{'百度统计'|trans}}</a>、
-          <a href="http://ta.qq.com/" target="_blank">{{'腾讯分析'|trans}}</a>、
-          <a href="http://www.cnzz.com/" target="_blank">CNZZ</a>。
-        </p>
+        <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
+        <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
+        <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
       </div>
     </div>
   </fieldset>

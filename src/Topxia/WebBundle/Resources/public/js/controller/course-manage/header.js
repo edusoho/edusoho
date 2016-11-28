@@ -4,6 +4,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $('.course-publish-btn').click(function() {
+
+            var studentNum = $('input[name=maxStudentNum]').val();
+
             if (!confirm(Translator.trans('您真的要发布该课程吗？'))) {
                 return ;
             }

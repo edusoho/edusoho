@@ -110,6 +110,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         if ($course['serializeMode'] != 'serialize') {
             $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+            $memberFields['finishedTime'] = $memberFields['isLearned'] ? time() : 0;
         }
 
         $memberFields['credit'] = $totalCredits;

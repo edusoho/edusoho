@@ -23,109 +23,6 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function exploreAction(Request $request, $category)
-    {
-        $conditions             = $request->query->all();
-        $conditions['status']   = 'published';
-        $conditions['showable'] = 1;
-
-        $categoryArray = array();
-
-        if (!empty($category)) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($category);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
-        }
-
-        if (!isset($conditions['filter'])) {
-            $conditions['filter'] = array(
-                'price'          => 'all',
-                'currentLevelId' => 'all'
-            );
-        }
-
-        $filter = $conditions['filter'];
-
-        if ($filter['price'] == 'free') {
-            $conditions['price'] = '0.00';
-        }
-
-        unset($conditions['filter']);
-        $levels = array();
-
-        if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
-
-            if (!$filter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
-            }
-        }
-
-        $classroomSetting = $this->getSettingService()->get('classroom');
-
-        if (!isset($classroomSetting['explore_default_orderBy'])) {
-            $classroomSetting['explore_default_orderBy'] = 'createdTime';
-        }
-
-        $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
-        
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $orderBy = array($orderBy, 'asc');
-        } else {
-            $orderBy = array($orderBy, 'desc');
-        }
-
-        unset($conditions['orderBy']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassroomService()->searchClassroomsCount($conditions),
-            9
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            $orderBy,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        if (!$categoryArray) {
-            $categoryArrayDescription = array();
-        } else {
-            $categoryArrayDescription = $categoryArray['description'];
-            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
-        }
-
-        if (!$categoryArray) {
-            $categoryParent = '';
-        } else {
-            if (!$categoryArray['parentId']) {
-                $categoryParent = '';
-            } else {
-                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-            }
-        }
-
-        return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
-            'paginator'                => $paginator,
-            'classrooms'               => $classrooms,
-            'path'                     => 'classroom_explore',
-            'category'                 => $category,
-            'categoryArray'            => $categoryArray,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'filter'                   => $filter,
-            'levels'                   => $levels,
-            'orderBy'                  => $orderBy[0]
-        ));
-    }
-
     public function keywordsAction($classroom)
     {
         $category       = $this->getCategoryService()->getCategory($classroom['categoryId']);
@@ -208,7 +105,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -216,7 +112,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member    = $this->previewAsMember($previewAs, $member, $classroom);
         $lessonNum = 0;
         $coinPrice = 0;
         $price     = 0;
@@ -233,13 +128,13 @@ class ClassroomController extends BaseController
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
 
-        if (!empty($member['role'])) {
-            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-        } else {
-            $isclassroomteacher = false;
-        }
 
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member    = $this->previewAsMember($previewAs, $member, $classroom);
+        
         if ($member) {
+            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
+            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
@@ -252,7 +147,8 @@ class ClassroomController extends BaseController
                 'coursesNum'             => $coursesNum,
                 'canFreeJoin'            => $canFreeJoin,
                 'breadcrumbs'            => $breadcrumbs,
-                'isclassroomteacher'     => $isclassroomteacher
+                'isclassroomteacher'     => $isclassroomteacher,
+                'vipChecked'             => $vipChecked
             ));
         }
 
@@ -810,27 +706,22 @@ class ClassroomController extends BaseController
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
-        $vipStatus = $classroomVip = null;
-
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-
-            if ($classroomVip) {
-                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
-
-                if ($vipStatus == 'ok') {
-                    $formData['becomeUseMember'] = true;
-                }
-            }
+        if ($this->isPluginInstalled('Vip') 
+            && $this->setting('vip.enabled') 
+            && !empty($classroom['vipLevelId'])
+            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
+            return $this->forward("ClassroomBundle:Classroom:becomeStudent", array(
+                'request' => $request, 
+                'id' => $classroom['id']
+            ));
         }
 
-        if ($classroom['price'] == 0 || $vipStatus == 'ok') {
+        if ($classroom['price'] == 0) {
             $formData['amount']     = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
-            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 

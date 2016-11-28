@@ -293,7 +293,7 @@ searchCourseType:
 
 userInfoFields:
     email: 邮箱地址
-    truename: 姓名
+    truename: 真实姓名
     mobile: 手机号码
     qq: QQ
     company: 公司
@@ -314,6 +314,13 @@ processStatus:
     waiting: 转码中
     processing: 转码中
     ok: 转码成功
+    error: 转码失败
+
+convertStatus:
+    none: 等待转码
+    waiting: 等待转码
+    doing: 正在转码
+    success: 转码成功
     error: 转码失败
 
 state:

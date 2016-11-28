@@ -40,6 +40,11 @@ class PlayerController extends BaseController
                     $api    = CloudAPIFactory::create("leaf");
                     $result = $api->get("/resources/{$file['globalId']}/player");
 
+                    if (isset($result['subtitles'])) {
+                        $this->filterSubtitles($result['subtitles']);
+                        $context['subtitles'] = $result['subtitles'];
+                    }
+
                     // 临时修复手机浏览器端视频不能播放的问题
                     if ($agentInWhiteList) {
                         $context['hideQuestion'] = 1; //手机浏览器不弹题
@@ -59,6 +64,7 @@ class PlayerController extends BaseController
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
+
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
@@ -335,6 +341,13 @@ class PlayerController extends BaseController
             return false;
         } else {
             return true;
+        }
+    }
+
+    private function filterSubtitles(&$subtitles)
+    {
+        foreach ($subtitles as &$subtitle) {
+            $subtitle['name'] = rtrim($subtitle['name'], '.srt');
         }
     }
 

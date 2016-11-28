@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     var _ = require('underscore');
+    var SubtitleDialog = require('topxiawebbundle/controller/media/subtitle/dialog');
     require('jquery.sortable');
     require('es-ckeditor');
 
@@ -128,9 +129,9 @@ define(function(require, exports, module) {
 
                     if($parent.length){
                         var add = 0;
-                        if($parent.hasClass('item-chapter  clearfix')){
+                        if($parent.hasClass('js-chapter')){
                             $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix')){
+                                if($(this).hasClass('js-chapter')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
@@ -143,12 +144,12 @@ define(function(require, exports, module) {
 
                         }else{
                              $parent.nextAll().each(function() {
-                                if($(this).hasClass('item-chapter  clearfix')){
+                                if($(this).hasClass('js-chapter')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
                                 }
-                                if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
+                                if($(this).hasClass('item-chapter-unit')){
                                     $(this).before(html);
                                     add = 1;
                                     return false;
@@ -343,7 +344,23 @@ define(function(require, exports, module) {
             }
 
             $title.val(name.substring(0, name.lastIndexOf('.')));
-        }; 
+        };
+
+        /**
+         * 视频字幕
+         */
+        var subtitleDialog = null;
+        if ($('.js-subtitle-list').length > 0) {
+            subtitleDialog = new SubtitleDialog({
+                element: '.js-subtitle-list'
+            });
+        }
+
+        //显示字幕编辑组件
+        if (choosedMedia && 'id' in choosedMedia && choosedMedia.id > 0) {
+            subtitleDialog.media = choosedMedia;
+            subtitleDialog.renderHTML();
+        }
 
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
@@ -351,7 +368,8 @@ define(function(require, exports, module) {
 
             updateDuration(item.length);
             fillTitle(item.name);
-
+            subtitleDialog.media = item;
+            subtitleDialog.renderHTML();
         });
 
         audioChooser.on('change', function(item) {
@@ -391,6 +409,10 @@ define(function(require, exports, module) {
             if(isUploading){
                 Notify.danger(Translator.trans('文件正在上传，等待上传完后再保存。'));
                 return false;
+            }
+
+            if (subtitleDialog) {
+                subtitleDialog.destroy();
             }
 
             _.each(choosers, function (chooser) {
@@ -507,5 +529,17 @@ define(function(require, exports, module) {
             var temp = val > multiple ? (multiple+0.5) : multiple;
             $(this).val(temp.toFixed(1));
         })
+
+        $('.js-free-lesson-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
     };
 });
