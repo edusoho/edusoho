@@ -4,15 +4,15 @@ import TaskPlugin from '../plugins/task/plugin';
 import 'store';
 
 class SideBar {
-  constructor(option) {
-    this.$element = $(option.element);
-    this.courseId = option.courseId;
-    this.taskId = null;
-    this.task = null;
-    this.activePlugins = option.activePlugins;
+
+  constructor({element,courseId, taskId, activePlugins}) {
+    this.$element = $(element);
+    this.courseId = courseId;
+    this.taskId = taskId;
+    this.activePlugins = activePlugins;
     this.plugins = {};
-    this._tasks = {};
     this._currentPane = null;
+    console.log( $(element));
     this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
     // this.$dashboardPane = this.$element.find('#dashboard-pane');
     this.$dashboardcontent = $('#dashboard-content');
@@ -20,7 +20,6 @@ class SideBar {
   }
 
   _init() {
-    this.taskId= 1;//@TODO 获取当前任务的ID
     this._registerPlugin(new TaskPlugin(this));
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
@@ -37,41 +36,41 @@ class SideBar {
 
   _initPlugin() {
     let html = '';
-    $.each(this.activePlugins, (i,name)=>{
+    $.each(this.activePlugins, (i, name)=> {
       let plugin = this.plugins[name];
       html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
     $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]',(event)=>{
       let $this = $(event.currentTarget);
       if ($this.hasClass('active')) {
-        this._rendBar($this,false);
+        this._rendBar($this, false);
         this._renderSiderBar(false);
         return;
       }
-      if(!this._currentPane || $this.data('plugin') != this._currentPane ) {
+      if (!this._currentPane || $this.data('plugin') != this._currentPane) {
         this.plugins[$this.data('plugin')].execute();
       }
-      this._rendBar($this,true);
+      this._rendBar($this, true);
       this._renderSiderBar(true);
     });
   }
 
-  _renderSiderBar(show,time='') {
+  _renderSiderBar(show, time = '') {
     let sider_right = '0px';
     let content_right = '379px';
-    if(!show) {
-      sider_right = '-'+this.$dashboardsidebar.width()+'px';
+    if (!show) {
+      sider_right = '-' + this.$dashboardsidebar.width() + 'px';
       content_right = '26px';
     }
     this.$dashboardsidebar.animate({
       right: sider_right,
-    },time);
+    }, time);
     this.$dashboardcontent.animate({
       right: content_right,
-    },time);
+    }, time);
   }
 
-  _rendBar($item,show) {
+  _rendBar($item, show) {
     show ? $item.addClass('active').siblings('li').removeClass('active') : $item.removeClass('active');
   }
 
@@ -88,12 +87,12 @@ class SideBar {
   }
 
   _isRenderSiderBar() {
-    if(!store.get('USER-START-LEARN')) {
+    if (!store.get('USER-START-LEARN')) {
       store.set('USER-START-LEARN', true);
-      this._renderSiderBar(true,'2000'); 
-      window.setTimeout(()=>{ 
-        this._renderSiderBar(false,'2000'); 
-      },2000); 
+      this._renderSiderBar(true, '2000');
+      window.setTimeout(()=> {
+        this._renderSiderBar(false, '2000');
+      }, 2000);
     }
   }
 
