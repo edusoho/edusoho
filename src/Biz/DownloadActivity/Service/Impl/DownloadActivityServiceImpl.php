@@ -2,10 +2,59 @@
 
 namespace Biz\DownloadActivity\Service\Impl;
 
-use Biz\DownloadActivity\Service\DownloadService;
-
+use Biz\BaseService;
+use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
+use Biz\DownloadActivity\Service\DownloadActivityService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
 {
+    public function createDownloadFileRecord($downloadFile)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw new AccessDeniedException();
+        }
+        $record = array(
+            'downloadActivityId' => $downloadFile['downloadActivityId'],
+            'downloadFileId'     => $downloadFile['id'],
+            'fileIndicate'       => $downloadFile['indicate'],
+            'userId'             => $user->getId()
+        );
+
+        return $this->getDownloadFileRecordDao()->create($record);
+    }
+
+    public function downloadActivityFile($activityId, $fileId)
+    {
+        $activity = $this->getActivityService()->getActivityFetchExt($activityId);
+
+        $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
+        if (empty($medias)) {
+            return $this->createNotFoundException('activity not found');
+        }
+        $downloadFiles = ArrayToolkit::index($materials, 'id');
+        $downloadFile  = $downloadFiles[$fileId];
+        if (empty($downloadFile)) {
+            return $this->createNotFoundException('file not found');
+        }
+        $this->createDownloadFileRecord($downloadFile);
+
+        return $downloadFile;
+    }
+
+
+    /**
+     * @return DownloadFileRecordDao
+     */
+    protected function getDownloadFileRecordDao()
+    {
+        return $this->createDao('DownloadActivity:DownloadFileRecordDao');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
+    }
 
 }

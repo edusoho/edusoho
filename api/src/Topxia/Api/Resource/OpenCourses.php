@@ -41,7 +41,8 @@ class OpenCourses extends BaseResource
     {
         $tagIds = array();
         foreach ($openCourses as $course) {
-            $tagIds = array_merge($tagIds, $course['tags']);
+            $tempTagIds = $this->getTagIdsByCourse($course);
+            $tagIds = array_merge($tagIds, $tempTagIds);
         }
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
@@ -82,6 +83,13 @@ class OpenCourses extends BaseResource
     public function filter($res)
     {
         return $this->multicallFilter('OpenCourse', $res);
+    }
+
+    protected function getTagIdsByCourse($course)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+        return ArrayToolkit::column($tags, 'id');
     }
 
     /**

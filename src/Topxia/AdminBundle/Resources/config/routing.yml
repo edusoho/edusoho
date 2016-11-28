@@ -2,6 +2,10 @@ admin:
     path:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_homepage:
+    pattern:  /homepage
+    defaults: { _controller: TopxiaAdminBundle:Default:homepage }
+
 admin_notice_modal:
     path:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
@@ -237,6 +241,26 @@ admin_tag_delete:
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
     permissions: [admin_course_tag_manage]
+
+admin_tag_group:
+    pattern: /tag/group
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:index }
+
+admin_tag_group_create:
+    pattern: /tag/group/create
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
+
+admin_tag_group_update:
+    pattern: /tag/group/{groupId}/update
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
+
+admin_tag_group_checkname:
+    pattern: /tag/group/checkname
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:checkName }
+
+admin_tag_group_delete:
+    pattern: /tag/group/{tagId}/delete
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:delete }
 
 admin_user:
     path:  /user
@@ -1719,6 +1743,27 @@ admin_order_manage_export_csv:
 admin_order_manage_export_coin_csv:
     path: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
+
+# admin_account_center:
+#     path:     /account/center
+#     defaults: { _controller: TopxiaAdminBundle:Account:index }
+
+# admin_account_analysis:
+#     path:     /account/analysis
+#     defaults: { _controller: TopxiaAdminBundle:Account:accountAnalysis }
+
+# admin_account_rank:
+#     path:     /account/rank
+#     defaults: { _controller: TopxiaAdminBundle:Account:rank }
+
+# admin_payment_rank:
+#     path:     /account/payment/rank
+#     defaults: { _controller: TopxiaAdminBundle:Account:paymentRank }
+
+# admin_account_statistic:
+#     pattern: /account/statistic/{period}
+#     defaults: { _controller: TopxiaAdminBundle:Account:accountStatistic }
+#     permissions: [admin]
 
 admin_coin_user_records:
     path:     /coin/records/user

@@ -5,16 +5,39 @@ use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
+            'classroom.delete'       => 'onClassroomDelete',
+            'classroom.update'       => 'onClassroomUpdate',
             'classroom.join'         => 'onClassroomJoin',
             'classroom.auditor_join' => 'onClassroomGuest',
             'classReview.add'        => 'onReviewCreate'
         );
+    }
+
+    public function onClassroomDelete(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+
+        $tagOwnerManager = new TagOwnerManager('classroom', $classroom['id']);
+        $tagOwnerManager->delete();
+    }
+
+    public function onClassroomUpdate(ServiceEvent $event)
+    {
+        $fields = $event->getSubject();
+
+        $tagIds      = $fields['tagIds'];
+        $userId      = $fields['userId'];
+        $classroomId = $fields['classroomId'];
+
+        $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $tagIds, $userId);
+        $tagOwnerManager->update();
     }
 
     public function onClassroomJoin(ServiceEvent $event)

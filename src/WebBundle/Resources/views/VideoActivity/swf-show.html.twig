@@ -3,9 +3,9 @@
 {% do script(['web/task/video/index.js']) %}
 
 
-{% block content %}
+{% block body %}
   <div class="dashboard-body">
-    <div class="lesson-content" id="video-content" data-role="lesson-content"
+    <div class="task-content-view" id="video-content" data-role="lesson-content"
          data-media-source="{{ activity.ext.mediaSource }}">
       <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
     </div>

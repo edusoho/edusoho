@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
 class BaseController extends Controller
 {
     protected function getBiz()
@@ -76,4 +77,5 @@ class BaseController extends Controller
         $biz = $this->getBiz();
         return $biz->service($alias);
     }
+
 }

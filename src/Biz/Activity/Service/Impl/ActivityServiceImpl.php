@@ -16,14 +16,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     public function getActivity($id)
     {
-        $activity = $this->getActivityDao()->get($id);
+        return $this->getActivityDao()->get($id);
+    }
 
+    public function getActivityFetchExt($id)
+    {
+        $activity = $this->getActivity($id);
         if (!empty($activity['mediaId'])) {
             $activityConfig  = ActivityFactory::create($this->biz, $activity['mediaType']);
             $media           = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
         }
-        return $activity;
     }
 
     public function findActivities($ids)
@@ -35,7 +38,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
 
-        if(empty($activity)){
+        if (empty($activity)) {
             return;
         }
 
@@ -43,13 +46,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
-        $logListener    = new ActivityLearnLogListener($this->biz);
+        $logListener = new ActivityLearnLogListener($this->biz);
 
-        $logData = $data;
-        $logData['event'] = $activity['mediaType'] . '.' . $eventName;
+        $logData          = $data;
+        $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
 
-        $listeners   = array();
+        $listeners        = array();
         $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
         if (!is_null($activityListener)) {
             $listeners[] = $activityListener;
