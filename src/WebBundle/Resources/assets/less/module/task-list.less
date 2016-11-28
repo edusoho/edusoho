@@ -60,17 +60,12 @@
     margin-left: 20px;
     cursor: move;
     &:hover,
-    a.active {
+    &.active {
       background: #f3f3f3;
       .item-actions {
         visibility: visible;;
       }
     }
-    // &.active {
-    //   .item-settings {
-    //     display: block;
-    //   }
-    // }
   }
   .task-manage-chapter {
     position: relative;
@@ -117,14 +112,14 @@
       text-decoration: none;
     }
   }
-  .item-settings {
+  .settings-list {
     padding: 0;
     margin: 42px 0 0;
     border-top: 1px solid @gray-medium;
     display: none;
     list-style: none;
     background-color: #f3f3f3;
-    >li {
+    .settings-item {
       float: left;
       width: 20%;
       text-align: center;
@@ -136,6 +131,11 @@
       &.active {
         >a {
           color: @brand-success;
+        }
+      }
+      &.active {
+        >a {
+          cursor: default;
         }
       }
       .after {

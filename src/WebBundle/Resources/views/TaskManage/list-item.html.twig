@@ -1,6 +1,6 @@
-<li class="task-manage-item drag clearfix " id="task-{{task.id}}">
+<li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{task.id}}">
   <div class="item-line"></div>
-  <div class="item-content text-overflow">
+  <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     {{task.title}}
@@ -28,39 +28,39 @@
       </ul>
     </span>
   </div>
-  <ul class="item-settings js-item-settings clearfix">
-    <li>
-      <a href="javascript:;">
+  <div class="settings-list js-settings-list clearfix">
+    <div class="settings-item ">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
         <i class="es-icon es-icon-yulan mrm"></i>
         预习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
-    </li>
-    <li>
+    </div>
+    <div class="settings-item js-settings-item active">
       <a href="javascript:;">
         <i class="es-icon es-icon-book mrm"></i>
         课时学校
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
-    </li>
-    <li>
-      <a href="javascript:;">
+    </div>
+    <div class="settings-item ">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
         <i class="es-icon es-icon-exam mrm"></i>
         练习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
-    </li>
-    <li>
-      <a href="javascript:;"> <i class="es-icon es-icon-mylibrarybooks mrm"></i>
+    </div>
+    <div class="settings-item ">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task"> <i class="es-icon es-icon-mylibrarybooks mrm"></i>
         作业
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
-    </li>
-    <li>
-      <a href="javascript:;">
+    </div>
+    <div class="settings-item ">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
         <i class="es-icon es-icon-sun mrm"></i>
         课外
       </a>
-    </li>
-  </ul>
+    </div>
+  </div>
 </li>
