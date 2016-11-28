@@ -42,8 +42,8 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $course      = $this->getCourseService()->tryManageCourse($courseId);
-        if($course['courseSetId'] != $courseSetId) {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        if ($course['courseSetId'] != $courseSetId) {
             throw $this->createAccessDeniedException("course #{$courseId} is not in courseSet #{$courseSetId}. ");
         }
 
@@ -78,6 +78,26 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->getCourse($courseId);
         return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function teachersAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseManage:teachers.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function studentsAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        return $this->render('WebBundle:CourseManage:students.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
