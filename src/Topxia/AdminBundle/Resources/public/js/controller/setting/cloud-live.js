@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var liveTopChart = document.getElementById('liveTopChart');
-        if (liveTopChart != null) {
+        if (liveTopChart) {
             var liveTopChart = echarts.init(liveTopChart);
             var items = app.arguments.items;
 
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 },
                 yAxis: {},
                 series: [{
-                    name: '容量(G)',
+                    name: '人数',
                     type: 'bar',
                     data: items.count
                 }],
