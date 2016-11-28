@@ -4,6 +4,8 @@
 
 {% block body %}
   <div id="activity-ppt-content"
+       data-finish-type="{{ ppt.finishType }}"
+       data-finish-detail="{{ ppt.finishDetail }}"
        data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
       {{ error.message|raw }}
