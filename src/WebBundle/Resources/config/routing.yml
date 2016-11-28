@@ -1,6 +1,62 @@
-course_manage_course_set:
-  path: /course_set/{courseId}/courses
-  defaults: {_controller:WebBundle:TaskManage:courseSet}
+course_set_manage_create:
+  path: /course_set/create
+  defaults: {_controller: WebBundle:CourseSetManage:create}
+
+course_set_show:
+  path: /course_set/{id}
+  defaults: {_controller: WebBundle:CourseSet:show}
+
+course_set_preview:
+  path: /course_set/{id}/preview
+  defaults: {_controller: WebBundle:CourseSet:preview}
+
+course_set_manage:
+  path: /course_set/{id}/manage
+  defaults: {_controller: WebBundle:CourseSetManage:index}
+
+course_set_manage_base:
+  path: /course_set/{id}/manage/base
+  defaults: {_controller: WebBundle:CourseSetManage:base}
+
+course_set_manage_detail:
+  path: /course_set/{id}/manage/detail
+  defaults: {_controller: WebBundle:CourseSetManage:detail}
+
+course_set_manage_cover:
+  path: /course_set/{id}/manage/cover
+  defaults: {_controller: WebBundle:CourseSetManage:cover}
+
+course_set_manage_courses:
+  path: /course_set/{courseSetId}/manage/courses
+  defaults: {_controller:WebBundle:CourseManage:list}
+
+course_set_manage_course_create:
+  path: /course_set/{courseSetId}/manage/course/create
+  defaults: {_controller: WebBundle:CourseManage:create}
+
+course_set_manage_course_info:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/info
+  defaults: {_controller: WebBundle:CourseManage:info}
+
+course_set_manage_course_tasks:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
+  defaults: {_controller: WebBundle:CourseManage:tasks}
+
+course_set_manage_course_marketing:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
+  defaults: {_controller: WebBundle:CourseManage:marketing}
+
+course_set_manage_course_close:
+  path: /course_set/{courseSetId}/course/{courseId}/close
+  defaults: {_controller: WebBundle:CourseManage:close}
+
+course_set_manage_course_delete:
+  path: /course_set/{courseSetId}/course/{courseId}/delete
+  defaults: {_controller: WebBundle:CourseManage:delete}
+
+course_set_manage_course_publish:  
+  path: /course_set/{courseSetId}/course/{courseId}/publish
+  defaults: {_controller: WebBundle:CourseManage:publish}
 
 course_manage_tasks:
   path:  /course/{courseId}/manage/tasks

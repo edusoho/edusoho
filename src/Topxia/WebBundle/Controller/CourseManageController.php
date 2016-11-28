@@ -3,10 +3,10 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Course\Impl\CourseServiceImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
 
 class CourseManageController extends BaseController
 {
@@ -19,11 +19,11 @@ class CourseManageController extends BaseController
         }
 
         $courseManagePermission = $this->getPermissionExtension()->getPermissionByCode('course_manage');
-        $menu            = $this->getPermissionExtension()->getFirstChild($courseManagePermission);
+        $menu                   = $this->getPermissionExtension()->getFirstChild($courseManagePermission);
 
         $firstChild = $this->getPermissionExtension()->getFirstChild($menu);
 
-        if(!empty($firstChild)){
+        if (!empty($firstChild)) {
             $menu = $firstChild;
         }
 
@@ -43,7 +43,7 @@ class CourseManageController extends BaseController
 
     public function baseAction(Request $request, $id)
     {
-        $course        = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -196,33 +196,33 @@ class CourseManageController extends BaseController
 
     public function courseDashboardAction($id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $summary = $this->getCourseReportService()->summary($id);
+        $course              = $this->getCourseService()->tryManageCourse($id);
+        $summary             = $this->getCourseReportService()->summary($id);
         $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
 
         return $this->render('TopxiaWebBundle:CourseManage/Dashboard:course.html.twig', array(
-            'course' => $course,
-            'summary' => $summary,
-            'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
-            'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
-            'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
-            'noteNum' => ArrayToolkit::column($lateMonthLearndData, 'noteNum'),
-            'askNum' => ArrayToolkit::column($lateMonthLearndData, 'askNum'),
+            'course'        => $course,
+            'summary'       => $summary,
+            'studentNum'    => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
+            'finishedNum'   => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
+            'finishedRate'  => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
+            'noteNum'       => ArrayToolkit::column($lateMonthLearndData, 'noteNum'),
+            'askNum'        => ArrayToolkit::column($lateMonthLearndData, 'askNum'),
             'discussionNum' => ArrayToolkit::column($lateMonthLearndData, 'discussionNum'),
-            'days' => ArrayToolkit::column($lateMonthLearndData, 'day')
+            'days'          => ArrayToolkit::column($lateMonthLearndData, 'day')
         ));
     }
 
     public function lessonDashboardAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course     = $this->getCourseService()->tryManageCourse($id);
         $lessonStat = $this->getCourseReportService()->getCourseLessonLearnStat($id);
         return $this->render('TopxiaWebBundle:CourseManage/Dashboard:lesson.html.twig', array(
-            'course' => $course,
+            'course'       => $course,
             'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
             'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
-            'finishedNum' => ArrayToolkit::column($lessonStat, 'finishedNum'),
-            'learnNum' => ArrayToolkit::column($lessonStat, 'learnNum'),
+            'finishedNum'  => ArrayToolkit::column($lessonStat, 'finishedNum'),
+            'learnNum'     => ArrayToolkit::column($lessonStat, 'learnNum')
         ));
     }
 
