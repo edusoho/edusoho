@@ -71,6 +71,18 @@
     </div>
   </div>
 
+  {% if storageSetting.upload_mode|default('local') == 'cloud' and lesson.mediaSource|default('self') == 'self' %}
+    <div class="form-group for-video-type" id="subtitle-form-group">
+      <div class="col-md-2 control-label for-video-type"><label>{{'视频字幕'|trans}}</label></div>
+      <div class="col-md-10 controls js-subtitle-list" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+        <p style="margin-top:6px;color:#a1a1a1">请等待视频上传完之后再添加字幕</p>
+      </div>
+      <div class="col-md-offset-2 help-block">
+        <p style="margin-left:10px;">字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/883" target="__blank">查看</a>编码转换说明。</p>
+      </div>
+    </div>
+  {% endif %}
+
   <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
       <div class="col-md-2 control-label for-video-type"><label>{{'视频时长'|trans}}</label></div>
       <div class="hide"><label for="lesson-length-field">{{'视频时长或'|trans}}</label></div>

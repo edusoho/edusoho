@@ -6,7 +6,8 @@
 
 {% block body %}
   <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
-    data-media-player-url="{{ path('media_play',{mediaId:media.id}) }}" >
+    data-media-player-url="{{ 
+    path('media_play',{mediaId:media.id, context:{'hideQuestion': 1, 'hideBeginning': true, 'hideSubtitle':1}}) }}" >
 
     {% include 'TopxiaWebBundle:MediaManage:player.html.twig' %}
     {% block media_edit %}
