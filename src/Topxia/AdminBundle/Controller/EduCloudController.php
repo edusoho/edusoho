@@ -199,8 +199,8 @@ class EduCloudController extends BaseController
         $overview['video']['isBuy'] = isset($overview['isBuy']) ? false : true;
         $overview['yearPackage']['isBuy'] = isset($overview['yearPackage']['isBuy']) ? false : true;
 
-        $spaceItems = isset($overview['video']['spaceItems']) ? $this->dealData($overview['video']['spaceItems']) : false;
-        $flowItems = isset($overview['video']['flowItems']) ? $this->dealData($overview['video']['flowItems']) : false;
+        $spaceItems = isset($overview['video']['spaceItems']) ? $this->dealItems($overview['video']['spaceItems']) : false;
+        $flowItems = isset($overview['video']['flowItems']) ? $this->dealItems($overview['video']['flowItems']) : false;
         return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
             'video'   => $overview['video'],
             'space'   => $overview['space'],
@@ -222,7 +222,7 @@ class EduCloudController extends BaseController
         }        
     }
 
-    private function dealData($data)
+    private function dealItems($data)
     {
         if (empty($data)) {
             return null;
