@@ -21,6 +21,11 @@ class PptActivityController extends BaseController implements ActivityActionInte
         $ppt = $config->get($activity['mediaId']);
 
         $file  = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+
+        if(empty($file) || $file['type'] !== 'ppt'){
+            throw $this->createAccessDeniedException('file type error');
+        }
+
         $error = array();
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
