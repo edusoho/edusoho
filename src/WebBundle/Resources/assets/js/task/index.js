@@ -60,7 +60,7 @@ class TaskShow extends Emitter {
 
   bindEmitterEvent() {
     this.eventEmitter.receive('finish', (data) => {
-      this.onActivityFinish();
+      this.onActivityFinish(data);
     });
   }
 

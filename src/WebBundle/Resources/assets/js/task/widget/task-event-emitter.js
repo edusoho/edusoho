@@ -12,25 +12,26 @@ export default class TaskEventEmitter {
       receives: {}
     };
 
-    this.receiveMessenger = new Messenger('parent', 'ActivityEvent');
+    this.receiveMessenger = new Messenger('TaskMessenger', 'ActivityEvent');
     this.receiveMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
     this.receiveMessenger.listen(message => {
       let {event, data} = JSON.parse(message);
+      console.log("event, data",event, data);
       let listeners = this.eventMap.receives[event];
       $.post(this.element.data('eventUrl'), {eventName: event, data: data})
-          .done(({event, data}) => {
-            if (typeof listeners !== 'undefined') {
-              listeners.forEach(callback => callback(data));
-            }
-            this.receiveMessenger.send(JSON.stringify({event: event, data: data}));
-          })
-          .fail((error) => {
-            this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
-          })
+        .done(({event, data}) => {
+          if (typeof listeners !== 'undefined') {
+            listeners.forEach(callback => callback(data));
+          }
+          this.receiveMessenger.send(JSON.stringify({event: event, data: data}));
+        })
+        .fail((error) => {
+          this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
+        })
     });
 
-    this.emitMessenger = new Messenger('parent', 'TaskEvent');
+    this.emitMessenger = new Messenger('TaskMessenger', 'TaskEvent');
     this.emitMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
   }

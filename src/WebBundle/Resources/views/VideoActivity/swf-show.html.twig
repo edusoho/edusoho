@@ -4,8 +4,10 @@
 
 
 {% block body %}
-  <div class="task-content-view" id="video-content" data-role="lesson-content"
-       data-media-source="{{ activity.ext.mediaSource }}">
-    <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+  <div class="dashboard-body">
+    <div class="task-content-view" id="video-content" data-role="lesson-content"
+         data-media-source="{{ activity.ext.mediaSource }}">
+      <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+    </div>
   </div>
 {% endblock %}
