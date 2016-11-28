@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\CurlToolkit;
 
 class User extends BaseResource
 {
@@ -57,11 +58,16 @@ class User extends BaseResource
         $token = json_decode($data);
 
         if (!$this->getUserService()->getUserByVerifiedMobile($token['verifiedMobile'])) {
-            $this->returnError('5001');
+            return $this->returnError('5001');
         }
 
-        
+        $params = array(
+            'mobile' => $token['verifiedMobile'];
+        );
 
+        $result = CurlToolkit::request('POST', 'open.edusoho.com/', $params);
+        
+        return $result;
     }
 
     public function returnError($code)
