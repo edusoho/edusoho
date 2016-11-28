@@ -11,7 +11,7 @@ class Emails extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $data = $request->query()->all();
+        $data = $request->request->all();
 
         $token = json_decode($data);
 
