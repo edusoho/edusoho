@@ -18,6 +18,7 @@
   {% cache 'course/' ~ courseSet.id ~ '/not/classroom/course/normal/header/for/guest' 600 %}
     {% include 'WebBundle:CourseSet:Part/header-for-guest.html.twig' %}
     {% include 'WebBundle:CourseSet:Part/header-for-member.html.twig' %}
+    {% include 'WebBundle:CourseSet:Part/header-for-member-order.html.twig' %}
   {% endcache %}
 {% endif %}
 
