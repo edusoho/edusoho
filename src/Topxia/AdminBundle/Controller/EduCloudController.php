@@ -1354,7 +1354,7 @@ class EduCloudController extends BaseController
             }
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
-            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
+            $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
         try {
