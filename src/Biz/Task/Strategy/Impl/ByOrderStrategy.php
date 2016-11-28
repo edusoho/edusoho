@@ -5,6 +5,7 @@ namespace Biz\Task\Strategy\Impl;
 
 use Biz\Task\Strategy\StrategyInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Service\Task\TaskService;
 
 class ByOrderStrategy implements StrategyInterface
@@ -33,13 +34,16 @@ class ByOrderStrategy implements StrategyInterface
         }
 
         $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
+
         if (empty($preTask)) {
-            throw new AccessDeniedException('previous task does not exist');
+            throw new NotFoundException('previous task does not exist');
         }
         $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {
             return true;
         }
+
+        return false;
     }
 
     protected function isFirstTask($task)

@@ -33,8 +33,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
-        $currentSeq              = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['seq']           = $currentSeq + 1;
+        $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
