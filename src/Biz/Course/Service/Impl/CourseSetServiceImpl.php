@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseSetService;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -102,11 +103,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getCourseService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     protected function getTagService()
     {
-        return $this->createService('Taxonomy:TagService');
+        // return $this->biz->service('Taxonomy:TagService');
+        return ServiceKernel::instance()->createService('Taxonomy.TagService');
     }
 }

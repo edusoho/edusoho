@@ -4,6 +4,7 @@ namespace Biz\Taxonomy\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
+use Topxia\Service\Common\ServiceKernel;
 
 class TagServiceImpl extends BaseService implements TagService
 {
@@ -162,16 +163,16 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getTagDao()
     {
-        return $this->createDao('Taxonomy.TagDao');
+        return $this->createDao('Taxonomy:TagDao');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->createService('System.LogService');
     }
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

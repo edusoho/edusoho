@@ -1,5 +1,5 @@
 <?php
-namespace Biz\Taxonomy\Serivce;
+namespace Biz\Taxonomy\Service;
 
 interface TagService
 {

@@ -15,6 +15,13 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return CourseSerialize::unserialize($course);
     }
 
+    public function update($id, array $fields)
+    {
+        $fields  = CourseSerialize::serialize($fields);
+        $updated = parent::update($id, $fields);
+        return CourseSerialize::unserialize($updated);
+    }
+
     public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->findInField('courseSetId', array($courseSetId));

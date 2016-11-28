@@ -132,4 +132,8 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
             ->andWhere('orgCode LIKE :likeOrgCode');
         return $builder;
     }
+
+    public function declares()
+    {
+    }
 }

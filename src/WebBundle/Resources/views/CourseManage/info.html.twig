@@ -19,12 +19,6 @@
         <li class="">
         	<a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
         </li>
-        <li class="">
-        	<a href="{{path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">{{'教师设置'|trans}}</a>
-        </li>
-        <li class="">
-        	<a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学员管理'|trans}}</a>
-        </li>
       </ul>
       <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         <div class="form-group">

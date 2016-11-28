@@ -9,7 +9,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 {
     protected $table = 'c2_course_set';
 
-    public function update($id, $fields)
+    public function update($id, array $fields)
     {
         $fields  = CourseSetSerialize::serialize($fields);
         $updated = parent::update($id, $fields);

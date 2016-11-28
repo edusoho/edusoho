@@ -76,7 +76,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['expiryEndDate']);
         }
         $fields = $this->validateCourse($fields, $id);
-
         return $this->getCourseDao()->update($id, $fields);
     }
 
@@ -125,7 +124,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
                 throw $this->createInvalidArgumentException("Lack of required fields");
             }
-            return;
+            return $course;
         }
         $requiredFields = array('title', 'courseSetId', 'expiryMode');
         if ($id <= 0) {

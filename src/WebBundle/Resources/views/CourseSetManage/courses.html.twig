@@ -42,9 +42,9 @@
 		                  <li>
 		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}">{{'预览'|trans}}</a>
 		                  </li>
-	      				  <li>
+	      				  {# <li>
 	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
-	      				  </li>
+	      				  </li> #}
                     {% if course.status|default('') == 'published' %}
       				      <li>
       				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course">{{'关闭'|trans}}</a>
