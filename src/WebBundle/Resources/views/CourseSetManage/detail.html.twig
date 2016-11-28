@@ -1,7 +1,8 @@
 {% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 
 {% block title %}{{ '课程详细信息'|trans }} - {{ parent() }}{% endblock %}
-
+{% set side_nav = 'detail' %}
+	
 {% block main %}
 TODO 课程详细信息表单
 注意所有中文文案加上trans

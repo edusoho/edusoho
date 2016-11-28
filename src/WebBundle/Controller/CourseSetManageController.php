@@ -28,14 +28,12 @@ class CourseSetManageController extends BaseController
 
     public function indexAction(Request $request, $id)
     {
-        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
-        $courses       = $this->getCourseService()->findCoursesByCourseSetId($id);
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
 
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
-            'courseSet'     => $courseSet,
-            'courses'       => $courses,
-            'defaultCourse' => $defaultCourse
+            'courseSet' => $courseSet,
+            'courses'   => $courses
         ));
     }
 
@@ -49,6 +47,15 @@ class CourseSetManageController extends BaseController
         ));
     }
 
+    public function sidebarAction($courseSetId, $sideNav)
+    {
+        //add default course if needed
+        return $this->render('WebBundle:CourseSetManage:sidebar.html.twig', array(
+            'id'       => $courseSetId,
+            'side_nav' => $sideNav
+        ));
+    }
+
     //基础信息
     public function baseAction(Request $request, $id)
     {
@@ -56,27 +63,23 @@ class CourseSetManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
         }
-        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
         $tags = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
         }
         return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
-            'courseSet'     => $courseSet,
-            'defaultCourse' => $defaultCourse,
-            'tags'          => ArrayToolkit::column($tags, 'name')
+            'courseSet' => $courseSet,
+            'tags'      => ArrayToolkit::column($tags, 'name')
         ));
     }
 
     public function detailAction(Request $request, $id)
     {
-        $courseSet     = $this->getCourseSetService()->getCourseSet($id);
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
         return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
-            'courseSet'     => $courseSet,
-            'defaultCourse' => $defaultCourse
+            'courseSet' => $courseSet
         ));
     }
 
