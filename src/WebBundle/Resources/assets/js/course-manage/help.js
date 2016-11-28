@@ -35,9 +35,14 @@ export const sortList = () => {
   });
 }
 
-
-export default {
-  deleteTask,
-  sortList
+export const showSettings = () => {
+  $("#sortable-list").on('click','.js-item-content',event=>{
+    var $this = $(event.currentTarget).closest('.js-task-manage-item');
+    $this.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').slideToggle();
+    $this.addClass('active').find('.js-settings-list').slideToggle();
+  }) ;
+  // $("#sortable-list").on('click','.js-settings-item.active',event=>{
+  //   return false;
+  // });
 }
 
