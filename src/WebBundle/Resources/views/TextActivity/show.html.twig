@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle::blank-layout.html.twig' %}
+{% extends 'WebBundle:Activity:content-layout.html.twig' %}
 
+{% do script(['web/activity/text/index.js']) %}
 
-{% block content %} 
-	<pre>{{activity.content|raw}}</pre>
-  {#<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>#}
+{% block body %} 
+	<div class="text-activity-show">{{activity.content|raw}}</div>
 {% endblock %}
