@@ -2,17 +2,13 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use Biz\Task\Strategy\StrategyContext;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
+use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -38,7 +34,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['courseId']      = $activity['fromCourseId'];
         $currentSeq              = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['seq']           = $currentSeq + 1;
-
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -78,13 +73,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->update($id, $fields);
     }
 
-    public function updateSeq($id, $fileds)
+    public function updateSeq($id, $fields)
     {
-        $fileds = ArrayToolkit::parts($fileds, array(
+        $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'courseChapterId',
+            'courseChapterId'
         ));
-        return $this->getTaskDao()->update($id, $fileds);
+        return $this->getTaskDao()->update($id, $fields);
     }
 
     public function deleteTask($id)
@@ -225,19 +220,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
     }
 
-
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
-        $strategy = new StrategyContext($course['learnMode'], $this->biz);
+        $strategy     = new StrategyContext($course['learnMode'], $this->biz);
         $canLearnTask = $strategy->canLearnTask($task);
 
-        if($canLearnTask){
-            return true;
-        }
-        return false;
+        return $canLearnTask;
     }
 
     public function isTaskLearned($taskId)
