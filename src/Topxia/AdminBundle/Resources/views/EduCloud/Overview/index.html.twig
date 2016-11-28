@@ -1,15 +1,13 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_my_cloud_overview' %}
-{% set submenu = 'service-information' %}
-{% set script_controller = 'app/my-cloud' %}
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
-{% endblock %}
 
 {% block main %}
+{% if overview.enabled == false %}
+  {% include 'TopxiaAdminBundle:EduCloud/Overview:disabled.html.twig' %}
+{% elseif overview.accessCloud == false %}
   {% include 'TopxiaAdminBundle:EduCloud/Overview:not-access.html.twig' %}
-  {#{% include 'TopxiaAdminBundle:EduCloud/Overview:normal-use.html.twig' %}#}
-  {#{% include 'TopxiaAdminBundle:EduCloud/Overview:disabled.html.twig' %}#}
+{% else %}
+  {% include 'TopxiaAdminBundle:EduCloud/Overview:normal-use.html.twig' %}
+{% endif %}
 {% endblock %}
