@@ -96,33 +96,6 @@ class TaskManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    // TODO 是否移到CourseManageController
-    /*
-     * @deprecated
-     * @see CourseManageController->tasksAction
-     */
-    public function tasksAction(Request $request, $courseId)
-    {
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
-        $course      = $this->tryManageCourse($courseId);
-        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        // $tasks       = $this->getTaskService()->findTasksByCourseId($courseId);
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'  => $tasks,
-            'course' => $course,
-            'items'  => $courseItems
-        ));
-    }
-
-    // TODO 重命名或移动到其它Controller（wuli create）
-    public function courseSetAction(Request $request, $courseId)
-    {
-        $course = $this->tryManageCourse($courseId);
-        return $this->render('WebBundle:PlanManage:list.html.twig', array(
-            'course' => $course
-        ));
-    }
-
     protected function tryManageCourse($courseId)
     {
         return $this->getCourseService()->tryManageCourse($courseId);
