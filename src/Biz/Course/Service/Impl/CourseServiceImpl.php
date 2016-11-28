@@ -375,7 +375,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $counter + 1;
     }
 
-    protected function getNextCourseItemSeq($courseId)
+    public function getNextCourseItemSeq($courseId)
     {
         $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
         $taskMaxSeq    = $this->getTaskService()->getMaxSeqByCourseId($courseId);
