@@ -22,7 +22,6 @@ $app->mount(_u('/files'), include dirname(__DIR__).'/src/files.php');
  * 新的路由配置方式
  */
 $app->get(_u('/user/{id}'), 'res.User:get');
-$app->get(_u('/user/verification'), 'res.User:sendVerificationCode');
 $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
 
@@ -118,3 +117,5 @@ $app->get(_u('/classrooms/{classRoomId}/threads'), 'res.ClassRoomThreads:get');
 $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
+
+$app->get(_u('/short_messages'), 'res.ShortMessages:post');
