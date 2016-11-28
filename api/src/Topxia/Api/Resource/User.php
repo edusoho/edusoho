@@ -65,7 +65,7 @@ class User extends BaseResource
             'mobile' => $token['verifiedMobile'];
         );
 
-        $result = CurlToolkit::request('POST', 'open.edusoho.com/', $params);
+        $result = CurlToolkit::request('POST', 'open.edusoho.com/sms/verify', $params);
         
         return $result;
     }
