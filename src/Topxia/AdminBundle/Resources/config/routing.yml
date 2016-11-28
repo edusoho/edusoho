@@ -1929,7 +1929,7 @@ admin_cloud_attachment_render:
 
 # 添加云直播
 admin_cloud_edulive_overview:
-    pattern:  /cloud/edulive
+    pattern:  /cloud/edulive/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
 
 admin_setting_cloud_edulive:
