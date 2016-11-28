@@ -16,6 +16,8 @@ plugins/
     Migrations/
     Resources/
     Scripts/
+      database.sql
+      InstallScript.php
     DemoPlugin.php
     plugin.json
 ```
