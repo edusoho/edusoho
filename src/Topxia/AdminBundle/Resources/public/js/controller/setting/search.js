@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         
         //改版图表
         var searchChart = document.getElementById('searchChart');
-        if (searchChart != null) {
+        if (searchChart) {
             var searchChart = echarts.init(searchChart);
             var items = app.arguments.items;
             var option = {
