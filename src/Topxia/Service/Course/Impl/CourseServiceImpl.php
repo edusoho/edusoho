@@ -9,7 +9,6 @@ use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -311,7 +310,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
-                $info = ArrayToolkit::parts($member, array('levelId'));
+                $info   = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"], $info);
                 return $member;
             }
@@ -2090,7 +2089,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         //查询出订单
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        $user = $this->getUserService()->getUser($userId);
+        $user  = $this->getUserService()->getUser($userId);
         if (!empty($order)) {
             $reason = array(
                 'type'     => 'other',
@@ -2099,13 +2098,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
-      
+
         $this->getMemberDao()->deleteMember($member['id']);
 
         $this->getCourseDao()->updateCourse($courseId, array(
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
-
 
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
     }

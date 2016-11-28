@@ -1,23 +1,25 @@
 {% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
-
-{% set side_nav = 'plan' %}
-
+{% set active = active | default(null) %}
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      {{course.title}}
-      <button class="btn btn-success btn-sm pull-right">发布计划</button>
+      <a href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a>/{{course.title}}
+      <button class="btn btn-success btn-sm pull-right js-publish-course" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">{{'发布计划'|trans}}</button>
     </div>
     <div class="panel-body">
       <ul class="nav nav-pills mbl">
-        <li {% if content_tab == 'task-list' %}class="active"{% endif %}><a href='{{path("course_manage_tasks", {courseId:course.id})}}'>计划任务</a></li>
-        <li class=""><a>计划设置</a></li>
-        <li class=""><a>营销设置</a></li>
-        <li class=""><a>教师设置</a></li>
-        <li class=""><a>学员管理</a></li>
+        <li class="{% if active == 'tasks' %}active{% endif %}">
+        	<a href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划任务'|trans}}</a>
+        </li>
+        <li class="{% if active == 'info' %}active{% endif %}"><a href="javascript:;">{{'计划设置'|trans}}</a></li>
+        <li class="{% if active == 'marketing' %}active{% endif %}">
+        	<a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
+        </li>
       </ul>
-      {% block task_manage %}{% endblock %}
+      {% block course %}
+
+      {% endblock %}
     </div>
   </div>
 {% endblock %}
