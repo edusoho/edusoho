@@ -166,6 +166,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $items = array();
         $user  = $this->getCurrentUser();
         $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
