@@ -3,75 +3,72 @@
 {% do script(['libs/bootstrap-datetimepicker.js','web/activity-manage/testpaper/index.js'], 300) %}
 
 {% block activity_content %}
-  <form id="step2-form" class="form-horizontal lesson-form" method="post">
+  <div class="form-group">
+    <div class="col-xs-2 control-label">
+      <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_manage_testpaper_items_get',{courseId:courseId}) }}">
+        {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
+      </select>
+      <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group" id="questionItemShowDiv" style="display:none;">
+    <div class="col-xs-2 control-label"></div>
+    <div class="col-xs-9 controls" id="questionItemShowTable"></div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-2 control-label"><label>{{'时间限制'|trans}}</label></div>
+    <div class="col-xs-9 controls radios">
+      <input class="form-control width-input width-input-small" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+      <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-2 control-label"><label>{{'考试次数'|trans}}</label></div>
+    <div class="col-xs-9 controls radios">
+      {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
+    </div>
+  </div>
+
+  <div class="form-group" {% if activity.doTimes|default('0') == 1 %}style="display:none;" {% endif %}>
+    <div class="col-xs-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
+    <div class="col-xs-9 controls">
+      <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ activity.redoInterval|default('0') }}"> {{'小时'|trans}}
+      <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'|trans}}"></i>
+      <div class="help-block">{{'0小时，表示无限制。'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group starttime-check-div" {% if activity.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
+    <div class="col-xs-2 control-label">
+      <label>{{'考试开始时间'|trans}}</label>
+    </div>
+    <div class="col-xs-9 controls radios">
+      {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
+      <label class="starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
+        <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
+      </label>
+      <label class="endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
+        - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
+        <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
+      </label>
+    </div>
+  </div>
+
+  {% if 'lesson_credit' in features %}
     <div class="form-group">
-      <div class="col-xs-2 control-label">
-        <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
-      </div>
+      <div class="col-xs-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
       <div class="col-xs-9 controls">
-        <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_manage_testpaper_items_get',{courseId:courseId}) }}">
-          {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
-        </select>
-        <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
+        <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
+        <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
       </div>
     </div>
-
-    <div class="form-group" id="questionItemShowDiv" style="display:none;">
-      <div class="col-xs-2 control-label"></div>
-      <div class="col-xs-9 controls" id="questionItemShowTable"></div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-xs-2 control-label"><label>{{'时间限制'|trans}}</label></div>
-      <div class="col-xs-9 controls radios">
-        <input class="form-control width-input width-input-small" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
-        <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-xs-2 control-label"><label>{{'考试次数'|trans}}</label></div>
-      <div class="col-xs-9 controls radios">
-        {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
-      </div>
-    </div>
-
-    <div class="form-group" {% if activity.doTimes|default('0') == 1 %}style="display:none;" {% endif %}>
-      <div class="col-xs-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
-      <div class="col-xs-9 controls">
-        <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ activity.redoInterval|default('0') }}"> {{'小时'|trans}}
-        <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'|trans}}"></i>
-        <div class="help-block">{{'0小时，表示无限制。'|trans}}</div>
-      </div>
-    </div>
-
-    <div class="form-group starttime-check-div" {% if activity.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
-      <div class="col-xs-2 control-label">
-        <label>{{'考试开始时间'|trans}}</label>
-      </div>
-      <div class="col-xs-9 controls radios">
-        {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
-
-        <label class="starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
-          <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% endif %}">
-        </label>
-        <label class="endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
-          - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
-          <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}">
-        </label>
-      </div>
-    </div>
-
-    {% if 'lesson_credit' in features %}
-      <div class="form-group">
-        <div class="col-xs-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
-        <div class="col-xs-9 controls">
-          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
-          <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
-        </div>
-      </div>
-    {% endif %}
-  </form>
+  {% endif %}
 
 {% endblock %}
 

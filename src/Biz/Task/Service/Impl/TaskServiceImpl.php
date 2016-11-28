@@ -74,7 +74,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
-            'preTaskId',
+            'seq',
             'courseChapterId',
             'activityId',
             'title',

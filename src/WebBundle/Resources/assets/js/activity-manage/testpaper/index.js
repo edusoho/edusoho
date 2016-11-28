@@ -36,9 +36,6 @@ class Testpaper {
   	$.post(url, {testpaperId:testpaperId},function(html){
       $('#questionItemShowTable').html(html);
       $('#questionItemShowDiv').show();
-      
-      var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-      $parentiframe.height($parentiframe.contents().find('body').height());
     });
   }
 
@@ -127,7 +124,9 @@ class Testpaper {
             	required:function(){
             		return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
             	},
-            	DateAndTime:true
+            	DateAndTime:function(){
+                return ($('[name="doTimes"]:checked').val() == 1) && ($('[name="testMode"]:checked').val() == 'realTime');
+              }
             },
             redoInterval:{
             	required:function(){
