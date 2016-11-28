@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseDeleteService;
+use Topxia\Service\Common\ServiceEvent;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -19,6 +20,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             $method = 'delete'.ucwords($type);
             $result = $this->$method($course);
+            $this->dispatchEvent("course.delete", $course);
             $this->getCourseDao()->getConnection()->commit();
 
             return $result;
