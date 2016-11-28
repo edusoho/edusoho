@@ -3,9 +3,7 @@
 {% set menu = 'admin_setting_cloud_video' %}
 {% set script_controller = 'setting/cloud-video-overview.js' %}
 
-{% if video.isBuy == true %}
-  {% set script_arguments = {spaceItems: spaceItems, flowItems: flowItems}  %}
-{% endif %}
+{% set script_arguments = {spaceItems: spaceItems, flowItems: flowItems}  %}
 {#{% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}#}
 
 {% block page_title %}
