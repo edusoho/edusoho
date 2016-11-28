@@ -22,14 +22,14 @@
       </div>
 
 
-      {% if paid == true %}
+      {% if paidService %}
         <div class="edu-combo">
           <div class="panel panel-default">
             <div class="panel-heading">
               <div class="panel-title">已开通服务</div>
             </div>
             <div class="panel-body">
-            {% if overview.services.video == true %}
+            {% if 'video' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-playcircleoutline"></i>
@@ -37,7 +37,7 @@
                 </a>
               </div>
             {% endif %}
-            {% if overview.services.live == true %}
+            {% if 'live' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-zhibokecheng"></i>
@@ -45,7 +45,7 @@
                 </a>
               </div>
             {% endif %}
-            {% if overview.services.sms == true %}
+            {% if 'sms' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-textsms"></i>
@@ -53,7 +53,7 @@
                 </a>
               </div>
             {% endif %}
-            {% if overview.services.search == true %}
+            {% if 'search' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-search"></i>
@@ -61,7 +61,7 @@
                 </a>
               </div>
             {% endif %}
-            {% if overview.services.email == true %}
+            {% if 'email' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-search"></i>
@@ -75,14 +75,14 @@
     </div>
 
 
-    {% if unPaid == true %}
+    {% if unPaidService %}
       <div class="edu-combo">
         <div class="panel panel-default">
           <div class="panel-heading">
             <div class="panel-title">需要开通／购买的服务</div>
           </div>
           <div class="panel-body">
-          {% if overview.services.video == false %}
+          {% if 'video' in unPaidService %}
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-playcircleoutline"></i>
@@ -90,7 +90,7 @@
               </a>
             </div>
           {% endif %}
-          {% if overview.services.live == false %}
+          {% if 'live' in unPaidService %}
             <div class="col-md-4">
               <a hhref="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-zhibokecheng"></i>
@@ -98,7 +98,7 @@
               </a>
             </div>
           {% endif %}
-          {% if overview.services.sms == false %}
+          {% if 'sms' in unPaidService %}
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-textsms"></i>
@@ -106,7 +106,7 @@
               </a>
             </div>
           {% endif %}
-          {% if overview.services.search == false %}
+          {% if 'search' in unPaidService %}
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
@@ -114,7 +114,7 @@
               </a>
             </div>
           {% endif %}
-          {% if overview.services.email == false %}
+          {% if 'email' in unPaidService %}
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
