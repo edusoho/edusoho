@@ -8,9 +8,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 {
     protected $table = 'article';
 
-    private $serializeFields = array(
-        'tagIds' => 'saw'
-    );
+    private $serializeFields = array();
 
     public function getArticle($id)
     {
@@ -163,30 +161,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function findPublishedArticlesByTagIdsAndCount($tagIds, $count)
-    {
-        $sql      = "SELECT * FROM {$this->table} WHERE status = 'published'";
-        $length   = count($tagIds);
-        $tagArray = array();
-        $sql .= " AND (";
-
-        for ($i = 0; $i < $length; $i++) {
-            $sql .= "  tagIds LIKE  ? ";
-
-            if ($i != $length - 1) {
-                $sql .= " OR ";
-            }
-
-            $tagArray[] = '%|' . $tagIds[$i] . '|%';
-        }
-
-        $sql .= " ) ";
-
-        $sql .= " ORDER BY publishedTime DESC LIMIT 0, {$count}";
-
-        return $this->getConnection()->fetchAll($sql, $tagArray);
-    }
-
     protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
@@ -212,10 +186,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             $conditions['keywords'] = "%{$conditions['keywords']}%";
         }
 
-        if (isset($conditions['tagId'])) {
-            $conditions['tagId'] = "%|{$conditions['tagId']}|%";
-        }
-
         if(isset($conditions['likeOrgCode'])){
             $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
             unset($conditions['orgCode']);
@@ -224,18 +194,20 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'article')
             ->andWhere('status = :status')
+            ->andWhere('id IN ( :articleIds )')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('featured = :featured')
             ->andWhere('promoted = :promoted')
             ->andWhere('sticky = :sticky')
             ->andWhere('title LIKE :keywords')
             ->andWhere('picture != :pictureNull')
-            ->andWhere('tagIds LIKE :tagId')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('categoryId IN (:categoryIds)')
             ->andWhere('orgCode LIKE :likeOrgCode')
             ->andWhere('id != :idNotEqual')
+            ->andWhere('id IN (:articleIds)')
+            ->andWhere('id = :articleId')
             ->andWhere('thumb != :thumbNotEqual')
             ->andWhere('orgCode = :orgCode');
 

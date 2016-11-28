@@ -228,6 +228,21 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisVipAmountDataByTime($startTime, $endTime);
     }
 
+    public function analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByUserId($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
     protected function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];

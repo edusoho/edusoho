@@ -42,8 +42,12 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course      = $this->getCourseService()->tryManageCourse($courseId);
+        if($course['courseSetId'] != $courseSetId) {
+            throw $this->createAccessDeniedException("course #{$courseId} is not in courseSet #{$courseSetId}. ");
+        }
+
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
         $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
 

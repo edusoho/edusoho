@@ -1,4 +1,4 @@
-import {closeCourse, deleteCourse, publishCourse,showSettings} from './help';
+import {closeCourse, deleteCourse, publishCourse, showSettings} from './help';
 
 closeCourse();
 deleteCourse();

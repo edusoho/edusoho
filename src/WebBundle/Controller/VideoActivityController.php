@@ -17,9 +17,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id,  $courseId)
+    public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivityFetchExt($id);
         if ($this->getMediaSource($activity) == 'self') {
             return $this->render('WebBundle:VideoActivity:show.html.twig', array(
                 'activity' => $activity,

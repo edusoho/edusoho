@@ -80,8 +80,8 @@ class UploaderExtension extends \Twig_Extension
                 'mimeTypes'  => array('application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation')
             ),
             'cloud_document' => array(
-                'extensions' => array('doc', 'docx', 'pdf'),
-                'mimeTypes'  => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf')
+                'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx'),
+                'mimeTypes'  => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel')
             ),
             'document'       => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'),

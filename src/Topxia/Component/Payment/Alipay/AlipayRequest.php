@@ -38,8 +38,11 @@ class AlipayRequest extends Request {
     protected function convertParams($params)
     {
         $converted = array();
+        $isMobile = $this->isMobile($params['userAgent']);
 
-        if ($this->getPaymentType() == 'dualfun') {
+        if ($isMobile) {
+            $converted['service'] = 'alipay.wap.create.direct.pay.by.user';
+        } else if ($this->getPaymentType() == 'dualfun') {
             $converted['service'] = 'trade_create_by_buyer';
         } elseif ($this->getPaymentType() == 'escow') {
             $converted['service'] = 'create_partner_trade_by_buyer';
@@ -84,6 +87,15 @@ class AlipayRequest extends Request {
         $converted['sign'] = $this->signParams($converted);
         
         return $converted;
+    }
+
+    public function isMobile($userAgent)
+    {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected function filterText($text)
