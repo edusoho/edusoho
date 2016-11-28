@@ -1,6 +1,8 @@
-import {deleteTask,sortList} from './help'
+import {closeCourse, deleteCourse, publishCourse} from './help';
 
-deleteTask();
-sortList();
-
-//
+closeCourse();
+deleteCourse();
+publishCourse();
+// deleteTask();
+// sortList();
+showSettings();

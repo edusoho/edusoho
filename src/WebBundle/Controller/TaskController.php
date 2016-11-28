@@ -1,15 +1,16 @@
 <?php
 namespace WebBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
+        $task    = $this->tryLearnTask($courseId, $id);
         $preview = $request->query->get('preview');
 
         $task     = $this->tryLearnTask($courseId, $id, $preview);

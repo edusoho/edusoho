@@ -1,8 +1,11 @@
 .task-dashboard-page {
+  position: fixed;
+  left: 0;
+  top:0;
+  width: 100%;
   background-color: #111111;
   height: 100%;
   padding-right: 360px;
-  overflow: hidden;
   .dashboard-content {
     position: absolute;
     left: 26px;
@@ -91,10 +94,6 @@
     bottom: 0;
     width: 360px;
     right: -360px;
-    .dashboard-sidebar-content {
-      position: relative;
-      height: 100%;
-    }
   }
   .dashboard-toolbar {
     position: absolute;
@@ -129,12 +128,19 @@
     }
   }
   .dashboard-pane {
-    height: 100%;
     overflow: hidden;
+    height: 100%;
     background-color: #333333;
   }
   .task-pane {
+     background-color: #333333;
     padding: 15px 17px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
   .note-pane {
     padding: 20px 15px;
@@ -143,7 +149,8 @@
     }
   }
   .question-pane {
-    background-color: #272727;
+    height: 100%;
+    // background-color: #272727;
     .lesson-question-plugin-form {
       margin-bottom: 0;
       padding: 6px;
@@ -151,16 +158,14 @@
     }
     .media-list {
       margin-top: 0;
-      background-color: #272727;
+      // background-color: #272727;
       .media {
-        background-color: #272727;
+        // background-color: #272727;
         border-bottom: 1px solid #3d3d3d;
       }
     }
   }
 }
-
-
 
 .task-state-modal {
   .title {

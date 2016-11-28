@@ -1,16 +1,12 @@
-import Emitter from 'es6-event-emitter';
+import Emitter from "es6-event-emitter";
 
-export default class UploaderChooser extends Emitter{
-  constructor() {
+export default class UploaderChooser extends Emitter {
+  constructor(element) {
     super();
-    this.element = $('#chooser-upload-panel');
+    this.element = $(element);
     this._sdk = undefined;
     this._initSdk()
         ._bindEvent();
-  }
-
-  get sdk() {
-    return undefined;
   }
 
   reopen() {
@@ -31,14 +27,14 @@ export default class UploaderChooser extends Emitter{
       return this;
     }
 
-    let $uploader = $('#uploader-container');
+    let $uploader = this.element.find('#uploader-container');
     this._sdk = new UploaderSDK({
       id: $uploader.attr('id'),
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
       process: $uploader.data('process'),
-      ui:'single'
+      ui: 'single'
     });
     return this;
   }
@@ -46,6 +42,15 @@ export default class UploaderChooser extends Emitter{
   _bindEvent() {
     this._sdk.on('file.finish', this._onFileUploadFinish.bind(this));
     $('.js-choose-trigger').on('click', this.reopen.bind(this));
+
+    this.element.on('change', '.js-upload-params', (event) => {
+      let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
+        prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
+        return prams;
+      }, {});
+      this._sdk.setProcess(uploadProcess);
+    });
+
     return this;
   }
 
@@ -83,7 +88,7 @@ export default class UploaderChooser extends Emitter{
     $('.file-chooser-main').addClass('hidden');
     $('.file-chooser-bar').removeClass('hidden');
 
-    if(this._sdk === undefined){
+    if (this._sdk === undefined) {
       return;
     }
 

@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Common\ArrayToolkit;
 
 class TagController extends BaseController
 {
@@ -12,9 +13,21 @@ class TagController extends BaseController
         $total     = $this->getTagService()->searchTagCount($conditions = array());
         $paginator = new Paginator($request, $total, 20);
         $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        foreach ($tags as &$tag) {
+            $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
+
+            $groupNames = ArrayToolkit::column($tagGroups, 'name');
+            if (!empty($groupNames)) {
+                $tag['groupNames'] = $groupNames;
+            } else {
+                $tag['groupNames'] = array();
+            }
+        }
+
         return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
-            'tags'      => $tags,
-            'paginator' => $paginator
+            'tags'         => $tags,
+            'paginator'    => $paginator,
         ));
     }
 
@@ -22,7 +35,13 @@ class TagController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->addTag($request->request->all());
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
+
+            $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
+
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag'          => $tag,
+                'tagRelations' => $tagRelation,
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
