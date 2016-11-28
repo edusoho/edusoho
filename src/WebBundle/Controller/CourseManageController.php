@@ -14,7 +14,7 @@ class CourseManageController extends BaseController
             return $this->listAction($request, $courseSetId);
         }
 
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('WebBundle:CourseManage:create-modal.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -22,7 +22,7 @@ class CourseManageController extends BaseController
 
     public function copyAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:create-modal.html.twig', array(
             'courseSet' => $courseSet,
@@ -32,7 +32,7 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
             'courseSet' => $courseSet,
@@ -42,7 +42,7 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet   = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course      = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $courseItems = $this->getCourseService()->getCourseItems($courseId);
@@ -61,7 +61,7 @@ class CourseManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseService()->updateCourse($data['id'], $data);
         }
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:info.html.twig', array(
             'courseSet' => $courseSet,
@@ -71,7 +71,7 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
             'courseSet' => $courseSet,
