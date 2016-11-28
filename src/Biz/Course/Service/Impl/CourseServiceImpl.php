@@ -168,6 +168,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function tryManageCourse($courseId)
     {
+        $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
