@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
@@ -52,7 +53,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status',
             'createdUserId'
         ));
-        $task = $this->getTaskDao()->create($fields);
+        $task   = $this->getTaskDao()->create($fields);
         return $task;
     }
 
@@ -94,7 +95,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
         $currentSeq = $task['seq'];
-        $result = $this->getTaskDao()->delete($id);
+        $result     = $this->getTaskDao()->delete($id);
         $this->getActivityService()->deleteActivity($task['activityId']);
         $this->getTaskDao()->waveSeqBiggerThanSeq($currentSeq, -1);
 
@@ -108,13 +109,13 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findTasksFetchActivityByCourseId($courseId)
     {
-        $tasks = $this->findTasksByCourseId($courseId);
-        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
-        $activities      = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
+        $tasks       = $this->findTasksByCourseId($courseId);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
 
         array_walk($tasks, function (&$task) use ($activities) {
-            $activity     = $activities[$task['activityId']];
+            $activity         = $activities[$task['activityId']];
             $task['activity'] = $activity;
         });
 
@@ -137,8 +138,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-        $that            = $this;
-        array_walk($tasks, function (&$task) use ($taskResults, $that) {
+        array_walk($tasks, function (&$task) use ($taskResults) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
                     continue;
@@ -229,24 +229,12 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
-        $this->getCourseService()->tryTakeCourse($task['courseId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
-        if ($this->isFirstTask($task)) {
-            return true;
-        }
+        $strategy = new StrategyContext($course['learnMode'], $this->biz);
+        $canLearnTask = $strategy->canLearnTask($task);
 
-        if ($task['isOptional']) {
-            return true;
-        }
-
-        //获取教学方法策略 新的 course 中应该纪录当前的教方法 teach method: freedom|order
-        //先按照默认实现
-        $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
-        if (empty($preTask)) {
-            throw $this->createNotFoundException("previous task does is lost");
-        }
-        $isTaskLearned = $this->isTaskLearned($preTask['id']);
-        if ($isTaskLearned) {
+        if($canLearnTask){
             return true;
         }
         return false;
@@ -267,6 +255,18 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findTasksByChapterId($chapterId);
+    }
+
+    protected function getTaskStrategy($course)
+    {
+        switch ($course['method']) {
+            case 'freedom':
+                return 1;
+                break;
+            case  'lock':
+                return 2;
+                break;
+        }
     }
 
     /**
