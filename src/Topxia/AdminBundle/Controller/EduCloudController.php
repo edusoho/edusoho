@@ -370,7 +370,7 @@ class EduCloudController extends BaseController
 
         $cloudInfo = $api->get('/me');
         if (empty($cloudInfo['accessCloud'])) {
-            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
+            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_my_cloud_overview'));
         }
 
         //启动
