@@ -349,6 +349,10 @@ class EduCloudController extends BaseController
     //云短信概览页
     public function smsOverviewAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig');
+        }
+
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
