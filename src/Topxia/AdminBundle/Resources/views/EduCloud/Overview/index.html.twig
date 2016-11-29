@@ -5,7 +5,7 @@
 {% block main %}
 {% if overview.enabled == false %}
   {% include 'TopxiaAdminBundle:EduCloud/Overview:disabled.html.twig' %}
-{% elseif overview.accessCloud == false %}
+{% elseif overview.accessCloud == false or is_trial() %}
   {% include 'TopxiaAdminBundle:EduCloud/Overview:not-access.html.twig' %}
 {% else %}
   {% include 'TopxiaAdminBundle:EduCloud/Overview:normal-use.html.twig' %}
