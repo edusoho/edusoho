@@ -55,8 +55,10 @@ class Creator{
         $.validator.addMethod(
             "before",
             function(value, element, params) {
-                // console.log(value, element, params, this.optional(element), $(params).val() > value);
-                return this.optional(element) || $(params).val() > value;
+                if($('input[name="expiryMode"]:checked').val() !== 'date'){
+                    return true;
+                }
+                return value && $(params).val() > value;
             },
             Translator.trans('开始日期应早于结束日期')
         );
@@ -64,8 +66,10 @@ class Creator{
         $.validator.addMethod(
             "after",
             function(value, element, params) {
-                // console.log(value, element, params, this.optional(element), $(params).val() < value);
-                return this.optional(element) || $(params).val() < value;
+                if($('input[name="expiryMode"]:checked').val() !== 'date'){
+                    return true;
+                }
+                return value && $(params).val() < value;
             },
             Translator.trans('结束日期应晚于开始日期')
         );
