@@ -396,7 +396,7 @@ class EduCloudController extends BaseController
     public function smsAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig', array());
         }
 
         $settings = $this->getSettingService()->get('storage', array());
