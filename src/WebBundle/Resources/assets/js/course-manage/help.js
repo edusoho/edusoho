@@ -6,7 +6,6 @@ export const closeCourse = () => {
 			return ;
 		}
 		$.post($(evt.target).data('url'), function(data){
-			console.log(data);
 			if(data.success){
 				notify('success', '关闭成功');
 				location.reload();
@@ -23,7 +22,6 @@ export const deleteCourse = () => {
 			return ;
 		}
 		$.post($(evt.target).data('url'), function(data){
-			console.log(data);
 			if(data.success){
 				notify('success', '删除成功');
 				location.reload();
@@ -40,7 +38,6 @@ export const publishCourse = () => {
 			return ;
 		}
 		$.post($(evt.target).data('url'), function(data){
-			console.log(data);
 			if(data.success){
 				notify('success', '发布成功');
 				location.reload();
@@ -65,8 +62,6 @@ export const showSettings = () => {
 export const TabChange = () => {
 	$('[data-role="tab"]').click(function(){
 	  let $this = $(this);
-	  console.log($($this.data('tab-content')));
-	  let $tabContent =$($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
-		console.log($tabContent);
+	  $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
 	});
 }
