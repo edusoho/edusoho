@@ -318,16 +318,6 @@ class UserController extends MobileController
         );
     }
 
-    protected function getVipLevelService()
-    {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
-    }
-
-    protected function getVipService()
-    {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    }
-
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
