@@ -104,6 +104,33 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->update($id, $fields);
     }
 
+    public function updateCourseSetDetail($id, $fields)
+    {
+        if (!$this->hasCourseSetManagerRole($id)) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
+        $fields = ArrayToolkit::parts($fields, array(
+            'summary',
+            'goals',
+            'audiences'
+        ));
+
+        return $this->getCourseSetDao()->update($id, $fields);
+    }
+
+    public function updateCourseSetCover($id, $fields)
+    {
+        if (!$this->hasCourseSetManagerRole($id)) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
+        }
+
+        if (empty($fields['cover'])) {
+            throw $this->createInvalidArgumentException("Invalid Param: cover");
+        }
+
+        return $this->getCourseSetDao()->update($id, $fields);
+    }
+
     public function deleteCourseSet($id)
     {
         //TODO
