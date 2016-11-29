@@ -390,13 +390,13 @@ class EduCloudController extends BaseController
     {
         try {
             $api  = CloudAPIFactory::create('root');
-            if ($request->getMethod() == 'POST') {
 
+            if ($request->getMethod() == 'POST') {
                 $this->handleSmsSetting($request, $api);
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
             }
-            $isBinded = $this->getAppService()->getBinded();
             $smsInfo   = $api->get('/me/sms_account');
+            $isBinded = $this->getAppService()->getBinded();
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
                 'isBinded' => $isBinded,
                 'smsInfo'   => $smsInfo
