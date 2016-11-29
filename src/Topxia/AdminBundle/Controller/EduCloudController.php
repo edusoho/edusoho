@@ -395,40 +395,36 @@ class EduCloudController extends BaseController
     //云短信设置页
     public function smsAction(Request $request)
     {
-        if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig', array());
-        }
-
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
+        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
         try {
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
-            $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
-            if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled'])) {
-                $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
-                return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
-                    'overview' => $overview,
-                    'cloudSmsSettings' => $cloudSmsSettings
-                ));               
-            }
-            foreach ($overview['items'] as $value) {
-                $items['date'][] = $value['date'];
-                $items['count'][] = $value['count'];
-            }
             $smsInfo = $api->get('/me/sms_account');
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
-                'account' => $overview['account'],
-                'items'   => isset($items) ? $items : null,
-                'smsInfo' => $smsInfo
-            ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
+        if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled'])) {
+            $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
+                'overview' => $overview,
+                'cloudSmsSettings' => $cloudSmsSettings
+            ));               
+        }
+        foreach ($overview['items'] as $value) {
+            $items['date'][] = $value['date'];
+            $items['count'][] = $value['count'];
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
+            'account' => $overview['account'],
+            'items'   => isset($items) ? $items : null,
+            'smsInfo' => $smsInfo
+        ));
     }
     //云短信设置页
     public function smsSettingAction(Request $request)

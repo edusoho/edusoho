@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
         //改版图表
         var smsSendChart = document.getElementById('smsSendChart');
-        if (smsSendChart != null) {
+        if (smsSendChart) {
             var smsSendChart = echarts.init(document.getElementById('smsSendChart'));
             var items = app.arguments.items;
             var option = {
