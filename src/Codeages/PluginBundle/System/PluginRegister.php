@@ -105,10 +105,14 @@ class PluginRegister
 
         $installed = array();
         foreach ($plugins as $plugin) {
+            if ($plugin['code'] == 'MAIN') {
+                continue;
+            }
             $installed[$plugin['code']] = array(
                 'code' => $plugin['code'],
                 'version' => $plugin['version'],
                 'type' => $plugin['type'],
+                'protocol' => $plugin['protocol'],
             );
         }
 

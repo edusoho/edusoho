@@ -60,8 +60,17 @@ class PluginConfigurationManager
         $plugins = $this->getInstalledPlugins();
 
         foreach ($plugins as $plugin) {
+            if ($plugin['type'] != 'plugin') {
+                continue;
+            }
+
             $code = ucfirst($plugin['code']);
-            $class = "{$code}Plugin\\{$code}Plugin";
+            if ($plugin['protocol'] == 2) {
+                $class = "{$code}\\{$code}Bundle\\{$code}Bundle";
+            } else {
+                $class = "{$code}Plugin\\{$code}Plugin";
+            }
+
             $bundlues[] = new $class();
         }
 
