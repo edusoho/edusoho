@@ -547,7 +547,7 @@ admin:
                     name: 云短信
                     visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
                     children:
-                        admin_edu_cloud_sms_setting:
+                        admin_edu_cloud_sms_overview:
                             name: 概览
                             router_name: admin_edu_cloud_sms
                             disable: true

@@ -1062,6 +1062,18 @@ admin_cloud_video_renew:
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_sms_detail:
+    pattern: /cloud/sms/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsDetail }
+
+admin_cloud_sms_statistics:
+    pattern: /cloud/sms/statistics
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsStatistics }
+
+admin_cloud_sms_setting:
+    pattern: /cloud/sms/setting
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSetting }
+
 # admin_customer_service:
 #     pattern: /customer/service
 #     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
@@ -1787,9 +1799,9 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /edu_cloud/sms
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
-    permissions: [admin_edu_cloud_sms_setting]
+    pattern:  /edu_cloud/sms/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsOverview }
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_setting_sms:
     pattern:  /setting/edu_cloud/sms
@@ -1802,17 +1814,17 @@ admin_edu_cloud_sms_status:
 admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_bill:
     pattern:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
     pattern: /setting/edu_cloud/email

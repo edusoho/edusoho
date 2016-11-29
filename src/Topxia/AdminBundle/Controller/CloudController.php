@@ -103,6 +103,21 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_renew');
     }
 
+    public function smsDetailAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_list_detail');
+    }
+
+    public function smsStatisticsAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_count');
+    }
+
+    public function smsSettingAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_setting');
+    }
+
     public function liveMoreAction(Request $request)
     {
         return $this->redirectUrl('service_live_count');

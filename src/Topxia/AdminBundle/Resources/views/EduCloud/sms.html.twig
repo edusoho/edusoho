@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 
-{% set menu = 'admin_edu_cloud_sms_setting' %} 
+{% set menu = 'admin_edu_cloud_sms_overview' %} 
 
 {% set script_controller = 'educloud/sms-setting' %}
 
@@ -867,9 +867,10 @@
   </div>
 </form>
 <div class="page-heading">
-  模版设置
+  模板设置
 </div>
-<div class="table-responsive sms-table"> 
+<form class="form-horizontal" method="post" id="sms-form" novalidate="">
+  <div class="table-responsive sms-table"> 
     <table class="table table-striped table-hover ">
       <thead>
         <tr>
@@ -886,28 +887,28 @@
           <td>手机绑定</td>
           <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
           <td>自动单发</td>
-          <td>默认开启</td>
+          <td><input type="hidden" name="sms_bind" value="on">默认开启</td>
         </tr>
         <tr>
           <td>验证类</td>
           <td>登录密码重置</td>
           <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
           <td>自动单发</td>
-          <td>默认开启</td>
+          <td><input type="hidden" name="sms_forget_password" value="on">默认开启</td>
         </tr>
         <tr>
           <td>验证类</td>
           <td>支付密码重置</td>
           <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
           <td>自动单发</td>
-          <td>默认开启</td>
+          <td><input type="hidden" name="sms_forget_pay_password" value="on">默认开启</td>
         </tr>
         <tr>
           <td>验证类</td>
           <td>使用网站余额支付</td>
           <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
           <td>自动单发</td>
-          <td>默认开启</td>
+          <td><input type="hidden" name="sms_user_pay" value="on">默认开启</td>
         </tr>
         <tr>
           <td>通知类</td>
@@ -915,8 +916,17 @@
           <td>同学们，《ES网校管理学习班》现已开始报名！http://t.cn/RtHEoCs。</td>
           <td>手动群发</td>
           <td>
-            <label style="margin-bottom:0">
-              <input type="checkbox"> 开启
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="on"
+                  {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}
+                checked="checked"
+                  {% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="off"
+                  {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
+                checked="checked"
+                  {% endif %}> {{ '关闭'|trans }}
             </label>
           </td>
         </tr>
@@ -1044,4 +1054,5 @@
       </tbody>
     </table>
   </div>
+</form>
 {% endblock %}

@@ -325,16 +325,13 @@ class EduCloudController extends BaseController
 
         $cloudInfo = $api->get('/me');
         if (empty($cloudInfo['accessCloud'])) {
-            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
+            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_my_cloud_overview'));
         }
 
-        //启动或者更新短信签名
-        if (isset($dataUserPosted['sms-open']) || isset($dataUserPosted['sms_school_name'])) {
+        //启动
+        if (isset($dataUserPosted['sms-open'])) {
             $smsStatus                    = array_merge($smsStatus, $settings);
             $smsStatus['sms_enabled']     = 1;
-            $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
-
-            $info = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
         }
 
         $status = $api->get('/me/sms_account');
@@ -350,64 +347,63 @@ class EduCloudController extends BaseController
         return $this->redirect($this->generateUrl('admin_edu_cloud_sms'));
     }
 
-    //云短信设置页
-    public function smsAction(Request $request)
+    //云短信概览页
+    public function smsOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig');
         }
 
         $settings = $this->getSettingService()->get('storage', array());
-
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
+        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
         try {
             $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
-
-            $this->handleSmsSetting($request, $api);
-            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
-            return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
-                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'accessCloud' => $this->isAccessEduCloud(),
-                'smsStatus'   => $smsStatus
-            ));
+            $overview  = $api->get("/me/sms/overview");
+            $smsInfo = $api->get('/me/sms_account');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
+        $isSmsWithoutEnable = $this->isSmsWithoutEnable($overview, $cloudSmsSettings);
+        if ($isSmsWithoutEnable) {
+            $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
+                'overview' => $overview,
+                'cloudSmsSettings' => $cloudSmsSettings
+            ));               
+        }
+        foreach ($overview['items'] as $value) {
+            $items['date'][] = $value['date'];
+            $items['count'][] = $value['count'];
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
+            'account' => $overview['account'],
+            'items'   => isset($items) ? $items : null,
+            'smsInfo' => $smsInfo
+        ));
     }
-    //云短信设置页
+    //云短信设置
     public function smsSettingAction(Request $request)
     {
-        if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
-        }
-
-        $settings = $this->getSettingService()->get('storage', array());
-
-        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
-            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
-        }
-
         try {
             $api  = CloudAPIFactory::create('root');
-            $info = $api->get('/me');
 
-            $this->handleSmsSetting($request, $api);
-            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
+            if ($request->getMethod() == 'POST') {
+                $this->handleSmsSetting($request, $api);
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
+            }
+            $smsInfo   = $api->get('/me/sms_account');
+            $isBinded = $this->getAppService()->getBinded();
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
-                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'accessCloud' => $this->isAccessEduCloud(),
-                'smsStatus'   => $smsStatus
+                'isBinded' => $isBinded,
+                'smsInfo'   => $smsInfo
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());            
         }
     }
 
@@ -895,6 +891,13 @@ class EduCloudController extends BaseController
     protected function monthDays($time)
     {
         return date('t', strtotime("{$time}-1"));
+    }
+
+    private function isSmsWithoutEnable($overview, $cloudSmsSettings)
+    {
+        $isSmsWithoutEnable = (isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled']);
+
+        return $isSmsWithoutEnable;
     }
 
     /**
