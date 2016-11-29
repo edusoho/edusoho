@@ -30,9 +30,7 @@ class Course extends BaseResource
             'ownerId'   => $res['id']
         ));
 
-        //在版本7.3.2,先把标签unset掉
-        //redmine编号17640
-        //下一个迭代来修改这个bug
+        //@TODO 在版本7.3.2,先把标签unset掉 redmine编号17640 下一个迭代来修改这个bug
         unset($res['tags']);
 
         return $res;
