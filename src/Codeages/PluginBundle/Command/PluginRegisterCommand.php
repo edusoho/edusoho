@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Codeages\PluginBundle\System\PluginRegister;
 use Topxia\Common\BlockToolkit;
+use Topxia\Service\Util\PluginUtil;
 
 class PluginRegisterCommand extends ContainerAwareCommand
 {
@@ -63,6 +64,10 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $output->write("  - Create plugin installed record.");
         $app = $installer->registerPlugin($code);
         $output->writeln($app ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+
+        $output->write("  - Refresh plugin routing.");
+        PluginUtil::refresh();
+        $output->writeln(true ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
 
         $output->write("  - Refresh plugin cache.");
         $installer->refreshInstalledPluginConfiguration();
