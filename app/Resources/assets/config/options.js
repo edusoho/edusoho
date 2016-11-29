@@ -5,6 +5,7 @@
     commonsChunkFilename: 'common', 
     bundleMainname: 'main',
     entryFileName: 'index',
+
     registeredBundles: [ // default auto forEach
       'plugins/CrmPlugin'
       'src/WebBundle',
@@ -12,8 +13,6 @@
     registeredDirs: ['src','plugins'],
 
     globalAssetsDir: 'app/Resources/assets',
-    srcDir: 'src',
-    pluginsDir: 'plugins',
     nodeModulesDir: 'node_modules',
     libsDir: 'app/Resources/assets/libs',
     commonDir: 'app/Resources/assets/common',
@@ -24,15 +23,19 @@
     libsDevOutputDir: 'libs',
     libsBuildOutputDir: 'web/build/libs',
 
+    fontlimit: 8096,
+    imglimit: 20240
+
     port: 3030
   }
 */
 
 const options = {
   output: {
-    path: 'web/build/', //file output path, relative to this file
-    buildpath: './',
-    publicPath: '/build/' //relative to website domain
+    path: 'web/build/',       // dev env, file output path, relative to this file
+    buildPath: './',          // prod env, file output path, relative to this file
+    publicPath: '/build/',    // relative to website domain, to server
+    loadersPublicPath: '../'  // loaders public path
   },
   libs: {
     vendor: ['libs/vendor.js'], //can be a js file
