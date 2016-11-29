@@ -22,6 +22,7 @@ const parameters = {
     "jquery-sortable":['jquery-sortable'],
     "iframe-resizer":['../libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
+    "es-webuploader":['../libs/js/es-webuploader.js']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
