@@ -98,7 +98,7 @@ class TestpaperController extends BaseController
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
 
-        $total = $this->makeTestpaperTotal($testpaper, $questions);
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
 
@@ -456,8 +456,8 @@ class TestpaperController extends BaseController
                 $total[$type]['score']  = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
 
-                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])) {
-                    $total[$type]['missScore'] = $testpaper["metas"]["missScore"][$type];
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper['metas']['missScore'])) {
+                    $total[$type]['missScore'] = $testpaper['metas']['missScore'][$type];
                 } else {
                     $total[$type]['missScore'] = 0;
                 }

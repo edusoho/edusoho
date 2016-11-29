@@ -6,6 +6,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseTestpaperManageController extends BaseController
 {
+    public function checkAction(Request $request, $courseId, $resultId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        return $this->forward('WebBundle:TestpaperManage:check', array(
+            'request'  => $request,
+            'resultId' => $resultId,
+            'source'   => 'course',
+            'targetId' => $course['id']
+        ));
+    }
+
     public function checkListAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);

@@ -138,6 +138,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return array_keys($questions);
     }
 
+    public function getCheckedQuestionTypes()
+    {
+        $types        = $this->getQuestionTypes();
+        $checkedTypes = array();
+
+        foreach ($types as $type) {
+            if ($this->getQuestionConfig($type)->isNeedCheck()) {
+                $checkedTypes[] = $type;
+            }
+        }
+
+        return $checkedTypes;
+    }
+
     public function findCourseTasks($courseId)
     {
         return array();

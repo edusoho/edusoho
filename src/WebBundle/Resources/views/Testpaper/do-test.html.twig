@@ -29,7 +29,7 @@
       </div>
     {% endfor %}
 
-    {% if showTestpaperNavbar|default('on') == 'off' %}
+    {% if paperResult.status|default(null) == 'reviewing' %}
       <textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
       <input type="hidden" id="passedStatus" name="passedStatus" value="" />
     {% endif %}

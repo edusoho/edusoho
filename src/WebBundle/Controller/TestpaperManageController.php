@@ -67,11 +67,11 @@ class TestpaperManageController extends BaseController
             );
         }
 
-        $conditions['types']    = ArrayToolkit::column($types, "key");
-        $conditions['courseId'] = $course["id"];
+        $conditions['types']    = ArrayToolkit::column($types, 'key');
+        $conditions['courseId'] = $course['id'];
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $questionNums = ArrayToolkit::index($questionNums, "type");
+        $questionNums = ArrayToolkit::index($questionNums, 'type');
 
         $conditions                              = array();
         $conditions['type']                      = 'material';
@@ -99,7 +99,7 @@ class TestpaperManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getTestpaperService()->searchTestpaperCount($conditions),
-            1
+            10
         );
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
@@ -120,7 +120,56 @@ class TestpaperManageController extends BaseController
         ));
     }
 
-    public function resultListAction(Request $request, $testpaperId)
+    public function checkAction(Request $request, $resultId)
+    {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        if (!$result) {
+            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
+        }
+
+        $source   = $request->query->get('source', 'course');
+        $targetId = $request->query->get('targetId', 0);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
+        if (!$testpaper) {
+            throw $this->createResourceNotFoundException('testpaper', $result['id']);
+        }
+
+        if ($result['status'] != 'reviewing') {
+            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $result['id'])));
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $formData    = $request->request->all();
+            $paperResult = $this->getTestpaperService()->checkFinish($result['id'], $formData);
+
+            $this->createJsonResponse(true);
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
+
+        $essayQuestions = $this->getCheckedEssayQuestions($questions);
+
+        $student  = $this->getUserService()->getUser($result['userId']);
+        $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
+        $total    = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+
+        return $this->render('WebBundle:TestpaperManage:teacher-check.html.twig', array(
+            'paper'         => $testpaper,
+            'paperResult'   => $result,
+            'questions'     => $essayQuestions,
+            'student'       => $student,
+            'accuracy'      => $accuracy,
+            'questionTypes' => array('essay', 'material'),
+            'total'         => $total,
+            'source'        => $source,
+            'targetId'      => $targetId,
+            'isTeacher'     => true
+        ));
+    }
+
+    public function resultListAction(Request $request, $testpaperId, $source, $targetId)
     {
         $user = $this->getUser();
 
@@ -169,7 +218,10 @@ class TestpaperManageController extends BaseController
             'status'       => $status,
             'paperResults' => $testpaperResults,
             'paginator'    => $paginator,
-            'users'        => $users
+            'users'        => $users,
+            'source'       => $source,
+            'targetId'     => $targetId,
+            'isTeacher'    => true
         ));
     }
 
@@ -560,6 +612,39 @@ class TestpaperManageController extends BaseController
         }
 
         return $ranges;
+    }
+
+    protected function getCheckedEssayQuestions($questions)
+    {
+        //$checkedQuestionTypes = $this->getQuestionService()->getCheckedQuestionTypes();
+        $essayQuestions = array();
+
+        /*foreach ($questions as $type => $items) {
+        if (in_array($type, $checkedQuestionTypes) && $type != 'material') {
+        $essayQuestions[$type] = $items;
+        }
+
+        if ($type == 'material') {
+        foreach ($variable as $key => $value) {
+        # code...
+        }
+        }
+        }*/
+        $essayQuestions['essay'] = !empty($questions['essay']) ? $questions['essay'] : array();
+
+        if (empty($questions['material'])) {
+            return $essayQuestions;
+        }
+
+        foreach ($questions['material'] as $questionId => $question) {
+            $questionTypes = ArrayToolkit::column(empty($question['subs']) ? array() : $question['subs'], 'type');
+
+            if (in_array('essay', $questionTypes)) {
+                $essayQuestions['material'][$questionId] = $question;
+            }
+        }
+
+        return $essayQuestions;
     }
 
     protected function getCourseService()

@@ -110,4 +110,9 @@ class FillQuestion extends Question
 
         return $fields;
     }
+
+    public function isNeedCheck()
+    {
+        return false;
+    }
 }

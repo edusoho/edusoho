@@ -97,8 +97,6 @@ interface TestpaperService
 
     public function finishTest($resultId, $formData);
 
-    public function makeTeacherFinishTest($id, $paperId, $teacherId, $field);
-
     public function updateTestpaperItems($testpaperId, $items);
 
     public function getTestpaperBuilder($type);

@@ -63,7 +63,7 @@
           <li class="list-group-item {% if side_nav == 'testpaperCheck' %}active{% endif %}">
             <a href="{% if course.locked|default(0) == 1 %}
             {{ path('course_manage_course_sync', {id:course.id,type:'testpaper'}) }}{% else %}
-            {{ path('course_manage_testpaper_check', {courseId:course.id}) }}
+            {{ path('course_manage_testpaper_check_list', {courseId:course.id}) }}
             {% endif %}">
               <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'试卷批阅'|trans}}
             </a>

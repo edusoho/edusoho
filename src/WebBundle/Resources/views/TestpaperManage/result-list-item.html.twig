@@ -39,8 +39,13 @@
           {% if paperResult.status == 'finished' %}
             <a href="{{ path('testpaper_result_show',{resultId:paperResult.id}) }}" id="show_testpaper_result" class="btn btn-default btn-sm" target="_blank">{{'查看结果'|trans}}</a>
           {% elseif paperResult.status == 'reviewing' %}
-            {% if isTeacher is defined and not isTeacher %}
-              <a href="{{ path('course_manage_test_teacher_check', {id:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" class="btn btn-default btn-sm " target="_blank">{{'批阅'|trans}}</a>
+            {% if isTeacher is defined and isTeacher %}
+              {% if source == 'classroom' %}
+
+              {% else %}
+                {% set checkUrl = path('course_manage_testpaper_check', {courseId:targetId,resultId:paperResult.id}) %}
+              {% endif %}
+              <a href="{{ checkUrl }}" class="btn btn-default btn-sm " target="_blank">{{'批阅'|trans}}</a>
             {% else %}
               <a href="javascript;;" class="btn btn-default btn-sm disabled" >{{'批阅'|trans}}</a>
             {% endif %}

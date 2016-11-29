@@ -3,7 +3,7 @@
 {% set resultStatus = [] %}
 {% include 'WebBundle:TestpaperManage:result-list-search-form.html.twig' %}
 
-{% include 'WebBundle:TestpaperManage:result-list-item.html.twig' with {source:'course',targetId:testpaper.courseId, paperResults:paperResults} %}
+{% include 'WebBundle:TestpaperManage:result-list-item.html.twig' with {source:source|default('course'),targetId:targetId|default(0), paperResults:paperResults} %}
 
 <nav class="text-center">
   {{ web_macro.paginator(paginator) }}

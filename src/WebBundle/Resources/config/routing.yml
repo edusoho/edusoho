@@ -142,6 +142,10 @@ course_manage_testpaper_close:
   defaults: { _controller: WebBundle:TestpaperManage:close }
 
 course_manage_testpaper_check:
+  path: /course/{courseId}/manage/testpaper/{resultId}/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:check }
+
+course_manage_testpaper_check_list:
   path: /course/{courseId}/manage/testpaper/check
   defaults: { _controller: WebBundle:CourseTestpaperManage:checkList }
 

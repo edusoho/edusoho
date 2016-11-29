@@ -5,7 +5,6 @@
 
 {% set side_nav = 'testpaperCheck' %}
 {% set parentId = parentId | default(null)%}
-{% set script_controller = 'course-manage/testpaper-result-list' %}
 
 {% block main %}
 
@@ -20,7 +19,7 @@
       <span class="text-danger">{{'当前用户不是本课程教师，没有批改试卷的权限。'|trans}}</span>
     {% endif %}
 
-    {{ render(controller('WebBundle:TestpaperManage:resultList',{request:app.request,testpaperId:testpaper.id})) }}
+    {{ render(controller('WebBundle:TestpaperManage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
 
   </div>
 </div>
