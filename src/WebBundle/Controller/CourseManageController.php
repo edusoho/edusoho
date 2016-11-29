@@ -48,10 +48,11 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException("course #{$courseId} is not in courseSet #{$courseSetId}. ");
         }
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks     = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $tasks           = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasksRenderPage = $this->createLearningStrategy($course)->getTasksRenderPage();
 
-        return $this->render('WebBundle:CourseManage:tasks.html.twig', array(
+        return $this->render($tasksRenderPage, array(
             'tasks'     => $tasks,
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -60,14 +61,18 @@ class CourseManageController extends BaseController
 
     public function courseListAction(Request $request, $course)
     {
-        $strategy = new StrategyContext($course['learnMode'], $this->get('biz'));
-
-        list($courseItems, $courseListRenderPage) = $strategy->findCourseItems($course['id']);
+        $courseItems          = $this->getCourseService()->findCourseItems($course['id']);
+        $courseListRenderPage = $this->createLearningStrategy($course)->getCourseItemsRenderPage();
 
         return $this->render($courseListRenderPage, array(
             'items'  => $courseItems,
             'course' => $course
         ));
+    }
+
+    protected function createLearningStrategy($course)
+    {
+        return new StrategyContext($course['learnMode'], $this->get('biz'));
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)

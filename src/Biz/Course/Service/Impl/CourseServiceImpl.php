@@ -145,25 +145,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findCourseItems($courseId)
     {
-
-        $items = array();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        foreach ($tasks as $task) {
-            $task['itemType']            = 'task';
-            $items["task-{$task['id']}"] = $task;
-        }
-
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
-            $items["chapter-{$chapter['id']}"] = $chapter;
-        }
-
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
-
-        return $items;
+        $course = $this->getCourse($courseId);
+        return $this->createLearningStrategy($course)->findCourseItems($courseId);
     }
 
     public function findCourseList($courseId)
@@ -431,6 +414,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         //1. courseId为空，判断是否有创建教学计划的权限
         //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;
+    }
+
+    protected function createLearningStrategy($course)
+    {
+        return new StrategyContext($course['learnMode'], $this->biz);
     }
 
     protected function getTaskService()

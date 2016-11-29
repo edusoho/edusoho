@@ -23,9 +23,14 @@ class StrategyContext
                 $this->strategy = new FreeOrderStrategy($biz);
                 break;
             default:
-                throw new NotFoundException('teach method does not exist');
+                throw new NotFoundException('teach method strategy does not exist');
 
         }
+    }
+
+    public function createStrategy()
+    {
+        return $this->strategy;
     }
 
     public function canLearnTask($task)
@@ -36,6 +41,16 @@ class StrategyContext
     public function findCourseItems($courseId)
     {
         return $this->strategy->findCourseItems($courseId);
+    }
+
+    public function getCourseItemsRenderPage()
+    {
+        return $this->strategy->getCourseItemsRenderPage();
+    }
+
+    public function getTasksRenderPage()
+    {
+        return $this->strategy->getTasksRenderPage();
     }
 
 }
