@@ -25,13 +25,13 @@ class UserFilter implements Filter
         }
 
         if (PluginToolkit::isPluginInstalled('Vip')) {
-            $userVip = ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($data['id']);
+            $userVip = $this->getVipService()->getMemberByUserId($data['id']);
 
             if (!empty($userVip)) {
-                $userVipLevel = ServiceKernel::instance()->createService('Vip:Vip.LevelService')->getLevel($userVip['levelId']);
+                $userVipLevel = $this->getVipLevelService()->getLevel($userVip['levelId']);
                 $data['vipName'] = $userVipLevel['name'];
 
-                $userVipHistory = ServiceKernel::instance()->createService('Vip:Vip.VipService')->getVipDetailByUserId($data['id']);
+                $userVipHistory = $this->getVipService()->getVipDetailByUserId($data['id']);
 
                 $data['VipDeadLine'] = $userVipHistory['deadline'];
             }
@@ -148,5 +148,14 @@ class UserFilter implements Filter
 
     }
 
+    protected function getVipLevelService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+    }
 }
 
