@@ -1,6 +1,7 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Task\Strategy\StrategyContext;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
@@ -57,10 +58,12 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function courseListAction(Request $request, $courseId)
+    public function courseListAction(Request $request, $course)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-        list($courseItems, $courseListRenderPage) = $this->getCourseService()->findCourseList($courseId);
+        $strategy = new StrategyContext($course['learnMode'], $this->get('biz'));
+
+        list($courseItems, $courseListRenderPage) = $strategy->findCourseItems($course['id']);
+
         return $this->render($courseListRenderPage, array(
             'items'  => $courseItems,
             'course' => $course

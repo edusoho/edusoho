@@ -33,9 +33,9 @@ class FreeOrderStrategy implements LearningStrategy
         return true;
     }
 
-    public function getCourseItems($courseId)
+    public function findCourseItems($courseId)
     {
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
         return array($courseItems, self::COURSE_ITEM_RENDER_PAGE);
     }
 

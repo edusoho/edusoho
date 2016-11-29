@@ -20,7 +20,7 @@ interface CourseService
 
     public function publishCourse($id, $userId);
 
-    public function getCourseItems($courseId);
+    public function findCourseItems($courseId);
 
     public function findCourseList($courseId);
 

@@ -143,7 +143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function getCourseItems($courseId)
+    public function findCourseItems($courseId)
     {
 
         $items = array();

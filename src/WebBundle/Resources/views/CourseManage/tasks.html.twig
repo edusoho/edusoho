@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  {{ render(controller('WebBundle:CourseManage:courseList', {courseId: course.id})) }}
+  {{ render(controller('WebBundle:CourseManage:courseList', {course: course})) }}
 {% endblock %}
 
 

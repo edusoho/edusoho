@@ -48,9 +48,9 @@ class ByOrderStrategy implements LearningStrategy
         return false;
     }
 
-    public function getCourseItems($courseId)
+    public function findCourseItems($courseId)
     {
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
         return array($courseItems, self::COURSE_ITEM_RENDER_PAGE);
     }
 

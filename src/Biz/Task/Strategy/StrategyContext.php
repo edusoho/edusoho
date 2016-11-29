@@ -35,7 +35,7 @@ class StrategyContext
 
     public function findCourseItems($courseId)
     {
-        return $this->strategy->getCourseItems($courseId);
+        return $this->strategy->findCourseItems($courseId);
     }
 
 }
