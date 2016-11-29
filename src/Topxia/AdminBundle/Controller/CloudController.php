@@ -118,6 +118,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('service_sms_setting');
     }
 
+    public function liveMoreAction(Request $request)
+    {
+        return $this->redirectUrl('service_live_count');
+    }
+
     protected function redirectUrl($routingName, $params = array())
     {
         $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);

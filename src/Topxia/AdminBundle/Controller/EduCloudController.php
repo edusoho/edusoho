@@ -7,6 +7,7 @@ use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -1262,15 +1263,92 @@ class EduCloudController extends BaseController
     }
 
     // 添加云直播
-    public function liveAction(Request $request)
+    public function liveOverviewAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig');
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:trial.html.twig');
+        }
+
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/live/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+        }
+        $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
+        $liveEnabled = $liveCourseSetting['live_course_enabled'];
+        $isLiveWithoutEnable = $this->isLiveWithoutEnable($overview, $liveEnabled);
+        if ($isLiveWithoutEnable) {
+            $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:without-enable.html.twig', array(
+                'overview'  => $overview
+            ));
+        }
+        foreach ($overview['items'] as $key => $value) {
+            $items['date'][] = $value['date'];
+            $items['count'][] = $value['count'];
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
+            'account'  => $overview['account'],
+            'items'  => isset($items) ? $items : null
+        ));
+    }
+
+    private function isLiveWithoutEnable($overview, $liveEnabled)
+    {
+        $isLiveWithoutEnable = (isset($overview['isBuy']) && $overview['isBuy'] == false)||(isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled);
+
+        return $isLiveWithoutEnable;
     }
 
     public function liveSettingAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig');
+        $client            = new EdusohoLiveClient();
+        $capacity          = $client->getCapacity();
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+
+        if ($request->getMethod() == 'POST') {
+            $courseSetting     = $this->getSettingService()->get('course', array());
+            $liveCourseSetting = $request->request->all();
+            $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $setting = array_merge($courseSetting, $liveCourseSetting);
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
+            $this->getSettingService()->set('course', $setting);
+
+            $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
+            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+        }
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/live/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Live:setting.html.twig', array(
+            'account'  => $overview['account'],
+            'liveCourseSetting' => $liveCourseSetting,
+            'capacity' => $capacity
+        ));
     }
+
+    public function uploadLiveLogoAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+            $courseSetting     = $this->getSettingService()->get('course', array()); 
+
+            $liveLogo = $request->request->all();
+            $liveCourseSetting = array_merge($liveCourseSetting, $liveLogo);
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
+
+            $courseSetting = array_merge($courseSetting, $liveCourseSetting);
+            $this->getSettingService()->set('course', $courseSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('直播logo已保存！'));
+
+            return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
+        }
+    }
+
     // 添加重建索引模态框
     public function modalAction(Request $request)
     {

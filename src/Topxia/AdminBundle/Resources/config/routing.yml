@@ -1019,6 +1019,10 @@ admin_cloud_buy:
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_live_more:
+    pattern: /cloud/live/more
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveMore }
+
 admin_cloud_tlp:
     pattern:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
@@ -1951,12 +1955,17 @@ admin_cloud_attachment_render:
     permissions: [admin_cloud_attachment_manage]
 
 # 添加云直播
-admin_setting_cloud_edulive:
-    pattern:  /cloud/edulive
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
+admin_cloud_edulive_overview:
+    pattern:  /cloud/edulive/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:liveOverview }
 
-admin_cloud_setting_edulive:
-    pattern:  /cloud/edulive/setting
+admin_cloud_upload_live_logo:
+    pattern: /cloud/edulive/upload
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:uploadLiveLogo }
+    methods: [POST]
+
+admin_setting_cloud_edulive:
+    pattern:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
 
 # 添加重建索引模态框
