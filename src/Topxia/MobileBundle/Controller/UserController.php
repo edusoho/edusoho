@@ -233,6 +233,26 @@ class UserController extends MobileController
             $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime'] = date('c', $user['createdTime']);
 
+
+            if (!empty($user['verifiedMobile'])) {
+                $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
+            } else {
+                unset($user['verifiedMobile']);
+            }
+
+            if ($this->isPluginInstalled('Vip')) {
+                $userVip = $this->getVipService()->getMemberByUserId($user['id']);
+
+                if (!empty($userVip)) {
+                    $userVipLevel = $this->getVipLevelService()->getLevel($userVip['levelId']);
+                    $user['vipName'] = $userVipLevel['name'];
+
+                    $userVipHistory = $this->getVipService()->getVipDetailByUserId($user['id']);
+
+                    $user['VipDeadLine'] = $userVipHistory['deadline'];
+                }
+            }
+
             $user['email'] = '';
             $user['roles'] = array();
             unset($user['password']);
@@ -316,6 +336,16 @@ class UserController extends MobileController
                 "max" => "1.1.0"
             ),
         );
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     protected function getAuthService()
