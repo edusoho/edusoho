@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     require('echarts-debug');
     exports.run = function() {
         var spaceItemChart = document.getElementById('spaceItemChart');
-        if (spaceItemChart != null) {
+        if (spaceItemChart) {
             var spaceItemChart = echarts.init(spaceItemChart);
             var spaceItems = app.arguments.spaceItems;
             var option = {
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
         }
         
         var flowItemChart = document.getElementById('flowItemChart');
-        if (flowItemChart != null) {
+        if (flowItemChart) {
          var flowItemChart = echarts.init(flowItemChart);
          var flowItems = app.arguments.flowItems;
          var option = {
