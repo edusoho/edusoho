@@ -1827,9 +1827,19 @@ admin_edu_cloud_sms_no_message:
     permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
-    pattern: /setting/edu_cloud/email
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
-    permissions: [admin_edu_cloud_email_seeting]
+    pattern: /edu_cloud/email/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_setting:
+    pattern: /edu_cloud/email/setting
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSetting }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_switch:
+    pattern: /edu_cloud/email/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSwitch }
+    permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_search:
     pattern: /edu_cloud/search

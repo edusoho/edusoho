@@ -407,15 +407,47 @@ class EduCloudController extends BaseController
         }
     }
 
-    //云邮件设置页
-    public function emailAction(Request $request)
+    //原云邮件设置页
+    // public function emailAction(Request $request)
+    // {
+    //     if ($this->getWebExtension()->isTrial()) {
+    //         return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
+    //     }
+
+    //     $settings = $this->getSettingService()->get('storage', array());
+
+    //     if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+    //         $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+    //         return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+    //     }
+
+    //     try {
+    //         $api         = CloudAPIFactory::create('root');
+    //         $info        = $api->get('/me');
+    //         $status      = $api->get('/me/email_account');
+    //         $emailStatus = $this->handleEmailSetting($request);
+    //         $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
+    //         $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
+    //         return $this->render('TopxiaAdminBundle:EduCloud/email:overview.html.twig', array(
+    //             'locked'       => isset($info['locked']) ? $info['locked'] : 0,
+    //             'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
+    //             'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
+    //             'accessCloud'  => $this->isAccessEduCloud(),
+    //             'emailStatus'  => $emailStatus,
+    //             'emailInfo'    => $emailInfo
+    //         ));
+    //     } catch (\RuntimeException $e) {
+    //         return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+    //     }
+    // }
+
+    public function emailOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
+            return $this->render('TopxiaAdminBundle:EduCloud/Email:trial.html.twig');
         }
 
         $settings = $this->getSettingService()->get('storage', array());
-
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
@@ -423,21 +455,69 @@ class EduCloudController extends BaseController
 
         try {
             $api         = CloudAPIFactory::create('root');
-            $info        = $api->get('/me');
-            $status      = $api->get('/me/email_account');
-            $emailStatus = $this->handleEmailSetting($request);
-            $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
-            return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
-                'locked'       => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
-                'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
-                'accessCloud'  => $this->isAccessEduCloud(),
-                'emailStatus'  => $emailStatus,
-                'emailInfo'    => $emailInfo
+            $overview        = $api->get('/me/email/overview');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+        }
+        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
+        if ($isEmailWithoutEnable) {
+            $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
+            return $this->render('TopxiaAdminBundle:EduCloud/Email:without-enable.html.twig', array(
+                'overview' => $overview
+            ));                
+        }
+        foreach ($overview['items'] as $value) {
+            $items['date'][] = $value['date']; 
+            $items['amount'][] = $value['amount']; 
+        }
+        return $this->render('TopxiaAdminBundle:EduCloud/Email:overview.html.twig', array(
+            'account' => $overview['account'],
+            'items'   => isset($items) ? $items : null
+        ));
+    }
+
+    private function isEmailWithoutEnable($overview, $emailSettings)
+    {
+        $isEmailWithoutEnable = (isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status']) || (isset($overview['isBuy']) && $overview['isBuy'] == false);
+
+        return $isEmailWithoutEnable;
+    }
+
+    //云邮件设置页
+    public function emailSettingAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview        = $api->get('/me/email/overview');
+            return $this->render('TopxiaAdminBundle:EduCloud/Email:setting.html.twig', array(
+                'account' => $overview['account']
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+        }
+    }
+
+    public function emailSwitchAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $status = $request->request->all();
+            if (isset($status['email-open'])) {
+                $emailStatus['status'] = 'enable';
+                $this->getSettingService()->set('cloud_email', $emailStatus);
+            }
+
+            if (isset($status['email-close'])) {
+                $emailStatus['status'] = 'disable';
+                $this->getSettingService()->set('cloud_email', $emailStatus);
+            }
+            return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
     }
 
