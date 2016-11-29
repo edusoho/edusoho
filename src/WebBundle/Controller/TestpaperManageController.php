@@ -13,7 +13,10 @@ class TestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $conditions['courseId'] = $courseId;
+        $conditions = array(
+            'courseId' => $courseId,
+            'type'     => 'testpaper'
+        );
 
         $paginator = new Paginator(
             $this->get('request'),

@@ -257,12 +257,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
-        $testpaper = array(
-            'status' => 'open'
-        );
-        $testpaper = $this->updateTestpaper($id, array('status' => 'open'));
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
 
-        $this->dispatchEvent('testpaper.publish', $testpaper);
+        $this->dispatchEvent('testpaper.publish', new ServiceEvent($testpaper));
 
         return $testpaper;
     }
@@ -279,9 +276,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
-        $testpaper = $this->updateTestpaper($id, array('status' => 'closed'));
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
 
-        $this->dispatchEvent('testpaper.close', $testpaper);
+        $this->dispatchEvent('testpaper.close', new ServiceEvent($testpaper));
 
         return $testpaper;
     }

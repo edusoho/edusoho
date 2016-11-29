@@ -136,10 +136,12 @@ course_manage_testpaper_create:
 course_manage_testpaper_publish:
   path: /course/{courseId}/manage/testpaper/{id}/publish
   defaults: { _controller: WebBundle:TestpaperManage:publish }
+  #methods: [POST]
 
 course_manage_testpaper_close:
   path: /course/{courseId}/manage/testpaper/{id}/close
   defaults: { _controller: WebBundle:TestpaperManage:close }
+  #methods: [POST]
 
 course_manage_testpaper_check:
   path: /course/{courseId}/manage/testpaper/{resultId}/check
