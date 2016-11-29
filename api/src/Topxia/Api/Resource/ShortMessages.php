@@ -13,33 +13,36 @@ class ShortMessages extends BaseResource
     {
         $data = $request->query->all();
 
-        $token = json_decode($data);
-
         //登录用户，重置密码
-        if (!empty($token['userId'])) {
-            return $this->sendVerify($token);
+        if (!empty($data['userId'])) {
+            return $this->sendVerify($data);
         }
 
         //同一个ip访问次数超过5次
-        if () {
+        if (true) {
         }
 
-        if (!$this->getUserService()->getUserByVerifiedMobile($token['mobile'])) {
+        if (!$this->getUserService()->getUserByVerifiedMobile($data['mobile'])) {
             return $this->error('5001', '手机号未验证');
         }
 
-        return $this->sendVerify($token);
+        return $this->sendVerify($data);
     }
 
-    protected function sendVerify($token)
+    public function filter($res)
+    {
+        return $res;
+    }
+
+    protected function sendVerify($data)
     {
         $smsCode = $this->generateSmsCode();
 
         $api    = CloudAPIFactory::create('leaf');
         $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-            'mobile'      => $token['mobile'], 
-            'category'    => $token['category'], 
-            'description' => '发送手机验证码', 
+            'mobile'      => $data['mobile'], 
+            'category'    => $data['category'], 
+            'description' => '密码重置', 
             'verify'      => $smsCode
         ));
 

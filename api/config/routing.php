@@ -118,4 +118,4 @@ $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
 
-$app->get(_u('/short_messages'), 'res.ShortMessages:post');
+$app->post(_u('/short_messages'), 'res.ShortMessages:post');
