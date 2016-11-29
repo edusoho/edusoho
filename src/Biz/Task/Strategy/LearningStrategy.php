@@ -11,6 +11,8 @@ namespace Biz\Task\Strategy;
 
 interface LearningStrategy
 {
+    public function createTask($field);
+
     public function canLearnTask($task);
 
     public function findCourseItems($courseId);

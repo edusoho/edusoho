@@ -40,6 +40,12 @@ class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
         return false;
     }
 
+    public function createTask($field)
+    {
+        return $this->baseCreateTask($field);
+    }
+
+
     public function getTasksRenderPage()
     {
         return 'WebBundle:CourseManage:tasks-byOrder.html.twig';
@@ -55,6 +61,8 @@ class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
     {
         return 1 == $task['seq'];
     }
+
+
 
 
 }

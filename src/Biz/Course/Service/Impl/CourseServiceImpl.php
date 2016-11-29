@@ -312,8 +312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createChapter($chapter)
     {
-        $argument = $chapter;
-
         if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
             throw $this->createInvalidArgumentException("Invalid Chapter Type");
         }
@@ -344,6 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getNextChapterNumber($courseId)
     {
+        //有逻辑缺陷
         $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
         return $counter + 1;
     }

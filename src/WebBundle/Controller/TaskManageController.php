@@ -17,7 +17,7 @@ class TaskManageController extends BaseController
             $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
             $task['fromUserId'] = $this->getUser()->getId();
-            $savedTask          = $this->getTaskService()->createTask($this->parseTimeFields($task));
+            $this->getTaskService()->createTask($this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 

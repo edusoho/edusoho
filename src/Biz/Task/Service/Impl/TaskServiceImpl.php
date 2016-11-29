@@ -5,6 +5,7 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Strategy\StrategyContext;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\TaskResultService;
@@ -20,35 +21,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function createTask($fields)
     {
-        if ($this->invalidTask($fields)) {
-            throw $this->createInvalidArgumentException('task is invalid');
-        }
+        $strategy =  $this->createLearningStrategy($fields['fromCourseId']);
 
-        if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权创建任务');
-        }
-
-        $activity = $this->getActivityService()->createActivity($fields);
-
-        $fields['activityId']    = $activity['id'];
-        $fields['createdUserId'] = $activity['fromUserId'];
-        $fields['courseId']      = $activity['fromCourseId'];
-        $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-
-        $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'seq',
-            'courseChapterId',
-            'activityId',
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status',
-            'createdUserId'
-        ));
-        $task   = $this->getTaskDao()->create($fields);
+        $task     = $strategy->createTask($fields);
         return $task;
     }
 
@@ -165,13 +140,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
-    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP)
+    public function doingTask($taskId, $time = TaskService::LEARN_TIME_STEP)
     {
         $task = $this->tryTakeTask($taskId);
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-        if(empty($taskResult)){
+        if (empty($taskResult)) {
             throw new AccessDeniedException('任务不在进行状态');
         }
 
@@ -268,23 +243,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createDao('Task:TaskDao');
     }
 
-    protected function canManageCourse($courseId)
-    {
-        return true;
-    }
-
-    protected function invalidTask($task)
-    {
-        if (!ArrayToolkit::requireds($task, array(
-            'title',
-            'fromCourseId'
-        ))
-        ) {
-            return true;
-        }
-
-        return false;
-    }
 
     protected function isFirstTask($task)
     {
@@ -295,6 +253,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $maxSeq = $this->getMaxSeqByCourseId($task['courseId']);
         return $maxSeq == $task['seq'];
+    }
+
+    protected function createLearningStrategy($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            throw new NotFoundException('course does not exist');
+        }
+        return new StrategyContext($course['learnMode'], $this->biz);
     }
 
     /**

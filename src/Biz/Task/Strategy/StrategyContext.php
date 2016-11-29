@@ -33,6 +33,11 @@ class StrategyContext
         return $this->strategy;
     }
 
+    public function createTask($fields)
+    {
+        return $this->strategy->createTask($fields);
+    }
+
     public function canLearnTask($task)
     {
         return $this->strategy->canLearnTask($task);

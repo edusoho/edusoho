@@ -2,7 +2,6 @@
 namespace Biz\Task\Strategy\Impl;
 
 
-use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Biz\Task\Strategy\page;
@@ -19,6 +18,19 @@ class FreeOrderStrategy extends BaseLearningStrategy implements LearningStrategy
     {
         return true;
     }
+
+    public function createTask($field)
+    {
+        $task    = $this->baseCreateTask($field);
+        $chapter = array(
+            'courseId' => $task['courseId'],
+            'title'    => $task['title'],
+            'type'     => 'lesson'
+        );
+        $this->getCourseService()->createChapter($chapter);
+        return $task;
+    }
+
 
     public function getTasksRenderPage()
     {
