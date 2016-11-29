@@ -28,7 +28,7 @@ class CourseSetManageController extends BaseController
 
     public function indexAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
 
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
@@ -58,11 +58,13 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
+        $courseSet = array();
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            $this->getCourseSetService()->updateCourseSet($id, $data);
+            $data      = $request->request->all();
+            $courseSet = $this->getCourseSetService()->updateCourseSet($id, $data);
+        } else {
+            $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         }
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
         $tags = array();
         if (!empty($courseSet['tags'])) {
@@ -76,8 +78,16 @@ class CourseSetManageController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
+            'courseSet' => $courseSet
+        ));
+    }
+
+    public function coverAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        return $this->render('WebBundle:CourseSetManage:cover.html.twig', array(
             'courseSet' => $courseSet
         ));
     }
