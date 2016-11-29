@@ -45,6 +45,25 @@ class User extends BaseResource
         return $this->filter($user);
     }
 
+    public function post(Application $app, Request $request, $id)
+    {
+        $data    = $request->request->all();
+
+        $type = $data['type'];
+
+        if (empty($type)) {
+            return $this->errer('5005', '没有type字段');
+        }
+
+        $method = 'call_'.ucfirst($type);
+
+        if (method_exists($this, $method)) {
+            return call_user_func(array($this, $method), $request);
+        } else {
+            return $this->error('5006', 'type字段无效');
+        }
+    }
+
     public function filter($res)
     {
         foreach ($this->_unsetFields as $key) {
@@ -111,6 +130,25 @@ class User extends BaseResource
         $simple['avatar']   = $this->getFileUrl($res['smallAvatar']);
 
         return $simple;
+    }
+
+    protected function call_bind_mobile($request)
+    {
+        $user    = $this->getCurrentUser();
+        $data    = $request->request->all();
+        $mobile  = empty($data['mobile']) ? null : $data['mobile'];
+        $smsCode = empty($data['sms_code']) ? null : $data['sms_code'];
+
+        //手机验证码的校验
+        $result = true;
+
+        if (!$result) {
+            return $this->error('5007', '手机验证码错误');
+        }
+
+        $this->getUserService()->changeMobile($user['id'], $mobile);
+
+        return array('code' => 0);
     }
 
     protected function getUserService()
