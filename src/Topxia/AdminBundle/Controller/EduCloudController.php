@@ -690,6 +690,10 @@ class EduCloudController extends BaseController
 
     public function searchAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Search:trial.html.twig');
+        }
+
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
         try {
             $api = CloudAPIFactory::create('root');
@@ -703,7 +707,7 @@ class EduCloudController extends BaseController
             ));
         }
 
-        //是否接入教育云
+        //判断云搜索状态
         if (empty($userOverview['user']['licenseDomains'])) {
             $data['status'] = 'unbinded';
         } else {
