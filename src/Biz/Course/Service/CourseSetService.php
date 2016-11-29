@@ -4,6 +4,8 @@ namespace Biz\Course\Service;
 
 interface CourseSetService
 {
+    public function tryManageCourseSet($id);
+
     public function getCourseSet($id);
 
     public function createCourseSet($courseSet);

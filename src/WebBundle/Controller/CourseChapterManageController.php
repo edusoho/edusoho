@@ -35,7 +35,7 @@ class CourseChapterManageController extends BaseController
         $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
 
         if (empty($chapter)) {
-            throw $this->createNotFoundException("Chapter($chapterId) Not Found");
+            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
 
         if ($request->getMethod() == 'POST') {
