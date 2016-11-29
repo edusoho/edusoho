@@ -183,6 +183,10 @@ class EduCloudController extends BaseController
     //云视频概览页
     public function videoAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Video:trial.html.twig', array());
+        }
+
         $storageSetting = $this->getSettingService()->get('storage', array());
         //云端视频判断
         try {
