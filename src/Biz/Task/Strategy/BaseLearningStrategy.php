@@ -61,10 +61,10 @@ class BaseLearningStrategy
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
-
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'seq',
+            'number',
             'courseChapterId',
             'activityId',
             'title',

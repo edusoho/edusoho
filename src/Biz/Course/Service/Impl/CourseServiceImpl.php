@@ -239,6 +239,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    //TODO 任务需要在排序时处理 chapterId， number
     public function sortCourseItems($courseId, $ids)
     {
         $this->tryManageCourse($courseId);
