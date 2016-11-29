@@ -2,7 +2,6 @@
 namespace WebBundle\Controller;
 
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,28 +96,6 @@ class TaskManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    // TODO 是否移到CourseManageController
-    public function tasksAction(Request $request, $courseId)
-    {
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
-        $course      = $this->tryManageCourse($courseId);
-        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        // $tasks       = $this->getTaskService()->findTasksByCourseId($courseId);
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'  => $tasks,
-            'course' => $course,
-            'items'  => $courseItems
-        ));
-    }
-
-    // TODO 重命名或移动到其它Controller（wuli create）
-    public function courseSetAction(Request $request, $courseId) {
-        $course      = $this->tryManageCourse($courseId);
-        return $this->render('WebBundle:PlanManage:list.html.twig',array(
-            'course' => $course
-        ));
-    }
-
     protected function tryManageCourse($courseId)
     {
         return $this->getCourseService()->tryManageCourse($courseId);
@@ -129,7 +106,7 @@ class TaskManageController extends BaseController
      */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**

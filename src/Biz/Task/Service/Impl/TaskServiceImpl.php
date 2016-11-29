@@ -2,16 +2,13 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
+use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -37,7 +34,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['courseId']      = $activity['fromCourseId'];
         $currentSeq              = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['seq']           = $currentSeq + 1;
-
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -81,7 +77,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fileds = ArrayToolkit::parts($fileds, array(
             'seq',
-            'courseChapterId',
+            'courseChapterId'
         ));
         return $this->getTaskDao()->update($id, $fileds);
     }
@@ -94,7 +90,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
         $currentSeq = $task['seq'];
-        $result = $this->getTaskDao()->delete($id);
+        $result     = $this->getTaskDao()->delete($id);
         $this->getActivityService()->deleteActivity($task['activityId']);
         $this->getTaskDao()->waveSeqBiggerThanSeq($currentSeq, -1);
 
@@ -108,13 +104,13 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findTasksFetchActivityByCourseId($courseId)
     {
-        $tasks = $this->findTasksByCourseId($courseId);
-        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
-        $activities      = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
+        $tasks       = $this->findTasksByCourseId($courseId);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
 
         array_walk($tasks, function (&$task) use ($activities) {
-            $activity     = $activities[$task['activityId']];
+            $activity         = $activities[$task['activityId']];
             $task['activity'] = $activity;
         });
 
@@ -124,12 +120,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findUserTasksFetchActivityAndResultByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
-        if ($this->getCourseService()->isCourseStudent($courseId, $user->getId())) {
+        if (!$this->getCourseService()->isCourseStudent($courseId, $user->getId())) {
             return array();
         }
 
         $tasks = $this->findTasksFetchActivityByCourseId($courseId);
-
         if (empty($tasks)) {
             return array();
         }
@@ -137,7 +132,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-        $that            = $this;
+        $that = $this;
         array_walk($tasks, function (&$task) use ($taskResults, $that) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
@@ -169,6 +164,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
 
         $this->getTaskResultService()->createTaskResult($taskResult);
+    }
+
+    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if(empty($taskResult)){
+            throw new AccessDeniedException('任务不在进行状态');
+        }
+
+        $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
     }
 
     public function finishTask($taskId)
@@ -224,7 +232,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
         return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
     }
-
 
     public function canLearnTask($taskId)
     {

@@ -2,29 +2,19 @@
 
 namespace Biz;
 
-
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Service\User\CurrentUser;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
-    /**
-     * @param $alias
-     * @return GeneralDaoInterface
-     */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
     }
 
-    /**
-     * @return CurrentUser
-     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];
@@ -66,13 +56,13 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz['logger'];
     }
 
-    protected function createAccessDeniedException($message, $context = array()) 
+    protected function createAccessDeniedException($message = '')
     {
-        $this->getLogger()->error($message, $context);
+        // $this->getLogger()->error($message, $context);
         return new AccessDeniedException($message);
     }
 
-    protected function createInvalidArgumentException($message = '') 
+    protected function createInvalidArgumentException($message = '')
     {
         return new InvalidArgumentException($message);
     }

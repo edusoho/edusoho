@@ -86,7 +86,8 @@ class Courses extends BaseResource
     {
         $tagIds = array();
         foreach ($courses as $course) {
-            $tagIds = array_merge($tagIds, $course['tags']);
+            $tempTagIds = $this->getTagIdsByCourse($course);
+            $tagIds = array_merge($tagIds, $tempTagIds);
         }
 
         $tags = $this->getTagService()->findTagsByIds($tagIds);
@@ -123,6 +124,13 @@ class Courses extends BaseResource
         }
 
         return $courses;
+    }
+
+    protected function getTagIdsByCourse($course)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+        return ArrayToolkit::column($tags, 'id');
     }
 
     public function filter($res)
