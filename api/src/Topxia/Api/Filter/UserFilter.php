@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Filter;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\PluginToolkit;
 
 class UserFilter implements Filter
 {
@@ -23,18 +24,16 @@ class UserFilter implements Filter
             unset($data['verifiedMobile']);
         }
 
-        $userVip = ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($data['id']);
+        if (PluginToolkit::isPluginInstalled('Vip')) {
+            $userVip = ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($data['id']);
 
-        if (!empty($userVip)) {
-            $userVipLevel = ServiceKernel::instance()->createService('Vip:Vip.LevelService')->getLevel($userVip['levelId']);
-            $data['vipName'] = $userVipLevel['name'];
+            if (!empty($userVip)) {
+                $userVipLevel = ServiceKernel::instance()->createService('Vip:Vip.LevelService')->getLevel($userVip['levelId']);
+                $data['vipName'] = $userVipLevel['name'];
 
-            if ($userVip['boughtUnit'] == 'month') {
-                $data['vipEndTime'] = $userVip['boughtTime'] + 3600 * 24 * 30 * $userVip['boughtDuration'];
-            } 
+                $userVipHistory = ServiceKernel::instance()->createService('Vip:Vip.VipService')->getVipDetailByUserId($data['id']);
 
-            if ($userVip['boughtUnit'] == 'year') {
-                $data['vipEndTime'] = $userVip['boughtTime'] + 3600 * 24 * 30 * 365 * $userVip['boughtDuration'];
+                $data['VipDeadLine'] = $userVipHistory['deadline'];
             }
         }
 
