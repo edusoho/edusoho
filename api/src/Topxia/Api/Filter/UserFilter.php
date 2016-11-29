@@ -16,7 +16,13 @@ class UserFilter implements Filter
         unset($data['salt']);
         unset($data['payPassword']);
         unset($data['payPasswordSalt']);
-       
+
+        if (!empty($data['verifiedMobile'])) {
+            $data['verifiedMobile'] = substr_replace($data['verifiedMobile'], '****', 3, 4);
+        } else {
+            unset($data['verifiedMobile']);
+        }
+
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['loginTime'] = date('c', $data['loginTime']);
@@ -36,7 +42,6 @@ class UserFilter implements Filter
         $profile['about'] = $this->convertAbsoluteUrl($host, $profile['about']);
         if (!$user->isLogin() || !$user->isAdmin() || ($user['id'] != $data['id'])) {
             unset($data['email']);
-            unset($data['verifiedMobile']);
             unset($data['uri']);
             unset($data['tags']);
             unset($data['type']);
@@ -62,6 +67,7 @@ class UserFilter implements Filter
             $data['about'] = $profile['about'];
             return $data;
         }
+
         $data = array_merge($data,$profile);
 
         unset($data['intField1']);
