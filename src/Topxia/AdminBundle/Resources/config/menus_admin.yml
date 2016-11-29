@@ -556,6 +556,7 @@ admin:
                             disable: true
                 admin_edu_cloud_email:
                     name: 云邮件
+                    visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
                     children:
                         admin_edu_cloud_email_overview:
                             name: 概览
