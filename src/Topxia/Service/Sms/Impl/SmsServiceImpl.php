@@ -43,6 +43,145 @@ class SmsServiceImpl extends BaseService implements SmsService
         return true;
     }
 
+    public function sendVerifySms($smsType,$to,$smsLastTime)
+    {
+        if (!$this->checkPhoneNum($to)) {
+            throw new \RuntimeException($this->getKernel()->trans('手机号错误:%to%', array('%to%' => $to)));
+        }
+
+        if (!$this->isOpen($smsType)) {
+            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
+        }
+
+        $allowedTime   = 120;
+        $currentTime = time();
+        if ($this->isNeedWaiting($smsLastTime, $currentTime, $allowedTime)) {
+           throw new \RuntimeException($this->getKernel()->trans('请等待120秒再申请!'));
+        }
+        $currentUser = $this->getCurrentUser();
+
+        if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
+            if ($smsType == 'sms_bind') {
+                $description = $this->trans('手机绑定');
+            } else {
+                $description = $this->trans('用户注册');
+            }
+
+            $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
+
+            if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])) {
+                throw new \RuntimeException($this->getKernel()->trans('您已经绑定了该手机号码'));
+            }
+
+            if (!$this->getUserService()->isMobileUnique($to)) {
+                throw new \RuntimeException($this->getKernel()->trans('该手机号码已被其他用户绑定'));
+            }
+        }
+
+        if ($smsType == 'sms_forget_password') {
+            $description = $this->trans('登录密码重置');
+            $targetUser  = $this->getUserService()->getUserByVerifiedMobile($to);
+
+            if (empty($targetUser)) {
+                throw new \RuntimeException($this->getKernel()->trans('用户不存在'));
+            }
+
+            if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
+                throw new \RuntimeExceptionarray($this->getKernel()->trans('用户没有被绑定的手机号'));
+            }
+
+            if ($targetUser['verifiedMobile'] != $to) {
+                throw new \RuntimeExceptionarray($this->getKernel()->trans('手机与用户名不匹配'));
+            }
+            $to = $targetUser['verifiedMobile'];
+        }
+
+        if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
+
+                if ($smsType == 'sms_user_pay') {
+                    $description = $this->trans('网站余额支付');
+                } else {
+                    $description = $this->trans('支付密码重置');
+                }
+
+                if ((!isset($currentUser['verifiedMobile']) || (strlen($currentUser['verifiedMobile']) == 0))) {
+                    throw new \RuntimeExceptionarray($this->getKernel()->trans('用户没有被绑定的手机号'));
+                }
+
+                if ($currentUser['verifiedMobile'] != $to) {
+                    throw new \RuntimeExceptionarray($this->getKernel()->trans('您输入的手机号，不是已绑定的手机'));
+                }
+
+                $to = $currentUser['verifiedMobile'];
+            }
+
+            if ($smsType == 'system_remind') {
+                $to          = $to;
+                $description = '直播公开课';
+            }
+
+         
+
+            $smsCode = $this->generateSmsCode();
+
+            try {
+                $api    = CloudAPIFactory::create('leaf');
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
+                if (isset($result['error'])) {
+                    return array('error' => $this->getKernel()->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error'])));
+                }
+            } catch (\RuntimeException $e) {
+                $message = $e->getMessage();
+                return array('error' => $this->getKernel()->trans('发送失败, %message%',array('%message%' => $message)));
+            }
+
+            $result['to']      = $to;
+            $result['smsCode'] = $smsCode;
+            $result['userId']  = $currentUser['id'];
+
+            if ($currentUser['id'] != 0) {
+                $result['nickname'] = $currentUser['nickname'];
+            }
+
+            $this->getLogService()->info('sms', $smsType, $this->trans('userId:%currentUserid%,对%to%发送用于%smsType%的验证短信%smsCode%', array('%currentUserid%' => $currentUser['id'], '%to%' => $to, '%smsType%' => $smsType, '%smsCode%' => $smsCode)), $result);
+
+            return array(
+                'to'            => $to,
+                'captcha_code'      => $smsCode,
+                'sms_last_time' => $currentTime
+            );
+
+    }
+
+    protected function generateSmsCode($length = 6)
+    {
+        $code = rand(0, 9);
+
+        for ($i = 1; $i < $length; $i++) {
+            $code = $code.rand(0, 9);
+        }
+
+        return $code;
+    }
+
+
+
+    protected function checkPhoneNum($num)
+    {
+        return preg_match("/^1\d{10}$/", $num);
+    }
+
+    protected function isNeedWaiting($smsLastTime, $currentTime, $allowedTime = 120)
+    {
+        if (strlen($smsLastTime) == 0) {
+            return false;
+        }
+        if (($currentTime - $smsLastTime) < $allowedTime) {
+           return true;
+        }
+        return false;
+    }
+
     /**
      * @return UserService
      */
