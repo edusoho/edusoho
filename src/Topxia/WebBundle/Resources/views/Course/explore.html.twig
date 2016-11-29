@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'course-list-page bg-blank' %}
+{% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
@@ -18,11 +18,16 @@
       </div>
 
       {% set classrooms = data('Classrooms',{count:1}) %}
-      {% if classrooms|default(null) %}
-        <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-          {{'查看%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
+      <div class="more">
+        {% if classrooms|default(null) %}
+          <a class="btn btn-primary btn-lg" href="{{path('classroom_explore')}}">
+            {{'查看%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
+          </a>
+        {% endif %}
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{'查看公开课'|trans}}
         </a>
-      {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}
@@ -32,10 +37,13 @@
   {% set price = filter.price|default('all')%}
   {% set orderBy = orderBy|default('latest')%}
   {% set currentLevelId = filter.currentLevelId|default('all')%}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',filter:{type: type,price: price,currentLevelId: currentLevelId},orderBy:orderBy})) }}
+
+
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{tags:tags, path:path, category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: orderBy, group:'course'})) }}
+
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
-      <li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %}active{% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %}active{% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">{{'推荐'|trans}}</a></li>
+      <li><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %}active{% endif %}">{{'最新'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %}active{% endif %}">{{'最热'|trans}}</a></li><li><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">{{'推荐'|trans}}</a></li>
     </ul>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
@@ -45,9 +53,9 @@
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
           {% for level in levels %}
-            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>
@@ -55,37 +63,38 @@
       <label class="checkbox-inline">
         <input type="checkbox" {% if type == 'live'%}checked="true" {% endif %} id="live" value="
         {% if type == 'all'%}
-          {{ path('course_explore', {category:category, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_explore', {category:category, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}"> {{'直播课程'|trans}}
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
-          {{ path('course_explore', {category:category, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% else %}
-          {{ path('course_explore', {category:category, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+          {{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
         "> {{'免费课程'|trans}}
       </label>
     </div>
   </div>
-
-  <div class="course-list">
-    <div class="row">
-      {% if courses %}
-        {% for course in courses %}
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
-          </div>
-        {% endfor %}
-      {% else %}
-        <div class="empty">{{'该分类下无课程'|trans}}</div>
-      {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="course-list">
+        <div class="row">
+          {% if courses %}
+            {% for course in courses %}
+              <div class="col-lg-3 col-md-4 col-xs-6">
+                {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty">{{'该分类下无课程'|trans}}</div>
+          {% endif %}
+        </div>
+      </div>
+      <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
     </div>
   </div>
-  <nav class="text-center">
-    {{ web_macro.paginator(paginator) }}
-  </nav>
 {% endblock %}

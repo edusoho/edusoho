@@ -68,48 +68,45 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
-    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    public function findNormalCoursesByStatusAndCourseIds(array $courseIds, $status, $orderBy, $start, $limit)
     {
-        if (empty($tagIds)) {
+        if (empty($courseIds)) {
             return array();
         }
 
-        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = ? AND (";
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = '{$status}' AND id in ({$marks})ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
 
-        foreach ($tagIds as $key => $tagId) {
-            if ($key > 0) {
-                $sql .= "OR tags LIKE '%|$tagId|%'";
-            } else {
-                $sql .= " tags LIKE '%|$tagId|%' ";
-            }
-        }
-
-        $sql .= ") ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array($status));
+        return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+
+        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-
         if ($orderBy[0] == 'recommendedSeq') {
             $builder->addOrderBy('recommendedTime', 'DESC');
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     public function searchCourseCount($conditions)
     {
+        $keys = $this->generateKeyWhenCount($conditions);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        return $this->fetchCached($keys, $builder, function ($builder) {
+            return $builder->execute()->fetchColumn(0);
+        });
     }
 
     public function addCourse($course)
@@ -216,27 +213,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['title']);
         }
 
-        if (!empty($conditions['tags'])) {
-            $tagIds = $conditions['tags'];
-            $tags   = '';
-
-            foreach ($tagIds as $tagId) {
-                $tags .= "|".$tagId;
-            }
-
-            $conditions['tags'] = $tags."|";
-        }
-
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
-
-            if (!empty($tagId)) {
-                $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-            }
-
-            unset($conditions['tagId']);
-        }
-
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
@@ -250,7 +226,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
@@ -266,7 +241,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
-            ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')
@@ -287,17 +261,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('lessonNum > :lessonNumGT')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
-
-        if (isset($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-
-            foreach ($tagIds as $key => $tagId) {
-                $conditions['tagIds_'.$key] = '%|'.$tagId.'|%';
-                $builder->andWhere('tags LIKE :tagIds_'.$key);
-            }
-
-            unset($conditions['tagIds']);
-        }
 
         if (isset($conditions['types'])) {
             $builder->andWhere('type IN ( :types )');

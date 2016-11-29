@@ -8,7 +8,9 @@ interface ActivityService
 {
     public function getActivity($id);
 
-    public function getActivities($ids);
+    public function getActivityFetchExt($id);
+
+    public function findActivities($ids);
 
     public function createActivity($activity);
 
@@ -17,7 +19,7 @@ interface ActivityService
     public function deleteActivity($id);
 
     /**
-     * @param  string     $type 活动类型
+     * @param  string $type 活动类型
      * @return Activity
      */
     public function getActivityConfig($type);

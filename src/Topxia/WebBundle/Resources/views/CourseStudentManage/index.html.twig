@@ -16,7 +16,7 @@
             class="glyphicon glyphicon-export"></i> {{ '导出'|trans }}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}
       </a>
     {% endif %}
-    {% if has_permission('course_manage_student_create') %}
+    {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
 
       {% if course.status == 'published' %}
         <a class="btn btn-info pull-right btn-sm mhs" data-toggle="modal" data-target="#modal"

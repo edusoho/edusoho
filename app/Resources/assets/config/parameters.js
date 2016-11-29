@@ -6,7 +6,6 @@
  */
 const parameters = {
   registeredBundles: [ //register php bundles
-    'Topxia/WebBundle',
     'WebBundle',
   ],
   output: {
@@ -32,6 +31,7 @@ const parameters = {
     'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
+    'store/store.js',
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
@@ -43,6 +43,16 @@ const parameters = {
       ignore: [
         '**/samples/**',
         // '**/lang/!(zh-cn.js)',
+      ]
+    },
+    {
+      name: 'justgage',
+      ignore: [
+        '**/examples/**',
+        'bower.json',
+        'package.json',
+        'README.md',
+        'LICENSE',
       ]
     }
   ]

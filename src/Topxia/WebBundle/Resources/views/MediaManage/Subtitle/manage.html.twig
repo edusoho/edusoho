@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle:MediaManage:layout.html.twig' %} 
+
+{% block title %}
+  {{'字幕管理'|trans}}
+{% endblock %}
+
+{% block media_edit %}
+<div class="manage-edit-body">
+  <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">字幕</a>
+    </li>
+  </ul>
+  <a href="{{ path('media_subtitle_preview', {mediaId:media.id}) }}" class="btn btn-info btn-preview" target="_blank">
+    {{'预览'|trans}}
+  </a>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active pane-question">
+    <div>
+      <div class="text-track-title plm">
+        <div class="row clearfix">
+          {% set token = uploader_token('subtitle', media.id, 'private') %}
+          <div class="caption-uploader js-select-file pull-left" id="uploader" style="width: 130px;{% if subtitles|length > 3 %}display: none;{% endif %}" data-media-id="{{ media.id }}" data-media-global-id="{{ media.globalId }}" data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}" data-subtitle-list-url="{{ url('media_subtitle_list', {mediaId: media.id}) }}" data-init-url="{{ url('uploader_init', {token:token}) }}" data-finish-url="{{ url('uploader_finished', {token:token}) }}">
+          </div>
+          <div class="caption-notify pull-left" style="width: 270px; padding-left: 0">
+            目前仅支持srt字幕，最多上传4个字幕
+          </div>
+        </div>
+      </div>
+      <div class="text-track-list mrm mts ptm">
+        <div class="mrm" id="track-select" data-subtitle-list="{{ subtitles|json_encode() }}"></div>
+        <div class="text-track-overview mrm"></div>
+      </div>
+    </div>
+    {% do load_script('media/subtitle/manage') %}
+  </div>
+</div>
+</div>
+{% endblock %}

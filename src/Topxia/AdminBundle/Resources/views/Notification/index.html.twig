@@ -47,12 +47,15 @@
                     </td>
                 </tr>
             {% endfor %}
-        {% endif %}
+          {% endif %}
     </tbody>
 </table>
   {% if not batchnotifications %}
-  <div class="empty">{{'暂无站内信'|trans}}</div>
+    <div class="empty">{{'暂无站内信'|trans}}</div>
   {% endif %}
+  <div class="alert alert-info text-center">
+    全站站内通知将以网校通知的形式发给所有用户
+  </div>
 
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

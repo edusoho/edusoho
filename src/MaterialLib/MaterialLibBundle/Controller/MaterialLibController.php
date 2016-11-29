@@ -109,7 +109,7 @@ class MaterialLibController extends BaseController
         $conditions                 = $request->query->all();
         $source                     = $conditions['sourceFrom'];
         $conditions['status']       = 'ok';
-        $conditions['noTargetType'] = 'attachment';
+        $conditions['noTargetTypes'] = array('attachment', 'subtitle');
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);

@@ -1,32 +1,5 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <style>
-    body{
-      padding:0;
-      margin:0;
-      box-sizing:border-box;
-      overflow: hidden;
-    }
-    html,body,div{
-      height:100%
-    }
-    </style>
-  </head>
-  <body>
-    {% block content %} {% endblock %}
-	{% if script() is not empty or use_webapck_loader|default(false) == true %}
-	  {# webpack #}
-	  {% do script(['libs/vendor.js', 'web.js'], 1000) %}
-	  {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
-	{% else %}
-	  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-	{% endif %}
-  </body>
-</html>
+{% block body %}
+
+{% endblock %}

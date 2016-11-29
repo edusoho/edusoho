@@ -148,6 +148,29 @@ abstract class BaseService
         return false;
     }
 
+    public function isPluginInstalled($code)
+    {
+        $appService = $this->createService('CloudPlatform.AppService');
+        $plugin = $appService->getAppByCode($code);
+        if(empty($plugin)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function setting($name, $default)
+    {
+        $names = explode('.', $name);
+        $setting = $this->createService('System.SettingService')->get($names[0]);
+        if(empty($names[1])) {
+            return empty($setting) ? $default : $setting;
+        } 
+
+        return empty($setting[$names[1]]) ? $default : $setting[$names[1]];
+
+    }
+
     protected function getLock()
     {
         if (!$this->lock) {

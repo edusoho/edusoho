@@ -12,6 +12,7 @@
             <button class="button es-icon es-icon-search"></button>
           </div>
         </form>
+
         <ul class="nav navbar-nav">
           {% set navigations = data('NavigationsTree', {}) %}
           {% include 'TopxiaWebBundle:Default:top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: true} %}

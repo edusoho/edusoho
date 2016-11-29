@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}
+{% endblock %}
+
+{% set bodyClass="marker-manage" %}
+
+{% block body %}
+  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
+    data-media-player-url="{{ 
+    path('media_play',{mediaId:media.id, context:{'hideQuestion': 1, 'hideBeginning': true, 'hideSubtitle':1}}) }}" >
+
+    {% include 'TopxiaWebBundle:MediaManage:player.html.twig' %}
+    {% block media_edit %}
+
+    {% endblock %}
+
+    {% include 'TopxiaWebBundle:MediaManage:coord.html.twig' with { mediaLength:media.length } %}
+
+  </div>
+  <div class="modal"></div>
+  <div class="introhelp-overlay js-introhelp-overlay hidden"></div>
+{% endblock %}

@@ -155,9 +155,9 @@ define(function (require, exports, module) {
 
                         if ($parent.length) {
                             var add = 0;
-                            if ($parent.hasClass('item-chapter  clearfix')) {
+                            if ($parent.hasClass('js-chapter')) {
                                 $parent.nextAll().each(function () {
-                                    if ($(this).hasClass('item-chapter  clearfix')) {
+                                    if ($(this).hasClass('js-chapter')) {
                                         $(this).before(html);
                                         add = 1;
                                         return false;
@@ -170,9 +170,9 @@ define(function (require, exports, module) {
 
                             } else {
                                 $parent.nextAll().each(function () {
-                                    if ($(this).hasClass('item-chapter  clearfix'))
+                                    if ($(this).hasClass('js-chapter'))
                                         return false;
-                                    if ($(this).hasClass('item-chapter item-chapter-unit clearfix')) {
+                                    if ($(this).hasClass('item-chapter-unit')) {
                                         $(this).before(html);
                                         add = 1;
                                         return false;

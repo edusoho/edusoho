@@ -25,6 +25,7 @@ class VideoActivity extends Activity
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
+            'video.doing' => 'Biz\\VideoActivity\\Listener\\VideoWatchingListener',
             'video.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
         );
     }
@@ -40,9 +41,13 @@ class VideoActivity extends Activity
 
     public function create($fields)
     {
+        if (empty($fields['ext'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+
         $videoActivity = $fields['ext'];
-        if (empty($videoActivity)) {
-            throw new InvalidArgumentException();
+        if (empty($videoActivity['mediaId'])) {
+            $videoActivity['mediaId'] = 0;
         }
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
         return $videoActivity;
@@ -55,7 +60,7 @@ class VideoActivity extends Activity
 
         $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
         if (empty($videoActivity)) {
-            throw new ResourceNotFoundException();
+            throw $this->createNotFoundException('教学活动不存在');
         }
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivityFields);
         return $videoActivity;

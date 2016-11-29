@@ -3,7 +3,7 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
+  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {tags: tags|default('')} %}
 {% endblock %}
 
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
@@ -12,7 +12,9 @@
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
 {% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% cache 'course/' ~ course.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 600 %}
+    {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% endcache %}
 {% endblock %}
 
 {% block content %}
@@ -26,7 +28,11 @@
       {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
 
       <section class="es-section">
-        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+
+        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id|default(0) ~ '/normal-nav' 600 %}
+          {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% endcache %}
+
         {% block course_main %}{% endblock %}
       </section>
       {% block dashboard_relatedCoursesBlock %}

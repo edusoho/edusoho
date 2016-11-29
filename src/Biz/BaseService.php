@@ -2,18 +2,14 @@
 
 namespace Biz;
 
-
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
-    /**
-     * @param $alias
-     * @return GeneralDaoInterface
-     */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
@@ -40,12 +36,43 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
-    protected function createResourceNotFoundService($resourceType, $resourceId)
+    protected function beginTransaction()
     {
-        return new ResourceNotFoundException($resourceType, $resourceId);
+        $this->biz['db']->beginTransaction();
     }
 
-    protected function createServiceException($message='')
+    protected function commit()
+    {
+        $this->biz['db']->commit();
+    }
+
+    protected function rollback()
+    {
+        $this->biz['db']->rollback();
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz['logger'];
+    }
+
+    protected function createAccessDeniedException($message = '')
+    {
+        // $this->getLogger()->error($message, $context);
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '')
+    {
+        return new InvalidArgumentException($message);
+    }
+
+    protected function createNotFoundException($message = '')
+    {
+        return new NotFoundException($message);
+    }
+
+    protected function createServiceException($message = '')
     {
         return new ServiceException($message);
     }

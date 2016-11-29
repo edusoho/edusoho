@@ -11,7 +11,6 @@ define(function (require, exports, module) {
     require('jquery.bootstrap-datetimepicker');
 
     exports.run = function () {
-
         $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function (data) {
             $("#maxStudentNum-field").data("liveCapacity", data.capacity);
             if (data.code == 2 || data.code == 1) {
@@ -19,7 +18,6 @@ define(function (require, exports, module) {
                 $("#live-plugin-url").find("a").attr("href", "http://www.edusoho.com/files/liveplugin/live_desktop_" + data.code + ".rar");
             }
         })
-
 
         $('#course_tags').select2({
 
@@ -98,7 +96,7 @@ define(function (require, exports, module) {
 
         validator.addItem({
             element: '[name=maxStudentNum]',
-            rule: 'integer',
+            rule: 'unsigned_integer',
             onItemValidated: function (error, message, elem) {
                 if (error) {
                     return;
