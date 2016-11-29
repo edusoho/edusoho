@@ -1,9 +1,10 @@
 import swfobject from "es-swfobject";
+import ActivityEmitter from '../activity-emitter';
 
 let $el = $('#flash-player');
 
 if (!swfobject.hasFlashPlayerVersion('11')) {
-  var html = `
+  let html = `
     <div class="alert alert-warning alert-dismissible fade in" role="alert">';
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">×</span>
@@ -18,4 +19,17 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
         wmode: 'opaque',
         allowFullScreen: 'true'
       });
+}
+
+let activityEmitter = new ActivityEmitter();
+
+let finishType = $el.data('finishType');
+
+if(finishType == 'time'){
+  let finishDetail = $el.data('finishDetail');
+  activityEmitter.receive('doing', (data) => {
+    if(finishDetail <= data.learnedTime){
+      activityEmitter.emit('finish');
+    }
+  });
 }
