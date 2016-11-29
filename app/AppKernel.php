@@ -8,6 +8,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
@@ -155,7 +156,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
-        $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
+        $biz->register(new DoctrineServiceProvider());
         $biz->boot();
     }
 

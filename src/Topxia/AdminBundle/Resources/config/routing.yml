@@ -2,14 +2,6 @@ admin:
     path:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_homepage:
-    pattern:  /homepage
-    defaults: { _controller: TopxiaAdminBundle:Default:homepage }
-
-admin_notice_modal:
-    path:  /notice/modal
-    defaults: { _controller: TopxiaAdminBundle:Default:notice }
-
 admin_question_remind_teachers:
     path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
@@ -54,11 +46,6 @@ admin_course_explore:
 #     path: /login/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
-
-admin_dashboard:
-    path:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-    permissions: [admin]
 
 admin_opencourse_analysis:
     path:  /opencourse/analysis
@@ -243,23 +230,23 @@ admin_tag_delete:
     permissions: [admin_course_tag_manage]
 
 admin_tag_group:
-    pattern: /tag/group
+    path: /tag/group
     defaults: { _controller: TopxiaAdminBundle:TagGroup:index }
 
 admin_tag_group_create:
-    pattern: /tag/group/create
+    path: /tag/group/create
     defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
 
 admin_tag_group_update:
-    pattern: /tag/group/{groupId}/update
+    path: /tag/group/{groupId}/update
     defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
 
 admin_tag_group_checkname:
-    pattern: /tag/group/checkname
+    path: /tag/group/checkname
     defaults: { _controller: TopxiaAdminBundle:TagGroup:checkName }
 
 admin_tag_group_delete:
-    pattern: /tag/group/{tagId}/delete
+    path: /tag/group/{tagId}/delete
     defaults: { _controller: TopxiaAdminBundle:TagGroup:delete }
 
 admin_user:
@@ -631,11 +618,11 @@ admin_setting_mobile:
     permissions: [admin_setting_mobile_settings]
 
 admin_setting_mobile_iap_product:
-    pattern:  /setting/mobile_iap_product
+    path:  /setting/mobile_iap_product
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProduct }
 
 admin_setting_mobile_iap_product_delete:
-    pattern:  /setting/mobile_iap_product_delete/{productId}
+    path:  /setting/mobile_iap_product_delete/{productId}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProductDelete }
     methods: [POST]
 
@@ -1238,9 +1225,7 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_category:
-    path: /category
-    defaults: { _controller: TopxiaAdminBundle:Category:index }
+
     permissions: [admin_course_category_manage]
 
 admin_app_package_update_check_newest:
@@ -1266,12 +1251,6 @@ admin_category_delete:
     path:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
-
-admin_category_upload:
-    path: /category/uploadfile
-    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
-    methods: [POST]
-    permissions: [admin_course_category_manage]
 
 admin_category_sort:
     path:  /category/sort
@@ -1674,11 +1653,6 @@ admin_system_status:
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
     permissions: [admin]
 
-admin_official_messages:
-    path:  /official/messages
-    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
-    permissions: [admin]
-
 admin_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
@@ -1950,9 +1924,4 @@ admin_report_status_email_send:
 admin_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
-    permissions: [admin_cloud_attachment_manage]
-
-admin_cloud_attachment_render:
-    path: /cloud_attachment/render
-    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }
     permissions: [admin_cloud_attachment_manage]
