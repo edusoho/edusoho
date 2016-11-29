@@ -365,9 +365,24 @@ class MobileBaseController extends BaseController
             $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
 
+            if (!empty($user['verifiedMobile'])) {
+                $user['verifiedMobile'] = substr_replace($user['verifiedMobile'], '****', 3, 4);
+            } else {
+                unset($user['verifiedMobile']);
+            }
+
             if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
-                $vip         = $controller->getVipService()->getMemberByUserId($user['id']);
-                $user["vip"] = $vip;
+                $userVip = $this->getVipService()->getMemberByUserId($user['id']);
+
+                if (!empty($userVip)) {
+                    $userVipLevel = $this->getLevelService()->getLevel($userVip['levelId']);
+
+                    $user['vipName'] = $userVipLevel['name'];
+
+                    $userVipHistory = $this->getVipService()->getVipDetailByUserId($user['id']);
+
+                    $user['VipDeadLine'] = $userVipHistory['deadline'];
+                }
             }
 
             $userProfile       = $controller->getUserService()->getUserProfile($user['id']);
@@ -382,7 +397,6 @@ class MobileBaseController extends BaseController
 
             $user['email']          = "****";
             $user['mobile']         = "****";
-            $user['verifiedMobile'] = "****";
             unset($user['password']);
             unset($user['payPasswordSalt']);
             unset($user['payPassword']);
