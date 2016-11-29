@@ -535,12 +535,12 @@ admin:
                 admin_cloud_edulive_setting:
                     name: 云直播
                     visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
-                    router_name: admin_setting_cloud_edulive
+                    router_name: admin_cloud_edulive_overview
                     children:
-                        admin_setting_cloud_edulive:
+                        admin_cloud_edulive_overview:
                             name: 概览
                             disable: true
-                        admin_cloud_setting_edulive:
+                        admin_setting_cloud_edulive:
                             name: 设置
                             disable: true
                 admin_edu_cloud_sms:
@@ -695,10 +695,10 @@ admin:
                             name: 课程
                             disable: true
                             router_name: admin_setting_course_setting
-                        admin_setting_live_course:
-                            name: 直播
-                            disable: true
-                            router_name: admin_setting_live_course_setting
+                        # admin_setting_live_course:
+                        #     name: 直播
+                        #     disable: true
+                        #     router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: 题库
                             disable: true

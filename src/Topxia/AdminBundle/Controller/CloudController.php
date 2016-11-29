@@ -103,6 +103,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_renew');
     }
 
+    public function liveMoreAction(Request $request)
+    {
+        return $this->redirectUrl('service_live_count');
+    }
+
     protected function redirectUrl($routingName, $params = array())
     {
         $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);
