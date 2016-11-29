@@ -118,7 +118,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->update($id, $fields);
     }
 
-    public function updateCourseSetCover($id, $fields)
+    public function changeCourseSetCover($id, $fields)
     {
         if (!$this->hasCourseSetManagerRole($id)) {
             throw $this->createAccessDeniedException('You have no access to Course Set Management');

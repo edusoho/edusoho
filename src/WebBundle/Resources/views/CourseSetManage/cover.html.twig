@@ -2,7 +2,8 @@
 
 {% block title %}{{ '课程封面'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'cover' %}
-	
+{% do script(['web/courseset-manage/cover/index.js']) %}
+{% set token = upload_token('tmp', 'image') %}
 {% block main %}
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
@@ -14,7 +15,7 @@
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
-          <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+          <img class="img-responsive" src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}" />
         </div>
       </div>
       <div class="form-group clearfix">
@@ -29,16 +30,15 @@
           id="upload-picture-btn"
           class="btn btn-fat btn-primary"
           data-upload-token="{{ upload_token('tmp', 'image') }}"
-          {% if course.type == 'open' or course.type == 'liveOpen' %}
-            data-goto-url="{{path('open_course_manage_picture_crop', {id:course.id})}}"
+          {% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
+            data-goto-url="{{path('open_course_manage_picture_crop', {id:courseSet.id})}}"
           {% else %}
-            data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
+            data-goto-url="{{path('course_set_manage_cover_crop', {id:courseSet.id})}}"
           {% endif %}
           
           >{{'选择要上传的图片'|trans}}</a>
         </div>
       </div>
-
   </div>
 </div>
 {% endblock %}

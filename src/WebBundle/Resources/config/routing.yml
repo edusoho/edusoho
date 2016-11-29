@@ -26,6 +26,10 @@ course_set_manage_cover:
   path: /course_set/{id}/manage/cover
   defaults: {_controller: WebBundle:CourseSetManage:cover}
 
+course_set_manage_cover_crop:
+  path: /course_set/{id}/manage/cover_crop
+  defaults: {_controller: WebBundle:CourseSetManage:coverCrop}
+
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller:WebBundle:CourseManage:list}

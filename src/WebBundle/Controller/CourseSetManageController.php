@@ -104,6 +104,27 @@ class CourseSetManageController extends BaseController
         ));
     }
 
+    public function coverCropAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->getCourseService()->changeCourseSetCover($courseSet['id'], $data["images"]);
+            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
+
+        return $this->render('WebBundle:CourseSetManage:cover-crop.html.twig', array(
+            'courseSet'   => $courseSet,
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
+        ));
+    }
+
     public function deleteAction(Request $request, $id)
     {
         try {
