@@ -28,31 +28,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="students-item" data-container=".students-item" data-toggle="popover" data-placement="bottom"  data-content="
-      <div class='es-piece'>
-       123的学习情况
-       <div class='piece-header'>学习进度</div>
-       <ul class='row learn-progress-list'>
-         <li class='learn-progress-item'>
-          计划学习天数
-          <p class='item-bottom'>
-          <span class='num'>35</span>／60天
-          </p>
-         </li>
-         <li class='learn-progress-item'>
-          目标学习速率
-          <p class='item-bottom'>
-          <span class='num'>2小时</span>／天
-          </p>
-         </li>
-         <li class='learn-progress-item'>
-          但前学习速率
-          <p class='item-bottom'>
-          <span class='num'>4小时</span>／天
-          </p>
-         </li>
-       </ul>
-      </div>">
+    <tr class="students-item" data-container=".students-item" data-toggle="popover" data-placement="bottom" data-target="hover" data-content=''>
       <td class="media media-middle" >
         <a class="pull-left js-user-card" href="/user/1343" data-card-url="/user/1343/card/show" data-user-id="1343">
           <img class="avatar-sm" src="/files/user/2016/10-31/111925dea8d8374811.jpg"></a>
@@ -95,4 +71,134 @@
     </tr>
   </tbody>
 </table>
+
+<div class="class-detail-content">
+  <div class="es-piece">
+    <div class="piece-header">学习进度</div>
+    <div class="study-process-list row">
+      <div class="col-md-4 col-sm-4">
+        <div class="study-process-item well">
+          <div class="title">累计学习天数</div>
+          <div class="content">
+            <span class="current">1</span>
+            /
+            <span class="total">计划 7 天</span>
+          </div> <i class="es-icon es-icon-column"></i>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <div class="study-process-item well">
+          <div class="title">目标学习速率</div>
+          <div class="content">
+            <span class="current">2小时</span>
+            /
+            <span class="total">天</span>
+          </div> <i class="es-icon es-icon-target"></i>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <div class="study-process-item well
+                  bg-success
+        ">
+          <div class="title">当前学习速率</div>
+          <div class="content">
+            <span class="current">2小时</span>
+            /
+            <span class="total">天</span>
+          </div>
+          <i class="es-icon es-icon-speed" style="font-size:90px"></i>
+        </div>
+      </div>
+    </div>
+    <div class="well process-table">
+      <div class="reference">
+        <span class="reference-item item-one">
+          <i class="color-lump lump-xs"></i>
+          未完成
+        </span>
+        <span class="reference-item item-two">
+          <i class="color-lump lump-xs lump-success"></i>
+          准时完成
+        </span>
+        <span class="reference-item item-three">
+          <i class="color-lump lump-xs lump-warning"></i>
+          逾期
+        </span>
+        <span class="reference-item item-four">
+          <i class="color-lump lump-xs lump-danger"></i>
+          严重逾期
+        </span>
+      </div>
+      <div class="lump-list">
+        <a class="color-lump lump-danger" data-type="text" data-title="课时 :2016" data-testpaper="" data-result="268" data-plan-date="2016-03-07" data-done-date="2016-11-29" data-original-title="" title="">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="es-piece" style="margin-bottom:0">
+    <div class="piece-header">成绩单</div>
+    <div class="report-card">
+      <div class="report-card-header">
+        <i class="es-icon es-icon-chevronright mrs"></i>
+        初级阶段
+        <span class="include">作业：1/2&nbsp;&nbsp;&nbsp;考试：0/3</span>
+      </div>
+      <div class="report-card-main">
+        <div class="card-main-title open">
+          <i class="es-icon es-icon-homework mrs"></i>
+          作业：课时＂2016＂的作业
+          <span class="score hidden-xs">
+            <span>不合格</span>
+          </span>
+          <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="暂无评语">评语</span>
+        </div>
+        <ul class="score-list" style="display: block;">
+          <li>
+            <span class="name">第 1 次作业</span>
+            <span class="date">2016/11/29</span>
+            <span class="score">不合格</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="es-piece" style="margin-bottom:-20px">
+    <div class="piece-header">学习数据</div>
+    <div class="study-data row">
+      <div class="col-md-3 col-sm-6">
+        <div class="well">
+          <p>发起提问</p>
+          <p class="number">0</p>
+          <i class="es-icon es-icon-comment1"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="well">
+          <p>发起话题</p>
+          <p class="number">0</p>
+          <i class="es-icon es-icon-topic"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="well">
+          <p>回复话题</p>
+          <p class="number">0</p>
+          <i class="es-icon es-icon-answer"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="well">
+          <p>参与活动</p>
+          <p class="number">0</p>
+          <i class="es-icon es-icon-activity"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
+
+
+
+
+
