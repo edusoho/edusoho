@@ -1260,8 +1260,12 @@ class EduCloudController extends BaseController
     }
 
     // 添加云直播
-    public function liveAction(Request $request)
+    public function liveOverviewAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:trial.html.twig');
+        }
+
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");

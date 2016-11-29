@@ -1945,7 +1945,7 @@ admin_cloud_attachment_render:
 # 添加云直播
 admin_cloud_edulive_overview:
     pattern:  /cloud/edulive/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:liveOverview }
 
 admin_cloud_upload_live_logo:
     pattern: /cloud/edulive/upload
