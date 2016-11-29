@@ -36,10 +36,6 @@ class PluginRemoveCommand extends ContainerAwareCommand
         $metas = $register->removePlugin($code);
         $output->writeln("  <info>[Ok]</info>");
 
-        $output->write("  - Refresh plugin routing.");
-        PluginUtil::refresh();
-        $output->writeln(true ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
-
         $output->write("  - Refresh plugin cache.");
         $register->refreshInstalledPluginConfiguration();
         $output->writeln("<info>[Ok]</info>");

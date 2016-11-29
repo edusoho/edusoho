@@ -65,10 +65,6 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $app = $installer->registerPlugin($code);
         $output->writeln($app ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
 
-        $output->write("  - Refresh plugin routing.");
-        PluginUtil::refresh();
-        $output->writeln(true ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
-
         $output->write("  - Refresh plugin cache.");
         $installer->refreshInstalledPluginConfiguration();
         $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
