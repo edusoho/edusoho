@@ -7,7 +7,7 @@
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif account.status|default() == 'disable' %}
     <div class="alert alert-warning" role="alert">{{'
-    您的云短信服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
+    您的云邮件服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
