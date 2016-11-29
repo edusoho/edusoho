@@ -1,9 +1,12 @@
 class Testpaper {
 	constructor($form) {
 		this.$element = $form;
+    this.slider = null;
 		this._setValidateRule();
     this._init();
     this._initEvent();
+    this._initSlider();
+
   }
 
   _init() {
@@ -20,7 +23,40 @@ class Testpaper {
   	$('#testpaper-media').on('change', event=>this._changeTestpaper(event));
   	$('input[name=doTimes]').on('change', event=>this._showRedoInterval(event));
   	$('input[name="testMode"]').on('change',event=>this._startTimeCheck(event))
-    $('input[name="limitedTime"]').on('blur',event=>this._changeEndTime(event))
+    $('input[name="limitedTime"]').on('blur',event=>this._changeEndTime(event));
+    $('#condition-select').on('change',event=>this._changeCondition(event));
+
+  }
+
+  _initSlider() {
+    this.slider = $('.nstSlider').nstSlider({
+      "left_grip_selector": ".leftGrip",
+      "value_changed_callback": function(cause, leftValue, rightValue) {
+        let $list = $(this).closest('.nstSlider-list');
+        let left = $('.js-leftGrip').css('left');
+        let total = $list.find('.js-totale-text').text();
+        let value = Math.floor(leftValue/total*100)+'%';
+        $list.find('.js-leftGrip-remask-text').text(leftValue);
+        $list.find('.js-bar').css('width',value);
+        $list.find('.js-nstSlider-content').css('left',left);
+        $list.find('.js-leftGrip-text').css('left',left).text(value);
+      }
+    });
+
+    $(document).mousemove(function() {
+      window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();;
+    });
+    let defaultValue = $('.js-totale-text').text()*0.6;
+  }
+
+  _changeCondition(event) {
+    var $this = $(event.currentTarget);
+    var value = $this.find('option:selected').val();
+    if(value!='score') {
+      $('.js-score-slider').addClass('hidden');
+    }else {
+      $('.js-score-slider').removeClass('hidden');
+    }
   }
 
   _changeTestpaper(event) {

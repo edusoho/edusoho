@@ -1,6 +1,6 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 {% do css(['web.css']) %}
-{% do script(['libs/bootstrap-datetimepicker.js','web/activity-manage/testpaper/index.js'], 300) %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-nstslider.js','web/activity-manage/testpaper/index.js'], 300) %}
 
 {% block activity_content %}
   <div class="form-group">
@@ -64,7 +64,7 @@
     <div class="form-group">
       <div class="col-xs-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
       <div class="col-xs-9 controls">
-        <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
+        <input class="form-control widt-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
         <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
       </div>
     </div>
@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block activity_finish %}
-  <div class="row form-group">
+  <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="condition-select">{{ '考评方式'|trans }}</label>
     </div>
@@ -83,8 +83,7 @@
       </select>
     </div>
   </div>
-
-  <div class="row form-group">
+  <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
@@ -108,6 +107,20 @@
 
     </div>
   </div>
-  
-  
+  <div class="form-group js-score-slider">
+    <div class="col-sm-offset-2 col-sm-8">
+      <div class="nstSlider-list clearfix">
+        <div class="nstSlider-item leftLabel">0</div>  
+        <div class="nstSlider-item nstSlider" data-range_min="0" data-range_max="150" data-cur_min="{{150 * 0.6 }}">
+          <div class="bar js-bar"></div>
+          <div class="nstSlider-content js-nstSlider-content">
+            <div class="leftGrip js-leftGrip"></div>
+            <div class="leftGrip-remask ">达标：<span class="js-leftGrip-remask-text">90</span>分</div>
+          </div>
+          <div class="leftGrip-text js-leftGrip-text">0%</div>
+        </div>
+        <div class="nstSlider-item mll js-totale-text">150</div>分
+      </div>
+    </div>
+  </div>
 {% endblock %}

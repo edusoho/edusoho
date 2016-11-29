@@ -22,6 +22,7 @@ const parameters = {
     "jquery-sortable":['jquery-sortable'],
     "iframe-resizer":['../libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
+    "jquery-nstslider":['jquery-nstslider'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -36,6 +37,7 @@ const parameters = {
     'respond.js/dest/respond.src.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
+    'jquery-nstslider/dist/jquery.nstSlider.js',
   ],
   onlyCopys: [
     {
