@@ -157,6 +157,7 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
+        $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider());
         $biz->boot();
     }
 
