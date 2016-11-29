@@ -45,7 +45,7 @@ class User extends BaseResource
         return $this->filter($user);
     }
 
-    public function post(Application $app, Request $request)
+    public function post(Application $app, Request $request, $id)
     {
         $data    = $request->request->all();
 
@@ -134,8 +134,8 @@ class User extends BaseResource
 
     protected function call_bind_mobile($request)
     {
+        $user    = $this->getCurrentUser();
         $data    = $request->request->all();
-        $token   = empty($data['token']) ? null : $data['token'];
         $mobile  = empty($data['mobile']) ? null : $data['mobile'];
         $smsCode = empty($data['sms_code']) ? null : $data['sms_code'];
 
@@ -146,13 +146,7 @@ class User extends BaseResource
             return $this->error('5007', '手机验证码错误');
         }
 
-        if (empty($token)) {
-            return $this->error('5008', 'token字段为空');
-        }
-
-        $userBind = $this->getUserService()->getUserBindByToken($token);
-
-        $this->getUserService()->changeMobile($userBind['userId'], $mobile);
+        $this->getUserService()->changeMobile($user['id'], $mobile);
 
         return array('code' => 0);
     }
