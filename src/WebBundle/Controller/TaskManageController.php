@@ -12,7 +12,7 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
-
+        $taskType   = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
@@ -24,7 +24,8 @@ class TaskManageController extends BaseController
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'course' => $course,
             'mode'   => 'create',
-            'types'  => $this->getActivityService()->getActivityTypes()
+            'types'  => $this->getActivityService()->getActivityTypes(),
+            'taskType'=>$taskType
         ));
     }
 

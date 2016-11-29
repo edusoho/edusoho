@@ -21,9 +21,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function createTask($fields)
     {
-        $strategy =  $this->createLearningStrategy($fields['fromCourseId']);
+        $strategy = $this->createLearningStrategy($fields['fromCourseId']);
 
-        $task     = $strategy->createTask($fields);
+        $task = $strategy->createTask($fields);
         return $task;
     }
 
@@ -228,6 +228,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getMaxSeqByCourseId($courseId)
     {
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
+    }
+
+    public function getMaxNumberByCourseId($courseId)
+    {
+        return $this->getTaskDao()->getMaxNumberByCourseId($courseId);
     }
 
     public function findTasksByChapterId($chapterId)

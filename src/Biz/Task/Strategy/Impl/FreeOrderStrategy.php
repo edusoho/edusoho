@@ -31,6 +31,11 @@ class FreeOrderStrategy extends BaseLearningStrategy implements LearningStrategy
         return $task;
     }
 
+    public function findCourseItems($courseId)
+    {
+        return $this->baseFindCourseItems($courseId);
+    }
+
 
     public function getTasksRenderPage()
     {

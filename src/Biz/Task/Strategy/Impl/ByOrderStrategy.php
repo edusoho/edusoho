@@ -10,8 +10,6 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
 {
 
-    const COURSE_ITEM_RENDER_PAGE = 'WebBundle:CourseManage/Parts:list-item-byOrder.html.twig';
-
     /**
      * 任务学习
      * @param $task
@@ -43,6 +41,11 @@ class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
     public function createTask($field)
     {
         return $this->baseCreateTask($field);
+    }
+
+    public function findCourseItems($courseId)
+    {
+        return $this->baseFindCourseItems($courseId);
     }
 
 

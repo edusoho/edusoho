@@ -52,6 +52,8 @@ interface TaskService
 
     public function getMaxSeqByCourseId($courseId);
 
+    public function getMaxNumberByCourseId($courseId);
+
     public function findTasksByChapterId($chapterId);
 }
 

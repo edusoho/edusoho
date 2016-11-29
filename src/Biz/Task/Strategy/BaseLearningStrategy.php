@@ -22,7 +22,7 @@ class BaseLearningStrategy
     }
 
 
-    public function findCourseItems($courseId)
+    public function baseFindCourseItems($courseId)
     {
         $items = array();
         $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
@@ -60,6 +60,7 @@ class BaseLearningStrategy
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',

@@ -34,6 +34,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
     }
 
+    public function getMaxNumberByCourseId($courseId)
+    {
+        $sql = "SELECT max(number) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+    }
+
+
     public function waveSeqBiggerThanSeq($seq, $diff)
     {
         $sql = "UPDATE {$this->table()} SET seq = seq + ?  WHERE seq >?";
