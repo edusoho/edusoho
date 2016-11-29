@@ -1736,7 +1736,7 @@ admin_order_manage_export_coin_csv:
 #     defaults: { _controller: TopxiaAdminBundle:Account:paymentRank }
 
 # admin_account_statistic:
-#     pattern: /account/statistic/{period}
+#     path: /account/statistic/{period}
 #     defaults: { _controller: TopxiaAdminBundle:Account:accountStatistic }
 #     permissions: [admin]
 
