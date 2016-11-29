@@ -31,7 +31,7 @@ define(function(require, exports, module) {
   //           });
   //       });
         var emailSendChart = document.getElementById('emailSendChart');
-        if (emailSendChart != null) {
+        if (emailSendChart) {
             var emailSendChart = echarts.init(emailSendChart);
             var items = app.arguments.items;
             var option = {
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
                 series: [{
                     name: '发送量(条)',
                     type: 'bar',
-                    data: items.count
+                    data: items.amount
                 }],
                 color:['#428BCA'],
                 grid:{
