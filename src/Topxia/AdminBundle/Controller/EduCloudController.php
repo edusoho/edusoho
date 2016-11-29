@@ -490,7 +490,7 @@ class EduCloudController extends BaseController
     //     }
     // }
 
-    public function emailAction(Request $request)
+    public function emailOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
             return $this->render('TopxiaAdminBundle:EduCloud/Email:trial.html.twig');

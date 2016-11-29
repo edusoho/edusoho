@@ -1797,7 +1797,7 @@ admin_edu_cloud_sms_no_message:
 
 admin_edu_cloud_email:
     pattern: /edu_cloud/email/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
     permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_email_setting:
