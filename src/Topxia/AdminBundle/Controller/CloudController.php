@@ -108,7 +108,7 @@ class CloudController extends BaseController
         return $this->redirectUrl('service_sms_list_detail');
     }
 
-    public function smsSendTrendAction(Request $request)
+    public function smsStatisticsAction(Request $request)
     {
         return $this->redirectUrl('service_sms_count');
     }

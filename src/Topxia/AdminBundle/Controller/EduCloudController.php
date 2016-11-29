@@ -346,8 +346,8 @@ class EduCloudController extends BaseController
         return $this->redirect($this->generateUrl('admin_edu_cloud_sms'));
     }
 
-    //云短信设置页
-    public function smsAction(Request $request)
+    //云短信概览页
+    public function smsOverviewAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
@@ -363,7 +363,8 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
-        if ((isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled'])) {
+        $isSmsWithoutEnable = $this->isSmsWithoutEnable($overview, $cloudSmsSettings);
+        if ($isSmsWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
                 'overview' => $overview,
@@ -380,7 +381,7 @@ class EduCloudController extends BaseController
             'smsInfo' => $smsInfo
         ));
     }
-    //云短信设置页
+    //云短信设置
     public function smsSettingAction(Request $request)
     {
         try {
@@ -885,6 +886,13 @@ class EduCloudController extends BaseController
     protected function monthDays($time)
     {
         return date('t', strtotime("{$time}-1"));
+    }
+
+    private function isSmsWithoutEnable($overview, $cloudSmsSettings)
+    {
+        $isSmsWithoutEnable = (isset($overview['isBuy']) && $overview['isBuy'] == false) || (isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled']);
+
+        return $isSmsWithoutEnable;
     }
 
     /**

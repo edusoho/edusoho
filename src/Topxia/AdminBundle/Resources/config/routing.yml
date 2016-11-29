@@ -1062,9 +1062,9 @@ admin_cloud_sms_detail:
     pattern: /cloud/sms/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsDetail }
 
-admin_cloud_sms_send_trend:
-    pattern: /cloud/sms/send/trend
-    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSendTrend }
+admin_cloud_sms_statistics:
+    pattern: /cloud/sms/statistics
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsStatistics }
 
 admin_cloud_sms_setting:
     pattern: /cloud/sms/setting
@@ -1795,8 +1795,8 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /edu_cloud/sms
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
+    pattern:  /edu_cloud/sms/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsOverview }
     permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_setting_sms:
