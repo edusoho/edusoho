@@ -48,7 +48,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
             throw $this->createAccessDeniedException('user must be login');
         }
 
-        $taskResult['createdTime'] = time();
         $taskResult['status'] = 'start';
 
         $this->getTaskResultDao()->create($taskResult);
@@ -57,6 +56,13 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function updateTaskResult($id, $taskResult)
     {
         return $this->getTaskResultDao()->update($id, $taskResult);
+    }
+
+    public function waveLearnTime($id, $time)
+    {
+        return $this->getTaskResultDao()->wave(array($id), array(
+            'time' => $time
+        ));
     }
 
     public function findUserProgressingTaskResultByActivityId($activityId)

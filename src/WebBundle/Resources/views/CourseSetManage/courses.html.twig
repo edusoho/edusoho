@@ -1,0 +1,69 @@
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
+
+{% block title %}{{ '教学计划列表'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'plan' %}
+
+{% do script(['web/course-manage/index.js']) %}
+
+{% block main %}
+<!-- 当前课程的教学计划列表 -->
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    {{'教学计划列表'|trans}}
+    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}"><i class="es-icon es-icon-anonymous-iconfont"></i>{{'创建教学计划'|trans}}</button>
+  </div>
+
+  <div class="panel-body">
+      <table id="course-table" class="table table-striped table-hover">
+      	<thead>
+      	  <th>{{'名称'|trans}}</th>
+          <th>{{'任务数'|trans}}</th>
+          <th>{{'学员'|trans}}</th>
+          <th>{{'价格（元）'|trans}}</th>
+          <th>{{'操作'|trans}}</th>
+      	</thead>
+      	<tbody>
+      		{% for course in courses %}
+      		<tr>
+      			<td>{{course.title}}
+              <span class="label label-warning mll">{{'会员免费'|trans}}</span>
+              <span class="label label-warning mll">{{'6折'|trans}}</span>
+            </td>
+      			<td>course.taskNum</td>
+      			<td>course.stuNum</td>
+      			<td>course.price</td>
+      			<td>
+      				<div class="btn-group">
+		                <a class="btn btn-default btn-sm" href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
+		                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+		                  <span class="caret"></span>
+		                </a>
+		                <ul class="dropdown-menu pull-right">
+		                  <li>
+		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}">{{'预览'|trans}}</a>
+		                  </li>
+	      				  {# <li>
+	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
+	      				  </li> #}
+                    {% if course.status|default('') == 'published' %}
+      				      <li>
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course">{{'关闭'|trans}}</a>
+      				      </li>
+                    {% else %}
+      				      <li>
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-delete-course">{{'删除'|trans}}</a>
+      				      </li>
+      				      <li>
+      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-publish-course">{{'发布'|trans}}</a><!-- 已发布的不能删除，可关闭 -->
+      				      </li>
+                    {% endif %}
+		                </ul>
+		            </div>
+      			</td>
+      		</tr>
+      		{% endfor %}
+      	</tbody>
+      </table>
+  </div>
+</div>
+{% endblock %}

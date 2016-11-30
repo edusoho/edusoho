@@ -5,12 +5,6 @@ export default class TaskUi {
     this.learnedPrompt = this.element.find('.js-learned-prompt');
     this.learnprompt = this.element.find('.js-learn-prompt');
     this.btnLearn = this.element.find('.js-btn-learn');
-    this.init();
-  }
-
-  init() {
-    $('.js-test').click(event=>this.learnedWeakPrompt());
-    this.btnLearn.click(event=>this.learned());
   }
 
   learnedWeakPrompt() {
@@ -24,6 +18,6 @@ export default class TaskUi {
 
 
   learned() {
-    this.btnLearn.toggleClass('active');
+    this.btnLearn.addClass('active');
   }
 }
