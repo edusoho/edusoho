@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\User;
 
-use Codeages\Biz\Framework\Context\CurrentUserInterface;
+
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;

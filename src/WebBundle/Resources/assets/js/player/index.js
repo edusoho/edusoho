@@ -99,7 +99,7 @@ class Show {
         let player = this.initPlayer();
         let messenger = this.initMesseger();
         player.on("ready", ()=> {
-            messenger.sendToParent("ready", {pause: true});
+            messenger.sendToParent("ready", {pause: true, currentTime:player.getCurrentTime()});
             if (!this.isCloudPalyer()) {
                 let time = DurationStorage.get(this.userId, this.fileId);
                 if (time > 0) {
@@ -138,11 +138,11 @@ class Show {
         });
 
         player.on("paused", () => {
-            messenger.sendToParent("paused", {pause: true});
+            messenger.sendToParent("paused", {pause: true, currentTime:player.getCurrentTime()});
         });
 
         player.on("playing", ()=> {
-            messenger.sendToParent("playing", {pause: false});
+            messenger.sendToParent("playing", {pause: false, currentTime:player.getCurrentTime()});
         });
 
         player.on("ended", ()=> {

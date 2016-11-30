@@ -103,7 +103,7 @@
 
               <h1 class="pull-left">
                 {% block page_title %}
-                  {{ currentMenu.fullname|default(currentMenu.name) }}
+                  {{ currentMenu.code|parent_permission.name|trans }}
                 {% endblock %}
               </h1>
               <div class="pull-right">

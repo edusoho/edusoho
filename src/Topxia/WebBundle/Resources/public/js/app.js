@@ -47,6 +47,7 @@ define(function(require, exports, module) {
         if (!error) {
             return;
         }
+
         if (error.name == 'Unlogin') {
             var ua = navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {

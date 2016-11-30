@@ -2,7 +2,7 @@ import Messenger from 'es-messenger';
 
 export default class ActivityEmitter {
 
-  constructor(){
+  constructor() {
     this.emitMessenger = new Messenger('task-content-iframe', 'ActivityEvent');
     this.emitMessenger.addTarget(window.parent, 'parent');
 
@@ -29,18 +29,15 @@ export default class ActivityEmitter {
         data: data
       });
 
-      messenger.addTarget(window.parent, 'parent');
-      messenger.send(message);
-
-      this.emitMessenger.send(message);
+     this.emitMessenger.send(message);
 
       this.emitMessenger.listen((message) => {
         message = JSON.parse(message);
         let listenEvent = message.event;
-        if(listenEvent === event){
-          if(message.error){
+        if (listenEvent === event) {
+          if (message.error) {
             reject(message.error);
-          }else {
+          } else {
             resolve(message.data);
           }
         }
@@ -49,7 +46,7 @@ export default class ActivityEmitter {
   }
 
   //监听task的事件
-  receive(event, callback){
+  receive(event, callback) {
     this.eventMap.receives[event] = this.eventMap.receives[event] || [];
     this.eventMap.receives[event].push(callback);
   }

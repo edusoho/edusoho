@@ -7,17 +7,33 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
-    protected $table = 'course';
+    protected $table = 'c2_course';
 
     public function get($id, $lock = false)
     {
-    	$course = parent::get($id, $lock);
-    	return CourseSerialize::unserialize($course);
+        $course = parent::get($id, $lock);
+        return CourseSerialize::unserialize($course);
+    }
+
+    public function update($id, array $fields)
+    {
+        $fields  = CourseSerialize::serialize($fields);
+        $updated = parent::update($id, $fields);
+        return CourseSerialize::unserialize($updated);
+    }
+
+    public function findCoursesByCourseSetId($courseSetId)
+    {
+        return $this->findInField('courseSetId', array($courseSetId));
+    }
+
+    public function getDefaultCourseByCourseSetId($courseSetId)
+    {
+        return $this->getByFields(array('courseSetId' => $courseSetId, 'isDefault' => 1));
     }
 
     public function declares()
     {
-
     }
 }
 
@@ -25,14 +41,6 @@ class CourseSerialize
 {
     public static function serialize(array &$course)
     {
-        if (isset($course['tags'])) {
-            if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|'.implode('|', $course['tags']).'|';
-            } else {
-                $course['tags'] = '';
-            }
-        }
-
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
                 $course['goals'] = '|'.implode('|', $course['goals']).'|';
@@ -49,13 +57,13 @@ class CourseSerialize
             }
         }
 
-        if (isset($course['teacherIds'])) {
-            if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
-            } else {
-                $course['teacherIds'] = null;
-            }
-        }
+        // if (isset($course['teacherIds'])) {
+        //     if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
+        //         $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
+        //     } else {
+        //         $course['teacherIds'] = null;
+        //     }
+        // }
 
         return $course;
     }
@@ -65,8 +73,6 @@ class CourseSerialize
         if (empty($course)) {
             return $course;
         }
-
-        $course['tags'] = empty($course['tags']) ? array() : explode('|', trim($course['tags'], '|'));
 
         if (empty($course['goals'])) {
             $course['goals'] = array();
@@ -80,11 +86,11 @@ class CourseSerialize
             $course['audiences'] = explode('|', trim($course['audiences'], '|'));
         }
 
-        if (empty($course['teacherIds'])) {
-            $course['teacherIds'] = array();
-        } else {
-            $course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
-        }
+        // if (empty($course['teacherIds'])) {
+        //     $course['teacherIds'] = array();
+        // } else {
+        //     $course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
+        // }
 
         return $course;
     }

@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 class AjaxExceptionListener
@@ -35,18 +34,15 @@ class AjaxExceptionListener
             return;
         }
 
-        if ($exception instanceof AccessDeniedException) {
-            $statusCode = 403;
-        } else {
-            $statusCode = $exception->getCode();
-            if (!array_key_exists($statusCode, Response::$statusTexts)) {
-                $statusCode = 500;
-            }
+        $statusCode = $exception->getCode();
 
-            $error = array('name' => 'Error', 'message' => $exception->getMessage());
-            if (!$this->container->get('kernel')->isDebug()) {
-                $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
-            }
+        if (!array_key_exists($statusCode, Response::$statusTexts)) {
+            $statusCode = 500;
+        }
+
+        $error = array('name' => 'Error', 'message' => $exception->getMessage());
+        if (!$this->container->get('kernel')->isDebug()) {
+            $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
         }
 
         if ($statusCode == 403) {

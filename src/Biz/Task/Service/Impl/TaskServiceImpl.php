@@ -87,7 +87,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
-            'preTaskId',
+            'seq',
             'courseChapterId',
             'activityId',
             'title',
@@ -120,12 +120,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findUserTasksFetchActivityAndResultByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
-        if ($this->getCourseService()->isCourseStudent($courseId, $user->getId())) {
+        if (!$this->getCourseService()->isCourseStudent($courseId, $user->getId())) {
             return array();
         }
 
         $tasks = $this->findTasksFetchActivityByCourseId($courseId);
-
         if (empty($tasks)) {
             return array();
         }
@@ -165,6 +164,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
 
         $this->getTaskResultService()->createTaskResult($taskResult);
+    }
+
+    public function doingTask($taskId, $time = TaskService::LEARN_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if (empty($taskResult)) {
+            throw new AccessDeniedException('任务不在进行状态');
+        }
+
+        $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
     }
 
     public function finishTask($taskId)

@@ -7,11 +7,16 @@ use Topxia\Component\MediaParser\ParseException;
 class QQVideoItemParser extends AbstractItemParser
 {
     private $patterns = array(
-        'p1' => '/^http\:\/\/v\.qq\.com\/cover\//s',
-        'p2' => '/^http\:\/\/v\.qq\.com\/boke\/page\//s',
-        'p3' => '/^http\:\/\/v\.qq\.com\/page\//s',
-        'p4' => '/^http\:\/\/v\.qq\.com\/x\/page\//s',
-        'p5' => '/^http\:\/\/v\.qq\.com\/x\/cover\//s'
+        'p1'  => '/^http\:\/\/v\.qq\.com\/cover\//s',
+        'p2'  => '/^http\:\/\/v\.qq\.com\/boke\/page\//s',
+        'p3'  => '/^http\:\/\/v\.qq\.com\/page\//s',
+        'p4'  => '/^http\:\/\/v\.qq\.com\/x\/page\//s',
+        'p5'  => '/^http\:\/\/v\.qq\.com\/x\/cover\//s',
+        'p6'  => '/^https\:\/\/v\.qq\.com\/cover\//s',
+        'p7'  => '/^https\:\/\/v\.qq\.com\/boke\/page\//s',
+        'p8'  => '/^https\:\/\/v\.qq\.com\/page\//s',
+        'p9'  => '/^https\:\/\/v\.qq\.com\/x\/page\//s',
+        'p10' => '/^https\:\/\/v\.qq\.com\/x\/cover\//s'
     );
 
     public function parse($url)
@@ -23,11 +28,13 @@ class QQVideoItemParser extends AbstractItemParser
             $vid = $matches[1];
         } else {
             $response = $this->fetchUrl($url);
+
             if ($response['code'] != 200) {
                 throw new ParseException('获取QQ视频页面信息失败');
             }
 
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
+
             if (empty($matched)) {
                 throw new ParseException('解析QQ视频ID失败');
             }
@@ -42,22 +49,26 @@ class QQVideoItemParser extends AbstractItemParser
             $videoUrl     = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
 
             $response = $this->fetchUrl($videoUrl);
+
             if ($response['code'] != 200) {
                 throw new ParseException('获取QQ视频信息失败');
             }
 
             $matched = preg_match('/{.*}/s', $response['content'], $matches);
+
             if (empty($matched)) {
                 throw new ParseException('解析QQ视频信息失败');
             }
 
             $video = json_decode($matches[0], true) ?: array();
+
             if (!empty($video) && !empty($video['video'])) {
                 $video = $video['video'];
                 $title = $video['title'];
             } else {
                 $video = array();
                 $title = $url;
+
                 if ($responseInfo) {
                     $title = $this->getVideoTitle($responseInfo);
                 }
@@ -70,6 +81,7 @@ class QQVideoItemParser extends AbstractItemParser
             $item = $this->getItem($vid, $title, $summary, $duration, $pageUrl);
         } else {
             $title = $this->getVideoTitle($response);
+
             if (empty($title)) {
                 throw new ParseException('解析QQ视频ID失败');
             }
@@ -115,6 +127,7 @@ class QQVideoItemParser extends AbstractItemParser
     {
         foreach ($this->patterns as $key => $pattern) {
             $matched = preg_match($pattern, $url);
+
             if ($matched) {
                 return $matched;
             }

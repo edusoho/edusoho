@@ -1352,7 +1352,7 @@ class Init extends Migration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题最后一次被编辑或回复时间',
               PRIMARY KEY (`id`),
-              KEY `updatedTime` (`updatedTime`)
+              KEY `updateTime` (`updateTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
             CREATE TABLE IF NOT EXISTS `thread_post` (
