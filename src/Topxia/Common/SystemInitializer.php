@@ -229,6 +229,7 @@ class SystemInitializer
 
         $defaultSetting                 = array();
         $defaultSetting['chapter_name'] = '章';
+        $defaultSetting['user_name']    = '学员';
         $defaultSetting['part_name']    = '节';
 
         $default        = $settingService->get('default', array());
