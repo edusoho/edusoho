@@ -11,7 +11,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function get($id, $lock = false)
     {
-        $courseSet = parent::get($id, $fields);
+        $courseSet = parent::get($id, $lock);
         if (!empty($courseSet)) {
             $courseSet = CourseSetSerialize::unserialize($courseSet);
         }
@@ -20,9 +20,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function update($id, array $fields)
     {
-        $fields  = CourseSetSerialize::serialize($fields);
-        $updated = parent::update($id, $fields);
-        return CourseSetSerialize::unserialize($updated);
+        $fields = CourseSetSerialize::serialize($fields);
+        return parent::update($id, $fields);
     }
 
     public function declares()

@@ -63,12 +63,11 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data      = $request->request->all();
             $courseSet = $this->getCourseSetService()->updateCourseSet($id, $data);
-            var_dump($courseSet);exit();
         } else {
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         }
         if (!empty($courseSet['tags'])) {
-            $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
+            $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
 
         return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
