@@ -18,6 +18,8 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
+    public function updateCourseMarketing($id, $fields);
+
     public function deleteCourse($id);
 
     public function closeCourse($id);

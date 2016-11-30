@@ -65,15 +65,15 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $course = array();
         if ($request->isMethod('POST')) {
-            $data   = $request->request->all();
-            $course = $this->getCourseService()->updateCourse($data['id'], $data);
-        } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourse($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_info', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:info.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
@@ -82,9 +82,50 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourseMarketing($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function teachersAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourseTeachers($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:teachers.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function studentsAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourseStudents($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:students.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));

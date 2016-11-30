@@ -4,10 +4,9 @@ namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Strategy\StrategyContext;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
@@ -29,13 +28,10 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-
         $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
         $task = $strategy->updateTask($id, $fields);
         return $task;
-
-
     }
 
     public function updateSeq($id, $fields)
@@ -199,7 +195,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
+        $task                  = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -235,7 +231,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->createDao('Task:TaskDao');
     }
-
 
     protected function isFirstTask($task)
     {

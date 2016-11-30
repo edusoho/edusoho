@@ -60,6 +60,7 @@
     "iframe-resizer": "^3.5.5",
     "jquery": "^1.12.4",
     "jquery-form": "^3.50.0",
+    "jquery-jcrop": "^0.9.13",
     "jquery-sortable": "^0.9.13",
     "jquery-validation": "^1.15.1",
     "reset.css": "^2.0.2",

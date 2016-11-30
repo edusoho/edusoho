@@ -73,6 +73,9 @@ let config = {
     }, {
       test: /\.(woff|woff2|eot|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'file?name=fonts/[name].[ext]'
+    }, {
+      test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'file'
     }]
   },
   plugins: [

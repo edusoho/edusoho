@@ -3,10 +3,10 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Strategy\StrategyContext;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Strategy\StrategyContext;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -90,6 +90,34 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Lack of required fields");
         } else {
             $fields = $this->validateExpiryMode($fields);
+        }
+
+        return $this->getCourseDao()->update($id, $fields);
+    }
+
+    public function updateCourseMarketing($id, $fields)
+    {
+        $course = $this->tryManageCourse($id);
+        $fields = ArrayToolkit::parts($fields, array(
+            'isFree',
+            'price',
+            'vipLevelId',
+            'buyable',
+            'tryLookable',
+            'tryLookLength',
+            'watchLimit',
+            'services'
+        ));
+
+        if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+        if ($fields['isFree'] == 1) {
+            $fields['price']      = 0;
+            $fields['vipLevelId'] = 0;
+        }
+        if ($fields['tryLookable'] == 0) {
+            $fields['tryLookLength'] = 0;
         }
 
         return $this->getCourseDao()->update($id, $fields);
@@ -209,7 +237,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 
-
         if (empty($course)) {
             return false;
         }
@@ -224,12 +251,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;
