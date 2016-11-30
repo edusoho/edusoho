@@ -53,7 +53,7 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_buy', $params);
     }
 
-    public function videoDetailsAction()
+    public function videoDetailAction()
     {
         return $this->redirectUrl('service_storage_chart');
     }

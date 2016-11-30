@@ -1014,9 +1014,9 @@ admin_cloud_video:
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
     permissions: [admin_my_cloud_overview]
 
-admin_cloud_video_details:
-    pattern: /cloud/video/details
-    defaults: { _controller: TopxiaAdminBundle:Cloud:videoDetails }
+admin_cloud_video_detail:
+    pattern: /cloud/video/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoDetail }
 
 admin_cloud_video_switch:
     pattern:  /cloud/video/switch
