@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
