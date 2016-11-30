@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 29/11/2016
- * Time: 14:52
- */
 
 namespace Biz\Task\Strategy;
 
