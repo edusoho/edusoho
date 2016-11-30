@@ -52,7 +52,7 @@ class User extends BaseResource
         $type = $data['type'];
 
         if (empty($type)) {
-            return $this->errer('5005', '没有type字段');
+            return $this->error('5005', '没有type字段');
         }
 
         $method = 'call_'.$type;
@@ -134,31 +134,60 @@ class User extends BaseResource
 
     protected function call_bind_mobile($request)
     {
-        // $user    = $this->getCurrentUser();
-        $data    = $request->request->all();
-        $mobile  = empty($data['mobile']) ? null : $data['mobile'];
-        $smsCode = empty($data['sms_code']) ? null : $data['sms_code'];
-        //验证参数是否符合要求
-        //验证手机号是否已经被绑定
-        //验证captcha_code是否正确
-        //绑定手机号
+        $data        = $request->request->all();
+        $mobile      = empty($data['mobile']) ? null : $data['mobile'];
+        $captchaCode = empty($data['captcha_code']) ? null : $data['captcha_code'];
+        $token       = empty($data['token']) ? null : $data['token'];
 
-        //手机验证码的校验
-        $result = true;
-
-        if (!$result) {
-            return $this->error('5007', '手机验证码错误');
+        if (empty($mobile)) {
+            return $this->error('5015', '手机号为空');
+        }
+        if (empty($captchaCode)) {
+            return $this->error('5016', '短信验证码为空，请输入');
+        }
+        if (empty($token)) {
+            return $this->error('5019', 'token为空');
         }
 
+        if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
+            return $this->error('5017', '手机号已被绑定');
+        }
+
+        $currentToken = $this->isSmsCaptchaCodeExpire('bind_mobile', $token);
+        if (empty($currentToken)) {
+            return $this->error('5013', '手机验证码已过期');
+        }
+
+        //调用SmsService方法
+        if ($mobile != $currentToken['data']['mobile']) {
+            return $this->error('5018', '手机号与短信验证码不匹配');
+        }
+        if (!empty($currentToken)) {
+            if ($captchaCode != $currentToken['data']['captcha_code']) {
+                return $this->error('5014', '短信验证码错误');
+            }
+        }
+
+        $user = $this->getCurrentUser();
         $this->getUserService()->changeMobile($user['id'], $mobile);
 
         return array('code' => 0);
     }
 
-    protected function call_send_captcha_code($request)
+    protected function isSmsCaptchaCodeExpire($type, $token)
     {
-        $resut = $this->getSmsService()->sendVerifySms('sms_bind','18857123749',0);
-        
+        $currentToken = $this->getTokenService()->verifyToken($type, $token);
+
+        if (empty($currentToken)) {
+            return array();
+        }
+
+        return $currentToken;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getUserService()
