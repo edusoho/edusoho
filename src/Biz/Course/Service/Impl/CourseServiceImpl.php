@@ -3,11 +3,10 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Strategy\StrategyContext;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Strategy\StrategyContext;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -238,7 +237,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 
-
         if (empty($course)) {
             return false;
         }
@@ -253,12 +251,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;
