@@ -42,7 +42,8 @@ class TestpaperActivityController extends BaseController implements ActivityActi
 
     public function createAction(Request $request, $courseId)
     {
-        $testpapers = $this->findCourseTestpapers($courseId);
+        $course     = $this->getCourseService()->getCourse($courseId);
+        $testpapers = $this->findCourseTestpapers($course['courseSetId']);
 
         $testpaperNames = array();
         foreach ($testpapers as $testpaper) {
@@ -55,7 +56,7 @@ class TestpaperActivityController extends BaseController implements ActivityActi
             'testpapers'     => $testpapers,
             'testpaperNames' => $testpaperNames,
             'features'       => $features,
-            'courseId'       => $courseId
+            'courseSetId'    => $course['courseSetId']
         ));
     }
 
@@ -88,6 +89,11 @@ class TestpaperActivityController extends BaseController implements ActivityActi
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTestpaperActivityService()
