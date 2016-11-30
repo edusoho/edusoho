@@ -9,6 +9,15 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class LockModeStrategy extends BaseLearningStrategy implements LearningStrategy
 {
+    public function createTask($field)
+    {
+        return $this->baseCreateTask($field);
+    }
+
+    public function updateTask($id, $fields)
+    {
+        return $this->baseUpdateTask($id, $fields);
+    }
 
     /**
      * 任务学习
@@ -38,10 +47,6 @@ class LockModeStrategy extends BaseLearningStrategy implements LearningStrategy
         return false;
     }
 
-    public function createTask($field)
-    {
-        return $this->baseCreateTask($field);
-    }
 
     public function findCourseItems($courseId)
     {

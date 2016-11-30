@@ -13,6 +13,8 @@ interface LearningStrategy
 {
     public function createTask($field);
 
+    public function updateTask($id, $fields);
+
     public function canLearnTask($task);
 
     public function findCourseItems($courseId);

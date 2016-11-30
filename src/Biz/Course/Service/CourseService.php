@@ -14,6 +14,8 @@ interface CourseService
 
     public function createChapter($chapter);
 
+    public function updateChapter($courseId, $chapterId, $fields);
+
     public function updateCourse($id, $fields);
 
     public function deleteCourse($id);

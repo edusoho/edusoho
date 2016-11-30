@@ -104,7 +104,7 @@
           <li class="col-xs-12">
             <label for="mediaType" class="hidden">分类</label>
             <input name="mediaType" id="mediaType" class="type-hidden">
-            <input name="taskType" id="{{ taskType }}">
+            <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
             <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='1'> <!--FIXME 临时赋值 -->
             <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           </li>

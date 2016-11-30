@@ -21,6 +21,61 @@ class BaseLearningStrategy
         $this->biz = $biz;
     }
 
+    public function baseCreateTask($fields)
+    {
+        if ($this->invalidTask($fields)) {
+            throw new InvalidArgumentException('task is invalid');
+        }
+
+        if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
+            throw new AccessDeniedException('无权创建任务');
+        }
+
+        $activity = $this->getActivityService()->createActivity($fields);
+
+        $fields['activityId']    = $activity['id'];
+        $fields['createdUserId'] = $activity['fromUserId'];
+        $fields['courseId']      = $activity['fromCourseId'];
+        $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
+        $fields                  = ArrayToolkit::parts($fields, array(
+            'courseId',
+            'seq',
+            'number',
+            'mode',
+            'courseChapterId',
+            'activityId',
+            'title',
+            'isFree',
+            'isOptional',
+            'startTime',
+            'endTime',
+            'status',
+            'createdUserId'
+        ));
+        return $this->getTaskDao()->create($fields);
+    }
+
+    public function baseUpdateTask($id, $fields)
+    {
+        $savedTask = $this->getTaskService()->getTask($id);
+
+        if (!$this->getCourseService()->tryManageCourse($savedTask['courseId'])) {
+            throw $this->createAccessDeniedException('无权更新任务');
+        }
+        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'isFree',
+            'isOptional',
+            'startTime',
+            'endTime',
+            'status'
+        ));
+
+        return $this->getTaskDao()->update($id, $fields);
+    }
 
     public function baseFindCourseItems($courseId)
     {
@@ -44,39 +99,6 @@ class BaseLearningStrategy
         return $items;
     }
 
-    public function baseCreateTask($fields)
-    {
-        if ($this->invalidTask($fields)) {
-            throw new InvalidArgumentException('task is invalid');
-        }
-
-        if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException('无权创建任务');
-        }
-
-        $activity = $this->getActivityService()->createActivity($fields);
-
-        $fields['activityId']    = $activity['id'];
-        $fields['createdUserId'] = $activity['fromUserId'];
-        $fields['courseId']      = $activity['fromCourseId'];
-        $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
-        $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'seq',
-            'number',
-            'courseChapterId',
-            'activityId',
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status',
-            'createdUserId'
-        ));
-        return $this->getTaskDao()->create($fields);
-    }
 
     protected function invalidTask($task)
     {

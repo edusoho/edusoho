@@ -11,8 +11,8 @@ class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId)
     {
-        $course = $this->tryManageCourse($courseId);
-        $taskType   = $request->query->get('type');
+        $course   = $this->tryManageCourse($courseId);
+        $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
@@ -22,28 +22,24 @@ class TaskManageController extends BaseController
         }
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
-            'course' => $course,
-            'mode'   => 'create',
-            'types'  => $this->getActivityService()->getActivityTypes(),
-            'taskType'=>$taskType
+            'course'   => $course,
+            'mode'     => 'create',
+            'types'    => $this->getActivityService()->getActivityTypes(),
+            'taskMode' => $taskMode
         ));
     }
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $course = $this->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getTask($id);
+        $course   = $this->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($id);
+        $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');
         }
 
         if ($request->getMethod() == 'POST') {
-            $task = $request->request->all();
-
-            // unset($task['mediaType']);
-            // unset($task['fromCourseSetId']);
-            // unset($task['fromCourseId']);
-
+            $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
             $task['fromUserId'] = $this->getUser()->getId();
             $savedTask          = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
@@ -61,7 +57,8 @@ class TaskManageController extends BaseController
             'types'               => $this->getActivityService()->getActivityTypes(),
             'activity_controller' => $editController,
             'course'              => $course,
-            'task'                => $task
+            'task'                => $task,
+            'taskMode'            => $taskMode
         ));
     }
 

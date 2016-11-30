@@ -29,23 +29,14 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $savedTask = $this->getTask($id);
 
-        if (!$this->canManageCourse($savedTask['courseId'])) {
-            throw $this->createAccessDeniedException('无权更新任务');
-        }
-        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $strategy = $this->createLearningStrategy($fields['fromCourseId']);
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status'
-        ));
+        $task = $strategy->updateTask($id, $fields);
+        return $task;
 
-        return $this->getTaskDao()->update($id, $fields);
+
+
     }
 
     public function updateSeq($id, $fields)
