@@ -20,7 +20,9 @@ class BaseStrategy
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
-
+        if (empty($fields['categoryId'])) {
+            unset($fields['categoryId']);
+        }
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             throw new AccessDeniedException('无权创建任务');
         }

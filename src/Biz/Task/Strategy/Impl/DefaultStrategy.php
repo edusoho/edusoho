@@ -30,6 +30,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $chapter             = $this->getCourseService()->createChapter($chapter);
             $field['categoryId'] = $chapter['id'];
         }
+
         $task = $this->baseCreateTask($field);
         return $task;
     }

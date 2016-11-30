@@ -300,8 +300,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 foreach ($parentChapters as $parent) {
                     if (!empty($parent)) {
                         $this->getTaskService()->updateSeq($id, array(
-                            'seq'             => $key,
-                            'courseChapterId' => $parent['id']
+                            'seq'        => $key,
+                            'categoryId' => $parent['id']
                         ));
                         break;
                     }
