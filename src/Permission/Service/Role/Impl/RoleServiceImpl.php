@@ -7,6 +7,7 @@ use Permission\Common\PermissionBuilder;
 use Permission\Service\Role\RoleService;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\UnexpectedValueException;
+use Topxia\Common\Tree;
 
 class RoleServiceImpl extends BaseService implements RoleService
 {
@@ -95,13 +96,25 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function refreshRoles()
     {
-        $getAllRole         = PermissionBuilder::instance()->getOriginPermissionTree(true);
-        $getSuperAdminRoles = $getAllRole->column('code');
-        $adminForbidRoles   = array('admin_user_avatar', 'admin_user_change_password', 'admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
+        $permissions = PermissionBuilder::instance()->loadPermissionsFromAllConfig();
+        $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
+
+        $getSuperAdminRoles = $tree->column('code');
+        $adminForbidRoles   = array(
+            'admin_user_avatar', 
+            'admin_user_change_password', 
+            'admin_my_cloud', 
+            'admin_cloud_video_setting', 
+            'admin_edu_cloud_sms', 
+            'admin_edu_cloud_search_setting', 
+            'admin_setting_cloud_attachment', 
+            'admin_setting_cloud', 
+            'admin_system'
+        );
 
         $getAdminForbidRoles = array();
         foreach ($adminForbidRoles as $adminForbidRole) {
-            $adminRole = $getAllRole->find(function ($tree) use ($adminForbidRole) {
+            $adminRole = $tree->find(function ($tree) use ($adminForbidRole) {
                 return $tree->data['code'] === $adminForbidRole;
             });
 
@@ -112,7 +125,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
         }
 
-        $getTeacherRoles = $getAllRole->find(function ($tree) {
+        $getTeacherRoles = $tree->find(function ($tree) {
             return $tree->data['code'] === 'web';
         });
         $getTeacherRoles = $getTeacherRoles->column('code');

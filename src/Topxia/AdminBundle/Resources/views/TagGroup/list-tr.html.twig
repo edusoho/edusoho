@@ -1,0 +1,18 @@
+<tr id="tag-group-tr-{{ tagGroup.id }}">
+  <td>{{ tagGroup.id }}</td>
+  <td>{{ tagGroup.name }}</td>
+  <td>
+    {% for scope in tagGroup.scope %}
+      {% if scope == 'classroom' %}
+        班级列表筛选
+      {% elseif scope == 'course'%}
+        课程列表筛选
+      {% endif %}
+    {% endfor %}
+  </td>
+  <td>{{ tagGroup.tagNum }}</td>
+  <td>{{ tagGroup.createdTime|date('Y-m-d H:i') }}</td>
+  <td>
+    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {groupId: tagGroup.id}) }}" data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</button>
+  </td>
+</tr>

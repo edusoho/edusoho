@@ -1,0 +1,179 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import _self as header_macro %}
+
+<!-- @TODO 获取previewLesson -->
+{% set previewLesson = {id:1}%}
+<!-- @TODO 获取userVipStatus -->
+{% set userVipStatus = "ok" %}
+
+{% if member %}
+  {% cache 'course/' ~ courseSet.id ~ 'normal/header/for/member' 600 %}
+    {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
+  {% endcache %}
+{% elseif courseSet.parentId|default(false) %}
+  {% cache 'course/' ~ courseSet.id ~ '/classroom/course/normal/header/for/guest' 600 %}
+    {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+  {% endcache %}
+{% else %}
+  {% cache 'course/' ~ courseSet.id ~ '/not/classroom/course/normal/header/for/guest' 600 %}
+    {% include 'WebBundle:CourseSet:Part/header-for-guest.html.twig' %}
+    {% include 'WebBundle:CourseSet:Part/header-for-member.html.twig' %}
+    {% include 'WebBundle:CourseSet:Part/header-for-member-order.html.twig' %}
+  {% endcache %}
+{% endif %}
+
+
+{% macro title(courseSet) %}
+  <div class="course-detail-header">
+    <span class="tags">{% if courseSet.serializeMode != 'serialized' %}
+      <span class="tag-serialing"></span>
+    {% elseif courseSet.serializeMode == 'finished' %}
+      <span class="tag-finished"></span>
+      {% endif %}</span>
+    <div class="course-detail-title">
+      <h1>
+        {{ courseSet.title }}
+        <span class="es-qrcode top" data-url="{{path('course_qrcode',{id: courseSet.id})}}"> <i class="es-icon es-icon-qrcode"></i>
+          <span class="qrcode-popover">
+            <img src="" alt="">      
+            {{'扫二维码继续学习'|trans}}
+          {{'二维码时效为半小时'|trans}}
+          </span>
+        </span>
+      </h1>
+      <div class="gray-dark">sdfsdf{{ courseSet.subtitle }}</div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro picture(courseSet, previewLesson,showStudentNum) %}
+  <div class="course-detail-img">
+    {% if previewLesson %}
+      <a href="#modal" data-toggle="modal" data-url="{{ path('course_lessons_preview', {courseId: courseSet.id, lessonId:previewLesson.id }) }}" class="course-img-cover">
+        <i class="es-icon es-icon-playcircleoutline"></i>
+      </a>
+    {% endif %}
+    <img class="img-responsive" src="{{ filepath(courseSet.largePicture, 'courseSet.png') }}" alt="{{ courseSet.title }}">
+    <div class="course-detail-remask">
+      {% if showStudentNum == true %}
+        {{_self.studentNum(courseSet)}}
+      {% endif %}
+    {#{% if setting('courseSet.show_student_num_enabled', '1') == 1  %} <i class="es-icon es-icon-people"></i>
+        {{'%studentNum%人'|trans({'%studentNum%': courseSet.studentNum}) }}
+      {% if courseSet.maxStudentNum > 0 %}
+        {% if courseSet.studentNum >= courseSet.maxStudentNum %}
+        <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
+        {% else %}
+        <small class="hidden-sm text-sm">
+          ({{'%maxStudentNum%名额'|trans({'%maxStudentNum%': courseSet.maxStudentNum}) }})
+        </small>
+        {% endif %}
+      {% endif %}
+    {% else %} <i class="es-icon es-icon-accesstime"></i>
+        {{'%lessonNum%课时'|trans({'%lessonNum%': courseSet.lessonNum}) }}
+    {% endif %}#}
+      <div class="score pull-right">
+        {#{{ web_macro.star(courseSet.rating) }}
+        <span>({{ courseSet.ratingNum }}{{' 评论'|trans}})</span>
+        #}
+        显示评分
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro info(courseSet, member, userVipStatus) %}
+  <div class="course-detail-info">
+    <div class="course-detail-item">
+      <span class="course-detail-title">{{'价格'|trans}}</span>
+      <span class="text-blod gray-darker">¥</span>
+      <span class="discount-price">75</span>¥<span class="original-price">118</span>
+    </div>
+    <div class="course-detail-content">
+      <div class="course-detail-item">
+        <span class="course-detail-title">{{'教学计划'|trans}}</span>
+        <div class="course-detail-nav">
+          <ul class="nav nav-pills nav-pills-course">
+            <li>
+              <a href="javascript:;">默认教学计划</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="course-detail-item">
+        <span class="course-detail-title">{{'学习方式'|trans}}</span>
+        <span class="gray-dark mrl">随到随学</span>
+        <span class="gray-dark">180天</span>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro bottom(courseSet) %}
+  <div class="course-detail-bottom">
+  {% if source|default("") == "classroom" %}
+    {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: courseSet.id})) }}
+  {% else %}
+    <a class="btn btn-default btn-lg mrm">会员</a>
+    <a class="btn btn-primary btn-lg">购买课程</a>
+  {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro studentNum(courseSet) %}
+  <span class="gray-color mrl">
+    <i class="es-icon es-icon-people mrm"></i>
+    122222 人
+  </span>
+{% endmacro %}
+
+{% macro favorite_btn(courseSet, hasFavorited) %}
+  <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:courseSet.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
+    <a class="btn btn-default btn-xs " href="javascript:;" class="color-primary">
+     <i class="es-icon es-icon-bookmark"></i>
+    </a>
+  </li>
+  <li id="favorite-btn" data-url="{{ path('course_favorite', {id:courseSet.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+    <a class="btn btn-default btn-xs  " href="javascript:;">
+      <i class="es-icon es-icon-bookmarkoutline"></i>
+    </a>
+  </li>
+{% endmacro %}
+
+{% macro share_btn(courseSet) %}
+  <li class="es-share top">
+    <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share"></i>
+    </a>
+    {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+  </li>
+{% endmacro %}
+
+{% macro setting_btn(courseSet) %}
+  {% if member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
+    <li>
+      <a class="btn btn-default btn-xs " href="{{ path('course_manage', {id:courseSet.id}) }}" title="{{'课程管理'|trans}}"> <i class="es-icon es-icon-setting"></i>
+      </a>
+    </li>
+  {% endif %}
+{% endmacro %}
+
+{% macro courseVip_btn(courseVip,courseSet) %}
+  {% if courseVip and courseSet.parentId == '0' %}
+    <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+      <i class="es-icon es-icon-crown"></i><br>
+      {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
+    </li>
+  {% endif %}
+{% endmacro %}
+
+
+
+
+
+       
+
+
+
+
+

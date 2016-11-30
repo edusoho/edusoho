@@ -4,19 +4,21 @@ namespace Topxia\WebBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-use Topxia\System;
 use ZipArchive;
 
 class BuildThemeAppCommand extends BaseCommand
 {
-
+    /**
+     * @var OutputInterface
+     */
     protected $output;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
 
     protected function configure()
     {
@@ -102,25 +104,6 @@ class BuildThemeAppCommand extends BaseCommand
         $this->filesystem->copy($source, $target);
     }
 
-    private function _zipPackage($distDir)
-    {
-        $buildDir = dirname($distDir);
-        $filename = basename($distDir);
-
-        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
-            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
-        }
-
-        $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
-
-        chdir($buildDir);
-        $command = "zip -r {$filename}.zip {$filename}/";
-        exec($command);
-
-        $zipPath = "{$buildDir}/{$filename}.zip";
-        $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
-    }
-
     private function _zip($distDir)
     {   
         $buildDir = dirname($distDir);
@@ -139,7 +122,7 @@ class BuildThemeAppCommand extends BaseCommand
         $z->close(); 
     }
 
-    private static function folderToZip($folder, &$zipFile, $exclusiveLength) { 
+    private static function folderToZip($folder, ZipArchive &$zipFile, $exclusiveLength) {
 
         $handle = opendir($folder); 
         while (false !== $f = readdir($handle)) { 
@@ -206,23 +189,4 @@ class BuildThemeAppCommand extends BaseCommand
 
         return $themeDir;
     }
-
-    protected function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', true);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-
-        $biz = $this->getContainer()->get('biz');
-        $serviceKernel->setConnection($biz['db']);
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-    }
-
 }

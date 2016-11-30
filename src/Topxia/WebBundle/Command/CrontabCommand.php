@@ -26,21 +26,4 @@ class CrontabCommand extends BaseCommand
         $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
         $output->writeln('<info>定时任务执行完毕</info>');
     }
-
-    protected function initServiceKernel()
-	{
-		$serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-
-        $biz = $this->getContainer()->get('biz');
-		$serviceKernel->setBiz($biz);
-		$currentUser = new CurrentUser();
-		$currentUser->fromArray(array(
-		    'id' => 0,
-		    'nickname' => '游客',
-		    'currentIp' =>  '127.0.0.1',
-		    'roles' => array(),
-		));
-		$serviceKernel->setCurrentUser($currentUser);
-	}
 }

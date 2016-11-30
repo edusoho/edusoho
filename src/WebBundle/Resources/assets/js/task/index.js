@@ -60,7 +60,7 @@ class TaskShow extends Emitter {
 
   bindEmitterEvent() {
     this.eventEmitter.receive('finish', (data) => {
-      this.onActivityFinish();
+      this.onActivityFinish(data);
     });
   }
 
@@ -74,17 +74,18 @@ class TaskShow extends Emitter {
 
   sidebar() {
     this.sideBar = new SideBar({
-      element: '.dashboard-sidebar-content',
-      activePlugins: ["note", "question"],
+      element: '.js-task-dashboard-page',
+      activePlugins: ['task',"note", "question"],
       courseId: this.courseId,
+      taskId: this.taskId,
     });
   }
 }
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#hidden-data [name="task-id"]').val()
+  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#js-hidden-data [name="task-id"]').val()
 });
 
 

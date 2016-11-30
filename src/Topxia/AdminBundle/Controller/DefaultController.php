@@ -15,6 +15,35 @@ use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
+    // public function indexAction(Request $request)
+    // {
+    //     $permissions = $this->container->get('permission.twig.permission_extension')->getSubPermissions('admin');
+    //     if (empty($permissions)) {
+    //         return $this->render('PermissionBundle:Admin:permission-error.html.twig');
+    //     }
+
+    //     $permissionNames = ArrayToolkit::column($permissions, 'code');
+    //     if (in_array('admin_homepage', $permissionNames)) {
+    //         return $this->forward('TopxiaAdminBundle:Default:homepage');
+    //     }
+
+    //     return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
+    //         'permission' => $permissions[0]
+    //     ));
+    // }
+
+    public function renderCurrentAdminHomepageAction($permission)
+    {
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);
+        $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+
+        if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
+            $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
+        }
+
+        $permissionPath = $this->container->get('permission.twig.permission_extension')->getPermissionPath($this, array('needs_context' => true, 'needs_environment' => true), $tabMenu);
+        return $this->redirect($permissionPath);
+    }
 
     public function indexAction(Request $request)
     {
