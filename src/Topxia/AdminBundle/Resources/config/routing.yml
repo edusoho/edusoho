@@ -700,7 +700,7 @@ admin_setting_payment:
 
 admin_cloud_video_overview:
     pattern:  /cloud/video/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoOverview }
 
 admin_cloud_setting_video:
     pattern:  /setting/cloud/video
