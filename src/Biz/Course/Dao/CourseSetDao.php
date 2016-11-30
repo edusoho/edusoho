@@ -8,5 +8,5 @@ interface CourseSetDao extends GeneralDaoInterface
 {
     public function get($id, $lock = false);
 
-    public function update($id, $fields);
+    public function update($id, array $fields);
 }
