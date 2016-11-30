@@ -68,7 +68,8 @@ $resources = array(
     'IM/MePush',
     'IM/Member',
     'IM/MemberSync',
-    'Captchas'
+    'Captchas',
+    'UsersBindMobile'
 );
 
 foreach ($resources as $res) {

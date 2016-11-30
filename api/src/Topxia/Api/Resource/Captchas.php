@@ -25,7 +25,7 @@ class Captchas extends BaseResource
         $user = $this->getCurrentUser();
         $newToken = $this->getTokenService()->makeToken($data['type'], array(
             'times'    => 5,
-            'duration' => 60 * 60,
+            'duration' => 60 * 2,
             'userId'   => $user['id'],
             'data'     => array(
                 'captcha_code' => $result['captcha_code'],

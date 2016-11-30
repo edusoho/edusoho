@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 
-class UsersBindMobile
+class UsersBindMobile extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
