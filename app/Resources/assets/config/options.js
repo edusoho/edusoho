@@ -24,7 +24,9 @@
     libsBuildOutputDir: 'web/build/libs',
 
     fontlimit: 8096,
-    imglimit: 20240
+    imglimit: 20240,
+
+    devtool: 'cheap-module-eval-source-map', // or 'source-map'
 
     port: 3030
   }
