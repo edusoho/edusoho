@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
+  require('echarts-debug');
 
-    exports.run = function() {
-        var liveTopChart = document.getElementById('liveTopChart');
-        if (liveTopChart) {
-            var liveTopChart = echarts.init(liveTopChart);
+	exports.run = function() {
+
+        var emailSendChart = document.getElementById('emailSendChart');
+        if (emailSendChart) {
+            var emailSendChart = echarts.init(emailSendChart);
             var items = app.arguments.items;
-
-             var liveoption = {
+            var option = {
                 title: {
                     text: ''
                 },
@@ -20,9 +20,9 @@ define(function(require, exports, module) {
                 },
                 yAxis: {},
                 series: [{
-                    name: '人数',
+                    name: '发送量(条)',
                     type: 'bar',
-                    data: items.count
+                    data: items.amount
                 }],
                 color:['#428BCA'],
                 grid:{
@@ -31,7 +31,8 @@ define(function(require, exports, module) {
                     backgroundColor:'#fff'
                 }
             };
-            liveTopChart.setOption(liveoption);
+            emailSendChart.setOption(option);
         }
-    }
+	}
+	
 });
