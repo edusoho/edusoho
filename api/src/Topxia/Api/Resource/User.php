@@ -52,7 +52,7 @@ class User extends BaseResource
         $type = $data['type'];
 
         if (empty($type)) {
-            return $this->errer('5005', '没有type字段');
+            return $this->error('5005', '没有type字段');
         }
 
         $method = 'call_'.$type;
