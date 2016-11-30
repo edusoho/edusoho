@@ -11,7 +11,7 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data   = $request->request->all();
-            $course = $this->getCourseService()->createCourse($data);
+            $this->getCourseService()->createCourse($data);
 
             return $this->listAction($request, $courseSetId);
         }
