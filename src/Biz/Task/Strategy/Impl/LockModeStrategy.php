@@ -7,7 +7,7 @@ use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
-class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
+class LockModeStrategy extends BaseLearningStrategy implements LearningStrategy
 {
 
     /**
@@ -48,24 +48,15 @@ class ByOrderStrategy extends BaseLearningStrategy implements LearningStrategy
         return $this->baseFindCourseItems($courseId);
     }
 
-
     public function getTasksRenderPage()
     {
-        return 'WebBundle:CourseManage:tasks-byOrder.html.twig';
+        return 'WebBundle:CourseManage/LockMode:tasks.html.twig';
     }
-
-    public function getCourseItemsRenderPage()
-    {
-        return 'WebBundle:CourseManage/Parts:list-item-byOrder.html.twig';
-    }
-
 
     protected function isFirstTask($task)
     {
         return 1 == $task['seq'];
     }
-
-
 
 
 }

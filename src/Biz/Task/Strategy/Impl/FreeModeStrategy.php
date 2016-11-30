@@ -11,7 +11,7 @@ use Biz\Task\Strategy\page;
  * Class FreeOrderStrategy
  * @package Biz\Task\Strategy\Impl
  */
-class FreeOrderStrategy extends BaseLearningStrategy implements LearningStrategy
+class FreeModeStrategy extends BaseLearningStrategy implements LearningStrategy
 {
 
     public function canLearnTask($task)
@@ -39,13 +39,6 @@ class FreeOrderStrategy extends BaseLearningStrategy implements LearningStrategy
 
     public function getTasksRenderPage()
     {
-        return 'WebBundle:CourseManage:tasks.html.twig';
+        return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
     }
-
-    public function getCourseItemsRenderPage()
-    {
-        return 'WebBundle:CourseManage/Parts:list-item.html.twig';
-    }
-
-
 }

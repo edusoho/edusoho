@@ -3,8 +3,8 @@
 namespace Biz\Task\Strategy;
 
 
-use Biz\Task\Strategy\Impl\ByOrderStrategy;
-use Biz\Task\Strategy\Impl\FreeOrderStrategy;
+use Biz\Task\Strategy\Impl\FreeModeStrategy;
+use Biz\Task\Strategy\Impl\LockModeStrategy;
 use Biz\Task\Strategy\Impl\TaskByOrderStrategy;
 use Biz\Task\Strategy\Impl\TaskFreeOrderStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -17,14 +17,13 @@ class StrategyContext
     {
         switch ($strategy_ind_id) {
             case 'byOrder':
-                $this->strategy = new ByOrderStrategy($biz);
+                $this->strategy = new LockModeStrategy($biz);
                 break;
             case 'freeOrder':
-                $this->strategy = new FreeOrderStrategy($biz);
+                $this->strategy = new FreeModeStrategy($biz);
                 break;
             default:
                 throw new NotFoundException('teach method strategy does not exist');
-
         }
     }
 

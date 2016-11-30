@@ -23,9 +23,4 @@ interface LearningStrategy
      */
     public function getTasksRenderPage();
 
-    /**
-     * 任务列表片段页面
-     * @return page path
-     */
-    public function getCourseItemsRenderPage();
 }

@@ -1,6 +1,7 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,24 +50,15 @@ class CourseManageController extends BaseController
         }
 
         $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks           = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $courseItems     = $this->getCourseService()->findCourseItems($course['id']);
         $tasksRenderPage = $this->createLearningStrategy($course)->getTasksRenderPage();
 
         return $this->render($tasksRenderPage, array(
             'tasks'     => $tasks,
             'courseSet' => $courseSet,
             'course'    => $course,
-        ));
-    }
-
-    public function courseListAction(Request $request, $course)
-    {
-        $courseItems          = $this->getCourseService()->findCourseItems($course['id']);
-        $courseListRenderPage = $this->createLearningStrategy($course)->getCourseItemsRenderPage();
-
-        return $this->render($courseListRenderPage, array(
-            'items'  => $courseItems,
-            'course' => $course
+            'items'     => $courseItems
         ));
     }
 
@@ -153,6 +145,9 @@ class CourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
