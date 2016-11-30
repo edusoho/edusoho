@@ -1,13 +1,13 @@
 <?php
 namespace Biz\Task\Strategy\Impl;
 
-
 use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Biz\Task\Strategy\page;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Topxia\Common\ArrayToolkit;
 
 /**
  * 自由学习策略
@@ -48,7 +48,27 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function findCourseItems($courseId)
     {
-        return $this->baseFindCourseItems($courseId);
+        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+
+        $items    = array();
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType']               = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+        array_walk($items, function (&$item) use ($tasks) {
+            if (!empty($tasks[$item['id']])) {
+                $item['tasks'] = $tasks[$item['id']];
+            } else {
+                $item['tasks'] = array();
+            }
+        });
+        return $items;
     }
 
 

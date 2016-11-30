@@ -5,7 +5,6 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Strategy\StrategyContext;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\TaskResultService;
@@ -34,8 +33,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $task = $strategy->updateTask($id, $fields);
         return $task;
-
-
     }
 
     public function updateSeq($id, $fields)
