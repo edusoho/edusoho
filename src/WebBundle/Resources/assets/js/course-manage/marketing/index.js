@@ -33,8 +33,8 @@ class Marketing {
 		$('input[name="isFree"]').on('change', function(event){
             $('.js-is-free').toggle($('input[name="isFree"]:checked').val() == 0 ? 'show' : 'hide');
         });
-        $('input[name="enableTryLook"]').on('change', function(event){
-            $('.js-enable-try-look').toggle($('input[name="enableTryLook"]:checked').val() == 0 ? 'show' : 'hide');
+        $('input[name="tryLookable"]').on('change', function(event){
+            $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
         });
 
 		$('#course-submit').click(function(evt){

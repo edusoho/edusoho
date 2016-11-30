@@ -59,6 +59,31 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($updated['title'], $result['title']);
     }
 
+    public function testUpdateCourseMarketing()
+    {
+        $course = array(
+            'title'       => '第一个教学计划',
+            'courseSetId' => 1,
+            'learnMode'   => 'byOrder',
+            'expiryMode'  => 'days',
+            'expiryDays'  => 0
+        );
+
+        $result = $this->getCourseService()->createCourse($course);
+
+        $result['isFree']         = 0;
+        $result['price']          = 111;
+        $result['vipLevelId']     = 1;
+        $result['buyable']        = 1;
+        $result['tryLookable']    = 1;
+        $result['$tryLookLength'] = 2;
+        $result['watchLimit']     = 3;
+        $result['services']       = array('xxx', 'yy', 'zzz');
+        $updated                  = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
+
+        $this->assertEquals(json_encode($result), json_encode($updated));
+    }
+
     public function testDelete()
     {
         $course = array(

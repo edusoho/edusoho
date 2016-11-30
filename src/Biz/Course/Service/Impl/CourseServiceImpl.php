@@ -3,8 +3,8 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -100,22 +100,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
             'price',
-            'memberRule',
-            'joinMode',
-            'enableTryLook',
+            'vipLevelId',
+            'buyable',
+            'tryLookable',
             'tryLookLength',
-            'lookLimit',
+            'watchLimit',
             'services'
         ));
 
-        if (!ArrayToolkit::requireds($fields, array('isFree', 'joinMode', 'enableTryLook'))) {
+        if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
         if ($fields['isFree'] == 1) {
             $fields['price']      = 0;
-            $fields['memberRule'] = 0;
+            $fields['vipLevelId'] = 0;
         }
-        if ($fields['enableTryLook'] == 0) {
+        if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
 

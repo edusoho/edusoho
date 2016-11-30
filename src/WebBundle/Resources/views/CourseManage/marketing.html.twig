@@ -31,7 +31,7 @@
     <label class="col-sm-2 control-label">{{'会员规则设置'|trans}}</label>
     <div class="col-sm-4">
       <!-- TODO 需要从会员插件里提取会员列表，这里用select展示，实际存储level_id -->
-      <input type="text" name="memberRule" value="{{course.memberRule|default('')}}">
+      <input type="text" name="vipLevelId" value="{{course.vipLevelId|default('')}}">
       <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
     </div>
   </div>
@@ -46,12 +46,12 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'加入方式'|trans}}</label>
     <div class="col-sm-10 radios">
-      <label for="modeJoin">
-        <input type="radio" id="modeJoin" name="joinMode" {% if course.joinMode|default('join') == 'join' %}checked{% endif %} value="join" data-val="{{ course.joinMode|default('join') == 'join' }}">
+      <label for="canBuy">
+        <input type="radio" id="canBuy" name="buyable" {% if course.buyable|default(1) == 1 %}checked{% endif %} value="1">
         {{'学员自己加入学习，也可以由老师来添加学员'|trans}}
       </label>
-      <label for="modeImport">
-        <input type="radio" id="modeImport" name="joinMode" {% if course.joinMode|default('join') == 'import' %}checked{% endif %} value="import">
+      <label for="cannotBuy">
+        <input type="radio" id="cannotBuy" name="buyable" {% if course.buyable|default(1) == 0 %}checked{% endif %} value="0">
         {{'只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学'|trans}}
       </label>
     </div>
@@ -68,17 +68,17 @@
     <label class="col-sm-2 control-label">{{'开启视频试看'|trans}}</label>
     <div class="col-sm-8 radios">
       <label for="enableTryLook">
-        <input type="radio" id="enableTryLook" name="enableTryLook" {% if course.enableTryLook|default(0) %}checked{% endif %} value="1">
+        <input type="radio" id="enableTryLook" name="tryLookable" {% if course.tryLookable|default(0) %}checked{% endif %} value="1">
         {{'是'|trans}}
       </label>
       <label for="disableTryLook">
-        <input type="radio" id="disableTryLook" name="enableTryLook" {% if course.enableTryLook|default(0) == 0 %}checked{% endif %} value="0">
+        <input type="radio" id="disableTryLook" name="tryLookable" {% if course.tryLookable|default(0) == 0 %}checked{% endif %} value="0">
         {{'否'|trans}}
       </label>
       <div class="help-block">{{'常用于收费视频内容的前几分钟免费试看'|trans}}</div>
     </div>
   </div>
-  <div class="form-group js-enable-try-look" {% if course.enableTryLook|default(false) == false %}style="display: none;"{% endif %}>
+  <div class="form-group js-enable-try-look" {% if course.tryLookable|default(0) == 0 %}style="display: none;"{% endif %}>
     <label class="col-sm-2 control-label">{{'试看时长'|trans}}</label>
     <div class="col-sm-8">
       <label><input type="text" name="trylookLength" value="{{course.trylookLength|default(1)}}">分钟</label>
@@ -87,7 +87,7 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'视频观看时长限制'|trans}}</label>
     <div class="col-sm-8">
-      <label><input type="text" name="lookLimit" value="{{course.lookLimit|default(0)}}">{{'倍单视频总时长'|trans}}</label>
+      <label><input type="text" name="watchLimit" value="{{course.watchLimit|default(0)}}">{{'倍单视频总时长'|trans}}</label>
       <div class="help-block">{{'0表示无限制'|trans}}</div>
     </div>
   </div>
