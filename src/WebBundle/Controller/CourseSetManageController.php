@@ -58,18 +58,17 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
-        $courseSet = array();
-        $tags      = array();
         if ($request->isMethod('POST')) {
-            $data      = $request->request->all();
-            $courseSet = $this->getCourseSetService()->updateCourseSet($id, $data);
-        } else {
-            $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+            $data = $request->request->all();
+            $this->getCourseSetService()->updateCourseSet($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
         }
+
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        $tags      = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
-
         return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
             'courseSet' => $courseSet,
             'tags'      => ArrayToolkit::column($tags, 'name')
@@ -78,13 +77,12 @@ class CourseSetManageController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $courseSet = array();
         if ($request->isMethod('POST')) {
-            $data      = $request->request->all();
-            $courseSet = $this->getCourseSetService()->updateCourseSetDetail($id, $data);
-        } else {
-            $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+            $data = $request->request->all();
+            $this->getCourseSetService()->updateCourseSetDetail($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -92,13 +90,13 @@ class CourseSetManageController extends BaseController
 
     public function coverAction(Request $request, $id)
     {
-        $courseSet = array();
         if ($request->isMethod('POST')) {
-            $data      = $request->request->all();
-            $courseSet = $this->getCourseSetService()->updateCourseSetCover($id, $data);
-        } else {
-            $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+            $data = $request->request->all();
+            $this->getCourseSetService()->updateCourseSetCover($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $id)));
         }
+
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if ($courseSet['cover']) {
             $courseSet['cover'] = json_decode($courseSet['cover'], true);
         }
