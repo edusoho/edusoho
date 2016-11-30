@@ -68,7 +68,8 @@ $resources = array(
     'IM/MePush',
     'IM/Member',
     'IM/MemberSync',
-    'ShortMessages'
+    'ShortMessages',
+    'UserPassword'
 );
 
 foreach ($resources as $res) {
