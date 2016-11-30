@@ -1,17 +1,11 @@
 {% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
 {% do load_script('quiz-question/testpaper-result') %}
-{% block testpaper_heading_status %}
-  {% if paperResult.status == 'finished' %}
-    <div class="label label-success">{{'批阅完成'|trans}}</div>
-  {% elseif paperResult.status == 'reviewing' %}
-    <div class="label label-info">{{'批阅中'|trans}}</div>
-  {% endif %}
+
+{% block paper_result_bar %}
+  {% include 'WebBundle:Testpaper/Part:paper-result-objective.html.twig' %}
 {% endblock %}
 
-{% block testpaper_heading_content %}
-
-  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
-
+{% block paper_warning %}
   {% if app.user.id == paperResult.userId %}
     {% if paperResult.status == 'reviewing' %}
       <div class="alert alert-warning">{{'老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
@@ -40,25 +34,29 @@
       {% endif %}
     {% endif %}
   {% endif %}
-
 {% endblock %}
 
-{% block testpaper_body_sidebar %}
+{% block paper_question_type_bar %}
+  {% include 'WebBundle:Testpaper/Part:paper-type-bar.html.twig' with {showTypeBar:showTypeBar|default(1), questionTypes:questionTypes} %}
+{% endblock %}
+
+
+{% block paper_sidebar %}
 
 {% if ( paperResult.status in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
 
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
       <div class="panel-body">
-        {% for type,count in paper.metas.counts if count > 0 %}
+        {% for type in questionTypes|default([]) %}
 
-          {% for item in items[type] %}
-            {% if item.questionType != 'material' %}
-              <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
-            {% else %}
-              {% for item in item.items|default([]) %}
-                <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+          {% for question in questions[type] %}
+            {% if question.type == 'material' %}
+              {% for questionSub in question.subs|default([]) %}
+                <a href="javascript:;" data-anchor="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and questionSub.type == 'essay' %}btn-warning{% elseif questionSub.testResult.status|default(null) == 'right' %}btn-success{% else %}btn-danger{% endif %}">{{ question.seq }}</a>
               {% endfor %}
+            {% else %}
+              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and question.type == 'essay' %}btn-warning{% elseif question.testResult.status|default(null) in ['partRight','wrong'] %}btn-danger{% else %}btn-success{% endif %}">{{ question.seq }}</a>
             {% endif %}
           {% endfor %}
 
@@ -66,10 +64,10 @@
         {% endfor %}
 
         <div class="testpaper-card-explain clearfix">
-            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">{{'正确'|trans}}</small>
-            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">{{'错误'|trans}}</small>
-            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">{{'待批阅'|trans}}</small>
-            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">{{'未做'|trans}}</small>
+          <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">{{'正确'|trans}}</small>
+          <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">{{'错误'|trans}}</small>
+          <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">{{'待批阅'|trans}}</small>
+          <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">{{'未做'|trans}}</small>
         </div>
       </div>
       <div class="panel-footer">

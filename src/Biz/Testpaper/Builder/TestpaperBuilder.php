@@ -7,7 +7,6 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\Exception\RuntimeException;
 use Biz\Testpaper\Builder\TestpaperLibBuilder;
 use Biz\Testpaper\Pattern\TestpaperPatternFactory;
-use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class TestpaperBuilder extends Factory implements TestpaperLibBuilder
@@ -33,20 +32,93 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $testpaper;
     }
 
-    public function filterFields($fields)
+    public function canBuild($options)
     {
-        if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
-            throw new \InvalidArgumentException('Testpaper field is invalid');
+        $questions      = $this->getQuestions($options);
+        $typedQuestions = ArrayToolkit::group($questions, 'type');
+        return $this->canBuildWithQuestions($options, $typedQuestions);
+    }
+
+    public function showTestItems($resultId)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        foreach ($items as $questionId => $item) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            if (!$question) {
+                $question = array(
+                    'isDeleted' => true,
+                    'stem'      => $this->getServiceKernel()->trans('此题已删除'),
+                    'score'     => 0,
+                    'answer'    => ''
+                );
+            }
+
+            $question['score']     = $item['score'];
+            $question['seq']       = $item['seq'];
+            $question['missScore'] = $item['missScore'];
+            $questionConfig        = $this->getQuestionService()->getQuestionConfig($item['questionType']);
+            $question['template']  = $questionConfig->getTemplate('do');
+
+            if (!empty($itemResults[$questionId])) {
+                $question['testResult'] = $itemResults[$questionId];
+            }
+
+            if ($question['parentId'] > 0) {
+                $formatItems['material'][$item['parentId']]['subs'][$questionId] = $question;
+            } else {
+                $formatItems[$item['questionType']][$questionId] = $question;
+            }
         }
+
+        return $formatItems;
+    }
+
+    public function filterFields($fields, $mode = 'create')
+    {
+        /*if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
+        throw new \InvalidArgumentException('Testpaper field is invalid');
+        }*/
+        $fields = ArrayToolkit::parts($fields, array(
+            'name',
+            'description',
+            'courseId',
+            'lessonId',
+            'type',
+            'metas',
+            'status',
+            'limitedTime',
+            'passedCondition',
+            'copyId',
+            'pattern',
+            'metas'
+        ));
 
         $filtedFields = array();
 
-        $filtedFields['name']        = $fields['name'];
-        $filtedFields['pattern']     = $fields['pattern'];
-        $filtedFields['description'] = empty($fields['description']) ? '' : $fields['description'];
-        $filtedFields['courseId']    = $fields['courseId'];
-        $filtedFields['lessonId']    = empty($fields['lessonId']) ? 0 : $fields['lessonId'];
-        $filtedFields['type']        = 'testpaper';
+        if (!empty($fields['name'])) {
+            $filtedFields['name'] = $fields['name'];
+        }
+
+        if (!empty($fields['pattern'])) {
+            $filtedFields['pattern'] = $fields['pattern'];
+        }
+
+        if (!empty($fields['description'])) {
+            $filtedFields['description'] = $fields['description'];
+        }
+
+        $filtedFields['courseId'] = $fields['courseId'];
+        $filtedFields['lessonId'] = empty($fields['lessonId']) ? 0 : $fields['lessonId'];
+        $filtedFields['type']     = 'testpaper';
 
         $filtedFields['metas']  = empty($fields['metas']) ? array() : $fields['metas'];
         $filtedFields['status'] = 'draft';
@@ -67,6 +139,41 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $filtedFields;
     }
 
+    public function updateSubmitedResult($resultId, $usedTime)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $testpaper       = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $items           = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
+
+        $fields = array(
+            'status' => $hasEssay ? 'reviewing' : 'finished'
+        );
+
+        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['objectiveScore'] = $accuracy['sumScore'];
+
+        $fields['score'] = 0;
+
+        if (!$hasEssay) {
+            $fields['score']       = $fields['objectiveScore'];
+            $fields['checkedTime'] = time();
+        }
+
+        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
+
+        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime']  = time();
+
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
+    }
+
     protected function createQuestionItems($questions)
     {
         $testpaperItems = array();
@@ -81,34 +188,26 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
                 $seq++;
             }
 
-            $testpaperItems[] = $this->getTestpaperService()->createTestpaperItem($item);
+            $testpaperItems[] = $this->getTestpaperService()->createItem($item);
         }
 
         return $testpaperItems;
-    }
-
-    public function canBuild($options)
-    {
-        $questions      = $this->getQuestions($options);
-        $typedQuestions = ArrayToolkit::group($questions, 'type');
-        return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
     protected function getQuestions($options)
     {
         $conditions        = array();
         $options['ranges'] = array_filter($options['ranges']);
-        if (!empty($options['ranges'])) {
-            $conditions['targets'] = $options['ranges'];
-        } else {
-            $conditions['targetPrefix'] = 'course-'.$options['courseId'];
-        }
 
+        if (!empty($options['ranges'])) {
+            $conditions['lessonIds'] = $options['ranges'];
+        }
+        $conditions['courseId'] = $options['courseId'];
         $conditions['parentId'] = 0;
 
-        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
     protected function canBuildWithQuestions($options, $questions)
@@ -161,7 +260,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getBiz()->service('Question:QuestionService');
     }
 
     protected function getServiceKernel()

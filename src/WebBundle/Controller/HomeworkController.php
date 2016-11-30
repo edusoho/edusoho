@@ -5,58 +5,153 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
-class CourseHomeworkController extends BaseController
+class HomeworkController extends BaseController
 {
-    public function showTestAction(Request $request, $courseId, $homeworkId, $resultId)
+    public function startDoAction(Request $request, $homeworkId)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        $homework              = $this->getHomeworkService()->getHomework($homeworkId);
-
+        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
         if (empty($homework)) {
-            throw $this->createNotFoundException();
+            throw new ResourceNotFoundException('homework', $homeworkId);
         }
 
-        if ($homework['courseId'] != $course['id']) {
-            throw $this->createNotFoundException();
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($homework['courseId']);
+
+        $result = $this->getTestpaperService()->startTestpaper($homeworkId, $homework['lessonId']);
+
+        if ($result['status'] == 'doing') {
+            return $this->redirect($this->generateUrl('homework_show', array(
+                'resultId' => $result['id']
+            )));
+        } else {
+            return $this->redirect($this->generateUrl('homework_result_show', array(
+                'resultId' => $result['id']
+            )));
+        }
+    }
+
+    public function doTestAction(Request $request, $resultId)
+    {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+        if (!$result) {
+            throw new ResourceNotFoundException('homeworkResult', $resultId);
         }
 
-        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($result['courseId']);
 
-        if (empty($lesson)) {
-            return $this->createMessageResponse('info', '作业所属课时不存在！');
+        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        if (!$homework) {
+            throw new ResourceNotFoundException('homework', $result['testId']);
         }
 
-        $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
 
-        return $this->render('HomeworkBundle:CourseHomework:do.html.twig', array(
-            'homework'         => $homework,
-            'itemSet'          => $itemSet,
-            'course'           => $course,
-            'lesson'           => $lesson,
-            'homeworkResultId' => $resultId,
-            'questionStatus'   => 'doing'
+        $activity = $this->getActivityService()->getActivity($result['lessonId']);
+
+        return $this->render('WebBundle:Homework:do.html.twig', array(
+            'paper'       => $homework,
+            'questions'   => $questions,
+            'course'      => $course,
+            'paperResult' => $result,
+            'activity'    => $activity,
+            'showTypeBar' => 0,
+            'showHeader'  => 0
         ));
     }
 
-    public function submitAction(Request $request, $courseId, $homeworkResultId)
+    public function showResultAction(Request $request, $resultId)
     {
-        if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $data = !empty($data['data']) ? $data['data'] : array();
+        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-            //$homeworkResult = $this->getHomeworkService()->getResult($homeworkResultId);
-            $homeworkResult = $this->getHomeworkService()->submitHomework($homeworkResultId, $data);
+        $homework = $this->getTestpaperService()->getTestpaper($homeworkResult['testId']);
 
-            if (!empty($homeworkResult) && !empty($homeworkResult['lessonId'])) {
-                return $this->createJsonResponse(array(
-                    'courseId'         => $courseId,
-                    'lessonId'         => $homeworkResult['lessonId'],
-                    'homeworkId'       => $homeworkResult['homeworkId'],
-                    'homeworkResultId' => $homeworkResult['id'],
-                    'userId'           => $homeworkResult['userId']
-                ));
+        if (!$homework) {
+            throw $this->createResourceNotFoundException('homework', $homeworkResult['testId']);
+        }
+
+        if (in_array($homeworkResult['status'], array('doing', 'paused'))) {
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+        }
+
+        $canLookHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
+
+        if (!$canLookHomework) {
+            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
+        }
+
+        $builder   = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);
+        $questions = $builder->showTestItems($homeworkResult['id']);
+
+        $student = $this->getUserService()->getUser($homeworkResult['userId']);
+
+        $attachments = $this->findAttachments($homework['id']);
+        return $this->render('WebBundle:Homework:do.html.twig', array(
+            'questions'   => $questions,
+            'paper'       => $homework,
+            'paperResult' => $homeworkResult,
+            'student'     => $student,
+            'attachments' => $attachments
+        ));
+    }
+
+    public function getItemSetByHomeworkId($homeworkId)
+    {
+        $items       = $this->getTestpaperService()->findItemsByTestId($homeworkId);
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $questions   = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        $validQuestionIds = array();
+
+        foreach ($indexdItems as $index => $item) {
+            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
+
+            if (empty($item['parentId'])) {
+                $indexdItems[$index] = $item;
+                continue;
             }
+
+            if (empty($indexdItems[$item['parentId']]['subItems'])) {
+                $indexdItems[$item['parentId']]['subItems'] = array();
+            }
+
+            $indexdItems[$item['parentId']]['subItems'][] = $item;
+            unset($indexdItems[$item['questionId']]);
+        }
+
+        $set = array(
+            'items'       => ArrayToolkit::index($indexdItems, 'questionId'),
+            'questionIds' => array(),
+            'total'       => 0
+        );
+
+        foreach ($set['items'] as $item) {
+            if (!empty($item['subItems'])) {
+                $set['total'] += count($item['subItems']);
+                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'], 'questionId'));
+            } else {
+                $set['total']++;
+                $set['questionIds'][] = $item['questionId'];
+            }
+        }
+
+        return $set;
+    }
+
+    public function submitAction(Request $request, $resultId)
+    {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
+            return $this->createJsonResponse(array('result' => false, 'message' => '作业已提交，不能再修改答案！'));
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+            $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
+
+            return $this->createJsonResponse(array('result' => true, 'message' => ''));
         }
     }
 
@@ -366,9 +461,36 @@ class CourseHomeworkController extends BaseController
         return $this->createJsonResponse($homework);
     }
 
+    protected function findAttachments($testId)
+    {
+        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $conditions  = array(
+            'type'        => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds'   => $questionIds
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
+        array_walk($attachments, function (&$attachment) {
+            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
+        });
+
+        return ArrayToolkit::group($attachments, 'dkey');
+    }
+
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->createService('Question:QuestionService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     protected function getUserService()
@@ -379,6 +501,11 @@ class CourseHomeworkController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getServiceKernel()

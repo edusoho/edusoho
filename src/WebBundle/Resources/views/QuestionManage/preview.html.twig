@@ -1,0 +1,13 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block body %}
+  <style>
+    body {
+      background-color: #fff;
+    }
+  </style>
+  <div style="padding:20px;">
+  {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+  </div>
+  <div id="attachment-modal" class="modal"></div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
+
+{% block paper_body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ '练习'|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':0}) }}</small>
+    </div>
+
+    <div class="panel-body">
+      <div class="question-set-items">
+        {% for question in questions %}
+          {% if question.isDelete|default(false) %}
+            {% include 'WebBundle:Question/Part:question-delete.html.twig' with {showScore:0,question:question}%}
+          {% else %}
+            {% include question.template with {showScore:0} %}
+          {% endif %}
+
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block finish_dialog_btn %}
+  <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('exercise_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('exercise_result_show', { resultId: paperResult.id|default(0) }) }}">{{'确认提交'|trans}}</button>
+{% endblock %}
+
+{% block paper_sidebar %}
+  {% include 'WebBundle:Homework/Part:paper-card.html.twig' %}
+{% endblock %}

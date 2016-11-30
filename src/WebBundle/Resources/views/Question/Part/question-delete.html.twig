@@ -1,0 +1,17 @@
+{% set showScore = showScore|default(1) %}
+<div class="testpaper-question testpaper-question-choice" id="question{{ question.id }}">
+  <div class="testpaper-question-body">
+    <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-seq-wrap">
+		    <div class="testpaper-question-seq">{{ question.seq|default('') }}</div>
+		    <div class="testpaper-question-score">
+		    	{% if showScore %}0{{'分'|trans}}{% endif %}
+		    </div>
+			</div>
+		</div>
+
+		<div class="testpaper-question-stem">
+    	{{'该题目已删除'|trans}}
+    </div>
+  </div>
+</div>

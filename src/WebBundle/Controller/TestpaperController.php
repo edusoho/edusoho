@@ -64,7 +64,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('testpaper', $testId);
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -75,17 +75,102 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
-        $testpaperResult = $this->getTestpaperService()->getUserDoingResult($testpaper['id'], $testpaper['courseId'], $lessonId, $testpaper['type'], $user['id']);
-
-        if (!$testpaperResult) {
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
-        }
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('testpaper_show', array('testId' => $testpaperResult['id'])));
+            return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         } else {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
         }
+    }
+
+    public function doTestAction(Request $request, $resultId)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
+            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
+        }
+
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
+
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+
+        $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
+
+        $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        if ($testpaperActivity['testMode'] == 'realTime') {
+            $testpaperResult['usedTime'] = time() - $activity['startTime'];
+        }
+
+        $attachments = $this->findAttachments($testpaper['id']);
+
+        return $this->render('WebBundle:Testpaper:start-do-show.html.twig', array(
+            'questions'         => $questions,
+            'limitTime'         => $testpaperResult['limitedTime'] * 60,
+            'paper'             => $testpaper,
+            'paperResult'       => $testpaperResult,
+            'activity'          => $activity,
+            'testpaperActivity' => $testpaperActivity,
+            'favorites'         => ArrayToolkit::column($favorites, 'questionId'),
+            'total'             => $total,
+            'attachments'       => $attachments,
+            'questionTypes'     => $this->getCheckedQuestionType($testpaper),
+            'showTypeBar'       => 1,
+            'showHeader'        => 0
+        ));
+    }
+
+    public function showResultAction(Request $request, $resultId)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+        if (!$testpaper) {
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
+        }
+
+        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+        }
+
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
+
+        if (!$canLookTestpaper) {
+            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看试卷！'));
+        }
+
+        $builder   = $this->getTestpaperService()->getTestpaperBuilder($testpaper['type']);
+        $questions = $builder->showTestItems($testpaperResult['id']);
+
+        $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);
+
+        $total = $this->makeTestpaperTotal($testpaper, $questions);
+
+        //$favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
+
+        $student = $this->getUserService()->getUser($testpaperResult['userId']);
+
+        $attachments = $this->findAttachments($testpaper['id']);
+        return $this->render('WebBundle:Testpaper:result.html.twig', array(
+            'questions'     => $questions,
+            'accuracy'      => $accuracy,
+            'paper'         => $testpaper,
+            'paperResult'   => $testpaperResult,
+            //'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
+            'total'         => $total,
+            'student'       => $student,
+            'source'        => $request->query->get('source', 'course'),
+            'attachments'   => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+        ));
     }
 
     public function reDoTestpaperAction(Request $request, $targetType, $targetId, $testId)
@@ -95,7 +180,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('testpaper', $testId);
         }
 
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
@@ -167,55 +252,28 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function doTestAction(Request $request, $testId)
+    protected function getCheckedQuestionType($testpaper)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($testId);
-
-        if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
+        $questionTypes = array();
+        foreach ($testpaper['metas']['counts'] as $type => $count) {
+            if ($count > 0) {
+                $questionTypes[] = $type;
+            }
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
-        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
-        $result           = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
-        $items            = $result['formatItems'];
-        $total            = $this->makeTestpaperTotal($testpaper, $items);
-
-        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-
-        //限时考试
-        $target = array();
-        $lesson = $this->getCourseService()->getLesson($testpaperResult['lessonId']);
-        if ($lesson['testMode'] == 'realTime') {
-            $testpaperResult['usedTime'] = time() - $lesson['testStartTime'];
-        }
-
-        $attachments = $this->findAttachments($testpaper['id']);
-
-        return $this->render('WebBundle:Testpaper:start-do-show.html.twig', array(
-            'items'       => $items,
-            'limitTime'   => $testpaperResult['limitedTime'] * 60,
-            'paper'       => $testpaper,
-            'paperResult' => $testpaperResult,
-            'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
-            //'id'          => $id,
-            'total'       => $total,
-            //'target'      => $target,
-            'attachments' => $attachments
-        ));
+        return $questionTypes;
     }
 
-    private function findAttachments($testId)
+    protected function findAttachments($testId)
     {
-        $items       = $this->getTestpaperService()->getTestpaperItems($testId);
+        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $conditions  = array(
             'type'        => 'attachment',
             'targetTypes' => array('question.stem', 'question.analysis'),
             'targetIds'   => $questionIds
         );
-        $attachments = $this->geUploadFileService()->searchUseFiles($conditions);
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
         array_walk($attachments, function (&$attachment) {
             $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
         });
@@ -223,68 +281,12 @@ class TestpaperController extends BaseController
         return ArrayToolkit::group($attachments, 'dkey');
     }
 
-    public function showResultAction(Request $request, $resultId)
-    {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
-        if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
-        }
-
-        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
-        }
-
-        $testpaper        = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
-
-        if (!$canLookTestpaper) {
-            throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看试卷！'));
-        }
-
-        $result   = $this->getTestpaperService()->showTestpaper($testpaperResult['id'], true);
-        $items    = $result['formatItems'];
-        $accuracy = $result['accuracy'];
-
-        $total = $this->makeTestpaperTotal($testpaper, $items);
-
-        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-
-        $student = $this->getUserService()->getUser($testpaperResult['userId']);
-
-        //$targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
-
-        //获取试卷载体
-        /*$target = array();
-
-        if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
-        $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
-        }*/
-        $attachments = $this->findAttachments($testpaper['id']);
-        return $this->render('WebBundle:Testpaper:result.html.twig', array(
-            'items'       => $items,
-            'accuracy'    => $accuracy,
-            'paper'       => $testpaper,
-            'paperResult' => $testpaperResult,
-            'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
-            //'id'          => $id,
-            'total'       => $total,
-            'student'     => $student,
-            'source'      => $request->query->get('source', 'course'),
-            //'targetId'    => $request->query->get('targetId', 0),
-            //'target'      => $target,
-            'attachments' => $attachments
-        ));
-    }
-
     public function testSuspendAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         if (!$testpaperResult) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在!'));
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
 //权限！
@@ -326,59 +328,30 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse(array('result' => false, 'message' => '试卷已提交，不能再修改答案！'));
         }
 
         if ($request->getMethod() == 'POST') {
-            $data     = $request->request->all();
-            $answers  = array_key_exists('data', $data) ? $data['data'] : array();
-            $usedTime = $data['usedTime'];
-            $user     = $this->getUser();
+            $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-            //提交变化的答案
-            $results = $this->getTestpaperService()->submitTestpaperAnswer($testpaperResult['id'], $answers);
-
-            //完成试卷，计算得分
-            $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($testpaperResult['id']);
-
-            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($testpaperResult['id']);
-
-            $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-            //试卷信息记录
-            $this->getTestpaperService()->finishTest($testpaperResult['id'], $user['id'], $usedTime);
-
-            //$course = $this->getCourseService()->getCourse($testpaper['courseId']);
-
-            //通知教师批阅时间  event
-            /*if ($this->getTestpaperService()->isExistsEssay($testResults)) {
-            $user = $this->getUser();
-
-            $message = array(
-            'id'       => $testpaperResult['id'],
-            'name'     => $testpaperResult['paperName'],
-            'userId'   => $user['id'],
-            'userName' => $user['nickname'],
-            'type'     => 'perusal'
-            );
-
-            foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
+            if ($activity['endTime'] && time() > $activity['endTime']) {
+                return $this->createJsonResponse(array('result' => false, 'message' => '考试时间已过，不能再提交！'));
             }
-            }*/
 
-            // @todo refactor. , wellming
-            /*$targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
+            $formData = $request->request->all();
 
-            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
-            $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
+            $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
-            if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
-            $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
-            $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+            if ($testpaperActivity['finishCondition']['type'] == 'submit') {
+                $response = array('result' => true, 'message' => '');
+            } elseif ($testpaperActivity['finishCondition']['type'] == 'score' && $paperResult['status'] == 'finished' && $paperResult['score'] > $testpaperActivity['finishCondition']['finishScore']) {
+                $response = array('result' => true, 'message' => '');
+            } else {
+                $response = array('result' => false, 'message' => '');
             }
-            }*/
 
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse($response);
         }
     }
 
@@ -391,7 +364,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
@@ -422,7 +395,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $result   = $this->getTestpaperService()->showTestpaper($id, true);
+        //$result   = $this->getTestpaperService()->showTestpaper($id, true);
         $items    = $result['formatItems'];
         $accuracy = $result['accuracy'];
 
@@ -483,8 +456,8 @@ class TestpaperController extends BaseController
                 $total[$type]['score']  = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
 
-                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])) {
-                    $total[$type]['missScore'] = $testpaper["metas"]["missScore"][$type];
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper['metas']['missScore'])) {
+                    $total[$type]['missScore'] = $testpaper['metas']['missScore'][$type];
                 } else {
                     $total[$type]['missScore'] = 0;
                 }
@@ -701,7 +674,17 @@ class TestpaperController extends BaseController
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('TestpaperActivity:TestpaperActivityService');
     }
 
     protected function getCourseService()
@@ -719,7 +702,7 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    protected function geUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

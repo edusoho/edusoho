@@ -11,6 +11,11 @@ class HomeworkActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        return $this->forward('WebBundle:Homework:startDo', array(
+            'homeworkId' => $activity['mediaId']
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

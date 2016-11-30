@@ -3,19 +3,12 @@
 {% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-nstslider.js','web/activity-manage/testpaper/index.js'], 300) %}
 
 {% block activity_content %}
-    <div class="form-group">
-      <div class="col-xs-2 control-label">
-        <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
-      </div>
-      <div class="col-xs-9 controls">
-        <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
-          {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
-        </select>
-        <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
-      </div>
+  <div class="form-group">
+    <div class="col-xs-2 control-label">
+      <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
     </div>
     <div class="col-xs-9 controls">
-      <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_manage_testpaper_items_get',{courseId:courseId}) }}">
+      <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
         {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
       </select>
       <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>

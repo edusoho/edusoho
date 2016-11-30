@@ -9,6 +9,22 @@ class TestpaperActivityController extends BaseController implements ActivityActi
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $user              = $this->getUser();
+        $activity          = $this->getActivityService()->getActivity($id);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaperResult   = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], 0, 'testpaper');
+
+        return $this->forward('WebBundle:Testpaper:doTestpaper', array(
+            'testId'   => $testpaperActivity['mediaId'],
+            'lessonId' => $activity['id']
+        ));
+
+        /*return $this->render('WebBundle:TestpaperActivity:show.html.twig', array(
+    'activity'          => $activity,
+    'testpaperActivity' => $testpaperActivity,
+    'testpaperResult'   => $testpaperResult,
+    'courseId'          => $activity['fromCourseId']
+    ));*/
     }
 
     public function editAction(Request $request, $id, $courseId)

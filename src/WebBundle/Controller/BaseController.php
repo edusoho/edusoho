@@ -2,9 +2,9 @@
 
 namespace WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -32,11 +32,6 @@ class BaseController extends Controller
         return $response->setCallback($callback);
     }
 
-    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
-    {
-        return new ResourceNotFoundException($resourceType, $resourceId, $message);
-    }
-
     /**
      * 创建消息提示响应
      *
@@ -60,6 +55,11 @@ class BaseController extends Controller
             'duration' => $duration,
             'goto'     => $goto
         ));
+    }
+
+    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
+    {
+        return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
     protected function setting($name, $default = null)

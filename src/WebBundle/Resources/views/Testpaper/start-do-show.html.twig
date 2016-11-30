@@ -1,16 +1,6 @@
 {% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
 
-{% block testpaper_heading_status %}
-  {% if isPreview|default(false) %}
-    <div class="label label-success">{{'试卷预览中'|trans}}</div>
-  {% else %}
-    {% if paperResult.status|default(null) == 'doing' %}
-      <div class="label label-primary testpaper-status-doing">{{'答题中'|trans}}</div>
-    {% endif %}
-  {% endif %}
-{% endblock %}
-
-{% block testpaper_heading_content %}
+{% block paper_description %}
   <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
   <div class="testpaper-metas">
     {{'共 %paper.itemCount% 题，总分 %paper.score% 分'|trans({'%paper.itemCount%': paper.itemCount,'%paper.score%': paper.score})}}
@@ -20,7 +10,11 @@
   </div>
 {% endblock %}
 
-{% block testpaper_body_sidebar %}
+{% block paper_question_type_bar %}
+  {% include 'WebBundle:Testpaper/Part:paper-type-bar.html.twig' with {showTypeBar:showTypeBar|default(1), questionTypes:questionTypes} %}
+{% endblock %}
+
+{% block paper_sidebar %}
   <div class="testpaper-card" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
     {% include 'WebBundle:Testpaper:testpaper-card.html.twig' %}
   </div>

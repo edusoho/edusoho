@@ -1,0 +1,21 @@
+<div class="testpaper-card" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+  <div class="panel panel-default">
+		<div class="panel-heading">
+			{{'答题卡'|trans}} 
+			<button class="btn btn-default btn-sm pull-right" id="homework-next-do" data-url="" data-return-url="">{{'下次再做'|trans}}</button>
+		</div>
+		<div class="panel-body">
+			{% for question in questions %}
+        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+      {% endfor %}
+		</div>
+		<div class="panel-footer">
+			{% if paperResult.status|default(null) == 'reviewing' %}
+        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" data-url"" id="homework-check-show-btn" data-return-url="">{{'完成批改'|trans}}</button>
+      {% elseif paperResult.status|default(null) == 'doing' %}
+      	<button id="paper-finish" class="btn btn-success btn-block" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</button>
+      {% endif %}
+
+		</div>
+	</div>
+</div>

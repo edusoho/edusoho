@@ -22,6 +22,8 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
             'open.course.delete'        => 'onOpenCourseDelete',
 
             'article.delete'            => 'onArticleDelete',
+            'question.create'           => 'onQuestionCreate',
+            'question.update'           => 'onQuestionUpdate',
             'question.delete'           => 'onQuestionDelete',
             'group.thread.post.delete'  => 'onGroupThreadPostDelete',
             'group.thread.delete'       => 'onGroupThreadDelete',
@@ -38,9 +40,41 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
         $this->deleteAttachment('article', $article['id']);
     }
 
+    public function onQuestionCreate(ServiceEvent $event)
+    {
+        $context    = $event->getSubject();
+        $argument   = $context['argument'];
+        $question   = $context['question'];
+        $attachment = $argument['attachment'];
+
+        if (empty($attachment)) {
+            return false;
+        }
+
+        $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+        $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+    }
+
+    public function onQuestionUpdate(ServiceEvent $event)
+    {
+        $context    = $event->getSubject();
+        $argument   = $context['argument'];
+        $question   = $context['question'];
+        $attachment = $argument['fields']['attachment'];
+
+        if (empty($attachment)) {
+            return false;
+        }
+
+        $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+        $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
+    }
+
     public function onQuestionDelete(ServiceEvent $event)
     {
-        $question = $event->getSubject();
+        $context  = $event->getSubject();
+        $question = $context['question'];
+
         $this->deleteAttachment('question.stem,question.analysis', $question['id']);
     }
 

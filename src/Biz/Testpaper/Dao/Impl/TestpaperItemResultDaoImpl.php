@@ -13,6 +13,11 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         'answer' => 'json'
     );
 
+    public function findItemResultsByResultId($resultId)
+    {
+        return $this->findInField('resultId', array($resultId));
+    }
+
     public function addItemAnswers($testPaperResultId, $answers, $testPaperId, $userId)
     {
         if (empty($answers)) {
@@ -125,12 +130,6 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
 
         $sql = "SELECT * FROM {$this->table} WHERE questionId IN ({$marks}) AND resultId = ?";
         return $this->db()->fetchAll($sql, $questionIds) ?: array();
-    }
-
-    public function findTestResultsByTestPaperResultId($testPaperResultId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE resultId = ?";
-        return $this->db()->fetchAll($sql, array($testPaperResultId)) ?: array();
     }
 
     public function findRightItemCountByTestPaperResultId($testPaperResultId)

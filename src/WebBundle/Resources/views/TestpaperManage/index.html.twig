@@ -1,17 +1,18 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
-{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 
 {% block title %}{{ '试卷管理'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testpaper' %}
 {% set parentId = parentId | default(null) %}
 {% set script_controller = 'test-paper/index' %}
+{% do script(['web/testpaper-manage/index.js']) %}
 
 {% block main %}
 
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      <a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}"
+      <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
          class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>{{ '创建试卷'|trans }}</a>
       {{ '试卷管理'|trans }}
     </div>
@@ -38,8 +39,8 @@
         {% else %}
           <tr>
             <td colspan="20">
-              <div class="empty">{{ '还没有试卷，请点击右上角按钮，'|trans }}<a
-                    href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">{{ '创建一个新试卷'|trans }}</a>
+              <div class="empty">{{ '还没有试卷，请点击右上角按钮，'|trans }}
+                <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}">{{ '创建一个新试卷'|trans }}</a>
               </div>
             </td>
           </tr>
@@ -48,17 +49,14 @@
       </table>
       <div>
         <label class="checkbox-inline"><input type="checkbox" autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ '试卷'|trans }}"
-                data-url="{{ path('course_manage_testpaper_deletes',{courseId:course.id}) }}">{{ '删除'|trans }}</button>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ '试卷'|trans }}" data-url="{{ path('course_manage_testpaper_deletes',{courseId:courseSet.id}) }}">{{ '删除'|trans }}</button>
       </div>
 
       {{ web_macro.paginator(paginator) }}
 
       <div class="text-muted mtl">
         {{ '提示：试卷一旦发布不能修改，发布后的试卷需要'|trans }}
-        <strong>
-          {{ '添加到课时'|trans }}
-        </strong>
+        <strong>{{ '添加到课时'|trans }}</strong>
         {{ '中才能正常使用。'|trans }}
       </div>
     </div>

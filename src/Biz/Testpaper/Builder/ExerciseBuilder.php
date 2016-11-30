@@ -3,7 +3,6 @@ namespace Biz\Testpaper\Builder;
 
 use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Builder\TestpaperLibBuilder;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -28,7 +27,43 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         }
     }
 
-    public function filterFields($fields)
+    public function showTestItems($resultId)
+    {
+        $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $exercise       = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
+
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id']);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        if ($itemResults) {
+            $questionIds = ArrayToolkit::column($itemResults, 'questionId');
+            $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        } else {
+            $conditions = array(
+                'types'    => $exercise['metas']['questionTypes'],
+                'courseId' => $exercise['courseId'],
+                'parentId' => 0
+            );
+            if (!empty($exercise['metas']['difficulty'])) {
+                $conditions['difficulty'] = $exercise['metas']['difficulty'];
+            }
+
+            if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
+                $conditions['lessonId'] = $exercise['lessonId'];
+            }
+
+            $questions = $this->getQuestionService()->search(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $exercise['itemCount']
+            );
+        }
+
+        return $this->formatQuestions($questions, $itemResults);
+    }
+
+    public function filterFields($fields, $mode = 'create')
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
             throw new \InvalidArgumentException('exercise field is invalid');
@@ -55,31 +90,53 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         return $filtedFields;
     }
 
-    protected function getQuestions($fields)
+    public function updateSubmitedResult($resultId, $usedTime)
     {
-        $conditions = array();
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
 
-        if (!empty($fields['difficulty'])) {
-            $conditions['difficulty'] = $fields['difficulty'];
+        $fields = array(
+            'status' => 'finished'
+        );
+
+        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $fields['score']          = $accuracy['sumScore'];
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        $fields['usedTime']    = $usedTime + $testpaperResult['usedTime'];
+        $fields['endTime']     = time();
+        $fields['checkedTime'] = time();
+
+        return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
+    }
+
+    protected function formatQuestions($questions, $questionResults)
+    {
+        $formatQuestions = array();
+        $i               = 1;
+        foreach ($questions as $question) {
+            if (!empty($questionResults[$question['id']])) {
+                $question['testResult'] = $questionResults[$question['id']];
+            }
+
+            $questionConfig       = $this->getQuestionService()->getQuestionConfig($question['type']);
+            $question['template'] = $questionConfig->getTemplate('do');
+            $question['seq']      = $i;
+
+            if ($question['parentId'] > 0) {
+                $formatQuestions[$question['parentId']]['subs'][$question['id']] = $question;
+            } else {
+                $formatQuestions[$question['id']] = $question;
+            }
+            $i++;
         }
 
-        if ($fields['range'] == 'lesson') {
-            $conditions['target'] = 'course-'.$fields['courseId'].'/lesson-'.$fields['lessonId'];
-        } else {
-            $conditions['targetPrefix'] = 'course-'.$fields['courseId'];
-        }
-        $conditions['types']                      = $fields['questionTypes'];
-        $conditions['parentId']                   = 0;
-        $conditions['excludeUnvalidatedMaterial'] = $fields['excludeUnvalidatedMaterial'];
-
-        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
-
-        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $formatQuestions;
     }
 
     protected function getQuestionService()
     {
-        return ServiceKernel::instance()->createService('Question.QuestionService');
+        return $this->getBiz()->service('Question:QuestionService');
     }
 
     protected function getTestpaperService()
