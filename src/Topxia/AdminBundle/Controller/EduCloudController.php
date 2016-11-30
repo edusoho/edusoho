@@ -1306,10 +1306,9 @@ class EduCloudController extends BaseController
     private function dealChartData($data)
     {
         $chartData['unit'] = $data['unit'];
-
         if (empty($data['items'])) {
-            for ($i=7; $i > 0; $i++) { 
-                $chartData['date'][] = date('Y-m-d', strtotime('-{i} days'));
+            for ($i=7; $i > 0; $i--) { 
+                $chartData['date'][] = date('Y-m-d', strtotime('-'.$i.'days'));
                 $chartData['count'][] = 0;
             }
             return $chartData;

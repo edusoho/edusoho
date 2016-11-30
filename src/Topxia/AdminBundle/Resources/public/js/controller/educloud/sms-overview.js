@@ -3,36 +3,33 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         //改版图表
-        var smsSendChart = document.getElementById('smsSendChart');
-        if (smsSendChart) {
-            var smsSendChart = echarts.init(document.getElementById('smsSendChart'));
-            var items = app.arguments.items;
-            var option = {
-                title: {
-                    text: ''
-                },
-                tooltip: {},
-                legend: {
-                    data:['时间']
-                },
-                xAxis: {
-                    data: items.date
-                },
-                yAxis: {},
-                series: [{
-                    name: '发送量(条)',
-                    type: 'bar',
-                    data: items.count
-                }],
-                color:['#428BCA'],
-                grid:{
-                    show:true,
-                    borderColor:'#fff',
-                    backgroundColor:'#fff'
-                }
-            };
-            smsSendChart.setOption(option);            
-        }
+        var smsSendChart = echarts.init(document.getElementById('smsSendChart'));
+        var chartData = app.arguments.chartData;
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {},
+            legend: {
+                data:['时间']
+            },
+            xAxis: {
+                data: chartData.date
+            },
+            yAxis: {},
+            series: [{
+                name: '发送量(条)',
+                type: 'bar',
+                data: chartData.count
+            }],
+            color:['#428BCA'],
+            grid:{
+                show:true,
+                borderColor:'#fff',
+                backgroundColor:'#fff'
+            }
+        };
+        smsSendChart.setOption(option);            
     }
 
 });

@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_edu_cloud_email_overview' %} 
 {% set script_controller = 'educloud/email-overview' %}        
-{% set script_arguments = {items: items}  %}
+{% set script_arguments = {chartData: chartData}  %}
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
