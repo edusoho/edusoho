@@ -30,117 +30,15 @@
   </div>
 </div>
 {% if items %}
-  <div class="panel panel-default panel-chart">
-    <div class="panel-heading">
-      搜索行为趋势
-      <span class="text-muted">（最近30天）</span>
-      <a class="pull-right" href="{{path('admin_cloud_search_detail')}}" target="_blank">更多&ensp;></a>
-    </div>
-    <div class="panel-body">
-      <div id="searchChart" style="width: 100%;height:400px;"></div>
-    </div>
-  </div>
-
-  <div class="page-heading">
-    搜索排行榜
+<div class="panel panel-default panel-chart">
+  <div class="panel-heading">
+    搜索行为趋势
     <span class="text-muted">（最近30天）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    <a class="pull-right" href="{{path('admin_cloud_search_detail')}}" target="_blank">更多&ensp;></a>
   </div>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          热词排行榜
-          <span class="text-muted">（TOP 10）
-            <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="在云搜索中，关键词被搜索的次数"></a>
-          </span>
-          <a class="pull-right" href="">更多&ensp;></a>
-        </div>
-        <div class="panel-body">
-          <table class="table table-hover search-part-table">
-            <tbody>
-              <tr>
-                <td><div class="part-num num-red">1</div></td>
-                <td class=""><div class="part-name">交互设计交互设计交互设计交互设计交互设计交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-              <tr>
-                <td><div class="part-num num-red">2</div></td>
-                <td><div class="part-name">交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-              <tr>
-                <td><div class="part-num num-red">3</div></td>
-                <td><div class="part-name">交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-              <tr>
-                <td><div class="part-num">4</div></td>
-                <td><div class="part-name">交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-              <tr>
-                <td><div class="part-num">5</div></td>
-                <td><div class="part-name">交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-              <tr>
-                <td><div class="part-num">6</div></td>
-                <td><div class="part-name">交互设计</div></td>
-                <td><div class="part-total text-muted">100</div></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          搜索课程落地排行榜
-          <span class="text-muted">（TOP 10）
-            <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="在云搜索的结果中，点击进入课程页面的次数"></a>
-          </span>
-          <a class="pull-right" href="">更多&ensp;></a>
-        </div>
-        <div class="panel-body">
-          <table class="table table-hover search-part-table">
-              <tbody>
-                <tr>
-                  <td><div class="part-num num-red">1</div></td>
-                  <td class=""><a href="" class="part-name">交互设计交互设计交互设计交互设计交互设计交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-                <tr>
-                  <td><div class="part-num num-red">2</div></td>
-                  <td><a href=""  class="part-name">交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-                <tr>
-                  <td><div class="part-num num-red">3</div></td>
-                  <td><a href=""  class="part-name">交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-                <tr>
-                  <td><div class="part-num">4</div></td>
-                  <td><a href=""  class="part-name">交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-                <tr>
-                  <td><div class="part-num">5</div></td>
-                  <td><a href=""  class="part-name">交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-                <tr>
-                  <td><div class="part-num">6</div></td>
-                  <td><a href=""  class="part-name">交互设计</a></td>
-                  <td><div class="part-total text-muted">100</div></td>
-                </tr>
-              </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+  <div class="panel-body">
+    <div id="searchChart" style="width: 100%;height:400px;"></div>
   </div>
+</div>
 {% endif %}
 {% endblock %}
