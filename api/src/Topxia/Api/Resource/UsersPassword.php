@@ -44,12 +44,20 @@ class UsersPassword extends BaseResource
         }
 
         $user = $this->getCurrentUser();
+        if ($user['id'] == 0) {
+            $targetUser = $this->getUserService()->getUserByVerifiedMobile($mobile);
+
+            if (empty($targetUser)) {
+                return $this->error('500', '该手机号未被绑定');
+            }
+
+            $user['id'] = $targetUser['id'];
+        }
+
         $this->getUserService()->changePassword($user['id'], $password);
         $this->getTokenService()->destoryToken($currentToken);
 
         return array('code' => 0);
-
-
     }
 
     public function filter($res)
