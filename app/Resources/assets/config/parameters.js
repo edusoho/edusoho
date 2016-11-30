@@ -24,6 +24,7 @@ const parameters = {
     "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
     "es-webuploader":['../libs/js/es-webuploader.js'],
     "es-image-crop":['../libs/js/es-image-crop.js'],
+    "easy-pie-chart":['../libs/js/easy-pie-chart.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -48,13 +49,27 @@ const parameters = {
       ]
     },
     {
-      name: 'justgage',
+      name: 'easy-pie-chart',
       ignore: [
-        '**/examples/**',
+        '**/demo/**',
+        '**/docs/**',
+        '**/src/**',
+        '**/test/**',
+        '**/dist/angular.easypiechart.js',
+        '**/dist/angular.easypiechart.min.js',
+        '**/dist/easypiechart.js',
+        '**/dist/easypiechart.min.js',
+        '.editorconfig',
+        '.npmignore',
+        '.travis.yml',
         'bower.json',
-        'package.json',
-        'README.md',
+        'Gruntfile.js',
+        'changelog.md',
+        'karma.conf.coffee',
         'LICENSE',
+        'package.js',
+        'package.json',
+        'Readme.md',
       ]
     }
   ]

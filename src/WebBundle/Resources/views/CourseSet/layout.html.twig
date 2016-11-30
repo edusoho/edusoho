@@ -1,88 +1,323 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ courseSet.title }} - {{ parent() }}{% endblock %}
-
-{% block keywords %}
-  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: courseSet} %}
-{% endblock %}
-
-{#{% block description %}{{ courseSet.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}#}
-
-{% set bodyClass = 'course-dashboard-page' %}
-{% set script_arguments = {course_uri: path('course_show', {id:courseSet.id})} %}
-
 {% block top_content %}
-  {#{% cache 'course/' ~ courseSet.id ~ '/user/' ~ member.userId|default(0) ~ '/header' 600 %}#}
-  {#{{ render(controller('WebBundle:CourseSet:Part/header',{course: courseSet, member: null})) }}#}
-  {#{% endcache %}#}
-  {% include 'WebBundle:CourseSet:Part/header.html.twig' with {courseSet: courseSet, member: null,course:course,} %}
 {% endblock %}
-{#
 
 {% block content %}
 
-  {% if is_plugin_installed('GroupSell') and not member %}
-    {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'course',targetId:course.id})) }}
-  {% endif %}
-  <div class="course-detail row">
-    <div class="col-lg-9 col-md-8  course-detail-main">
-
-      {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
-
-      <section class="es-section">
-
-        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id|default(0) ~ '/normal-nav' 600 %}
-          {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
-        {% endcache %}
-
-        {% block course_main %}{% endblock %}
-      </section>
-      {% block dashboard_relatedCoursesBlock %}
-        {% if setting('course.relatedCourses') == 1 %}
-          {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
-        {% endif %}
-      {% endblock %}
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="/">首页</a>
+    </li>
+    <li class="active">sdfdsf</li>
+  </ol>
+  <div class="es-section course-detail-section before clearfix">
+    <div class="course-detail-header">
+      <span class="tags">
+        <span class="tag-serialing"></span>
+      </span>
+      <div class="course-detail-title">
+        <h1>
+          sdfdsf
+          <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习二维码时效为半小时
+            </span>
+          </span>
+        </h1>
+        <div class="gray-dark">sdfsdf</div>
+      </div>
     </div>
+    <div class="course-detail-img">
+      <a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover"> <i class="es-icon es-icon-playcircleoutline"></i>
+      </a>
+      <img class="img-responsive" src="/assets/img/default/courseSet.png" alt="sdfdsf ">
+      <div class="course-detail-remask">
+        <span class="gray-color mrl">
+          <i class="es-icon es-icon-people mrm"></i>
+          122222 人
+        </span>
 
-    <div class="col-lg-3 col-md-4  course-sidebar">
-      {% block course_sidebar %}
-        {% if member|default(null) %}
-          {% cache 'course/' ~ course.id ~ '/sidebar/belongClassrooms/for/member' 600 %}
-            {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
-          {% endcache %}
-        {% endif %}
-
-        {% if course.parentId == 0 %}
-          {% cache 'course/' ~ course.id ~ '/not/classroom/course/sidebar/recommendClassrooms' 600 %}
-            {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
-          {% endcache %}
-        {% endif %}
-
-        {% cache 'course/' ~ course.id ~ '/sidebar/teachers' 600 %}
-          {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
-        {% endcache %}
-
-        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
-          {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
-        {% endcache %}
-        
-        {% cache 'course/' ~ course.id ~ '/sidebar/statuses' 600 %}
-          {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
-        {% endcache %}
-
-      {% endblock %}
+        <div class="score pull-right">显示评分</div>
+      </div>
     </div>
+    <div class="course-detail-info">
+      <div class="course-detail-item">
+        <span class="course-detail-title">价格</span>
+        <span class="text-blod gray-darker">¥</span>
+        <span class="discount-price">75</span>
+        ¥
+        <span class="original-price">118</span>
+      </div>
+      <div class="course-detail-content">
+        <div class="course-detail-item">
+          <span class="course-detail-title">教学计划</span>
+          <div class="course-detail-nav">
+            <ul class="nav nav-pills nav-pills-course">
+              <li>
+                <a href="javascript:;">默认教学计划</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="course-detail-item">
+          <span class="course-detail-title">学习方式</span>
+          <span class="gray-dark mrl">随到随学</span>
+          <span class="gray-dark">180天</span>
+        </div>
+      </div>
+    </div>
+    <div class="course-detail-bottom">
+      <a class="btn btn-default btn-lg mrm">会员</a>
+      <a class="btn btn-primary btn-lg">购买课程</a>
+    </div>
+    <ul class="course-operation clearfix ">
+      <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+        <a class="btn btn-default btn-xs " href="javascript:;">
+          <i class="es-icon es-icon-bookmark"></i>
+        </a>
+      </li>
+      <li id="favorite-btn" data-url="/course/2/favorite">
+        <a class="btn btn-default btn-xs  " href="javascript:;">
+          <i class="es-icon es-icon-bookmarkoutline"></i>
+        </a>
+      </li>
+      <li class="es-share top">
+        <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+          <i class="es-icon es-icon-share"></i>
+        </a>
+        <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+          <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+            <i class="es-icon es-icon-weixin"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+            <i class="es-icon es-icon-weibo"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+            <i class="es-icon es-icon-qq"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+            <i class="es-icon es-icon-qzone"></i>
+          </a>
+        </div>
+      </li>
+      <li>
+        <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+          <i class="es-icon es-icon-setting"></i>
+        </a>
+      </li>
+    </ul>
   </div>
+</div>
 
-  {% if is_plugin_installed('HowzhiPopAd') %}
-    {{ render(controller('HowzhiPopAdBundle:HowzhiPop:index')) }}
-  {% endif %}
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="/">首页</a></li>
+    <li class="active">sdfdsf </li>
+  </ol>
+  <div class="es-section course-detail-section after clearfix">
+    <div class="course-detail-header">
+      <span class="tags">
+        <span class="tag-serialing"></span>
+      </span>
+      <div class="course-detail-title">
+        <h1>
+          sdfdsf
+          <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
+            <span class="qrcode-popover">
+              <img src="" alt="">  
+              扫二维码继续学习
+          二维码时效为半小时
+            </span>
+          </span>
+        </h1>
+        <div class="gray-dark">sdfsdf</div>
+      </div>
+    </div>
+    <ul class="course-operation clearfix ">
+      <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+        <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+        </a>
+      </li>
+      <li id="favorite-btn" data-url="/course/2/favorite">
+        <a class="btn btn-default btn-xs  " href="javascript:;">
+          <i class="es-icon es-icon-bookmarkoutline"></i>
+        </a>
+      </li>
 
-  {% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
-  'title': course.title,
-  'desc': course.about|striptags|purify_and_trim_html,
-  'link': app.request.uri,
-  'imgUrl': fileurl(course.largePicture,'course.png'),
-  } %}
+      <li class="es-share top">
+        <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+          <i class="es-icon es-icon-share"></i>
+        </a>
 
-{% endblock %}#}
+        <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+
+          <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+            <i class="es-icon es-icon-weixin"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+            <i class="es-icon es-icon-weibo"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+            <i class="es-icon es-icon-qq"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+            <i class="es-icon es-icon-qzone"></i>
+          </a>
+        </div>
+      </li>
+      <li>
+        <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+          <i class="es-icon es-icon-setting"></i>
+        </a>
+      </li>
+    </ul>
+    <section class="course-freelearn-section">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="course-progress">
+            <div class="cricle-progress" id="freeprogress" data-percent="44.444444444444">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-7">
+          <ul class="course-learn-list">
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>
+                已完成
+              </p>
+              <span class="color-primary">09</span>
+              ／
+              <span class="mrl">24</span>
+              课时
+            </li>
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-today mrm"></i>
+                学习有效期
+              </p>
+              2016-0-28
+            </li>
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-book"></i>
+                下一课
+              </p>
+              PS移动工具
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-2 text-center">
+          <a class="btn btn-primary btn-lg">继续学习</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="/">首页</a>
+    </li>
+    <li class="active">sdfdsf</li>
+  </ol>
+
+  <div class="es-section course-detail-section after clearfix">
+    <div class="course-detail-header">
+      <span class="tags">
+        <span class="tag-serialing"></span>
+      </span>
+      <div class="course-detail-title">
+        <h1>
+          sdfdsf
+          <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习
+          二维码时效为半小时
+            </span>
+          </span>
+        </h1>
+        <div class="gray-dark">sdfsdf</div>
+      </div>
+    </div>
+
+    <ul class="course-operation clearfix ">
+      <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+        <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+        </a>
+      </li>
+      <li id="favorite-btn" data-url="/course/2/favorite">
+        <a class="btn btn-default btn-xs  " href="javascript:;">
+          <i class="es-icon es-icon-bookmarkoutline"></i>
+        </a>
+      </li>
+
+      <li class="es-share top">
+        <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+          <i class="es-icon es-icon-share"></i>
+        </a>
+
+        <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+
+          <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+            <i class="es-icon es-icon-weixin"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+            <i class="es-icon es-icon-weibo"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+            <i class="es-icon es-icon-qq"></i>
+          </a>
+          <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+            <i class="es-icon es-icon-qzone"></i>
+          </a>
+
+        </div>
+
+      </li>
+
+      <li>
+        <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+          <i class="es-icon es-icon-setting"></i>
+        </a>
+      </li>
+
+    </ul>
+
+    <section class="row course-orderlearn-section">
+      <div class="col-sm-5">
+        <span class="progress-img">
+          <div class="course-progress">
+            <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
+            </div>
+            <div class="cricle-progress" id="orderprogress" data-percent="44.444444444444">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </span>
+        <ul class="progress-info">
+          <li>
+            已完成
+            <span class="color-primary">3</span>
+            ／45个任务
+          </li>
+          <li>计划完成5个任务，落后计划5%</li>
+          <li>学习有效期</li>
+          <li>2015-08-09 ~ 2025-23-23</li>
+        </ul>
+      </div>
+      <div class="col-sm-7">
+        <div class="task-list"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock %}
+

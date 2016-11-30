@@ -36,6 +36,37 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
+    protected function beginTransaction()
+    {
+        $this->biz['db']->beginTransaction();
+    }
+
+    protected function commit()
+    {
+        $this->biz['db']->commit();
+    }
+
+    protected function rollback()
+    {
+        $this->biz['db']->rollback();
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz['logger'];
+    }
+
+    protected function createAccessDeniedException($message = '')
+    {
+        // $this->getLogger()->error($message, $context);
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '')
+    {
+        return new InvalidArgumentException($message);
+    }
+
     protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
@@ -44,15 +75,5 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function createServiceException($message = '')
     {
         return new ServiceException($message);
-    }
-
-    protected function createAccessDeniedException($message = '')
-    {
-        return new AccessDeniedException($message);
-    }
-
-    protected function createInvalidArgumentException($message = '')
-    {
-        return new InvalidArgumentException($message);
     }
 }

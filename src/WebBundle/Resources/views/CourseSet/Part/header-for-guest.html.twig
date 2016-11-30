@@ -1,0 +1,37 @@
+{% extends 'WebBundle:CourseSet:Part/header-layout.html.twig' %}
+
+{% set layoutClass = 'before' %}
+
+{% block before_content %}
+  {#<ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    <li class="active">{{ courseSet.title|raw }}</li>
+  </ol>#}
+
+
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
+    <li class="active">{{ courseSet.title|raw }}</li>
+  </ol>
+{% endblock %}
+
+{%  set courseVip = null %}
+{% set hasFavorited = null %}
+
+{% block content %}
+  {{header_macro.title(courseSet)}}
+  {{ header_macro.picture(courseSet, previewLesson,true) }}
+  {{ header_macro.info(courseSet, member, userVipStatus) }}
+  {{header_macro.bottom(courseSet)}}
+  <ul class="course-operation clearfix {% if courseVip and courseSet.parentId == '0' %}active{% endif %}">
+    {{ header_macro.favorite_btn(courseSet, hasFavorited) }}
+    {{ header_macro.share_btn(courseSet) }}
+    {{ header_macro.setting_btn(courseSet) }}
+    {{ header_macro.courseVip_btn(courseVip,courseSet) }}
+  </ul>
+{% endblock %}
+
+
