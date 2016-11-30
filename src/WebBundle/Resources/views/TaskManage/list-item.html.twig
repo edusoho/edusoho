@@ -1,4 +1,4 @@
-<li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ chapter.id }}">
+<li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ chapter.id }}">
   {% set tasks = array_index(chapter.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
   <div class="item-line"></div>
