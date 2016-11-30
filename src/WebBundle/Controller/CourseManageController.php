@@ -1,6 +1,8 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
@@ -8,8 +10,8 @@ class CourseManageController extends BaseController
     public function createAction(Request $request, $courseSetId)
     {
         if ($request->isMethod('POST')) {
-            $data   = $request->request->all();
-            $course = $this->getCourseService()->createCourse($data);
+            $data = $request->request->all();
+            $this->getCourseService()->createCourse($data);
 
             return $this->listAction($request, $courseSetId);
         }
@@ -42,17 +44,23 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $course      = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $courseItems     = $this->getCourseService()->findCourseItems($courseId);
+        $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
 
-        return $this->render('WebBundle:CourseManage:tasks.html.twig', array(
+        return $this->render($tasksRenderPage, array(
             'tasks'     => $tasks,
             'courseSet' => $courseSet,
             'course'    => $course,
             'items'     => $courseItems
         ));
+    }
+
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
@@ -136,6 +144,9 @@ class CourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');

@@ -16,7 +16,7 @@
     {% endif %}
   </div>
   <div class="item-actions">
-    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
+    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
     <a class="btn btn-gray" href="{{path('course_task_show', {id:task.id,courseId:task.courseId,preview:1})}}" target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
     <span class="dropdown">
       <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown mrs"aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}
@@ -30,7 +30,7 @@
   </div>
   <div class="settings-list js-settings-list clearfix">
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation'}) }}">
         <i class="es-icon es-icon-yulan mrm"></i>
         预习
       </a>
@@ -39,25 +39,25 @@
     <div class="settings-item js-settings-item active">
       <a href="javascript:;">
         <i class="es-icon es-icon-book mrm"></i>
-        课时学校
+        课时学习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise'}) }}">
         <i class="es-icon es-icon-exam mrm"></i>
         练习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task"> <i class="es-icon es-icon-mylibrarybooks mrm"></i>
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework'}) }}"> <i class="es-icon es-icon-mylibrarybooks mrm"></i>
         作业
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass'}) }}">
         <i class="es-icon es-icon-sun mrm"></i>
         课外
       </a>

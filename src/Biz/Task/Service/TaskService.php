@@ -22,7 +22,7 @@ interface TaskService
 
     public function startTask($taskId);
 
-    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP);
+    public function doTask($taskId, $time=TaskService::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 
@@ -51,6 +51,8 @@ interface TaskService
     public function isTaskLearned($taskId);
 
     public function getMaxSeqByCourseId($courseId);
+
+    public function getMaxNumberByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
 }
