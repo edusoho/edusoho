@@ -9,4 +9,6 @@ interface QuestionDao
     public function findQuestionsByParentId($id);
 
     public function deleteSubQuestions($parentId);
+
+    public function getQuestionCountGroupByTypes($conditions);
 }

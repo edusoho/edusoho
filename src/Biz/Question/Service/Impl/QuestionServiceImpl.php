@@ -139,6 +139,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return array_keys($questions);
     }
 
+    public function getCheckedQuestionTypes()
+    {
+        $types        = $this->getQuestionTypes();
+        $checkedTypes = array();
+
+        foreach ($types as $type) {
+            if ($this->getQuestionConfig($type)->isNeedCheck()) {
+                $checkedTypes[] = $type;
+            }
+        }
+
+        return $checkedTypes;
+    }
+
     public function waveCount($id, $diffs)
     {
         return $this->getQuestionDao()->wave(array($id), $diffs);
@@ -167,6 +181,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         return false;
+    }
+
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
     /**

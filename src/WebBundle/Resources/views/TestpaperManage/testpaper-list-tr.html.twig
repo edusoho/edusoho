@@ -33,17 +33,17 @@
 
       <ul class="dropdown-menu pull-right">
         {% if testpaper.status in ['draft', 'closed'] %}
-          <li><a class="open-testpaper" href="javascript:" title="{{'发布试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_publish', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-ok"></span> {{'发布试卷'|trans}}</a></li>
+          <li><a class="open-testpaper" href="javascript:" title="{{'发布试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_publish', {courseId:courseSet.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-ok"></span> {{'发布试卷'|trans}}</a></li>
         {% endif %}
         {% if testpaper.status == 'open' %}
-          <li><a class="close-testpaper" href="javascript:" title="{{'关闭试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_close', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'关闭试卷'|trans}}</a></li>
+          <li><a class="close-testpaper" href="javascript:" title="{{'关闭试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_close', {courseId:courseSet.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'关闭试卷'|trans}}</a></li>
         {% endif %}
 
         {% if testpaper.status == 'draft' %}
-          <li><a href="{{ path('course_manage_testpaper_update', {courseId:course.id,id:testpaper.id}) }}"><span class="glyphicon glyphicon-edit"></span> {{'编辑试卷信息'|trans}}</a></li>
-          <li><a href="{{ path('course_manage_testpaper_items', {courseId:course.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'管理题目'|trans}}</a></li>
-          <li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> {{'重新生成题目'|trans}}</a></li>
-          <li><a href="javascript:" data-name='{{'试卷'|trans}}' data-role='item-delete' data-url="{{ path('course_manage_testpaper_delete', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> {{'删除试卷'|trans}}</a></li>
+          <li><a href="{{ path('course_manage_testpaper_update', {courseId:courseSet.id,id:testpaper.id}) }}"><span class="glyphicon glyphicon-edit"></span> {{'编辑试卷信息'|trans}}</a></li>
+          <li><a href="{{ path('course_manage_testpaper_items', {courseId:courseSet.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'管理题目'|trans}}</a></li>
+          <li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> {{'重新生成题目'|trans}}</a></li>
+          <li><a href="javascript:" data-name='{{'试卷'|trans}}' data-role='item-delete' data-url="{{ path('course_manage_testpaper_delete', {courseId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> {{'删除试卷'|trans}}</a></li>
         {% endif %}
       </ul>
     </div>

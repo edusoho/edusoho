@@ -8,7 +8,7 @@ interface TestpaperResultDao
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
-    //old
+    public function findPaperResultsStatusNumGroupByStatus($testId);
 
     public function searchTestpapersScore($conditions);
 

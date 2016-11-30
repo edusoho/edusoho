@@ -62,4 +62,9 @@ class EssayQuestion extends Question
         return parent::commonFilter($fields, $mode);
     }
 
+    public function isNeedCheck()
+    {
+        return true;
+    }
+
 }

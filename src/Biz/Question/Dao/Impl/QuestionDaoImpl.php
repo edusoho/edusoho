@@ -23,6 +23,16 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
     }
 
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        $builder = $this->_createQueryBuilder($conditions)
+            ->select('count(id) as questionNum, type');
+
+        $builder->addGroupBy('type');
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     public function declares()
     {
         $declares['orderbys'] = array(

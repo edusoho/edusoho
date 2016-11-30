@@ -30,6 +30,21 @@ course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller:WebBundle:CourseManage:list}
 
+#testpaper
+course_set_manage_testpaper:  
+  path: /course_set/{id}/manage/testpaper
+  defaults: { _controller: WebBundle:TestpaperManage:index }
+
+course_set_manage_testpaper_create:
+  path: /course_set/{id}/manage/testpaper/create
+  defaults: { _controller: WebBundle:TestpaperManage:create }
+
+course_set_manage_testpaper_info:
+  path: /course_set/{id}/manage/testpaper/info
+  defaults: { _controller: WebBundle:TestpaperManage:info }
+  methods: [POST]
+
+
 course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
   defaults: {_controller: WebBundle:CourseManage:create}
@@ -57,6 +72,7 @@ course_set_manage_course_delete:
 course_set_manage_course_publish:  
   path: /course_set/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: WebBundle:CourseManage:publish}
+
 
 course_manage_tasks:
   path:  /course/{courseId}/manage/tasks
@@ -185,29 +201,43 @@ course_manage_question_picked:
 
 
 #testpaper
-course_manage_testpaper:
-  path: /course/{courseId}/manage/testpaper
-  defaults: { _controller: WebBundle:TestpaperManage:index }
+# course_manage_testpaper:
+#   path: /course/{courseId}/manage/testpaper
+#   defaults: { _controller: WebBundle:TestpaperManage:index }
 
-course_manage_testpaper_create:
-  path: /course/{courseId}/manage/testpaper/create
-  defaults: { _controller: WebBundle:TestpaperManage:create }
+# course_manage_testpaper_create:
+#   path: /course/{courseId}/manage/testpaper/create
+#   defaults: { _controller: WebBundle:TestpaperManage:create }
 
 course_manage_testpaper_publish:
-    path: /course/{courseId}/manage/testpaper/{id}/publish
-    defaults: { _controller: WebBundle:TestpaperManage:publish }
+  path: /course/{courseId}/manage/testpaper/{id}/publish
+  defaults: { _controller: WebBundle:TestpaperManage:publish }
+  #methods: [POST]
 
 course_manage_testpaper_close:
-    path: /course/{courseId}/manage/testpaper/{id}/close
-    defaults: { _controller: WebBundle:TestpaperManage:close }
+  path: /course/{courseId}/manage/testpaper/{id}/close
+  defaults: { _controller: WebBundle:TestpaperManage:close }
+  #methods: [POST]
+
+course_manage_testpaper_check:
+  path: /course/{courseId}/manage/testpaper/{resultId}/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:check }
+
+course_manage_testpaper_check_list:
+  path: /course/{courseId}/manage/testpaper/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:checkList }
+
+course_manage_testpaper_result_list:
+  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: WebBundle:CourseTestpaperManage:resultList }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items
   defaults: { _controller: WebBundle:TestpaperManage:questions }
 
-course_manage_testpaper_items_get:
-  path: /course/{courseId}/manage/testpaper/items/get
-  defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
+# course_manage_testpaper_items_get:
+#   path: /course/{courseId}/manage/testpaper/items/get
+#   defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
 
 testpaper_do:
   path: /lesson/{lessonId}/testpaper/{testId}/do

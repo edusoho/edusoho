@@ -2,12 +2,11 @@
 
 namespace WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 
 class BaseController extends Controller
 {
@@ -31,11 +30,6 @@ class BaseController extends Controller
     {
         $response = $this->createJsonResponse($data, $status, $headers);
         return $response->setCallback($callback);
-    }
-
-    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
-    {
-        return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
     /**
@@ -63,9 +57,9 @@ class BaseController extends Controller
         ));
     }
 
-    protected function setFlashMessage($level, $message)
+    protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
     {
-        $this->get('session')->getFlashBag()->add($level, $message);
+        return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
     protected function setting($name, $default = null)
@@ -83,4 +77,8 @@ class BaseController extends Controller
         return $biz->service($alias);
     }
 
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
 }

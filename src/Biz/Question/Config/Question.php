@@ -79,6 +79,10 @@ abstract class Question
 
     abstract public function judge($question, $answer);
 
+    abstract public function filter($fields, $mode);
+
+    abstract public function isNeedCheck();
+
     protected function commonFilter($fields, $mode)
     {
         if (!empty($fields['target']) && $fields['target'] > 0) {

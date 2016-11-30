@@ -20,6 +20,12 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type));
     }
 
+    public function findPaperResultsStatusNumGroupByStatus($testId)
+    {
+        $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? GROUP BY status";
+        return $this->db()->fetchAll($sql, array($testId)) ?: array();
+    }
+
     public function searchTestpapersScore($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)

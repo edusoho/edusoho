@@ -57,6 +57,8 @@ interface TestpaperService
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
+    public function findPaperResultsStatusNumGroupByStatus($testId);
+
     public function addTestpaperResult($fields);
 
     public function updateTestpaperResult($id, $fields);
@@ -94,8 +96,6 @@ interface TestpaperService
     //public function submitAnswers($resultId, $answers);
 
     public function finishTest($resultId, $formData);
-
-    public function makeTeacherFinishTest($id, $paperId, $teacherId, $field);
 
     public function updateTestpaperItems($testpaperId, $items);
 

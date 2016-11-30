@@ -22,7 +22,7 @@
         </thead>
         <tbody>
           <tr>
-            <th>答对</th>
+            <th>{{'答对'|trans}}</th>
             {% for type in questionTypes|default([]) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}

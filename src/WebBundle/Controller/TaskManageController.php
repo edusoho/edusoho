@@ -128,10 +128,10 @@ class TaskManageController extends BaseController
     //datetime to int
     protected function parseTimeFields($fields)
     {
-        if (isset($fields['startTime'])) {
+        if (isset($fields['startTime']) && $fields['startTime'] != 0) {
             $fields['startTime'] = strtotime($fields['startTime']);
         }
-        if (isset($fields['endTime'])) {
+        if (isset($fields['endTime']) && $fields['startTime'] != 0) {
             $fields['endTime'] = strtotime($fields['endTime']);
         }
 
