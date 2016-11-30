@@ -1,7 +1,6 @@
 import EsWebUploader from 'libs/js/es-webuploader.js';
 import notify from 'common/notify';
 
-console.log('EsWebUploader: ', EsWebUploader);
 class Cover {
 	constructor() {
 		this.init();
@@ -9,12 +8,14 @@ class Cover {
 
 	init(){
 		new EsWebUploader({
-			element: '#upload-picture-btn'
-		}).onUploadSuccess = function(file, response ) {
-			let url = $("#upload-picture-btn").data("gotoUrl");
-			notify('success', Translator.trans('上传成功！'), 1);
-			document.location.href = url;
-		};
+			element: '#upload-picture-btn',
+			onUploadSuccess: function(file, response ) {
+				let url = $("#upload-picture-btn").data("gotoUrl");
+				notify('success', Translator.trans('上传成功！'), 1);
+				
+				document.location.href = url;
+			}
+		});
 	}
 }
 

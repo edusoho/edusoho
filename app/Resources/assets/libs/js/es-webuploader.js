@@ -1,5 +1,5 @@
-import WebUploader from 'tb-webuploader/dist/webuploader.js';
-import SWF_PATH from 'tb-webuploader/dist/Uploader.swf';
+import WebUploader from './fex-webuploader/webuploader.js';
+import SWF_PATH from './fex-webuploader/Uploader.swf';
 import notify from 'common/notify';
 
 class EsWebUploader
@@ -21,6 +21,9 @@ class EsWebUploader
 	        fileVal: 'file',
 	        element: $(config.element)
 	  	}, config);
+
+	  	this.onFileQueued = config.onFileQueued || this.onFileQueued;
+	  	this.onUploadSuccess = config.onUploadSuccess || this.onUploadSuccess;
 
 	  	let ele = $(config.element);
 	  	let uploader = WebUploader.create({
@@ -78,5 +81,4 @@ class EsWebUploader
   	}
 }
 
-// console.log('new es-uploader:', new EsWebUploader("#upload-picture-btn"));
 export default EsWebUploader;

@@ -118,17 +118,22 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->update($id, $fields);
     }
 
-    public function changeCourseSetCover($id, $fields)
+    public function changeCourseSetCover($id, $coverArray)
     {
         if (!$this->hasCourseSetManagerRole($id)) {
             throw $this->createAccessDeniedException('You have no access to Course Set Management');
         }
 
-        if (empty($fields['cover'])) {
+        if (empty($coverArray)) {
             throw $this->createInvalidArgumentException("Invalid Param: cover");
         }
 
-        return $this->getCourseSetDao()->update($id, $fields);
+        $covers = array();
+        foreach ($coverArray as $cover) {
+            $covers[$cover['type']] = $this->getFileService()->getFile($cover['id'])['uri'];
+        }
+
+        return $this->getCourseSetDao()->update($id, array('cover' => json_encode($covers)));
     }
 
     public function deleteCourseSet($id)
@@ -174,5 +179,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getTagService()
     {
         return ServiceKernel::instance()->createService('Taxonomy.TagService');
+    }
+
+    protected function getFileService()
+    {
+        return ServiceKernel::instance()->createService('Content.FileService');
     }
 }

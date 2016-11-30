@@ -99,6 +99,9 @@ class CourseSetManageController extends BaseController
         } else {
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         }
+        if ($courseSet['cover']) {
+            $courseSet['cover'] = json_decode($courseSet['cover'], true);
+        }
         return $this->render('WebBundle:CourseSetManage:cover.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -110,11 +113,12 @@ class CourseSetManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $this->getCourseService()->changeCourseSetCover($courseSet['id'], $data["images"]);
+            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data["images"], true));
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get("fileId");
+
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render('WebBundle:CourseSetManage:cover-crop.html.twig', array(
@@ -153,5 +157,10 @@ class CourseSetManageController extends BaseController
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getFileService()
+    {
+        return ServiceKernel::instance()->createService('Content.FileService');
     }
 }
