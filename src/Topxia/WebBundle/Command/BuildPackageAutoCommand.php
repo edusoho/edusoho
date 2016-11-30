@@ -113,7 +113,7 @@ class BuildPackageAutoCommand extends BaseCommand
                     continue;
                 }
 
-                if (empty($module) && strpos($opFile, 'vendor2') !== 0 && strpos($opFile, 'vendor') === 0){
+                if (empty($module) && strpos($opFile, 'vendor') === 0){
                     $this->output->writeln("<comment>忽略vendor</comment>");
                     continue;
                 }
