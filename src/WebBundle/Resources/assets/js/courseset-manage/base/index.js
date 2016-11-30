@@ -7,7 +7,7 @@ class Base
 
 	init(){
 		//init ui components
-		$('#courseSet_tags').select2({
+		$('#tags').select2({
 		    ajax: {
 		        url: '/tag/match_jsonp#',
 		        dataType: 'json',

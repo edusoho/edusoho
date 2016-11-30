@@ -60,7 +60,7 @@ class CourseManageController extends BaseController
         $course = array();
         if ($request->isMethod('POST')) {
             $data   = $request->request->all();
-            $course = $this->getCourseService()->updateCourse($data['id'], $data);
+            $course = $this->getCourseService()->updateCourse($courseId, $data);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         }
@@ -74,7 +74,13 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $course = array();
+        if ($request->isMethod('POST')) {
+            $data   = $request->request->all();
+            $course = $this->getCourseService()->updateCourseMarketing($courseId, $data);
+        } else {
+            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        }
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
             'courseSet' => $courseSet,

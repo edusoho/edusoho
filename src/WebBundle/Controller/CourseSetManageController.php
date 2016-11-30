@@ -59,17 +59,18 @@ class CourseSetManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $courseSet = array();
+        $tags      = array();
         if ($request->isMethod('POST')) {
             $data      = $request->request->all();
             $courseSet = $this->getCourseSetService()->updateCourseSet($id, $data);
+            var_dump($courseSet);exit();
         } else {
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         }
-
-        $tags = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
         }
+
         return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
             'courseSet' => $courseSet,
             'tags'      => ArrayToolkit::column($tags, 'name')

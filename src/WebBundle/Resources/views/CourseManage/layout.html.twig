@@ -12,7 +12,9 @@
         <li class="{% if active == 'tasks' %}active{% endif %}">
         	<a href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划任务'|trans}}</a>
         </li>
-        <li class="{% if active == 'info' %}active{% endif %}"><a href="javascript:;">{{'计划设置'|trans}}</a></li>
+        <li class="{% if active == 'info' %}active{% endif %}">
+          <a href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划设置'|trans}}</a>
+        </li>
         <li class="{% if active == 'marketing' %}active{% endif %}">
         	<a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
         </li>

@@ -93,6 +93,34 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateCourseMarketing($id, $fields)
+    {
+        $course = $this->tryManageCourse($id);
+        $fields = ArrayToolkit::parts($fields, array(
+            'isFree',
+            'price',
+            'memberRule',
+            'joinMode',
+            'enableTryLook',
+            'tryLookLength',
+            'lookLimit',
+            'services'
+        ));
+
+        if (!ArrayToolkit::requireds($fields, array('isFree', 'joinMode', 'enableTryLook'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+        if ($fields['isFree'] == 1) {
+            $fields['price']      = 0;
+            $fields['memberRule'] = 0;
+        }
+        if ($fields['enableTryLook'] == 0) {
+            $fields['tryLookLength'] = 0;
+        }
+
+        return $this->getCourseDao()->update($id, $fields);
+    }
+
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
@@ -153,7 +181,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $items = array();
         $user  = $this->getCurrentUser();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;

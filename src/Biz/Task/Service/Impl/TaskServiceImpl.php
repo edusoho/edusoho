@@ -166,13 +166,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
-    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP)
+    public function doingTask($taskId, $time = TaskService::LEARN_TIME_STEP)
     {
         $task = $this->tryTakeTask($taskId);
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-        if(empty($taskResult)){
+        if (empty($taskResult)) {
             throw new AccessDeniedException('任务不在进行状态');
         }
 

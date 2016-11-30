@@ -16,9 +16,9 @@ class C2CourseMarketing extends Migration
             ALTER TABLE c2_course ADD COLUMN price int(11) DEFAULT 0;
             ALTER TABLE c2_course ADD COLUMN memberRule varchar(1024) DEFAULT '';
             ALTER TABLE c2_course ADD COLUMN joinMode varchar(32) DEFAULT 'join' COMMENT 'join,import';
-            ALTER TABLE c2_course ADD COLUMN enableTrylook tinyint(1) DEFAULT 0;
+            ALTER TABLE c2_course ADD COLUMN enableTryLook tinyint(1) DEFAULT 0;
             ALTER TABLE c2_course ADD COLUMN tryLookLength int(11) DEFAULT 0;
-            ALTER TABLE c2_course ADD COLUMN trylookLimit int(11) DEFAULT 0;
+            ALTER TABLE c2_course ADD COLUMN lookLimit int(11) DEFAULT 0;
             ALTER TABLE c2_course ADD COLUMN services text;
         ");
     }
@@ -35,9 +35,9 @@ class C2CourseMarketing extends Migration
             ALTER TABLE c2_course DROP COLUMN price;
             ALTER TABLE c2_course DROP COLUMN memberRule;
             ALTER TABLE c2_course DROP COLUMN joinMode;
-            ALTER TABLE c2_course DROP COLUMN enableTrylook;
+            ALTER TABLE c2_course DROP COLUMN enableTryLook;
             ALTER TABLE c2_course DROP COLUMN tryLookLength;
-            ALTER TABLE c2_course DROP COLUMN trylookLimit;
+            ALTER TABLE c2_course DROP COLUMN lookLimit;
             ALTER TABLE c2_course DROP COLUMN services;
         ");
     }

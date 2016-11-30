@@ -3,32 +3,36 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'marketing' %}
+{% do script(['libs/jquery-validation.js','web/course-manage/marketing/index.js']) %}
 
 {% block course %}
-<form class="form-horizontal">
+<form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'收费免费'|trans}}</label>
     <div class="col-sm-8 radios">
-      <label for="modeCharge">
-        <input type="radio" id="modeCharge" name="isFree" value="0" {% if course.isFree|default(0) == 1 %}checked{% endif %}>
+      <label for="chargeMode">
+        <input type="radio" id="chargeMode" name="isFree" value="0" {% if course.isFree|default(0) == 0 %}checked{% endif %}>
         {{'收费'|trans}}
       </label>
-      <label for="modeFree">
-        <input type="radio" id="modeFree" name="isFree" value="1" {% if course.isFree|default(0) == 0 %}checked{% endif %}>
+      <label for="freeMode">
+        <input type="radio" id="freeMode" name="isFree" value="1" {% if course.isFree|default(0) == 1 %}checked{% endif %}>
         {{'免费'|trans}}
       </label>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group js-is-free" {% if course.isFree|default(0) == 1 %}style="display: none;"{% endif %}>
     <label class="col-sm-2 control-label">{{'价格'|trans}}</label>
     <div class="col-sm-4">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       <input type="text" name="price" value="{{course.price|default(0)}}">
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group js-is-free" {% if course.isFree|default(0) == 1 %}style="display: none;"{% endif %}>
     <label class="col-sm-2 control-label">{{'会员规则设置'|trans}}</label>
     <div class="col-sm-4">
+      <!-- TODO 需要从会员插件里提取会员列表，这里用select展示，实际存储level_id -->
       <input type="text" name="memberRule" value="{{course.memberRule|default('')}}">
+      <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
     </div>
   </div>
   {# <div class="form-group">
@@ -43,11 +47,11 @@
     <label class="col-sm-2 control-label">{{'加入方式'|trans}}</label>
     <div class="col-sm-10 radios">
       <label for="modeJoin">
-        <input type="radio" id="modeJoin" name="joinMode" {% if course.joinMode|default('join') == 'join' %}checked{% endif %}>
+        <input type="radio" id="modeJoin" name="joinMode" {% if course.joinMode|default('join') == 'join' %}checked{% endif %} value="join" data-val="{{ course.joinMode|default('join') == 'join' }}">
         {{'学员自己加入学习，也可以由老师来添加学员'|trans}}
       </label>
       <label for="modeImport">
-        <input type="radio" id="modeImport" name="joinMode" {% if course.joinMode|default('join') == 'import' %}checked{% endif %}>
+        <input type="radio" id="modeImport" name="joinMode" {% if course.joinMode|default('join') == 'import' %}checked{% endif %} value="import">
         {{'只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学'|trans}}
       </label>
     </div>
@@ -64,26 +68,26 @@
     <label class="col-sm-2 control-label">{{'开启视频试看'|trans}}</label>
     <div class="col-sm-8 radios">
       <label for="enableTryLook">
-        <input type="radio" id="enableTryLook" name="enableTryLook" {% if course.enableTryLook|default(false) %}checked{% endif %}>
+        <input type="radio" id="enableTryLook" name="enableTryLook" {% if course.enableTryLook|default(0) %}checked{% endif %} value="1">
         {{'是'|trans}}
       </label>
       <label for="disableTryLook">
-        <input type="radio" id="disableTryLook" name="enableTryLook" {% if course.enableTryLook|default(false) == false %}checked{% endif %}>
+        <input type="radio" id="disableTryLook" name="enableTryLook" {% if course.enableTryLook|default(0) == 0 %}checked{% endif %} value="0">
         {{'否'|trans}}
       </label>
       <div class="help-block">{{'常用于收费视频内容的前几分钟免费试看'|trans}}</div>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group js-enable-try-look" {% if course.enableTryLook|default(false) == false %}style="display: none;"{% endif %}>
     <label class="col-sm-2 control-label">{{'试看时长'|trans}}</label>
     <div class="col-sm-8">
-      <label><input type="text" name="trylookLength">分钟</label>
+      <label><input type="text" name="trylookLength" value="{{course.trylookLength|default(1)}}">分钟</label>
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'视频观看时长限制'|trans}}</label>
     <div class="col-sm-8">
-      <label><input type="text" name="tryLookLimit">{{'倍单视频总时长'|trans}}</label>
+      <label><input type="text" name="lookLimit" value="{{course.lookLimit|default(0)}}">{{'倍单视频总时长'|trans}}</label>
       <div class="help-block">{{'0表示无限制'|trans}}</div>
     </div>
   </div>
