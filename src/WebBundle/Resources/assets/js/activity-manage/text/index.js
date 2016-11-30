@@ -6,19 +6,9 @@ class Text{
     }
 
     _init() {
-        $('#condition-select').on('change',event=>this._change(event));
         this._inItStep2form();
-        initEditor($('[name="content"]'));
-    }
-
-    _change(event) {
-        var val = $(event.currentTarget).children('option:selected').val();
-        if(val != 'auto') {
-            $("#condition-group").addClass('hidden');
-            return;
-        }
         this._inItStep3form();
-        $("#condition-group").removeClass('hidden');
+        initEditor($('[name="content"]'));
     }
 
     _inItStep2form() {

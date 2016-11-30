@@ -2,7 +2,6 @@
 namespace WebBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
-use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -80,15 +79,6 @@ class ActivityController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->getBiz()->service('Task:TaskService');
-    }
-
 
     protected function getCourseService()
     {

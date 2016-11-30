@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Topxia\Common\ArrayToolkit;
 
 class TagsDataTag extends CourseBaseDataTag implements DataTag
 {
@@ -23,7 +24,8 @@ class TagsDataTag extends CourseBaseDataTag implements DataTag
         $tags = array();
 
         if (isset($arguments['tagIds']) && !empty($arguments['tagIds'])) {
-            $tags = $this->getTagService()->findTagsByIds($arguments['tagIds']);
+            $tagIds = ArrayToolkit::column($arguments['tagIds'], 'id');
+            $tags = $this->getTagService()->findTagsByIds($tagIds);
         } elseif (isset($arguments['count']) && !empty($arguments['count'])) {
             $this->checkCount($arguments);
             $tags = $this->getTagService()->findAllTags(0, $arguments['count']);

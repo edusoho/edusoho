@@ -3,95 +3,74 @@
 {% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
 
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
-{% set bodyClass = "task-dashboard-page js-task-dashboard-page" %}
+{% set bodyClass = "" %}
 {% do css(['web.css']) %}
 {% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','web/task/index.js']) %}
 
 {% block body %}
-  <div id="hidden-data">
-    <input type="hidden" name="course-id" value="{{ task.courseId }}">
-    <input type="hidden" name="task-id" value="{{ task.id }}">
-  </div>
-  <div class="dashboard-content" id="dashboard-content">
-    <div class="dashboard-header">
-      <a class="back-link" href="javascript:;">
-        <i class="es-icon es-icon-chevronleft"></i>
-      </a>
-      任务1：{{ task.title }}
-    </div>
-    <div class="dashboard-body">
-      <iframe id="task-content-iframe" class="task-content-iframe"
-              data-event-url="{{ path('course_activity_trigger', {courseId: task.courseId, activityId: task.activityId}) }}"
-              src="{{path('course_task_activity_show',{ id:task.id,courseId:task.courseId ,preview:preview})}}"
-              style="width:100%;height:100%;border:0px">
-      </iframe>
-    </div>
-    <div class="dashboard-footer">
-      <div class="state-opration"> 
-        <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
-        <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>XXX任务已完成</a>
-        <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-placement="top" data-content='
-          <div class="task-state-modal task-state-modal-xs">
-            <div class="title">
-              <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
-            </div>
-            <div class="content">
-              <div class="content-title">《 第1个任务：集合的定义和使用 》</div>
-              学习进度
-              <div class="content-progress">
-                <div class="progress progress-radius mts mb0">
-                  <div class="progress-bar  progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:50%">60%</div>
+  <div class="task-dashboard-page js-task-dashboard-page">
+    <div class="dashboard-content" id="dashboard-content">
+      <div class="dashboard-header">
+        <a class="back-link" href="javascript:;">
+          <i class="es-icon es-icon-chevronleft"></i>
+        </a>
+        任务1：{{ task.title }}
+      </div>
+      <div class="dashboard-body">
+        <iframe id="task-content-iframe" class="task-content-iframe"
+          data-event-url="{{ path('course_activity_trigger', {courseId: task.courseId, activityId: task.activityId}) }}"
+          src="{{path('course_task_activity_show',{ id:task.id,courseId:task.courseId })}}"
+          style="width:100%;height:100%;border:0px">
+        </iframe>
+      </div>
+      <div class="dashboard-footer ">
+        <div class="state-opration "> 
+          <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
+          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>XXX任务已完成</a>
+          <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-placement="top" data-content='
+            <div class="task-state-modal task-state-modal-xs">
+              <div class="title">
+                <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
+              </div>
+              <div class="content">
+                <div class="content-title">《 第1个任务：集合的定义和使用 》</div>
+                学习进度
+                <div class="content-progress">
+                  <div class="progress progress-radius mts mb0">
+                    <div class="progress-bar  progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:50%">60%</div>
+                  </div>
+
                 </div>
               </div>
-            </div>
-            <div class="footer text-right">
-              <a class="btn btn-primary btn-sm">下一任务</a>
-            </div>
-          </div>'>
-          <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
+              <div class="footer text-right">
+                <a class="btn btn-primary btn-sm">下一任务</a>
+              </div>
+            </div>'>
+            <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
+          </a>
+        </div>
+        <a type="button" class="btn btn-transparent btn-learn js-btn-learn" data-toggle="modal"  data-target="#myModal">
+          <i class="es-icon es-icon-undone-check doing"></i>
+          <i class="es-icon es-icon--check-circle done"></i>
+          学过了
         </a>
+        <a type="button" class="btn btn-transparent btn-learn js-btn-learn" >
+          <i class="es-icon es-icon-undone-check doing"></i>
+          <i class="es-icon es-icon--check-circle done"></i>
+          学过了
+        </a>
+        <a class="btn btn-primary js-test">弱提示效果</a>
+        <a class="btn btn-primary " data-toggle="modal" data-target="#myModal">完成任务</a>
+        <a class="btn btn-primary " data-toggle="modal" data-target="#myModal2">任务失败</a>
       </div>
-      <a type="button" class="btn btn-transparent btn-learn js-btn-learn" >
-        <i class="es-icon es-icon-undone-check doing"></i>
-        <i class="es-icon es-icon--check-circle done"></i>
-        学过了
-      </a>
-      <a type="button" class="btn btn-transparent btn-learn js-btn-learn" >
-        <i class="es-icon es-icon-undone-check doing"></i>
-        <i class="es-icon es-icon--check-circle done"></i>
-        学过了
-      </a>
-      <a class="btn btn-primary js-test">弱提示效果</a>
-      <a class="btn btn-primary " data-toggle="modal" data-target="#myModal">完成任务</a>
-      <a class="btn btn-primary " data-toggle="modal" data-target="#myModal2">任务失败</a>
     </div>
-  </div>
-  <div class="dashboard-sidebar" id="dashboard-sidebar">
-    <div class="dashboard-sidebar-content">
+    <div class="dashboard-sidebar" id="dashboard-sidebar">
       <div class="dashboard-toolbar">
         <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
-          <li class="active" data-pane="#task-pane">
-            <a href="javascript:;"> <i class="es-icon es-icon-menu"></i>
-              <br/>      
-              课程
-            </a>
-          </li>
-          <li class="" data-pane="#question-pane">
-            <a href="javascript:;"> <i class="es-icon es-icon-help"></i>
-              <br/>      
-              问答
-            </a>
-          </li>
-          <li class="" data-pane="#note-pane">
-            <a href="javascript:;">
-              <i class="es-icon es-icon-edit"></i>
-              <br/>      
-              笔记
-            </a>
-          </li>
+          
         </ul>
       </div>
-      <div data-pane='task' class="dashboard-pane task-pane" id="task-pane" >
+      <div data-pane="task" class="task-pane">
         <ul class="task-list ">
           {% for task in tasks %}
             {% set task_lock =  (task.resultStatus is not defined  or task.resultStatus.status is empty ) ? true : false %}
@@ -110,13 +89,13 @@
               {% endif %}
               <a class="text-overflow"  {% if task_lock %} data-url {% else  %} href {% endif %} ="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
               {% if task_lock %}
-                <span class="right-menu mouse-leave">{{task['activityMeta']['length'] | default('')}}
-                  <i class="es-icon {{task['activityMeta']['icon']}} mlm"></i>
+                <span class="right-menu mouse-leave">{{task.activity.length|activity_length_format}}
+                  <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mlm"></i>
                 </span> 
                 <span class="right-menu mouse-enter color-primary">任务未解锁</span>
               {% else %}
-                <span class="right-menu">{{task['activityMeta']['length'] | default('')}}
-                  <i class="es-icon {{task['activityMeta']['icon']}} mlm" data-toggle="tooltip" data-placement="top" title="{{task['activityMeta']['name']}}任务"></i>
+                <span class="right-menu">{{task.activity.length|activity_length_format}}
+                  <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mlm" data-toggle="tooltip" data-placement="top" title="{{activity_metas(task.activity.mediaType).name}}任务"></i>
                 </span>  
               {% endif %}
             </li>
@@ -124,6 +103,8 @@
         </ul>
       </div>
     </div>
+  </div>
+
   <div  class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -140,6 +121,7 @@
             <span class="text-success">已完成了整个课程的18%，加油吧！</span>
           </div>
           <div class="footer text-right">
+            <a class="btn btn-info mrm">分享</a>
             <a class="btn btn-primary">下一任务</a>
           </div>
         </div>

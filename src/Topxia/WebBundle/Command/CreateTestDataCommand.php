@@ -94,21 +94,4 @@ class CreateTestDataCommand extends BaseCommand
         // $sessionId = $this->getContainer()->get('request')->getSession()->getId();
         // $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
-
-    protected function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-
-        $biz = $this->getContainer()->get('biz');
-        $serviceKernel->setConnection($biz['db']);
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-    }
 }

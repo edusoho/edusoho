@@ -42,21 +42,12 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function findTagsByIds(array $ids)
     {
-        if (empty($ids)) {
+       if (empty($ids)) {
             return array();
         }
-
-        uasort($ids, function ($a, $b) {
-            return $a < $b;
-        });
-
-        $self = $this;
-
-        return $this->fetchCached("ids:".implode('|', $ids), $ids, function ($ids) use ($self) {
-            $marks = str_repeat('?,', count($ids) - 1).'?';
-            $sql   = "SELECT * FROM {$self->getTable()} WHERE id IN ({$marks});";
-            return $self->getConnection()->fetchAll($sql, $ids);
-        });
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
     }
 
     public function findTagsByNames(array $names)
@@ -76,12 +67,13 @@ class TagDaoImpl extends BaseDao implements TagDao
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
-
+    
     public function searchTags($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
+            ->orderBy('createdTime', 'DESC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 

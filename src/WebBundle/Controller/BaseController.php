@@ -2,6 +2,7 @@
 
 namespace WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Common\Exception\ResourceNotFoundException;

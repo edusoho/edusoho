@@ -4,6 +4,7 @@ namespace Topxia\Service\File\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Common\ArrayToolkit;
 
 class UploadFileEventSubscriber implements EventSubscriberInterface
 {

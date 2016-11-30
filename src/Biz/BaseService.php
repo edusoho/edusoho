@@ -2,27 +2,19 @@
 
 namespace Biz;
 
-use Topxia\Service\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
-use Topxia\Common\Exception\ResourceNotFoundException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
-    /**
-     * @param  $alias
-     * @return GeneralDaoInterface
-     */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
     }
 
-    /**
-     * @return CurrentUser
-     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];
@@ -49,14 +41,40 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
-    protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
+    protected function beginTransaction()
     {
-        return new AccessDeniedException($message, null, $code);
+        $this->biz['db']->beginTransaction();
     }
 
-    protected function createResourceNotFoundService($resourceType, $resourceId)
+    protected function commit()
     {
-        return new ResourceNotFoundException($resourceType, $resourceId);
+        $this->biz['db']->commit();
+    }
+
+    protected function rollback()
+    {
+        $this->biz['db']->rollback();
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz['logger'];
+    }
+
+    protected function createAccessDeniedException($message = '')
+    {
+        // $this->getLogger()->error($message, $context);
+        return new AccessDeniedException($message);
+    }
+
+    protected function createInvalidArgumentException($message = '')
+    {
+        return new InvalidArgumentException($message);
+    }
+
+    protected function createNotFoundException($message = '')
+    {
+        return new NotFoundException($message);
     }
 
     protected function createServiceException($message = '')
