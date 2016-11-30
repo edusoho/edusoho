@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ckeditor@^4.5.10",
+        "scope": null,
+        "escapedName": "ckeditor",
+        "name": "ckeditor",
+        "rawSpec": "^4.5.10",
+        "spec": ">=4.5.10 <5.0.0",
+        "type": "range"
+      },
+      "/Users/Simon/Projects/php/x8.edusoho.com"
+    ]
+  ],
+  "_cnpm_publish_time": 1479311322246,
+  "_from": "ckeditor@>=4.5.10 <5.0.0",
+  "_id": "ckeditor@4.6.0",
+  "_inCache": true,
+  "_location": "/ckeditor",
+  "_nodeVersion": "6.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/ckeditor-4.6.0.tgz_1479311319258_0.1100359137635678"
+  },
+  "_npmUser": {
+    "name": "cksource",
+    "email": "npm@cksource.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ckeditor@^4.5.10",
+    "scope": null,
+    "escapedName": "ckeditor",
+    "name": "ckeditor",
+    "rawSpec": "^4.5.10",
+    "spec": ">=4.5.10 <5.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/ckeditor/download/ckeditor-4.6.0.tgz",
+  "_shasum": "37cdc988aa22ca6fc67540bb32b6f039a35e7718",
+  "_shrinkwrap": null,
+  "_spec": "ckeditor@^4.5.10",
+  "_where": "/Users/Simon/Projects/php/x8.edusoho.com",
+  "author": {
+    "name": "CKSource",
+    "url": "http://cksource.com/"
+  },
+  "bugs": {
+    "url": "http://dev.ckeditor.com"
+  },
+  "dependencies": {},
+  "description": "JavaScript WYSIWYG web text editor.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "37cdc988aa22ca6fc67540bb32b6f039a35e7718",
+    "size": 1837635,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/ckeditor/download/ckeditor-4.6.0.tgz"
+  },
+  "gitHead": "2530c9c5d26f275882da192ba2231ac69e967474",
+  "homepage": "http://ckeditor.com",
+  "keywords": [
+    "ckeditor",
+    "fckeditor",
+    "editor",
+    "wysiwyg",
+    "html",
+    "richtext",
+    "text",
+    "javascript"
+  ],
+  "license": "For licensing, see LICENSE.md or http://ckeditor.com/license.",
+  "main": "ckeditor.js",
+  "maintainers": [
+    {
+      "name": "cksource",
+      "email": "npm@cksource.com"
+    }
+  ],
+  "name": "ckeditor",
+  "optionalDependencies": {},
+  "publish_time": 1479311322246,
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckeditor/ckeditor-releases.git"
+  },
+  "scripts": {},
+  "version": "4.6.0"
+}
