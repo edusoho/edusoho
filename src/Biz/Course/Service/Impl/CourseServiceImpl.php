@@ -3,7 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseMemberDao;
+use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -151,27 +151,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function getCourseItems($courseId)
+    public function findCourseItems($courseId)
     {
-        $items = array();
-        $user  = $this->getCurrentUser();
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        foreach ($tasks as $task) {
-            $task['itemType']            = 'task';
-            $items["task-{$task['id']}"] = $task;
-        }
-
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
-            $items["chapter-{$chapter['id']}"] = $chapter;
-        }
-
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
-
-        return $items;
+        $course = $this->getCourse($courseId);
+        return $this->createCourseStrategy($course)->findCourseItems($courseId);
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -214,20 +197,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
-
         $user   = $this->getCurrentUser();
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-
         return array($course, $member);
     }
 
     protected function canTakeCourse($course)
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
+
 
         if (empty($course)) {
             return false;
@@ -243,11 +224,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
+
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
-
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;
@@ -256,6 +238,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    //TODO 任务需要在排序时处理 chapterId， number
     public function sortCourseItems($courseId, $ids)
     {
         $this->tryManageCourse($courseId);
@@ -329,8 +312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createChapter($chapter)
     {
-        $argument = $chapter;
-
         if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
             throw $this->createInvalidArgumentException("Invalid Chapter Type");
         }
@@ -361,6 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getNextChapterNumber($courseId)
     {
+        //有逻辑缺陷
         $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
         return $counter + 1;
     }
@@ -434,17 +416,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
-    /**
-     * @return TaskService
-     */
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+    }
+
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
 
-    /**
-     * @return CourseMemberDao
-     */
     protected function getMemberDao()
     {
         return $this->createDao('Course:CourseMemberDao');

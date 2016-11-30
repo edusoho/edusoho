@@ -27,6 +27,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $media           = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
         }
+        return $activity;
     }
 
     public function findActivities($ids)

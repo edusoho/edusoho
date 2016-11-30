@@ -28,15 +28,15 @@
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
           <div class="col-sm-8 radios">
-            <label for="learnFreeOrder">
-              <input type="radio" id="learnFreeOrder" name="learnMode" value="freeOrder" {% if course.learnMode|default('freeOrder') == 'freeOrder' %}checked{% endif %} data-role="tab" data-tab-content="#learnFreeOrderHelp">{{'自由式学习'|trans}}
+            <label for="learnFreeMode">
+              <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode" {% if course.learnMode|default('freeMode') == 'freeMode' %}checked{% endif %} data-role="tab" data-tab-content="#learnFreeModeHelp">{{'自由式学习'|trans}}
             </label>
-            <label for="learnByOrder">
-              <input type="radio" id="learnByOrder" name="learnMode" value="byOrder" {% if course.learnMode|default('freeOrder') == 'byOrder' %}checked{% endif %} data-role="tab" data-tab-content="#learnByOrderHelp">
+            <label for="learnLockOrder">
+              <input type="radio" id="learnLockOrder" name="learnMode" value="lockMode" {% if course.learnMode|default('freeMode') == 'lockMode' %}checked{% endif %} data-role="tab" data-tab-content="#learnLockOrderHelp">
               任务式学习
             </label>
-            <p class="help-block" id="learnFreeOrderHelp" data-role="tab-content">{{'学员自由安排学习过程'|trans}}</p>
-            <p class="help-block hidden" id="learnByOrderHelp" data-role="tab-content" >{{'根据既定顺序逐个解锁学习'|trans}}</p>
+            <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'学员自由安排学习过程'|trans}}</p>
+            <p class="help-block hidden" id="learnLockOrderHelp" data-role="tab-content" >{{'根据既定顺序逐个解锁学习'|trans}}</p>
             <div class="color-warning">{{'确定创建后“学习模式”将不能修改'|trans}}</div>
           </div>
         </div>

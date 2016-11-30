@@ -14,7 +14,7 @@
         {% endif %}
         {% if chapter.type != 'lesson' %}
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id, type:'lesson'}) }}">{{'添加'|trans}}{{ '课时'|trans }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">{{'添加'|trans}}{{ '任务'|trans }}</a>
           </li>
         {% endif %}
       </ul>
