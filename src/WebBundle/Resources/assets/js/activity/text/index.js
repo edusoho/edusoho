@@ -2,16 +2,30 @@ import Emitter from "common/es-event-emitter";
 import ActivityEmitter from "../activity-emitter";
 
 class Text extends Emitter  {
-  // constructor() {
-  //   this.currentTime = 0;
-  // }
+  constructor({element}) {
+    super();
+    this.element = $(element);
 
-  // getLearnTime() {
-  //   //获取当前已经学过的时间
-  //   this.currentTime = 0;
-  // }
+    this.emitter = new ActivityEmitter();
+    this.emitter.receive('doing', (data) => {
+      console.log(data);
+      let finishTime = parseInt(this.element.data('finishTime'));
+      console.log(finishTime);
 
-  // setLearnTime() {
-  //   this.currentTime = 0;
-  // }
+      if(!finishTime){
+        return;
+      }
+
+      if(data.learnedTime >= finishTime){
+        console.log('text.finish');
+        this.emitter.emit('finish');
+      }
+    })
+  }
+
 }
+
+
+new Text({
+  element: '#text-activity'
+});
