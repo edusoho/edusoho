@@ -8,16 +8,13 @@ class Text extends Emitter  {
 
     this.emitter = new ActivityEmitter();
     this.emitter.receive('doing', (data) => {
-      console.log(data);
       let finishTime = parseInt(this.element.data('finishTime'));
-      console.log(finishTime);
 
       if(!finishTime){
         return;
       }
 
       if(data.learnedTime >= finishTime){
-        console.log('text.finish');
         this.emitter.emit('finish');
       }
     })
