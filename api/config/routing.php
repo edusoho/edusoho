@@ -25,6 +25,7 @@ $app->get(_u('/user/{id}'), 'res.User:get');
 $app->post(_u('/user/{id}'), 'res.User:post');
 $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
+
 $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
 $app->get(_u('/lessons'), 'res.Course/Lessons:get');
@@ -117,3 +118,5 @@ $app->get(_u('/classrooms/{classRoomId}/threads'), 'res.ClassRoomThreads:get');
 $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
+
+$app->post(_u('/short_messages'), 'res.ShortMessages:post');
