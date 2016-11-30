@@ -81,7 +81,13 @@ class CourseServiceTest extends BaseTestCase
         $result['services']       = array('xxx', 'yy', 'zzz');
         $updated                  = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
 
-        $this->assertEquals(json_encode($result), json_encode($updated));
+        $this->assertEquals($result['price'], $updated['price']);
+        $this->assertEquals($result['vipLevelId'], $updated['vipLevelId']);
+        $this->assertEquals($result['buyable'], $updated['buyable']);
+        $this->assertEquals($result['tryLookable'], $updated['tryLookable']);
+        $this->assertEquals($result['tryLookLength'], $updated['tryLookLength']);
+        $this->assertEquals($result['watchLimit'], $updated['watchLimit']);
+        $this->assertEquals($result['services'], $updated['services']);
     }
 
     public function testDelete()
