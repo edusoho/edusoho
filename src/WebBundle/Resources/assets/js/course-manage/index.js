@@ -1,9 +1,14 @@
-import { deleteTask } from './help';
+import {closeCourse, deleteCourse, publishCourse, showSettings} from './help';
 import sortable from 'common/sortable';
 
-deleteTask();
 
 sortable({
   element : '#sortable-list'
 });
 
+closeCourse();
+deleteCourse();
+publishCourse();
+// deleteTask();
+// sortList();
+// showSettings();

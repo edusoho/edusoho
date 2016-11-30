@@ -1,19 +1,20 @@
 <?php
 namespace WebBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
+        $task    = $this->tryLearnTask($courseId, $id);
         $preview = $request->query->get('preview');
 
         $task     = $this->tryLearnTask($courseId, $id, $preview);
-        $tasks    = $this->getTaskService()->findTasksWithLearningResultByCourseId($courseId);
+        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
@@ -41,6 +42,19 @@ class TaskController extends BaseController
         return $this->forward('WebBundle:Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
+        ));
+    }
+
+    public function triggerAction(Request $request, $courseId, $id, $eventName)
+    {
+        $task         = $this->tryLearnTask($courseId, $id);
+        $data         = $request->request->all();
+        $data['task'] = $task;
+
+        return $this->forward('WebBundle:Activity:trigger', array(
+            'id'        => $task['activityId'],
+            'eventName' => $eventName,
+            'data'      => $data
         ));
     }
 

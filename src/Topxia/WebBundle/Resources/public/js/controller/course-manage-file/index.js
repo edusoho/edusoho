@@ -79,6 +79,8 @@ define(function(require, exports, module) {
                 return ;
             }
 
+            console.log(data);
+
             for(var i=0; i<data.length; i++){
                 var file=data[i];
                 if($.inArray(file.type, ['video','ppt','document'])>-1){
@@ -101,6 +103,10 @@ define(function(require, exports, module) {
                     } else if(file.metas2.sd) {
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">'+Translator.trans('标清')+'</span>');
                     }
+                }
+
+                if(file.type == 'video' && file.metas && file.metas.caption ){
+                    $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-primary tip">'+Translator.trans('字幕')+'</span>');
                 }
             }
         });

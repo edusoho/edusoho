@@ -1,23 +1,26 @@
 import NotePlugin from '../plugins/note/plugin';
 import QuestionPlugin from '../plugins/question/plugin';
+import TaskPlugin from '../plugins/task/plugin';
 import 'store';
 
 class SideBar {
-  constructor(option) {
-    this.courseId = option.courseId;
-    this.taskId = null;
-    this.task = null;
-    this.activePlugins = option.activePlugins;
+
+  constructor({element,courseId, taskId, activePlugins}) {
+    this.$element = $(element);
+    this.courseId = courseId;
+    this.taskId = taskId;
+    this.activePlugins = activePlugins;
     this.plugins = {};
-    this._tasks = {};
     this._currentPane = null;
-    this.$dashboardsidebar = $('#dashboard-sidebar');
+    console.log( $(element));
+    this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
+    // this.$dashboardPane = this.$element.find('#dashboard-pane');
     this.$dashboardcontent = $('#dashboard-content');
     this._init();
   }
 
   _init() {
-    this.taskId = 1;//@TODO 获取当前任务的ID
+    this._registerPlugin(new TaskPlugin(this));
     this._registerPlugin(new NotePlugin(this));
     this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
@@ -37,7 +40,7 @@ class SideBar {
       let plugin = this.plugins[name];
       html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
-    $('#dashboard-toolbar-nav').html(html).on('click', 'li[data-plugin]', (event)=> {
+    $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]',(event)=>{
       let $this = $(event.currentTarget);
       if ($this.hasClass('active')) {
         this._rendBar($this, false);
@@ -72,7 +75,7 @@ class SideBar {
   }
 
   _getPaneContainer() {
-    return $('.dashboard-sidebar-content');
+    return this.$element;
   }
 
   _getPane(name) {
@@ -96,7 +99,7 @@ class SideBar {
   createPane(name) {
     let $pane = this._getPane(name);
     if (!$pane) {
-      $pane = $('<div data-pane="' + name + '" class="dashboard-pane ' + name + '-pane"></div>').appendTo(this._getPaneContainer());
+      $pane = $('<div data-pane="'+ name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this.$dashboardsidebar);
     }
     return $pane;
   }

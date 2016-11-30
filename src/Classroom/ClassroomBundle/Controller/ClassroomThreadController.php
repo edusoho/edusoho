@@ -9,21 +9,19 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomName = $this->setting('classroom.name');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $user = $this->getCurrentUser();
-
-        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
+            $classroomName = $this->setting('classroom.name', '班级');
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
-        if ($member && $member['locked'] == '0') {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
-        }
+        $user = $this->getCurrentUser();
+        $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+
+        $layout = ($member && $member['locked'] == '0') ? 'ClassroomBundle:Classroom:join-layout.html.twig' : 'ClassroomBundle:Classroom:layout.html.twig';
+
         if (!$classroom) {
             $classroomDescription = array();
         } else {
@@ -35,7 +33,7 @@ class ClassroomThreadController extends BaseController
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
             'classroom'            => $classroom,
             'filters'              => $this->getThreadSearchFilters($request),
-            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'canLook'              => $canLook,
             'service'              => $this->getThreadService(),
             'layout'               => $layout,
             'member'               => $member,
@@ -85,16 +83,16 @@ class ClassroomThreadController extends BaseController
     public function updateAction(Request $request, $classroomId, $threadId)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $user   = $this->getCurrentUser();
 
-        if (!$this->getClassroomService()->canLookClassroom($classroomId)) {
+        if (!($user->isAdmin()
+            || $this->getClassroomService()->canManageClassroom($classroomId) 
+            || ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id']))) {
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
 
-        $thread = $this->getThreadService()->getThread($threadId);
-
-        $user   = $this->getCurrentUser();
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -129,7 +127,8 @@ class ClassroomThreadController extends BaseController
         }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
             return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
         if (empty($thread)) {
@@ -148,7 +147,7 @@ class ClassroomThreadController extends BaseController
             'member'    => $member,
             'layout'    => $layout,
             'filter'    => $filter,
-            'canLook'   => $this->getClassroomService()->canLookClassroom($classroom['id'])
+            'canLook'   => $canLook
         ));
     }
 

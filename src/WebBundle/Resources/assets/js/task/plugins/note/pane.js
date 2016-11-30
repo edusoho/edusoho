@@ -13,12 +13,14 @@ class NotePane {
     let plugin = this.plugin,
     toolbar = plugin.toolbar;
     toolbar.showPane(this.plugin.code);
+    this.$element.perfectScrollbar({wheelSpeed:50});
     //@todo url 
     $.get('http://www.esdev.com/lessonplugin/note/init', {
       courseId: toolbar.courseId,
       lessonId: toolbar.taskId,
     }, (html)=>{
       this.$element.html(html);
+      
       this.editor = CKEDITOR.replace('note_content', {
         toolbar: 'Simple',
         filebrowserImageUploadUrl: this.$element.find('#note_content').data('imageUploadUrl'),

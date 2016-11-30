@@ -112,7 +112,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
         $user = $this->getCurrentUser();
 
-        if ($ownerCanManage && ($resource['userId'] == $user['id'])) {
+        if ($ownerCanManage && $resource['userId'] == $user['id']) {
             return true;
         }
 

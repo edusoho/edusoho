@@ -8,7 +8,6 @@ use Biz\BaseService;
 use Biz\Task\Dao\TaskResultDao;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
@@ -17,7 +16,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if(!$user->isLogin()){
-            throw new AccessDeniedException('can not get task results because user not login');
+            throw $this->createAccessDeniedException('can not get task results because user not login');
         }
 
         return $this->getTaskResultDao()->findByCourseIdAndUserId($courseId, $user['id']);
@@ -28,7 +27,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if(!$user->isLogin()){
-            throw new AccessDeniedException('can not get task result because user not login');
+            throw $this->createAccessDeniedException('can not get task result because user not login');
         }
 
         return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $user['id']);
@@ -46,10 +45,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->biz['user'];
 
         if(!$user->isLogin()){
-            throw new AccessDeniedException('user must be login');
+            throw $this->createAccessDeniedException('user must be login');
         }
 
-        $taskResult['createdTime'] = time();
         $taskResult['status'] = 'start';
 
         $this->getTaskResultDao()->create($taskResult);
@@ -60,12 +58,19 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->update($id, $taskResult);
     }
 
+    public function waveLearnTime($id, $time)
+    {
+        return $this->getTaskResultDao()->wave(array($id), array(
+            'time' => $time
+        ));
+    }
+
     public function findUserProgressingTaskResultByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
 
         if(!$user->isLogin()){
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException('无权访问');
         }
 
         $conditions = array(
