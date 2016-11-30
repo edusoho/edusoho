@@ -21,7 +21,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function createTask($fields)
     {
-        $strategy = $this->createLearningStrategy($fields['fromCourseId']);
+        $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
         $task = $strategy->createTask($fields);
         return $task;
@@ -30,11 +30,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function updateTask($id, $fields)
     {
 
-        $strategy = $this->createLearningStrategy($fields['fromCourseId']);
+        $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
         $task = $strategy->updateTask($id, $fields);
         return $task;
-
 
 
     }
@@ -203,9 +202,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
-        $strategy     = new StrategyContext($course['learnMode'], $this->biz);
-        $canLearnTask = $strategy->canLearnTask($task);
-
+        $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
         return $canLearnTask;
     }
 
@@ -251,13 +248,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $maxSeq == $task['seq'];
     }
 
-    protected function createLearningStrategy($courseId)
+    protected function createCourseStrategy($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
             throw new NotFoundException('course does not exist');
         }
-        return new StrategyContext($course['learnMode'], $this->biz);
+
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
     }
 
     /**

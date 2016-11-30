@@ -14,7 +14,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Common\ArrayToolkit;
 
-class BaseLearningStrategy
+class BaseStrategy
 {
     public function __construct($biz)
     {

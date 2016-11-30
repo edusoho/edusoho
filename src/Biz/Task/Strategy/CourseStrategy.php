@@ -9,7 +9,7 @@
 namespace Biz\Task\Strategy;
 
 
-interface LearningStrategy
+interface CourseStrategy
 {
     public function createTask($field);
 

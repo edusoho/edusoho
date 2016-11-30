@@ -26,8 +26,6 @@ interface CourseService
 
     public function findCourseItems($courseId);
 
-    public function findCourseList($courseId);
-
     public function tryManageCourse($courseId);
 
     public function getNextNumberAndParentId($courseId);

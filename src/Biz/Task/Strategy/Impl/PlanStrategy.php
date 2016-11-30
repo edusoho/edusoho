@@ -4,10 +4,12 @@ namespace Biz\Task\Strategy\Impl;
 
 
 use Biz\Task\Strategy\BaseLearningStrategy;
+use Biz\Task\Strategy\BaseStrategy;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
-class LockModeStrategy extends BaseLearningStrategy implements LearningStrategy
+class PlanStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
@@ -27,6 +29,11 @@ class LockModeStrategy extends BaseLearningStrategy implements LearningStrategy
      */
     public function canLearnTask($task)
     {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        //自由式学习 可以学习任意课时
+        if ($course['learnMode'] == 'freeMode') {
+            return true;
+        }
         if ($this->isFirstTask($task)) {
             return true;
         }

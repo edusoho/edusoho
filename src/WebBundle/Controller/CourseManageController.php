@@ -48,7 +48,7 @@ class CourseManageController extends BaseController
         $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
-        $tasksRenderPage = $this->createLearningStrategy($course)->getTasksRenderPage();
+        $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
 
         return $this->render($tasksRenderPage, array(
             'tasks'     => $tasks,
@@ -58,9 +58,9 @@ class CourseManageController extends BaseController
         ));
     }
 
-    protected function createLearningStrategy($course)
+    protected function createCourseStrategy($course)
     {
-        return new StrategyContext($course['learnMode'], $this->get('biz'));
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)

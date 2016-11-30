@@ -154,19 +154,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findCourseItems($courseId)
     {
         $course = $this->getCourse($courseId);
-        return $this->createLearningStrategy($course)->findCourseItems($courseId);
+        return $this->createCourseStrategy($course)->findCourseItems($courseId);
     }
-
-
-    public function findCourseList($courseId)
-    {
-        $course   = $this->getCourse($courseId);
-        $strategy = new StrategyContext($course['learnMode'], $this->biz);
-
-        list($courseItems, $courseListRenderPage) = $strategy->findCourseItems($courseId);
-        return array($courseItems, $courseListRenderPage);
-    }
-
 
     public function tryManageCourse($courseId, $courseSetId = 0)
     {
@@ -208,20 +197,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
-
         $user   = $this->getCurrentUser();
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-
         return array($course, $member);
     }
 
     protected function canTakeCourse($course)
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
+
 
         if (empty($course)) {
             return false;
@@ -237,11 +224,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
+
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
-
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;
@@ -428,9 +416,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
-    protected function createLearningStrategy($course)
+    protected function createCourseStrategy($course)
     {
-        return new StrategyContext($course['learnMode'], $this->biz);
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
     }
 
     /**

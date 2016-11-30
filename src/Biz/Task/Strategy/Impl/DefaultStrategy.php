@@ -3,17 +3,18 @@ namespace Biz\Task\Strategy\Impl;
 
 
 use Biz\Task\Strategy\BaseLearningStrategy;
+use Biz\Task\Strategy\BaseStrategy;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Biz\Task\Strategy\page;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 /**
  * 自由学习策略
  * Class FreeOrderStrategy
  * @package Biz\Task\Strategy\Impl
  */
-class FreeModeStrategy extends BaseLearningStrategy implements LearningStrategy
+class DefaultStrategy extends BaseStrategy implements CourseStrategy
 {
 
     public function canLearnTask($task)
@@ -68,11 +69,6 @@ class FreeModeStrategy extends BaseLearningStrategy implements LearningStrategy
         }
     }
 
-
-    protected function canCreateChapter()
-    {
-
-    }
 
     protected function prepareChapterFields($task)
     {
