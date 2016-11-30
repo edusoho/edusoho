@@ -46,6 +46,7 @@ class UsersBindMobile extends BaseResource
 
         $user = $this->getCurrentUser();
         $this->getUserService()->changeMobile($user['id'], $mobile);
+        $this->getTokenService()->destoryToken($currentToken);
 
         return array('code' => 0);
     }
@@ -64,5 +65,15 @@ class UsersBindMobile extends BaseResource
         }
 
         return $currentToken;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
