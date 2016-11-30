@@ -22,7 +22,7 @@ interface TaskService
 
     public function startTask($taskId);
 
-    public function doingTask($taskId, $time=TaskService::LEARN_TIME_STEP);
+    public function doTask($taskId, $time=TaskService::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 

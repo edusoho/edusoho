@@ -130,7 +130,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
-    public function doingTask($taskId, $time = TaskService::LEARN_TIME_STEP)
+    public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP)
     {
         $task = $this->tryTakeTask($taskId);
 
