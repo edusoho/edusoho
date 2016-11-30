@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Filter;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\PluginToolkit;
 
 class UserFilter implements Filter
 {
@@ -16,7 +17,26 @@ class UserFilter implements Filter
         unset($data['salt']);
         unset($data['payPassword']);
         unset($data['payPasswordSalt']);
-       
+
+        if (!empty($data['verifiedMobile'])) {
+            $data['verifiedMobile'] = substr_replace($data['verifiedMobile'], '****', 3, 4);
+        } else {
+            unset($data['verifiedMobile']);
+        }
+
+        if (PluginToolkit::isPluginInstalled('Vip')) {
+            $userVip = $this->getVipService()->getMemberByUserId($data['id']);
+
+            if (!empty($userVip)) {
+                $userVipLevel = $this->getVipLevelService()->getLevel($userVip['levelId']);
+                $data['vipName'] = $userVipLevel['name'];
+
+                $userVipHistory = $this->getVipService()->getVipDetailByUserId($data['id']);
+
+                $data['VipDeadLine'] = $userVipHistory['deadline'];
+            }
+        }
+
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['loginTime'] = date('c', $data['loginTime']);
@@ -36,7 +56,6 @@ class UserFilter implements Filter
         $profile['about'] = $this->convertAbsoluteUrl($host, $profile['about']);
         if (!$user->isLogin() || !$user->isAdmin() || ($user['id'] != $data['id'])) {
             unset($data['email']);
-            unset($data['verifiedMobile']);
             unset($data['uri']);
             unset($data['tags']);
             unset($data['type']);
@@ -62,6 +81,7 @@ class UserFilter implements Filter
             $data['about'] = $profile['about'];
             return $data;
         }
+
         $data = array_merge($data,$profile);
 
         unset($data['intField1']);
@@ -128,5 +148,14 @@ class UserFilter implements Filter
 
     }
 
+    protected function getVipLevelService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+    }
 }
 

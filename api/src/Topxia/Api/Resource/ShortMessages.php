@@ -11,22 +11,37 @@ class ShortMessages extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $data = $request->query->all();
+        $data = $request->request->all();
 
-        //登录用户，重置密码
-        if (!empty($data['userId'])) {
-            return $this->sendVerify($data);
+
+        if (empty($data['type'])) {
+            return $this->error('5005', '没有type字段');
+        }
+        if (empty($data['mobile'])) {
+            return $this->error('5015', '手机号为空');
         }
 
-        //同一个ip访问次数超过5次
+        //未登录用户,忘记密码的业务逻辑
         if (true) {
         }
 
-        if (!$this->getUserService()->getUserByVerifiedMobile($data['mobile'])) {
-            return $this->error('5001', '手机号未验证');
-        }
+        $result = $this->getSmsService()->sendVerifySms('sms_bind', $data['mobile'], 0);
+            
+        $user = $this->getCurrentUser();
+        $newToken = $this->getTokenService()->makeToken($data['type'], array(
+            'times'    => 5,
+            'duration' => 60 * 60,
+            'userId'   => $user['id'],
+            'data'     => array(
+                'captcha_code' => $result['captcha_code'],
+                'mobile'       => $data['mobile']
+            )
+        ));
 
-        return $this->sendVerify($data);
+        return array(
+            'code'  => 0,
+            'token' => $newToken
+        );
     }
 
     public function filter($res)
@@ -34,30 +49,14 @@ class ShortMessages extends BaseResource
         return $res;
     }
 
-    protected function sendVerify($data)
+    protected function getTokenService()
     {
-        $smsCode = $this->generateSmsCode();
-
-        $api    = CloudAPIFactory::create('leaf');
-        $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-            'mobile'      => $data['mobile'], 
-            'category'    => $data['category'], 
-            'description' => '密码重置', 
-            'verify'      => $smsCode
-        ));
-
-        return $result;   
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
-    protected function generateSmsCode($length = 6)
+    protected function getSmsService()
     {
-        $code = rand(0, 9);
-
-        for ($i = 1; $i < $length; $i++) {
-            $code = $code.rand(0, 9);
-        }
-
-        return $code;
+        return $this->getServiceKernel()->createService('Sms.SmsService');
     }
 
     protected function getUserService()
