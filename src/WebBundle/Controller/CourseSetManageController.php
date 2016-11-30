@@ -92,14 +92,14 @@ class CourseSetManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $this->getCourseSetService()->updateCourseSetCover($id, $data);
+            $this->getCourseSetService()->changeCourseSetCover($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $id)));
         }
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        if ($courseSet['cover']) {
-            $courseSet['cover'] = json_decode($courseSet['cover'], true);
-        }
+        // if ($courseSet['cover']) {
+        //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
+        // }
         return $this->render('WebBundle:CourseSetManage:cover.html.twig', array(
             'courseSet' => $courseSet
         ));

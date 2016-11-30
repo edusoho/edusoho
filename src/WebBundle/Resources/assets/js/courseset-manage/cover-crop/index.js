@@ -15,7 +15,6 @@ class CoverCrop
         });
         imageCrop.afterCrop = function(response){
             let url = $("#upload-picture-btn").data("url");
-            console.log('after crop : ', url, response);
             $.post(url, {images: JSON.stringify(response)}, function(){
                 document.location.href=$("#upload-picture-btn").data("gotoUrl");
             });

@@ -127,7 +127,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $covers[$cover['type']] = $this->getFileService()->getFile($cover['id'])['uri'];
         }
 
-        return $this->getCourseSetDao()->update($courseSet['id'], array('cover' => json_encode($covers)));
+        return $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
     }
 
     public function deleteCourseSet($id)
