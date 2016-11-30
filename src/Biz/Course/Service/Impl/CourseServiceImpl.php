@@ -28,6 +28,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!$this->hasCourseManagerRole()) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
+        if (!isset($course['isDefault'])) {
+            $course['isDefault'] = 0;
+        }
         $course = ArrayToolkit::parts($course, array(
             'title',
             'courseSetId',
@@ -35,7 +38,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryMode',
             'expiryDays',
             'expiryStartDate',
-            'expiryEndDate'
+            'expiryEndDate',
+            'isDefault'
         ));
 
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
