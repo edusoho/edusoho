@@ -134,7 +134,6 @@ class User extends BaseResource
 
     protected function call_bind_mobile($request)
     {
-        // $user     = $this->getCurrentUser();
         $data        = $request->request->all();
         $mobile      = empty($data['mobile']) ? null : $data['mobile'];
         $captchaCode = empty($data['captcha_code']) ? null : $data['captcha_code'];
