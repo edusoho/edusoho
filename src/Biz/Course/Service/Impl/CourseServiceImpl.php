@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 
@@ -153,7 +154,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $items = array();
         $user  = $this->getCurrentUser();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -432,6 +433,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
