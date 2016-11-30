@@ -169,16 +169,10 @@ class User extends BaseResource
             }
         }
 
-
         $user = $this->getCurrentUser();
         $this->getUserService()->changeMobile($user['id'], $mobile);
 
         return array('code' => 0);
-    }
-
-    protected function call_send_captcha_code($request)
-    {
-        $resut = $this->getSmsService()->sendVerifySms('sms_bind','18857123749',0);
     }
 
     protected function isSmsCaptchaCodeExpire($type, $token)
@@ -189,7 +183,7 @@ class User extends BaseResource
             return array();
         }
 
-        return currentToken;
+        return $currentToken;
     }
 
     protected function getTokenService()
