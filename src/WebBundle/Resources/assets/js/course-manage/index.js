@@ -11,5 +11,4 @@ closeCourse();
 deleteCourse();
 publishCourse();
 // deleteTask();
-// sortList();
-// showSettings();
+showSettings();
