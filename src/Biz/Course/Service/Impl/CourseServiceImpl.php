@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseMemberDao;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -441,6 +442,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return CourseMemberDao
+     */
     protected function getMemberDao()
     {
         return $this->createDao('Course:CourseMemberDao');
