@@ -337,11 +337,11 @@ live_classroom_url:
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
 
 live_classroom_es_replay_play_url:
-    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
+    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
     defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
 
 live_classroom_replay_url:
-    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
+    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
 
 live_course_manage_replay:
@@ -585,11 +585,11 @@ course_review_list:
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
 
 course_review_post:
-    pattern:  /course/{id}/review/{reviewId}/post
+    path:  /course/{id}/review/{reviewId}/post
     defaults: { _controller: TopxiaWebBundle:CourseReview:post }
 
 course_review_delete:
-    pattern:  /course/review/{reviewId}/delete
+    path:  /course/review/{reviewId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseReview:delete }
 
 course_members:
@@ -706,15 +706,15 @@ course_manage_teachers:
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
 course_manage_course_dashboard:
-    pattern:  /course/{id}/manage/course/dashboard
+    path:  /course/{id}/manage/course/dashboard
     defaults: { _controller: TopxiaWebBundle:CourseManage:courseDashboard }
 
 course_manage_lesson_dashboard:
-    pattern:  /course/{id}/manage/lesson/dashboard
+    path:  /course/{id}/manage/lesson/dashboard
     defaults: { _controller: TopxiaWebBundle:CourseManage:lessonDashboard }
 
 course_manage_lesson_learn_dashboard:
-    pattern:  /course/{id}/manage/lessonlearn/dashboard
+    path:  /course/{id}/manage/lessonlearn/dashboard
     defaults: { _controller: TopxiaWebBundle:CourseManage:lessonlearnDashboard }
 
 #课程同步
@@ -831,15 +831,15 @@ course_manage_lesson_create:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
 course_manage_lesson_file_status:
-    pattern:  /course/{id}/manage/lesson/fileStatus
+    path:  /course/{id}/manage/lesson/fileStatus
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
 
 course_manage_lesson_batch_modal:
-    pattern:  /course/{id}/manage/lesson/batch/modal
+    path:  /course/{id}/manage/lesson/batch/modal
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
 
 course_manage_lesson_create_from_file:
-    pattern:  /course/{id}/manage/lesson/create/from/file
+    path:  /course/{id}/manage/lesson/create/from/file
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
 
 course_draft_create:
@@ -1112,7 +1112,7 @@ course_lesson_marker_manage:
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
 course_lesson_marker_manage_preview:
-    pattern:  /course/{courseId}/lesson/{lessonId}/marker/preview
+    path:  /course/{courseId}/lesson/{lessonId}/marker/preview
     defaults: { _controller: TopxiaWebBundle:Marker:preview }
 
 course_lesson_marker_show:
@@ -1134,7 +1134,7 @@ course_lesson_marker_update:
     methods: [POST]
 
 course_question_marker_preview:
-    pattern: /course/{courseId}/question/{id}/marker/preview
+    path: /course/{courseId}/question/{id}/marker/preview
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:questionMakerPreview }
 
 course_lesson_question_markers_show:
@@ -1170,33 +1170,33 @@ course_lesson_question_marker_search:
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
 
 media_play:
-    pattern:  /media/{mediaId}/play
+    path:  /media/{mediaId}/play
     defaults: { _controller: TopxiaWebBundle:Media/Index:play }
 
 media_subtitle_preview:
-    pattern:  /media/{mediaId}/subtitles/preview
+    path:  /media/{mediaId}/subtitles/preview
     defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
 
 media_subtitle_manage:
-    pattern:  /media/{mediaId}/subtitles/manage
+    path:  /media/{mediaId}/subtitles/manage
     defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
 
 media_subtitle_list:
-    pattern:  /media/{mediaId}/subtitles
+    path:  /media/{mediaId}/subtitles
     defaults: { _controller: TopxiaWebBundle:Subtitle:list }
 
 media_subtitle_create:
-    pattern:  /media/{mediaId}/subtitle/create
+    path:  /media/{mediaId}/subtitle/create
     defaults: { _controller: TopxiaWebBundle:Subtitle:create }
     methods: [POST]
 
 media_subtitle_delete:
-    pattern:  /media/{mediaId}/subtitle/{id}/delete
+    path:  /media/{mediaId}/subtitle/{id}/delete
     defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
     methods: [POST]
 
 media_subtitle_manage_dialog:
-    pattern:  /media/subtitles/manage/dialog
+    path:  /media/subtitles/manage/dialog
     defaults: { _controller: TopxiaWebBundle:Subtitle:manageDialog }
 
 announcement_list:

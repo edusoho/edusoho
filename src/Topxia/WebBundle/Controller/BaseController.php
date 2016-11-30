@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -178,13 +178,9 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    public function createAccessDeniedException($message = null, \Exception $previous = null)
+    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-        if ($message) {
-            return new AccessDeniedException($message);
-        } else {
-            return new AccessDeniedException();
-        }
+        return new AccessDeniedException($message, 403, $previous);
     }
 
     public function createInvalidArgumentException($message = null)

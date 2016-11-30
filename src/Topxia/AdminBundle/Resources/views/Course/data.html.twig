@@ -31,7 +31,7 @@
             <td>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</td>
              {% endif %}
             <td>{{ '课时数'|trans }}</td>
-            <td>{% if setting('default.user_name') %}{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</td>
+            <td>{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</td>
             <td>{{'完成课程人数'|trans}}</td>
             <td>{{'课程学习时长(分)'|trans}}</td>
             <td>{{'课程收入(元)'|trans}}</td>
