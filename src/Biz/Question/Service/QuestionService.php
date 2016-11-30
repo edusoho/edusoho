@@ -27,6 +27,8 @@ interface QuestionService
 
     public function hasEssay($questionIds);
 
+    public function getQuestionCountGroupByTypes($conditions);
+
     /**
      * question_favorite
      */

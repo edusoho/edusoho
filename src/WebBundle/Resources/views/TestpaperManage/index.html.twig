@@ -12,7 +12,7 @@
 
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      <a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}"
+      <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}"
          class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>{{ '创建试卷'|trans }}</a>
       {{ '试卷管理'|trans }}
     </div>
@@ -40,7 +40,7 @@
           <tr>
             <td colspan="20">
               <div class="empty">{{ '还没有试卷，请点击右上角按钮，'|trans }}
-                <a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">{{ '创建一个新试卷'|trans }}</a>
+                <a href="{{ path('course_set_manage_testpaper_create',{id:courseSet.id}) }}">{{ '创建一个新试卷'|trans }}</a>
               </div>
             </td>
           </tr>
@@ -49,7 +49,7 @@
       </table>
       <div>
         <label class="checkbox-inline"><input type="checkbox" autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ '试卷'|trans }}" data-url="{{ path('course_manage_testpaper_deletes',{courseId:course.id}) }}">{{ '删除'|trans }}</button>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ '试卷'|trans }}" data-url="{{ path('course_manage_testpaper_deletes',{courseId:courseSet.id}) }}">{{ '删除'|trans }}</button>
       </div>
 
       {{ web_macro.paginator(paginator) }}

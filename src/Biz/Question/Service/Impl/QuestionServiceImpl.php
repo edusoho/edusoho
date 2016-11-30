@@ -187,6 +187,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return false;
     }
 
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
+    }
+
     /**
      * question_favorite
      */

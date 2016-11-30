@@ -9,12 +9,12 @@ use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class TestpaperManageController extends BaseController
 {
-    public function indexAction(Request $request, $courseId)
+    public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = array(
-            'courseId' => $courseId,
+            'courseId' => $courseSet['id'],
             'type'     => 'testpaper'
         );
 
@@ -35,7 +35,7 @@ class TestpaperManageController extends BaseController
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('WebBundle:TestpaperManage:index.html.twig', array(
-            'course'     => $course,
+            'courseSet'  => $courseSet,
             'testpapers' => $testpapers,
             'users'      => $users,
             'paginator'  => $paginator
@@ -43,19 +43,19 @@ class TestpaperManageController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $courseId)
+    public function createAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($request->getMethod() == 'POST') {
             $fields             = $request->request->all();
             $fields['ranges']   = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
-            $fields['courseId'] = $courseId;
+            $fields['courseId'] = $courseSet['id'];
             $fields['pattern']  = 'questionType';
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
 
-            return $this->redirect($this->generateUrl('course_manage_testpaper_questions', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
+            return $this->redirect($this->generateUrl('course_manage_testpaper_questions', array('courseId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])));
         }
 
         $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
@@ -71,7 +71,7 @@ class TestpaperManageController extends BaseController
         }
 
         $conditions['types']    = ArrayToolkit::column($types, 'key');
-        $conditions['courseId'] = $course['id'];
+        $conditions['courseId'] = $courseSet['id'];
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
@@ -82,8 +82,8 @@ class TestpaperManageController extends BaseController
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
         return $this->render('WebBundle:TestpaperManage:create.html.twig', array(
-            'course'       => $course,
-            'ranges'       => $this->getQuestionRanges($course),
+            'courseSet'    => $courseSet,
+            'ranges'       => $this->getQuestionRanges($courseSet),
             'types'        => $types,
             'questionNums' => $questionNums
         ));
@@ -91,7 +91,7 @@ class TestpaperManageController extends BaseController
 
     public function checkListAction(Request $request, $courseId, $type)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $conditions = array(
             'status'   => 'open',
@@ -231,7 +231,7 @@ class TestpaperManageController extends BaseController
     public function getQuestionCountGroupByTypesAction(Request $request, $courseId)
     {
         $params = $request->query->all();
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         if (empty($course)) {
             return $this->createJsonResponse(array());
@@ -266,7 +266,7 @@ class TestpaperManageController extends BaseController
 
     public function buildCheckAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $data           = $request->request->all();
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
@@ -276,7 +276,7 @@ class TestpaperManageController extends BaseController
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
 
@@ -299,7 +299,7 @@ class TestpaperManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $testpaperId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        $course    = $this->getCourseSetService()->tryManageCourseSet($courseId);
         $testpaper = $this->getTestpaperWithException($course, $testpaperId);
         $this->getTestpaperService()->deleteTestpaper($testpaper['id']);
 
@@ -308,7 +308,7 @@ class TestpaperManageController extends BaseController
 
     public function deletesAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $ids = $request->request->get('ids');
 
@@ -322,7 +322,7 @@ class TestpaperManageController extends BaseController
 
     public function publishAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $testpaper = $this->getTestpaperService()->publishTestpaper($id);
 
@@ -337,7 +337,7 @@ class TestpaperManageController extends BaseController
 
     public function closeAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($id);
 
@@ -367,7 +367,7 @@ class TestpaperManageController extends BaseController
 
     public function questionsAction(Request $request, $courseId, $testpaperId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -444,7 +444,7 @@ class TestpaperManageController extends BaseController
 
     public function itemsResetAction(Request $request, $courseId, $testpaperId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -487,7 +487,7 @@ class TestpaperManageController extends BaseController
 
     public function itemPickerAction(Request $request, $courseId, $testpaperId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        $course    = $this->getCourseSetService()->tryManageCourseSet($courseId);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
@@ -541,7 +541,7 @@ class TestpaperManageController extends BaseController
 
     public function itemPickedAction(Request $request, $courseId, $testpaperId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        $course    = $this->getCourseSetService()->tryManageCourseSet($courseId);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
@@ -572,9 +572,9 @@ class TestpaperManageController extends BaseController
         ));
     }
 
-    public function itemsGetAction(Request $request, $courseId)
+    public function infoAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $testpaperId = $request->request->get('testpaperId');
 
@@ -598,21 +598,7 @@ class TestpaperManageController extends BaseController
 
     protected function getQuestionRanges($course, $includeCourse = false)
     {
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-        $ranges  = array();
-
-        if ($includeCourse == true) {
-            $ranges["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
-        }
-
-        foreach ($lessons as $lesson) {
-            if ($lesson['type'] == 'testpaper') {
-                continue;
-            }
-
-            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时%lessonnumber%： %lessontitle%',
-                array('%lessonnumber%' => $lesson['number'], '%lessontitle%' => $lesson['title']));
-        }
+        $ranges = array('本课程');
 
         return $ranges;
     }
@@ -652,7 +638,12 @@ class TestpaperManageController extends BaseController
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getUserService()
