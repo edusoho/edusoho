@@ -150,7 +150,25 @@ class SmsServiceImpl extends BaseService implements SmsService
                 'captcha_code'      => $smsCode,
                 'sms_last_time' => $currentTime
             );
+    }
 
+    public function checkVerifySms($actualMobile, $expectedMobile ,$actualSmsCode, $expectedSmsCode)
+    {
+        if (strlen($actualSmsCode) == 0 || strlen($expectedSmsCode) == 0) {
+            $response = array('success' => false, 'message' => $this->trans('验证码错误'));
+        }
+
+        if ($actualMobile != '' && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
+            return array('success' => false, 'message' => '验证码和手机号码不匹配');
+        }
+
+        if ($expectedSmsCode == $actualSmsCode) {
+            $response = array('success' => true, 'message' => $this->trans('验证码正确'));
+        } else {
+            $response = array('success' => false, 'message' => $this->trans('验证码错误'));
+        }
+
+        return $response;
     }
 
     protected function generateSmsCode($length = 6)
@@ -163,8 +181,6 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         return $code;
     }
-
-
 
     protected function checkPhoneNum($num)
     {
