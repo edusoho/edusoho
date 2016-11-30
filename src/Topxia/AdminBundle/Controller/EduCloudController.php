@@ -217,7 +217,6 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
         }
 
-        //云端视频判断
         try {
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/me/storage/overview");
