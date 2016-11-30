@@ -21,8 +21,6 @@ class CoverCrop
             });
         };
 
-        console.log('imageCrop: ', imageCrop);
-
         $("#upload-picture-btn").click(function(e){
             e.stopPropagation();
 

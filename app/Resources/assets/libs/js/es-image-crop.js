@@ -1,6 +1,5 @@
 import 'jquery-jcrop/js/jquery.Jcrop.js';
-import 'jquery-jcrop/css/jquery.Jcrop.css';
-import 'jquery-jcrop/css/Jcrop.gif';
+// import 'jquery-jcrop/css/Jcrop.gif';
 
 class EsImageCrop {
 	constructor(config) {
