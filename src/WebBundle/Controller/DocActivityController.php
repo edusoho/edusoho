@@ -26,17 +26,21 @@ class DocActivityController extends BaseController implements ActivityActionInte
             throw $this->createNotFoundException();
         }
 
+        if($file['type'] != 'document'){
+            throw $this->createAccessDeniedException('file type error, expect document');
+        }
+
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf($this->trans('文档转换失败，请到课程') . '<a href="%s" target="_blank">' . $this->trans('文件管理') . '</a>' . $this->trans('中，重新转换。'), $url);
+                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
 
                 $error = array(
                     'error' => array('code' => 'error', 'message' => $message)
                 );
             } else {
                 $error = array(
-                    'error' => array('code' => 'processing', 'message' => $this->trans('文档还在转换中，还不能查看，请稍等。'))
+                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
                 );
             }
         } else {
