@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 
@@ -28,6 +29,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!$this->hasCourseManagerRole()) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
+        if (!isset($course['isDefault'])) {
+            $course['isDefault'] = 0;
+        }
         $course = ArrayToolkit::parts($course, array(
             'title',
             'courseSetId',
@@ -35,7 +39,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryMode',
             'expiryDays',
             'expiryStartDate',
-            'expiryEndDate'
+            'expiryEndDate',
+            'isDefault'
         ));
 
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
@@ -149,7 +154,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $items = array();
         $user  = $this->getCurrentUser();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -428,6 +433,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');

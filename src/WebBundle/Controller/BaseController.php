@@ -4,6 +4,7 @@ namespace WebBundle\Controller;
 
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -45,7 +46,7 @@ class BaseController extends Controller
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
         if (!in_array($type, array('info', 'warning', 'error'))) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('type不正确'));
+            throw new \RuntimeException('type error');
         }
 
         return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
