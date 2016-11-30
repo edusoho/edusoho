@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
+  require('echarts-debug');
 
-    exports.run = function() {
-        var liveTopChart = echarts.init(document.getElementById('liveTopChart'));
+	exports.run = function() {
+
+        var emailSendChart = echarts.init(document.getElementById('emailSendChart'));
         var chartData = app.arguments.chartData;
-
-         var liveoption = {
+        var option = {
             title: {
                 text: ''
             },
@@ -29,6 +29,7 @@ define(function(require, exports, module) {
                 backgroundColor:'#fff'
             }
         };
-        liveTopChart.setOption(liveoption);
-    }
+        emailSendChart.setOption(option);
+	}
+	
 });

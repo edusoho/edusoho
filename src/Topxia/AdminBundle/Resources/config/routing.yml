@@ -994,6 +994,21 @@ admin_cloud_recharge:
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_account_person:
+    pattern:  /cloud/account/person
+    defaults: { _controller: TopxiaAdminBundle:Cloud:accountPerson }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_list_coupon:
+    pattern:  /cloud/list/coupon
+    defaults: { _controller: TopxiaAdminBundle:Cloud:listCoupon }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_service_overview:
+    pattern:  /cloud/service/{type}/overview
+    defaults: { _controller: TopxiaAdminBundle:Cloud:serviceOverview }
+    permissions: [admin_my_cloud_overview]
+
 admin_cloud_detail:
     pattern:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
@@ -1003,6 +1018,10 @@ admin_cloud_buy:
     pattern:  /cloud/{type}/buy
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
     permissions: [admin_my_cloud_overview]
+
+admin_cloud_live_more:
+    pattern: /cloud/live/more
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveMore }
 
 admin_cloud_tlp:
     pattern:  /cloud/tlp
@@ -1046,6 +1065,18 @@ admin_cloud_video_renew:
 admin_cloud_search_detail:
     pattern: /cloud/search/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:searchDetail }
+
+admin_cloud_sms_detail:
+    pattern: /cloud/sms/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsDetail }
+
+admin_cloud_sms_statistics:
+    pattern: /cloud/sms/statistics
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsStatistics }
+
+admin_cloud_sms_setting:
+    pattern: /cloud/sms/setting
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSetting }
 
 # admin_customer_service:
 #     pattern: /customer/service
@@ -1772,9 +1803,9 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /edu_cloud/sms
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
-    permissions: [admin_edu_cloud_sms_setting]
+    pattern:  /edu_cloud/sms/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsOverview }
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_setting_sms:
     pattern:  /setting/edu_cloud/sms
@@ -1787,22 +1818,32 @@ admin_edu_cloud_sms_status:
 admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_bill:
     pattern:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
-    pattern: /setting/edu_cloud/email
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
-    permissions: [admin_edu_cloud_email_seeting]
+    pattern: /edu_cloud/email/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_setting:
+    pattern: /edu_cloud/email/setting
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSetting }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_switch:
+    pattern: /edu_cloud/email/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSwitch }
+    permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_search:
     pattern: /edu_cloud/search/overview
@@ -1928,10 +1969,15 @@ admin_cloud_attachment_render:
     permissions: [admin_cloud_attachment_manage]
 
 # 添加云直播
-admin_setting_cloud_edulive:
-    pattern:  /cloud/edulive
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:live }
+admin_cloud_edulive_overview:
+    pattern:  /cloud/edulive/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:liveOverview }
 
-admin_cloud_setting_edulive:
-    pattern:  /cloud/edulive/setting
+admin_cloud_upload_live_logo:
+    pattern: /cloud/edulive/upload
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:uploadLiveLogo }
+    methods: [POST]
+
+admin_setting_cloud_edulive:
+    pattern:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }

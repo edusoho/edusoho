@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
     require('echarts-debug');
-
     exports.run = function() {
-        var liveTopChart = echarts.init(document.getElementById('liveTopChart'));
-        var chartData = app.arguments.chartData;
 
-         var liveoption = {
+        //改版图表
+        var smsSendChart = echarts.init(document.getElementById('smsSendChart'));
+        var chartData = app.arguments.chartData;
+        var option = {
             title: {
                 text: ''
             },
@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             },
             yAxis: {},
             series: [{
-                name: chartData.unit,
+                name: '发送量(条)',
                 type: 'bar',
                 data: chartData.count
             }],
@@ -29,6 +29,7 @@ define(function(require, exports, module) {
                 backgroundColor:'#fff'
             }
         };
-        liveTopChart.setOption(liveoption);
+        smsSendChart.setOption(option);            
     }
+
 });
