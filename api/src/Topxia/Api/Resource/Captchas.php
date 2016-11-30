@@ -7,22 +7,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\CurlToolkit;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class ShortMessages extends BaseResource
+class Captchas extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
         $data = $request->request->all();
 
-
         if (empty($data['type'])) {
-            return $this->error('5005', '没有type字段');
+            return $this->error('500', '没有type字段');
         }
         if (empty($data['mobile'])) {
-            return $this->error('5015', '手机号为空');
-        }
-
-        //未登录用户,忘记密码的业务逻辑
-        if (true) {
+            return $this->error('500', '手机号为空');
         }
 
         $result = $this->getSmsService()->sendVerifySms('sms_bind', $data['mobile'], 0);

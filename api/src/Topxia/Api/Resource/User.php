@@ -45,25 +45,6 @@ class User extends BaseResource
         return $this->filter($user);
     }
 
-    public function post(Application $app, Request $request, $id)
-    {
-        $data    = $request->request->all();
-
-        $type = $data['type'];
-
-        if (empty($type)) {
-            return $this->error('5005', '没有type字段');
-        }
-
-        $method = 'call_'.$type;
-
-        if (method_exists($this, $method)) {
-            return call_user_func(array($this, $method), $request);
-        } else {
-            return $this->error('5006', 'type字段无效');
-        }
-    }
-
     public function filter($res)
     {
         foreach ($this->_unsetFields as $key) {
@@ -130,48 +111,6 @@ class User extends BaseResource
         $simple['avatar']   = $this->getFileUrl($res['smallAvatar']);
 
         return $simple;
-    }
-
-    protected function call_bind_mobile($request)
-    {
-        $data        = $request->request->all();
-        $mobile      = empty($data['mobile']) ? null : $data['mobile'];
-        $captchaCode = empty($data['captcha_code']) ? null : $data['captcha_code'];
-        $token       = empty($data['token']) ? null : $data['token'];
-
-        if (empty($mobile)) {
-            return $this->error('5015', '手机号为空');
-        }
-        if (empty($captchaCode)) {
-            return $this->error('5016', '短信验证码为空，请输入');
-        }
-        if (empty($token)) {
-            return $this->error('5019', 'token为空');
-        }
-
-        if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
-            return $this->error('5017', '手机号已被绑定');
-        }
-
-        $currentToken = $this->isSmsCaptchaCodeExpire('bind_mobile', $token);
-        if (empty($currentToken)) {
-            return $this->error('5013', '手机验证码已过期');
-        }
-
-        //调用SmsService方法
-        if ($mobile != $currentToken['data']['mobile']) {
-            return $this->error('5018', '手机号与短信验证码不匹配');
-        }
-        if (!empty($currentToken)) {
-            if ($captchaCode != $currentToken['data']['captcha_code']) {
-                return $this->error('5014', '短信验证码错误');
-            }
-        }
-
-        $user = $this->getCurrentUser();
-        $this->getUserService()->changeMobile($user['id'], $mobile);
-
-        return array('code' => 0);
     }
 
     protected function isSmsCaptchaCodeExpire($type, $token)
