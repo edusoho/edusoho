@@ -374,15 +374,13 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:without-enable.html.twig', array(
                 'overview' => $overview,
                 'cloudSmsSettings' => $cloudSmsSettings
-            ));               
+            ));
         }
-        foreach ($overview['items'] as $value) {
-            $items['date'][] = $value['date'];
-            $items['count'][] = $value['count'];
-        }
+        $chartData = $this->dealChartData($overview['data']);
+
         return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
             'account' => $overview['account'],
-            'items'   => isset($items) ? $items : null,
+            'chartData'   => $chartData,
             'smsInfo' => $smsInfo
         ));
     }
@@ -408,38 +406,38 @@ class EduCloudController extends BaseController
     }
 
     //原云邮件设置页
-    // public function emailAction(Request $request)
-    // {
-    //     if ($this->getWebExtension()->isTrial()) {
-    //         return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
-    //     }
+    public function emailAction(Request $request)
+    {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
+        }
 
-    //     $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', array());
 
-    //     if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-    //         $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
-    //         return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
-    //     }
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
 
-    //     try {
-    //         $api         = CloudAPIFactory::create('root');
-    //         $info        = $api->get('/me');
-    //         $status      = $api->get('/me/email_account');
-    //         $emailStatus = $this->handleEmailSetting($request);
-    //         $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
-    //         $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
-    //         return $this->render('TopxiaAdminBundle:EduCloud/email:overview.html.twig', array(
-    //             'locked'       => isset($info['locked']) ? $info['locked'] : 0,
-    //             'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
-    //             'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
-    //             'accessCloud'  => $this->isAccessEduCloud(),
-    //             'emailStatus'  => $emailStatus,
-    //             'emailInfo'    => $emailInfo
-    //         ));
-    //     } catch (\RuntimeException $e) {
-    //         return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
-    //     }
-    // }
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $info        = $api->get('/me');
+            $status      = $api->get('/me/email_account');
+            $emailStatus = $this->handleEmailSetting($request);
+            $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
+            return $this->render('TopxiaAdminBundle:EduCloud/email:overview.html.twig', array(
+                'locked'       => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
+                'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
+                'accessCloud'  => $this->isAccessEduCloud(),
+                'emailStatus'  => $emailStatus,
+                'emailInfo'    => $emailInfo
+            ));
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+        }
+    }
 
     public function emailOverviewAction(Request $request)
     {
@@ -467,13 +465,11 @@ class EduCloudController extends BaseController
                 'overview' => $overview
             ));                
         }
-        foreach ($overview['items'] as $value) {
-            $items['date'][] = $value['date']; 
-            $items['amount'][] = $value['amount']; 
-        }
+        $chartData = $this->dealChartData($overview['data']);
+
         return $this->render('TopxiaAdminBundle:EduCloud/Email:overview.html.twig', array(
             'account' => $overview['account'],
-            'items'   => isset($items) ? $items : null
+            'chartData'   => $chartData
         ));
     }
 
@@ -1307,6 +1303,25 @@ class EduCloudController extends BaseController
         return $result['no'];
     }
 
+    private function dealChartData($data)
+    {
+        $chartData['unit'] = $data['unit'];
+
+        if (empty($data['items'])) {
+            for ($i=7; $i > 0; $i++) { 
+                $chartData['date'][] = date('Y-m-d', strtotime('-{i} days'));
+                $chartData['count'][] = 0;
+            }
+            return $chartData;
+        }
+        
+        foreach ($data['items'] as $item) {
+            $chartData['date'][] = $item['date'];
+            $chartData['count'][] = $item['count'];            
+        }
+        return $chartData;
+    }
+
     protected function getSearchService()
     {
         return $this->getServiceKernel()->createService('Search.SearchService');
@@ -1364,13 +1379,11 @@ class EduCloudController extends BaseController
                 'overview'  => $overview
             ));
         }
-        foreach ($overview['items'] as $key => $value) {
-            $items['date'][] = $value['date'];
-            $items['count'][] = $value['count'];
-        }
+        $chartData = $this->dealChartData($overview['data']);
+
         return $this->render('TopxiaAdminBundle:EduCloud/Live:overview.html.twig', array(
             'account'  => $overview['account'],
-            'items'  => isset($items) ? $items : null
+            'chartData'  => $chartData
         ));
     }
 
