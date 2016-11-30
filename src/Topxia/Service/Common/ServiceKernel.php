@@ -336,6 +336,14 @@ class ServiceKernel
         return $this;
     }
 
+    public function getBiz()
+    {
+        if (!$this->biz) {
+            throw new \RuntimeException('The `Biz Container` of ServiceKernel is not setted!');
+        }
+        return $this->biz;
+    }
+
     protected function getClassMap($type)
     {
         if (isset($this->classMaps[$type])) {
