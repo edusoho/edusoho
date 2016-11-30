@@ -60,6 +60,8 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
         $currentUser = $this->getCurrentUser();
 
+        $this->checkSmsType($smsType, $currentUser);
+
         if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
             if ($smsType == 'sms_bind') {
                 $description = $this->trans('手机绑定');
@@ -150,7 +152,40 @@ class SmsServiceImpl extends BaseService implements SmsService
                 'captcha_code'      => $smsCode,
                 'sms_last_time' => $currentTime
             );
+    }
 
+    public function checkVerifySms($actualMobile, $expectedMobile ,$actualSmsCode, $expectedSmsCode)
+    {
+        if (strlen($actualSmsCode) == 0 || strlen($expectedSmsCode) == 0) {
+            $result = array('success' => false, 'message' => $this->trans('验证码错误'));
+        }
+
+        if ($actualMobile != '' && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
+            return array('success' => false, 'message' => '验证码和手机号码不匹配');
+        }
+
+        if ($expectedSmsCode == $actualSmsCode) {
+            $result = array('success' => true, 'message' => $this->trans('验证码正确'));
+        } else {
+            $result = array('success' => false, 'message' => $this->trans('验证码错误'));
+        }
+
+        return $result;
+    }
+
+    protected function checkSmsType($smsType, $user)
+    {
+        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
+            throw new \RuntimeException($this->trans('不存在的sms Type'));
+        }
+
+        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
+            throw new \RuntimeException($this->trans('用户未登录'));
+        }
+
+        if ($this->setting("cloud_sms.{$smsType}") != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
+            throw new \RuntimeException($this->trans('该使用场景未开启'));
+        }
     }
 
     protected function generateSmsCode($length = 6)
@@ -163,8 +198,6 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         return $code;
     }
-
-
 
     protected function checkPhoneNum($num)
     {
