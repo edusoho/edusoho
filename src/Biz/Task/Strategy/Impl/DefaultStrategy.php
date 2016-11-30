@@ -25,12 +25,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function createTask($field)
     {
         $this->validateTaskMode($field);
-        $task = $this->baseCreateTask($field);
-
-        if ($task['mode'] == 'lesson') {
-            $chapter = $this->prepareChapterFields($task);
-            $this->getCourseService()->createChapter($chapter);
+        if ($field['mode'] == 'lesson') {
+            $chapter             = $this->prepareChapterFields($field);
+            $chapter             = $this->getCourseService()->createChapter($chapter);
+            $field['categoryId'] = $chapter['id'];
         }
+        $task = $this->baseCreateTask($field);
         return $task;
     }
 
@@ -42,6 +42,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         if ($task['mode'] == 'lesson') {
             $this->getCourseService()->updateChapter($task['courseId'], $task['chapterId'], array('title' => $task['title']));
         }
+
         return $task;
     }
 
@@ -93,7 +94,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     protected function prepareChapterFields($task)
     {
         return array(
-            'courseId' => $task['courseId'],
+            'courseId' => $task['fromCourseId'],
             'title'    => $task['title'],
             'type'     => 'lesson'
         );

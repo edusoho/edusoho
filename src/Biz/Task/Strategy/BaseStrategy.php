@@ -37,7 +37,7 @@ class BaseStrategy
             'seq',
             'number',
             'mode',
-            'courseChapterId',
+            'categoryId',
             'activityId',
             'title',
             'isFree',

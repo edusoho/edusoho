@@ -41,9 +41,9 @@
     <div class="settings-item ">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
         {% if not tasks.preparation|default(null) %}
-         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation'}) }}">
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'preparation'}) }}">
+          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-yulan mrm"></i>
         预习
@@ -60,9 +60,9 @@
     <div class="settings-item ">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
         {% if not tasks.exercise|default(null) %}
-         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation'}) }}">
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'preparation'}) }}">
+          data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-exam mrm"></i>
         练习
@@ -71,10 +71,10 @@
     </div>
     <div class="settings-item ">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        {% if not tasks.exercise|default(null) %}
-         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework'}) }}">
+        {% if not tasks.homework|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'homework'}) }}">
+          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-mylibrarybooks mrm"></i>
         作业
@@ -83,10 +83,10 @@
     </div>
     <div class="settings-item ">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        {% if not  tasks.exercise|default(null) %}
-         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass'}) }}">
+        {% if not  tasks.extraClass|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'extraClass'}) }}">
+          data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-sun mrm"></i>
         课外
