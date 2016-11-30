@@ -1805,8 +1805,8 @@ admin_edu_cloud_email:
     permissions: [admin_edu_cloud_email_seeting]
 
 admin_edu_cloud_search:
-    pattern: /edu_cloud/search
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:search }
+    pattern: /edu_cloud/search/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOverview }
 
 admin_edu_cloud_setting_search:
     pattern: /setting/edu_cloud/search

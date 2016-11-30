@@ -688,7 +688,7 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig');
     }
 
-    public function searchAction(Request $request)
+    public function searchOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:trial.html.twig');
@@ -702,7 +702,7 @@ class EduCloudController extends BaseController
             $searchOverview = $api->get("/me/search/overview");
             $data = $this->isSearchInited($api, $cloud_search_settting);
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
             ));
         }
