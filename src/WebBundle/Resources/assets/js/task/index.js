@@ -84,8 +84,8 @@ class TaskShow extends Emitter {
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#hidden-data [name="task-id"]').val()
+  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#js-hidden-data [name="task-id"]').val()
 });
 
 
