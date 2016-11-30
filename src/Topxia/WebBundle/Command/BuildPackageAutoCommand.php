@@ -30,7 +30,7 @@ class BuildPackageAutoCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName('topxia:auto-build-package')
+            ->setName('build:upgrade-package')
             ->setDescription('自动编制升级包')
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('fromVersion', InputArgument::REQUIRED, 'compare from  version')
