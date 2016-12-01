@@ -1,17 +1,17 @@
 <?php
 namespace Biz\Task\Strategy\Impl;
 
-
 use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Biz\Task\Strategy\page;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Topxia\Common\ArrayToolkit;
 
 /**
  * 自由学习策略
- * Class FreeOrderStrategy
+ * Class DefaultStrategy
  * @package Biz\Task\Strategy\Impl
  */
 class DefaultStrategy extends BaseStrategy implements CourseStrategy
@@ -25,12 +25,13 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function createTask($field)
     {
         $this->validateTaskMode($field);
-        $task = $this->baseCreateTask($field);
-
-        if ($task['mode'] == 'lesson') {
-            $chapter = $this->prepareChapterFields($task);
-            $this->getCourseService()->createChapter($chapter);
+        if ($field['mode'] == 'lesson') {
+            $chapter             = $this->prepareChapterFields($field);
+            $chapter             = $this->getCourseService()->createChapter($chapter);
+            $field['categoryId'] = $chapter['id'];
         }
+
+        $task = $this->baseCreateTask($field);
         return $task;
     }
 
@@ -42,15 +43,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         if ($task['mode'] == 'lesson') {
             $this->getCourseService()->updateChapter($task['courseId'], $task['chapterId'], array('title' => $task['title']));
         }
+
         return $task;
     }
-
-
-    public function findCourseItems($courseId)
-    {
-        return $this->baseFindCourseItems($courseId);
-    }
-
 
     public function getTasksRenderPage()
     {
@@ -69,11 +64,41 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
     }
 
+    public function findCourseItems($courseId)
+    {
+        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+
+        $items    = array();
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType']               = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+        array_walk($items, function (&$item) use ($tasks) {
+            if (!empty($tasks[$item['id']])) {
+                $item['tasks'] = $tasks[$item['id']];
+            } else {
+                $item['tasks'] = array();
+            }
+        });
+        return $items;
+    }
+
+    public function sortCourseItems($courseId, array $itemIds)
+    {
+        // TODO: Implement sortCourseItems() method.
+    }
+
 
     protected function prepareChapterFields($task)
     {
         return array(
-            'courseId' => $task['courseId'],
+            'courseId' => $task['fromCourseId'],
             'title'    => $task['title'],
             'type'     => 'lesson'
         );

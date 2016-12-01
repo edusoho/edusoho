@@ -2,11 +2,9 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Task\Dao\TaskDao;
+use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;

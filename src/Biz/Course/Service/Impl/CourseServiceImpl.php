@@ -47,7 +47,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
-        if (!in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
 
@@ -325,8 +325,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 foreach ($parentChapters as $parent) {
                     if (!empty($parent)) {
                         $this->getTaskService()->updateSeq($id, array(
-                            'seq'             => $key,
-                            'courseChapterId' => $parent['id']
+                            'seq'        => $key,
+                            'categoryId' => $parent['id']
                         ));
                         break;
                     }

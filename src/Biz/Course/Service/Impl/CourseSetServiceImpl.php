@@ -61,7 +61,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'title'       => '默认教学计划',
             'expiryMode'  => 'days',
             'expiryDays'  => 0,
-            'learnMode'   => 'freeOrder',
+            'learnMode'   => 'freeMode',
             'isDefault'   => 1,
             'status'      => 'draft'
         );

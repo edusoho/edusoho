@@ -54,16 +54,22 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return false;
     }
 
+    public function getTasksRenderPage()
+    {
+        return 'WebBundle:CourseManage/LockMode:tasks.html.twig';
+    }
+
 
     public function findCourseItems($courseId)
     {
         return $this->baseFindCourseItems($courseId);
     }
 
-    public function getTasksRenderPage()
+    public function sortCourseItems($courseId, array $itemIds)
     {
-        return 'WebBundle:CourseManage/LockMode:tasks.html.twig';
+        // TODO: Implement sortCourseItems() method.
     }
+
 
     protected function isFirstTask($task)
     {
