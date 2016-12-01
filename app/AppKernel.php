@@ -87,34 +87,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Codeages\PluginBundle\CodeagesPluginBundle(),
         );
 
-        $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir().'/../plugins';
-
-        if (file_exists($pluginMetaFilepath)) {
-            $pluginMeta    = include_once $pluginMetaFilepath;
-            $this->plugins = $pluginMeta['installed'];
-
-            if (is_array($pluginMeta)) {
-                foreach ($pluginMeta['installed'] as $c) {
-                    if ($pluginMeta['protocol'] == '1.0') {
-                        $c         = ucfirst($c);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    } elseif ($pluginMeta['protocol'] == '2.0') {
-                        if ($c['type'] != 'plugin') {
-                            continue;
-                        }
-
-                        $c         = ucfirst($c['code']);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    }
-                }
-            }
-        }
-
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
@@ -137,8 +109,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function getPlugins()
     {
-        return $this->plugins;
-        // return $this->pluginConfigurationManager->getInstalledPlugins();
+        return $this->pluginConfigurationManager->getInstalledPlugins();
     }
 
     public function getPluginConfigurationManager()

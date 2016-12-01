@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Codeages\PluginBundle\System\PluginRegister;
 use Topxia\Common\BlockToolkit;
+use Topxia\Service\Util\PluginUtil;
 
 class PluginRegisterCommand extends ContainerAwareCommand
 {

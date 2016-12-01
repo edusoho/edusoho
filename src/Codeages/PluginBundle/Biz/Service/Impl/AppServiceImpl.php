@@ -34,8 +34,11 @@ class AppServiceImpl extends BaseService implements AppService
         $app['code'] = $plugin['code'];
         $app['name'] = $plugin['name'];
         $app['description'] = $plugin['description'];
-        $app['author'] = $plugin['author'];
+        $app['icon'] = '';
+        // $app['author'] = $plugin['author'];
+        $app['developerName'] = $plugin['author'];
         $app['version'] = $plugin['version'];
+        $app['protocol'] = empty($plugin['protocol']) ? 3 : $plugin['protocol'];
 
         $app = $this->getAppDao()->create($app);
 
@@ -56,7 +59,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getAppDao()
     {
-        return $this->biz->dao('CodeagesPluginBundle:AppDao');
+        return $this->biz->dao('CodeagesPluginBundle:OldAppDao');
     }
 
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Codeages\PluginBundle\System\PluginRegister;
+use Topxia\Service\Util\PluginUtil;
 
 class PluginRemoveCommand extends ContainerAwareCommand
 {
@@ -16,7 +17,7 @@ class PluginRemoveCommand extends ContainerAwareCommand
         $this
             ->setName('plugin:remove')
             ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.')
-            ->addOption('with-database', null, InputOption::VALUE_NONE, 'remove database?')
+            ->addOption('with-deleting-database', null, InputOption::VALUE_NONE, 'remove database?')
             ->setDescription('Remove plugin.');
     }
 

@@ -4,6 +4,8 @@ namespace Codeages\PluginBundle\System;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 class PluginRegister
 {
@@ -103,17 +105,56 @@ class PluginRegister
     {
         $plugins = $this->biz->service('CodeagesPluginBundle:AppService')->findAllPlugins();
 
-        $installed = array();
+        $installeds = array();
         foreach ($plugins as $plugin) {
-            $installed[$plugin['code']] = array(
+            if ($plugin['code'] == 'MAIN') {
+                continue;
+            }
+            $installeds[$plugin['code']] = array(
                 'code' => $plugin['code'],
                 'version' => $plugin['version'],
                 'type' => $plugin['type'],
+                'protocol' => $plugin['protocol'],
             );
         }
 
         $manager = new PluginConfigurationManager(dirname($this->pluginRootDir) . '/app');
-        $manager->setInstalledPlugins($installed)->save();
+        $manager->setInstalledPlugins($installeds)->save();
+
+        $this->refreshInstalledPluginRouting($installeds);
+    }
+
+    protected function refreshInstalledPluginRouting($plugins)
+    {
+        $fs = new Filesystem();
+        $routing = array();
+
+        foreach ($plugins as $plugin) {
+            foreach (array('' => 'routing.yml', 'admin' => 'routing_admin.yml') as $prefix => $filename) {
+                if ($plugin['protocol'] == 2) {
+                    $resourcePath = sprintf("%sBundle/Resources/config/%s", ucfirst($plugin['code']), $filename);
+                    $filePath = sprintf("%s/%s/%s", $this->pluginRootDir, ucfirst($plugin['code']), $resourcePath);
+                } else {
+                    $resourcePath = sprintf("%sPlugin/Resources/config/%s", ucfirst($plugin['code']), $filename);
+                    $filePath = sprintf("%s/%s", $this->pluginRootDir, $resourcePath);
+                }
+
+                if ($fs->exists($filePath)) {
+                    $routing["_plugin_{$plugin['code']}_{$prefix}"] = array(
+                        'resource' => '@'.$resourcePath,
+                        'prefix' => '/'.$prefix,
+                    );
+                }
+            }
+        }
+
+        $routingFile = $this->rootDir . '/app/config/routing_plugins.yml';
+
+        if (!$fs->exists($routingFile)) {
+            $fs->touch($routingFile);
+        }
+
+        file_put_contents($routingFile, Yaml::dump($routing));
     }
 
     public function removePlugin($code)
