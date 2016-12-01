@@ -43,7 +43,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return true;
     }
 
-    public function sendVerifySms($smsType,$to,$smsLastTime)
+    public function sendVerifySms($smsType,$to,$smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
             throw new \RuntimeException($this->getKernel()->trans('手机号错误:%to%', array('%to%' => $to)));
@@ -177,10 +177,6 @@ class SmsServiceImpl extends BaseService implements SmsService
     {
         if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
             throw new \RuntimeException($this->trans('不存在的sms Type'));
-        }
-
-        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
-            throw new \RuntimeException($this->trans('用户未登录'));
         }
 
         if ($this->setting("cloud_sms.{$smsType}") != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
