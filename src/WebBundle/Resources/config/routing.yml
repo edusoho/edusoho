@@ -190,8 +190,6 @@ course_manage_question_preview:
     path: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: WebBundle:QuestionManage:preview }
 
-<<<<<<< Updated upstream
-=======
 course_set_manage_question_picker:
   path: /course_set/{courseId}/manage/question/picker
   defaults: { _controller: WebBundle:QuestionManage:questionPicker }
@@ -318,7 +316,4 @@ exercise_finish:
   path: /exercise/result/{resultId}/finish
   defaults: { _controller: WebBundle:Exercise:submit }
   methods: [POST]
-
-
->>>>>>> Stashed changes
 
