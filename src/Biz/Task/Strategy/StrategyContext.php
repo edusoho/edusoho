@@ -60,6 +60,11 @@ class StrategyContext
         return $this->strategy->updateTask($id, $fields);
     }
 
+    public function deleteTask($task)
+    {
+        return $this->strategy->deleteTask($task);
+    }
+
     public function canLearnTask($task)
     {
         return $this->strategy->canLearnTask($task);

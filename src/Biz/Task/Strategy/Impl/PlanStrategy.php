@@ -21,6 +21,18 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $this->baseUpdateTask($id, $fields);
     }
 
+    public function deleteTask($task)
+    {
+        $that = $this;
+        $this->biz['db']->transactional(function () use ($task, $that) {
+            $currentSeq = $task['seq'];
+            $that->getTaskDao()->delete($task['id']);
+            $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
+            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
+        });
+        return true;
+    }
+
     /**
      * 任务学习
      * @param $task
@@ -38,7 +50,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
-        $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
+        $preTask = $this->getTaskDao()->getByCourseIdAndNumber($task['courseId'], $task['number'] - 1);
 
         if ($preTask['isOptional']) {
             return true;
@@ -74,28 +86,28 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         );
 
         $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-
+        $taskNumber   = 0;
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
                 $chapter = $this->getChapterDao()->get($id);
-                $fileds  = array('seq' => $key);
+                $fields  = array('seq' => $key);
 
                 $index = $chapterTypes[$chapter['type']];
                 switch ($index) {
                     case 3:
-                        $fileds['parentId'] = 0;
+                        $fields['parentId'] = 0;
                         break;
                     case 2:
                         if (!empty($parentChapters['chapter'])) {
-                            $fileds['parentId'] = $parentChapters['chapter']['id'];
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
                         }
                         break;
                     case 1:
                         if (!empty($parentChapters['unit'])) {
-                            $fileds['parentId'] = $parentChapters['unit']['id'];
+                            $fields['parentId'] = $parentChapters['unit']['id'];
                         } elseif (!empty($parentChapters['chapter'])) {
-                            $fileds['parentId'] = $parentChapters['chapter']['id'];
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
                         }
                         break;
                     default:
@@ -103,9 +115,9 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 }
 
                 if (!empty($parentChapters[$chapter['type']])) {
-                    $fileds['number'] = $parentChapters[$chapter['type']]['number'] + 1;
+                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
                 } else {
-                    $fileds['number'] = 1;
+                    $fields['number'] = 1;
                 }
 
                 foreach ($chapterTypes as $type => $value) {
@@ -114,30 +126,27 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                     }
                 }
 
-                $chapter                          = $this->getChapterDao()->update($id, $fileds);
+                $chapter                          = $this->getChapterDao()->update($id, $fields);
                 $parentChapters[$chapter['type']] = $chapter;
             }
-
             if (strpos($id, 'task') === 0) {
-                $id = str_replace('task-', '', $id);
-
-                foreach ($parentChapters as $parent) {
-                    if (!empty($parent)) {
-                        $this->getTaskService()->updateSeq($id, array(
-                            'seq'        => $key,
-                            'categoryId' => $parent['id']
-                        ));
-                        break;
-                    }
-                }
+                $taskNumber++;
+                $categoryId = empty($chapter) ? 0 : $chapter['id'];
+                $id         = str_replace('task-', '', $id);
+                $this->getTaskService()->updateSeq($id, array(
+                    'seq'        => $key,
+                    'categoryId' => $categoryId,
+                    'number'     => $taskNumber
+                ));
             }
         }
     }
 
 
-    protected function isFirstTask($task)
+    protected
+    function isFirstTask($task)
     {
-        return 1 == $task['seq'];
+        return 1 == $task['number'];
     }
 
 
