@@ -73,6 +73,9 @@ let config = {
     }, {
       test: /\.(woff|woff2|eot|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'file?name=fonts/[name].[ext]'
+    }, {
+      test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'file'
     }]
   },
   plugins: [
@@ -116,7 +119,7 @@ config.module.loaders.push({
 });
 
 if (__DEV__) {
-  config.devtool = 'source-map';//cheap-module-eval-source-map
+  config.devtool = 'source-map';
 } else {
   if (!__DEBUG__) { //debug mode not compress
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({

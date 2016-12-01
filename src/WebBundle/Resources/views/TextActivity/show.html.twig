@@ -3,5 +3,7 @@
 {% do script(['web/activity/text/index.js']) %}
 
 {% block body %} 
-  <div class="task-content-view text-activity-show">{{activity.content|raw}}</div>
+  <div class="task-content-view text-activity-show" id="text-activity" data-finish-time="{{ text.finishDetail }}">
+    {{activity.content|raw}}
+  </div>
 {% endblock %}

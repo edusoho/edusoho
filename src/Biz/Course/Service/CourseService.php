@@ -12,7 +12,13 @@ interface CourseService
 
     public function createCourse($course);
 
+    public function createChapter($chapter);
+
+    public function updateChapter($courseId, $chapterId, $fields);
+
     public function updateCourse($id, $fields);
+
+    public function updateCourseMarketing($id, $fields);
 
     public function deleteCourse($id);
 
@@ -20,7 +26,7 @@ interface CourseService
 
     public function publishCourse($id, $userId);
 
-    public function getCourseItems($courseId);
+    public function findCourseItems($courseId);
 
     public function tryManageCourse($courseId);
 

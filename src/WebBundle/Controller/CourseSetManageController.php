@@ -28,7 +28,7 @@ class CourseSetManageController extends BaseController
 
     public function indexAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
 
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
@@ -61,12 +61,13 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
         }
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        $tags = array();
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        $tags      = array();
         if (!empty($courseSet['tags'])) {
-            $tags = $this->getTagService()->findTagsByIds(explode('|', $courseSet['tags']));
+            $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
         return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
             'courseSet' => $courseSet,
@@ -76,9 +77,53 @@ class CourseSetManageController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseSetService()->updateCourseSetDetail($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
+        }
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
             'courseSet' => $courseSet
+        ));
+    }
+
+    public function coverAction(Request $request, $id)
+    {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseSetService()->changeCourseSetCover($id, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $id)));
+        }
+
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        // if ($courseSet['cover']) {
+        //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
+        // }
+        return $this->render('WebBundle:CourseSetManage:cover.html.twig', array(
+            'courseSet' => $courseSet
+        ));
+    }
+
+    public function coverCropAction(Request $request, $id)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data["images"], true));
+            return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+        }
+
+        $fileId = $request->getSession()->get("fileId");
+
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
+
+        return $this->render('WebBundle:CourseSetManage:cover-crop.html.twig', array(
+            'courseSet'   => $courseSet,
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
         ));
     }
 
@@ -110,5 +155,10 @@ class CourseSetManageController extends BaseController
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getFileService()
+    {
+        return ServiceKernel::instance()->createService('Content.FileService');
     }
 }
