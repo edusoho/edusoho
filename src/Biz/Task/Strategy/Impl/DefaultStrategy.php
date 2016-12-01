@@ -47,6 +47,22 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
+    public function getTasksRenderPage()
+    {
+        return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
+    public function validateTaskMode($field)
+    {
+        if (empty($field['mode']) || !in_array($field['mode'], array('preparation', 'lesson', 'exercise', 'homework', 'extraClass'))) {
+            throw new InvalidArgumentException('task mode  Invalid');
+        }
+    }
 
     public function findCourseItems($courseId)
     {
@@ -73,22 +89,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $items;
     }
 
-
-    public function getTasksRenderPage()
+    public function sortCourseItems($courseId, array $itemIds)
     {
-        return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
-    }
-
-    /**
-     * @param $field
-     * @return mixed
-     * @throws InvalidArgumentException
-     */
-    public function validateTaskMode($field)
-    {
-        if (empty($field['mode']) || !in_array($field['mode'], array('preparation', 'lesson', 'exercise', 'homework', 'extraClass'))) {
-            throw new InvalidArgumentException('task mode  Invalid');
-        }
+        // TODO: Implement sortCourseItems() method.
     }
 
 

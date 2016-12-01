@@ -7,8 +7,6 @@ use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\FreeModeStrategy;
 use Biz\Task\Strategy\Impl\LockModeStrategy;
 use Biz\Task\Strategy\Impl\PlanStrategy;
-use Biz\Task\Strategy\Impl\TaskByOrderStrategy;
-use Biz\Task\Strategy\Impl\TaskFreeOrderStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
@@ -51,7 +49,7 @@ class StrategyContext
         return $this->strategy;
     }
 
-
+    //任务的api策略
     public function createTask($fields)
     {
         return $this->strategy->createTask($fields);
@@ -67,11 +65,6 @@ class StrategyContext
         return $this->strategy->canLearnTask($task);
     }
 
-    public function findCourseItems($courseId)
-    {
-        return $this->strategy->findCourseItems($courseId);
-    }
-
     public function getCourseItemsRenderPage()
     {
         return $this->strategy->getCourseItemsRenderPage();
@@ -80,6 +73,17 @@ class StrategyContext
     public function getTasksRenderPage()
     {
         return $this->strategy->getTasksRenderPage();
+    }
+
+    //课程的api 策略
+    public function findCourseItems($courseId)
+    {
+        return $this->strategy->findCourseItems($courseId);
+    }
+
+    public function sortCourseItems($courseId, array $itemIds)
+    {
+        return $this->strategy->sortCourseItems($courseId, $itemIds);
     }
 
 }
