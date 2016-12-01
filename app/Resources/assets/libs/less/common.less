@@ -8,6 +8,7 @@ html,body {
   right: 0;
   bottom: 0;
   top:0;
+  overflow: auto;
 }
 
 .text-activity-show {
@@ -18,3 +19,27 @@ html,body {
     max-width: 100%;
   }
 }
+
+.testpaper-activity-show {
+  background-color: #111;
+  overflow: hidden;
+}
+
+
+.view-toggle {
+  >.view-hide {
+    display: none;
+  }
+  >.view-show {
+   display: inline;
+  }
+  &.active{
+    >.view-show {
+      display: none;
+    }
+    >.view-hide {
+      display: inline;
+    }
+  }
+}
+

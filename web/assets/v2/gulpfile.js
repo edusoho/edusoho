@@ -7,16 +7,16 @@ var sourcemaps = require('gulp-sourcemaps');
 gulp.task('less',function(){
     return gulp.src([
         'less/main.less',
-        'less/main-blue.less',
-        'less/main-blue-light.less',
-        'less/main-en-us.less',
-        'less/main-green-light.less',
-        'less/main-orange-light.less',
-        'less/main-orange.less',
-        'less/main-purple-light.less',
-        'less/main-purple.less',
-        'less/main-red-light.less',
-        'less/main-red.less',
+        // 'less/main-blue.less',
+        // 'less/main-blue-light.less',
+        // 'less/main-en-us.less',
+        // 'less/main-green-light.less',
+        // 'less/main-orange-light.less',
+        // 'less/main-orange.less',
+        // 'less/main-purple-light.less',
+        // 'less/main-purple.less',
+        // 'less/main-red-light.less',
+        // 'less/main-red.less',
         ])
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
         .pipe(sourcemaps.init())

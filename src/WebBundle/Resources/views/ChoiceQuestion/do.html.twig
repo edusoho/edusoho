@@ -5,7 +5,7 @@
 	<div class="testpaper-question-body">
     {% include 'WebBundle:Question/Part:question-stem.html.twig' with {question:question, parentQuestion:parentQuestion|default(null)} %}
 
-		<ul class="testpaper-question-choices">
+		<ul class="testpaper-question-choices js-testpaper-question-list">
 			{% for key, choice in question.metas.choices %}
 			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in question.answer)) ? 'testpaper-question-choice-right' : '' %}
 			  {% set choiceIndex = (65+key)|chr %}
@@ -48,7 +48,7 @@
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 
-		  <div class="testpaper-question-choice-inputs">
+		  <div class="testpaper-question-choice-inputs js-testpaper-question-label">
 				{% for key, choice in question.metas.choices %}
 					{% set choiceIndex = (65+key)|chr %}
 

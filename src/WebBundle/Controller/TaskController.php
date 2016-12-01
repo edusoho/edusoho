@@ -10,7 +10,6 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $task    = $this->tryLearnTask($courseId, $id);
         $preview = $request->query->get('preview');
 
         $task     = $this->tryLearnTask($courseId, $id, $preview);
@@ -61,10 +60,10 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-            }
+            // list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+            // if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+            //     throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            // }
             $task = $this->getTaskService()->getTask($taskId);
         } else {
             $this->getCourseService()->tryLearnCourse($courseId);
