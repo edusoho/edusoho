@@ -33,7 +33,7 @@ class Classroom extends BaseResource
         $simple['id']            = $res['id'];
         $simple['picture']       = $res['middlePicture'];
         $simple['title']         = $res['title'];
-        $simple['about']         = is_null($res['about']) ? '' : $res['about'];
+        $simple['about']         = $res['about'];
         $simple['headTeacherId'] = $res['headTeacherId'];
         $simple['teacherIds']    = $res['teacherIds'];
         $simple['convNo']        = $this->getConversation($res['id']);
@@ -45,7 +45,7 @@ class Classroom extends BaseResource
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['convNo']      = $this->getConversation($res['id']);
-
+        $res['about']       = is_null($res['about']) ? '' : $res['about'];
         foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
             $res[$key] = $this->getFileUrl($res[$key]);
         }
