@@ -1,13 +1,13 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="">升级</a>｜
+    <a href="{{path('admin_cloud_video_upgrade')}}" target="_blank">升级</a>｜
     {% if video.renewVideo.status == true %} 
       <span class="text-muted">已续费</span>
       <span class="text-danger pts">
-        {{video.renewVideo.status.message|default('')}}
+        {{video.renewVideo.message|default('')}}
       </span>
     {% else %}
-      <a href="">续费</a>
+      <a href="{{path('admin_cloud_video_renew')}}" target="_blank">续费</a>
     {% endif %}
   </div>
   <div class="panel-body">
