@@ -38,7 +38,7 @@ class SmsCodes extends BaseResource
         }
             
         $user = $this->getCurrentUser();
-        $SmsToken = $this->getTokenService()->makeToken($type, array(
+        $smsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
             'duration' => 60 * 2,
             'userId'   => $user['id'],

@@ -24,8 +24,8 @@ $app->mount(_u('/files'), include dirname(__DIR__).'/src/files.php');
 $app->get(_u('/user/{id}'), 'res.User:get');
 $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
-$app->post(_u('/users/{id}/password'), 'res.User/Password:post');
-$app->post(_u('/users/{id}/verified_mobile'), 'res.User/VerifiedMobile:post');
+$app->post(_u('/users/password'), 'res.User/Password:post');
+$app->post(_u('/users/verified_mobile'), 'res.User/VerifiedMobile:post');
 
 $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');

@@ -46,7 +46,7 @@ class Password extends BaseResource
         $this->getUserService()->changePassword($user['id'], $password);
         $this->getTokenService()->destoryToken($currentToken);
 
-        return array('userId' => $user['id'], 'password' => $password);
+        return array('userId' => $user['id']);
     }
 
     public function filter($res)
