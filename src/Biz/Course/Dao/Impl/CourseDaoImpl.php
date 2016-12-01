@@ -24,7 +24,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return array(
             'serializes' => array(
                 'goals'     => 'delimiter',
-                'audiences' => 'delimiter'
+                'audiences' => 'delimiter',
+                'services'  => 'delimiter'
             )
         );
     }

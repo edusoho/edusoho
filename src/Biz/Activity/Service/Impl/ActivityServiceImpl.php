@@ -27,6 +27,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $media           = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
         }
+        return $activity;
     }
 
     public function findActivities($ids)
@@ -112,11 +113,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $listener->handle($activity, array());
             }
             $this->commit();
+            return $activity;
         } catch(\Exception $e) {
             $this->rollback();
+            throw $e;
         }
-
-        return $activity;
     }
 
     public function updateActivity($id, $fields)

@@ -1,9 +1,11 @@
-<li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{task.id}}">
+<li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ chapter.id }}">
+  {% set tasks = array_index(chapter.tasks, 'mode') %}
+  {% set task = tasks.lesson|default(null) %}
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
-    <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mrm"></i>
+    <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    {{task.title}}
+    </i>第<span class="number">{{ chapter.number }}</span>课时： {{ task.title }}
     {% if task.activity.mediaType is same as('live') %}
       {% if task.result.status|default('') == 'finished' %}
         <span class="color-gray mls">已结束</span>
@@ -12,25 +14,37 @@
         {{ task.activity.startTime|date('Y-n-j H:i'|trans) }} ~ {{ task.activity.endTime|date('H:i'|trans) }}</span>
       {% endif %}
     {% else %}
-      {% if task.activity.length|activity_length_format %}<span class="color-gray mls">（{{task.activity.length|activity_length_format}}）</span>{% endif %}
+      {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
+        （{{ task.activity.length|activity_length_format }}）</span>{% endif %}
     {% endif %}
   </div>
   <div class="item-actions">
-    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_task_update', {id:task.id,courseId:task.courseId})}}"><i class="es-icon es-icon-edit mrs"></i>编辑</a>
-    <a class="btn btn-gray" href="{{path('course_task_show', {id:task.id,courseId:task.courseId,preview:1})}}" target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
+    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
+       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"><i
+          class="es-icon es-icon-edit mrs"></i>编辑</a>
+    <a class="btn btn-gray" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
+       target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
     <span class="dropdown">
-      <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown mrs"aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}
+      <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#">
+        <i class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true" aria-expanded="false"></i>{{ '更多'|trans }}
       </a>
-      <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
+      <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
+          aria-labelledby="dLabel" style="display:none;">
         <li>
-          <a class='delete-item' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
+          <a class='delete-item' href="javascript:;"
+             data-url="{{ path('course_manage_task_delete', {id:task.id,courseId:task.courseId}) }}">删除</a>
         </li>
       </ul>
     </span>
   </div>
   <div class="settings-list js-settings-list clearfix">
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        {% if not tasks.preparation|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
+        {% else %}
+          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
+        {% endif %}
         <i class="es-icon es-icon-yulan mrm"></i>
         预习
       </a>
@@ -39,25 +53,41 @@
     <div class="settings-item js-settings-item active">
       <a href="javascript:;">
         <i class="es-icon es-icon-book mrm"></i>
-        课时学校
+        课时学习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        {% if not tasks.exercise|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
+        {% else %}
+          data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
+        {% endif %}
         <i class="es-icon es-icon-exam mrm"></i>
         练习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task"> <i class="es-icon es-icon-mylibrarybooks mrm"></i>
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        {% if not tasks.homework|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
+        {% else %}
+          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
+        {% endif %}
+        <i class="es-icon es-icon-mylibrarybooks mrm"></i>
         作业
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item ">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="/course/1/task">
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+        {% if not  tasks.extraClass|default(null) %}
+         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
+        {% else %}
+          data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
+        {% endif %}
         <i class="es-icon es-icon-sun mrm"></i>
         课外
       </a>
