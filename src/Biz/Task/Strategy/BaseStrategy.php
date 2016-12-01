@@ -137,7 +137,7 @@ class BaseStrategy
     /**
      * @return CourseService
      */
-    protected function getCourseService()
+    public function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }
