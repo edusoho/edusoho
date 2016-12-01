@@ -178,7 +178,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
             throw new \RuntimeException($this->trans('不存在的sms Type'));
         }
-var_dump($user);exit();
+
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
             throw new \RuntimeException($this->trans('用户未登录'));
         }
