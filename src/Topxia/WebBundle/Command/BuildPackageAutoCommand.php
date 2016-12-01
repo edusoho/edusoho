@@ -59,7 +59,7 @@ class BuildPackageAutoCommand extends BaseCommand
 
         $this->diffFilePrompt($diffFile, array('vendor' => $vendorDiff));
 
-        $packageDirectory = $this->createDirectory($name);
+        $packageDirectory = $this->createDirectory();
 
         $this->generateFiles($diffFile, array('vendor' => $vendorDiff), $packageDirectory);
 
@@ -90,7 +90,11 @@ class BuildPackageAutoCommand extends BaseCommand
             $file = @fopen($filePath, "r");
             while (!feof($file)) {
                 $line = fgets($file);
-                $op   = $line[0];
+
+                $splitLine = preg_split('/\s+/', $line);
+
+                var_dump($splitLine);
+                exit();
 
                 if (empty($line)) {
                     continue;
@@ -100,6 +104,9 @@ class BuildPackageAutoCommand extends BaseCommand
                     echo "无法处理该文件：{$line}";
                     continue;
                 }
+
+
+
 
                 if(empty($module)){
                     $opFile = trim(substr($line, 1));
@@ -186,10 +193,10 @@ class BuildPackageAutoCommand extends BaseCommand
         $this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
     }
 
-    private function createDirectory($name)
+    private function createDirectory()
     {
         $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
-        $path = "{$root}/build/{$name}_{$this->version}/";
+        $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
             $this->filesystem->remove($path);
@@ -372,7 +379,7 @@ class BuildPackageAutoCommand extends BaseCommand
         while (!feof($file)) {
             $line   = fgets($file);
             $opFile = trim(substr($line, 1));
-            if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
+            if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                 echo "异常的文件更新模式：{$line}";
                 $askDiffFile = true;
                 continue;
@@ -392,7 +399,7 @@ class BuildPackageAutoCommand extends BaseCommand
             while (!feof($file)) {
                 $line   = fgets($file);
                 $opFile = trim(substr($line, 1));
-                if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
+                if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                     echo "异常的文件更新模式：{$line}";
                     $askDiffFile = true;
                     continue;
