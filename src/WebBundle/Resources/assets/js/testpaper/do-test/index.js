@@ -1,28 +1,93 @@
 import QuestionTypeBuilder from '../../../common/testpaper/question-type-builder';
 import ActivityEmitter from "../../activity/activity-emitter";
+// import 'common/jquery-timer';
 
 class DoTest
 {
 	constructor($container) {
-
 		this.$container = $container;
 		this.answers = {};
 		this.usedTime = 0;
 		this.$form = $container.find('form');
+    this.$timer = $container.find('.js-testpaper-timer');
 		this._initEvent();
-		this._init();
+    this._initTimer();
 	}
 
 	_initEvent() {
+    $(".testpaper-activity-show").perfectScrollbar();
 		this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
 		this.$container.on('click','[data-role="paper-submit"]',event=>this._submit(event));
-		this.$container.on('click','ul.testpaper-question-choices li',event=>this._choice2Lable(event));
+		this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
 		this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
+    this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));
+    this.$container.on('click','.js-btn-index',event=>this._clickBtnIndex(event));
+    this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
+    this.$container.on('click','.js-marking-toggle',event=>this._markingToggle(event));
+    this.$container.on('click','.js-favorite-toggle',event=>this._favoriteToggle(event));
+    this.$container.on('click','.js-analysis-toggle',event=>this._analysisToggle(event));
 	}
 
-	_init() {
+  _markingToggle(event) {
+    let $current = this._viewToggle(event);
+    let id = $current.closest('.testpaper-question').attr('id');
+    $(`a[data-anchor="#${id}"]`).toggleClass("have-pro");
+  }
 
-	}
+  _favoriteToggle(event) {
+    let $current = this._viewToggle(event);
+    console.log($current.data('url'));
+  }
+
+  _analysisToggle(event) {
+    let $current = this._viewToggle(event);
+    console.log($current.data('url'));
+  }
+
+  _viewToggle(event) {
+    let  $this = $(event.currentTarget).toggleClass('active');
+    let  $current  =  $this.children(':hidden');
+    return $current;
+  }
+
+  _initTimer() {
+    this.$timer.timer({
+      countdown:true,
+      duration: this.$timer.data('time'),
+      format: '%H:%M:%S',
+      callback: function() {
+        console.log('结束'); 
+      },
+      repeat: true
+    });
+  }
+
+  _clickBtnPause(event) {
+    let $btn = $(event.currentTarget).toggleClass('active');
+    if($btn.hasClass('active')) {
+      this.$timer.timer('pause');
+    }else {
+      this.$timer.timer('resume');
+    }
+  }
+
+  _clickBtnIndex(event) {
+    let $current = $($(event.currentTarget).data('anchor'));
+    $(".testpaper-activity-show").scrollTop($current.offset().top);
+  }
+
+  _choiceLable(event) {
+    let $inputParents = $(event.delegateTarget);
+    $inputParents.find('label').each(function(){
+      $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
+    });
+    let $choices = $inputParents.find('label.active');
+    this._renderBtnIndex($choices.find('input').attr('name'),$choices.length);
+  }
+
+  _renderBtnIndex(id,num) {
+    num > 0 ? $('a[data-anchor="#question' + id + '"]').addClass('active') : $('a[data-anchor="#question' + id + '"]').removeClass('active');
+  }
 
 	_showEssayInputEditor(event) {
 		let $shortTextarea = $(event.currentTarget);
@@ -83,7 +148,7 @@ class DoTest
 		
 	}
 
-	_choice2Lable(event) {
+	_choiceList(event) {
 		let $target = $(event.currentTarget);
 		let index = $target.index();
 		let $input = $target.closest('.testpaper-question-body').siblings('.testpaper-question-footer').find('label').eq(index).find('input');
@@ -131,4 +196,4 @@ class DoTest
 	}
 }
 
-new DoTest($('.container'));
+new DoTest($('.testpaper-activity-show'));

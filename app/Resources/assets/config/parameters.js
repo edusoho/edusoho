@@ -24,6 +24,7 @@ const parameters = {
     "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
     "jquery-nstslider":['jquery-nstslider'],
     "easy-pie-chart":['../libs/js/easy-pie-chart.js'],
+    'jquery-timer':['../libs/js/jquery-timer.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -39,6 +40,8 @@ const parameters = {
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
     'jquery-nstslider/dist/jquery.nstSlider.js',
+    '../libs/js/jquery-timer.js',
+
   ],
   onlyCopys: [
     {

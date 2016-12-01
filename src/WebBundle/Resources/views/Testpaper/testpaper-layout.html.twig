@@ -2,14 +2,15 @@
 
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js','web/testpaper/do-test/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','web/testpaper/do-test/index.js']) %}
 
 {% block header %}{% if showHeader|default(1) %}{{ parent() }}{% endif %}{% endblock %}
 
-{% block content %}
-  
+{% block body %}
+   <div class="testpaper-activity-show">
+   <div class="container">
   {% block paper_header %}
-    <div class="es-section testpaper-heading">
+    {#<div class="es-section testpaper-heading">
       <div class="testpaper-titlebar clearfix">
         <h1 class="testpaper-title">
           {{ paper.name }} <br>
@@ -36,7 +37,7 @@
       {% block paper_result_bar %}{% endblock %}
       {% block paper_warning %}{% endblock %}
       {% block paper_question_type_bar %}{% endblock %}
-    </div>
+    </div>#}
   {% endblock %}
 
   {% block paper_content %}
@@ -96,6 +97,8 @@
   {% endblock %}
 
   {% block testpaperCheckedDialog %}{% endblock %}
+  </div>
+  </div>
 
 {% endblock %}
 
