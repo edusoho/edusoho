@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             },
             yAxis: {},
             series: [{
-                name: '发送量(条)',
+                name: chartData.unit,
                 type: 'line',
                 data: chartData.count,
                 areaStyle: {
