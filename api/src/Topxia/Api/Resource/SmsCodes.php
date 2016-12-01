@@ -14,7 +14,7 @@ class SmsCodes extends BaseResource
         $type   = $request->request->get('type');
         $mobile = $request->request->get('mobile');
 
-        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'email_change_password'))) {
+        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile'))) {
             return $this->error('500', '短信服务不支持该业务');
         }
         if (empty($mobile)) {
