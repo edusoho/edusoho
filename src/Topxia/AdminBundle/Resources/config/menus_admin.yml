@@ -523,10 +523,10 @@ admin:
                             disable: true
                 admin_cloud_video_setting:
                     name: 云视频
+                    router_name: admin_cloud_video_overview
                     visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
-                    router_name: admin_setting_cloud_video
                     children:
-                        admin_setting_cloud_video:
+                        admin_cloud_video_overview:
                             name: 概览
                             disable: true
                         admin_cloud_setting_video:

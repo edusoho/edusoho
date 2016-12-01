@@ -1,13 +1,13 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="">升级</a>｜
+    <a href="{{path('admin_cloud_video_upgrade')}}" target="_blank">升级</a>｜
     {% if video.renewVideo.status == true %} 
       <span class="text-muted">已续费</span>
       <span class="text-danger pts">
-        {{video.renewVideo.status.message|default('')}}
+        {{video.renewVideo.message|default('')}}
       </span>
     {% else %}
-      <a href="">续费</a>
+      <a href="{{path('admin_cloud_video_renew')}}" target="_blank">续费</a>
     {% endif %}
   </div>
   <div class="panel-body">
@@ -23,7 +23,7 @@
         </div>
         <span class="text-danger">{{space.usedSpace}}GB</span>/{{space.freeSpace}}GB
       </div>
-      {% if space.overUsedSpace != 0 %}
+      {% if space.overUsedSpace %}
         <div class="col-xs-1" style="width:100px;padding-left:0">
           <div class="progress mbm cloud-progress">
             <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
@@ -32,10 +32,11 @@
           </div>
           <div class="text-danger text-center">超额{{space.overUsedSpace}}GB</div>
         </div>
+      {% endif %}
     </div>
     <div class="row pvm">
       <div class="col-sm-2 text-right">
-        存储空间
+        本月流量
       </div>
       <div class="col-xs-7">
         <div class="progress mbm cloud-progress">

@@ -698,9 +698,9 @@ admin_setting_payment:
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
     permissions: [admin_payment]
 
-admin_setting_cloud_video:
+admin_cloud_video_overview:
     pattern:  /cloud/video/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoOverview }
 
 admin_cloud_setting_video:
     pattern:  /setting/cloud/video
@@ -747,25 +747,25 @@ admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkUpload }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_watermark_remove:
     pattern: /setting/cloud/video_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_embed_watermark_upload:
     pattern: /setting/cloud/video_embed_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_embed_watermark_remove:
     pattern: /setting/cloud/video_embed_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_refund:
     pattern:  /setting/refund
@@ -1032,6 +1032,14 @@ admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
     permissions: [admin_my_cloud_overview]
+
+admin_cloud_video_detail:
+    pattern: /cloud/video/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoDetail }
+
+admin_cloud_video_switch:
+    pattern:  /cloud/video/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSwitch }
 
 admin_cloud_search:
     pattern:  /cloud/search
@@ -1701,7 +1709,7 @@ admin_official_messages:
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_coin_picture:
     pattern: /coin/picture
