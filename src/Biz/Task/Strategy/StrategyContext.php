@@ -65,11 +65,6 @@ class StrategyContext
         return $this->strategy->canLearnTask($task);
     }
 
-    public function getCourseItemsRenderPage()
-    {
-        return $this->strategy->getCourseItemsRenderPage();
-    }
-
     public function getTasksRenderPage()
     {
         return $this->strategy->getTasksRenderPage();

@@ -4,6 +4,8 @@ namespace Biz\Task\Strategy;
 
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Common\ArrayToolkit;
@@ -76,7 +78,7 @@ class BaseStrategy
     public function baseFindCourseItems($courseId)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -122,6 +124,9 @@ class BaseStrategy
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return TaskDao
+     */
     protected function getTaskDao()
     {
         return $this->biz->service('Task:TaskDao');
