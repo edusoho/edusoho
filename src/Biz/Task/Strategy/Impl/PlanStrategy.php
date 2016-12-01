@@ -21,6 +21,18 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $this->baseUpdateTask($id, $fields);
     }
 
+    public function deleteTask($task)
+    {
+        $that = $this;
+        $this->biz['db']->transactional(function () use ($task, $that) {
+            $currentSeq = $task['seq'];
+            $that->getTaskDao()->delete($task['id']);
+            $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
+            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
+        });
+        return true;
+    }
+
     /**
      * 任务学习
      * @param $task
@@ -74,7 +86,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         );
 
         $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-        $taskNumber = 0;
+        $taskNumber   = 0;
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
@@ -119,7 +131,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             }
 
             if (strpos($id, 'task') === 0) {
-                $id         = str_replace('task-', '', $id);
+                $id = str_replace('task-', '', $id);
 
                 foreach ($parentChapters as $parent) {
                     if (!empty($parent)) {

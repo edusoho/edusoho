@@ -9,6 +9,11 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 {
     protected $table = 'course_task';
 
+    public function deleteByCategoryId($categoryId)
+    {
+        return $this->db()->delete($this->table(), array('categoryId' => $categoryId));
+    }
+
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq";
@@ -41,10 +46,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     }
 
 
-    public function waveSeqBiggerThanSeq($seq, $diff)
+    public function waveSeqBiggerThanSeq($courseId, $seq, $diff)
     {
-        $sql = "UPDATE {$this->table()} SET seq = seq + ?  WHERE seq >?";
-        return $this->db()->executeUpdate($sql, array($diff, $seq));
+        $sql = "UPDATE {$this->table()} SET seq = seq + ? , number = number + ? WHERE courseId =? and seq >?";
+        return $this->db()->executeUpdate($sql, array($diff, $diff, $courseId, $seq));
     }
 
     public function declares()
