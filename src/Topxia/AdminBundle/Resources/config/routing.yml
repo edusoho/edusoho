@@ -2,10 +2,6 @@ admin:
     path:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_notice_modal:
-    path:  /notice/modal
-    defaults: { _controller: TopxiaAdminBundle:Default:notice }
-
 admin_question_remind_teachers:
     path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
@@ -50,11 +46,6 @@ admin_course_explore:
 #     path: /login/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
-
-admin_dashboard:
-    path:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-    permissions: [admin]
 
 admin_opencourse_analysis:
     path:  /opencourse/analysis
@@ -237,6 +228,26 @@ admin_tag_delete:
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
     permissions: [admin_course_tag_manage]
+
+admin_tag_group:
+    path: /tag/group
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:index }
+
+admin_tag_group_create:
+    path: /tag/group/create
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
+
+admin_tag_group_update:
+    path: /tag/group/{groupId}/update
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
+
+admin_tag_group_checkname:
+    path: /tag/group/checkname
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:checkName }
+
+admin_tag_group_delete:
+    path: /tag/group/{tagId}/delete
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:delete }
 
 admin_user:
     path:  /user
@@ -607,11 +618,11 @@ admin_setting_mobile:
     permissions: [admin_setting_mobile_settings]
 
 admin_setting_mobile_iap_product:
-    pattern:  /setting/mobile_iap_product
+    path:  /setting/mobile_iap_product
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProduct }
 
 admin_setting_mobile_iap_product_delete:
-    pattern:  /setting/mobile_iap_product_delete/{productId}
+    path:  /setting/mobile_iap_product_delete/{productId}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProductDelete }
     methods: [POST]
 
@@ -1214,9 +1225,7 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_category:
-    path: /category
-    defaults: { _controller: TopxiaAdminBundle:Category:index }
+
     permissions: [admin_course_category_manage]
 
 admin_app_package_update_check_newest:
@@ -1242,12 +1251,6 @@ admin_category_delete:
     path:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
-
-admin_category_upload:
-    path: /category/uploadfile
-    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
-    methods: [POST]
-    permissions: [admin_course_category_manage]
 
 admin_category_sort:
     path:  /category/sort
@@ -1650,11 +1653,6 @@ admin_system_status:
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
     permissions: [admin]
 
-admin_official_messages:
-    path:  /official/messages
-    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
-    permissions: [admin]
-
 admin_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
@@ -1720,6 +1718,27 @@ admin_order_manage_export_csv:
 admin_order_manage_export_coin_csv:
     path: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
+
+# admin_account_center:
+#     path:     /account/center
+#     defaults: { _controller: TopxiaAdminBundle:Account:index }
+
+# admin_account_analysis:
+#     path:     /account/analysis
+#     defaults: { _controller: TopxiaAdminBundle:Account:accountAnalysis }
+
+# admin_account_rank:
+#     path:     /account/rank
+#     defaults: { _controller: TopxiaAdminBundle:Account:rank }
+
+# admin_payment_rank:
+#     path:     /account/payment/rank
+#     defaults: { _controller: TopxiaAdminBundle:Account:paymentRank }
+
+# admin_account_statistic:
+#     path: /account/statistic/{period}
+#     defaults: { _controller: TopxiaAdminBundle:Account:accountStatistic }
+#     permissions: [admin]
 
 admin_coin_user_records:
     path:     /coin/records/user
@@ -1905,9 +1924,4 @@ admin_report_status_email_send:
 admin_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
-    permissions: [admin_cloud_attachment_manage]
-
-admin_cloud_attachment_render:
-    path: /cloud_attachment/render
-    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }
     permissions: [admin_cloud_attachment_manage]

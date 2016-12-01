@@ -67,6 +67,17 @@ class SubtitleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function previewAction($mediaId)
+    {
+        return $this->render('TopxiaWebBundle:MediaManage:preview.html.twig', array(
+            'mediaId' => $mediaId,
+            'context' => array(
+                'hideQuestion' => 1,
+                'hideBeginning' => true
+            )
+        ));
+    }
+
     public function manageDialogAction(Request $request)
     {
         $mediaId = $request->query->get('mediaId');

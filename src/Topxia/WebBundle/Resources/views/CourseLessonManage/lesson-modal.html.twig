@@ -120,10 +120,10 @@
     </div>
   </div>
 
-  {% if storageSetting.upload_mode|default('local') == 'cloud' %}
-    <div class="form-group for-video-type" id="subtitle-form-group" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+  {% if storageSetting.upload_mode|default('local') == 'cloud' and lesson.mediaSource|default('self') == 'self' %}
+    <div class="form-group for-video-type" id="subtitle-form-group">
       <div class="col-md-2 control-label for-video-type"><label>{{'视频字幕'|trans}}</label></div>
-      <div class="col-md-10 controls js-subtitle-list">
+      <div class="col-md-10 controls js-subtitle-list" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
         <p style="margin-top:6px;color:#a1a1a1">请等待视频上传完之后再添加字幕</p>
       </div>
       <div class="col-md-offset-2 help-block">

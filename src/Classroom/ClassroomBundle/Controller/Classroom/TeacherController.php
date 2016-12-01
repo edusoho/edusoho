@@ -41,7 +41,8 @@ class TeacherController extends BaseController
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        if (!$canLook) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -57,7 +58,7 @@ class TeacherController extends BaseController
         }
         return $this->render('ClassroomBundle:Classroom\Teacher:list.html.twig', array(
             'layout'               => $layout,
-            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'canLook'              => $canLook,
             'classroom'            => $classroom,
             'teachers'             => $users,
             'profiles'             => $profiles,

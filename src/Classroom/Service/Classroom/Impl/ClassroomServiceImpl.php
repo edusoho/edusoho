@@ -19,6 +19,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
+
         return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
@@ -188,7 +189,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * 要过滤要更新的字段
      */
     public function updateClassroom($id, $fields)
-    {
+    {   
+        $user = $this->getCurrentUser();
+
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
@@ -197,6 +202,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
+
+        $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+
         return $classroom;
     }
 
@@ -997,10 +1005,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param  $id
-     * @param  $classroomPermission
+     * @param  $permission
      * @return bool
      */
-    public function canManageClassroom($id, $classroomPermission = null)
+    public function canManageClassroom($id, $permission = 'admin_classroom_content_manage')
     {
         $classroom = $this->getClassroom($id);
 
@@ -1013,8 +1021,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        $defaultPermission = 'admin_classroom_content_manage';
-        if ($user->hasPermission($defaultPermission) || $user->hasPermission($classroomPermission)) {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->hasPermission($permission)) {
             return true;
         }
 
@@ -1038,7 +1049,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function canTakeClassroom($id, $isStudentOrAuditor = false)
+    public function canTakeClassroom($id, $includeAuditor = false)
     {
         $classroom = $this->getClassroom($id);
 
@@ -1052,7 +1063,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($user->isAdmin() && !$isStudentOrAuditor) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -1062,22 +1073,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'assistant', 'auditor', 'teacher', 'headTeacher'))) {
-                return true;
-            }
-        } else {
-            if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
-                return true;
-            }
+        if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
+            return true;
+        }
+
+        if ($includeAuditor && in_array('auditor', $member['role'])) {
+            return true;
         }
 
         return false;
     }
 
-    public function tryTakeClassroom($id)
+    public function tryTakeClassroom($id, $includeAuditor = false)
     {
-        if (!$this->canTakeClassroom($id)) {
+        if (!$this->canTakeClassroom($id, $includeAuditor)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
         }
     }
@@ -1122,25 +1131,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function canLookClassroom($id)
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return false;
-        }
-
-        if ($user->isAdmin()) {
-            return true;
-        }
-        
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
             return false;
         }
 
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin() && $classroom['showable']) {
+            return true;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         $member = $this->getClassroomMember($id, $user['id']);
 
-        if ($classroom['showable'] && !$member['locked']) {
+        if (empty($member) && $classroom['showable']) {
             return true;
         }
 
@@ -1451,6 +1460,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getClassroomMemberDao()
     {
         return $this->createDao('Classroom:Classroom.ClassroomMemberDao');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
     protected function getCourseService()
