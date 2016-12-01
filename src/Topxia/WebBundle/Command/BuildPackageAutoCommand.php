@@ -129,7 +129,7 @@ class BuildPackageAutoCommand extends BaseCommand
                     continue;
                 }
 
-                if (strpos($opFile, 'plugins') === 0) {
+                if (strpos($opFile, 'plugins') === 0 || strpos($newFile, 'plugins')) {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
                 }
@@ -150,8 +150,7 @@ class BuildPackageAutoCommand extends BaseCommand
                     $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
                     $this->insertDelete($opFile, $packageDirectory);
                     $this->copyFileAndDir($newFile, $packageDirectory);
-                    var_dump($opFile, $newFile);
-                    exit();
+
                     if ($opBundleFile) {
                         $this->output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
                         $this->insertDelete($opBundleFile, $packageDirectory);
