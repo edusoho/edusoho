@@ -13,20 +13,18 @@ class Emails extends BaseResource
     {
         $data = $request->request->all();
 
-        if (!$this->getUserService()->getUserByEmail($data['email'])) {
+        $user = $this->getUserService()->getUserByEmail($data['email']);
+        if (!$user) {
             return $this->error('5003', '该邮箱未在网校注册');
         }
 
+        $url  = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('rawPassword' => $data['rawPassword'], 'userId' => $user['id']));
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-
         $data['rawPassword'] = array(
             'salt'     => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
         );
-
-        $user = $this->getCurrentUser();
         $site = $this->getSettingService()->get('site', array());
-        $url  = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('rawPassword' => $data['rawPassword'], 'userId' => $user['id']));
 
         try {
             $mailOptions = array(
