@@ -47,7 +47,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $task = $this->getTask($id);
 
         if (!$this->canManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权删除任务');
+            throw $this->createAccessDeniedException("cann't delete task. ");
         }
         $currentSeq = $task['seq'];
         $result     = $this->getTaskDao()->delete($id);
@@ -132,7 +132,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw new AccessDeniedException('任务不在进行状态');
+            throw $this->createAccessDeniedException('task is not doing. ');
         }
 
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
@@ -145,7 +145,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('该任务不在进行状态');
+            throw $this->createAccessDeniedException('task access denied. ');
         }
 
         if ($taskResult['status'] === 'finish') {
