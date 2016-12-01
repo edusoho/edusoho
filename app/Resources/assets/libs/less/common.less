@@ -8,6 +8,7 @@
   right: 0;
   bottom: 0;
   top:0;
+  background-color: #fff;
 }
 
 .text-activity-show {
@@ -16,5 +17,32 @@
   word-spacing: normal;
   img {
     max-width: 100%;
+  }
+}
+
+.download-activity-show {
+  background-color: #fff;
+  .download-activity-list {
+    padding-left: 0;
+    list-style: none;
+    >li {
+      &:nth-of-type(odd) {
+        background-color: @bg-color;
+      }
+      >a {
+        display: block;
+        padding: 20px;
+        .download-icon {
+          float: right;
+          color: @gray-medium;
+        }
+        &:hover {
+          .download-icon {
+            color: @brand-primary;
+          }
+          color: @brand-primary;
+        }
+      }
+    }
   }
 }
