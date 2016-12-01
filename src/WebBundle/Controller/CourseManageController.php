@@ -149,34 +149,27 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    public function checkStudentAction(Request $request, $id)
+    public function checkStudentAction(Request $request, $courseSetId, $courseId)
     {
         $keyword = $request->query->get('value');
         $user    = $this->getUserService()->getUserByLoginField($keyword);
 
+        $response = true;
         if (!$user) {
-            // $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
-            $response = '该用户不存在';
+            $response = $this->getServiceKernel()->trans('该用户不存在');
         } else {
-            $isCourseMember = $this->getCourseService()->isCourseMember($id, $user['id']);
-            // $response       = !$isCourseMember ? 'true' : 'false';
-            $response = 'true'; //test only
+            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
 
-            // $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
+            if ($isCourseStudent) {
+                $response = $this->getServiceKernel()->trans('该用户已是本课程的学员了');
+            } else {
+                $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
 
-            // if ($isCourseStudent) {
-            //     $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了'));
-            // } else {
-            //     $response = array('success' => true, 'message' => '');
-            // }
-
-            // $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
-
-            // if ($isCourseTeacher) {
-            //     $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));
-            // }
+                if ($isCourseTeacher) {
+                    $response = $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加');
+                }
+            }
         }
-
         return $this->createJsonResponse($response);
     }
 
@@ -249,6 +242,11 @@ class CourseManageController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
