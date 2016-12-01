@@ -1,6 +1,81 @@
-course_manage_course_set:
-  path: /course_set/{courseId}/courses
-  defaults: {_controller:WebBundle:TaskManage:courseSet}
+course_set_manage_create:
+  path: /course_set/create
+  defaults: {_controller: WebBundle:CourseSetManage:create}
+
+course_set_show:
+  path: /course_set/{id}
+  defaults: {_controller: WebBundle:CourseSet:show}
+
+course_set_preview:
+  path: /course_set/{id}/preview
+  defaults: {_controller: WebBundle:CourseSet:preview}
+
+course_set_manage:
+  path: /course_set/{id}/manage
+  defaults: {_controller: WebBundle:CourseSetManage:index}
+
+course_set_manage_base:
+  path: /course_set/{id}/manage/base
+  defaults: {_controller: WebBundle:CourseSetManage:base}
+
+course_set_manage_detail:
+  path: /course_set/{id}/manage/detail
+  defaults: {_controller: WebBundle:CourseSetManage:detail}
+
+course_set_manage_cover:
+  path: /course_set/{id}/manage/cover
+  defaults: {_controller: WebBundle:CourseSetManage:cover}
+
+course_set_manage_courses:
+  path: /course_set/{courseSetId}/manage/courses
+  defaults: {_controller:WebBundle:CourseManage:list}
+
+#testpaper
+course_set_manage_testpaper:  
+  path: /course_set/{id}/manage/testpaper
+  defaults: { _controller: WebBundle:TestpaperManage:index }
+
+course_set_manage_testpaper_create:
+  path: /course_set/{id}/manage/testpaper/create
+  defaults: { _controller: WebBundle:TestpaperManage:create }
+
+course_set_manage_testpaper_info:
+  path: /course_set/{id}/manage/testpaper/info
+  defaults: { _controller: WebBundle:TestpaperManage:info }
+  methods: [POST]
+
+course_set_manage_question_check:
+  path: /course_set/{id}/manage/question/check
+  defaults: { _controller: WebBundle:QuestionManage:check }
+
+
+course_set_manage_course_create:
+  path: /course_set/{courseSetId}/manage/course/create
+  defaults: {_controller: WebBundle:CourseManage:create}
+
+course_set_manage_course_info:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/info
+  defaults: {_controller: WebBundle:CourseManage:info}
+
+course_set_manage_course_tasks:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
+  defaults: {_controller: WebBundle:CourseManage:tasks}
+
+course_set_manage_course_marketing:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
+  defaults: {_controller: WebBundle:CourseManage:marketing}
+
+course_set_manage_course_close:
+  path: /course_set/{courseSetId}/course/{courseId}/close
+  defaults: {_controller: WebBundle:CourseManage:close}
+
+course_set_manage_course_delete:
+  path: /course_set/{courseSetId}/course/{courseId}/delete
+  defaults: {_controller: WebBundle:CourseManage:delete}
+
+course_set_manage_course_publish:  
+  path: /course_set/{courseSetId}/course/{courseId}/publish
+  defaults: {_controller: WebBundle:CourseManage:publish}
 
 course_manage_tasks:
   path:  /course/{courseId}/manage/tasks
@@ -115,4 +190,135 @@ course_manage_question_preview:
     path: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: WebBundle:QuestionManage:preview }
 
+<<<<<<< Updated upstream
+=======
+course_set_manage_question_picker:
+  path: /course_set/{courseId}/manage/question/picker
+  defaults: { _controller: WebBundle:QuestionManage:questionPicker }
+
+course_set_manage_question_picked:
+  path:  /course_set/{courseId}/manage/question/{questionId}/picked
+  defaults: { _controller: WebBundle:QuestionManage:pickedQuestion }
+
+
+#testpaper
+# course_manage_testpaper:
+#   path: /course/{courseId}/manage/testpaper
+#   defaults: { _controller: WebBundle:TestpaperManage:index }
+
+# course_manage_testpaper_create:
+#   path: /course/{courseId}/manage/testpaper/create
+#   defaults: { _controller: WebBundle:TestpaperManage:create }
+
+course_manage_testpaper_publish:
+  path: /course/{courseId}/manage/testpaper/{id}/publish
+  defaults: { _controller: WebBundle:TestpaperManage:publish }
+  #methods: [POST]
+
+course_manage_testpaper_close:
+  path: /course/{courseId}/manage/testpaper/{id}/close
+  defaults: { _controller: WebBundle:TestpaperManage:close }
+  #methods: [POST]
+
+course_manage_testpaper_check:
+  path: /course/{courseId}/manage/testpaper/{resultId}/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:check }
+
+course_manage_testpaper_check_list:
+  path: /course/{courseId}/manage/testpaper/check
+  defaults: { _controller: WebBundle:CourseTestpaperManage:checkList }
+
+course_manage_testpaper_result_list:
+  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: WebBundle:CourseTestpaperManage:resultList }
+
+course_manage_testpaper_questions:
+  path: /course/{courseId}/manage/testpaper/{testpaperId}/items
+  defaults: { _controller: WebBundle:TestpaperManage:questions }
+
+# course_manage_testpaper_items_get:
+#   path: /course/{courseId}/manage/testpaper/items/get
+#   defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
+
+testpaper_do:
+  path: /lesson/{lessonId}/testpaper/{testId}/do
+  defaults: { _controller: WebBundle:Testpaper:doTestpaper }
+
+testpaper_show:
+  path: /testpaper/{resultId}/show
+  defaults: { _controller: WebBundle:Testpaper:doTest }
+
+testpaper_result_show:
+  path: /testpaper/result/{resultId}/show
+  defaults: { _controller: WebBundle:Testpaper:showResult }
+
+testpaper_result_submit:
+  path: /testpaper/result/{resultId}/submit
+  defaults: { _controller: WebBundle:Testpaper:submitTest }
+  methods: [POST]
+
+testpaper_finish:
+  path: /testpaper/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Testpaper:finishTest }
+
+
+#homework
+course_manage_homework:
+  path: /course/{courseId}/manage/homework
+  defaults: { _controller: WebBundle:HomeworkManage:index }
+
+course_manage_homework_create:
+  path: /course/{courseId}/manage/lesson/{lessonId}/homework/create
+  defaults: { _controller: WebBundle:HomeworkManage:create }
+
+course_manage_homework_question_picked:
+  path: /course/{courseId}/manage/question/picked
+  defaults: { _controller: WebBundle:HomeworkManage:questionPicked }
+
+homework_start_do:
+    pattern: /homework/{homeworkId}/startDo
+    defaults: { _controller: WebBundle:Homework:startDo }
+
+homework_show:
+    pattern: /homework/{resultId}/show
+    defaults: { _controller: WebBundle:Homework:doTest }
+
+homework_result_show:
+    pattern: /homework/result/{resultId}/show
+    defaults: { _controller: WebBundle:Homework:showResult }
+
+homework_finish:
+  path: /homework/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Homework:submit }
+  methods: [POST]
+
+#exercise
+course_manage_exercise_create:
+  path: /course/{courseId}/manage/lesson/{lessonId}/exercise/create
+  defaults: { _controller: WebBundle:ExerciseManage:create }
+
+#todo 与homework_check合并
+course_manage_exercise_check:
+  path:  /course/{courseId}/manage/exercise/check
+  defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
+
+exercise_start_do:
+    pattern: /exercise/{exerciseId}/startDo
+    defaults: { _controller: WebBundle:Exercise:startDo }
+
+exercise_show:
+    pattern: /exercise/{resultId}/show
+    defaults: { _controller: WebBundle:Exercise:doTest }
+
+exercise_result_show:
+    pattern: /exercise/result/{resultId}/show
+    defaults: { _controller: WebBundle:Exercise:showResult }
+
+exercise_finish:
+  path: /exercise/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Exercise:submit }
+  methods: [POST]
+
+
+>>>>>>> Stashed changes
 

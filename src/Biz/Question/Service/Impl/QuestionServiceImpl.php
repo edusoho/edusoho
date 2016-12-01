@@ -3,10 +3,8 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
-use Topxia\Service\Question\Type\QuestionTypeFactory;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
@@ -34,10 +32,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $question = $this->getQuestionDao()->create($fields);
 
         if ($question['parentId'] > 0) {
-            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
 
         return $question;
     }
@@ -59,7 +57,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
 
         return $question;
     }
@@ -77,14 +75,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $result = $this->getQuestionDao()->delete($id);
 
         if ($question['parentId'] > 0) {
-            $this->waveSubCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
         if ($question['subCount'] > 0) {
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->dispatchEvent('question.delete', new Event($question));
+        $this->dispatchEvent("question.delete", array('question' => $question));
 
         return $result;
     }
@@ -140,32 +138,106 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return array_keys($questions);
     }
 
-    public function judgeQuestions(array $answers, $refreshStats = false)
+    public function getCheckedQuestionTypes()
     {
-        $questions = $this->findQuestionsByIds(array_keys($answers));
+        $types        = $this->getQuestionTypes();
+        $checkedTypes = array();
 
-        $results = array();
-        foreach ($answers as $id => $answer) {
-            if (empty($answer)) {
-                $results[$id] = array('status' => 'noAnswer');
-            } elseif (empty($questions[$id])) {
-                $results[$id] = array('status' => 'notFound');
-            } else {
-                $question     = $questions[$id];
-                $results[$id] = QuestionTypeFactory::create($question['type'])->judge($question, $answer);
+        foreach ($types as $type) {
+            if ($this->getQuestionConfig($type)->isNeedCheck()) {
+                $checkedTypes[] = $type;
             }
         }
 
-        return $results;
+        return $checkedTypes;
     }
 
-    public function waveSubCount($id, $diffs)
+    public function findCourseTasks($courseId)
+    {
+        return array();
+    }
+
+    public function waveCount($id, $diffs)
     {
         return $this->getQuestionDao()->wave(array($id), $diffs);
+    }
+
+    public function judgeQuestion($question, $answer)
+    {
+        if (!$question) {
+            return array('status' => 'notFound', 'score' => 0);
+        }
+
+        if (!$answer) {
+            return array('status' => 'noAnswer', 'score' => 0);
+        }
+
+        $questionConfig = $this->getQuestionConfig($question['type']);
+        return $questionConfig->judge($question, $answer);
+    }
+
+    public function hasEssay($questionIds)
+    {
+        $count = $this->searchCount(array('ids' => $questionIds, 'type' => 'essay'));
+
+        if ($count) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
+    }
+
+    /**
+     * question_favorite
+     */
+
+    public function createFavoriteQuestion($fields)
+    {
+        return $this->getQuestionFavoriteDao()->create($fields);
+    }
+
+    public function updateFavoriteQuestion($id, $fields)
+    {
+        return $this->getQuestionFavoriteDao()->update($id, $fields);
+    }
+
+    public function deleteFavoriteQuestion($id)
+    {
+        return $this->getQuestionFavoriteDao()->delete($id);
+    }
+
+    public function searchFavoriteQuestions($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getQuestionFavoriteDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchFavoriteCount($conditions)
+    {
+        return $this->getQuestionFavoriteDao()->count($conditions);
+    }
+
+    public function findUserFavoriteQuestions($userId)
+    {
+        return $this->getQuestionFavoriteDao()->findUserFavoriteQuestions($userId);
+    }
+
+    public function deleteFavoriteByQuestionId($questionId)
+    {
+        return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
     }
 
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
+    }
+
+    protected function getQuestionFavoriteDao()
+    {
+        return $this->createDao('Question:QuestionFavoriteDao');
     }
 }

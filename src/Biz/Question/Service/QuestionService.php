@@ -21,4 +21,30 @@ interface QuestionService
 
     public function searchCount($conditions);
 
+    public function waveCount($id, $diffs);
+
+    public function judgeQuestion($question, $answer);
+
+    public function hasEssay($questionIds);
+
+    public function getQuestionCountGroupByTypes($conditions);
+
+    /**
+     * question_favorite
+     */
+
+    public function createFavoriteQuestion($fields);
+
+    public function updateFavoriteQuestion($id, $fields);
+
+    public function deleteFavoriteQuestion($id);
+
+    public function searchFavoriteQuestions($conditions, $orderBy, $start, $limit);
+
+    public function searchFavoriteCount($conditions);
+
+    public function findUserFavoriteQuestions($userId);
+
+    public function deleteFavoriteByQuestionId($questionId);
+
 }
