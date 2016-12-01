@@ -28,8 +28,13 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
         if ($field['mode'] == 'lesson') {
             $that = $this;
-            $task = $this->biz['db']->transactional(function () use ($field, $that) {
-                $chapter             = $that->prepareChapterFields($field);
+
+            $chapter = array(
+                'courseId' => $field['fromCourseId'],
+                'title'    => $field['title'],
+                'type'     => 'lesson'
+            );
+            $task    = $this->biz['db']->transactional(function () use ($field, $chapter, $that) {
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
@@ -214,12 +219,4 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $chapterSeq + $taskModes[$taskMode];
     }
 
-    protected function prepareChapterFields($task)
-    {
-        return array(
-            'courseId' => $task['fromCourseId'],
-            'title'    => $task['title'],
-            'type'     => 'lesson'
-        );
-    }
 }
