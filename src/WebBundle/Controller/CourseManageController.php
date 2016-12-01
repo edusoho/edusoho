@@ -3,6 +3,7 @@ namespace WebBundle\Controller;
 
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
@@ -116,19 +117,67 @@ class CourseManageController extends BaseController
 
     public function studentsAction(Request $request, $courseSetId, $courseId)
     {
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-            $this->getCourseService()->updateCourseStudents($courseId, $data);
-
-            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
-        }
-
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
         return $this->render('WebBundle:CourseManage:students.html.twig', array(
             'courseSet' => $courseSet,
-            'course'    => $course
+            'course'    => $course,
+            'students'  => $students
         ));
+    }
+
+    public function addStudentAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $data           = $request->request->all();
+            $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
+            $data['userId'] = $user['id'];
+            $this->getCourseService()->addStudentToCourse($courseId, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:student-add-modal.html.twig', array(
+            'course'      => $course,
+            'courseSetId' => $courseSetId
+        ));
+    }
+
+    public function removeStudentAction(Request $request, $courseSetId, $courseId, $userId)
+    {
+        $this->getCourseService()->removeStudentFromCourse($courseId, $userId);
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function checkStudentAction(Request $request, $id)
+    {
+        $keyword = $request->query->get('value');
+        $user    = $this->getUserService()->getUserByLoginField($keyword);
+
+        if (!$user) {
+            // $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
+            $response = '该用户不存在';
+        } else {
+            $isCourseMember = $this->getCourseService()->isCourseMember($id, $user['id']);
+            // $response       = !$isCourseMember ? 'true' : 'false';
+            $response = 'true'; //test only
+
+            // $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
+
+            // if ($isCourseStudent) {
+            //     $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了'));
+            // } else {
+            //     $response = array('success' => true, 'message' => '');
+            // }
+
+            // $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
+
+            // if ($isCourseTeacher) {
+            //     $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));
+            // }
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)
@@ -196,5 +245,10 @@ class CourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

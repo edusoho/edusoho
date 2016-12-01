@@ -34,5 +34,14 @@ interface CourseService
 
     public function tryTakeCourse($courseId);
 
+    public function findStudentsByCourseId($courseId);
+
+    public function isCourseTeacher($courseId, $userId);
+
     public function isCourseStudent($courseId, $userId);
+
+    public function addStudentToCourse($courseId, $fields);
+
+    public function removeStudentFromCourse($courseId, $userId);
+
 }
