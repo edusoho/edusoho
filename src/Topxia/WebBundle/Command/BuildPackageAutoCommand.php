@@ -93,27 +93,20 @@ class BuildPackageAutoCommand extends BaseCommand
 
                 $splitLine = preg_split('/\s+/', $line);
 
-                var_dump($splitLine);
-                exit();
+                list($op, $opFile, $newFile) = $splitLine;
 
                 if (empty($line)) {
                     continue;
                 }
 
-                if (!in_array($line[0], array('M', 'A', 'D'))) {
+                if (!in_array($line[0], array('M', 'A', 'D', 'R'))) {
                     echo "无法处理该文件：{$line}";
                     continue;
                 }
 
-
-
-
-                if(empty($module)){
-                    $opFile = trim(substr($line, 1));
-                }else{
-                    $opFile = $module . DIRECTORY_SEPARATOR . trim(substr($line, 1));
+                if(!empty($module)){
+                    $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
                 }
-
 
                 if (empty($opFile)) {
                     echo "无法处理该文件：{$line}";
@@ -151,6 +144,17 @@ class BuildPackageAutoCommand extends BaseCommand
                 }
 
                 $opBundleFile = $this->getBundleFile($opFile);
+
+                if ($op == 'R' && !empty($newFile)){
+                    $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
+                    $this->insertDelete($opFile, $packageDirectory);
+                    $this->copyFileAndDir($newFile, $packageDirectory);
+
+                    if ($opBundleFile) {
+                        $this->output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
+                        $this->insertDelete($opBundleFile, $packageDirectory);
+                    }
+                }
 
                 if ($op == 'M' || $op == 'A') {
                     $this->output->writeln("<info>增加更新文件：{$opFile}</info>");
