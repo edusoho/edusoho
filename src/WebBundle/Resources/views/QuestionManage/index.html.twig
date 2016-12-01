@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
 {% block title %}{{'题目管理'|trans}} - {{ parent() }}{% endblock %}
@@ -6,7 +6,7 @@
 {% set parentId = parentQuestion.id|default(0) %}
 
 {% set side_nav = 'question' %}
-{% set script_controller = 'course-manage/list' %}
+{% do script(['web/question-manage/index.js',]) %}
 
 {% block main %}
 
@@ -81,7 +81,7 @@
     </table>
     <div>
       <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
-      <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_manage_question_deletes',{courseId:course.id}) }}">{{'删除'|trans}}</button>
+      <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_manage_question_deletes',{courseId:course.id}) }}" data-loading-text="正在删除...">{{'删除'|trans}}</button>
       <span class="pull-right text-muted">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
     </div>
     <nav class="text-center">

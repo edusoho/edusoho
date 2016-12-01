@@ -48,6 +48,9 @@ course_set_manage_testpaper_info:
   defaults: { _controller: WebBundle:TestpaperManage:info }
   methods: [POST]
 
+course_set_manage_question_check:
+  path: /course_set/{id}/manage/question/check
+  defaults: { _controller: WebBundle:QuestionManage:check }
 
 course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
@@ -204,13 +207,13 @@ course_manage_question_preview:
     path: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: WebBundle:QuestionManage:preview }
 
-course_manage_question_picker:
-  path: /course/{courseId}/manage/question/picker
+course_set_manage_question_picker:
+  path: /course_set/{courseId}/manage/question/picker
   defaults: { _controller: WebBundle:QuestionManage:questionPicker }
 
-course_manage_question_picked:
-  path:  /course/{courseId}/manage/question/{questionId}/picked
-  defaults: { _controller: WebBundle:QuestionManage:PickedQuestion }
+course_set_manage_question_picked:
+  path:  /course_set/{courseId}/manage/question/{questionId}/picked
+  defaults: { _controller: WebBundle:QuestionManage:pickedQuestion }
 
 
 #testpaper
@@ -330,6 +333,5 @@ exercise_finish:
   path: /exercise/result/{resultId}/finish
   defaults: { _controller: WebBundle:Exercise:submit }
   methods: [POST]
-
 
 

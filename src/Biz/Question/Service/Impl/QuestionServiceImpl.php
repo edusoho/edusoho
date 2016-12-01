@@ -152,11 +152,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $checkedTypes;
     }
 
-    public function findCourseTasks($courseId)
-    {
-        return array();
-    }
-
     public function waveCount($id, $diffs)
     {
         return $this->getQuestionDao()->wave(array($id), $diffs);
@@ -239,10 +234,5 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question:QuestionFavoriteDao');
-    }
-
-    private function getCourseTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

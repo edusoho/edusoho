@@ -37,16 +37,15 @@ class MaterialQuestionController extends BaseController
         $course      = $this->getCourseService()->getCourse($courseId);
         $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
 
+        $features = array();
         if ($this->container->hasParameter('enabled_features')) {
             $features = $this->container->getParameter('enabled_features');
-        } else {
-            $features = array();
         }
         $enabledAudioQuestion = in_array('audio_question', $features);
 
         return $this->render('WebBundle:MaterialQuestion:form.html.twig', array(
             'course'               => $course,
-            'parentQuestion'       => null,
+            'parentQuestion'       => array(),
             'enabledAudioQuestion' => $enabledAudioQuestion,
             'courseTasks'          => $courseTasks,
             'type'                 => $type
