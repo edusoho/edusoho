@@ -5,7 +5,7 @@ class Testpaper {
 		this._setValidateRule();
     this._init();
     this._initEvent();
-    this._initSlider();
+    //this._initSlider();
 
   }
 
@@ -13,10 +13,8 @@ class Testpaper {
     this._inItStep2form();
     this._dateTimePicker();
 
-    let testpaperId = $('#testpaper-media').find('option:selected').val();
-    if (testpaperId != 0) {
-    	this._getItemsTable($('#testpaper-media').data('getTestpaperItems'), testpaperId);
-    }
+    let passScore = $('[name="finishScore"]').val();
+    this._initSelectTestpaper($('#testpaper-media').find('option:selected'),passScore);
   }
 
   _initEvent() {
@@ -35,11 +33,13 @@ class Testpaper {
         let $list = $(this).closest('.nstSlider-list');
         let left = $('.js-leftGrip').css('left');
         let total = $list.find('.js-totale-text').text();
-        let value = Math.floor(leftValue/total*100)+'%';
+        let value = Math.ceil(leftValue/total*100)+'%';
+
         $list.find('.js-leftGrip-remask-text').text(leftValue);
         $list.find('.js-bar').css('width',value);
         $list.find('.js-nstSlider-content').css('left',left);
         $list.find('.js-leftGrip-text').css('left',left).text(value);
+        $('[name="finishScore"]').val(leftValue);
       }
     });
 
@@ -50,8 +50,8 @@ class Testpaper {
   }
 
   _changeCondition(event) {
-    var $this = $(event.currentTarget);
-    var value = $this.find('option:selected').val();
+    let $this = $(event.currentTarget);
+    let value = $this.find('option:selected').val();
     if(value!='score') {
       $('.js-score-slider').addClass('hidden');
     }else {
@@ -60,11 +60,32 @@ class Testpaper {
   }
 
   _changeTestpaper(event) {
-  	var $this = $(event.currentTarget);
-    var mediaId = $this.find('option:selected').val();
+  	let $target = $(event.currentTarget);
+    let $option = $target.find('option:selected');
     
-    if (mediaId != 0) {
-      this._getItemsTable($this.data('getTestpaperItems'), mediaId);
+    this._initSelectTestpaper($option);
+  }
+
+  _initSelectTestpaper($option, passScore='') {
+    let mediaId = $option.val();
+    
+    if (mediaId != '') {
+      this._getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
+      let score = $option.data('score');
+
+      $('.nstSlider').attr('data-range_max',score);
+      $('.js-totale-text').text(score);
+      if (passScore == '') {
+        passScore = Math.ceil(score * 0.6);
+      }
+      
+      $('.js-leftGrip-remask-text').text(passScore);
+      $('.nstSlider').attr('data-cur_min',passScore);
+
+      this._initSlider();
+
+    } else {
+      $('#questionItemShowDiv').hide();
     }
   }
 
@@ -148,6 +169,9 @@ class Testpaper {
     var validator = $step2_form.validate({
         onkeyup: false,
         rules: {
+            title: {
+              required:true
+            },
             mediaId: {
               required: true,
               digits:true
@@ -173,6 +197,12 @@ class Testpaper {
             }
         },
         messages: {
+            title:{
+              required:"请填写标题"
+            },
+            mediaId: {
+              required:"请选择试卷"
+            },
             startTime: {
               required:"请选择考试的开始时间"
             },

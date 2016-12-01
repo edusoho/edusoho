@@ -34,12 +34,14 @@ class ExerciseActivityController extends BaseController implements ActivityActio
 
     public function createAction(Request $request, $courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+
         $questionTypes = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
 
         return $this->render('WebBundle:ExerciseActivity:modal.html.twig', array(
             'courseId'      => $courseId,
             'questionTypes' => $questionTypes,
-            'courseId'      => $courseId
+            'courseSetId'   => $course['courseSetId']
         ));
     }
 
@@ -71,6 +73,11 @@ class ExerciseActivityController extends BaseController implements ActivityActio
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTestpaperActivityService()

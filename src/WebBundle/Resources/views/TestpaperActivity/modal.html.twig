@@ -9,7 +9,10 @@
     </div>
     <div class="col-xs-9 controls">
       <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
-        {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
+        <option value="">{{ '请选择试卷'|trans }}</option>>
+        {% for testpaper in testpapers if testpaper %}
+          <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>>
+        {% endfor %}
       </select>
       <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
     </div>
@@ -92,18 +95,8 @@
         {{ select_options({'score':'分数达标'|trans,'submit':'提交答卷'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
 
-      <input type="hidden" name="finishScore" value="{{ activity.finishCondition['score']|default('0') }}" />
+      <input type="hidden" name="finishScore" value="{{ activity.finishCondition['finishScore']|default('0') }}" />
       <input type="hidden" name="mediaType" value="testpaper" />
-      {#<div class="difficulty-percentage-slider noUi-target noUi-ltr noUi-horizontal noUi-background">
-        <div class="noUi-base">
-          <div class="noUi-origin" data-style="left" style="left: 30%;">
-            <div class="noUi-handle noUi-handle-lower"></div>
-          </div>
-          <div class="noUi-origin" data-style="left" style="left: 70%;">
-            <div class="noUi-handle noUi-handle-upper"></div>
-          </div>
-        </div>
-      </div>#}
 
     </div>
   </div>
@@ -111,15 +104,15 @@
     <div class="col-sm-offset-2 col-sm-8">
       <div class="nstSlider-list clearfix">
         <div class="nstSlider-item leftLabel">0</div>  
-        <div class="nstSlider-item nstSlider" data-range_min="0" data-range_max="150" data-cur_min="{{150 * 0.6 }}">
+        <div class="nstSlider-item nstSlider" data-range_min="0" data-range_max="100" data-cur_min="{{100 * 0.6 }}">
           <div class="bar js-bar"></div>
           <div class="nstSlider-content js-nstSlider-content">
             <div class="leftGrip js-leftGrip"></div>
-            <div class="leftGrip-remask ">达标：<span class="js-leftGrip-remask-text">90</span>分</div>
+            <div class="leftGrip-remask ">达标：<span class="js-leftGrip-remask-text">60</span>分</div>
           </div>
           <div class="leftGrip-text js-leftGrip-text">0%</div>
         </div>
-        <div class="nstSlider-item mll js-totale-text">150</div>分
+        <div class="nstSlider-item mll js-totale-text">100</div>分
       </div>
     </div>
   </div>
