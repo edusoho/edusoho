@@ -12,7 +12,7 @@ class Emails extends BaseResource
     public function post(Application $app, Request $request)
     {
         $user = $this->getCurrentUser();
-        $data = $request->query->all();
+        $data = $request->request->all();
 
         if (!$this->getUserService()->getUserByEmail($data['email'])) {
             return $this->error('5003', '该邮箱未在网校注册');
@@ -26,6 +26,7 @@ class Emails extends BaseResource
         );
 
         $site  = $this->getSettingService()->get('site', array());
+        $url   = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('rawPassword' => $data['rawPassword'], 'userId' => $user['id']));
 
         // try {
             $mailOptions = array(
@@ -33,7 +34,7 @@ class Emails extends BaseResource
                 'template' => 'effect_email_reset_password',
                 'params'   => array(
                     'nickname'  => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('raw_password_update', array('token' => $data), true),
+                    'verifyurl' => $url,
                     'sitename'  => $site['name'],
                     'siteurl'   => $site['url']
                 )

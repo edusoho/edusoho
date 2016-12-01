@@ -121,11 +121,11 @@ class PasswordResetController extends BaseController
 
     public function changeRawPassword(Request $request)
     {
-        $token = $request->query->all();
+        $fields = $request->query->all();
 
-        $id = $token['userId'];
+        $id = $fields['userId'];
 
-        $flag = $this->getUserService()->changeRawPassword($id, $token['rawPassword']);
+        $flag = $this->getUserService()->changeRawPassword($id, $fields['rawPassword']);
 
         if (!$flag) {
             throw new \Exception("重置密码失败", 1);

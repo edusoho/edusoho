@@ -63,7 +63,7 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('生效%nickname%在%sitename%修改密码的操作', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name'))),
-            'body'  => $this->renderBody('TopxiaWebBundle:PasswordReset:effect-reset.txt.twig');
+            'body'  => $this->renderBody('TopxiaWebBundle:PasswordReset:effect-reset.txt.twig')
         );
     }
 
