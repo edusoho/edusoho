@@ -96,7 +96,7 @@ class BuildPackageAutoCommand extends BaseCommand
                 }
 
                 list($op, $opFile, $newFile) = $splitLine;
-
+                $op = $line[0];
                 if (empty($line)) {
                     continue;
                 }
