@@ -116,7 +116,6 @@ class BuildPackageAutoCommand extends BaseCommand
                 }
 
                 if (empty($module) && strpos($opFile, 'vendor') === 0){
-                    $this->output->writeln("<comment>忽略vendor</comment>");
                     continue;
                 }
 
@@ -147,7 +146,7 @@ class BuildPackageAutoCommand extends BaseCommand
 
                 $opBundleFile = $this->getBundleFile($opFile);
 
-                if ($op == 'R' && !empty($newFile)){
+                if ($op == 'R'){
                     $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
                     $this->insertDelete($opFile, $packageDirectory);
                     $this->copyFileAndDir($newFile, $packageDirectory);
