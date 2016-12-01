@@ -15,7 +15,7 @@
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <span class="color-danger">20GB</span>/100GB<span style="color:#aeaeae !important;">（剩余70GB）</span>
+          <span class="text-danger">{{yearPackage.totalAmount-yearPackage.amount}}GB</span>/{{yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">（剩余{{yearPackage.amount}}GB）</span>
         </div>
       </div>
       <div class="row pvm">
@@ -23,11 +23,11 @@
         服务期限
         </div>
         <div class="col-sm-7">
-         2017-10-21~2017-11-11
+         {{yearPackage.startTime}}~{{yearPackage.endTime}}
         </div>
         <div class="col-sm-offset-2 col-sm-7">
           <div class="text-danger">
-          您的流量年包已过期，请尽快续购（0571-28022356）
+            {{yearPackage.message}}
           </div>
         </div>
       </div>
