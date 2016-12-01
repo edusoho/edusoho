@@ -1,6 +1,9 @@
 {% extends 'WebBundle:CourseManage:layout.html.twig' %}
 {% do script(['web/course-manage/student/index.js']) %}
 
+{% set side_nav = 'plan' %}
+{% set active = 'students' %}
+
 {% block course %}
 <ul class="nav nav-tabs mbl">
   <li class="active">
