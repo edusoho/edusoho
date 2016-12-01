@@ -32,7 +32,6 @@ class BuildPackageAutoCommand extends BaseCommand
         $this
             ->setName('build:upgrade-package')
             ->setDescription('自动编制升级包')
-            ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('fromVersion', InputArgument::REQUIRED, 'compare from  version')
             ->addArgument('version', InputArgument::REQUIRED, 'compare to  version');
     }
@@ -41,7 +40,6 @@ class BuildPackageAutoCommand extends BaseCommand
     {
         $output->writeln('<info>开始编制升级包</info>');
 
-        $name        = $input->getArgument('name');
         $fromVersion = $input->getArgument('fromVersion');
         $version     = $input->getArgument('version');
 
