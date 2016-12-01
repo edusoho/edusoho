@@ -1,6 +1,6 @@
 <tr>
   {% if not replace %}
-<th><input type="checkbox" data-role="item-select" data-replace="{{ replace|default('') }}" data-url="{{ path('course_manage_question_picked', {courseId:course.id,questionId:question.id }) }}"></th>
+    <th><input type="checkbox" data-role="item-select" data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseId:courseSet.id,questionId:question.id }) }}"></th>
   {% endif %}
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
@@ -10,7 +10,7 @@
     {% endif %}
     <br>
     <small class="text-muted">从属：
-      {% if question.target == 'course-' ~ course.id %}
+      {% if question.target == 'course-' ~ courseSet.id %}
         本课程
       {% else %}
         {{ targets[question.target].simple_name|default('--') }}
@@ -19,7 +19,7 @@
   </td>
   <td>{{ dict_text('questionType', question.type) }}</td>
   <td>
-    <button data-url="{{ path('course_manage_question_preview', {courseId:course.id, id:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview">预览</button>
-    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('course_manage_question_picked', {courseId:course.id,questionId:question.id }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
+    <button data-url="{{ path('course_manage_question_preview', {courseId:courseSet.id, id:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview">预览</button>
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseId:courseSet.id,questionId:question.id,target:target }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
   </td>
 </tr>

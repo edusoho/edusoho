@@ -19,13 +19,14 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onQuestionCreate(Event $event)
     {
-        $question   = $event->getSubject();
-        $argument   = $event->getArgument('argument');
-        $attachment = $argument['attachment'];
+        $question = $event->getSubject();
+        $argument = $event->getArgument('argument');
 
-        if (empty($attachment)) {
+        if (empty($argument['attachment'])) {
             return false;
         }
+
+        $attachment = $argument['attachment'];
 
         $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
         $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
@@ -33,13 +34,14 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onQuestionUpdate(Event $event)
     {
-        $question   = $event->getSubject();
-        $argument   = $event->getArgument('argument');
-        $attachment = $argument['fields']['attachment'];
+        $question = $event->getSubject();
+        $argument = $event->getArgument('argument');
 
-        if (empty($attachment)) {
+        if (empty($argument['fields']['attachment'])) {
             return false;
         }
+
+        $attachment = $argument['fields']['attachment'];
 
         $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
         $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);

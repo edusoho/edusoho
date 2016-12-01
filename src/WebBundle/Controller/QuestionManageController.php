@@ -12,7 +12,7 @@ class QuestionManageController extends BaseController
 {
     public function indexAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $conditions = $request->query->all();
 
@@ -199,14 +199,34 @@ class QuestionManageController extends BaseController
         ));
     }
 
+    public function checkAction(Request $request, $id)
+    {
+        $courseSet              = $this->getCourseSetService()->tryManageCourseSet($id);
+        $conditions             = $request->request->all();
+        $conditions['courseId'] = $courseSet['id'];
+
+        if (!empty($conditions['types'])) {
+            $conditions['types'] = explode(',', $conditions['types']);
+        }
+
+        $count = $this->getQuestionService()->searchCount($conditions);
+
+        $result = false;
+        if (!empty($conditions['itemCount']) && $count >= $conditions['itemCount']) {
+            $result = true;
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
     public function questionPickerAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $conditions = $request->query->all();
 
         if (empty($conditions['target'])) {
-            $conditions['targetPrefix'] = "course-{$course['id']}";
+            $conditions['targetPrefix'] = "course-{$courseSet['id']}";
         }
 
         $conditions['parentId'] = 0;
@@ -221,8 +241,6 @@ class QuestionManageController extends BaseController
             $conditions['stem'] = trim($conditions['keyword']);
         }
 
-        $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchCount($conditions),
@@ -231,7 +249,7 @@ class QuestionManageController extends BaseController
 
         $questions = $this->getQuestionService()->search(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -239,19 +257,20 @@ class QuestionManageController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
 
         return $this->render('WebBundle:QuestionManage:question-picker.html.twig', array(
-            'course'        => $course,
+            'courseSet'     => $courseSet,
             'questions'     => $questions,
-            'replace'       => $replace,
+            'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($course, true),
+            'targetChoices' => $this->getQuestionRanges($courseSet),
             'targets'       => $targets,
-            'conditions'    => $conditions
+            'conditions'    => $conditions,
+            'target'        => $request->query->get('target', 'testpaper')
         ));
     }
 
-    public function PickedQuestionAction(Request $request, $courseId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseId, $questionId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
         $question = $this->getQuestionService()->get($questionId);
 
@@ -263,34 +282,31 @@ class QuestionManageController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-        return $this->render('WebBundle:QuestionManage:question-tr.html.twig', array(
-            'courseId'     => $course['id'],
+        return $this->render('WebBundle:QuestionManage:question-item-picked.html.twig', array(
+            'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,
             'targets'      => $targets,
-            'type'         => $question['type']
+            'type'         => $question['type'],
+            'target'       => $request->query->get('target', 'testpaper')
         ));
     }
 
-    protected function getQuestionRanges($course, $includeCourse = false)
+    protected function getQuestionRanges($course)
     {
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-        $ranges  = array();
-
-        if ($includeCourse == true) {
-            $ranges["course-{$course['id']}"] = '本课程';
-        }
-
-        foreach ($lessons as $lesson) {
-            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
-        }
+        $ranges = array('本课程');
 
         return $ranges;
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getQuestionService()

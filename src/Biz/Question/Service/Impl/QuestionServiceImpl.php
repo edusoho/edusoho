@@ -3,7 +3,6 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Config\QuestionFactory;
 use Biz\Question\Service\QuestionService;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -36,7 +35,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
 
         return $question;
     }
@@ -58,7 +57,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
 
         return $question;
     }
@@ -83,7 +82,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->dispatchEvent('question.delete', new Event($question));
+        $this->dispatchEvent("question.delete", array('question' => $question));
 
         return $result;
     }
@@ -119,11 +118,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function search($conditions, $sort, $start, $limit)
     {
+        $conditions = $this->filterQuestion($conditions);
         return $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchCount($conditions)
     {
+        $conditions = $this->filterQuestion($conditions);
         return $this->getQuestionDao()->count($conditions);
     }
 
@@ -225,6 +226,18 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function deleteFavoriteByQuestionId($questionId)
     {
         return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
+    }
+
+    protected function filterQuestion($fields)
+    {
+        if (!empty($fields['range']) && $fields['range'] == 'lesson') {
+            $fields['lessonId'] = 0;
+        }
+        if (empty($fields['difficulty'])) {
+            unset($fields['difficulty']);
+        }
+
+        return $fields;
     }
 
     protected function getQuestionDao()
