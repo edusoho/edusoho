@@ -11,7 +11,7 @@ use Topxia\Common\ArrayToolkit;
 
 /**
  * 自由学习策略
- * Class FreeOrderStrategy
+ * Class DefaultStrategy
  * @package Biz\Task\Strategy\Impl
  */
 class DefaultStrategy extends BaseStrategy implements CourseStrategy
