@@ -5,6 +5,7 @@ namespace Topxia\Service\Util;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
 
 class PluginUtil extends BaseService
 {
@@ -38,22 +39,13 @@ class PluginUtil extends BaseService
             $pluginMetas['installed'][$app['code']] = array(
                 'code'    => $app['code'],
                 'version' => $app['version'],
-                'type'    => $app['type']
+                'type'    => $app['type'],
+                'protocol' => empty($app['protocol']) ? 2 : $app['protocol'],
             );
         }
 
-        $dataDirectory = realpath(self::$kernel->getParameter('kernel.root_dir').'/data/');
-        if (empty($dataDirectory)) {
-            throw new \RuntimeException(self::$kernel->trans('app/data目录不存在，请先创建'));
-        }
-
-        $metaFilePath = $dataDirectory.'/plugin_installed.php';
-        if (self::$filesystem->exists($metaFilePath)) {
-            self::$filesystem->remove($metaFilePath);
-        }
-
-        $fileContent = "<?php \nreturn ".var_export($pluginMetas, true).";";
-        file_put_contents($metaFilePath, $fileContent);
+        $manager = new PluginConfigurationManager(self::$kernel->getParameter('kernel.root_dir'));
+        $manager->setInstalledPlugins($pluginMetas['installed'])->save();
     }
 
     public static function refreshRoutingFile($apps)
@@ -68,18 +60,34 @@ class PluginUtil extends BaseService
             }
             $code = $app['code'];
 
-            $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing.yml", ucfirst($code), ucfirst($code));
-            if (self::$filesystem->exists($routingPath)) {
-                $config .= "_plugin_{$code}_web:\n";
-                $config .= sprintf("    resource: \"@%sBundle/Resources/config/routing.yml\"\n", ucfirst($code));
-                $config .= "    prefix:   /\n";
-            }
+            if ($app['protocol'] == 2) {
+                $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing.yml", ucfirst($code), ucfirst($code));
+                if (self::$filesystem->exists($routingPath)) {
+                    $config .= "_plugin_{$code}_web:\n";
+                    $config .= sprintf("    resource: \"@%sBundle/Resources/config/routing.yml\"\n", ucfirst($code));
+                    $config .= "    prefix:   /\n";
+                }
 
-            $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing_admin.yml", ucfirst($code), ucfirst($code));
-            if (self::$filesystem->exists($routingPath)) {
-                $config .= "_plugin_{$code}_admin:\n";
-                $config .= sprintf("    resource: \"@%sBundle/Resources/config/routing_admin.yml\"\n", ucfirst($code));
-                $config .= "    prefix:   /admin\n";
+                $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing_admin.yml", ucfirst($code), ucfirst($code));
+                if (self::$filesystem->exists($routingPath)) {
+                    $config .= "_plugin_{$code}_admin:\n";
+                    $config .= sprintf("    resource: \"@%sBundle/Resources/config/routing_admin.yml\"\n", ucfirst($code));
+                    $config .= "    prefix:   /admin\n";
+                }
+            } else {
+                $routingPath = sprintf("{$pluginRootDirectory}/%sPlugin/Resources/config/routing.yml", ucfirst($code));
+                if (self::$filesystem->exists($routingPath)) {
+                    $config .= "_plugin_{$code}_web:\n";
+                    $config .= sprintf("    resource: \"@%sPlugin/Resources/config/routing.yml\"\n", ucfirst($code));
+                    $config .= "    prefix:   /\n";
+                }
+
+                $routingPath = sprintf("{$pluginRootDirectory}/%sPlugin/Resources/config/routing_admin.yml", ucfirst($code), ucfirst($code));
+                if (self::$filesystem->exists($routingPath)) {
+                    $config .= "_plugin_{$code}_admin:\n";
+                    $config .= sprintf("    resource: \"@%sPlugin/Resources/config/routing_admin.yml\"\n", ucfirst($code));
+                    $config .= "    prefix:   /admin\n";
+                }
             }
         }
 
