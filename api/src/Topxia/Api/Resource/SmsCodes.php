@@ -50,7 +50,7 @@ class SmsCodes extends BaseResource
 
         return array(
             'mobile'   => $mobile,
-            'SmsToken' => $SmsToken['token']
+            'smsToken' => $smsToken['token']
         );
     }
 
