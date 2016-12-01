@@ -1,11 +1,11 @@
 {% if type == 'course' %}
-  {% set title = courseSet.title %}
+  {% set title = course.title %}
   {% set summary = "大神" %}
-  {#{% set summary = courseSet.summary|plain_text(50) %}#}
-  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':courseSet.title}) %}
-  {% set url = url('course_show', {id:courseSet.id}) %}
-  {% set picture = filepath(courseSet.largePicture, 'courseSet.png') %}
-  {% set id = courseSet.id%}
+  {#{% set summary = course.summary|plain_text(50) %}#}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':course.title}) %}
+  {% set url = url('course_show', {id:course.id}) %}
+  {% set picture = filepath(course.largePicture, 'course.png') %}
+  {% set id = course.id%}
 {% elseif type == 'classroom' %}
   {% set title = classroom.title %}
   {% set summary = classroom.summary|plain_text(50) %}
@@ -28,17 +28,17 @@
   {% set picture = '' %}
   {% set id = group.id%}
 {% elseif type == 'open_course' %}
-  {% set title = courseSet.title %}
-  {% set summary = courseSet.summary|plain_text(50) %}
-  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':courseSet.title}) %}
-  {% set url = url('open_course_show', {courseId:courseSet.id}) %}
-  {% set picture = filepath(courseSet.largePicture, 'courseSet.png') %}
-  {% set id = courseSet.id%}
+  {% set title = course.title %}
+  {% set summary = course.summary|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':course.title}) %}
+  {% set url = url('open_course_show', {courseId:course.id}) %}
+  {% set picture = filepath(course.largePicture, 'course.png') %}
+  {% set id = course.id%}
 {% endif %}
 
 <div class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
   {% if is_plugin_installed('Point') %}
-    <input type="hidden" class="point-share-url" value="{{ path('share_point',{ id:id, title:title, type:type}) }}">
+   {#  <input type="hidden" class="point-share-url" value="{{ path('share_point',{ id:id, title:title, type:type}) }}"> #}
   {% endif %}
 
   <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="{{'分享到微信'|trans}}" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><i class="es-icon es-icon-weixin"></i></a>

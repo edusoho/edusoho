@@ -26,6 +26,10 @@ course_set_manage_cover:
   path: /course_set/{id}/manage/cover
   defaults: {_controller: WebBundle:CourseSetManage:cover}
 
+course_set_manage_cover_crop:
+  path: /course_set/{id}/manage/cover_crop
+  defaults: {_controller: WebBundle:CourseSetManage:coverCrop}
+
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller:WebBundle:CourseManage:list}
@@ -45,6 +49,15 @@ course_set_manage_course_tasks:
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
   defaults: {_controller: WebBundle:CourseManage:marketing}
+
+course_set_manage_course_teachers:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/teachers
+  defaults: {_controller: WebBundle:CourseManage:teachers}
+
+course_set_manage_course_students:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students
+  defaults: {_controller: WebBundle:CourseManage:students}
+
 
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
