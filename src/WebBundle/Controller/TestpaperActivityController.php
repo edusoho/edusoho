@@ -29,6 +29,8 @@ class TestpaperActivityController extends BaseController implements ActivityActi
 
     public function editAction(Request $request, $id, $courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+
         $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
@@ -38,21 +40,16 @@ class TestpaperActivityController extends BaseController implements ActivityActi
         }
         $activity = array_merge($activity, $testpaperActivity);
 
-        $testpapers = $this->findCourseTestpapers($activity['fromCourseId']);
-
-        $testpaperNames = array();
-        foreach ($testpapers as $testpaper) {
-            $testpaperNames[$testpaper['id']] = $testpaper['name'];
-        }
+        $testpapers = $this->findCourseTestpapers($course['courseSetId']);
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('WebBundle:TestpaperActivity:modal.html.twig', array(
-            'activity'       => $activity,
-            'testpapers'     => $testpapers,
-            'testpaperNames' => $testpaperNames,
-            'features'       => $features,
-            'courseId'       => $activity['fromCourseId']
+            'activity'    => $activity,
+            'testpapers'  => $testpapers,
+            'features'    => $features,
+            'courseId'    => $activity['fromCourseId'],
+            'courseSetId' => $course['courseSetId']
         ));
     }
 
@@ -61,18 +58,12 @@ class TestpaperActivityController extends BaseController implements ActivityActi
         $course     = $this->getCourseService()->getCourse($courseId);
         $testpapers = $this->findCourseTestpapers($course['courseSetId']);
 
-        $testpaperNames = array();
-        foreach ($testpapers as $testpaper) {
-            $testpaperNames[$testpaper['id']] = $testpaper['name'];
-        }
-
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('WebBundle:TestpaperActivity:modal.html.twig', array(
-            'testpapers'     => $testpapers,
-            'testpaperNames' => $testpaperNames,
-            'features'       => $features,
-            'courseSetId'    => $course['courseSetId']
+            'testpapers'  => $testpapers,
+            'features'    => $features,
+            'courseSetId' => $course['courseSetId']
         ));
     }
 

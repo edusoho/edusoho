@@ -9,10 +9,10 @@ class Homework
   }
 
   _init() {
-  	/*var editor = CKEDITOR.replace('homework-about-field', {
-      toolbar: 'Minimal',
-      filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl')
-    });*/
+    let editor = CKEDITOR.replace('homework-about-field', {
+        toolbar: 'Minimal',
+        filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl'),
+    });
 
     this._inItStep2form();
   }
@@ -48,18 +48,20 @@ class Homework
     var validator = $step2_form.validate({
       onkeyup: false,
       rules: {
+        title:{
+          required:true
+        },
         'questionId[]':{
           required:true
         }
       },
       messages: {
+        title:"请填写标题",
         'questionId[]':{
           required:"请选择题目"
         }
       },
-      /*submitHandler:function(form) {
-        
-      }*/
+      
     });
     $step2_form.data('validator',validator);
   }

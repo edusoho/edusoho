@@ -71,7 +71,7 @@ class TestpaperActivity extends Activity
             'limitedTime',
             'checkType',
             'finishCondition',
-            'finisheScore',
+            'finishScore',
             'requireCredit',
             'testMode'
         ));
@@ -82,9 +82,9 @@ class TestpaperActivity extends Activity
             $finishCondition['type'] = $fields['finishCondition'];
         }
 
-        if (!empty($fields['finisheScore'])) {
-            $finishCondition['finisheScore'] = $fields['finisheScore'];
-            unset($fields['finisheScore']);
+        if (!empty($fields['finishScore'])) {
+            $finishCondition['finishScore'] = $fields['finishScore'];
+            unset($fields['finishScore']);
         }
 
         $fields['finishCondition'] = $finishCondition;

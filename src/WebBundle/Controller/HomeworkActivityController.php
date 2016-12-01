@@ -20,6 +20,7 @@ class HomeworkActivityController extends BaseController implements ActivityActio
 
     public function editAction(Request $request, $id, $courseId)
     {
+        $course   = $this->getCourseService()->getCourse($courseId);
         $activity = $this->getActivityService()->getActivity($id);
 
         $homeworkActivity = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -38,14 +39,17 @@ class HomeworkActivityController extends BaseController implements ActivityActio
             'activity'      => $activity,
             'courseId'      => $activity['fromCourseId'],
             'questionItems' => $questionItems,
-            'questions'     => $questions
+            'questions'     => $questions,
+            'courseSetId'   => $course['courseSetId']
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
         return $this->render('WebBundle:HomeworkActivity:modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId'    => $courseId,
+            'courseSetId' => $course['courseSetId']
         ));
     }
 
@@ -77,6 +81,11 @@ class HomeworkActivityController extends BaseController implements ActivityActio
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getQuestionService()

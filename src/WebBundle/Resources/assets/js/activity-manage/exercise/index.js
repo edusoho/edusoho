@@ -19,24 +19,54 @@ class Exercise {
     var validator = $step2_form.validate({
         onkeyup: false,
         rules: {
-            itemCount: {
-              required: true,
-              positiveInteger:true
-            },
-            range:{
-            	required:true,
-            },
-            difficulty:{
-            	required:true
-            },
-            'questionTypes[]':{
-              required:true
-            }
+          title: {
+            required:true
+          },
+          itemCount: {
+            required: true,
+            positiveInteger:true
+          },
+          range:{
+          	required:true,
+          },
+          difficulty:{
+          	required:true
+          },
+          'questionTypes[]':{
+            required:true,
+            remote: {    
+              url: $('[name="checkQuestion"]').data('checkUrl'),   
+              type: "post",    
+              dataType: "json",       
+              data: {    
+                itemCount: function() {    
+                  return $('[name="itemCount"]').val();    
+                },
+                range: function() {
+                  return $('[name="range"]:checked').val();
+                },
+                difficulty: function() {
+                  return $('[name="difficulty"]').val();
+                },
+                types: function () {
+                  let types = [];
+                  $('[name="questionTypes\[\]"]:checked').each(function(){
+                    types.push($(this).val());
+                  });
+                  return types;
+                }
+              }    
+            }    
+          }
         },
         messages: {
-            range: "题目来源",
-            difficulty: "请选择难易程度",
-            'questionTypes[]': "请选择题型"
+          required:"请填写标题",
+          range: "题目来源",
+          difficulty: "请选择难易程度",
+          'questionTypes[]': {
+            required:"请选择题型",
+            remote:"题目数量不足"
+          },
         }
     });
 
