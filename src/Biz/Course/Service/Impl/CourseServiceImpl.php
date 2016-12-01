@@ -264,7 +264,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields['classroomId'] = 0;
         $fields['courseId']    = $courseId;
 
-        $this->getMemberDao()->create($fields);
+        //TODO create order
+
+        return $this->getMemberDao()->create($fields);
     }
 
     public function removeStudentFromCourse($courseId, $userId)
