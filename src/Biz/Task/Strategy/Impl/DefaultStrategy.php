@@ -103,7 +103,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
         $chapterTypes       = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         $lessonChapterTypes = array();
-        $lessonNum          = $chapterNum = $unitNum = $seq = 0;
+        $taskNumber         = $seq = 0;
 
         foreach ($ids as $key => $id) {
             if (strpos($id, 'chapter') !== 0) {
@@ -165,12 +165,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
             foreach ($tasks as $task) {
-                $lessonNum++;
+                $taskNumber++;
                 $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq'        => $seq,
                     'categoryId' => $chapter['id'],
-                    'number'     => $lessonNum
+                    'number'     => $taskNumber
                 );
 
                 $this->getTaskService()->updateSeq($task['id'], $fields);
