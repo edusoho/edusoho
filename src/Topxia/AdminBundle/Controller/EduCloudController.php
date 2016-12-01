@@ -157,8 +157,8 @@ class EduCloudController extends BaseController
         $overview['video']['isBuy'] = isset($overview['isBuy']) ? false : true;
         $overview['yearPackage']['isBuy'] = isset($overview['yearPackage']['isBuy']) ? false : true;
 
-        $spaceItems = isset($overview['video']['spaceItems']) ? $this->dealItems($overview['video']['spaceItems']) : false;
-        $flowItems = isset($overview['video']['flowItems']) ? $this->dealItems($overview['video']['flowItems']) : false;
+        $spaceItems =  $this->dealItems($overview['video']['spaceItems']);
+        $flowItems =  $this->dealItems($overview['video']['flowItems']);
         return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
             'video'   => $overview['video'],
             'space'   => $overview['space'],
@@ -183,8 +183,13 @@ class EduCloudController extends BaseController
     private function dealItems($data)
     {
         if (empty($data)) {
-            return null;
+            for ($i=7; $i > 0; $i--) { 
+                $items['date'][] = date('Y-m-d', strtotime('-'.$i.'days'));
+                $items['amount'][] = 0;
+            }
+            return $items;
         }
+
         foreach ($data as $value) {
             $items['date'][] = $value['date'];
             $items['amount'][] = $value['amount'];            
