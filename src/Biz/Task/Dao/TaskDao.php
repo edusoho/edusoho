@@ -12,6 +12,8 @@ interface TaskDao extends GeneralDaoInterface
 
     public function getMaxSeqByCourseId($courseId);
 
+    public function getMaxNumberByCourseId($courseId);
+
     public function findTasksByChapterId($chapterId);
 
     public function waveSeqBiggerThanSeq($seq, $diff);

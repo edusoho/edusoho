@@ -40,7 +40,7 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
             return;
         }
 
-        $this->getTaskService()->doingTask($taskId, $time);
+        $this->getTaskService()->doTask($taskId, $time);
     }
 
     public function onActivityFinish(Event $event)
