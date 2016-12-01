@@ -446,9 +446,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
     }
 
-    /**
-     * @return TaskService
-     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');

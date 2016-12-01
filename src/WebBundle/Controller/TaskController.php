@@ -1,6 +1,7 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
@@ -11,8 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task     = $this->tryLearnTask($courseId, $id, $preview);
-
+        $task     = $this->tryLearnTask($courseId, $id, (bool) $preview);
         $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
@@ -81,6 +81,9 @@ class TaskController extends BaseController
         return $task;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');

@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Service\Impl;
 
+use Biz\BaseService;
 use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
