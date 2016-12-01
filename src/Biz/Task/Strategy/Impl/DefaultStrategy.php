@@ -83,15 +83,88 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             if (!empty($tasks[$item['id']])) {
                 $item['tasks'] = $tasks[$item['id']];
             } else {
+                unset($item); //没有的tasks的数据是有问题的数据，
                 $item['tasks'] = array();
             }
         });
         return $items;
     }
 
-    public function sortCourseItems($courseId, array $itemIds)
+
+    //TODO 任务需要在排序时处理 chapterId， number
+    public function sortCourseItems($courseId, array $ids)
     {
-        // TODO: Implement sortCourseItems() method.
+        $parentChapters = array(
+            'lesson'  => array(),
+            'unit'    => array(),
+            'chapter' => array()
+        );
+
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+
+        $lessonNum = $chapterNum = $unitNum = $seq = 0;
+        foreach ($ids as $key => $id) {
+            if (strpos($id, 'chapter') === 0) {
+                $id      = str_replace('chapter-', '', $id);
+                $chapter = $this->getChapterDao()->get($id);
+                //$seq = $key; //有业务含义，不是顺序增加的
+
+                $index = $chapterTypes[$chapter['type']];
+             //   var_dump($chapter, $index);
+                $seq = $index == 1 ? $seq + 1 : $seq + 5;
+                //    var_dump($index, $seq);
+                $fields = array('seq' => $seq);
+
+                switch ($index) {
+                    case 3:
+                        $fields['parentId'] = 0;
+                        break;
+                    case 2:
+                        if (!empty($parentChapters['chapter'])) {
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    case 1:
+                        if (!empty($parentChapters['unit'])) {
+                            $fields['parentId'] = $parentChapters['unit']['id'];
+                        } elseif (!empty($parentChapters['chapter'])) {
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (!empty($parentChapters[$chapter['type']])) {
+                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
+                } else {
+                    $fields['number'] = 1;
+                }
+
+                foreach ($chapterTypes as $type => $value) {
+                    if ($value < $index) {
+                        $parentChapters[$type] = array();
+                    }
+                }
+
+                $chapter                          = $this->getChapterDao()->update($id, $fields);
+                $parentChapters[$chapter['type']] = $chapter;
+            }
+
+            if (strpos($id, 'task') === 0) {
+                $id = str_replace('task-', '', $id);
+
+                foreach ($parentChapters as $parent) {
+                    if (!empty($parent)) {
+                        $this->getTaskService()->updateSeq($id, array(
+                            'seq'        => $key,
+                            'categoryId' => $parent['id']
+                        ));
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 
