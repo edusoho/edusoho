@@ -95,7 +95,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function findCourseItems($courseId)
     {
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
         $items    = array();
