@@ -142,6 +142,10 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Video:trial.html.twig', array());
         }
 
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
         $storageSetting = $this->getSettingService()->get('storage', array());
         //云端视频判断
         try {
@@ -199,6 +203,19 @@ class EduCloudController extends BaseController
 
     public function videoSettingAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Video:trial.html.twig', array());
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+        $storageSetting = $this->getSettingService()->get('storage', array());
+
+        if ((isset($storageSetting['upload_mode']) && $storageSetting['upload_mode'] == 'local') || !isset($storageSetting['upload_mode'])) {   
+            return $this->redirect($this->generateUrl('admin_cloud_video_overview'));
+        }
+
         $storageSetting = $this->getSettingService()->get('storage', array());
         $default        = array(
             'upload_mode'                 => 'local',
@@ -357,6 +374,10 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig');
         }
 
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
@@ -390,6 +411,19 @@ class EduCloudController extends BaseController
     //云短信设置
     public function smsSettingAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Sms:trial.html.twig');
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
+        if ((isset($cloudSmsSettings['sms_enabled']) && $cloudSmsSettings['sms_enabled'] == 0) || !isset($cloudSmsSettings['sms_enabled'])) {
+            return $this->redirect($this->generateUrl('admin_edu_cloud_sms'));
+        }
+
         try {
             $api  = CloudAPIFactory::create('root');
 
@@ -448,6 +482,10 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Email:trial.html.twig');
         }
 
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
@@ -486,6 +524,19 @@ class EduCloudController extends BaseController
     //云邮件设置页
     public function emailSettingAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Email:trial.html.twig');
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status'])) {
+            return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
+        }
+
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
@@ -713,6 +764,18 @@ class EduCloudController extends BaseController
 
     public function searchSettingAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Search:trial.html.twig');
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        if (!$cloud_search_settting['search_enabled'] || $cloud_search_settting['status'] != 'ok') {
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+        }        
         return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig');
     }
 
@@ -720,6 +783,10 @@ class EduCloudController extends BaseController
     {
         if ($this->getWebExtension()->isTrial()) {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:trial.html.twig');
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
@@ -1293,6 +1360,11 @@ class EduCloudController extends BaseController
         return $this->getServiceKernel()->createService('Search.SearchService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -1330,6 +1402,10 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Live:trial.html.twig');
         }
 
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
@@ -1360,8 +1436,27 @@ class EduCloudController extends BaseController
         return $isLiveWithoutEnable;
     }
 
+    private function isHiddenCloud()
+    {
+        return $this->getEduCloudService()->isHiddenCloud();
+    }
+
     public function liveSettingAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Live:trial.html.twig');
+        }
+
+        if (!($this->isHiddenCloud())) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
+
+        $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
+        $liveEnabled = $liveCourseSetting['live_course_enabled'];
+        if ((isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
+            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+        }
+
         $client            = new EdusohoLiveClient();
         $capacity          = $client->getCapacity();
         $liveCourseSetting = $this->getSettingService()->get('live-course', array());

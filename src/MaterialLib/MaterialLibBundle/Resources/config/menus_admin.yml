@@ -1,7 +1,7 @@
 
 admin_cloud_file_manage:
     name: 云资源
-    visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
+    visable: (cloudStatus())
     parent: admin_app
     after: admin_app_center_show
     children:
