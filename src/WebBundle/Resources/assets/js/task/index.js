@@ -27,38 +27,40 @@ class TaskShow extends Emitter {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({
       html: true,
-      trigger: 'click',
+      trigger: 'hover',
     });
   }
 
-  bindEvent() {
+  bindEvent(){
+    let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
-    this.delay('doing', () => {
-      let eventUrl = this.element.find('#task-content-iframe').data('eventUrl');
-      if (eventUrl === undefined) {
-        return;
-      }
-      let postData = {
-        eventName: 'doing',
-        data: {
-          taskId: this.taskId,
-        }
-      };
-      $.post(eventUrl, postData).done((currentTime) => {
-        this.eventEmitter.emit('doing', {currentTime: currentTime});
-        this.trigger('doing');
-      });
+    this.delay('doing', (timeStep) => {
+
+      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
+      this.eventEmitter.emit('doing', {
+        timeStep: timeStep,
+        learnedTime: learnedTime,
+        taskId: this.taskId
+      }).then(data => {
+        this.trigger('doing', timeStep);
+      })
     }, timeStep * minute);
 
-    this.trigger('doing');
+    this.trigger('doing', timeStep);
 
+    this.element.on('click', '.js-btn-learn', event => {
+      this.eventEmitter.emit('finish', {taskId: this.taskId}).then(() => {
+        this.ui.learned();
+        //@TODO 弹框
+      })
+    });
     this.bindEmitterEvent();
   }
 
   bindEmitterEvent() {
     this.eventEmitter.receive('finish', (data) => {
-      this.onActivityFinish();
+      this.onActivityFinish(data);
     });
   }
 
@@ -72,17 +74,18 @@ class TaskShow extends Emitter {
 
   sidebar() {
     this.sideBar = new SideBar({
-      element: '.dashboard-sidebar-content',
-      activePlugins: ["note", "question"],
+      element: '.js-task-dashboard-page',
+      activePlugins: ['task',"note", "question"],
       courseId: this.courseId,
+      taskId: this.taskId,
     });
   }
 }
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#hidden-data [name="task-id"]').val()
+  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#js-hidden-data [name="task-id"]').val()
 });
 
 

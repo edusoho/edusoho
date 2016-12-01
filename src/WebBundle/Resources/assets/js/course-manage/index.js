@@ -1,6 +1,14 @@
-import {deleteTask,sortList} from './help'
+import {closeCourse, deleteCourse, publishCourse, showSettings} from './help';
+import sortable from 'common/sortable';
 
-deleteTask();
-sortList();
+if($('#sortable-list').length){
+	sortable({
+	  element : '#sortable-list'
+	});
+}
 
-//
+closeCourse();
+deleteCourse();
+publishCourse();
+// deleteTask();
+showSettings();

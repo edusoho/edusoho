@@ -98,6 +98,15 @@ class AttachmentController extends BaseController
         ));
     }
 
+    public function fileShowAction(Request $request, $fileId)
+    {
+        $file       = $this->getUploadFileService()->getFile($fileId);
+        $attachment = array('file' => $file);
+        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
+            'attachment' => $attachment
+        ));
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $previewType = $request->query->get('type', 'attachment');
@@ -111,15 +120,6 @@ class AttachmentController extends BaseController
             }
         }
         return $this->createJsonResponse(array('msg' => 'ok'));
-    }
-
-    public function fileShowAction(Request $request, $fileId)
-    {
-        $file       = $this->getUploadFileService()->getFile($fileId);
-        $attachment = array('file' => $file);
-        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
-            'attachment' => $attachment
-        ));
     }
 
     protected function getUploadFileService()

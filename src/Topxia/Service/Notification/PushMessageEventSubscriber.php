@@ -6,6 +6,7 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\IMAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface
 {
@@ -313,7 +314,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onArticleCreate(ServiceEvent $event)
     {
-        $article    = $event->getSubject();
+        $fields = $event->getSubject();
+
+        $article = $fields['article'];
+
         $schoolUtil = new MobileSchoolUtil();
 
         $articleApp           = $schoolUtil->getArticleApp();
@@ -346,12 +350,29 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->pushIM($from, $to, $body);
+
+
+        if (!empty($fields['tagIds'])) {
+            $tagIds = $fields['tagIds'];
+            $userId = $fields['userId'];
+
+            $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
+            $tagOwnerManager->create();
+        }
     }
 
     public function onArticleUpdate(ServiceEvent $event)
     {
-        $article = $event->getSubject();
+        $fields  = $event->getSubject();
+        $article = $fields['article'];
+
         $this->pushCloud('article.update', $this->convertArticle($article));
+
+        $tagIds = $fields['tagIds'];
+        $userId = $fields['userId'];
+
+        $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
+        $tagOwnerManager->update();
     }
 
     public function onArticleDelete(ServiceEvent $event)

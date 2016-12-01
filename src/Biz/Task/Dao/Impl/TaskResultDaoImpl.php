@@ -26,13 +26,14 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function findByActivityIdAndUserId($activityId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? ";
-        return $this->db()->fetchAll($sql, array($activityId, $userId)) ? : array();
+        return $this->db()->fetchAll($sql, array($activityId, $userId)) ?: array();
     }
 
     public function declares()
     {
         return array(
-            'orderbys' => array('createdTime'),
+            'orderbys'   => array('createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'status =:status',
                 'userId =:userId',

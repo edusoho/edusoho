@@ -15,7 +15,7 @@ class AudioActivityController extends BaseController implements ActivityActionIn
 
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivityFetchExt($id);
         return $this->render('WebBundle:AudioActivity:show.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId

@@ -14,26 +14,47 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
     {
         return array(
             'activity.start'  => 'onActivityStart',
+            'activity.doing'  => 'onActivityDoing',
             'activity.finish' => 'onActivityFinish'
         );
     }
 
     public function onActivityStart(Event $event)
     {
-        $activity = $event->getSubject();
         $task = $event->getArgument('task');
 
         $this->getTaskService()->startTask($task['id']);
+    }
+
+    public function onActivityDoing(Event $event)
+    {
+        $taskId = $event->getArgument('taskId');
+
+        if(!$event->hasArgument('timeStep')){
+            $time = TaskService::LEARN_TIME_STEP;
+        }else{
+            $time = $event->getArgument('timeStep');
+        }
+
+        if(empty($taskId)){
+            return;
+        }
+
+        $this->getTaskService()->doTask($taskId, $time);
     }
 
     public function onActivityFinish(Event $event)
     {
         $activity = $event->getSubject();
 
-        $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId($activity['id']);
-
-        foreach ($taskResults as $taskResult){
-            $this->getTaskService()->finishTask($taskResult['courseTaskId']);
+        if($event->hasArgument('taskId')){
+            $taskId = $event->getArgument('taskId');
+            $this->getTaskService()->finishTask($taskId);
+        }else{
+            $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId($activity['id']);
+            foreach ($taskResults as $taskResult){
+                $this->getTaskService()->finishTask($taskResult['courseTaskId']);
+            }
         }
     }
 

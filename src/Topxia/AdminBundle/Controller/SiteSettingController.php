@@ -174,6 +174,7 @@ class SiteSettingController extends BaseController
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
+            'inviteShareContent' => $this->getServiceKernel()->trans('我正在%sitename%网校学习，邀请你也来体验下。', array('%sitename%' => '{{sitename}}')),
             'articleShareContent' => $this->getServiceKernel()->trans('我正在看%articletitle%，关注%sitename%，分享知识，成就未来。', array('%articletitle%' => '{{articletitle}}','%sitename%' => '{{sitename}}' )),
             'courseShareContent' => $this->getServiceKernel()->trans('我正在学习%course%，收获巨大哦，一起来学习吧！', array('%course%' => '{{course}}' )),
             'groupShareContent' => $this->getServiceKernel()->trans('我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!', array('%groupname%' =>'{{groupname}}','%threadname%' => '{{threadname}}' )),

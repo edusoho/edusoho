@@ -13,6 +13,15 @@ class Setting extends BaseResource
             return array();
         }
 
+        $config = $this->getAccessConfig();
+
+
+        $currentUser = $this->getCurrentUser();
+
+        if (isset($config[$settingName]['needToken']) && $config[$settingName]['needToken'] && !$currentUser->isLogin()){
+            return array();
+        }
+
         $res = $this->getSettingService()->get($settingName);
 
         $method = 'filter' . ucfirst($settingName);
@@ -31,25 +40,39 @@ class Setting extends BaseResource
 
     protected function filterCourse($res)
     {
-        return $this->filterKeys($res, array('welcome_message_enabled'));
+        return $this->filterKeys($res, array(
+          'welcome_message_enabled'
+        ));
     }
 
     protected function filterApp_im($res)
     {
-        return $this->filterKeys($res, array('welcome_message_enabled'));
+        return $this->filterKeys($res, array(
+          'welcome_message_enabled'
+        ));
     }
 
-    protected function filterKeys(array $input, array $allowed)
+    protected function filterKeys(array $input, array $notAllowed)
     {
-        return array_diff_key($input, array_flip($allowed));
+        return array_diff_key($input, array_flip($notAllowed));
     }
 
     protected function canAccess($settingName)
     {
-        return in_array($settingName, array(
-            'course',
-            'app_im'
-        ), true);
+        $config = $this->getAccessConfig();
+        return array_key_exists($settingName, $config);
+    }
+
+    protected function getAccessConfig()
+    {
+      return array(
+          'course' => array(
+              'needToken' => false
+          ),
+          'app_im' => array(
+              'needToken' => true
+          )
+        );
     }
 
     protected function getSettingService()

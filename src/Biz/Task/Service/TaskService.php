@@ -4,6 +4,8 @@ namespace Biz\Task\Service;
 
 interface TaskService
 {
+    const LEARN_TIME_STEP = 2;
+
     public function getTask($id);
 
     public function createTask($task);
@@ -19,6 +21,8 @@ interface TaskService
     public function findUserTasksFetchActivityAndResultByCourseId($courseId);
 
     public function startTask($taskId);
+
+    public function doTask($taskId, $time=TaskService::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 
@@ -47,6 +51,8 @@ interface TaskService
     public function isTaskLearned($taskId);
 
     public function getMaxSeqByCourseId($courseId);
+
+    public function getMaxNumberByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
 }
