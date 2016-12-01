@@ -13,6 +13,11 @@
               <span></span>{{'详细信息'|trans}}
             </a>
           </li>
+          <li class="list-group-item {% if side_nav == 'cover' %}active{% endif %}">
+            <a href="{{ path('course_set_manage_cover', {id:id}) }}">
+              <span></span>{{'课程封面'|trans}}
+            </a>
+          </li>
           <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
             <a href="{{ path('course_set_manage_testpaper', {id:id}) }}">
               <span></span>{{'试卷管理'|trans}}

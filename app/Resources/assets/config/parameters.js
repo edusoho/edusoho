@@ -23,6 +23,8 @@ const parameters = {
     "iframe-resizer":['../libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['../libs/js/iframe-resizer-contentWindow.js'],
     "jquery-nstslider":['jquery-nstslider'],
+    "es-webuploader":['../libs/js/es-webuploader.js'],
+    "es-image-crop":['../libs/js/es-image-crop.js'],
     "easy-pie-chart":['../libs/js/easy-pie-chart.js'],
     'jquery-timer':['../libs/js/jquery-timer.js'],
   },

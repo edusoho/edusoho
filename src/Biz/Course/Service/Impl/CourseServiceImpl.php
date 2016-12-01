@@ -3,9 +3,10 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Strategy\StrategyContext;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -46,7 +47,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
-        if (!in_array($course['learnMode'], array('freeOrder', 'byOrder'))) {
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
 
@@ -89,6 +90,34 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Lack of required fields");
         } else {
             $fields = $this->validateExpiryMode($fields);
+        }
+
+        return $this->getCourseDao()->update($id, $fields);
+    }
+
+    public function updateCourseMarketing($id, $fields)
+    {
+        $course = $this->tryManageCourse($id);
+        $fields = ArrayToolkit::parts($fields, array(
+            'isFree',
+            'price',
+            'vipLevelId',
+            'buyable',
+            'tryLookable',
+            'tryLookLength',
+            'watchLimit',
+            'services'
+        ));
+
+        if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+        if ($fields['isFree'] == 1) {
+            $fields['price']      = 0;
+            $fields['vipLevelId'] = 0;
+        }
+        if ($fields['tryLookable'] == 0) {
+            $fields['tryLookLength'] = 0;
         }
 
         return $this->getCourseDao()->update($id, $fields);
@@ -150,27 +179,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function getCourseItems($courseId)
+    public function findCourseItems($courseId)
     {
-        $items = array();
-        $user  = $this->getCurrentUser();
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        foreach ($tasks as $task) {
-            $task['itemType']            = 'task';
-            $items["task-{$task['id']}"] = $task;
-        }
-
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
-            $items["chapter-{$chapter['id']}"] = $chapter;
-        }
-
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
-
-        return $items;
+        $course = $this->getCourse($courseId);
+        return $this->createCourseStrategy($course)->findCourseItems($courseId);
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -213,14 +225,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
-
         $user   = $this->getCurrentUser();
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-
         return array($course, $member);
     }
 
@@ -245,7 +254,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
-
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
@@ -255,6 +263,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    //TODO 任务需要在排序时处理 chapterId， number
     public function sortCourseItems($courseId, $ids)
     {
         $this->tryManageCourse($courseId);
@@ -316,8 +325,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 foreach ($parentChapters as $parent) {
                     if (!empty($parent)) {
                         $this->getTaskService()->updateSeq($id, array(
-                            'seq'             => $key,
-                            'courseChapterId' => $parent['id']
+                            'seq'        => $key,
+                            'categoryId' => $parent['id']
                         ));
                         break;
                     }
@@ -328,8 +337,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createChapter($chapter)
     {
-        $argument = $chapter;
-
         if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
             throw $this->createInvalidArgumentException("Invalid Chapter Type");
         }
@@ -360,6 +367,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getNextChapterNumber($courseId)
     {
+        //有逻辑缺陷
         $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
         return $counter + 1;
     }
@@ -433,9 +441,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
-    /**
-     * @return TaskService
-     */
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+    }
+
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
