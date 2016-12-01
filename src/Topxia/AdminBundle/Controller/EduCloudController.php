@@ -154,15 +154,15 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud/Video:without-enable.html.twig');
         }
 
-        $overview['video']['isBuy'] = isset($overview['isBuy']) ? false : true;
+        $overview['video']['isBuy'] = isset($overview['video']['isBuy']) ? false : true;
         $overview['yearPackage']['isBuy'] = isset($overview['yearPackage']['isBuy']) ? false : true;
 
         $spaceItems =  $this->dealItems($overview['video']['spaceItems']);
         $flowItems =  $this->dealItems($overview['video']['flowItems']);
         return $this->render('TopxiaAdminBundle:EduCloud/Video:overview.html.twig', array(
             'video'   => $overview['video'],
-            'space'   => $overview['space'],
-            'flow'    => $overview['flow'],
+            'space'   => isset($overview['space']) ? $overview['space'] : null,
+            'flow'    => isset($overview['flow']) ? $overview['flow'] : null,
             'yearPackage' => $overview['yearPackage'],
             'spaceItems' => $spaceItems,
             'flowItems'  => $flowItems
