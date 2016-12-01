@@ -100,73 +100,92 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             'chapter' => array()
         );
 
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
 
-        $lessonNum = $chapterNum = $unitNum = $seq = 0;
+        $chapterTypes       = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $lessonChapterTypes = array();
+        $lessonNum          = $chapterNum = $unitNum = $seq = 0;
+
         foreach ($ids as $key => $id) {
-            if (strpos($id, 'chapter') === 0) {
-                $id      = str_replace('chapter-', '', $id);
-                $chapter = $this->getChapterDao()->get($id);
-                //$seq = $key; //有业务含义，不是顺序增加的
+            if (strpos($id, 'chapter') !== 0) {
+                continue;
+            }
+            $id      = str_replace('chapter-', '', $id);
+            $chapter = $this->getChapterDao()->get($id);
+            $seq++;
 
-                $index = $chapterTypes[$chapter['type']];
-             //   var_dump($chapter, $index);
-                $seq = $index == 1 ? $seq + 1 : $seq + 5;
-                //    var_dump($index, $seq);
-                $fields = array('seq' => $seq);
+            $index  = $chapterTypes[$chapter['type']];
+            $fields = array('seq' => $seq);
 
-                switch ($index) {
-                    case 3:
-                        $fields['parentId'] = 0;
-                        break;
-                    case 2:
-                        if (!empty($parentChapters['chapter'])) {
-                            $fields['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    case 1:
-                        if (!empty($parentChapters['unit'])) {
-                            $fields['parentId'] = $parentChapters['unit']['id'];
-                        } elseif (!empty($parentChapters['chapter'])) {
-                            $fields['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!empty($parentChapters[$chapter['type']])) {
-                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
-                } else {
-                    $fields['number'] = 1;
-                }
-
-                foreach ($chapterTypes as $type => $value) {
-                    if ($value < $index) {
-                        $parentChapters[$type] = array();
+            switch ($index) {
+                case 3:
+                    $fields['parentId'] = 0;
+                    break;
+                case 2:
+                    if (!empty($parentChapters['chapter'])) {
+                        $fields['parentId'] = $parentChapters['chapter']['id'];
                     }
-                }
-
-                $chapter                          = $this->getChapterDao()->update($id, $fields);
-                $parentChapters[$chapter['type']] = $chapter;
+                    break;
+                case 1:
+                    if (!empty($parentChapters['unit'])) {
+                        $fields['parentId'] = $parentChapters['unit']['id'];
+                    } elseif (!empty($parentChapters['chapter'])) {
+                        $fields['parentId'] = $parentChapters['chapter']['id'];
+                    }
+                    $seq += 5;
+                    break;
+                default:
+                    break;
             }
 
-            if (strpos($id, 'task') === 0) {
-                $id = str_replace('task-', '', $id);
+            if (!empty($parentChapters[$chapter['type']])) {
+                $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
+            } else {
+                $fields['number'] = 1;
+            }
 
-                foreach ($parentChapters as $parent) {
-                    if (!empty($parent)) {
-                        $this->getTaskService()->updateSeq($id, array(
-                            'seq'        => $key,
-                            'categoryId' => $parent['id']
-                        ));
-                        break;
-                    }
+            foreach ($chapterTypes as $type => $value) {
+                if ($value < $index) {
+                    $parentChapters[$type] = array();
                 }
+            }
+
+            $chapter = $this->getChapterDao()->update($id, $fields);
+            if ($chapter['type'] == 'lesson') {
+                array_push($lessonChapterTypes, $chapter);
+
+            }
+            $parentChapters[$chapter['type']] = $chapter;
+        }
+
+        uasort($lessonChapterTypes, function ($lesson1, $lesson2) {
+            return $lesson1['seq'] > $lesson2['seq'];
+        });
+
+        foreach ($lessonChapterTypes as $key => $chapter) {
+            $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
+            $tasks = ArrayToolkit::index($tasks, 'mode');
+            foreach ($tasks as $task) {
+                $lessonNum++;
+                $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
+                $fields = array(
+                    'seq'        => $seq,
+                    'categoryId' => $chapter['id'],
+                    'number'     => $lessonNum
+                );
+
+                $this->getTaskService()->updateSeq($task['id'], $fields);
             }
         }
     }
 
+    protected function getTaskSeq($taskMode, $chapterSeq)
+    {
+        $taskModes = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        if (!in_array($taskMode, array_keys($taskModes))) {
+            throw new InvalidArgumentException('task mode is invalida');
+        }
+        return $chapterSeq + $taskModes[$taskMode];
+    }
 
     protected function prepareChapterFields($task)
     {
