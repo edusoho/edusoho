@@ -11,7 +11,6 @@ class Emails extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $user = $this->getCurrentUser();
         $data = $request->request->all();
 
         if (!$this->getUserService()->getUserByEmail($data['email'])) {
@@ -25,10 +24,11 @@ class Emails extends BaseResource
             'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
         );
 
-        $site  = $this->getSettingService()->get('site', array());
-        $url   = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('rawPassword' => $data['rawPassword'], 'userId' => $user['id']));
+        $user = $this->getCurrentUser();
+        $site = $this->getSettingService()->get('site', array());
+        $url  = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('rawPassword' => $data['rawPassword'], 'userId' => $user['id']));
 
-        // try {
+        try {
             $mailOptions = array(
                 'to'       => $data['email'],
                 'template' => 'effect_email_reset_password',
@@ -47,12 +47,12 @@ class Emails extends BaseResource
             return array(
                 'code' => 0
             );
-        // } catch (\Exception $e) {
-        //     return array(
-        //         'code'    => '5004',
-        //         'message' => '邮箱发送失败'
-        //     );   
-        // }
+        } catch (\Exception $e) {
+            return array(
+                'code'    => '500',
+                'message' => '邮箱发送失败'
+            );   
+        }
     }
     public function filter($res)
     {
