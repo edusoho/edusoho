@@ -92,6 +92,12 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
+    public function searchAction(Request $request)
+    {
+        $params = array('type' => 'search');
+        return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
     public function liveAction(Request $request)
     {
         $params = array('type' => 'live');
@@ -106,6 +112,11 @@ class CloudController extends BaseController
     public function videoRenewAction(Request $request)
     {
         return $this->redirectUrl('edu_cloud_video_renew');
+    }
+
+    public function searchDetailAction(Request $request)
+    {
+        return $this->redirectUrl('service_search_overview');
     }
 
     public function smsDetailAction(Request $request)

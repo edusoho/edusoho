@@ -5,14 +5,11 @@ define(function(require, exports, module) {
 
 
     exports.run = function() {
-        if($(".alert-warning").length>0){
-            $(".search-button").hide();
-        }
-
         $("[data-toggle='popover']").popover();
         
         //改版图表
         var searchChart = echarts.init(document.getElementById('searchChart'));
+        var chartData = app.arguments.chartData;
         var option = {
             title: {
                 text: ''
@@ -22,13 +19,13 @@ define(function(require, exports, module) {
                 data:['时间']
             },
             xAxis: {
-                data: ["2016/02","2016/03","2016/04","2016/05","2016/05","2016/06"]
+                data: chartData.date
             },
             yAxis: {},
             series: [{
-                name: '发送量(条)',
+                name: chartData.unit,
                 type: 'line',
-                data: [50, 220, 136, 110, 10, 90],
+                data: chartData.count,
                 areaStyle: {
                     normal: {
                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{

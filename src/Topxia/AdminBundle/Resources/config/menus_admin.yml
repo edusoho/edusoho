@@ -570,8 +570,9 @@ admin:
                     visable: ((setting('cloud_status.enabled')|default(false) != false) and (setting('cloud_status.accessCloud')|default(false) != false))
                     router_name: admin_edu_cloud_search
                     children:
-                        admin_edu_cloud_search:
+                        admin_edu_cloud_search_overview:
                             name: 概览
+                            router_name: admin_edu_cloud_search
                             disable: true
                         admin_edu_cloud_setting_search:
                             name: 设置

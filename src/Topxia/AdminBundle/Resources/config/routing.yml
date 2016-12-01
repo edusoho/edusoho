@@ -1040,6 +1040,10 @@ admin_cloud_video_detail:
 admin_cloud_video_switch:
     pattern:  /cloud/video/switch
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSwitch }
+
+admin_cloud_search:
+    pattern:  /cloud/search
+    defaults: { _controller: TopxiaAdminBundle:Cloud:search }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_doc:
@@ -1070,6 +1074,10 @@ admin_cloud_video_renew:
     pattern:  /cloud/video/renew
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
+
+admin_cloud_search_detail:
+    pattern: /cloud/search/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:searchDetail }
 
 admin_cloud_sms_detail:
     pattern: /cloud/sms/detail
@@ -1851,8 +1859,8 @@ admin_edu_cloud_email_switch:
     permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_search:
-    pattern: /edu_cloud/search
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:search }
+    pattern: /edu_cloud/search/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOverview }
 
 admin_edu_cloud_setting_search:
     pattern: /setting/edu_cloud/search
@@ -1986,8 +1994,3 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     pattern:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
-
-# 添加重建索引模态框
-admin_cloud_buildindex_modal:
-    pattern:  /setting/cloud/buildindex/modal
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:modal }
