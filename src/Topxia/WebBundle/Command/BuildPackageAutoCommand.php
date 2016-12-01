@@ -93,6 +93,10 @@ class BuildPackageAutoCommand extends BaseCommand
 
                 $splitLine = preg_split('/\s+/', $line);
 
+                if(empty($splitLine) || count($splitLine) === 1){
+                    continue;
+                }
+
                 list($op, $opFile, $newFile) = $splitLine;
 
                 if (empty($line)) {
