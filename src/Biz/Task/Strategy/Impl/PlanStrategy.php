@@ -50,7 +50,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
-        $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
+        $preTask = $this->getTaskDao()->getByCourseIdAndNumber($task['courseId'], $task['number'] - 1);
 
         if ($preTask['isOptional']) {
             return true;
@@ -134,24 +134,25 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 $id = str_replace('task-', '', $id);
 
                 foreach ($parentChapters as $parent) {
+                    $taskNumber++;
+                    $fields = array(
+                        'seq'    => $key,
+                        'number' => $taskNumber
+                    );
                     if (!empty($parent)) {
-                        $taskNumber++;
-                        $this->getTaskService()->updateSeq($id, array(
-                            'seq'        => $key,
-                            'categoryId' => $parent['id'],
-                            'number'     => $taskNumber
-                        ));
-                        break;
+                        $fields['categoryId'] = $parent['id'];
                     }
+                    $this->getTaskService()->updateSeq($id, $fields);
                 }
             }
         }
     }
 
 
-    protected function isFirstTask($task)
+    protected
+    function isFirstTask($task)
     {
-        return 1 == $task['seq'];
+        return 1 == $task['number'];
     }
 
 

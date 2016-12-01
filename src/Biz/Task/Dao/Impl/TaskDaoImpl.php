@@ -20,10 +20,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
-    public function getByCourseIdAndSeq($courseId, $seq)
+    public function getByCourseIdAndNumber($courseId, $number)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `seq` = ? LIMIT 1";
-        return $this->db()->fetchAssoc($sql, array($courseId, $seq));
+        $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `number` = ? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($courseId, $number));
     }
 
 

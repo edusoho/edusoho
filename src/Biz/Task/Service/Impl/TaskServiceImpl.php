@@ -187,12 +187,12 @@ class TaskServiceImpl extends BaseService implements TaskService
                 return array();
             }
         }
-        return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
+        return $this->getTaskDao()->getByCourseIdAndNumber($task['courseId'], $task['number'] + 1);
     }
 
     public function canLearnTask($taskId)
     {
-        $task                  = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -231,13 +231,13 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function isFirstTask($task)
     {
-        return 1 == $task['seq'];
+        return 1 == $task['number'];
     }
 
     protected function isLastTask($task)
     {
-        $maxSeq = $this->getMaxSeqByCourseId($task['courseId']);
-        return $maxSeq == $task['seq'];
+        $maxSeq = $this->getMaxNumberByCourseId($task['courseId']);
+        return $maxSeq == $task['number'];
     }
 
     protected function createCourseStrategy($courseId)
