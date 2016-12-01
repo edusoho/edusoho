@@ -266,73 +266,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     //TODO 任务需要在排序时处理 chapterId， number
     public function sortCourseItems($courseId, $ids)
     {
-        $this->tryManageCourse($courseId);
+        $course = $this->tryManageCourse($courseId);
 
-        $parentChapters = array(
-            'lesson'  => array(),
-            'unit'    => array(),
-            'chapter' => array()
-        );
+        $this->createCourseStrategy($course)->sortCourseItems($courseId, $ids);
 
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-
-        foreach ($ids as $key => $id) {
-            if (strpos($id, 'chapter') === 0) {
-                $id      = str_replace('chapter-', '', $id);
-                $chapter = $this->getChapterDao()->get($id);
-                $fileds  = array('seq' => $key);
-
-                $index = $chapterTypes[$chapter['type']];
-                switch ($index) {
-                    case 3:
-                        $fileds['parentId'] = 0;
-                        break;
-                    case 2:
-                        if (!empty($parentChapters['chapter'])) {
-                            $fileds['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    case 1:
-                        if (!empty($parentChapters['unit'])) {
-                            $fileds['parentId'] = $parentChapters['unit']['id'];
-                        } elseif (!empty($parentChapters['chapter'])) {
-                            $fileds['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!empty($parentChapters[$chapter['type']])) {
-                    $fileds['number'] = $parentChapters[$chapter['type']]['number'] + 1;
-                } else {
-                    $fileds['number'] = 1;
-                }
-
-                foreach ($chapterTypes as $type => $value) {
-                    if ($value < $index) {
-                        $parentChapters[$type] = array();
-                    }
-                }
-
-                $chapter                          = $this->getChapterDao()->update($id, $fileds);
-                $parentChapters[$chapter['type']] = $chapter;
-            }
-
-            if (strpos($id, 'task') === 0) {
-                $id = str_replace('task-', '', $id);
-
-                foreach ($parentChapters as $parent) {
-                    if (!empty($parent)) {
-                        $this->getTaskService()->updateSeq($id, array(
-                            'seq'        => $key,
-                            'categoryId' => $parent['id']
-                        ));
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     public function createChapter($chapter)
@@ -418,7 +355,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
 
         foreach ($tasks as $task) {
-            $this->getTaskService()->updateTask($task['id'], array('courseChapterId' => $prevChapter['id']));
+            $this->getTaskService()->updateTask($task['id'], array('categoryId' => $prevChapter['id']));
         }
     }
 
