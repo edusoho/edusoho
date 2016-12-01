@@ -33,7 +33,7 @@ class Classroom extends BaseResource
         $simple['id']            = $res['id'];
         $simple['picture']       = $res['middlePicture'];
         $simple['title']         = $res['title'];
-        $simple['about']         = $res['about'];
+        $simple['about']         = is_null($res['about']) ? '' : $res['about'];
         $simple['headTeacherId'] = $res['headTeacherId'];
         $simple['teacherIds']    = $res['teacherIds'];
         $simple['convNo']        = $this->getConversation($res['id']);
