@@ -744,13 +744,10 @@ class EduCloudController extends BaseController
             }
         }
         if ($data['search_enabled'] == 1 && $data['status'] == 'ok') {
-            foreach ($searchOverview['thirtyDays'] as $value) {
-                $items['date'][] = $value['date'];
-                $items['amount'][] = $value['amount'];            
-            }
+            $chartData = $this->dealChartData($searchOverview['data']);
             return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
                 'searchOverview' => $searchOverview,
-                'items'          => isset($items) ? $items : null
+                'chartData'          => $chartData
             ));
         } else {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(

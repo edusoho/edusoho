@@ -8,47 +8,44 @@ define(function(require, exports, module) {
         $("[data-toggle='popover']").popover();
         
         //改版图表
-        var searchChart = document.getElementById('searchChart');
-        if (searchChart) {
-            var searchChart = echarts.init(searchChart);
-            var items = app.arguments.items;
-            var option = {
-                title: {
-                    text: ''
+        var searchChart = echarts.init(document.getElementById('searchChart'));
+        var chartData = app.arguments.chartData;
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {},
+            legend: {
+                data:['时间']
+            },
+            xAxis: {
+                data: chartData.date
+            },
+            yAxis: {},
+            series: [{
+                name: '发送量(条)',
+                type: 'line',
+                data: chartData.count,
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#428BCA'
+                        }, {
+                            offset: 1,
+                            color: '#7ec2fc'
+                        }])
+                    }
                 },
-                tooltip: {},
-                legend: {
-                    data:['时间']
-                },
-                xAxis: {
-                    data: items.date
-                },
-                yAxis: {},
-                series: [{
-                    name: '发送量(条)',
-                    type: 'line',
-                    data: items.amount,
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: '#428BCA'
-                            }, {
-                                offset: 1,
-                                color: '#7ec2fc'
-                            }])
-                        }
-                    },
-                }],
-                color:['#428BCA'],
-                grid:{
-                    show:true,
-                    borderColor:'#fff',
-                    backgroundColor:'#fff'
-                }
-            };
-            searchChart.setOption(option);
-        }
+            }],
+            color:['#428BCA'],
+            grid:{
+                show:true,
+                borderColor:'#fff',
+                backgroundColor:'#fff'
+            }
+        };
+        searchChart.setOption(option);
     }
 
 })

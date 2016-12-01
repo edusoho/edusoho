@@ -1033,6 +1033,11 @@ admin_cloud_video:
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_search:
+    pattern:  /cloud/search
+    defaults: { _controller: TopxiaAdminBundle:Cloud:search }
+    permissions: [admin_my_cloud_overview]
+
 admin_cloud_doc:
     pattern:  /cloud/doc
     defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
