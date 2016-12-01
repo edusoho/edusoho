@@ -210,7 +210,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findStudentsByCourseId($courseId)
     {
-        return $this->getMemberDao()->findStudentsByCourseId($courseId);
+        $students = $this->getMemberDao()->findStudentsByCourseId($courseId);
+        if (!empty($students)) {
+            $userIds = ArrayToolkit::column($students, 'userId');
+            $user    = $this->getUserService()->findUsersByIds($userIds);
+            $userMap = ArrayToolkit::index($user, 'id');
+            foreach ($students as $index => $student) {
+                $student['nickname']    = $userMap[$student['userId']]['nickname'];
+                $student['smallAvatar'] = $userMap[$student['userId']]['smallAvatar'];
+                $students[$index]       = $student;
+            }
+        }
+
+        return $students;
     }
 
     public function isCourseMember($courseId, $userId)

@@ -45,8 +45,9 @@
         <td class="media media-middle" >
           <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
             {# <img class="avatar-sm" src="{{student.smallAvatar}}"> #}
+            {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
           </a>
-          <a target="_blank" href="/user/{{student.userId}}">{{student.userId}}</a>
+          <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
           <div class="text-muted text-sm">{{student.createdTime|date_format()}}</div>
         </td>
        {#  <td>
