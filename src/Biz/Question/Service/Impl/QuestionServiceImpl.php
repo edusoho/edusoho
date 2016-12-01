@@ -118,11 +118,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function search($conditions, $sort, $start, $limit)
     {
+        $conditions = $this->filterQuestion($conditions);
         return $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchCount($conditions)
     {
+        $conditions = $this->filterQuestion($conditions);
         return $this->getQuestionDao()->count($conditions);
     }
 
@@ -224,6 +226,18 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function deleteFavoriteByQuestionId($questionId)
     {
         return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
+    }
+
+    protected function filterQuestion($fields)
+    {
+        if (!empty($fields['range']) && $fields['range'] == 'lesson') {
+            $fields['lessonId'] = 0;
+        }
+        if (empty($fields['difficulty'])) {
+            unset($fields['difficulty']);
+        }
+
+        return $fields;
     }
 
     protected function getQuestionDao()

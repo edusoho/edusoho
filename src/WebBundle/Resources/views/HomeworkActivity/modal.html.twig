@@ -71,16 +71,6 @@
 {% endblock %}
 
 {% block activity_finish %}
-  <div class="row form-group">
-    <div class="col-xs-2 control-label">
-      <label for="condition-select">{{ '考评方式'|trans }}</label>
-    </div>
-    <div class="col-xs-4 controls">
-      <select class="form-control" id="" name="checkType">
-        {{ select_options({'score':'分数'|trans}, activity.checkType|default('score')) }}
-      </select>
-    </div>
-  </div>
 
   <div class="row form-group">
     <div class="col-xs-2 control-label">
@@ -88,21 +78,11 @@
     </div>
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishCondition">
-        {{ select_options({'score':'分数达标'|trans,'submit':'提交答卷'|trans}, activity.finishCondition['type']|default('score')) }}
+        {{ select_options({'submit':'提交作业'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
 
       <input type="hidden" name="finishScore" value="{{ activity.finishCondition['score']|default('0') }}" />
-      <input type="hidden" name="mediaType" value="testpaper" />
-      {#<div class="difficulty-percentage-slider noUi-target noUi-ltr noUi-horizontal noUi-background">
-        <div class="noUi-base">
-          <div class="noUi-origin" data-style="left" style="left: 30%;">
-            <div class="noUi-handle noUi-handle-lower"></div>
-          </div>
-          <div class="noUi-origin" data-style="left" style="left: 70%;">
-            <div class="noUi-handle noUi-handle-upper"></div>
-          </div>
-        </div>
-      </div>#}
+      <input type="hidden" name="mediaType" value="homework" />
 
     </div>
   </div>

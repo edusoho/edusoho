@@ -2,11 +2,10 @@
 
 namespace Biz\Task\Strategy;
 
-
+use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Topxia\Common\ArrayToolkit;
 
 class BaseStrategy
 {
@@ -76,7 +75,7 @@ class BaseStrategy
     public function baseFindCourseItems($courseId)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -94,7 +93,6 @@ class BaseStrategy
 
         return $items;
     }
-
 
     protected function invalidTask($task)
     {
@@ -142,5 +140,4 @@ class BaseStrategy
     {
         return $this->biz->service('Activity:ActivityService');
     }
-
 }
