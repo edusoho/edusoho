@@ -7,35 +7,36 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\CurlToolkit;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class Captchas extends BaseResource
+class SmsCodes extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $data = $request->request->all();
+        $type   = $request->request->get('type');
+        $mobile = $request->request->get('mobile');
 
-        if (empty($data['type'])) {
-            return $this->error('500', '没有type字段');
+        if (in_array($type, array('sms_bind', 'sms_forget_password'))) {
+            return $this->error('500', '短信服务不支持该业务');
         }
-        if (empty($data['mobile'])) {
+        if (empty($mobile)) {
             return $this->error('500', '手机号为空');
         }
 
-        $result = $this->getSmsService()->sendVerifySms('sms_bind', $data['mobile'], 0);
+        $result = $this->getSmsService()->sendVerifySms($type, $mobile);
             
         $user = $this->getCurrentUser();
-        $newToken = $this->getTokenService()->makeToken($data['type'], array(
+        $SmsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
             'duration' => 60 * 2,
             'userId'   => $user['id'],
             'data'     => array(
                 'captcha_code' => $result['captcha_code'],
-                'mobile'       => $data['mobile']
+                'mobile'       => $mobile
             )
         ));
 
         return array(
-            'code'  => 0,
-            'token' => $newToken
+            'mobile'   => $mobile,
+            'SmsToken' => $SmsToken
         );
     }
 

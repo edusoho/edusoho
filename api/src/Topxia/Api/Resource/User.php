@@ -113,17 +113,6 @@ class User extends BaseResource
         return $simple;
     }
 
-    protected function isSmsCaptchaCodeExpire($type, $token)
-    {
-        $currentToken = $this->getTokenService()->verifyToken($type, $token);
-
-        if (empty($currentToken)) {
-            return array();
-        }
-
-        return $currentToken;
-    }
-
     protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');

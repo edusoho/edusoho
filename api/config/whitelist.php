@@ -18,6 +18,6 @@ return array(
         '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
         '/^\/api\/users\/bind_login$/',
-        '/^\/api\/captchas$/'
+        '/^\/api\/sms_codes$/'
     )
 );

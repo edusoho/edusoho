@@ -43,7 +43,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return true;
     }
 
-    public function sendVerifySms($smsType,$to,$smsLastTime)
+    public function sendVerifySms($smsType,$to,$smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
             throw new \RuntimeException($this->getKernel()->trans('手机号错误:%to%', array('%to%' => $to)));
