@@ -4,6 +4,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: biz.yml }
+    - { resource: services.xml }
 
 framework:
     # esi:             ~
