@@ -95,9 +95,9 @@ class EduCloudController extends BaseController
         $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
         foreach ($overview['services'] as $key => $value) {
             if ($value == true) {
-                $paidService[] = $overview['services'][$key];
+                $paidService[] = $key;
             } else {
-                $unPaidService[] = $overview['services'][$key];
+                $unPaidService[] = $key;
             }
         }
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
