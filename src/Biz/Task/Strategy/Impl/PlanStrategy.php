@@ -129,21 +129,15 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 $chapter                          = $this->getChapterDao()->update($id, $fields);
                 $parentChapters[$chapter['type']] = $chapter;
             }
-
             if (strpos($id, 'task') === 0) {
-                $id = str_replace('task-', '', $id);
-
-                foreach ($parentChapters as $parent) {
-                    $taskNumber++;
-                    $fields = array(
-                        'seq'    => $key,
-                        'number' => $taskNumber
-                    );
-                    if (!empty($parent)) {
-                        $fields['categoryId'] = $parent['id'];
-                    }
-                    $this->getTaskService()->updateSeq($id, $fields);
-                }
+                $taskNumber++;
+                $categoryId = empty($chapter) ? 0 : $chapter['id'];
+                $id         = str_replace('task-', '', $id);
+                $this->getTaskService()->updateSeq($id, array(
+                    'seq'        => $key,
+                    'categoryId' => $categoryId,
+                    'number'     => $taskNumber
+                ));
             }
         }
     }
