@@ -106,13 +106,14 @@ class BuildPackageAutoCommand extends BaseCommand
                     continue;
                 }
 
-                if(!empty($module)){
-                    $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
-                }
-
                 if (empty($opFile)) {
                     echo "无法处理该文件：{$line}";
                     continue;
+                }
+
+                if(!empty($module)){
+                    $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
+                    $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
                 }
 
                 if (empty($module) && strpos($opFile, 'vendor') === 0){
