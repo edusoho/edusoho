@@ -52,7 +52,8 @@ class KernelResponseListener
 
     private function generateUserActiveLog($request)
     {
-        if (empty($request->getSession())) {
+        $session = $request->getSession();
+        if (empty($session)) {
             return false;
         }
         $activeUserTime = $request->getSession()->get('active_user_time', 0);
