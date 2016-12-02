@@ -15,6 +15,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
             new \Twig_SimpleFunction('datas_count', array($this, 'getDatasCount'), $options),
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
+            new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
         );
     }
 
@@ -40,6 +41,11 @@ class DataExtension extends \Twig_Extension
             throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', array('%name%' =>$name )));
         }
         return $this->{$method}($conditions);
+    }
+
+    public function getOldSmsUserStatus()
+    {
+        
     }
 
     /**
