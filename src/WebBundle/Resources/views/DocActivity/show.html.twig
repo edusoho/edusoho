@@ -7,7 +7,7 @@
        data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
        {% if setting('magic.doc_watermark') %}data-watermark-url="{{ path('cloud_doc_watermark') }}" {% endif %}>
     {% if not error is empty %}
-      <div class="content-text-body text-danger">
+      <div class="content-text-body color-danger">
         {{ error.message|raw }}
       </div>
     {% endif %}

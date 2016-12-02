@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% set bodyClass = "testpaper-activity-show-body" %}
+
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','web/testpaper/do-test/index.js']) %}

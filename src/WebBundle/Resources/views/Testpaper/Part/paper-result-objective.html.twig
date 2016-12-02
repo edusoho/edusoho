@@ -44,12 +44,12 @@
             {% for type in questionTypes|default([]) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
                   <td>
-                    <span class="text-danger">
+                    <span class="color-danger">
                       {{ accuracy[type].wrong + accuracy[type].partRight }}
                       <small>
                         {{'道'|trans}}

@@ -11,7 +11,7 @@
 				{% if question.testResult.status == 'right' %}
 					{{'你答对了'|trans}}
 				{% elseif question.testResult.status == 'wrong' %}
-					{{'你<strong class="text-danger">答错</strong>了'|trans|raw}}
+					{{'你<strong class="color-danger">答错</strong>了'|trans|raw}}
 				{% elseif question.testResult.status == 'noAnswer' %}
 					{{'你未答题'|trans}}
 				{% endif %}

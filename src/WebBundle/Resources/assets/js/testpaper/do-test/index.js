@@ -1,6 +1,5 @@
 import QuestionTypeBuilder from '../../../common/testpaper/question-type-builder';
 import ActivityEmitter from "../../activity/activity-emitter";
-// import 'common/jquery-timer';
 
 class DoTest
 {
@@ -42,6 +41,7 @@ class DoTest
   _analysisToggle(event) {
     let $current = this._viewToggle(event);
     console.log($current.data('url'));
+    $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
   }
 
   _viewToggle(event) {
@@ -173,6 +173,7 @@ class DoTest
 	}
 
 	_submit(event) {
+    console.log(event);
 		let $target = $(event.currentTarget);
 		let values = {};
 		let emitter = new ActivityEmitter();
@@ -186,13 +187,11 @@ class DoTest
 		})
 
 		$.post($target.data('url'),{data:values,usedTime:0})
-			.done((response) => {
-				if (response.result) {
-					emitter.emit('finish');
-				}
-
-				
-			})
+		.done((response) => {
+			if (response.result) {
+				emitter.emit('finish');
+			}
+		})
 	}
 }
 

@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-choice {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-choice  js-testpaper-question {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
 
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
@@ -27,13 +27,13 @@
 				{% if question.testResult.status == 'right' %}
 					{{'回答正确'|trans}}
 				{% elseif question.testResult.status == 'partRight' %}
-					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>
+					{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>
 					{{'。回答部分正确。'|trans}}
 					{% if showScore|default(1) %}
 						{{'得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
 					{% endif %}
 				{% elseif question.testResult.status == 'wrong' %}
-					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。{{'回答错误'|trans}}
+				{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'你答错了'|trans}}
 				{% elseif question.testResult.status == 'noAnswer' %}
 				  {{'你未答题'|trans}}
 				{% endif %}

@@ -13,8 +13,8 @@
 </span>
 
 <span class="view-toggle js-analysis-toggle">
-  <a class="btn btn-sm btn-link analysis-btn view-show"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
-  <a class="btn btn-sm btn-link unanalysis-btn view-hide"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
+  <a class="btn  link-gray view-show"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
+  <a class="btn link-gray view-hide"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
 </span>
 
 
@@ -34,7 +34,7 @@
 
 {% if 'analysis' in flags and id|default(null) %}
   {% if not item.question.analysis == '' %}
-    <a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
-    <a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
+    <a class="btn  link-gray"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
+    <a class="btn link-gray" style="display:none"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
   {% endif %}
 {% endif %}

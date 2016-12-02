@@ -20,7 +20,7 @@
 			    	  {% elseif question.testResult.status == "partRight" %}
 			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>。
+			    	  {{'，你的答案'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}
@@ -35,7 +35,7 @@
 				    {% endif %}
 			    </p>
 			  {% else %}
-			    <p class="text-danger">{{'回答错误。'|trans}}</p>
+			    <p class="color-danger">{{'回答错误。'|trans}}</p>
 			  {% endif %}
 			</div>
 
