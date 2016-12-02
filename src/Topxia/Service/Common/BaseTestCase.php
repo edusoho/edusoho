@@ -28,9 +28,10 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     public function setUp()
     {
         parent::emptyDatabase();
-        $this->flushPool();
-        $this->initDevelopSetting();
-        $this->initCurrentUser();
+        $this->initServiceKernel()
+            ->flushPool()
+            ->initDevelopSetting()
+            ->initCurrentUser();
     }
 
     protected function initDevelopSetting()
@@ -38,6 +39,15 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->createService('System.SettingService')->set('developer', array(
             'without_network' => '1'
         ));
+
+        return $this;
+    }
+
+    protected function initServiceKernel()
+    {
+        $serviceKernel = $this->getServiceKernel();
+        $serviceKernel->setBiz(self::$biz);
+        return $this;
     }
 
     protected function initCurrentUser()
@@ -74,6 +84,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $biz = $this->getBiz();
         $biz['user'] = $this->getCurrentUser();
+        return $this;
     }
 
     /**
@@ -113,6 +124,8 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $pool             = $reflectionObject->getProperty("pool");
         $pool->setAccessible(true);
         $pool->setValue($this->getServiceKernel(), array());
+
+        return $this;
     }
 
     protected static function getContainer()

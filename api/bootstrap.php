@@ -17,7 +17,7 @@ if (API_ENV == 'prod') {
 }
 
 $parameters = include __DIR__.'/config/paramaters.php';
-if(isset($_SERVER['HTTPS'])){
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
     $parameters['host'] = 'https://'.$_SERVER['HTTP_HOST'];
 }else{
     $parameters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
