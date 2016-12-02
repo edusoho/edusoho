@@ -32,7 +32,12 @@
       <label>{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-10">
-      <p class="form-control-static">观看到最后</p>
+      <p class="form-control-static">
+      <div class="col-sm-4">
+        <select id="finish-condition" class="form-control">
+          <option value="downloaded">观看到最后</option>
+        </select>
+      </div>
     </div>
   </div>
 {% endblock %}

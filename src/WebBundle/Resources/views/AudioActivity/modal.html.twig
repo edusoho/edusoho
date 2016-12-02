@@ -45,8 +45,10 @@
     <div class="col-xs-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-9">
-      <p class="form-control-static">听完课时</p>
+    <div class="col-xs-4">
+      <select id="finish-condition" class="form-control">
+        <option value="downloaded">听完课时</option>
+      </select>
     </div>
   </div>
 {% endblock %}
