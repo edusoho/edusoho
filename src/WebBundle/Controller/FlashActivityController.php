@@ -3,14 +3,29 @@
 
 namespace WebBundle\Controller;
 
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\File\UploadFileService;
 
 class FlashActivityController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+        $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
 
+        $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
+
+        $apiClient              = CloudAPIFactory::create('leaf');
+        $result                 = $apiClient->get(sprintf('/resources/%s/player', $file['globalId']));
+        $flashMedia['uri'] = $result['url'];
+
+        return $this->render('WebBundle:FlashActivity:index.html.twig', array(
+            'flash'      => $flash,
+            'flashMedia' => $flashMedia
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -19,15 +34,15 @@ class FlashActivityController extends BaseController implements ActivityActionIn
         $config   = $this->getActivityService()->getActivityConfig('flash');
         $flash    = $config->get($activity['mediaId']);
 
-        $file     = $this->getUploadFileService()->getFile($flash['mediaId']);
+        $file = $this->getUploadFileService()->getFile($flash['mediaId']);
 
         $activity['ext']['media']['name'] = $file['filename'];
         $activity['ext']['media']['id']   = $file['id'];
 
         return $this->render('WebBundle:FlashActivity:edit-modal.html.twig', array(
             'activity' => $activity,
-            'courseId'  => $courseId,
-            'flash'     => $flash
+            'courseId' => $courseId,
+            'flash'    => $flash
         ));
     }
 

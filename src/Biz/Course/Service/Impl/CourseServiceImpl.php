@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -207,15 +208,89 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function findStudentsByCourseId($courseId)
+    {
+        $students = $this->getMemberDao()->findStudentsByCourseId($courseId);
+        if (!empty($students)) {
+            $userIds = ArrayToolkit::column($students, 'userId');
+            $user    = $this->getUserService()->findUsersByIds($userIds);
+            $userMap = ArrayToolkit::index($user, 'id');
+            foreach ($students as $index => $student) {
+                $student['nickname']    = $userMap[$student['userId']]['nickname'];
+                $student['smallAvatar'] = $userMap[$student['userId']]['smallAvatar'];
+                $students[$index]       = $student;
+            }
+        }
+
+        return $students;
+    }
+
+    public function isCourseMember($courseId, $userId)
+    {
+        $role = $this->getUserRoleInCourse($courseId, $userId);
+        return !empty($role);
+    }
+
     public function isCourseStudent($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $role = $this->getUserRoleInCourse($courseId, $userId);
+        return $role == 'student';
+    }
 
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) || $member['role'] != 'student' ? false : true;
+    public function isCourseTeacher($courseId, $userId)
+    {
+        $role = $this->getUserRoleInCourse($courseId, $userId);
+        return $role == 'teacher';
+    }
+
+    public function createCourseStudent($courseId, $fields)
+    {
+        $this->tryManageCourse($courseId);
+        if (!ArrayToolkit::requireds($fields, array('userId', 'price'))) {
+            throw $this->createInvalidArgumentException("Lack of required fields");
         }
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $fields['userId']);
+        if (!empty($member)) {
+            throw $this->createInvalidArgumentException("User#{$fields['userId']} is already in Course#{$courseId}");
+        }
+        $fields = ArrayToolkit::parts($fields, array(
+            'userId',
+            // 'price', // create order ...
+            'remark'
+        ));
+
+        $fields['role']        = 'student';
+        $fields['joinedType']  = 'course';
+        $fields['classroomId'] = 0;
+        $fields['courseId']    = $courseId;
+
+        //TODO create order
+
+        return $this->getMemberDao()->create($fields);
+    }
+
+    public function removeCourseStudent($courseId, $userId)
+    {
+        $this->tryManageCourse($courseId);
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createNotFoundException("User#{$user['id']} Not Found");
+        }
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
+        }
+        if ($member['role'] !== 'student') {
+            throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
+        }
+
+        return $this->getMemberDao()->delete($member['id']);
+    }
+
+    public function getUserRoleInCourse($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        return empty($member) ? null : $member['role'];
     }
 
     public function tryTakeCourse($courseId)
@@ -401,5 +476,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }
