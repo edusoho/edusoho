@@ -1,6 +1,6 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 
-{% do script([ 'web/activity-manage/audio/index.js']) %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/activity-manage/audio/index.js']) %}
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('audio') %}
   {% set fileType = 'audio' %}
@@ -45,8 +45,10 @@
     <div class="col-xs-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-9">
-      <p class="form-control-static">听完课时</p>
+    <div class="col-xs-4">
+      <select id="finish-condition" name="condition" class="form-control">
+        <option value="downloaded">听完课时</option>
+      </select>
     </div>
   </div>
 {% endblock %}
