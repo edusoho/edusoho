@@ -1,7 +1,10 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Impl;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\EduCloudService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -13,10 +16,14 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            $e->getMessage();
+            $logger = new Logger('CloudAPI');
+            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
+            $logger->addInfo($e->getMessage());
+            return false;
         }
-        $status = $overview['accessCloud'] && $overview['enabled'];
-
-        return $status;
+        if (!isset($overview['error'])) {
+            return $overview['accessCloud'] && $overview['enabled'];
+        }
+        return false;
     }
 }

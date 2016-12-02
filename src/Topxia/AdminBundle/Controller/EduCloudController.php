@@ -92,6 +92,9 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
+        if (isset($overview['error'])) {
+            return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
+        }
         $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
         foreach ($overview['services'] as $key => $value) {
             if ($value == true) {
@@ -811,7 +814,7 @@ class EduCloudController extends BaseController
                 $data['status'] = 'binded_error';
             }
         }
-        if ($data['search_enabled'] == 1 && $data['status'] == 'ok') {
+        if ($data['search_enabled'] == 1 && ($data['status'] == 'ok'||$data['status'] == 'waiting')) {
             $chartData = $this->dealChartData($searchOverview['data']);
             return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
                 'searchOverview' => $searchOverview,
@@ -822,7 +825,6 @@ class EduCloudController extends BaseController
             'data' => $data
             ));
         }
-
     }
 
     public function searchReapplyAction(Request $request)

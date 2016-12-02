@@ -27,11 +27,6 @@
         </a>
     {% elseif not setting('cloud_search.search_enabled') %}
       <a type="submit" href="{{ path('admin_edu_cloud_search_open') }}" class="btn btn-primary btn-lg notice-btn">{{'立即启用'|trans}}</a>
-    {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'waiting' %}
-      <div class="col-md-10 form-group control-cloud">
-
-        <span class="text-warning">{{'正在索引数据，预计1～3天完成'|trans}}</span>
-      </div>
     {% endif %}
     <h4>{{'搜索范围说明'|trans}}</h4>
 
