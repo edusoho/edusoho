@@ -72,6 +72,7 @@ class DoTest
   }
 
   _clickBtnIndex(event) {
+    console.log(event);
     let $current = $($(event.currentTarget).data('anchor'));
     $(".testpaper-activity-show").scrollTop($current.offset().top);
   }
@@ -158,12 +159,7 @@ class DoTest
 
     isChecked = $input.prop('checked');
     let questionId = $input.attr('name');
-    
-    if(isChecked) {
-			$('a[data-anchor="#question' + questionId + '"]').addClass('active');
-		} else {
-			$('a[data-anchor="#question' + questionId + '"]').removeClass('active');
-		}
+    isChecked ? $('a[data-anchor="#question' + questionId + '"]').addClass('lump-primary-light') : $('a[data-anchor="#question' + questionId + '"]').removeClass('lump-primary-light');
 	}
 
 	_quick2Question(event) {

@@ -24,10 +24,10 @@
           {% for question in questions[type] %}
             {% if question.type == 'material' %}
               {% for questionSub in question.subs|default([]) %}
-                <a href="javascript:;" data-anchor="#question{{ questionSub.id }}" class="btn btn-default btn-index pull-left">{{ question.seq }}</a>
+                <a href="javascript:;" data-anchor="#question{{ questionSub.id }}" class="js-btn-index color-lump mrm mbmpull-left">{{ question.seq }}</a>
               {% endfor %}
             {% else %}
-              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="btn btn-default btn-index pull-left">{{ question.seq }}</a>
+              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left">{{ question.seq }}</a>
             {% endif %}
           {% endfor %}
 

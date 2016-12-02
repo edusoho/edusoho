@@ -13,7 +13,7 @@
 		</div>
 		<div class="panel-body">
 			{% for question in questions %}
-        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
       {% endfor %}
 		</div>
     {% if paperResult.status|default(null) != 'finished' %}
