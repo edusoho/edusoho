@@ -48,7 +48,9 @@
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="alert alert-danger" role="alert"><center><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余XXX条，为保证继续使用，请开通教育云，点击 <a href="#" target="_blank"> 立即开通</a></strong></center></div>
+  {% if isOldSmsUser() %}
+    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余XXX条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a></strong></div></div>
+  {% endif %}
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -82,7 +84,7 @@
     </div>
   </div>
   
-  <div class="container">
+  <div class="container {% if isOldSmsUser() %}es-admin-container-down{% endif %}">
     
     {% set notifies = plugin_update_notify() %}
     {% if not notifies is empty %}

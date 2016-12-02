@@ -46,7 +46,7 @@ class DataExtension extends \Twig_Extension
 
     public function getOldSmsUserStatus()
     {
-        
+        return $this->getEduCloudService()->getOldSmsUserStatus();
     }
 
     /**
