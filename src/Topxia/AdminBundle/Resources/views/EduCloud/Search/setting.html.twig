@@ -32,6 +32,8 @@
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
+
+{% if setting('developer.debug') %}
 <div class="page-heading">
   基本设置
 </div>
@@ -45,4 +47,5 @@
     </div>
   </div>
 </form>
+{% endif %}
 {% endblock %}
