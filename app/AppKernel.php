@@ -88,6 +88,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new WebBundle\WebBundle(),
             // new TemplatePlugin\TemplatePlugin(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
+            new AppBundle\AppBundle(),
         );
 
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
