@@ -1,4 +1,4 @@
-import {closeCourse, deleteCourse, publishCourse, showSettings} from './help';
+import {closeCourse, deleteCourse, publishCourse, showSettings,deleteTask} from './help';
 import sortable from 'common/sortable';
 
 if($('#sortable-list').length){
@@ -6,9 +6,9 @@ if($('#sortable-list').length){
 	  element : '#sortable-list'
 	});
 }
-
 closeCourse();
 deleteCourse();
+deleteTask();
 publishCourse();
 // deleteTask();
 showSettings();

@@ -61,7 +61,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'title'       => '默认教学计划',
             'expiryMode'  => 'days',
             'expiryDays'  => 0,
-            'learnMode'   => 'freeOrder',
+            'learnMode'   => 'freeMode',
             'isDefault'   => 1,
             'status'      => 'draft'
         );
@@ -124,7 +124,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->tryManageCourseSet($id);
         $covers    = array();
         foreach ($coverArray as $cover) {
-            $covers[$cover['type']] = $this->getFileService()->getFile($cover['id'])['uri'];
+            $file                   = $this->getFileService()->getFile($cover['id']);
+            $covers[$cover['type']] = $file['uri'];
         }
 
         return $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
