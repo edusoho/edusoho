@@ -28,19 +28,16 @@ class BaseStrategy
             throw new AccessDeniedException('无权创建任务');
         }
 
-        $activity      = $this->getActivityService()->createActivity($fields);
-        $currentNumber = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
+        $activity = $this->getActivityService()->createActivity($fields);
 
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['number']        = $currentNumber + 1;
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'seq',
-            'number',
             'mode',
             'categoryId',
             'activityId',

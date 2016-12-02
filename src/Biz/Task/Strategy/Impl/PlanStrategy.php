@@ -46,18 +46,16 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        if ($this->isFirstTask($task)) {
+        //if the task is first return true;
+        $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (empty($preTask)) {
             return true;
         }
-
-        $preTask = $this->getTaskDao()->getByCourseIdAndNumber($task['courseId'], $task['number'] - 1);
 
         if ($preTask['isOptional']) {
             return true;
         }
-        if (empty($preTask)) {
-            throw new NotFoundException('previous task does not exist');
-        }
+
         $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {
             return true;
@@ -86,7 +84,6 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         );
 
         $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-        $taskNumber   = 0;
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
@@ -130,23 +127,13 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 $parentChapters[$chapter['type']] = $chapter;
             }
             if (strpos($id, 'task') === 0) {
-                $taskNumber++;
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id         = str_replace('task-', '', $id);
                 $this->getTaskService()->updateSeq($id, array(
                     'seq'        => $key,
                     'categoryId' => $categoryId,
-                    'number'     => $taskNumber
                 ));
             }
         }
     }
-
-
-    protected function isFirstTask($task)
-    {
-        return 1 == $task['number'];
-    }
-
-
 }
