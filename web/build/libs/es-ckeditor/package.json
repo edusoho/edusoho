@@ -1,60 +1,10 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "es-ckeditor@^1.0.0",
-        "scope": null,
-        "escapedName": "es-ckeditor",
-        "name": "es-ckeditor",
-        "rawSpec": "^1.0.0",
-        "spec": ">=1.0.0 <2.0.0",
-        "type": "range"
-      },
-      "/Users/retamia/Workspace/php/edusoho"
-    ]
-  ],
-  "_from": "es-ckeditor@>=1.0.0 <2.0.0",
-  "_id": "es-ckeditor@1.0.0",
-  "_inCache": true,
-  "_location": "/es-ckeditor",
-  "_nodeVersion": "6.3.0",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/es-ckeditor-1.0.0.tgz_1478687350586_0.31403782521374524"
-  },
-  "_npmUser": {
-    "name": "codeages",
-    "email": "topxia-dev@outlook.com"
-  },
-  "_npmVersion": "3.10.3",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "es-ckeditor@^1.0.0",
-    "scope": null,
-    "escapedName": "es-ckeditor",
-    "name": "es-ckeditor",
-    "rawSpec": "^1.0.0",
-    "spec": ">=1.0.0 <2.0.0",
-    "type": "range"
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.0.0.tgz",
-  "_shasum": "9872891c718bf08c58738dc8307b552c88c1d9cb",
-  "_shrinkwrap": null,
-  "_spec": "es-ckeditor@^1.0.0",
-  "_where": "/Users/retamia/Workspace/php/edusoho",
-  "author": {
-    "name": "codeages"
-  },
-  "dependencies": {},
+  "name": "es-ckeditor",
+  "version": "1.0.0",
   "description": "CKEditor-based implementation  and  add some plugins, For example kityformula etc.",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "9872891c718bf08c58738dc8307b552c88c1d9cb",
-    "tarball": "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.0.0.tgz"
+  "main": "ckeditor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "ckeditor",
@@ -62,19 +12,8 @@
     "editor",
     "wysiwyg"
   ],
+  "author": "codeages",
   "license": "MIT",
-  "main": "ckeditor.js",
-  "maintainers": [
-    {
-      "name": "codeages",
-      "email": "topxia-dev@outlook.com"
-    }
-  ],
-  "name": "es-ckeditor",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "version": "1.0.0"
+  "_from": "es-ckeditor@1.0.0",
+  "_resolved": "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-1.0.0.tgz"
 }

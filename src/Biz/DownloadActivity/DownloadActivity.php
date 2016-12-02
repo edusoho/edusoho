@@ -44,8 +44,8 @@ class DownloadActivity extends Activity
         $that      = $this;
         $ext       = $this->getConnection()->transactional(function () use ($materials, $that) {
             //1. created ext
-            $downloadActivity = $this->parseDownloadExtension($materials);
-            $downloadActivity = $this->getDownloadActivityDao()->create($downloadActivity);
+            $downloadActivity = $that->parseDownloadExtension($materials);
+            $downloadActivity = $that->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
             $files = $this->parseDownloadFiles($downloadActivity['id'], $materials);
             foreach ($files as $file) {

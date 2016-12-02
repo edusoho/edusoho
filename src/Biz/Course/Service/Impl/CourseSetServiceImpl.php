@@ -61,7 +61,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'title'       => '默认教学计划',
             'expiryMode'  => 'days',
             'expiryDays'  => 0,
-            'learnMode'   => 'freeOrder',
+            'learnMode'   => 'freeMode',
             'isDefault'   => 1,
             'status'      => 'draft'
         );
@@ -72,15 +72,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function updateCourseSet($id, $fields)
     {
-        if (!$this->hasCourseSetManagerRole($id)) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
-        }
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
         if (!in_array($fields['serializeMode'], array('none', 'serialized', 'finished'))) {
             throw $this->createInvalidArgumentException("Invalid Param: serializeMode");
         }
+
+        $courseSet = $this->tryManageCourseSet($id);
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
@@ -101,7 +100,35 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $item = (int) $item['id'];
             });
         }
-        return $this->getCourseSetDao()->update($id, $fields);
+        return $this->getCourseSetDao()->update($courseSet['id'], $fields);
+    }
+
+    public function updateCourseSetDetail($id, $fields)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'summary',
+            'goals',
+            'audiences'
+        ));
+
+        return $this->getCourseSetDao()->update($courseSet['id'], $fields);
+    }
+
+    public function changeCourseSetCover($id, $coverArray)
+    {
+        if (empty($coverArray)) {
+            throw $this->createInvalidArgumentException("Invalid Param: cover");
+        }
+        $courseSet = $this->tryManageCourseSet($id);
+        $covers    = array();
+        foreach ($coverArray as $cover) {
+            $file                   = $this->getFileService()->getFile($cover['id']);
+            $covers[$cover['type']] = $file['uri'];
+        }
+
+        return $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
     }
 
     public function deleteCourseSet($id)
@@ -109,10 +136,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //TODO
         //1. 判断该课程能否被删除
         //2. 删除时需级联删除课程下的教学计划、用户信息等等
-        if (!$this->hasCourseSetManagerRole($id)) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
-        }
-        return $this->getCourseSetDao()->delete($id);
+        $courseSet = $this->tryManageCourseSet($id);
+        return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
     protected function hasCourseSetManagerRole($courseSetId = 0)
@@ -147,5 +172,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getTagService()
     {
         return ServiceKernel::instance()->createService('Taxonomy.TagService');
+    }
+
+    protected function getFileService()
+    {
+        return ServiceKernel::instance()->createService('Content.FileService');
     }
 }
