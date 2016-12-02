@@ -2,7 +2,7 @@
 {% set resultStatus = resultStatus|default(null) %}
 
 <!-- 示例 -->
-<span class="view-toggle js-marking-toggle">
+{#<span class="view-toggle js-marking-toggle">
   <a class="btn link-gray btn-sm marking view-show" data-url="标记"><span class="glyphicon glyphicon-bookmark "></span> {{'标记'|trans}}</a>
   <a class="btn link-gray btn-sm unMarking view-hide" data-url="取消标记"><span class="glyphicon glyphicon-bookmark"></span> {{'取消标记'|trans}}</a>
 </span>
@@ -15,26 +15,28 @@
 <span class="view-toggle js-analysis-toggle">
   <a class="btn  link-gray view-show"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
   <a class="btn link-gray view-hide"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
-</span>
-
-
+</span>#}
 <!-- end示例 -->
 
 {% if 'mark' in flags and id|default(null) %}
-  <div class="marking-group">
+  <div class="view-toggle js-marking-toggle">
     <a class="btn link-gray  btn-sm marking"><span class="glyphicon glyphicon-bookmark "></span> {{'标记'|trans}}</a>
     <a class="btn link-gray btn-sm unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"></span> {{'取消标记'|trans}}</a>
   </div>
 {% endif %}
 
 {% if 'favorite' in flags and id|default(null) and resultStatus != 'doing' %}
-  <button data-url="{{ path('my_favorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-sm btn-default favorite-btn" {% if item.question.id in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-star-empty"></span> {{'收藏'|trans}}</button>
-  <button data-url="{{ path('my_unfavorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-link btn-sm unfavorite-btn" {% if item.question.id not in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-star"></span> {{'取消收藏'|trans}}</button>
+  <span class="view-toggle js-favorite-toggle">
+    <button data-url="{{ path('my_favorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-sm btn-default favorite-btn {% if item.question.id in favorites %} view-show {% else %} view-hide {% endif %}" ><span class="glyphicon glyphicon-star-empty"></span> {{'收藏'|trans}}</button>
+    <button data-url="{{ path('my_unfavorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-link btn-sm unfavorite-btn {% if item.question.id not in favorites %} view-show {% else %} view-hide {% endif %}" ><span class="glyphicon glyphicon-star"></span> {{'取消收藏'|trans}}</button>
+  </span>
 {% endif %}
 
 {% if 'analysis' in flags and id|default(null) %}
   {% if not item.question.analysis == '' %}
-    <a class="btn  link-gray"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
-    <a class="btn link-gray" style="display:none"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
+  <span class="view-toggle js-analysis-toggle">
+    <a class="btn  link-gray view-show"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
+    <a class="btn link-gray view-hide"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
+  </span>
   {% endif %}
 {% endif %}
