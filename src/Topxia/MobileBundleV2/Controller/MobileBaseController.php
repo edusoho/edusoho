@@ -377,11 +377,9 @@ class MobileBaseController extends BaseController
                 if (!empty($userVip)) {
                     $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
 
-                    $user['vipName'] = $userVipLevel['name'];
-
-                    $userVipHistory = $controller->getVipService()->getVipDetailByUserId($user['id']);
-
-                    $user['VipDeadLine'] = $userVipHistory['deadline'];
+                    $user['vip']['levelId']     = $userVip['levelId'];
+                    $user['vip']['vipName']     = $userVipLevel['name'];
+                    $user['vip']['VipDeadLine'] = $userVip['deadline'];
                 }
             }
 
