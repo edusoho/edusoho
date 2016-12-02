@@ -15,7 +15,7 @@ function _inItStep2form() {
             content: 'required',
             minute: 'required unsigned_integer',
             second: 'second_range',
-            '"ext[mediaId]': 'required'
+            'ext[mediaId]': 'required'
         },
         messages: {
             content: "请输入简介",
@@ -26,7 +26,7 @@ function _inItStep2form() {
             second: {
                 unsigned_integer: '时长必须为非负整数',
             },
-            '"ext[mediaId]': "请选择或者上传视频"
+            'ext[mediaId]': "请选择或者上传视频"
         }
     });
     
