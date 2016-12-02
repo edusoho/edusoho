@@ -403,7 +403,6 @@ class EduCloudController extends BaseController
             ));
         }
         $chartData = $this->dealChartData($overview['data']);
-
         return $this->render('TopxiaAdminBundle:EduCloud/Sms:overview.html.twig', array(
             'account' => $overview['account'],
             'chartData'   => $chartData,
@@ -1414,7 +1413,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
         }
         $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
-        $liveEnabled = $liveCourseSetting['live_course_enabled'];
+        $liveEnabled = isset($liveCourseSetting['live_course_enabled']) ? $liveCourseSetting['live_course_enabled'] : 0;
         $isLiveWithoutEnable = $this->isLiveWithoutEnable($overview, $liveEnabled);
         if ($isLiveWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
@@ -1432,7 +1431,7 @@ class EduCloudController extends BaseController
 
     private function isLiveWithoutEnable($overview, $liveEnabled)
     {
-        $isLiveWithoutEnable = (isset($overview['isBuy']) && $overview['isBuy'] == false)||(isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled);
+        $isLiveWithoutEnable = (isset($overview['isBuy']) && $overview['isBuy'] == false)|| $liveEnabled == 0 || !isset($liveEnabled);
 
         return $isLiveWithoutEnable;
     }
