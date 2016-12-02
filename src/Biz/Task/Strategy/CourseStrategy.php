@@ -10,6 +10,8 @@ interface CourseStrategy
 
     public function updateTask($id, $fields);
 
+    public function deleteTask($task);
+
     public function canLearnTask($task);
 
     /**
@@ -22,7 +24,6 @@ interface CourseStrategy
     public function findCourseItems($courseId);
 
     public function sortCourseItems($courseId, array $itemIds);
-
 
 
 }

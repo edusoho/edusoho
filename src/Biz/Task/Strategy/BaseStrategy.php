@@ -19,24 +19,25 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
+        $fields = array_filter($fields);
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
-        if (empty($fields['categoryId'])) {
-            unset($fields['categoryId']);
-        }
+
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             throw new AccessDeniedException('无权创建任务');
         }
 
-        $activity = $this->getActivityService()->createActivity($fields);
+        $activity      = $this->getActivityService()->createActivity($fields);
+        $currentNumber = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
 
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
-        $fields                  = ArrayToolkit::parts($fields, array(
+        $fields['number']        = $currentNumber + 1;
+
+        $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'seq',
             'number',
@@ -135,7 +136,7 @@ class BaseStrategy
     /**
      * @return CourseService
      */
-    protected function getCourseService()
+    public function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }

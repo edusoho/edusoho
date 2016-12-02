@@ -7,12 +7,12 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Codeages\PluginBundle\System\PluggableHttpKernelInterface;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 
 
-class AppKernel extends Kernel implements PluggableHttpKernelInterface
+class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
 
@@ -66,13 +66,11 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
     {
         $bundles = array(
             new Codeages\PluginBundle\FrameworkBundle(),
-            // new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            // new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
@@ -84,39 +82,11 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
-            // new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new WebBundle\WebBundle(),
-            // new TemplatePlugin\TemplatePlugin(),
+            new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
+            new AppBundle\AppBundle(),
         );
-
-        $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir().'/../plugins';
-
-        if (file_exists($pluginMetaFilepath)) {
-            $pluginMeta    = include_once $pluginMetaFilepath;
-            $this->plugins = $pluginMeta['installed'];
-
-            if (is_array($pluginMeta)) {
-                foreach ($pluginMeta['installed'] as $c) {
-                    if ($pluginMeta['protocol'] == '1.0') {
-                        $c         = ucfirst($c);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    } elseif ($pluginMeta['protocol'] == '2.0') {
-                        if ($c['type'] != 'plugin') {
-                            continue;
-                        }
-
-                        $c         = ucfirst($c['code']);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    }
-                }
-            }
-        }
 
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
 
@@ -140,8 +110,7 @@ class AppKernel extends Kernel implements PluggableHttpKernelInterface
 
     public function getPlugins()
     {
-        return $this->plugins;
-        // return $this->pluginConfigurationManager->getInstalledPlugins();
+        return $this->pluginConfigurationManager->getInstalledPlugins();
     }
 
     public function getPluginConfigurationManager()
