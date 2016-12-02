@@ -1,6 +1,9 @@
 <?php
 namespace WebBundle\Controller;
 
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseManageController extends BaseController
@@ -8,8 +11,8 @@ class CourseManageController extends BaseController
     public function createAction(Request $request, $courseSetId)
     {
         if ($request->isMethod('POST')) {
-            $data   = $request->request->all();
-            $course = $this->getCourseService()->createCourse($data);
+            $data = $request->request->all();
+            $this->getCourseService()->createCourse($data);
 
             return $this->listAction($request, $courseSetId);
         }
@@ -42,12 +45,13 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $course      = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
+        $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $courseItems     = $this->getCourseService()->findCourseItems($courseId);
+        $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
 
-        return $this->render('WebBundle:CourseManage:tasks.html.twig', array(
+        return $this->render($tasksRenderPage, array(
             'tasks'     => $tasks,
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -55,17 +59,22 @@ class CourseManageController extends BaseController
         ));
     }
 
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+    }
+
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
-        $course = array();
         if ($request->isMethod('POST')) {
-            $data   = $request->request->all();
-            $course = $this->getCourseService()->updateCourse($data['id'], $data);
-        } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourse($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_info', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:info.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
@@ -74,12 +83,94 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourseMarketing($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
+    }
+
+    public function teachersAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->updateCourseTeachers($courseId, $data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:teachers.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course
+        ));
+    }
+
+    public function studentsAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
+        return $this->render('WebBundle:CourseManage:students.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'students'  => $students
+        ));
+    }
+
+    public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
+    {
+        if ($request->isMethod('POST')) {
+            $data           = $request->request->all();
+            $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
+            $data['userId'] = $user['id'];
+            $this->getCourseService()->createCourseStudent($courseId, $data);
+            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+        }
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:student-add-modal.html.twig', array(
+            'course'      => $course,
+            'courseSetId' => $courseSetId
+        ));
+    }
+
+    public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
+    {
+        $this->getCourseService()->removeCourseStudent($courseId, $userId);
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function checkStudentAction(Request $request, $courseSetId, $courseId)
+    {
+        $keyword = $request->query->get('value');
+        $user    = $this->getUserService()->getUserByLoginField($keyword);
+
+        $response = true;
+        if (!$user) {
+            $response = $this->getServiceKernel()->trans('该用户不存在');
+        } else {
+            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+
+            if ($isCourseStudent) {
+                $response = $this->getServiceKernel()->trans('该用户已是本课程的学员了');
+            } else {
+                $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+
+                if ($isCourseTeacher) {
+                    $response = $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加');
+                }
+            }
+        }
+        return $this->createJsonResponse($response);
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)
@@ -136,6 +227,9 @@ class CourseManageController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
@@ -144,5 +238,15 @@ class CourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

@@ -36,6 +36,38 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals($created['title'], $updated['title']);
     }
 
+    public function testUpdateDetail()
+    {
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $created = $this->getCourseSetService()->createCourseSet($courseSet);
+
+        $created['summary']   = 'this is summary <script ...';
+        $created['goals']     = array(1);
+        $created['audiences'] = array(1);
+
+        $updated = $this->getCourseSetService()->updateCourseSetDetail($created['id'], $created);
+        $this->assertEquals($updated['summary'], $created['summary']);
+    }
+
+    public function testChangeCover()
+    {
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $created = $this->getCourseSetService()->createCourseSet($courseSet);
+        //mock file service ?
+        // $updated = $this->getCourseSetService()->changeCourseSetCover($created['id'], array(
+        //     'large'  => 1,
+        //     'middle' => 2,
+        //     'small'  => 3
+        // ));
+        // $this->assertNotEmpty($updated['cover']);
+    }
+
     public function testDelete()
     {
         $courseSet = array(

@@ -1,3 +1,5 @@
+import 'jquery-sortable';
+
 const sortList = (options) => {
   let defaultOptions = {
     element: '#sortable-list',
