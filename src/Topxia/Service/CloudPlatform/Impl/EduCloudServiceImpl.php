@@ -39,8 +39,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $logger->addInfo($e->getMessage());
             return false;
         }
-        $smsStatus = $smsOverview['account']['status'];
-        if ((isset($smsStatus) && $smsStatus == 'used')) {
+        if ((isset($smsOverview['account']['status']) && $smsOverview['account']['status'] == 'used')) {
             return true;
         }
         return false;
