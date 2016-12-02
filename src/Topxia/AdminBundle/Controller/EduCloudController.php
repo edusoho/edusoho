@@ -1454,24 +1454,23 @@ class EduCloudController extends BaseController
         }
 
         $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
-        $liveEnabled = $liveCourseSetting['live_course_enabled'];
-        if ((isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
-            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
-        }
-
         $client            = new EdusohoLiveClient();
         $capacity          = $client->getCapacity();
-        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
 
         if ($request->getMethod() == 'POST') {
-            $courseSetting     = $this->getSettingService()->get('course', array());
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $courseSetting = $this->getSettingService()->get('course', array());
             $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
+            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+        }
+
+        $liveEnabled = $liveCourseSetting['live_course_enabled'];
+        if ((isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
         try {
