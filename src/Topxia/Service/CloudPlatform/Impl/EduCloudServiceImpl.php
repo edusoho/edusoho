@@ -31,7 +31,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
     {
         try {
             $api  = CloudAPIFactory::create('root');
-            // $cloudOverview = $api->get("/cloud/{$api->getAccessKey()}/overview");
+            $cloudOverview = $api->get("/cloud/{$api->getAccessKey()}/overview");
             $smsOverview  = $api->get("/me/sms/overview");
         } catch (\RuntimeException $e) {
             $logger = new Logger('CloudAPI');
@@ -39,8 +39,11 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $logger->addInfo($e->getMessage());
             return false;
         }
-        if ((isset($smsOverview['account']['status']) && $smsOverview['account']['status'] == 'used')) {
-            return true;
+        $smsStatus = isset($smsOverview['account']['status']) && $smsOverview['account']['status'] == 'used';
+        $cloudStatus = isset($cloudOverview['accessCloud']) && $cloudOverview['accessCloud'] == false;
+        if ($smsStatus && $cloudStatus) {
+            $smsInfo['remainCount'] = $smsOverview['account']['remainCount'];
+            return $smsInfo;
         }
         return false;
     }
