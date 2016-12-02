@@ -6,8 +6,9 @@
     <div class="col-sm-2 control-label">
       <label for="media" class="style">{{ '视频'|trans }}</label>
     </div>
-    <div
-        class="col-sm-10">{% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}</div>
+    <div class="col-sm-10">
+      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
+    </div>
   </div>
   <div class="form-group for-video-type" id="lesson-length-form-group">
     <div class="col-sm-2 control-label for-video-type">
