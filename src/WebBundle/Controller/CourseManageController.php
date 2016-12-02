@@ -127,13 +127,13 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function addStudentAction(Request $request, $courseSetId, $courseId)
+    public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
     {
         if ($request->isMethod('POST')) {
             $data           = $request->request->all();
             $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
             $data['userId'] = $user['id'];
-            $this->getCourseService()->addStudentToCourse($courseId, $data);
+            $this->getCourseService()->createCourseStudent($courseId, $data);
             return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
@@ -143,9 +143,9 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function removeStudentAction(Request $request, $courseSetId, $courseId, $userId)
+    public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
     {
-        $this->getCourseService()->removeStudentFromCourse($courseId, $userId);
+        $this->getCourseService()->removeCourseStudent($courseId, $userId);
         return $this->createJsonResponse(array('success' => true));
     }
 

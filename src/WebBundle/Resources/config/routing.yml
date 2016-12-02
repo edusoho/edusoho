@@ -60,11 +60,11 @@ course_set_manage_course_students:
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
-  defaults: {_controller: WebBundle:CourseManage:addStudent}
+  defaults: {_controller: WebBundle:CourseManage:createCourseStudent}
 
 course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
-  defaults: {_controller: WebBundle:CourseManage:removeStudent}
+  defaults: {_controller: WebBundle:CourseManage:removeCourseStudent}
 
 course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check

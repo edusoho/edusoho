@@ -243,7 +243,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $role == 'teacher';
     }
 
-    public function addStudentToCourse($courseId, $fields)
+    public function createCourseStudent($courseId, $fields)
     {
         $this->tryManageCourse($courseId);
         if (!ArrayToolkit::requireds($fields, array('userId', 'price'))) {
@@ -269,7 +269,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->create($fields);
     }
 
-    public function removeStudentFromCourse($courseId, $userId)
+    public function removeCourseStudent($courseId, $userId)
     {
         $this->tryManageCourse($courseId);
         $user = $this->getUserService()->getUser($userId);

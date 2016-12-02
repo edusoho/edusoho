@@ -40,8 +40,8 @@ interface CourseService
 
     public function isCourseStudent($courseId, $userId);
 
-    public function addStudentToCourse($courseId, $fields);
+    public function createCourseStudent($courseId, $fields);
 
-    public function removeStudentFromCourse($courseId, $userId);
+    public function removeCourseStudent($courseId, $userId);
 
 }
