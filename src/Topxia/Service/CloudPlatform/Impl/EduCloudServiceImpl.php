@@ -26,4 +26,23 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         }
         return false;
     }
+
+    public function getOldSmsUserStatus()
+    {
+        try {
+            $api  = CloudAPIFactory::create('root');
+            // $cloudOverview = $api->get("/cloud/{$api->getAccessKey()}/overview");
+            $smsOverview  = $api->get("/me/sms/overview");
+        } catch (\RuntimeException $e) {
+            $logger = new Logger('CloudAPI');
+            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
+            $logger->addInfo($e->getMessage());
+            return false;
+        }
+        $smsStatus = $smsOverview['account']['status'];
+        if ((isset($smsStatus) && $smsStatus == 'used')) {
+            return true;
+        }
+        return false;
+    }
 }
