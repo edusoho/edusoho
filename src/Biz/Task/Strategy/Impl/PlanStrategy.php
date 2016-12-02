@@ -143,8 +143,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     }
 
 
-    protected
-    function isFirstTask($task)
+    protected function isFirstTask($task)
     {
         return 1 == $task['number'];
     }
