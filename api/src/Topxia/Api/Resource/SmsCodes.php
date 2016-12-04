@@ -2,12 +2,10 @@
 
 namespace Topxia\Api\Resource;
 
-use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\CurlToolkit;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Gregwar\Captcha\CaptchaBuilder;
+use Symfony\Component\HttpFoundation\Response;
 
 class SmsCodes extends BaseResource
 {
@@ -19,21 +17,26 @@ class SmsCodes extends BaseResource
 
         $remain = $limiter->check($request->getClientIp());
         if ($remain == 0) {
-            $imgBuilder = new CaptchaBuilder;
-            $imgBuilder->build($width = 150, $height = 32, $font = null);
+            // $imgBuilder = new CaptchaBuilder;
+            // $imgBuilder->build($width = 150, $height = 32, $font = null);
 
-            ob_start();
-            $imgBuilder->output();
-            $str = ob_get_clean();
-            $imgBuilder = null;
-            $headers = array(
-                'Content-type'        => 'image/jpeg',
-                'Content-Disposition' => 'inline; filename="'."img_captcha.jpg".'"',
-            );
+            // ob_start();
+            // $imgBuilder->output();
+            // $str = ob_get_clean();
+            // $imgBuilder = null;
+            // $headers = array(
+            //     'Content-type'        => 'image/jpeg',
+            //     'Content-Disposition' => 'inline; filename="'."img_captcha.jpg".'"',
+            // );
 
 
-            $response = new Response($str, 200, $headers);
-            $response->send();
+            // $response = new Response($str, 200, $headers);
+            // $response->send();
+            $imgCaptcha = $request->request->get('img_captcha_code');
+
+            if (empty($imgCaptcha)) {
+                return $this->error('500', '图形验证码为空');
+            }
         }
 
         $type   = $request->request->get('type');

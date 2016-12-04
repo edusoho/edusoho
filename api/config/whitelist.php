@@ -19,6 +19,7 @@ return array(
         '/^\/api\/users\/login$/',
         '/^\/api\/users\/bind_login$/',
         '/^\/api\/sms_codes$/',
+        '/^\/api\/img_codes$/',
         '/^\/api\/users\/password$/',
     )
 );
