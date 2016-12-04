@@ -340,6 +340,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $replay  = $context['replay'];
 
+        $this->dealESReplay($replay);
+
         if ($replay['copyId'] > 0 || $replay['type'] == 'liveOpen') {
             return false;
         }
@@ -422,6 +424,25 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
 
         return true;
+    }
+
+    protected function dealESReplay($replay)
+    {
+        $lessonId = $replay['lessonId'];
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        if ($lesson['liveProvider'] == 5) {
+            $result = $this->getCourseService()->entryReplay($lessonId, $replay['id']);
+            //$globalId = $result['resourceNo'];
+            $globalId = '15e76607bc9f4fca8d82283d3a206a81';
+            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
+            $currentUser = $this->getCurrentUser();
+            $cloudFile['status'] = 'ok';
+            $cloudFile['targetId'] = $replay['id'];
+            $cloudFile['targetType'] = 'repaly';
+            $cloudFile['createdUserId'] = $currentUser['id'];
+            $cloudFile['updatedUserId'] = $currentUser['id'];
+            $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);
+        }
     }
 
     protected function simplifyCousrse($course)
@@ -535,6 +556,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return false;
     }
 
+    protected function getCurrentUser()
+    {
+        return ServiceKernel::instance()->getCurrentUser();
+    }
+
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
@@ -558,6 +584,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return ServiceKernel::instance()->createService('CloudFile.CloudFileService');
     }
 
     protected function getCrontabJobService()

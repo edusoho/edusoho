@@ -453,6 +453,33 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->getFileImplementor('cloud')->syncFile($file);
     }
 
+    public function syncToLocalFromCloud($cloudFile)
+    {
+        if (empty($cloudFile)) {
+            return;
+        }
+
+        $localFile = $this->getUploadFileDao()->getFileByGlobalId($cloudFile['globalId']);
+
+        if ($localFile) {
+            return;
+        }
+
+        $fields = ArrayToolkit::parts($cloudFile, array(
+            'globalId', 'hashId', 'filename', 'ext', 'fileSize',
+            'etag', 'length', 'description', 'status', 'convertHash',
+            'convertStatus', 'targetId', 'targetType', 'metas', 'metas2', 'type', 'storage', 'createdUserId', 'updatedUserId'
+        ));
+
+        $initFileFields = $fields;
+        unset($initFileFields['description']);
+
+        $initFile = $this->getUploadFileInitDao()->addFile($initFileFields);
+        $fields['id'] = $initFile['id'];
+
+        return $this->getUploadFileDao()->addFile($fields);
+    }
+
     public function getFileByHashId($hashId)
     {
         $file = $this->getUploadFileDao()->getFileByHashId($hashId);
