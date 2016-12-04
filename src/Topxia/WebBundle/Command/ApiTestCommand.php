@@ -70,6 +70,4 @@ class ApiTestCommand extends BaseCommand
 
         return $api;
     }
-
-
 }

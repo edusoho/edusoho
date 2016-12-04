@@ -1,0 +1,34 @@
+{
+  "family": "jquery-plugin",
+  "name": "bootstrap-datetimepicker",
+  "version": "1.0.1",
+  "description": "A both Date and Time picker widget based on twitter bootstrap.",
+  "homepage": "http://www.malot.fr/bootstrap-datetimepicker/",
+  "author": {
+    "name": "Sebastien MALOT",
+    "url": "https://github.com/smalot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smalot/bootstrap-datetimepicker.git"
+  },
+  "bugs": "https://github.com/smalot/bootstrap-datetimepicker/issues",
+  "licenses": [
+    {
+      "type": "Apache",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "keywords": [ "datetimepicker", "bootstrap" ],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [
+      "datetimepicker.js",
+      "datetimepicker.css",
+      "i18n/zh_CN.js",
+      "i18n/en_US.js"
+    ]
+  }
+}

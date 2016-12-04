@@ -1758,7 +1758,7 @@ class CourseServiceTest extends BaseTestCase
             'title'     => 'test' + rand(),
             'summary'   => '',
             'type'      => 'live',
-            'startTime' => '',
+            'startTime' => time() + 900,
             'length'    => ''
         );
         $start               = strtotime(date("Y-m-d", time()));

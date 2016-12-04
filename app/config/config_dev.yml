@@ -5,10 +5,10 @@ framework:
     router:
         resource: "%kernel.root_dir%/config/routing_dev.yml"
         strict_requirements: true
-    profiler: { only_exceptions: true }
+    profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: false
+    toolbar: true
     intercept_redirects: false
 
 twig:
@@ -21,7 +21,7 @@ monolog:
     handlers:
         main:
             type:  stream
-            path:  %kernel.logs_dir%/%kernel.environment%.log
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
         firephp:
             type:  firephp
@@ -30,5 +30,3 @@ monolog:
             type:  chromephp
             level: info
 
-assetic:
-    use_controller: true

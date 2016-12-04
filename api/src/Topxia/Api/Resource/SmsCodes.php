@@ -2,15 +2,40 @@
 
 namespace Topxia\Api\Resource;
 
+use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\CurlToolkit;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class SmsCodes extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
+        $biz = $this->getServiceKernel()->getBiz();
+        $factory = $biz['ratelimiter.factory'];
+        $limiter = $factory('ip', 10, 600);
+
+        $remain = $limiter->check($request->getClientIp());
+        if ($remain == 0) {
+            $imgBuilder = new CaptchaBuilder;
+            $imgBuilder->build($width = 150, $height = 32, $font = null);
+
+            ob_start();
+            $imgBuilder->output();
+            $str = ob_get_clean();
+            $imgBuilder = null;
+            $headers = array(
+                'Content-type'        => 'image/jpeg',
+                'Content-Disposition' => 'inline; filename="'."img_captcha.jpg".'"',
+            );
+
+
+            $response = new Response($str, 200, $headers);
+            $response->send();
+        }
+
         $type   = $request->request->get('type');
         $mobile = $request->request->get('mobile');
 
