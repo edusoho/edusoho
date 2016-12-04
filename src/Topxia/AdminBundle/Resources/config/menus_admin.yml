@@ -18,6 +18,9 @@ admin:
     name: 后台管理员
     parent: null
     children:
+        # admin_homepage:
+        #     name: 后台首页
+        #     router_name: admin_homepage
         admin_user:
             name: 用户
             children:
@@ -335,6 +338,19 @@ admin:
                                     router_name: admin_tag_create
                                     mode: modal
                                     group: topBtn
+                admin_course_tag_group:
+                    name: '标签组管理'
+                    children:
+                        admin_course_tag_group_manage:
+                            name: '标签组管理'
+                            router_name: admin_tag_group
+                            disable: true
+                            children:
+                                admin_course_tag_group_add:
+                                    name: '新建标签组'
+                                    router_name: admin_tag_group_create
+                                    mode: modal
+                                    group: topBtn
         admin_operation:
             name: 运营
             children:
@@ -485,6 +501,12 @@ admin:
         admin_finance:
             name: 账务
             children:
+                # admin_accounts_center:
+                #     name: 账务中心
+                #     children:
+                #         admin_account_center:
+                #             name: 账务中心
+                #             disable: true
                 admin_bills:
                     name: 账单管理
                     children:

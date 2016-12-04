@@ -206,6 +206,11 @@ class CourseController extends BaseController
 
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
 
+        if ($course['status'] == 'published') {
+            $this->getCourseService()->closeCourse($courseId);
+            $course['status'] = 'closed';
+        }
+
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => $this->getServiceKernel()->trans('请先删除班级课程')));
         }
@@ -215,7 +220,7 @@ class CourseController extends BaseController
             return $this->createJsonResponse(array('code' => 0, 'message' => $this->getServiceKernel()->trans('删除课程成功')));
         }
 
-        if ($course['status'] == 'closed' || $course['status'] == 'published') {
+        if ($course['status'] == 'closed') {
             $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
             if ($classroomCourse) {

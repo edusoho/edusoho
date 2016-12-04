@@ -358,7 +358,7 @@ live_capacity:
 
 course_explore:
     pattern:  /course/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
+    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
 
 course_archive:
     pattern:  /archive/course
@@ -1178,9 +1178,9 @@ media_play:
     pattern:  /media/{mediaId}/play
     defaults: { _controller: TopxiaWebBundle:Media/Index:play }
 
-media_preview:
-    pattern:  /media/{mediaId}/preview
-    defaults: { _controller: TopxiaWebBundle:Media/Index:preview }
+media_subtitle_preview:
+    pattern:  /media/{mediaId}/subtitles/preview
+    defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
 
 media_subtitle_manage:
     pattern:  /media/{mediaId}/subtitles/manage
@@ -1909,6 +1909,7 @@ my_coin:
 my_invite_code:
     path:     /my/invitecode
     defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
+
 invite_promote_link:
     path:     /my/invitecode/promotelink
     defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }

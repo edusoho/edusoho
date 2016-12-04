@@ -329,7 +329,7 @@ EOD;
             $group = $this->getCategoryService()->addGroup(array(
                 'name'  => '课程分类',
                 'code'  => 'course',
-                'depth' => 2
+                'depth' => 3
             ));
         }
 
@@ -351,7 +351,7 @@ EOD;
             $group = $this->getCategoryService()->addGroup(array(
                 'name'  => '班级分类',
                 'code'  => 'classroom',
-                'depth' => 2
+                'depth' => 3
             ));
         }
 
