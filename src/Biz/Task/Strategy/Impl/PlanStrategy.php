@@ -25,10 +25,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     {
         $that = $this;
         $this->biz['db']->transactional(function () use ($task, $that) {
-            $currentSeq = $task['seq'];
             $that->getTaskDao()->delete($task['id']);
             $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
         });
         return true;
     }

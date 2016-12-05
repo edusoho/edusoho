@@ -50,12 +50,6 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAssoc($sql, array($chapterId, $mode));
     }
 
-    public function waveSeqBiggerThanSeq($courseId, $seq, $diff)
-    {
-        $sql = "UPDATE {$this->table()} SET seq = seq + ? WHERE courseId =? and seq >?";
-        return $this->db()->executeUpdate($sql, array($diff, $courseId, $seq));
-    }
-
     public function declares()
     {
         return array();

@@ -19,11 +19,9 @@ export const closeCourse = () => {
 
 export const sortList = (element = '#sortable-list') => {
   let data = $(element).sortable("serialize").get();
-  console.log(data);
   $.post($(element).data('sortUrl'), {ids: data}, (response) => {
-    console.log('response',response)
     if (response) {
-      document.location.reload();
+        document.location.reload();
     }
   });
 }
@@ -57,7 +55,7 @@ export const deleteTask = () => {
     $.post($(evt.target).data('url'), function (data) {
       if (data.success) {
         notify('success', '删除成功');
-        $(evt.target).parents('.task-manage-list').remove();
+        $(evt.target).parents('.task-manage-item').remove();
         sortList();
       } else {
         notify('danger', '删除失败：' + data.message);
