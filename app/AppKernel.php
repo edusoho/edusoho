@@ -135,6 +135,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
 
+        $collector = $this->getContainer()->get('biz.service_provider.collector');
+        foreach ($collector->all() as $provider) {
+            $biz->register($provider);
+        }
+
         $biz->boot();
     }
 
