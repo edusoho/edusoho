@@ -44,7 +44,7 @@ class DownloadActivity extends Activity
         $that      = $this;
         $ext       = $this->getConnection()->transactional(function () use ($materials, $that) {
             //1. created ext
-            $downloadActivity = count($materials);
+            $downloadActivity = array('mediaCount' => count($materials));
             $downloadActivity = $that->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
             $files = $this->parseDownloadFiles($downloadActivity['id'], $materials);
@@ -133,7 +133,7 @@ class DownloadActivity extends Activity
         return $files;
     }
 
-    public  function getDownloadActivityDao()
+    public function getDownloadActivityDao()
     {
         return $this->getBiz()->dao('DownloadActivity:DownloadActivityDao');
     }
