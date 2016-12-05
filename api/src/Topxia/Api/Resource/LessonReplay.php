@@ -55,6 +55,7 @@ class LessonReplay extends BaseResource
                 $options = array(
                     'fromApi' => true,
                     'times' => 2,
+                    'line' => $request->query->get('line', ''),
                     'format' => $request->query->get('format', '')
                 );
                 $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
