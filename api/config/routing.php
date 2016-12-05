@@ -121,4 +121,3 @@ $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
 
 $app->post(_u('/sms_codes'), 'res.SmsCodes:post');
-$app->post(_u('/img_codes'), 'res.ImgCodes:post');

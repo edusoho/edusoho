@@ -70,8 +70,7 @@ $resources = array(
     'IM/MemberSync',
     'User/Password',
     'SmsCodes',
-    'User/VerifiedMobile',
-    'ImgCodes'
+    'User/VerifiedMobile'
 );
 
 foreach ($resources as $res) {
