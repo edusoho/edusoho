@@ -16,11 +16,11 @@
 </div>
 <ul class="nav nav-tabs mbl">
   <li class="active">
-    <a href="">{{ '正式学员'|trans }}</a>
+    <a href="javascript:;">{{ '正式学员'|trans }}</a>
   </li>
 
   <li class="">
-    <a href="">{{ '退出记录'|trans }}</a>
+    <a href="{{path('course_set_manage_course_refund_record', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '退出记录'|trans }}</a>
   </li>
 </ul>
 <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
@@ -232,16 +232,4 @@
   </div>
 </div>
 
-
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-

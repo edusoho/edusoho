@@ -127,6 +127,17 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function studentRefundRecordsAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:quit-record.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'refunds'   => array()
+        ));
+    }
+
     public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
     {
         if ($request->isMethod('POST')) {

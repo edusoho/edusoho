@@ -1,0 +1,61 @@
+{% extends 'WebBundle:CourseManage:layout.html.twig' %}
+{% do script(['web/course-manage/students/index.js']) %}
+
+{% set side_nav = 'plan' %}
+{% set active = 'students' %}
+
+{% block course %}
+<div class="panel-bar">
+  <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加学员'|trans}}</button>
+  {% if course.status == 'published' %}
+   {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% else %}
+    {# <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% endif %}
+  {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
+</div>
+<ul class="nav nav-tabs mbl">
+  <li class="">
+    <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '正式学员'|trans }}</a>
+  </li>
+
+  <li class="active">
+    <a href="javascript:;">{{ '退出记录'|trans }}</a>
+  </li>
+</ul>
+<form class="form-inline well well-sm " action="" method="get" novalidate>
+    <div class="form-group col-md-7">
+      <input class="form-control " style="width:45%" type="text" placeholder="{{ '请输入用户名/邮箱/手机号'|trans }}" name="keyword" value="{{ app.request.get('keyword') }}">
+
+      <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+  
+	<table class="table table-striped" id="quit-record-list">
+    <thead>
+      <tr>
+        <th>{{'学员名称'|trans}}</th>
+        <th width="30%">{{'退出原因'|trans}}</th>
+        <th>{{'退出日期'|trans}}</th>
+        <th>{{'退款状态'|trans}}</th>
+        <th>{{'退款金额'|trans}}
+          <span class="glyphicon glyphicon-question-sign text-muted" id="refund-coin-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+          <div id="refund-coin-tips-html" style="display:none;">
+            <div style="width:150px;">
+              <span style="color:blue;">1.</span>{{'仅显示通过现金购买加入的学员退款记录'|trans}}<br><br>
+              <span style="color:blue;">2.</span>{{'班级课程退款情况请在班级管理中查看'|trans}}<br>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for refund in refunds %}        
+        {% include 'TopxiaWebBundle:CourseStudentManage:quit-record-tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">{{'无学员记录'|trans}}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
