@@ -20,7 +20,7 @@ class SmsCodes extends BaseResource
 
         $remain = $limiter->check($request->getClientIp());
 
-        if (!$request->request->get('img_code') && !$request->request->get('img_token')) {
+        if ($request->request->get('img_code') && $request->request->get('img_token')) {
             $imgCode  = $request->request->get('img_code');
             $imgToken = $request->request->get('img_token');
 
