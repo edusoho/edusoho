@@ -32,11 +32,10 @@ class AppExtension extends \Twig_Extension
     public function currency($money)
     {
         //当前仅考虑中文的货币处理；
-        $unit = '元';
         if ($money == 0) {
-            return '0'.$unit;
+            return '0';
         }
-        return sprintf('%.2f', $money / 100.0).$unit;
+        return sprintf('%.2f', $money / 100.0);
     }
 
     public function getName()

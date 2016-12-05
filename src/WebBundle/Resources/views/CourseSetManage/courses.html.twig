@@ -31,7 +31,7 @@
             </td>
       			<td>course.taskNum</td>
       			<td>course.stuNum</td>
-      			<td>{{course.price|currency}}</td> {# 货币国际化？ #}
+      			<td>{{course.price|currency}}{{'元'|trans}}</td> {# 货币国际化？ #}
       			<td>
       				<div class="btn-group">
 		                <a class="btn btn-default btn-sm" href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
