@@ -50,13 +50,26 @@ class CourseManageController extends BaseController
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
         $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
-
+        $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
         return $this->render($tasksRenderPage, array(
-            'tasks'     => $tasks,
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'items'     => $courseItems
+            'tasks'      => $tasks,
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'items'      => $courseItems,
+            'taskPerDay' => $taskPerDay
         ));
+    }
+
+    protected function getFinishedTaskPerDay($course, $tasks)
+    {
+        $taskCount = count($tasks);
+        if ($course['expiryMode'] == 'days') {
+            $finishedTaskPerDay = empty($course['expiryMode']) ? $taskCount : $taskCount / $course['expiryMode'];
+        } else {
+            $diffDay            = ($course['expiryEndDate'] + 60 * 60 * 24 - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? $taskCount : $taskCount / $diffDay;
+        }
+        return round($finishedTaskPerDay, 1);
     }
 
     protected function createCourseStrategy($course)
