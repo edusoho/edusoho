@@ -23,6 +23,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return true;
     }
 
+    //如果不是课时任务，则需要根据课时任务的状态设置状态，即如果发布了，该任务创建时，已经是发布状态， 如果没有发布，则就是创建
     public function createTask($field)
     {
         $this->validateTaskMode($field);
@@ -41,7 +42,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 return $task;
             });
         } else {
-            $task = $this->baseCreateTask($field);
+            $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
+            if (empty($lessonTask)) {
+                throw new NotFoundException('lesson task is not found');
+            }
+            $field['status'] = $lessonTask['status'];
+            $task            = $this->baseCreateTask($field);
         }
         return $task;
     }
@@ -135,7 +141,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
         $chapterTypes       = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         $lessonChapterTypes = array();
-        $taskNumber         = $seq = 0;
+        $seq                = 0;
 
         foreach ($ids as $key => $id) {
             if (strpos($id, 'chapter') !== 0) {
@@ -197,18 +203,49 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
             foreach ($tasks as $task) {
-                $taskNumber++;
                 $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq'        => $seq,
                     'categoryId' => $chapter['id'],
-                    'number'     => $taskNumber
                 );
 
                 $this->getTaskService()->updateSeq($task['id'], $fields);
             }
         }
     }
+
+    //发布课时中一组任务
+    public function publishTask($task)
+    {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权删除任务');
+        }
+        if ($task['status'] == 'published') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+        }
+
+        $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
+        foreach ($tasks as $task) {
+            $this->getTaskDao()->update($task['id'], array('status' => 'published'));
+        }
+    }
+
+    //取消发布课时中一组任务
+    public function unpublishTask($task)
+    {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权删除任务');
+        }
+        if ($task['status'] == 'unpublished') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
+        }
+
+        $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
+        foreach ($tasks as $key => $task) {
+            $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
+        }
+    }
+
 
     protected function getTaskSeq($taskMode, $chapterSeq)
     {
