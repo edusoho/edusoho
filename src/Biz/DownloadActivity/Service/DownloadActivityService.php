@@ -6,5 +6,5 @@ interface DownloadActivityService
 {
     public function createDownloadFileRecord($file);
 
-    public function downloadActivityFile($activityId, $fileId);
+    public function downloadActivityFile($activityId, $downloadFileId);
 }

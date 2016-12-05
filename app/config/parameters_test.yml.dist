@@ -10,6 +10,5 @@ parameters:
             driver: pdo_mysql
             charset: UTF8
             wrapperClass: Codeages\Biz\Framework\Dao\TestCaseConnection
-        cache_directory: "%kernel.root_dir%/../var/cache"
-        tmp_directory: "%kernel.root_dir%/../var/tmp"
-        log_directory: "%kernel.root_dir%/../var/logs"
+        cache_directory: "%kernel.root_dir%/cache"
+        log_directory: "%kernel.root_dir%/logs"

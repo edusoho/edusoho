@@ -3,6 +3,8 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
@@ -37,7 +39,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'number',
             'categoryId'
         ));
         return $this->getTaskDao()->update($id, $fields);
@@ -172,7 +173,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-        if ($this->isLastTask($task)) {
+
+        // if the task is last task, no next test can be return
+        $nextTask = $this->getTaskDao()->getNextTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (empty($nextTask)) {
             return array();
         }
 
@@ -181,13 +185,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //if the task is first, when get next task, we need to know if the task if finish, if not  return null;
-        if ($this->isFirstTask($task)) {
+        $firstTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (!empty($firstTask)) {
             $isTaskLearned = $this->isTaskLearned($taskId);
             if (!$isTaskLearned) {
                 return array();
             }
         }
-        return $this->getTaskDao()->getByCourseIdAndNumber($task['courseId'], $task['number'] + 1);
+        return $nextTask;
     }
 
     public function canLearnTask($taskId)
@@ -211,11 +216,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
     }
 
-    public function getMaxNumberByCourseId($courseId)
-    {
-        return $this->getTaskDao()->getMaxNumberByCourseId($courseId);
-    }
-
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findTasksByChapterId($chapterId);
@@ -227,17 +227,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
-    }
-
-    protected function isFirstTask($task)
-    {
-        return 1 == $task['number'];
-    }
-
-    protected function isLastTask($task)
-    {
-        $maxSeq = $this->getMaxNumberByCourseId($task['courseId']);
-        return $maxSeq == $task['number'];
     }
 
     protected function createCourseStrategy($courseId)

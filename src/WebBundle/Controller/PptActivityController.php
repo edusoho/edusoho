@@ -41,6 +41,11 @@ class PptActivityController extends BaseController implements ActivityActionInte
 
         $result = $this->getMaterialLibService()->player($file['globalId']);
 
+        if(isset($result['error'])){
+            $error['code'] = 'error';
+            $error['message'] = $result['error'];
+        }
+
         $slides = isset($result['images']) ? $result['images'] : array();
 
         return $this->render('WebBundle:PptActivity:show.html.twig', array(
@@ -58,8 +63,8 @@ class PptActivityController extends BaseController implements ActivityActionInte
         $ppt      = $config->get($activity['mediaId']);
 
         $file                             = $this->getUploadFileService()->getFile($ppt['mediaId']);
-        $activity['ext']['media']['name'] = $file['filename'];
-        $activity['ext']['media']['id']   = $file['id'];
+        $ppt['media'] = $file;
+
         return $this->render('WebBundle:PptActivity:edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
