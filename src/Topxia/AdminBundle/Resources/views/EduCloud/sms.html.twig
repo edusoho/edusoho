@@ -65,7 +65,7 @@
         </p>
 
         <p style="text-align:center;font-size:16px">
-          {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}0571-86819929 {{'或'|trans}}
+          {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}4008041114 {{'或'|trans}}
           <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
             <a id="BizQQWPA"  href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。
           </span>
@@ -80,10 +80,10 @@
   {% else %}
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
-      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}4008041114。</div>
     {% endif %}
     {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
-      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}0571-86819929。</div>
+      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}4008041114。</div>
     {% endif %}
     <div class="eduyun-main">
       {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}

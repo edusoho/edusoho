@@ -42,6 +42,26 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_show', array('type' => $type));
     }
 
+    public function liveUpgradeAction(Request $request)
+    {
+        return $this->redirectUrl('edu_cloud_live_upgrade');
+    }
+
+    public function liveRenewAction(Request $request)
+    {
+        return $this->redirectUrl('edu_cloud_live_renew');
+    }
+
+    public function emailListAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_list');
+    }
+
+    public function emailCountAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_count');
+    }
+
     public function listCouponAction(Request $request)
     {
         return $this->redirectUrl('list_coupon');
@@ -71,7 +91,7 @@ class CloudController extends BaseController
     public function buyAction(Request $request, $type)
     {
         $params = array('type' => $type);
-        return $this->redirectUrl('edu_cloud_buy', $params);
+        return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function videoDetailAction()

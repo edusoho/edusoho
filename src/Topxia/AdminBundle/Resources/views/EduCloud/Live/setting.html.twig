@@ -5,11 +5,11 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif account.status|default() == 'none' %}
     <div class="alert alert-warning" role="alert">{{'
-    您的云直播服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
+    您的云直播服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}

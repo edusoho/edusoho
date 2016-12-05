@@ -1,12 +1,12 @@
 {% if overview.locked|default(false) == true %}
-  <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+  <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
 {% endif %}
   <div class="row">
     <div class="col-md-8">
       <div class="edu-user clearfix">
         <div class="user-part pull-left">
           <a href="{{path('admin_cloud_access')}}" target="_blank"><img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}></a>
-          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name }}</span></a></div>
+          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name| default('') }}</span></a></div>
         </div>
         <div class="user-part pull-left">
           <div class="ptm">余额</div>
@@ -134,36 +134,15 @@
         </div>
         <div class="panel-body">
           <ul class="update-list">
+            {% for item in overview.updateDoc.items %}
             <li class="pvs">
-              <a href="" class="text-overflow link-gray">
+              <a href="{{ 'http://open.edusoho.com' ~ item.url }}" class="text-overflow link-gray" target="_blank">
                 <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                <span class="text-muted mrm">{{ item.createdTime |date('m-d') }}</span>
+                {{ item.name | slice(0,10) }}...
               </a>
             </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
+            {% endfor %}
           </ul>
         </div>
       </div>
