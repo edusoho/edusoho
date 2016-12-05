@@ -6,7 +6,7 @@
       <div class="edu-user clearfix">
         <div class="user-part pull-left">
           <a href="{{path('admin_cloud_access')}}" target="_blank"><img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}></a>
-          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name }}</span></a></div>
+          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name| default('') }}</span></a></div>
         </div>
         <div class="user-part pull-left">
           <div class="ptm">余额</div>
