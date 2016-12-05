@@ -134,36 +134,15 @@
         </div>
         <div class="panel-body">
           <ul class="update-list">
+            {% for item in overview.updateDoc.items %}
             <li class="pvs">
-              <a href="" class="text-overflow link-gray">
+              <a href="{{ 'http://open.edusoho.com' ~ item.url }}" class="text-overflow link-gray" target="_blank">
                 <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                <span class="text-muted mrm">{{ item.createdTime |date('m-d') }}</span>
+                {{ item.name | slice(0,10) }}
               </a>
             </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
-            <li class="pvs">
-              <a href="" class="text-overflow link-gray">
-                <i class="es-icon es-icon-dot text-primary"></i>
-                <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
-              </a>
-            </li>
+            {% endfor %}
           </ul>
         </div>
       </div>
