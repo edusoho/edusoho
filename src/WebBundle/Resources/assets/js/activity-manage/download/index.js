@@ -6,8 +6,10 @@ jQuery.validator.addMethod("url", function (value, element) {
 function _inItStep2form() {
     var $form = $('#step2-form');
     var validator = $form.validate({
-        onkeyup: false,
-        ignore: "",
+        title: {
+            required: true,
+            maxlength: 50,
+        },
         rules: {
             link: 'url'
 

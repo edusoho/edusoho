@@ -1,4 +1,4 @@
-<input type="hidden" name="media">
+<input type="hidden" name="media" id="media">
 <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ file.filename|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>

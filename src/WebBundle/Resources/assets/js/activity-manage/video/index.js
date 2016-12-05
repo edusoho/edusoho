@@ -11,22 +11,24 @@ function _inItStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
     $step2_form.validate({
-        onkeyup: false,
-        ignore: "",
+        groups: {
+            date: 'minute second'
+        },
         rules: {
-            title: 'required',
+            title: {
+                required: true,
+                maxlength: 50,
+            },
             minute: 'required unsigned_integer',
-            second: 'second_range',
+            second: 'required second_range',
             'ext[mediaSource]': 'required'
         },
         messages: {
-            title: "请输入标题",
             minute: {
                 required: '请输入时长',
-                unsigned_integer: '时长必须为非负整数',
             },
             second: {
-                unsigned_integer: '时长必须为非负整数',
+                required: '请输入时长',
             },
             'ext[mediaSource]': "请选择或者上传视频"
         }
