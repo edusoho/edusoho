@@ -5,10 +5,9 @@ parameters:
     database_name:     edusoho-dev
     database_user:     root
     database_password: ~
-
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
-
+    webpack_base_url:  http://127.0.0.1:3030
 
     #扩展参数
     #oauth2_clients: #oauth2客户端配置

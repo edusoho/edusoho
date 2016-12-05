@@ -16,7 +16,7 @@ services:
 
     user.login_listener:
         class: Topxia\WebBundle\Handler\LoginSuccessHandler
-        arguments: ['@security.context']
+        arguments: ['@security.authorization_checker']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
     user.login_generate_notification_handler:
@@ -32,7 +32,7 @@ security:
         custom_provider:
             id: topxia.user_provider
 
-    role_hierarchy: %role_hierarchy%
+    role_hierarchy: "%role_hierarchy%"
 
     firewalls:
         dev:
@@ -48,7 +48,7 @@ security:
                 failure_handler: topxia.authentication.failure_handler
                 success_handler: topxia.authentication.success_handler
             remember_me:
-                key: "%secret%"
+                secret: "%secret%"
                 lifetime: 31536000
                 path: /
                 domain: ~

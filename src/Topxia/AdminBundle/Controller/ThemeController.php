@@ -29,6 +29,8 @@ class ThemeController extends BaseController
             return $this->createJsonResponse(false);
         }
 
+        $this->get('kernel')->getPluginConfigurationManager()->setActiveThemeName($themeUri)->save();
+
         $this->getSettingService()->set('theme', $theme);
 
         return $this->createJsonResponse(true);

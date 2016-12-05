@@ -157,5 +157,4 @@ class BuildPluginAppCommand extends BaseCommand
 
         return $pluginDir;
     }
-
 }
