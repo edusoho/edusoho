@@ -5,8 +5,11 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block body %}
-
-  {% include question.template %}
+  
+  {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+  {% if questionTemplate %}
+    {% include questionTemplate %}
+  {% endif %}
 
 {% endblock %}
 

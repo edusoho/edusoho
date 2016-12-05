@@ -7,7 +7,12 @@
     }
   </style>
   <div style="padding:20px;">
-  {% include question.template %}
+
+    {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+    {% if questionTemplate %}
+      {% include questionTemplate %}
+    {% endif %}
+  
   </div>
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}

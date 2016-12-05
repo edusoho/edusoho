@@ -51,7 +51,6 @@ class QuestionManageController extends BaseController
             'paginator'      => $paginator,
             'parentQuestion' => $parentQuestion,
             'conditions'     => $conditions,
-            'questionTypes'  => $this->getQuestionConfig(),
             'courseTasks'    => $courseTasks
         ));
     }
@@ -163,12 +162,6 @@ class QuestionManageController extends BaseController
 
         if ($question['subCount'] > 0) {
             $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
-            foreach ($questionSubs as $key => $questionSub) {
-                $questionTypeObj = $this->getQuestionService()->getQuestionConfig($questionSub['type']);
-
-                $questionSubs[$key]['template'] = $questionConfig[$questionSub['type']]['templates']['do'];
-            }
 
             $question['subs'] = $questionSubs;
         }

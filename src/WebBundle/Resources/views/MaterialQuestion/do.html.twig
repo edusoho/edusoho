@@ -3,8 +3,12 @@
 		{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
 		{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
 	</div>
-	
+
 	{% for question in question.subs|default([]) %}
-		{% include question.template %}
+  
+    {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+    {% if questionTemplate %}
+      {% include questionTemplate %}
+    {% endif %}
 	{% endfor %}
 </div>
