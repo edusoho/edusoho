@@ -299,7 +299,7 @@ class CourseOrderController extends OrderController
             return $enableds;
         }
 
-        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment  = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
@@ -342,7 +342,7 @@ class CourseOrderController extends OrderController
         }
 
         if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 $member = array(
                     'id'          => 0,
                     'courseId'    => $course['id'],

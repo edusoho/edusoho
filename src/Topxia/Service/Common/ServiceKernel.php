@@ -1,11 +1,13 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Common\AppConnectionFactory;
 
 class ServiceKernel
 {
@@ -24,6 +26,8 @@ class ServiceKernel
     protected $translator;
     protected $translatorEnabled;
 
+    protected $pluginKernel;
+
     protected $parameterBag;
 
     protected $currentUser;
@@ -32,6 +36,11 @@ class ServiceKernel
     protected $connection;
 
     protected $classMaps = array();
+
+    /**
+     * @var Biz
+     */
+    protected $biz = null;
 
     public function getRedis($group = 'default')
     {
@@ -74,13 +83,21 @@ class ServiceKernel
         return self::$_instance;
     }
 
+    /**
+     * @return EventDispatcherInterface
+     */
     public static function dispatcher()
     {
         if (self::$_dispatcher) {
             return self::$_dispatcher;
         }
 
-        self::$_dispatcher = new EventDispatcher();
+        //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
+        if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+            self::$_dispatcher = new EventDispatcher();
+        }else{
+            self::$_dispatcher = self::instance()->biz['dispatcher'];
+        }
 
         return self::$_dispatcher;
     }
@@ -123,14 +140,21 @@ class ServiceKernel
 
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
 
+
         foreach ($subscribers as $subscriber) {
-            $this->dispatcher()->addSubscriber(new $subscriber());
+            //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
+            if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+                $this->dispatcher()->addSubscriber(new $subscriber());
+            }else{
+                $this->biz['subscribers'][] = $subscriber;
+            }
         }
     }
 
     public function setParameterBag($parameterBag)
     {
         $this->parameterBag = $parameterBag;
+        return $this;
     }
 
     public function getParameter($name)
@@ -145,6 +169,7 @@ class ServiceKernel
     public function setTranslator($translator)
     {
         $this->translator = $translator;
+        return $this;
     }
 
     public function getTranslator()
@@ -159,6 +184,7 @@ class ServiceKernel
     public function setTranslatorEnabled($boolean = true)
     {
         $this->translatorEnabled = $boolean;
+        return $this;
     }
 
     public function getTranslatorEnabled()
@@ -212,32 +238,12 @@ class ServiceKernel
         return $this->env[$key];
     }
 
+    /**
+     * @return Connection
+     */
     public function getConnection()
     {
-        if ($this->connection) {
-            return $this->connection;
-        }
-
-        if (is_null($this->connectionFactory)) {
-            throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
-        }
-
-        $this->connection = $this->connectionFactory->getConnection();
-
-        return $this->connection;
-    }
-
-    public function setConnection($connection)
-    {
-        $this->connection = $connection;
-        return $this;
-    }
-
-    public function setConnectionFactory(ConnectionFactory $factory)
-    {
-        if(empty($this->connection)){
-            $this->connectionFactory = $factory;
-        }
+        return $this->biz['db'];
     }
 
     public function createService($name)
@@ -255,7 +261,7 @@ class ServiceKernel
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
             $dao   = new $class();
-            $dao->setConnectionFactory($this->connectionFactory);
+            $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
         }
@@ -276,6 +282,7 @@ class ServiceKernel
     public function registerModuleDirectory($dir)
     {
         $this->_moduleDirectories[] = $dir;
+        return $this;
     }
 
     public function getModuleDirectories()
@@ -332,6 +339,20 @@ class ServiceKernel
         }
 
         return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+    }
+
+    public function setBiz(Biz $biz)
+    {
+        $this->biz = $biz;
+        return $this;
+    }
+
+    public function getBiz()
+    {
+        if (!$this->biz) {
+            throw new \RuntimeException('The `Biz Container` of ServiceKernel is not setted!');
+        }
+        return $this->biz;
     }
 
     protected function getClassMap($type)

@@ -31,6 +31,11 @@
     {% set currentTheme = current_theme() %}
     {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
 
+    {# webpack #}
+    {% for path in css() %}
+      <link href="{{ asset('build/' ~ path, 'webpack') }}" rel="stylesheet" />
+    {% endfor %}
+
   {% endblock %}
 
   <!--[if lt IE 9]>
@@ -87,7 +92,12 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
-{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+{% if script() is empty %}
+  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+{% else %}
+  {# webpack #}
+  {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
+{% endif %}
 
 </body>
 </html>

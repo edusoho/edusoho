@@ -2317,7 +2317,7 @@ php_curl扩展未激活: php_curl扩展未激活
 备份(%backupdDirectory%)创建失败: 备份(%backupdDirectory%)创建失败
 'app目录无写权限': 'app目录无写权限'
 'src目录无写权限': 'src目录无写权限'
-'vendor2目录无写权限': 'vendor2目录无写权限'
+'vendor目录无写权限': 'vendor目录无写权限'
 'plugins目录无写权限': 'plugins目录无写权限'
 'web目录无写权限': 'web目录无写权限'
 'app/cache目录无写权限': 'app/cache目录无写权限'

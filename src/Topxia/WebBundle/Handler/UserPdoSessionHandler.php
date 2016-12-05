@@ -11,8 +11,8 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
@@ -189,10 +189,9 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @param  array $options An associative array of options
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct($pdoOrDsn = null, array $options = array(), SecurityContext $context, $container)
+    public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $request   = $container->get('request');
-        $userAgent = $request->headers->get("user-agent");
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ?  $_SERVER['HTTP_USER_AGENT'] : '';
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;
@@ -220,7 +219,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
         $this->lockMode          = isset($options['lock_mode']) ? $options['lock_mode'] : $this->lockMode;
 
-        $this->context = $context;
+        $this->storage = $storage;
     }
 
     /**
@@ -374,7 +373,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
 
         $maxlifetime = self::MAX_LIFE_TIME;
 
-        $token = $this->context->getToken();
+        $token = $this->storage->getToken();
 
         if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;

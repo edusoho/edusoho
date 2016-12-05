@@ -11,28 +11,24 @@
 // 5.包太大可能导致上传脚本失败
 // 6.打包代码都在feature/install-data
 
-require __DIR__.'/../../vendor2/autoload.php';
 
-$loader = new Twig_Loader_Filesystem(__DIR__.'/templates');
+require __DIR__ . '/../../bootstrap/bootstrap_install.php';
+
+$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
-
-define("INSTALL_URI", "\/install\/start-install.php");
 
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
-$functionName = 'install_step'.$step;
+$functionName = 'install_step' . $step;
 
 $functionName($init_data);
 
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\CloudPlatform\KeyApplier;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Topxia\Service\Common\ServiceKernel;
 
 function check_installed()
 {
@@ -41,7 +37,7 @@ function check_installed()
         $_COOKIE['nokey'] = 1;
     }
 
-    if (file_exists(__DIR__.'/../../app/data/install.lock')) {
+    if (file_exists(__DIR__ . '/../../app/data/install.lock')) {
         exit('already install.');
     }
 }
@@ -102,7 +98,7 @@ function install_step1($init_data = 0)
     $checkedPaths = array();
 
     foreach ($paths as $path) {
-        $checkedPath = __DIR__.'/../../'.$path;
+        $checkedPath = __DIR__ . '/../../' . $path;
         $checked     = is_executable($checkedPath) && is_writable($checkedPath) && is_readable($checkedPath);
 
         if (PHP_OS == 'WINNT') {
@@ -161,52 +157,50 @@ function install_step3($init_data = 0)
     check_installed();
     global $twig;
 
-    $connection = _create_connection();
-
-    $serviceKernel = ServiceKernel::create('prod', true);
-    $serviceKernel->setParameterBag(new ParameterBag(array(
-        'kernel.root_dir' => realpath(__DIR__.'/../../app')
-    )));
-    $serviceKernel->setConnection($connection);
+    global $biz;
 
     $error = null;
 
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-        $init = new SystemInit();
-        $connection->beginTransaction();
+
+        $biz['db']->beginTransaction();
+        $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
+        $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
+        $initializer = new \Topxia\Common\SystemInitializer($output);
         try {
+
             if (!empty($init_data)) {
-                $connection->exec("delete from `user` where id=1;");
-                $connection->exec("delete from `user_profile` where id=1;");
+                $biz['db']->exec("delete from `user` where id=1;");
+                $biz['db']->exec("delete from `user_profile` where id=1;");
             }
 
-            $admin = $init->initAdmin($_POST);
+            $admin = $initializer->initAdminUser($_POST);
             if (empty($init_data)) {
-                $init->initTag();
-                $init->initCategory();
-                $init->initFile();
-                $init->initPages();
-                $init->initNavigations();
-                $init->initBlocks();
-                $init->initThemes();
-                $init->initSetting($admin);
-                $init->initCrontabJob();
-                $init->initOrg();
-                $init->initRole();
+                $initializer->init();
+                _init_setting($admin);
             } else {
-                $init->deleteKey();
-                $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
-                $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
+                $service  = ServiceKernel::instance()->createService('System.SettingService');
+                $settings = $service->get('storage', array());
+                if (!empty($settings['cloud_key_applied'])) {
+                    unset($settings['cloud_access_key']);
+                    unset($settings['cloud_secret_key']);
+                    unset($settings['cloud_key_applied']);
+                    $service->set('storage', $settings);
+                }
+                $biz['db']->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '" . $_POST['nickname'] . "');");
+                $biz['db']->exec("update `user` set id = 1 where nickname = '" . $_POST['nickname'] . "';");
             }
 
-            $init->initFolders();
-            $init->initLockFile();
-            $connection->commit();
+            $initializer->initFolders();
+            $initializer->initLockFile();
+            $biz['db']->commit();
             header("Location: start-install.php?step=4");
             exit();
         } catch (\Exception $e) {
             echo $e->getMessage();
-            $connection->rollBack();
+            $biz['db']->rollBack();
+        } finally{
+            @fclose($installLogFd);
         }
     }
 
@@ -266,17 +260,7 @@ function install_step999($init_data = 0)
             session_start();
         }
 
-        $connection    = _create_connection();
-        $serviceKernel = ServiceKernel::create('prod', true);
-        $serviceKernel->setParameterBag(new ParameterBag(array(
-            'kernel.root_dir' => realpath(__DIR__.'/../../app')
-        )));
-
-        $serviceKernel->setConnection($connection);
-
-        $init = new SystemInit();
-
-        $key = $init->initKey();
+        $key = _initKey();
 
         echo json_encode($key);
     } else {
@@ -330,7 +314,7 @@ function _create_database($config, $replace)
             $index++;
             $filesystem = new Filesystem();
 
-            if (!$filesystem->exists('edusoho_init_'.$index.'.sql')) {
+            if (!$filesystem->exists('edusoho_init_' . $index . '.sql')) {
                 _init_auto_increment($pdo, $config);
                 return array('success' => true);
             }
@@ -346,7 +330,7 @@ function _create_database($config, $replace)
 
 function _init_data($pdo, $config, $index)
 {
-    $sql    = file_get_contents('./edusoho_init_'.$index.'.sql');
+    $sql    = file_get_contents('./edusoho_init_' . $index . '.sql');
     $result = $pdo->exec($sql);
 }
 
@@ -375,6 +359,12 @@ function _init_auto_increment($pdo, $config)
 function _create_config($config)
 {
     $secret = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    $server = $_SERVER['SERVER_NAME'];
+    if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
+        $server = 'https://' . $server;
+    }else{
+        $server = 'http://' . $server;
+    }
     $config = "parameters:
     database_driver: pdo_mysql
     database_host: {$config['database_host']}
@@ -388,107 +378,16 @@ function _create_config($config)
     mailer_password: null
     locale: zh_CN
     secret: {$secret}
+    webpack_base_url: {$server}
     user_partner: none";
 
-    file_put_contents(__DIR__."/../../app/config/parameters.yml", $config);
+    file_put_contents(__DIR__ . "/../../app/config/parameters.yml", $config);
 }
 
-function _create_connection()
+function _init_setting($user)
 {
-    $factory    = new \Doctrine\Bundle\DoctrineBundle\ConnectionFactory(array());
-    $parameters = file_get_contents(__DIR__."/../../app/config/parameters.yml");
-    $parameters = \Symfony\Component\Yaml\Yaml::parse($parameters);
-    $parameters = $parameters['parameters'];
 
-    $connection = $factory->createConnection(
-        array(
-            'wrapperClass'  => 'Topxia\Service\Common\Connection',
-            'dbname'        => $parameters['database_name'],
-            'host'          => $parameters['database_host'],
-            'port'          => $parameters['database_port'],
-            'user'          => $parameters['database_user'],
-            'password'      => $parameters['database_password'],
-            'charset'       => 'UTF8',
-            'driver'        => $parameters['database_driver'],
-            'driverOptions' => array()
-        )
-        ,
-        new \Doctrine\DBAL\Configuration(),
-        null,
-        array('enum' => 'string')
-    );
-
-    $connection->exec("SET NAMES utf8");
-
-    return $connection;
-}
-
-class SystemInit
-{
-    public function initAdmin($user)
-    {
-        $user['emailVerified'] = 1;
-        $user                  = $user = $this->getUserService()->register($user);
-        $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
-        $user['currentIp']     = '127.0.0.1';
-
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        ServiceKernel::instance()->setCurrentUser($currentUser);
-
-        $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
-        return $this->getUserService()->getUser($user['id']);
-    }
-
-    public function deleteKey()
-    {
-        $settings = $this->getSettingService()->get('storage', array());
-
-        if (!empty($settings['cloud_key_applied'])) {
-            unset($settings['cloud_access_key']);
-            unset($settings['cloud_secret_key']);
-            unset($settings['cloud_key_applied']);
-            $this->getSettingService()->set('storage', $settings);
-        }
-    }
-
-    public function initKey()
-    {
-        $settings = $this->getSettingService()->get('storage', array());
-
-        if (!empty($settings['cloud_key_applied'])) {
-            return array(
-                'accessKey' => '您的Key已生成，请直接进入系统',
-                'secretKey' => '---'
-            );
-        }
-
-        $applier = new KeyApplier();
-
-        $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
-
-        if (empty($users) || empty($users[0])) {
-            return array('error' => '管理员账号不存在，创建Key失败');
-        }
-
-        $keys = $applier->applyKey($users[0], 'opensource', 'install');
-
-        if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-            return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
-        }
-
-        $settings['cloud_access_key']  = $keys['accessKey'];
-        $settings['cloud_secret_key']  = $keys['secretKey'];
-        $settings['cloud_key_applied'] = 1;
-
-        $this->getSettingService()->set('storage', $settings);
-
-        return $keys;
-    }
-
-    public function initSetting($user)
-    {
-        $emailBody = <<<'EOD'
+    $emailBody = <<<'EOD'
 Hi, {{nickname}}
 
 欢迎加入{{sitename}}!
@@ -506,490 +405,150 @@ Hi, {{nickname}}
 (这是一封自动产生的email，请勿回复。)
 EOD;
 
-        $settings = array(
-            'refund'         => array(
-                'maxRefundDays'       => 10,
-                'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-                'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
-                'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
-            ),
-            'article'        => array(
-                'name' => '资讯频道', 'pageNums' => 20
-            ),
-            'site'           => array(
-                'name'              => $_POST['sitename'],
-                'slogan'            => '',
-                'url'               => '',
-                'logo'              => '',
-                'seo_keywords'      => '',
-                'seo_description'   => '',
-                'master_email'      => $_POST['email'],
-                'icp'               => '',
-                'analytics'         => '',
-                'status'            => 'open',
-                'closed_note'       => '',
-                'homepage_template' => 'less'
-            ),
-            'developer'      => array('cloud_api_failover' => 1),
-            'auth'           => array(
-                'register_mode'          => 'email',
-                'email_activation_title' => '请激活您的{{sitename}}账号',
-                'email_activation_body'  => trim($emailBody),
-                'welcome_enabled'        => 'opened',
-                'welcome_sender'         => $user['nickname'],
-                'welcome_methods'        => array(),
-                'welcome_title'          => '欢迎加入{{sitename}}',
-                'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
-            ),
-            'mailer'         => array(
-                'enabled'  => 0,
-                'host'     => 'smtp.example.com',
-                'port'     => '25',
-                'username' => 'user@example.com',
-                'password' => '',
-                'from'     => 'user@example.com',
-                'name'     => $_POST['sitename']
-            ),
-            'payment'        => array(
-                'enabled'        => 0,
-                'bank_gateway'   => 'none',
-                'alipay_enabled' => 0,
-                'alipay_key'     => '',
-                'alipay_secret'  => ''
-            ),
-            'storage'        => array(
-                'upload_mode'           => 'local',
-                'cloud_access_key'      => '',
-                'cloud_secret_key'      => '',
-                'cloud_api_server'      => 'http://api.edusoho.net',
-                'enable_playback_rates' => 0
-            ),
-            'post_num_rules' => array(
-                'rules' => array(
-                    'thread'            => array(
-                        'fiveMuniteRule' => array(
-                            'interval' => 300,
-                            'postNum'  => 100
-                        )
-                    ),
-                    'threadLoginedUser' => array(
-                        'fiveMuniteRule' => array(
-                            'interval' => 300,
-                            'postNum'  => 50
-                        )
+    $settings = array(
+        'refund'         => array(
+            'maxRefundDays'       => 10,
+            'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
+        ),
+        'article'        => array(
+            'name' => '资讯频道', 'pageNums' => 20
+        ),
+        'site'           => array(
+            'name'              => $_POST['sitename'],
+            'slogan'            => '',
+            'url'               => '',
+            'logo'              => '',
+            'seo_keywords'      => '',
+            'seo_description'   => '',
+            'master_email'      => $_POST['email'],
+            'icp'               => '',
+            'analytics'         => '',
+            'status'            => 'open',
+            'closed_note'       => '',
+            'homepage_template' => 'less'
+        ),
+        'developer'      => array('cloud_api_failover' => 1),
+        'auth'           => array(
+            'register_mode'          => 'email',
+            'email_activation_title' => '请激活您的{{sitename}}账号',
+            'email_activation_body'  => trim($emailBody),
+            'welcome_enabled'        => 'opened',
+            'welcome_sender'         => $user['nickname'],
+            'welcome_methods'        => array(),
+            'welcome_title'          => '欢迎加入{{sitename}}',
+            'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+        ),
+        'mailer'         => array(
+            'enabled'  => 0,
+            'host'     => 'smtp.example.com',
+            'port'     => '25',
+            'username' => 'user@example.com',
+            'password' => '',
+            'from'     => 'user@example.com',
+            'name'     => $_POST['sitename']
+        ),
+        'payment'        => array(
+            'enabled'        => 0,
+            'bank_gateway'   => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key'     => '',
+            'alipay_secret'  => ''
+        ),
+        'storage'        => array(
+            'upload_mode'           => 'local',
+            'cloud_access_key'      => '',
+            'cloud_secret_key'      => '',
+            'cloud_api_server'      => 'http://api.edusoho.net',
+            'enable_playback_rates' => 0
+        ),
+        'post_num_rules' => array(
+            'rules' => array(
+                'thread'            => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum'  => 100
+                    )
+                ),
+                'threadLoginedUser' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum'  => 50
                     )
                 )
-            ),
-            'default'        => array(
-                'user_name'    => '学员',
-                'chapter_name' => '章',
-                'part_name'    => '节'
-            ),
-            'coin'           => array(
-                'coin_enabled'        => 0,
-                'cash_model'          => 'none',
-                'cash_rate'           => 1,
-                'coin_name'           => '虚拟币',
-                'coin_content'        => '',
-                'coin_picture'        => '',
-                'coin_picture_50_50'  => '',
-                'coin_picture_30_30'  => '',
-                'coin_picture_20_20'  => '',
-                'coin_picture_10_10'  => '',
-                'charge_coin_enabled' => ''
-            ),
-            'magic'          => array(
-                'export_allow_count' => 100000,
-                'export_limit'       => 10000,
-                'enable_org'         => 0
-            ),
-            'cloud_sms'      => array(
-                'system_remind' => 'on'
             )
+        ),
+        'default'        => array(
+            'user_name'    => '学员',
+            'chapter_name' => '章',
+            'part_name'    => '节'
+        ),
+        'coin'           => array(
+            'coin_enabled'        => 0,
+            'cash_model'          => 'none',
+            'cash_rate'           => 1,
+            'coin_name'           => '虚拟币',
+            'coin_content'        => '',
+            'coin_picture'        => '',
+            'coin_picture_50_50'  => '',
+            'coin_picture_30_30'  => '',
+            'coin_picture_20_20'  => '',
+            'coin_picture_10_10'  => '',
+            'charge_coin_enabled' => ''
+        ),
+        'magic'          => array(
+            'export_allow_count' => 100000,
+            'export_limit'       => 10000,
+            'enable_org'         => 0
+        ),
+        'cloud_sms'      => array(
+            'system_remind' => 'on'
+        )
+    );
+
+    $service = ServiceKernel::instance()->createService('System.SettingService');
+    foreach ($settings as $key => $value) {
+        $setting = $service->get($key, array());
+        $setting = array_merge($setting, $value);
+        $service->set($key, $setting);
+    }
+
+}
+
+function _initKey()
+{
+    $settingService = ServiceKernel::instance()->createService('System.SettingService');
+
+    $settings = $settingService->get('storage', array());
+
+    if (!empty($settings['cloud_key_applied'])) {
+        return array(
+            'accessKey' => '您的Key已生成，请直接进入系统',
+            'secretKey' => '---'
         );
-
-        foreach ($settings as $key => $value) {
-            $setting = $this->getSettingService()->get($key, array());
-            $setting = array_merge($value, $setting);
-            $this->getSettingService()->set($key, $setting);
-        }
     }
 
-    public function initTag()
-    {
-        $defaultTag = $this->getTagService()->getTagByName('默认标签');
+    $applier = new \Topxia\Service\CloudPlatform\KeyApplier();
 
-        if (!$defaultTag) {
-            $this->getTagService()->addTag(array('name' => '默认标签'));
-        }
+    $userService = ServiceKernel::instance()->createService('User.UserService');
+    $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
+
+    if (empty($users) || empty($users[0])) {
+        return array('error' => '管理员账号不存在，创建Key失败');
     }
 
-    public function initCategory()
-    {
-        $group = $this->getCategoryService()->addGroup(array(
-            'name'  => '课程分类',
-            'code'  => 'course',
-            'depth' => 3
-        ));
+    $keys = $applier->applyKey($users[0], 'opensource', 'install');
 
-        $this->getCategoryService()->createCategory(array(
-            'name'     => '默认分类',
-            'code'     => 'default',
-            'weight'   => 100,
-            'groupId'  => $group['id'],
-            'parentId' => 0
-        ));
-
-        $group = $this->getCategoryService()->addGroup(array(
-            'name'  => '班级分类',
-            'code'  => 'classroom',
-            'depth' => 3
-        ));
-
-        $this->getCategoryService()->createCategory(array(
-            'name'     => '默认分类',
-            'code'     => 'classroomdefault',
-            'weight'   => 100,
-            'groupId'  => $group['id'],
-            'parentId' => 0
-        ));
+    if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
+        return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
     }
 
-    public function initFile()
-    {
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '默认文件组',
-            'code'   => 'default',
-            'public' => 1
-        ));
+    $settings['cloud_access_key']  = $keys['accessKey'];
+    $settings['cloud_secret_key']  = $keys['secretKey'];
+    $settings['cloud_key_applied'] = 1;
 
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '缩略图',
-            'code'   => 'thumb',
-            'public' => 1
-        ));
+    $settingService->set('storage', $settings);
 
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '课程',
-            'code'   => 'course',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '用户',
-            'code'   => 'user',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '课程私有文件',
-            'code'   => 'course_private',
-            'public' => 0
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '资讯',
-            'code'   => 'article',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '临时目录',
-            'code'   => 'tmp',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '全局设置文件',
-            'code'   => 'system',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '小组',
-            'code'   => 'group',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '编辑区',
-            'code'   => 'block',
-            'public' => 1
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name'   => '班级',
-            'code'   => 'classroom',
-            'public' => 1
-        ));
-    }
-
-    public function initPages()
-    {
-        $this->getContentService()->createContent(array(
-            'title'    => '关于我们',
-            'type'     => 'page',
-            'alias'    => 'aboutus',
-            'body'     => '',
-            'template' => 'default',
-            'status'   => 'published'
-        ));
-
-        $this->getContentService()->createContent(array(
-            'title'    => '常见问题',
-            'type'     => 'page',
-            'alias'    => 'questions',
-            'body'     => '',
-            'template' => 'default',
-            'status'   => 'published'
-        ));
-    }
-
-    public function initNavigations()
-    {
-        $this->getNavigationService()->createNavigation(array(
-            'name'     => '师资力量',
-            'url'      => 'teacher',
-            'sequence' => 1,
-            'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
-        ));
-
-        $this->getNavigationService()->createNavigation(array(
-            'name'     => '常见问题',
-            'url'      => 'page/questions',
-            'sequence' => 2,
-            'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
-        ));
-
-        $this->getNavigationService()->createNavigation(array(
-            'name'     => '关于我们',
-            'url'      => 'page/aboutus',
-            'sequence' => 2,
-            'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
-        ));
-    }
-
-    public function initThemes()
-    {
-        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
-    }
-
-    public function initBlocks()
-    {
-        $themeDir = realpath(__DIR__.'/../themes/');
-
-        $metaFiles = array(
-            'system'  => "{$themeDir}/block.json",
-            'default' => "{$themeDir}/default/block.json",
-            'autumn'  => "{$themeDir}/autumn/block.json",
-            'jianmo'  => "{$themeDir}/jianmo/block.json"
-        );
-
-        foreach ($metaFiles as $category => $file) {
-            $metas = file_get_contents($file);
-            $metas = json_decode($metas, true);
-
-            foreach ($metas as $code => $meta) {
-                $data = array();
-
-                foreach ($meta['items'] as $key => $item) {
-                    $data[$key] = $item['default'];
-                }
-
-                $filename = __DIR__.'/blocks/'."block-".md5($code).'.html';
-
-                if (file_exists($filename)) {
-                    $content = file_get_contents($filename);
-                    $content = preg_replace_callback('/(<img[^>]+>)/i', function ($matches) {
-                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
-                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/'.INSTALL_URI.'.*/i', '', $_SERVER['REQUEST_URI']);
-                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI.trim($src);
-
-                        $img = "<img src='{$src}'";
-
-                        if (isset($alts[1][0])) {
-                            $alt = $alts[1][0];
-                            $img .= " alt='{$alt}'>";
-                        } else {
-                            $img .= ">";
-                        }
-
-                        return $img;
-                    }, $content);
-                } else {
-                    $content = '';
-                }
-
-                $template = $this->getBlockService()->createBlockTemplate(array(
-                    'title'        => $meta['title'],
-                    'mode'         => 'template',
-                    'templateName' => $meta['templateName'],
-                    'content'      => $content,
-                    'code'         => $code,
-                    'meta'         => $meta,
-                    'data'         => $data,
-                    'category'     => $category
-                ));
-
-                $this->getBlockService()->createBlock(array(
-                    'blockTemplateId' => $template['id'],
-                    'code'            => $code,
-                    'content'         => $content,
-                    'data'            => $data
-                ));
-            }
-        }
-    }
-
-    public function initCrontabJob()
-    {
-        $this->getCrontabService()->createJob(array(
-            'name'            => 'CancelOrderJob',
-            'cycle'           => 'everyhour',
-            'jobClass'        => 'Topxia\\Service\\Order\\Job\\CancelOrderJob',
-            'nextExcutedTime' => time(),
-            'jobParams'       => '{}',
-            'createdTime'     => time()
-        ));
-
-        $this->getCrontabService()->createJob(array(
-            'name'            => 'DeleteExpiredTokenJob',
-            'cycle'           => 'everyhour',
-            'jobClass'        => 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams'       => '{}',
-            'nextExcutedTime' => time(),
-            'createdTime'     => time()
-        ));
-
-        $this->getSettingService()->set("crontab_next_executed_time", time());
-    }
-
-    public function initOrg()
-    {
-        $org = array(
-            'name' => '全站',
-            'code' => 'FullSite'
-        );
-        $this->getOrgService()->createOrg($org);
-    }
-
-    public function initFolders()
-    {
-        $folders = array(
-            __DIR__.'/../../app/data/udisk',
-            __DIR__.'/../../app/data/private_files',
-            __DIR__.'/../../web/files'
-        );
-
-        $filesystem = new Filesystem();
-
-        foreach ($folders as $folder) {
-            if (!$filesystem->exists($folder)) {
-                $filesystem->mkdir($folder);
-            }
-        }
-    }
-
-    public function initLockFile()
-    {
-        file_put_contents(__DIR__.'/../../app/data/install.lock', '');
-
-    }
-
-    public function initRole()
-    {
-        $this->getRoleService()->refreshRoles();
-    }
-
-    private function getCrontabService()
-    {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
-    }
-
-    private function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    private function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
-    private function getCategoryService()
-    {
-        return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
-    }
-
-    private function getTagService()
-    {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
-    }
-
-    private function getFileService()
-    {
-        return ServiceKernel::instance()->createService('Content.FileService');
-    }
-
-    protected function getContentService()
-    {
-        return ServiceKernel::instance()->createService('Content.ContentService');
-    }
-
-    protected function getBlockService()
-    {
-        return ServiceKernel::instance()->createService('Content.BlockService');
-    }
-
-    protected function getNavigationService()
-    {
-        return ServiceKernel::instance()->createService('Content.NavigationService');
-    }
-
-    protected function getOrgService()
-    {
-        return ServiceKernel::instance()->createService('Org:Org.OrgService');
-    }
-
-    protected function getRoleService()
-    {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
-    }
-
-    protected function postRequest($url, $params)
-    {
-        $userAgent = 'EduSoho Install Client 1.0';
-
-        $connectTimeout = 10;
-
-        $timeout = 10;
-
-        $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
+    return $keys;
 }

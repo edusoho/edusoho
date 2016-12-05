@@ -26,5 +26,4 @@ class CrontabCommand extends BaseCommand
         $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
         $output->writeln('<info>定时任务执行完毕</info>');
     }
-
 }

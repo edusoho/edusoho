@@ -33,8 +33,9 @@
 
 ## 下载EduSoho源码
 
-    git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
-
+    * git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
+    * git submodule init    #初始化git子模块
+    * git submodule update  #更新git子模块
     注：/var/www/edusoho-dev 为本地要放的目录,如果要修改，下面出现的目录相应变化
 
     由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
@@ -48,25 +49,7 @@
     curl -sS https://getcomposer.org/installer | php
 
 ## 安装程序的依赖库(Vendor)
-
-    php composer.phar install
-
-    由于众所周知的原因，这一步也会花点时间，如果中途由于网络超时，只要重新执行上面的命令就可以了，会继续install的。
-    在最后一步会问你数据库的设置，如下：
-
-    Some parameters are missing. Please provide them.
-    database_driver (pdo_mysql):    
-    database_host (127.0.0.1): 
-    database_port (null): 
-    database_name (symfony): edusoho-dev
-    database_user (root): 
-    database_password (null): 
-    mailer_transport (smtp): 
-    mailer_host (127.0.0.1): 
-    mailer_user (null):  
-    mailer_password (null): 
-    locale (en): zh_CN
-    secret (ThisTokenIsNotSoSecretChangeIt): 
+    * vendor依赖已经在git submodule vendor
 
 ## 创建数据库
 
@@ -82,7 +65,7 @@
 
 ## 初始化程序基础数据
 
-    app/console doctrine:migrations:migrate
+    bin/phpmig migrate
     app/console topxia:init
 
 
