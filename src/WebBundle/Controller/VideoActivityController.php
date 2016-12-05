@@ -44,7 +44,7 @@ class VideoActivityController extends BaseController implements ActivityActionIn
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivityFetchExt($id);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
             'activity' => $activity,

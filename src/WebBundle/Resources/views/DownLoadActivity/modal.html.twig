@@ -1,55 +1,55 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{% do script([ 'web/activity-manage/download/index.js']) %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/activity-manage/download/index.js']) %}
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('download') %}
   <div class="form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="text-content-field" class="style">{{ '简介'|trans }}</label>
     </div>
-    <div class="col-xs-10">
+    <div class="col-sm-10">
       <textarea class="form-control" id="text-content-field" name="content"
-        data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
-        data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
-        data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+                data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+                data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+                data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
       >{{ activity.content|default('') }}</textarea>
     </div>
-    
+
   </div>
   <div class="form-group">
-    <div class="col-xs-offset-2 col-xs-10">
+    <div class="col-sm-offset-2 col-sm-10">
       <ul class="list-group mb0" id="material-list">
         {% for media in activity.ext.materials|default(null) %}
-        <li class="list-group-item clearfix" data-id="{{ media.link|default(media.id) }}">
-          <button class="close delete-btn" type="button" title="{{ '删除'|trans }}"
-                      data-url="">&times;</button>
-          {% if media.link|default(null) %}
-          <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
-          <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
-          {% else %}
-          <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
-          {% endif %}
-        </li>
+          <li class="list-group-item clearfix" data-id="{{ media.link|default(media.id) }}">
+            <button class="close delete-btn" type="button" title="{{ '删除'|trans }}"
+                    data-url="">&times;</button>
+            {% if media.link|default(null) %}
+              <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
+              <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
+            {% else %}
+              <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
+            {% endif %}
+          </li>
         {% endfor %}
       </ul>
       {% if not activity.ext.materials|default(null) %}
-      <div class="js-empty-list">
-        <span class="text-warning">{{ '暂无资料，请上传。'|trans }}</span>
-      </div>
+        <div class="js-empty-list">
+          <span class="text-warning">{{ '暂无资料，请上传。'|trans }}</span>
+        </div>
       {% endif %}
     </div>
   </div>
   <div class="form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="media" class="style">{{ '选择文件'|trans }}</label>
     </div>
-     <div class="col-xs-10">
-    {% include 'WebBundle:FileChooser:file-choose.html.twig'with {mediaType: mediaType,fileType:'',file: null } %}
+    <div class="col-sm-10">
+      {% include 'WebBundle:FileChooser:file-choose.html.twig'with {mediaType: mediaType,fileType:'',file: null } %}
     </div>
   </div>
   <div class="form-group">
-    <div class="col-xs-2 control-label"></div>
-    <div class="col-xs-10 col-md-offset-1 controls">
+    <div class="col-sm-2 control-label"></div>
+    <div class="col-sm-10 col-md-offset-1 controls">
       <a href="javascript:;" class="btn btn-primary js-download-material-add" role="button">{{ '添加'|trans }}</a>
     </div>
   </div>
@@ -61,11 +61,13 @@
 
 {% block activity_finish %}
   <div class=" form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-10">
-      <p class="form-control-static">下载过资料</p>
+    <div class="col-sm-4">
+      <select id="finish-condition" name="condition" class="form-control">
+        <option value="downloaded">下载过资料</option>
+      </select>
     </div>
   </div>
 {% endblock %}

@@ -9,6 +9,7 @@ use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+define('RUNTIME_ENV', 'API');
 define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '/../app');
 
 if (API_ENV == 'prod') {
@@ -17,7 +18,7 @@ if (API_ENV == 'prod') {
 }
 
 $parameters = include __DIR__.'/config/paramaters.php';
-if(isset($_SERVER['HTTPS'])){
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
     $parameters['host'] = 'https://'.$_SERVER['HTTP_HOST'];
 }else{
     $parameters['host'] = 'http://'.$_SERVER['HTTP_HOST'];

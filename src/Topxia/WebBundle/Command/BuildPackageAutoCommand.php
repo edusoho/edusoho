@@ -30,9 +30,8 @@ class BuildPackageAutoCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName('topxia:auto-build-package')
+            ->setName('build:upgrade-package')
             ->setDescription('自动编制升级包')
-            ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('fromVersion', InputArgument::REQUIRED, 'compare from  version')
             ->addArgument('version', InputArgument::REQUIRED, 'compare to  version');
     }
@@ -41,7 +40,6 @@ class BuildPackageAutoCommand extends BaseCommand
     {
         $output->writeln('<info>开始编制升级包</info>');
 
-        $name        = $input->getArgument('name');
         $fromVersion = $input->getArgument('fromVersion');
         $version     = $input->getArgument('version');
 
@@ -59,7 +57,7 @@ class BuildPackageAutoCommand extends BaseCommand
 
         $this->diffFilePrompt($diffFile, array('vendor' => $vendorDiff));
 
-        $packageDirectory = $this->createDirectory($name);
+        $packageDirectory = $this->createDirectory();
 
         $this->generateFiles($diffFile, array('vendor' => $vendorDiff), $packageDirectory);
 
@@ -90,31 +88,35 @@ class BuildPackageAutoCommand extends BaseCommand
             $file = @fopen($filePath, "r");
             while (!feof($file)) {
                 $line = fgets($file);
-                $op   = $line[0];
 
+                $splitLine = preg_split('/\s+/', $line);
+
+                if(empty($splitLine) || count($splitLine) === 1){
+                    continue;
+                }
+
+                list($op, $opFile, $newFile) = $splitLine;
+                $op = $line[0];
                 if (empty($line)) {
                     continue;
                 }
 
-                if (!in_array($line[0], array('M', 'A', 'D'))) {
+                if (!in_array($line[0], array('M', 'A', 'D', 'R'))) {
                     echo "无法处理该文件：{$line}";
                     continue;
                 }
-
-                if(empty($module)){
-                    $opFile = trim(substr($line, 1));
-                }else{
-                    $opFile = $module . DIRECTORY_SEPARATOR . trim(substr($line, 1));
-                }
-
 
                 if (empty($opFile)) {
                     echo "无法处理该文件：{$line}";
                     continue;
                 }
 
-                if (empty($module) && strpos($opFile, 'vendor2') !== 0 && strpos($opFile, 'vendor') === 0){
-                    $this->output->writeln("<comment>忽略vendor</comment>");
+                if(!empty($module)){
+                    $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
+                    $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
+                }
+
+                if (empty($module) && strpos($opFile, 'vendor') === 0){
                     continue;
                 }
 
@@ -128,7 +130,7 @@ class BuildPackageAutoCommand extends BaseCommand
                     continue;
                 }
 
-                if (strpos($opFile, 'plugins') === 0) {
+                if (strpos($opFile, 'plugins') === 0 || strpos($newFile, 'plugins')) {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
                 }
@@ -144,6 +146,17 @@ class BuildPackageAutoCommand extends BaseCommand
                 }
 
                 $opBundleFile = $this->getBundleFile($opFile);
+
+                if ($op == 'R'){
+                    $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
+                    $this->insertDelete($opFile, $packageDirectory);
+                    $this->copyFileAndDir($newFile, $packageDirectory);
+
+                    if ($opBundleFile) {
+                        $this->output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
+                        $this->insertDelete($opBundleFile, $packageDirectory);
+                    }
+                }
 
                 if ($op == 'M' || $op == 'A') {
                     $this->output->writeln("<info>增加更新文件：{$opFile}</info>");
@@ -186,10 +199,10 @@ class BuildPackageAutoCommand extends BaseCommand
         $this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
     }
 
-    private function createDirectory($name)
+    private function createDirectory()
     {
         $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
-        $path = "{$root}/build/{$name}_{$this->version}/";
+        $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
             $this->filesystem->remove($path);
@@ -372,7 +385,7 @@ class BuildPackageAutoCommand extends BaseCommand
         while (!feof($file)) {
             $line   = fgets($file);
             $opFile = trim(substr($line, 1));
-            if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
+            if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                 echo "异常的文件更新模式：{$line}";
                 $askDiffFile = true;
                 continue;
@@ -392,7 +405,7 @@ class BuildPackageAutoCommand extends BaseCommand
             while (!feof($file)) {
                 $line   = fgets($file);
                 $opFile = trim(substr($line, 1));
-                if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
+                if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                     echo "异常的文件更新模式：{$line}";
                     $askDiffFile = true;
                     continue;

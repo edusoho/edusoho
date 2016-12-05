@@ -5,6 +5,8 @@ imports:
     - { resource: security.yml }
     - { resource: biz.yml }
     - { resource: "@WebBundle/Resources/config/services.yml" }
+    - { resource: services.xml }
+    - { resource: "@AppBundle/Resources/config/services.yml" }
 
 framework:
     # esi:             ~
@@ -25,7 +27,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.3'
+        version: '7.3.4'
         packages:
             webpack:
                 base_urls:
