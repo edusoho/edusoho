@@ -6,11 +6,11 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif video.status|default() == 'stoped' %}
     <div class="alert alert-warning" role="alert">{{'
-    您的云视频服务已被暂停，不能使用，请联系客服人员：'|trans}}0571-86819929。</div>
+    您的云视频服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
@@ -216,7 +216,7 @@
           <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
         </div>
         <div class="help-block">
-          云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。点击<a href="">这里</a>了解详情。
+          云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。点击<a href="{{ path('admin_cloud_show',{'type': 'video'}) }}" target="_blank">这里</a>了解详情。
         </div>
       </div>
     </div>

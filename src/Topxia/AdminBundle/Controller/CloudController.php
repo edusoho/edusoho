@@ -37,6 +37,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('account_person');
     }
 
+    public function videoShowAction(Request $request, $type)
+    {
+        return $this->redirectUrl('edu_cloud_show', array('type' => $type));
+    }
+
     public function listCouponAction(Request $request)
     {
         return $this->redirectUrl('list_coupon');

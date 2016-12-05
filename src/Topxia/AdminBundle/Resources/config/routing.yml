@@ -1061,6 +1061,10 @@ admin_cloud_video_switch:
     path:  /cloud/video/switch
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSwitch }
 
+admin_cloud_show:
+    path:  /cloud/{type}/show
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoShow , type: 'video'}
+
 admin_cloud_search:
     path:  /cloud/search
     defaults: { _controller: TopxiaAdminBundle:Cloud:search }
