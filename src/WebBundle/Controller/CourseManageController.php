@@ -64,7 +64,7 @@ class CourseManageController extends BaseController
     {
         $taskCount = count($tasks);
         if ($course['expiryMode'] == 'days') {
-            $finishedTaskPerDay = empty($course['expiryMode']) ? $taskCount : $taskCount / $course['expiryMode'];
+            $finishedTaskPerDay = empty($course['expiryDays']) ? $taskCount : $taskCount / $course['expiryDays'];
         } else {
             $diffDay            = ($course['expiryEndDate'] + 60 * 60 * 24 - $course['expiryStartDate']) / (24 * 60 * 60);
             $finishedTaskPerDay = empty($diffDay) ? $taskCount : $taskCount / $diffDay;
