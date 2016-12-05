@@ -1,14 +1,15 @@
 <?php
+namespace Biz\Question\Type;
 
 interface TypeInterface
 {
-    public function create();
+    public function create($fields);
 
-    public function update();
+    public function update($id, $fields);
 
-    public function delete();
+    public function delete($id);
 
-    public function get();
+    public function get($id);
 
-    public function filter();
+    public function filter($fields);
 }

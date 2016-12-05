@@ -12,10 +12,11 @@ class FillQuestionController extends BaseController
         // TODO: Implement showAction() method.
     }
 
-    public function editAction(Request $request, $courseId, $questionId)
+    public function editAction(Request $request, $courseSetId, $questionId)
     {
-        $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
         $question    = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -24,7 +25,7 @@ class FillQuestionController extends BaseController
         }
 
         return $this->render('WebBundle:FillQuestion:form.html.twig', array(
-            'course'         => $course,
+            'courseSet'      => $courseSet,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,
             'type'           => $question['type'],
@@ -32,26 +33,19 @@ class FillQuestionController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $courseId, $type)
+    public function createAction(Request $request, $courseSetId, $type)
     {
-        $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
 
         $parentId       = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);
 
-        $features = array();
-        if ($this->container->hasParameter('enabled_features')) {
-            $features = $this->container->getParameter('enabled_features');
-        }
-        $enabledAudioQuestion = in_array('audio_question', $features);
-
         return $this->render('WebBundle:FillQuestion:form.html.twig', array(
-            'course'               => $course,
-            'parentQuestion'       => $parentQuestion,
-            'enabledAudioQuestion' => $enabledAudioQuestion,
-            'courseTasks'          => $courseTasks,
-            'type'                 => $type
+            'courseSet'      => $courseSet,
+            'parentQuestion' => $parentQuestion,
+            'courseTasks'    => $courseTasks,
+            'type'           => $type
         ));
     }
 
@@ -65,9 +59,9 @@ class FillQuestionController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getServiceKernel()

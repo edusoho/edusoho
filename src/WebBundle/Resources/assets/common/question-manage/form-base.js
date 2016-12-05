@@ -40,7 +40,7 @@ class QuestionFormBase {
           },
           score: {
             required: true,
-            digits:true,
+            number:true,
             max:999,
             min:0
           }

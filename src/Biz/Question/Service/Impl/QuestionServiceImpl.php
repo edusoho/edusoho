@@ -3,7 +3,7 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Biz\Question\Config\QuestionFactory;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
@@ -27,7 +27,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['metas']['mediaId'] = $media['id'];
         }
 
-        $fields = $questionConfig->filter($fields, 'create');
+        $fields['createdTime'] = time();
+        $fields['updatedTime'] = time();
+        $fields                = $questionConfig->filter($fields);
 
         $question = $this->getQuestionDao()->create($fields);
 
@@ -35,7 +37,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        $this->dispatchEvent("question.create", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -53,11 +55,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $questionConfig->update($question['metas']['mediaId'], $fields);
         }
 
-        $fields = $questionConfig->filter($fields, 'create');
+        $fields['updatedTime'] = time();
+        $fields                = $questionConfig->filter($fields);
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->dispatchEvent("question.update", array('argument' => $argument, 'question' => $question));
+        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -82,7 +85,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
-        $this->dispatchEvent("question.delete", array('question' => $question));
+        $this->dispatchEvent('question.delete', new Event($question));
 
         return $result;
     }
@@ -118,43 +121,33 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function search($conditions, $sort, $start, $limit)
     {
+        $conditions = $this->filterQuestionFields($conditions);
         return $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchCount($conditions)
     {
+        $conditions = $this->filterQuestionFields($conditions);
         return $this->getQuestionDao()->count($conditions);
     }
 
     public function getQuestionConfig($type)
     {
-        return QuestionFactory::create($this->biz, $type);
-    }
-
-    public function getQuestionTypes()
-    {
-        $questions = QuestionFactory::all($this->biz);
-
-        return array_keys($questions);
+        return $this->biz["question_type.{$type}"];
     }
 
     public function getCheckedQuestionTypes()
     {
-        $types        = $this->getQuestionTypes();
-        $checkedTypes = array();
+        /*$types        = $this->getQuestionTypes();
+    $checkedTypes = array();
 
-        foreach ($types as $type) {
-            if ($this->getQuestionConfig($type)->isNeedCheck()) {
-                $checkedTypes[] = $type;
-            }
-        }
-
-        return $checkedTypes;
+    foreach ($types as $type) {
+    if ($this->getQuestionConfig($type)->isNeedCheck()) {
+    $checkedTypes[] = $type;
+    }
     }
 
-    public function findCourseTasks($courseId)
-    {
-        return array();
+    return $checkedTypes;*/
     }
 
     public function waveCount($id, $diffs)
@@ -229,6 +222,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function deleteFavoriteByQuestionId($questionId)
     {
         return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
+    }
+
+    public function filterQuestionFields($conditions)
+    {
+        if (!empty($conditions['keyword'])) {
+            $conditions['stem'] = $conditions['keyword'];
+            unset($conditions['keyword']);
+        }
+
+        if (empty($conditions['type'])) {
+            unset($conditions['type']);
+        }
+
+        if (!empty($conditions['target'])) {
+            $conditions['lessonId'] = $conditions['target'];
+            unset($conditions['target']);
+        } else {
+            unset($conditions['target']);
+        }
+
+        return $conditions;
     }
 
     protected function getQuestionDao()

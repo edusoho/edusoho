@@ -12,10 +12,10 @@ class MaterialQuestionController extends BaseController
         // TODO: Implement showAction() method.
     }
 
-    public function editAction(Request $request, $courseId, $questionId)
+    public function editAction(Request $request, $courseSetId, $questionId)
     {
-        $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseTasks = $this->getQuestionService()->findCourseTasks($courseSet['id']);
         $question    = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -24,7 +24,7 @@ class MaterialQuestionController extends BaseController
         }
 
         return $this->render('WebBundle:MaterialQuestion:form.html.twig', array(
-            'course'         => $course,
+            'courseSet'      => $courseSet,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,
             'type'           => $question['type'],
@@ -32,23 +32,16 @@ class MaterialQuestionController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $courseId, $type)
+    public function createAction(Request $request, $courseSetId, $type)
     {
-        $course      = $this->getCourseService()->getCourse($courseId);
-        $courseTasks = $this->getQuestionService()->findCourseTasks($courseId);
-
-        $features = array();
-        if ($this->container->hasParameter('enabled_features')) {
-            $features = $this->container->getParameter('enabled_features');
-        }
-        $enabledAudioQuestion = in_array('audio_question', $features);
+        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
 
         return $this->render('WebBundle:MaterialQuestion:form.html.twig', array(
-            'course'               => $course,
-            'parentQuestion'       => array(),
-            'enabledAudioQuestion' => $enabledAudioQuestion,
-            'courseTasks'          => $courseTasks,
-            'type'                 => $type
+            'courseSet'      => $courseSet,
+            'parentQuestion' => array(),
+            'courseTasks'    => $courseTasks,
+            'type'           => $type
         ));
     }
 
@@ -57,9 +50,14 @@ class MaterialQuestionController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
-    protected function getCourseService()
+    protected function getCourseTaskService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getServiceKernel()

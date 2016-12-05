@@ -13,16 +13,16 @@
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
     <div class="pull-right">
-      <a href="{{ path('course_manage_question_create',{courseId:course.id,type:'single_choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'单选题'|trans}}</a>
-      <a href="{{ path('course_manage_question_create',{courseId:course.id,type:'choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'多选题'|trans}}</a>
-      <a href="{{ path('course_manage_question_create',{courseId:course.id,type:'essay',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'问答题'|trans}}</a>
+      <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'single_choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'单选题'|trans}}</a>
+      <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'多选题'|trans}}</a>
+      <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'essay',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'问答题'|trans}}</a>
       
       <div class="btn-group">
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
-        {% for type in questionTypes %}
+        {% for type,questionType in questionTypes %}
           {% if type not in ['single_choice','choice','essay','material'] or (type == 'material' and not parentQuestion) %}
-            <li><a href="{{ path('course_manage_question_create',{courseId:course.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-sm"><span class="glyphicon glyphicon-plus"></span> {{ dict_text('questionType',type)}}</a></li>
+            <li><a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-sm"><span class="glyphicon glyphicon-plus"></span> {{ questionType.name }}</a></li>
           {% endif %}
         {% endfor %}
 
@@ -37,7 +37,7 @@
 
     {% if parentQuestion %}
       <ol class="breadcrumb">
-        <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">{{'题目管理'|trans}}</a></li>
+        <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'题目管理'|trans}}</a></li>
         <li class="active">{{'材料题'|trans}}</li>
       </ol>
     {% endif %}
@@ -81,7 +81,7 @@
     </table>
     <div>
       <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
-      <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_manage_question_deletes',{courseId:course.id}) }}" data-loading-text="正在删除...">{{'删除'|trans}}</button>
+      <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_set_manage_question_deletes',{courseSetId:courseSet.id}) }}" data-loading-text="正在删除...">{{'删除'|trans}}</button>
       <span class="pull-right text-muted">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
     </div>
     <nav class="text-center">
