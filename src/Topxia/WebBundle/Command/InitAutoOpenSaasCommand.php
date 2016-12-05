@@ -53,6 +53,10 @@ class InitAutoOpenSaasCommand extends InitCommand
         $user = $this->initUser($user);
         $this->logger("网校设置用户成功", $output);
 
+        $initializer->initFolders();
+        $initializer->initLockFile();
+        $initializer->initRegisterSetting($user);
+
         $this->logger("网校创建成功", $output);
     }
 
@@ -73,7 +77,7 @@ class InitAutoOpenSaasCommand extends InitCommand
             'password'      => $user['password'],
         );
         $registerUser = $this->getAuthService()->register($registerUser);
-        $this->getUserService()->changeUserRoles($registerUser['id'], array(
+        return $this->getUserService()->changeUserRoles($registerUser['id'], array(
             'ROLE_USER',
             'ROLE_TEACHER',
             'ROLE_SUPER_ADMIN'
