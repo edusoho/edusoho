@@ -113,7 +113,7 @@ class DownloadActivity extends Activity
         return $downloadActivity;
     }
 
-    protected function parseDownloadFiles($downloadActivityId, $materials)
+    public function parseDownloadFiles($downloadActivityId, $materials)
     {
         $files = array();
         array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
