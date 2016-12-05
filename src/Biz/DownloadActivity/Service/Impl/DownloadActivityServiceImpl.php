@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
 use Biz\DownloadActivity\Service\DownloadActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Topxia\Common\ArrayToolkit;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
 {
@@ -25,18 +26,19 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         return $this->getDownloadFileRecordDao()->create($record);
     }
 
-    public function downloadActivityFile($activityId, $fileId)
+    public function downloadActivityFile($activityId, $downloadFileId)
     {
         $activity = $this->getActivityService()->getActivityFetchExt($activityId);
 
+
         $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
-        if (empty($medias)) {
-            return $this->createNotFoundException('activity not found');
+        if (empty($materials)) {
+            throw $this->createNotFoundException('activity not found');
         }
         $downloadFiles = ArrayToolkit::index($materials, 'id');
-        $downloadFile  = $downloadFiles[$fileId];
+        $downloadFile  = $downloadFiles[$downloadFileId];
         if (empty($downloadFile)) {
-            return $this->createNotFoundException('file not found');
+            throw $this->createNotFoundException('file not found');
         }
         $this->createDownloadFileRecord($downloadFile);
 

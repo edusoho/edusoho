@@ -23,6 +23,8 @@ function _inItStep2form() {
             minute: 'required unsigned_integer',
             second: 'required second_range',
             media: 'required',
+            second: 'second_range',
+            'ext[mediaId]': 'required'
         },
         messages: {
             minute: {
@@ -31,9 +33,11 @@ function _inItStep2form() {
             second: {
                 required: '请输入时长',
             },
+
             media: {
                 required:'请上传或选择%display%'
-            }
+            },
+            'ext[mediaId]': "请选择或者上传视频"
         }
     });
     
