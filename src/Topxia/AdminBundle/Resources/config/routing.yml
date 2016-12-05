@@ -1065,6 +1065,14 @@ admin_cloud_show:
     path:  /cloud/{type}/show
     defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
 
+admin_cloud_live_upgrade:
+    path:  /cloud/live/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudLiveUpgrade }
+
+admin_cloud_live_renew:
+    path:  /cloud/live/renew
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudLiveRenew }
+
 admin_cloud_search:
     path:  /cloud/search
     defaults: { _controller: TopxiaAdminBundle:Cloud:search }
