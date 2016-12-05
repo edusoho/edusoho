@@ -36,8 +36,28 @@ npm run compile:debug  #不压缩
 
 ### 改进
 * dev模式下scanPath的新文件无法监听的问题
-* webpack编译失败的通知
 * npm run compile 没修改的话也会git变化
-* libs和common的区别能不能再改进
 * build之后chunk-manifest.json问题优化
-* 搞成独立npm
+
+
+### package.json 版本约定
+
+* devDependencies 
+
+```
+放入开发工具的依赖，即不会出现在build的文件中，版本默认用 ^ 开头
+
+使用下面命令新增
+npm install xxx --save-dev 
+```
+
+* dependencies 
+
+```
+放入功能开发需要的依赖，即会出现在build的文件中,
+
+版本使用分为两部分，一部分是第三方的依赖，限定具体版本，另一部分即我们自己上传的npm依赖，则使用 'latest'
+
+使用下面命令新增
+npm install xxx@x.x.x --save
+``` 

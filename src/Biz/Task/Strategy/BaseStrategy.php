@@ -3,7 +3,10 @@
 namespace Biz\Task\Strategy;
 
 
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Common\ArrayToolkit;
@@ -17,12 +20,11 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
+        $fields = array_filter($fields);
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
-        if (empty($fields['categoryId'])) {
-            unset($fields['categoryId']);
-        }
+
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             throw new AccessDeniedException('无权创建任务');
         }
@@ -33,11 +35,10 @@ class BaseStrategy
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['number']        = $this->getTaskService()->getMaxNumberByCourseId($activity['fromCourseId']);
-        $fields                  = ArrayToolkit::parts($fields, array(
+
+        $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'seq',
-            'number',
             'mode',
             'categoryId',
             'activityId',
@@ -76,7 +77,7 @@ class BaseStrategy
     public function baseFindCourseItems($courseId)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -109,6 +110,9 @@ class BaseStrategy
         return false;
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
@@ -122,15 +126,18 @@ class BaseStrategy
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return TaskDao
+     */
     protected function getTaskDao()
     {
-        return $this->biz->service('Task:TaskDao');
+        return $this->biz->dao('Task:TaskDao');
     }
 
     /**
      * @return CourseService
      */
-    protected function getCourseService()
+    public function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }

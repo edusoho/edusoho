@@ -9,6 +9,7 @@ use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+define('RUNTIME_ENV', 'API');
 define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '/../app');
 
 if (API_ENV == 'prod') {

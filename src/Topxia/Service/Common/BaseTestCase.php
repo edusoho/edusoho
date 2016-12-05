@@ -2,9 +2,9 @@
 
 namespace Topxia\Service\Common;
 
-use Codeages\Biz\Framework\Context\Biz;
 use Mockery;
 use Topxia\Service\User\CurrentUser;
+use Codeages\Biz\Framework\Context\Biz;
 use Permission\Common\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
@@ -28,7 +28,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     public function setUp()
     {
         parent::emptyDatabase();
-        $this->initServiceKernel()
+        $this
             ->flushPool()
             ->initDevelopSetting()
             ->initCurrentUser();
@@ -40,13 +40,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             'without_network' => '1'
         ));
 
-        return $this;
-    }
-
-    protected function initServiceKernel()
-    {
-        $serviceKernel = $this->getServiceKernel();
-        $serviceKernel->setBiz(self::$biz);
         return $this;
     }
 
@@ -82,8 +75,10 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getServiceKernel()->createService('Permission:Role.RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        $biz = $this->getBiz();
+
+        $biz         = $this->getBiz();
         $biz['user'] = $this->getCurrentUser();
+
         return $this;
     }
 

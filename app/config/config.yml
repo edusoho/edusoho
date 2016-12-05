@@ -27,7 +27,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.3'
+        version: '7.3.4'
         packages:
             webpack:
                 base_urls:

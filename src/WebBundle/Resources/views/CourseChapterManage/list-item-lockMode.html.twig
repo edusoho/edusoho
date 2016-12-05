@@ -24,7 +24,7 @@
       <i class="es-icon es-icon-edit mrs"></i><a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_edit', {chapterId:chapter.id,courseId:course.id}) }}">{{'编辑'|trans}}</a>
     </a>
     <a class="btn btn-gray">
-      <i class="es-icon es-icon-delete mrs"></i><a href="javascript:;" class='delete-item' data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">{{'删除'|trans}}</a>
+      <i class="es-icon es-icon-delete mrs"></i><a href="javascript:;" class="delete-item"  data-type="chapter"  data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">{{'删除'|trans}}</a>
     </a>
   </div>
 </li>

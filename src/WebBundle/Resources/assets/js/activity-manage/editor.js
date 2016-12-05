@@ -1,3 +1,8 @@
+/**
+ * [description]
+ * @param  {[string]} $item [te]
+ * @return {[type]}       [description]
+ */
 export const initEditor = ($item) => {
   var editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Full',
@@ -9,10 +14,6 @@ export const initEditor = ($item) => {
   editor.on( 'change', () => {    
     $item.val(editor.getData());
   });
-}
-
-export default {
-  initEditor
 }
 
 

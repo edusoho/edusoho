@@ -102,6 +102,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'endTime'
             ));
 
+            $fields = array_filter($fields);
+
             if (isset($fields['startTime']) && isset($fields['length'])) {
                 $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
             }
@@ -114,7 +116,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             }
             $this->commit();
             return $activity;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }

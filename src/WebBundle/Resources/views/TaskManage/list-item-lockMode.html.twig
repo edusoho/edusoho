@@ -22,8 +22,19 @@
       <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown mrs"aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
+         {% if task.status|default('create') != 'published' %}
+           <li>
+          <a class='publish-item' href="javascript:;" data-type="task"
+             data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">发布</a>
+        </li>
+        {% else %}
+           <li>
+          <a class='unpublish-item' href="javascript:;" data-type="task"
+             data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">取消发布</a>
+        </li>
+         {% endif %}
         <li>
-          <a class='delete-item' href="javascript:;" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
+          <a class='delete-item'  href="javascript:;"  data-type="task" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
         </li>
       </ul>
     </span>
