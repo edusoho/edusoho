@@ -32,6 +32,27 @@ class CloudController extends BaseController
         return $this->redirectUrl('order_recharge');
     }
 
+    public function accountPersonAction(Request $request)
+    {
+        return $this->redirectUrl('account_person');
+    }
+
+    public function cloudShowAction(Request $request, $type)
+    {
+        return $this->redirectUrl('edu_cloud_show', array('type' => $type));
+    }
+
+    public function listCouponAction(Request $request)
+    {
+        return $this->redirectUrl('list_coupon');
+    }
+
+    public function serviceOverviewAction(Request $request, $type)
+    {
+        $url = 'service_'.$type.'_overview';
+        return $this->redirectUrl($url);
+    }
+
     public function detailAction(Request $request)
     {
         return $this->redirectUrl('bill_list');
@@ -53,6 +74,11 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_buy', $params);
     }
 
+    public function videoDetailAction()
+    {
+        return $this->redirectUrl('service_storage_chart');
+    }
+
     public function tlpAction(Request $request)
     {
         $params = array('type' => 'tlp');
@@ -71,6 +97,12 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
+    public function searchAction(Request $request)
+    {
+        $params = array('type' => 'search');
+        return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
     public function liveAction(Request $request)
     {
         $params = array('type' => 'live');
@@ -85,6 +117,31 @@ class CloudController extends BaseController
     public function videoRenewAction(Request $request)
     {
         return $this->redirectUrl('edu_cloud_video_renew');
+    }
+
+    public function searchDetailAction(Request $request)
+    {
+        return $this->redirectUrl('service_search_overview');
+    }
+
+    public function smsDetailAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_list_detail');
+    }
+
+    public function smsStatisticsAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_count');
+    }
+
+    public function smsSettingAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_setting');
+    }
+
+    public function liveMoreAction(Request $request)
+    {
+        return $this->redirectUrl('service_live_count');
     }
 
     protected function redirectUrl($routingName, $params = array())

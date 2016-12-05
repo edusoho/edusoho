@@ -2,6 +2,10 @@ admin:
     path:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_notice_modal:
+    path:  /notice/modal
+    defaults: { _controller: TopxiaAdminBundle:Default:notice }
+
 admin_question_remind_teachers:
     path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
@@ -46,6 +50,11 @@ admin_course_explore:
 #     path: /login/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
+
+admin_dashboard:
+    path:  /dashboard
+    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
+    permissions: [admin]
 
 admin_opencourse_analysis:
     path:  /opencourse/analysis
@@ -235,7 +244,7 @@ admin_tag_group:
 
 admin_tag_group_create:
     path: /tag/group/create
-    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }
 
 admin_tag_group_update:
     path: /tag/group/{groupId}/update
@@ -709,9 +718,13 @@ admin_setting_payment:
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
     permissions: [admin_payment]
 
-admin_setting_cloud_video:
+admin_cloud_video_overview:
+    path:  /cloud/video/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoOverview }
+
+admin_cloud_setting_video:
     path:  /setting/cloud/video
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSetting }
 
 admin_setting_cloud:
     path:  /setting/cloud
@@ -754,25 +767,25 @@ admin_setting_cloud_video_watermark_upload:
     path: /setting/cloud/video_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkUpload }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_watermark_remove:
     path: /setting/cloud/video_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_embed_watermark_upload:
     path: /setting/cloud/video_embed_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_cloud_video_embed_watermark_remove:
     path: /setting/cloud/video_embed_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
-    permissions: [admin_setting_cloud_video]
+    permissions: [admin_cloud_video_overview]
 
 admin_setting_refund:
     path:  /setting/refund
@@ -1001,6 +1014,21 @@ admin_cloud_recharge:
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_account_person:
+    path:  /cloud/account/person
+    defaults: { _controller: TopxiaAdminBundle:Cloud:accountPerson }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_list_coupon:
+    path:  /cloud/list/coupon
+    defaults: { _controller: TopxiaAdminBundle:Cloud:listCoupon }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_service_overview:
+    path:  /cloud/service/{type}/overview
+    defaults: { _controller: TopxiaAdminBundle:Cloud:serviceOverview }
+    permissions: [admin_my_cloud_overview]
+
 admin_cloud_detail:
     path:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
@@ -1011,6 +1039,10 @@ admin_cloud_buy:
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_live_more:
+    path: /cloud/live/more
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveMore }
+
 admin_cloud_tlp:
     path:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
@@ -1019,6 +1051,23 @@ admin_cloud_tlp:
 admin_cloud_video:
     path:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
+    permissions: [admin_my_cloud_overview]
+
+admin_cloud_video_detail:
+    path: /cloud/video/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoDetail }
+
+admin_cloud_video_switch:
+    path:  /cloud/video/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSwitch }
+
+admin_cloud_show:
+    path:  /cloud/{type}/show
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
+
+admin_cloud_search:
+    path:  /cloud/search
+    defaults: { _controller: TopxiaAdminBundle:Cloud:search }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_doc:
@@ -1049,6 +1098,22 @@ admin_cloud_video_renew:
     path:  /cloud/video/renew
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
+
+admin_cloud_search_detail:
+    path: /cloud/search/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:searchDetail }
+
+admin_cloud_sms_detail:
+    path: /cloud/sms/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsDetail }
+
+admin_cloud_sms_statistics:
+    path: /cloud/sms/statistics
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsStatistics }
+
+admin_cloud_sms_setting:
+    path: /cloud/sms/setting
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSetting }
 
 # admin_customer_service:
 #     path: /customer/service
@@ -1251,6 +1316,12 @@ admin_category_delete:
     path:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
+
+admin_category_upload:
+    path: /category/uploadfile
+    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
+    methods: [POST]
+    permissions: [admin_course_category_manage]
 
 admin_category_sort:
     path:  /category/sort
@@ -1653,6 +1724,11 @@ admin_system_status:
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
     permissions: [admin]
 
+admin_official_messages:
+    path:  /official/messages
+    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
+    permissions: [admin]
+
 admin_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
@@ -1784,9 +1860,13 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
+    path:  /edu_cloud/sms/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsOverview }
+    permissions: [admin_edu_cloud_sms_overview]
+
+admin_edu_cloud_setting_sms:
     path:  /setting/edu_cloud/sms
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
-    permissions: [admin_edu_cloud_sms_setting]
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsSetting }
 
 admin_edu_cloud_sms_status:
     path:  /setting/sms/status
@@ -1795,24 +1875,38 @@ admin_edu_cloud_sms_status:
 admin_edu_cloud_apply_for_sms:
     path:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_bill:
     path:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_sms_no_message:
     path: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    permissions: [admin_edu_cloud_sms_setting]
+    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
-    path: /setting/edu_cloud/email
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
-    permissions: [admin_edu_cloud_email_seeting]
+    path: /edu_cloud/email/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_setting:
+    path: /edu_cloud/email/setting
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSetting }
+    permissions: [admin_edu_cloud_email_overview]
+
+admin_edu_cloud_email_switch:
+    path: /edu_cloud/email/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSwitch }
+    permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_search:
+    path: /edu_cloud/search/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOverview }
+
+admin_edu_cloud_setting_search:
     path: /setting/edu_cloud/search
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
 
@@ -1925,3 +2019,22 @@ admin_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
     permissions: [admin_cloud_attachment_manage]
+
+admin_cloud_attachment_render:
+    path: /cloud_attachment/render
+    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }
+    permissions: [admin_cloud_attachment_manage]
+
+# 添加云直播
+admin_cloud_edulive_overview:
+    path:  /cloud/edulive/overview
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:liveOverview }
+
+admin_cloud_upload_live_logo:
+    path: /cloud/edulive/upload
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:uploadLiveLogo }
+    methods: [POST]
+
+admin_setting_cloud_edulive:
+    path:  /setting/cloud/edulive
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
