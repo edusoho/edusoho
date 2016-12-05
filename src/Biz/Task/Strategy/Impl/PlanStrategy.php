@@ -136,4 +136,30 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             }
         }
     }
+
+    public function publishTask($task)
+    {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权发布任务');
+        }
+        if ($task['status'] == 'published') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+        }
+        $task = $this->getTaskDao()->update($task['id'], array('status' => 'published'));
+        return $task;
+    }
+
+    public function unPublishTask($task)
+    {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权取消发布任务');
+        }
+        if ($task['status'] == 'unpublished') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
+        }
+        $task = $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
+        return $task;
+    }
+
+
 }

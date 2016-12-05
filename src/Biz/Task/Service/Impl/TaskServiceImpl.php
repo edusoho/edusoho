@@ -34,6 +34,25 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function publishTask($id)
+    {
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->publishTask($task);
+        return $task;
+    }
+
+    public function unPublishTask($id)
+    {
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->unPublishTask($task);
+        return $task;
+    }
+
+
     public function updateSeq($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array(
@@ -217,7 +236,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findTasksByChapterId($chapterId)
     {
-        return $this->getTaskDao()->findTasksByChapterId($chapterId);
+        return $this->getTaskDao()->findByChapterId($chapterId);
     }
 
     /**

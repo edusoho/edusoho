@@ -12,6 +12,10 @@ interface TaskService
 
     public function updateTask($id, $fields);
 
+    public function publishTask($id);
+
+    public function unPublishTask($id);
+
     public function deleteTask($id);
 
     public function findTasksByCourseId($courseId);
@@ -22,7 +26,7 @@ interface TaskService
 
     public function startTask($taskId);
 
-    public function doTask($taskId, $time=TaskService::LEARN_TIME_STEP);
+    public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 

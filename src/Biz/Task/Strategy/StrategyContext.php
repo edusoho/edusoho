@@ -75,6 +75,16 @@ class StrategyContext
         return $this->strategy->getTasksRenderPage();
     }
 
+    public function publishTask($task)
+    {
+        return $this->strategy->publishTask($task);
+    }
+
+    public function unPublishTask($task)
+    {
+        return $this->strategy->unPublishTask($task);
+    }
+
     //课程的api 策略
     public function findCourseItems($courseId)
     {
