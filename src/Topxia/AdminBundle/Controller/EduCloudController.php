@@ -239,6 +239,8 @@ class EduCloudController extends BaseController
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
+        } else {
+            $storageSetting = array_merge($default, $storageSetting);
         }
 
         try {
