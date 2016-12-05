@@ -22,7 +22,7 @@ class CourseTask extends Migration
             `isOptional` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否必修',
             `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
             `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-            `status` varchar(255) NOT NULL default 'create' COMMENT '发布状态',
+            `status` varchar(255) NOT NULL default 'create' COMMENT '发布状态 create|publish|unpublish',
             `createdUserId` int(10) unsigned NOT NULL COMMENT '创建者',
             `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
             `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',

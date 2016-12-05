@@ -20,13 +20,6 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
-    public function getByCourseIdAndNumber($courseId, $number)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE `courseId`= ? AND `number` = ? LIMIT 1";
-        return $this->db()->fetchAssoc($sql, array($courseId, $number));
-    }
-
-
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT max(seq) FROM {$this->table()} WHERE courseId = ? ";
@@ -45,17 +38,22 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAssoc($sql, array($seq, $courseId));
     }
 
-    public function findTasksByChapterId($chapterId)
+    public function findByChapterId($chapterId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE categoryId = ? ";
         return $this->db()->fetchAll($sql, array($chapterId)) ?: array();
     }
 
+    public function getByChapterIdAndMode($chapterId, $mode)
+    {
+        $sql = "SELECT * FROM {$this->table()}  WHERE `categoryId`= ? AND `mode` = ? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($chapterId, $mode));
+    }
 
     public function waveSeqBiggerThanSeq($courseId, $seq, $diff)
     {
-        $sql = "UPDATE {$this->table()} SET seq = seq + ? , number = number + ? WHERE courseId =? and seq >?";
-        return $this->db()->executeUpdate($sql, array($diff, $diff, $courseId, $seq));
+        $sql = "UPDATE {$this->table()} SET seq = seq + ? WHERE courseId =? and seq >?";
+        return $this->db()->executeUpdate($sql, array($diff, $courseId, $seq));
     }
 
     public function declares()
