@@ -1067,11 +1067,19 @@ admin_cloud_show:
 
 admin_cloud_live_upgrade:
     path:  /cloud/live/upgrade
-    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudLiveUpgrade }
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveUpgrade }
 
 admin_cloud_live_renew:
     path:  /cloud/live/renew
-    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudLiveRenew }
+    defaults: { _controller: TopxiaAdminBundle:Cloud:liveRenew }
+
+admin_cloud_email_list:
+    path: /cloud/email/list
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailList }
+
+admin_cloud_email_count:
+    path: /cloud/email/list
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailCount }
 
 admin_cloud_search:
     path:  /cloud/search
