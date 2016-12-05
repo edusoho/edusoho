@@ -9,6 +9,7 @@ class Text{
         this._inItStep2form();
         this._inItStep3form();
         initEditor($('[name="content"]'));
+        console.log($('body').height());
     }
 
     _inItStep2form() {
@@ -17,13 +18,12 @@ class Text{
         validator = $step2_form.validate({
             onkeyup: false,
             rules: {
-                title:'required',
+                title:{
+                    required: true,
+                    maxlength: 50,
+                },
                 content: 'required',
             },
-            messages: {
-                title:'请输入标题',
-                content:"请输入内容"
-            }
         });
     }
 
@@ -33,12 +33,11 @@ class Text{
         validator = $step3_form.validate({
             onkeyup: false,
             rules: {
-                'condition_detail': {
+                'finishDetail': {
                     required: true,
                     digits:true,
                     max:300,
                 },
-
             },
         });
     }

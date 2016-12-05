@@ -14,10 +14,12 @@ class Discuss{
         var $step2_form = $("#step2-form");
         var validator = $step2_form.data('validator');
         validator = $step2_form.validate({
-            onkeyup: false,
             rules: {
-                title:'required',
-                content: 'required',
+                title: {
+                    required: true,
+                    maxlength: 50,
+                },
+                media: 'required',
             },
         });
     }
