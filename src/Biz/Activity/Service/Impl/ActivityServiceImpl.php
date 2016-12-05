@@ -19,7 +19,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
-    public function getActivityFetchExt($id)
+    public function getActivityFetchMedia($id)
     {
         $activity = $this->getActivity($id);
         if (!empty($activity['mediaId'])) {

@@ -8,7 +8,7 @@ interface ActivityService
 {
     public function getActivity($id);
 
-    public function getActivityFetchExt($id);
+    public function getActivityFetchMedia($id);
 
     public function findActivities($ids);
 
