@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import 'jquery-sortable';
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function (evt) {
@@ -16,6 +17,16 @@ export const closeCourse = () => {
   });
 }
 
+export const sortList = (element = '#sortable-list') => {
+  let data = $(element).sortable("serialize").get();
+  console.log(data);
+  $.post($(element).data('sortUrl'), {ids: data}, (response) => {
+    console.log('response',response)
+    if (response) {
+      document.location.reload();
+    }
+  });
+}
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', function (evt) {
     if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
@@ -43,11 +54,11 @@ export const deleteTask = () => {
         return;
       }
     }
-
     $.post($(evt.target).data('url'), function (data) {
       if (data.success) {
         notify('success', '删除成功');
-        location.reload();
+        $(evt.target).parents('.task-manage-list').remove();
+        sortList();
       } else {
         notify('danger', '删除失败：' + data.message);
       }
@@ -68,8 +79,8 @@ export const publishTask = () => {
   })
 }
 
-export const unpublishTask =()=>{
-  $('body').on('click', '.unpublish-item',(event)=>{
+export const unpublishTask = () => {
+  $('body').on('click', '.unpublish-item', (event) => {
     $.post($(event.target).data('url'), function (data) {
       if (data.success) {
         notify('success', '取消发布成功');
