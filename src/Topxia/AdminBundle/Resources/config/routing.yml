@@ -1063,7 +1063,7 @@ admin_cloud_video_switch:
 
 admin_cloud_show:
     path:  /cloud/{type}/show
-    defaults: { _controller: TopxiaAdminBundle:Cloud:videoShow , type: 'video'}
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
 
 admin_cloud_search:
     path:  /cloud/search
