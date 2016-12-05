@@ -82,9 +82,6 @@ course_set_manage_course_publish:
   path: /course_set/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: WebBundle:CourseManage:publish}
 
-course_manage_tasks:
-  path:  /course/{courseId}/manage/tasks
-  defaults: { _controller: WebBundle:CourseManage:tasks }
 
 course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
@@ -107,6 +104,14 @@ course_manage_chapter_delete:
 course_manage_task_create:
   path:  /course/{courseId}/task
   defaults: { _controller: WebBundle:TaskManage:create}
+
+course_manage_task_publish:
+  path:  /course/{courseId}/task/{id}/publish
+  defaults: { _controller: WebBundle:TaskManage:publish }
+
+course_manage_task_unpublish:
+  path:  /course/{courseId}/task/{id}/unpublish
+  defaults: { _controller: WebBundle:TaskManage:unPublish }
 
 course_manage_task_fields:
   path:  /course/{courseId}/task_fields/{mode}
