@@ -231,7 +231,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     }
 
     //取消发布课时中一组任务
-    public function unPublishTask($task)
+    public function unpublishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');

@@ -149,7 +149,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function unPublishTask($task)
+    public function unpublishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权取消发布任务');

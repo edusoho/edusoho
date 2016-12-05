@@ -14,7 +14,7 @@ interface TaskService
 
     public function publishTask($id);
 
-    public function unPublishTask($id);
+    public function unpublishTask($id);
 
     public function deleteTask($id);
 

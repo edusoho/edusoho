@@ -43,12 +43,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
-    public function unPublishTask($id)
+    public function unpublishTask($id)
     {
         $task     = $this->getTask($id);
         $strategy = $this->createCourseStrategy($task['courseId']);
 
-        $task = $strategy->unPublishTask($task);
+        $task = $strategy->unpublishTask($task);
         return $task;
     }
 

@@ -16,7 +16,7 @@ interface CourseStrategy
 
     public function publishTask($task);
 
-    public function unPublishTask($task);
+    public function unpublishTask($task);
 
     /**
      * 任务列表管理页面

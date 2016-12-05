@@ -80,9 +80,9 @@ class StrategyContext
         return $this->strategy->publishTask($task);
     }
 
-    public function unPublishTask($task)
+    public function unpublishTask($task)
     {
-        return $this->strategy->unPublishTask($task);
+        return $this->strategy->unpublishTask($task);
     }
 
     //课程的api 策略
