@@ -47,7 +47,7 @@ class DownloadActivity extends Activity
             $downloadActivity = array('mediaCount' => count($materials));
             $downloadActivity = $that->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
-            $files = $this->parseDownloadFiles($downloadActivity['id'], $materials);
+            $files = $that->parseDownloadFiles($downloadActivity['id'], $materials);
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }
