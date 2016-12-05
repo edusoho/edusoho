@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
+
 class NormalMail extends Mail
 {
     /**
@@ -52,6 +54,7 @@ class NormalMail extends Mail
         }
 
         $method = 'on_'.$this->template;
+        var_dump($method);
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method));
         } else {
@@ -117,9 +120,10 @@ class NormalMail extends Mail
 
     private function renderBody($view)
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-        return $container->get('templating')->render($view, $this->params);
+        $loader = new \Twig_Loader_Filesystem($view);
+        $twig = new \Twig_Environment($loader);
+
+        return  $twig->render($view, $this->params);
     }
 
     protected function getKernel()
