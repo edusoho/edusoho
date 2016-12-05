@@ -71,10 +71,7 @@ class Live {
 			eventName = eventName ? 'doing' : 'start'; 
 			$.ajax({
 				url: $('meta[name="trigger_url"]').attr('content'),
-				beforeSend: function(xhr){
-					return xhr.setRequestHeader('X-CSRF-Token', $('meta[name="_csrf_token"]').attr('content'));
-				},
-				type: 'POST',
+				type: 'GET',
 				data: {eventName: eventName},
 				success: function(response){
 					if(response.live_end){

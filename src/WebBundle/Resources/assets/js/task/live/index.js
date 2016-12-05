@@ -1,3 +1,5 @@
+import  ActivityEmitter from '../../activity/activity-emitter';
+
 class LiveShow {
 
   constructor() {
@@ -27,6 +29,7 @@ class LiveShow {
       }
 
       let intervalSecond = 0;
+      this.entry_url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
 
       function generateHtml() {
           nowDate = nowDate + intervalSecond;
@@ -63,23 +66,21 @@ class LiveShow {
 
           if (0 < startLeftSeconds && startLeftSeconds < 7200) {
               $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
-              let url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
               if (!!activityData.isTeacher) {
                   $countDown = $replayGuid + $countDown;
-                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               } else {
-                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               }
           };
           if (startLeftSeconds <= 0) {
               clearInterval(iID);
               $liveNotice = "<p>" + Translator.trans('直播已经开始，直播将于%liveEndTime%结束。', {liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'}) + "</p>";
-              let url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
               if (!!activityData.isTeacher) {
                   $countDown = $replayGuid;
-                  $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown += "<p><a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               } else {
-                  $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p><a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               }
           };
 
@@ -122,6 +123,23 @@ class LiveShow {
 
       $("#lesson-live-content").show();
       $("#lesson-live-content").scrollTop(0);
+
+      that.started = false;
+    }
+
+    entryLiveRoom(){
+      let that = this;
+      console.log('startLive', that.started, that.entry_url);
+      if(!that.started){
+        that.started = true;
+        let emitter = new ActivityEmitter();
+        emitter.emit('start', {}).then(() => {
+          console.log('live.start');
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      window.open(that.entry_url, '_blank');  
     }
 
     _getCountDown(days, hours, minutes, seconds) {
@@ -135,4 +153,4 @@ class LiveShow {
     }
 }
 
-new LiveShow(); 
+window.liveShow = new LiveShow(); 

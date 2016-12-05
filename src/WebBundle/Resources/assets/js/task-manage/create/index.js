@@ -76,7 +76,7 @@ class Editor {
         $.post(this.$task_manage_type.data('saveUrl'), postData)
             .done((response) => {
                 this.$element.modal('hide');
-                // location.reload();
+                location.reload();
             })
             .fail((response) => {
                 this.$element.modal('hide');

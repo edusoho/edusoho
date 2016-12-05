@@ -101,9 +101,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $user = $this->getUser();
-        //1. 查询Activity，校验是不是直播，如果是，校验是否正在进行中
-        //2. 查询TaskResult，如果没有，若直播已开始，则创建，否则返回；首次start时创建ActivityLearnLog；
-        //3. 更新TaskResult，当前逻辑，直接设置为finish，并累计time字段（now() - live.startTime）
+
         $activity = $this->getActivityService()->getActivity($activityId);
         if ($activity['mediaType'] !== 'live') {
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_live'));
@@ -112,8 +110,9 @@ class LiveActivityController extends BaseController implements ActivityActionInt
         if ($activity['startTime'] > $now) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
         }
-        $eventName = $request->query->get('eventName', 'doing');
-        $this->getActivityService()->trigger($activityId, $eventName, array());
+
+        // $eventName = $request->query->get('eventName', 'doing');
+        // $this->getActivityService()->trigger($activityId, $eventName, array());
 
         //当前业务逻辑：看过即视为完成
         $this->getActivityService()->trigger($activityId, 'finish', array());
@@ -122,7 +121,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
             return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
         }
 
-        return $this->createJsonResponse(array('success' => true, 'status' => 'doing'));
+        return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
     /**
