@@ -55,6 +55,31 @@ export const deleteTask = () => {
   });
 }
 
+export const publishTask = () => {
+  $('body').on('click', '.publish-item', (event) => {
+    $.post($(event.target).data('url'), function (data) {
+      if (data.success) {
+        notify('success', '发布成功');
+        location.reload();
+      } else {
+        notify('danger', '发布失败：' + data.message);
+      }
+    });
+  })
+}
+
+export const unpublishTask =()=>{
+  $('body').on('click', '.unpublish-item',(event)=>{
+    $.post($(event.target).data('url'), function (data) {
+      if (data.success) {
+        notify('success', '取消发布成功');
+        location.reload();
+      } else {
+        notify('danger', '取消发布失败：' + data.message);
+      }
+    });
+  })
+}
 
 export const publishCourse = () => {
   $('body').on('click', '.js-publish-course', function (evt) {
