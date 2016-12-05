@@ -16,7 +16,9 @@ define(function(require, exports, module) {
             xAxis: {
                 data: chartData.date
             },
-            yAxis: {},
+            yAxis: {
+                minInterval: 1
+            },
             series: [{
                 name: '发送量(条)',
                 type: 'bar',

@@ -16,7 +16,9 @@ define(function(require, exports, module) {
             xAxis: {
                 data: chartData.date
             },
-            yAxis: {},
+            yAxis: {
+                minInterval: 1
+            },
             series: [{
                 name: chartData.unit,
                 type: 'bar',
