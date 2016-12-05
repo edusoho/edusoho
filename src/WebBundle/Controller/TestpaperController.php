@@ -96,7 +96,7 @@ class TestpaperController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaperResult['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
 
         $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
 
@@ -109,7 +109,7 @@ class TestpaperController extends BaseController
             $testpaperResult['usedTime'] = time() - $activity['startTime'];
         }
 
-        $attachments = $this->findAttachments($testpaper['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
         return $this->render('WebBundle:Testpaper:start-do-show.html.twig', array(
             'questions'         => $questions,
@@ -228,30 +228,6 @@ class TestpaperController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function previewTestAction(Request $request, $testId)
-    {
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
-            throw new AccessDeniedException($this->getServiceKernel()->trans('无权预览试卷！'));
-        }
-
-        $items = $this->getTestpaperService()->previewTestpaper($testId);
-
-        $total       = $this->makeTestpaperTotal($testpaper, $items);
-        $attachments = $this->findAttachments($testpaper['id']);
-
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
-            'items'       => $items,
-            'limitTime'   => $testpaper['limitedTime'] * 60,
-            'paper'       => $testpaper,
-            'id'          => 0,
-            'isPreview'   => 'preview',
-            'total'       => $total,
-            'attachments' => $attachments
-        ));
-    }
-
     protected function getCheckedQuestionType($testpaper)
     {
         $questionTypes = array();
@@ -262,23 +238,6 @@ class TestpaperController extends BaseController
         }
 
         return $questionTypes;
-    }
-
-    protected function findAttachments($testId)
-    {
-        $items       = $this->getTestpaperService()->findItemsByTestId($testId);
-        $questionIds = ArrayToolkit::column($items, 'questionId');
-        $conditions  = array(
-            'type'        => 'attachment',
-            'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds'   => $questionIds
-        );
-        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
-        array_walk($attachments, function (&$attachment) {
-            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
-        });
-
-        return ArrayToolkit::group($attachments, 'dkey');
     }
 
     public function testSuspendAction(Request $request, $id)
@@ -700,11 +659,6 @@ class TestpaperController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getServiceKernel()

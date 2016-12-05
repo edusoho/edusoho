@@ -24,7 +24,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 
         if ($result['status'] != 'ok') {
-            throw new \RuntimeException("Build testpaper #{$id} items error.");
+            throw new \RuntimeException("Build testpaper #{$result['id']} items error.");
         }
 
         $this->createQuestionItems($result['items']);
@@ -39,18 +39,26 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($resultId)
+    public function showTestItems($testId, $resultId)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $test  = $this->getTestpaperService()->getTestpaper($testId);
+        $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
+        if (!$items) {
+            return array();
+        }
 
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+        $itemResults = array();
+        if (!empty($resultId)) {
+            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
-        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+            $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        }
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
+        $formatItems = array();
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
             if (!$question) {
@@ -84,59 +92,45 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
 
     public function filterFields($fields, $mode = 'create')
     {
-        /*if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'courseId'))) {
-        throw new \InvalidArgumentException('Testpaper field is invalid');
-        }*/
+        if (isset($fields['mode'])) {
+            $fields['metas']['mode'] = $fields['mode'];
+        }
+        if (isset($fields['range'])) {
+            $fields['metas']['range'] = $fields['range'];
+        }
+        if (isset($fields['ranges'])) {
+            $fields['metas']['ranges'] = $fields['ranges'];
+        }
+        if (isset($fields['counts'])) {
+            $fields['metas']['counts'] = $fields['counts'];
+        }
+        if (isset($fields['scores'])) {
+            $fields['metas']['scores'] = $fields['scores'];
+        }
+        if (isset($fields['missScores'])) {
+            $fields['metas']['missScores'] = $fields['missScores'];
+        }
+        if (isset($fields['scores'])) {
+            $fields['metas']['percentages'] = $fields['percentages'];
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
             'name',
             'description',
             'courseId',
             'lessonId',
             'type',
-            'metas',
             'status',
             'limitedTime',
+            'score',
             'passedCondition',
+            'itemCount',
             'copyId',
             'pattern',
             'metas'
         ));
 
-        $filtedFields = array();
-
-        if (!empty($fields['name'])) {
-            $filtedFields['name'] = $fields['name'];
-        }
-
-        if (!empty($fields['pattern'])) {
-            $filtedFields['pattern'] = $fields['pattern'];
-        }
-
-        if (!empty($fields['description'])) {
-            $filtedFields['description'] = $fields['description'];
-        }
-
-        $filtedFields['courseId'] = $fields['courseId'];
-        $filtedFields['lessonId'] = empty($fields['lessonId']) ? 0 : $fields['lessonId'];
-        $filtedFields['type']     = 'testpaper';
-
-        $filtedFields['metas']  = empty($fields['metas']) ? array() : $fields['metas'];
-        $filtedFields['status'] = 'draft';
-
-        $filtedFields['limitedTime']     = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
-        $filtedFields['passedCondition'] = empty($fields['passedCondition']) ? array(0) : array($fields['passedCondition']);
-
-        $filtedFields['copyId'] = empty($fields['copyId']) ? 0 : $fields['copyId'];
-
-        $filtedFields['metas']['mode']        = $fields['mode'];
-        $filtedFields['metas']['range']       = $fields['range'];
-        $filtedFields['metas']['ranges']      = $fields['ranges'];
-        $filtedFields['metas']['counts']      = $fields['counts'];
-        $filtedFields['metas']['scores']      = $fields['scores'];
-        $filtedFields['metas']['missScores']  = $fields['missScores'];
-        $filtedFields['metas']['percentages'] = $fields['percentages'];
-
-        return $filtedFields;
+        return $fields;
     }
 
     public function updateSubmitedResult($resultId, $usedTime)

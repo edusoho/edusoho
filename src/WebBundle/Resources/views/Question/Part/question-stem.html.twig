@@ -2,7 +2,7 @@
 <div class="testpaper-question-stem-wrap clearfix">
   <div class="testpaper-question-seq-wrap">
     <div class="testpaper-question-seq">
-      {% if parentQuestion|default(null) %}{{ parentQuestion.seq }}.{{ seq }}{% else %}{{ question.seq|default('') }}{% endif %}
+      {% if parentQuestion|default(null) and parentQuestion.seq|default(null) %}{{ parentQuestion.seq }}.{{ seq }}{% else %}{{ question.seq|default('') }}{% endif %}
     </div>
     {% if showScore %}
       <div class="testpaper-question-score">

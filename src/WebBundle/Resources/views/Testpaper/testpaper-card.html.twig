@@ -3,12 +3,12 @@
 		{% if limitTime != 0 %}
 			<span class="{{ isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.usedTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ limitTime - paperResult.usedTime }}{% endif %}">00:00</span>
 			{% if target.testMode|default('normal') != 'realTime' %}
-			<button class="btn btn-sm btn-default pull-right"{% if paperResult.id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paperResult.id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
-			<button id="pause" class="btn btn-sm btn-default pull-right"{% if paperResult.id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>{{'暂停'|trans}}</button>
+			<button class="btn btn-sm btn-default pull-right"{% if paperResult.id|default(0) > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paperResult.id|default(0)}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
+			<button id="pause" class="btn btn-sm btn-default pull-right"{% if paperResult.id|default(0) > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>{{'暂停'|trans}}</button>
 		  {% endif %}
 		{% else %}
 		  <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">{{'时间不限'|trans}}</small></span>
-			<button class="btn btn-sm btn-default pull-right"{% if paperResult.testId > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paperResult.testId}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
+			<button class="btn btn-sm btn-default pull-right"{% if paperResult.testId|default(0) > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paperResult.testId}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
 		{% endif %}
 		{% if target|default(null) and target.doTimes|default('0') %}
 			<div><span class="text-warning text-md">本次考试仅一次机会</span></div>

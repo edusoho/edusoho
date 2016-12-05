@@ -1022,19 +1022,19 @@ course_manage_testpaper_build_check:
     path: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
 
-course_manage_testpaper_update:
-    path: /course/{courseId}/manage/testpaper/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
+# course_manage_testpaper_update:
+#     path: /course/{courseId}/manage/testpaper/{id}/update
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
 
-course_manage_testpaper_delete:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
-    methods: [POST]
+# course_manage_testpaper_delete:
+#     path: /course/{courseId}/manage/testpaper/{testpaperId}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+#     methods: [POST]
 
-course_manage_testpaper_deletes:
-    path: /course/{courseId}/manage/testpaper/deletes
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
-    methods: [POST]
+# course_manage_testpaper_deletes:
+#     path: /course/{courseId}/manage/testpaper/deletes
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+#     methods: [POST]
 
 # course_manage_testpaper_publish:
 #     path: /course/{courseId}/manage/testpaper/{id}/publish
@@ -1044,9 +1044,9 @@ course_manage_testpaper_deletes:
 #     path: /course/{courseId}/manage/testpaper/{id}/close
 #     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
 
-course_manage_testpaper_items:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/items
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
+# course_manage_testpaper_items:
+#     path: /course/{courseId}/manage/testpaper/{testpaperId}/items
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
 # course_manage_testpaper_items_get:
 #     path: /course/{courseId}/manage/testpaper/items_get

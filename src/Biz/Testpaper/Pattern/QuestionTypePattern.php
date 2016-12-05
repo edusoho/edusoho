@@ -135,10 +135,13 @@ class QuestionTypePattern extends Factory implements TestpaperPattern
     {
         $conditions        = array();
         $options['ranges'] = array_filter($options['ranges']);
-        if (!empty($options['ranges'])) {
-            $conditions['targets'] = $options['ranges'];
+        /*if (!empty($options['ranges'])) {
+        $conditions['targets'] = $options['ranges'];
         } else {
-            $conditions['targetPrefix'] = 'course-'.$options['courseId'];
+        $conditions['targetPrefix'] = 'course-'.$options['courseId'];
+        }*/
+        if (empty($options['ranges'])) {
+            $conditions['courseId'] = $options['courseId'];
         }
 
         $conditions['parentId'] = 0;

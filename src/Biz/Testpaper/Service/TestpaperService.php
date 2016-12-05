@@ -11,6 +11,8 @@ interface TestpaperService
 
     public function deleteTestpaper($id);
 
+    public function deleteTestpapers($ids);
+
     public function findTestpapersByIds($ids);
 
     public function searchTestpapers($conditions, $sort, $start, $limit);
@@ -28,6 +30,8 @@ interface TestpaperService
     public function updateItem($id, $fields);
 
     public function deleteItem($id);
+
+    public function deleteItemsByTestId($testpaperId);
 
     public function getItemsCountByParams(array $conditions, $groupBy = '');
 
@@ -74,8 +78,6 @@ interface TestpaperService
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
-
-    public function deleteTestpaperItemByTestId($testpaperId);
 
     public function canBuildTestpaper($builder, $options);
 

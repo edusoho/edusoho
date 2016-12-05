@@ -145,16 +145,16 @@ class QuestionManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function previewAction(Request $request, $courseId, $id)
+    public function previewAction(Request $request, $courseSetId, $questionId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseService()->tryManageCourse($courseSetId);
 
         $isNewWindow = $request->query->get('isNew');
 
-        $question = $this->getQuestionService()->get($id);
+        $question = $this->getQuestionService()->get($questionId);
 
         if (empty($question)) {
-            throw new ResourceNotFoundException('question', $id);
+            throw new ResourceNotFoundException('question', $questionId);
         }
 
         $questionTypeObj      = $this->getQuestionService()->getQuestionConfig($question['type']);
@@ -166,7 +166,7 @@ class QuestionManageController extends BaseController
         }
 
         if ($question['subCount'] > 0) {
-            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($id);
+            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($questionId);
 
             foreach ($questionSubs as $key => $questionSub) {
                 $questionTypeObj = $this->getQuestionService()->getQuestionConfig($questionSub['type']);
@@ -189,16 +189,16 @@ class QuestionManageController extends BaseController
         ));
     }
 
-    public function questionPickerAction(Request $request, $courseId)
+    public function questionPickerAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = $request->query->all();
 
-        if (empty($conditions['target'])) {
-            $conditions['targetPrefix'] = "course-{$course['id']}";
-        }
-
+        /*if (empty($conditions['target'])) {
+        $conditions['targetPrefix'] = "course-{$course['id']}";
+        }*/
+        $conditions['courseId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
 
         if (empty($conditions['excludeIds'])) {
@@ -221,27 +221,27 @@ class QuestionManageController extends BaseController
 
         $questions = $this->getQuestionService()->search(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+        /*$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));*/
 
         return $this->render('WebBundle:QuestionManage:question-picker.html.twig', array(
-            'course'        => $course,
+            'courseSet'     => $courseSet,
             'questions'     => $questions,
             'replace'       => $replace,
             'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($course, true),
-            'targets'       => $targets,
+            'targetChoices' => $this->getQuestionRanges($courseSet, true),
+            //'targets'       => $targets,
             'conditions'    => $conditions
         ));
     }
 
-    public function PickedQuestionAction(Request $request, $courseId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseService()->tryManageCourse($courseSetId);
 
         $question = $this->getQuestionService()->get($questionId);
 
@@ -250,11 +250,14 @@ class QuestionManageController extends BaseController
         }
 
         $subQuestions = array();
+        if ($question['subCount'] > 0) {
+            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        }
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-        return $this->render('WebBundle:QuestionManage:question-tr.html.twig', array(
-            'courseId'     => $course['id'],
+        return $this->render('WebBundle:QuestionManage:question-picked.html.twig', array(
+            'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,
             'targets'      => $targets,
@@ -286,6 +289,11 @@ class QuestionManageController extends BaseController
     private function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getUserService()
