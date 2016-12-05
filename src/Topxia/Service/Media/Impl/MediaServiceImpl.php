@@ -10,7 +10,7 @@ class MediaServiceImpl extends BaseService implements MediaService
     public function getVideoPlayUrl($globalId, $options)
     {
         $defaultOptions = array(
-            'format' => 'json',
+            'format' => '',
             'fromApi' => false,
             'times' => 1,
             'duration' => 3600,

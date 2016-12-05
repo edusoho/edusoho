@@ -38,8 +38,12 @@ class LessonReplay extends BaseResource
         $user = $this->getCurrentUser();
         $response = array(
             'url' => '',
-            'provider' => '',
-            'lessonId' => $lesson['id']
+            'extra' => array(
+                'provider' => '',
+                'lessonId' => $lesson['id'],
+
+            ),
+            'device' => $device
         );
         try {
             // play es replay
@@ -50,10 +54,11 @@ class LessonReplay extends BaseResource
                 $globalId = '507868be3524496eb80c8df7c4ceeeda';
                 $options = array(
                     'fromApi' => true,
-                    'times' => 2
+                    'times' => 2,
+                    'format' => $request->query->get('format', '')
                 );
                 $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
-                $response['provider'] = 'longinus';
+                $response['extra']['provider'] = 'longinus';
             } else {
                 $response = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
             }
