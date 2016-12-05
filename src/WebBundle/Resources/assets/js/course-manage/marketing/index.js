@@ -12,7 +12,7 @@ class Marketing {
 			rules: {
 				price: {
 					required: '#chargeMode:checked',
-					digits: true
+					number: true
 				},
 				tryLookLength: {
 					required: '#enableTryLook:checked',
