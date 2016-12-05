@@ -456,28 +456,33 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function syncToLocalFromCloud($cloudFile)
     {
         if (empty($cloudFile)) {
-            return;
-        }
-
-        $localFile = $this->getUploadFileDao()->getFileByGlobalId($cloudFile['globalId']);
-
-        if ($localFile) {
-            return;
+            return false;
         }
 
         $fields = ArrayToolkit::parts($cloudFile, array(
             'globalId', 'hashId', 'filename', 'ext', 'fileSize',
             'etag', 'length', 'description', 'status', 'convertHash',
-            'convertStatus', 'targetId', 'targetType', 'metas', 'metas2', 'type', 'storage', 'createdUserId', 'updatedUserId'
+            'convertStatus', 'targetId', 'targetType', 'type', 'storage', 'createdUserId', 'updatedUserId'
         ));
 
         $initFileFields = $fields;
         unset($initFileFields['description']);
+        unset($initFileFields['convertParams']);
 
-        $initFile = $this->getUploadFileInitDao()->addFile($initFileFields);
+        $initFile = $this->getUploadFileInitDao()->getFileByHashId($cloudFile['hashId']);
+
+        if (!$initFile) {
+            $initFile = $this->getUploadFileInitDao()->addFile($initFileFields);
+        }
+
         $fields['id'] = $initFile['id'];
+        $localFile = $this->getUploadFileDao()->getFileByHashId($cloudFile['hashId']);
+        
+        if (!$localFile) {
+            $this->getUploadFileDao()->addFile($fields);
+        }
 
-        return $this->getUploadFileDao()->addFile($fields);
+        return true;
     }
 
     public function getFileByHashId($hashId)

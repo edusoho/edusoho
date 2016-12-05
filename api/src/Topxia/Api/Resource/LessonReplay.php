@@ -47,6 +47,7 @@ class LessonReplay extends BaseResource
                 //获取globalid
                 $res = $this->getCourseService()->entryReplay($lesson['id'], $visableReplays[0]['id']);
                 $globalId = empty($res['resourceNo']) ? 0 : $res['resourceNo'];
+                $globalId = '507868be3524496eb80c8df7c4ceeeda';
                 $options = array(
                     'fromApi' => true,
                     'times' => 2
