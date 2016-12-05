@@ -51,7 +51,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for refund in refunds %}        
+      {% for record in records %}        
         {% include 'TopxiaWebBundle:CourseStudentManage:quit-record-tr.html.twig' %}
       {% else %}
         <tr class="empty"><td colspan="20">{{'无学员记录'|trans}}</td></tr>

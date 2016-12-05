@@ -20,7 +20,7 @@
   </li>
 
   <li class="">
-    <a href="{{path('course_set_manage_course_refund_record', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '退出记录'|trans }}</a>
+    <a href="{{path('course_set_manage_course_quit_records', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '退出记录'|trans }}</a>
   </li>
 </ul>
 <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>

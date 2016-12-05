@@ -58,9 +58,9 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: WebBundle:CourseManage:students}
 
-course_set_manage_course_refund_record:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/refund_record
-  defaults: {_controller: WebBundle:CourseManage:studentRefundRecords}
+course_set_manage_course_quit_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
+  defaults: {_controller: WebBundle:CourseManage:studentQuitRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
