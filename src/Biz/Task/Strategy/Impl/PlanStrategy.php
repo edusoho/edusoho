@@ -21,6 +21,18 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $this->baseUpdateTask($id, $fields);
     }
 
+    public function deleteTask($task)
+    {
+        $that = $this;
+        $this->biz['db']->transactional(function () use ($task, $that) {
+            $currentSeq = $task['seq'];
+            $that->getTaskDao()->delete($task['id']);
+            $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
+            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
+        });
+        return true;
+    }
+
     /**
      * 任务学习
      * @param $task
@@ -34,18 +46,16 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        if ($this->isFirstTask($task)) {
+        //if the task is first return true;
+        $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (empty($preTask)) {
             return true;
         }
-
-        $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
 
         if ($preTask['isOptional']) {
             return true;
         }
-        if (empty($preTask)) {
-            throw new NotFoundException('previous task does not exist');
-        }
+
         $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
         if ($isTaskLearned) {
             return true;
@@ -67,13 +77,88 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function sortCourseItems($courseId, array $itemIds)
     {
-        // TODO: Implement sortCourseItems() method.
+        $parentChapters = array(
+            'lesson'  => array(),
+            'unit'    => array(),
+            'chapter' => array()
+        );
+
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        foreach ($itemIds as $key => $id) {
+            if (strpos($id, 'chapter') === 0) {
+                $id      = str_replace('chapter-', '', $id);
+                $chapter = $this->getChapterDao()->get($id);
+                $fields  = array('seq' => $key);
+
+                $index = $chapterTypes[$chapter['type']];
+                switch ($index) {
+                    case 3:
+                        $fields['parentId'] = 0;
+                        break;
+                    case 2:
+                        if (!empty($parentChapters['chapter'])) {
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    case 1:
+                        if (!empty($parentChapters['unit'])) {
+                            $fields['parentId'] = $parentChapters['unit']['id'];
+                        } elseif (!empty($parentChapters['chapter'])) {
+                            $fields['parentId'] = $parentChapters['chapter']['id'];
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (!empty($parentChapters[$chapter['type']])) {
+                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
+                } else {
+                    $fields['number'] = 1;
+                }
+
+                foreach ($chapterTypes as $type => $value) {
+                    if ($value < $index) {
+                        $parentChapters[$type] = array();
+                    }
+                }
+
+                $chapter                          = $this->getChapterDao()->update($id, $fields);
+                $parentChapters[$chapter['type']] = $chapter;
+            }
+            if (strpos($id, 'task') === 0) {
+                $categoryId = empty($chapter) ? 0 : $chapter['id'];
+                $id         = str_replace('task-', '', $id);
+                $this->getTaskService()->updateSeq($id, array(
+                    'seq'        => $key,
+                    'categoryId' => $categoryId,
+                ));
+            }
+        }
     }
 
-
-    protected function isFirstTask($task)
+    public function publishTask($task)
     {
-        return 1 == $task['seq'];
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权发布任务');
+        }
+        if ($task['status'] == 'published') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+        }
+        $task = $this->getTaskDao()->update($task['id'], array('status' => 'published'));
+        return $task;
+    }
+
+    public function unpublishTask($task)
+    {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
+            throw $this->createAccessDeniedException('无权取消发布任务');
+        }
+        if ($task['status'] == 'unpublished') {
+            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
+        }
+        $task = $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
+        return $task;
     }
 
 

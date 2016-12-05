@@ -3,32 +3,31 @@
 {% set mediaType = 'document' %}
 {% block activity_content %}
   <div class="form-group">
-    <div class="col-xs-2 control-label">
-      <label for="media" class="style">文档</label>
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style">文档</label>
     </div>
-    <div class="hidden-data">
-      <input type="hidden" value="{{ doc.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
+    <div class="col-sm-10">
+      {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+      <input type="hidden" value="{{ doc.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+      <div id="file-choose-type" class="hidden" data-type="doc"></div>
     </div>
-    <div id="file-choose-type" class="hidden" data-type="doc"></div>
-    <div class="col-xs-10">{% include 'WebBundle:FileChooser:file-choose.html.twig' %}</div>
   </div>
 {% endblock %}
 
 {% block activity_finish %}
   <div class=" form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishType">
-        <option value="click" {% if doc.finishType|default('click') == 'click'
-  %}selected{% endif %}>点击看过了</option>
+        <option value="click" {% if doc.finishType|default('click') == 'click'%}selected{% endif %}>点击看过了</option>
         <option value="time" {% if doc.finishType|default('click') == 'time' %}selected{% endif %}>至少观看X分钟</option>
       </select>
     </div>
   </div>
   <div class="form-group {% if doc.finishType|default('click') != 'time' %}hidden{% endif %}" id="condition-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">

@@ -12,6 +12,10 @@ interface TaskService
 
     public function updateTask($id, $fields);
 
+    public function publishTask($id);
+
+    public function unpublishTask($id);
+
     public function deleteTask($id);
 
     public function findTasksByCourseId($courseId);
@@ -22,7 +26,7 @@ interface TaskService
 
     public function startTask($taskId);
 
-    public function doTask($taskId, $time=TaskService::LEARN_TIME_STEP);
+    public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 
@@ -51,8 +55,6 @@ interface TaskService
     public function isTaskLearned($taskId);
 
     public function getMaxSeqByCourseId($courseId);
-
-    public function getMaxNumberByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
 }

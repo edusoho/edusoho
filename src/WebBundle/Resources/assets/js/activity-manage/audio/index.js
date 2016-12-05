@@ -1,7 +1,7 @@
 import FileChooser from '../../file-chooser/file-choose';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
-}, "时长必须为非负整数");
+}, "必须为非负整数");
 
 jQuery.validator.addMethod("second_range", function (value, element) {
     return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
@@ -11,22 +11,33 @@ function _inItStep2form() {
     var $step1_form = $('#step2-form');
     var validator = $step1_form.data('validator', validator);
     validator = $step1_form.validate({
+        groups: {
+            date: 'minute second'
+        },
         rules: {
+            title: {
+                required: true,
+                maxlength: 50,
+            },
             content: 'required',
             minute: 'required unsigned_integer',
+            second: 'required second_range',
+            media: 'required',
             second: 'second_range',
-            media: 'required'
+            'ext[mediaId]': 'required'
         },
         messages: {
-            content: "请输入简介",
             minute: {
                 required: '请输入时长',
-                unsigned_integer: '时长必须为非负整数',
             },
             second: {
-                unsigned_integer: '时长必须为非负整数',
+                required: '请输入时长',
             },
-            media: "请选择或者上传视频"
+
+            media: {
+                required:'请上传或选择%display%'
+            },
+            'ext[mediaId]': "请选择或者上传视频"
         }
     });
     

@@ -24,7 +24,7 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivity($id);
+        $activity  = $this->getActivityService()->getActivityFetchExt($id);
         $materials = array();
 
         foreach ($activity['ext']['materials'] as $media) {
@@ -41,9 +41,9 @@ class DownLoadActivityController extends BaseController implements ActivityActio
     public function downloadFileAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryLearnCourse($courseId);
-        $fileId = $request->query->get('fileId');
+        $downloadFileId = $request->query->get('fileId');
 
-        $downloadFile = $this->getDownloadActivityService()->downloadActivityMedia($activityId, $fileId);
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $downloadFileId);
 
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);

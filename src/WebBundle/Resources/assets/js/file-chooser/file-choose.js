@@ -20,7 +20,7 @@ class FileChooser extends Emitter {
   initTab() {
     $("#material a").click(function (e) {
       e.preventDefault();
-      var $this = $(this);
+      let $this = $(this);
       $this.find('[type="radio"]').prop('checked', 'checked');
       $this.closest('li').siblings('li').find('[type="radio"]').prop('checked', false);
       $this.tab('show')
@@ -32,10 +32,10 @@ class FileChooser extends Emitter {
     const courseFileChoose = new CourseFileChoose($('#chooser-course-panel'));
     const videoImport = new VideoImport($('#import-video-panel'));
     const uploader = new UploadChooser($('#chooser-upload-panel'));
-    materialLibChoose.on('select', this.fileSelect.bind(this));
-    courseFileChoose.on('select', this.fileSelect.bind(this));
-    videoImport.on('file.select', this.fileSelect.bind(this));
-    uploader.on('select', this.fileSelect.bind(this));
+    materialLibChoose.on('select', file => this.fileSelect(file));
+    courseFileChoose.on('select', file => this.fileSelect(file));
+    videoImport.on('file.select', file => this.fileSelect(file));
+    uploader.on('select', file => this.fileSelect(file));
   }
 
   fileSelect(file) {

@@ -1,6 +1,6 @@
-import Emitter from "es6-event-emitter";
+import Chooser from './chooser';
 
-export default class UploaderChooser extends Emitter {
+export default class UploaderChooser extends Chooser {
   constructor(element) {
     super();
     this.element = $(element);
@@ -40,7 +40,7 @@ export default class UploaderChooser extends Emitter {
   }
 
   _bindEvent() {
-    this._sdk.on('file.finish', this._onFileUploadFinish.bind(this));
+
     $('.js-choose-trigger').on('click', this.reopen.bind(this));
 
     this.element.on('change', '.js-upload-params', (event) => {
@@ -50,6 +50,8 @@ export default class UploaderChooser extends Emitter {
       }, {});
       this._sdk.setProcess(uploadProcess);
     });
+
+    this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
 
     return this;
   }
@@ -85,8 +87,7 @@ export default class UploaderChooser extends Emitter {
   }
 
   destroy() {
-    $('.file-chooser-main').addClass('hidden');
-    $('.file-chooser-bar').removeClass('hidden');
+    this._close();
 
     if (this._sdk === undefined) {
       return;
