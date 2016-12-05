@@ -439,6 +439,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $cloudFile['status'] = 'ok';
             $cloudFile['targetId'] = $replay['id'];
             $cloudFile['targetType'] = 'repaly';
+            $cloudFile['targetType'] = 'repaly';
+            $cloudFile['convertHash'] = $cloudFile['hashId'];
+            $cloudFile['etag'] = $cloudFile['hashId'];
             $cloudFile['createdUserId'] = $currentUser['id'];
             $cloudFile['updatedUserId'] = $currentUser['id'];
             $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);
