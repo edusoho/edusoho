@@ -9,47 +9,47 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ImgCodes extends BaseResource
 {
+
+    protected $imgBuilder;
+
     public function post(Application $app, Request $request)
     {
-        $mobile = $request->request->get('mobile');
+        $this->imgBuilder = new CaptchaBuilder;
+        $str = $this->buildImg();
 
-        if (empty($mobile)) {
-            return $this->error('500', '手机号为空');
-        }
-
-        $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
-        if (!$user) {
-            return $this->error('500', '该手机号未绑定用户');
-        }
-
-        $imgToken = $this->getTokenService()->makeToken('sms_registration', array(
+        $imgToken = $this->getTokenService()->makeToken('img_verify', array(
             'times'    => 5,
             'duration' => 60 * 2,
-            'userId'   => $user['id'],
+            'userId'   => 0,
             'data'     => array(
-                'img_code' => $result['captcha_code'],
-                'mobile'   => $mobile
+                'img_code' => $this->imgBuilder->getPhrase(),
             )
         ));
 
-        $imgBuilder = new CaptchaBuilder;
-        $imgBuilder->build($width = 150, $height = 32, $font = null);
-
-        ob_start();
-        $imgBuilder->output();
-        $str = ob_get_clean();
-        $imgBuilder = null;
-        $headers = array(
-            'Content-type'        => 'image/jpeg',
-            'Content-Disposition' => 'inline; filename="'."img_captcha.jpg".'"',
-        );
-
-        return array('' => $str, '' => $token);
+        $this->imgBuilder = null;
+        
+        return array('img_code' => $str, 'img_token' => $imgToken['token']);
     }
 
     public function filter($res)
     {
         return $res;
+    }
+
+    protected function buildImg()
+    {
+        $this->imgBuilder->build($width = 150, $height = 32, $font = null);
+
+        ob_start();
+        $this->imgBuilder->output();
+        $str = ob_get_clean();
+
+        return base64_encode($str);
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getUserService()

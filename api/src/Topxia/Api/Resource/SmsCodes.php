@@ -71,20 +71,18 @@ class SmsCodes extends BaseResource
             }
         }
         
-        $user = $this->getCurrentUser();
         $smsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
             'duration' => 60 * 2,
-            'userId'   => $user['id'],
+            'userId'   => 0,
             'data'     => array(
                 'sms_code' => $result['captcha_code'],
-                'mobile'   => $mobile
             )
         ));
 
         return array(
             'mobile'   => $mobile,
-            'smsToken' => $smsToken['token']
+            'sms_token' => $smsToken['token']
         );
     }
 
