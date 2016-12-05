@@ -46,6 +46,7 @@ class KernelRequestListener
             }
 
             if ($request->isXmlHttpRequest()) {
+                var_dump($request->headers->get('X-CSRF-Token'));
                 $token = $request->headers->get('X-CSRF-Token');
             } else {
                 $token = $request->request->get('_csrf_token', '');
@@ -54,7 +55,8 @@ class KernelRequestListener
             $request->request->remove('_csrf_token');
 
             $expectedToken = $this->container->get('form.csrf_provider')->generateCsrfToken('site');
-
+            var_dump($token);
+            var_dump($expectedToken);exit();
             if ($token != $expectedToken) {
 // @todo 需要区分ajax的response
 

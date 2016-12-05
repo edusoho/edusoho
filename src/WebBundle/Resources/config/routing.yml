@@ -65,6 +65,7 @@ course_set_manage_course_students_add:
 course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
   defaults: {_controller: WebBundle:CourseManage:removeCourseStudent}
+  methods: [POST]
 
 course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
@@ -73,14 +74,17 @@ course_set_manage_course_students_check:
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
   defaults: {_controller: WebBundle:CourseManage:close}
+  methods: [POST]
 
 course_set_manage_course_delete:
   path: /course_set/{courseSetId}/course/{courseId}/delete
   defaults: {_controller: WebBundle:CourseManage:delete}
+  methods: [POST]
 
 course_set_manage_course_publish:  
   path: /course_set/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: WebBundle:CourseManage:publish}
+  methods: [POST]
 
 course_manage_tasks:
   path:  /course/{courseId}/manage/tasks
@@ -133,8 +137,16 @@ course_task_activity_show:
   defaults: { _controller: WebBundle:Task:taskActivity }
 
 task_live_entry:
-  path: /course/{courseId}/activity/{id}/live_entry
+  path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller: WebBundle:LiveActivity:liveEntry}
+
+task_liveroom_ticket:
+  path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
+  defaults: {_controller: WebBundle:Liveroom:ticket}
+
+task_live_trigger:
+  path: /course/{courseId}/activity/{activityId}/live_trigger
+  defaults: {_controller: WebBundle:LiveActivity:trigger}
 
 course_activity_trigger:
   path: /course/{courseId}/activity/{activityId}/trigger

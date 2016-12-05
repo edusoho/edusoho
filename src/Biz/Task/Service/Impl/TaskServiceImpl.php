@@ -3,9 +3,9 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
@@ -159,7 +159,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw $this->createAccessDeniedException("the Task is Locked");
+            // throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 
@@ -192,7 +192,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
+        $task                  = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
