@@ -139,7 +139,7 @@
               <a href="{{ 'http://open.edusoho.com' ~ item.url }}" class="text-overflow link-gray" target="_blank">
                 <i class="es-icon es-icon-dot text-primary"></i>
                 <span class="text-muted mrm">{{ item.createdTime |date('m-d') }}</span>
-                {{ item.name | slice(0,10) }}
+                {{ item.name | slice(0,10) }}...
               </a>
             </li>
             {% endfor %}
