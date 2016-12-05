@@ -29,6 +29,7 @@ class Live {
             rules: {
                 title: {
                     required: true,
+                    maxlength: 50,
                 },
                 startTime: {
                   required: true,

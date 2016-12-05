@@ -3,21 +3,21 @@
 {% set mediaType = 'ppt' %}
 {% block activity_content %}
   <div class="form-group">
-    <div class="col-xs-2 control-label">
-      <label for="media" class="style">PPT</label>
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style">PPT</label>
     </div>
-    <div id="file-choose-type" class="hidden" data-type="ppt"></div>
-    <div class="hidden-data">
-      <input type="hidden" value="{{ ppt.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
+    <div class="col-sm-10">
+      {% include 'WebBundle:FileChooser:file-choose.html.twig'  with {mediaType: 'ppt',fileType:'ppt',file: activity.ext.file|default(null) } %}
+      <input type="hidden" value="{{ ppt.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+      <div id="file-choose-type" class="hidden" data-type="ppt"></div>
     </div>
-    <div class="col-xs-10">{% include 'WebBundle:FileChooser:file-choose.html.twig'  with {mediaType: 'ppt',fileType:'ppt',file: ppt.media|default(null) } %}</div>
   </div>
 {% endblock %}
 
 
 {% block activity_finish %}
   <div class=" form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
 
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class=" form-group {% if ppt.finishType|default('end') != 'time' %}hidden{% endif %}" id="condition-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-detail">{{ '至少观看'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">

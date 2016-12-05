@@ -1,31 +1,20 @@
 import 'jquery-validation';
 
 $.validator.setDefaults({
-  errorClass: 'help-block jq-validate-error',
+  errorClass: 'form-error-message jq-validate-error',
   errorElement: 'p',
   onkeyup: false,
   ignore: '',
   ajax: false,
   currentDom: null, 
   highlight: function(element, errorClass, validClass) {
-    let $row = $(element).closest('.form-group');
-    $row.addClass('has-error');
-    $row.find('.help-block').each(function() {
-      let $this = $(this);
-      if (!$this.hasClass('jq-validate-error')) {
-        $this.hide();
-      }
-    });
+    let $row = $(element).addClass('form-control-error').closest('.form-group').addClass('has-error');
+    $row.find('.help-block').hide();
   },
   unhighlight: function(element, errorClass, validClass) {
-    let $row = $(element).closest('.form-group');
+    let $row = $(element).removeClass('form-control-error').closest('.form-group');
     $row.removeClass('has-error');
-    $row.find('.help-block').each(function() {
-      let $this = $(this);
-      if (!$this.hasClass('jq-validate-error')) {
-        $this.show();
-      }
-    });
+    $row.find('.help-block').show();
   },
   errorPlacement: function(error, element) {
     if (element.parent().hasClass('input-group')) {
@@ -110,7 +99,7 @@ $.extend($.validator.messages, {
   date: "请输入有效的日期",
   dateISO: "请输入有效的日期 (YYYY-MM-DD)",
   number: "请输入有效的数字",
-  digits: "只能输入数字",
+  digits: "只能输入整数",
   creditcard: "请输入有效的信用卡号码",
   equalTo: "你的输入不相同",
   extension: "请输入有效的后缀",
@@ -163,3 +152,8 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
   }
   return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
+
+
+'positive_integer',
+            /^[1-9]\d*$/,
+            Translator.trans('%display%必须为正整数', {display: '{{display}}'})
