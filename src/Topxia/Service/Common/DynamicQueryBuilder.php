@@ -2,7 +2,7 @@
 namespace Topxia\Service\Common;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Topxia\Service\Common\Connection;
+use Codeages\Biz\Framework\Dao\Connection;
 
 class DynamicQueryBuilder extends QueryBuilder
 {

@@ -1,5 +1,8 @@
 <?php
 
+use Symfony\Component\Debug\Debug;
+use Symfony\Component\HttpFoundation\Request;
+
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 //umask(0000);
@@ -9,7 +12,7 @@
 
 if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-    || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1'))
+    || !(in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')) || php_sapi_name() === 'cli-server')
 ) {
     if (!file_exists(__DIR__.'/../app/data/dev.lock')) {
         header('HTTP/1.0 403 Forbidden');
@@ -23,62 +26,29 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
     exit();
 }
 
-use Symfony\Component\Debug\Debug;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Common\AppConnectionFactory;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
-
 fix_gpc_magic();
 
-$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+$loader = require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
-
-require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
-Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-
-$kernel->boot();
-
-// START: init service kernel
-$serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-$serviceKernel->setEnvVariable(array(
-    'host'          => $request->getHttpHost(),
-    'schemeAndHost' => $request->getSchemeAndHttpHost(),
-    'basePath'      => $request->getBasePath(),
-    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
-));
-$serviceKernel->setTranslatorEnabled(true);
-$serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
-$serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-$serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-$serviceKernel->setConnectionFactory(new AppConnectionFactory());
-
-$currentUser = new CurrentUser();
-$currentUser->fromArray(array(
-    'id'        => 0,
-    'nickname'  => '游客',
-    'currentIp' => $request->getClientIp(),
-    'roles'     => array()
-));
-$serviceKernel->setCurrentUser($currentUser);
-
-// END: init service kernel
-
-// NOTICE: 防止请求捕捉失败而做异常处理
-// 包括：数据库连接失败等
-try {
-    $response = $kernel->handle($request);
-} catch (\RuntimeException $e) {
-    echo "Error!  ".$e->getMessage();
-    die();
-}
-
+$kernel->setRequest($request);
+$response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
+
+function fix_gpc_magic()
+{
+    if (get_magic_quotes_gpc()) {
+        array_walk($_GET, '_fix_gpc_magic');
+        array_walk($_POST, '_fix_gpc_magic');
+        array_walk($_COOKIE, '_fix_gpc_magic');
+        array_walk($_REQUEST, '_fix_gpc_magic');
+        array_walk($_FILES, '_fix_gpc_magic_files');
+    }
+}
 
 function _fix_gpc_magic(&$item)
 {
@@ -97,16 +67,5 @@ function _fix_gpc_magic_files(&$item, $key)
         } else {
             $item = stripslashes($item);
         }
-    }
-}
-
-function fix_gpc_magic()
-{
-    if (ini_get('magic_quotes_gpc')) {
-        array_walk($_GET, '_fix_gpc_magic');
-        array_walk($_POST, '_fix_gpc_magic');
-        array_walk($_COOKIE, '_fix_gpc_magic');
-        array_walk($_REQUEST, '_fix_gpc_magic');
-        array_walk($_FILES, '_fix_gpc_magic_files');
     }
 }

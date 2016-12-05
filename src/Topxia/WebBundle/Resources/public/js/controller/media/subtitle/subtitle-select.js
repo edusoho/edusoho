@@ -1,4 +1,7 @@
 define(function(require,exports,module){
+
+    var convertStatus = require('./convert-status-map');
+
     var Select = {
         init:function(options){
             this.$el = $(options.id);
@@ -68,7 +71,7 @@ define(function(require,exports,module){
                     '</ul>'+
                 '</div>';
         },
-        getDefaultOption() {
+        getDefaultOption: function() {
             if(this.options.length){
                 return this.options[0];
             }else{
@@ -87,7 +90,7 @@ define(function(require,exports,module){
                     '<div class="value" title="'+ option.name +'" url="'+option.url+'">'+
                         option.name+
                     '</div>'+
-                    '<span class="convertStatus convert-'+ option.convertStatus +'">'+_self.convertStatus[option.convertStatus]+ '</span>'+
+                    '<span class="convertStatus convert-'+ option.convertStatus +'">'+convertStatus(option.convertStatus)+ '</span>'+
                     '<i class="es-icon es-icon-close01 delete" data-index="'+index+'"></i>'+
                 '</li>';
             })
@@ -131,7 +134,7 @@ define(function(require,exports,module){
             this.trigger('listchange',this.options);
             e.stopPropagation();
         },
-        handleOptionEmpty(){
+        handleOptionEmpty: function(){
             this.value = '';
             this.trigger('valuechange',false);
         },
@@ -159,13 +162,6 @@ define(function(require,exports,module){
             }
             this.options.push(option);
             this.trigger('listchange');
-        },
-        convertStatus:{
-            waiting:'等待转码',
-            processing:'正在转码',
-            ok:'转码成功',
-            error:'转码失败',
-            none:'等待转码'
         }
     }
     module.exports = Select;

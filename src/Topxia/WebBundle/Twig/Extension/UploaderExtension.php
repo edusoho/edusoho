@@ -22,9 +22,9 @@ class UploaderExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'uploader_token'   => new \Twig_Function_Method($this, 'makeUpoaderToken'),
-            'uploader_process' => new \Twig_Function_Method($this, 'getProcessMode'),
-            'uploader_accept'  => new \Twig_Function_Method($this, 'getUploadFileAccept')
+            new \Twig_SimpleFunction('uploader_token', array($this, 'makeUpoaderToken')),
+            new \Twig_SimpleFunction('uploader_process', array($this, 'getProcessMode')),
+            new \Twig_SimpleFunction('uploader_accept', array($this, 'getUploadFileAccept')),
         );
     }
 
@@ -79,8 +79,8 @@ class UploaderExtension extends \Twig_Extension
                 'mimeTypes'  => array('application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation')
             ),
             'cloud_document' => array(
-                'extensions' => array('doc', 'docx', 'pdf'),
-                'mimeTypes'  => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf')
+                'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx'),
+                'mimeTypes'  => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel')
             ),
             'document'       => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'),

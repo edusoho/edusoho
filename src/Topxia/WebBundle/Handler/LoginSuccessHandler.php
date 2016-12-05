@@ -2,8 +2,9 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -13,19 +14,19 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 class LoginSuccessHandler
 {
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContext
+     * @var AuthorizationChecker
      */
-    private $securityContext;
+    private $checker;
 
     /**
      * Constructor
      *
-     * @param SecurityContext $securityContext
-     * @param Doctrine        $doctrine
+     * @param AuthorizationChecker $checker
+     * @param Doctrine             $doctrine
      */
-    public function __construct(SecurityContext $securityContext)
+    public function __construct(AuthorizationChecker $checker)
     {
-        $this->securityContext = $securityContext;
+        $this->checker = $checker;
     }
 
     /**
@@ -36,11 +37,11 @@ class LoginSuccessHandler
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
 
-        if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
         }
 
-        if ($this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->checker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // user has logged in using remember_me cookie
         }
 

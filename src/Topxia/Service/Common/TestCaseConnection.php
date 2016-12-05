@@ -2,7 +2,8 @@
 
 namespace Topxia\Service\Common;
 
-use Topxia\Service\Common\Connection;
+
+use Codeages\Biz\Framework\Dao\Connection;
 
 class TestCaseConnection extends Connection
 {

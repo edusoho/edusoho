@@ -112,7 +112,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
         $user = $this->getCurrentUser();
 
-        if ($ownerCanManage && ($resource['userId'] == $user['id'])) {
+        if ($ownerCanManage && $resource['userId'] == $user['id']) {
             return true;
         }
 
@@ -142,7 +142,8 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function isPluginInstalled($code)
     {
-        return !empty(ServiceKernel::instance()->createService('CloudPlatform.AppService')->getAppByCode($code));
+        $app = ServiceKernel::instance()->createService('CloudPlatform.AppService')->getAppByCode($code);
+        return !empty($app);
         
     }
 

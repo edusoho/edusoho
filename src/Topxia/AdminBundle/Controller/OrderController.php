@@ -118,7 +118,7 @@ class OrderController extends BaseController
             'cancelled' => $this->trans('已关闭')
         );
 
-        $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
         $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -253,19 +253,19 @@ class OrderController extends BaseController
 
     private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
     {
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
             $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= $order['sn'].",";
+            $member .= $status[$order['status']].",";
+            $member .= $order['title'].",";
+            $member .= $users[$order['userId']]['nickname'].",";
+            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $member .= $order['amount'].",";
+            $member .= $payment[$order['payment']].",";
+            $member .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
-            if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            if ($order['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $order['paidTime']).",";
             } else {
                 $member .= "-".",";
             }

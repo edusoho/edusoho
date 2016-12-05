@@ -32,14 +32,4 @@ class BaseProcessorTest extends BaseTestCase
         return lcfirst($method);
     }
 
-	public function setUp()
-    {
-        $this->setServiceKernel();
-    }
-
-    public function tearDown()
-    {
-    	
-    }
-
 }

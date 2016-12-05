@@ -7,7 +7,7 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
-    public function manageAction($mediaId)
+    public function manageAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
@@ -22,6 +22,7 @@ class SubtitleController extends BaseController
         
         return $this->render('TopxiaWebBundle:MediaManage/Subtitle:manage.html.twig', array(
             'media'  => $media,
+            'goto' => $request->query->get('goto'),
             'subtitles' => $subtitles
         ));
     }
@@ -64,6 +65,17 @@ class SubtitleController extends BaseController
         $this->getSubtitleService()->deleteSubtitle($id);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function previewAction($mediaId)
+    {
+        return $this->render('TopxiaWebBundle:MediaManage:preview.html.twig', array(
+            'mediaId' => $mediaId,
+            'context' => array(
+                'hideQuestion' => 1,
+                'hideBeginning' => true
+            )
+        ));
     }
 
     public function manageDialogAction(Request $request)

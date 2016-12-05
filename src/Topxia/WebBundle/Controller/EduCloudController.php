@@ -199,7 +199,7 @@ class EduCloudController extends BaseController
         $url .= $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;
         $api  = CloudAPIFactory::create('leaf');
-        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+        $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
             return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));
@@ -222,7 +222,7 @@ class EduCloudController extends BaseController
         $url = $siteSetting['url'];
         $url .= $this->generateUrl('edu_cloud_search_callback');
         $api  = CloudAPIFactory::create('root');
-        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+        $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
         if ($originSign != $sign) {
             return $this->createJsonResponse(array('error' => $this->trans('sign不正确')));

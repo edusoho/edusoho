@@ -3,11 +3,13 @@ imports:
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: biz.yml }
+    - { resource: services.xml }
 
 framework:
     # esi:             ~
-    translator:      { fallback: %locale% }
-    secret:          %secret%
+    translator:      { fallback: "%locale%", logging: false }
+    secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -16,61 +18,30 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 7.2.15
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.factory
+        handler_id:  session.handler.factory
     fragments:       ~
+    http_method_override: true
+    assets:
+        version: '7.3.4'
+#        packages:
+#            webpack:
+#                base_urls:
+#                    - "%webpack_base_url%"
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
     paths:
         "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../" : root
     globals:
-        disabled_features: %disabled_features%
-
-# Assetic Configuration
-assetic:
-    debug:          %kernel.debug%
-    use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
-    filters:
-        cssrewrite: ~
-        #closure:
-        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
-        #yui_css:
-        #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
-
-# Doctrine Configuration
-doctrine:
-    dbal:
-        default_connection: default
-        types:
-            enum: Topxia\Common\DoctrineEnumType
-        connections:
-            default:
-                wrapper_class: Topxia\Service\Common\Connection
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
-                charset:  UTF8
-
-                mapping_types:
-                    enum: string
-
-    orm:
-        auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        disabled_features: "%disabled_features%"
 
 # Swiftmailer Configuration
 # swiftmailer:
@@ -104,6 +75,7 @@ parameters:
     templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
 
 services:
+
     app.locale_listener:
         class: Topxia\WebBundle\Listener\LocaleListener
         arguments: ['%kernel.default_locale%']
@@ -121,28 +93,26 @@ services:
 
         arguments:
             dsn:      "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
-            user:     %database_user%
-            password: %database_password%
+            user:     "%database_user%"
+            password: "%database_password%"
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.context', '@service_container']
+        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis.factory:
         class: Topxia\Service\Common\Redis\RedisFactory
-        factory_class: Topxia\Service\Common\Redis\RedisFactory
-        factory_method: instance
+        factory: ['Topxia\Service\Common\Redis\RedisFactory', instance]
         arguments:
             - "@service_container"
 
     session.handler.redis:
         class:     Topxia\WebBundle\Handler\RedisSessionHandler
-        arguments: ['@session.handler.redis.factory', '@security.context']
+        arguments: ['@session.handler.redis.factory', '@security.token_storage']
 
     session.handler.factory:
         class: SessionHandlerInterface
-        factory_class: Topxia\Service\Common\SessionHandlerFactory
-        factory_method: getSessionHandler
+        factory: ['Topxia\Service\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
 
@@ -178,6 +148,7 @@ services:
 
     topxia.twig.html_extension:
         class: Topxia\WebBundle\Twig\Extension\HtmlExtension
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
@@ -217,7 +188,7 @@ services:
 
     topxia.twig.file_cache:
         class: Topxia\Service\Common\FilesystemCache
-        arguments:    ['%kernel.root_dir%/cache']
+        arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter

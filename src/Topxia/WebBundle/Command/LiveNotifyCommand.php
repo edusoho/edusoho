@@ -20,7 +20,8 @@ class LiveNotifyCommand extends BaseCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$this->initServiceKernel();
-		$connection = $this->getContainer()->get('database_connection');
+        $biz = $this->getContainer()->get('biz');
+		$connection = $biz['db'];
 
 		$tomorrow = date("Y-m-d",strtotime("+1 day"));
 

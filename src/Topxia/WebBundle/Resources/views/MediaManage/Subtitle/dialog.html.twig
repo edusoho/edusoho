@@ -4,7 +4,7 @@
       <li class="pvs">
         <span class="subtitle-name prl">{{ subtitle.name }}</span>
         <span class="subtitle-transcode-status {{ subtitle.convertStatus }}">
-        {{ dict_text('processStatus', subtitle.convertStatus) }}</span>
+        {{ dict_text('convertStatus', subtitle.convertStatus) }}</span>
         <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" 
         data-subtitle-delete-url="{{path('media_subtitle_delete',{mediaId:media.id,id:subtitle.id})}}"
         >删除</a>

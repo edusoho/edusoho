@@ -8,169 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
-    public function exploreAction(Request $request, $category)
+    protected function makeCategoryTree($categories)
     {
-        $conditions    = $request->query->all();
-        $categoryArray = array();
-        $levels        = array();
+        $categories = ArrayToolkit::index($categories, 'id');
 
-        $conditions['code'] = $category;
-
-        if (!empty($conditions['code'])) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
-        }
-
-        unset($conditions['code']);
-
-        if (!isset($conditions['filter'])) {
-            $conditions['filter'] = array(
-                'type'           => 'all',
-                'price'          => 'all',
-                'currentLevelId' => 'all'
-            );
-        }
-
-        $filter = $conditions['filter'];
-
-        if ($filter['price'] == 'free') {
-            $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType   = "RMB";
-
-            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-                $priceType = $coinSetting["price_type"];
-            }
-
-            $conditions['price'] = '0.00';
-        }
-
-        if ($filter['type'] == 'live') {
-            $conditions['type'] = 'live';
-        }
-
-        if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
-
-            if ($filter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
+        foreach ($categories as &$category) {
+            if ($category['parentId'] != '0') {
+                $categories[$category['parentId']]['subs'] = $category;
             }
         }
 
-        unset($conditions['filter']);
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        if (!isset($courseSetting['explore_default_orderBy'])) {
-            $courseSetting['explore_default_orderBy'] = 'latest';
-        }
-
-        $orderBy = $courseSetting['explore_default_orderBy'];
-        $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
-        unset($conditions['orderBy']);
-
-        $conditions['parentId'] = 0;
-        $conditions['status']   = 'published';
-        $paginator              = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
-            20
-        );
-
-        if ($orderBy != 'recommendedSeq') {
-            $courses = $this->getCourseService()->searchCourses(
-                $conditions,
-                $orderBy,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
-
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $recommendCount            = $this->getCourseService()->searchCourseCount($conditions);
-            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage             = intval($recommendCount / 20);
-            $recommendLeft             = $recommendCount % 20;
-
-            if ($currentPage <= $recommendPage) {
-                $courses = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    $orderBy,
-                    ($currentPage - 1) * 20,
-                    20
-                );
-            } elseif (($recommendPage + 1) == $currentPage) {
-                $courses = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    $orderBy,
-                    ($currentPage - 1) * 20,
-                    20
-                );
-                $conditions['recommended'] = 0;
-                $coursesTemp               = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    'createdTime',
-                    0,
-                    20 - $recommendLeft
-                );
-                $courses = array_merge($courses, $coursesTemp);
-            } else {
-                $conditions['recommended'] = 0;
-                $courses                   = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    'createdTime',
-                    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
-                    20
-                );
-            }
-        }
-
-        $group = $this->getCategoryService()->getGroupByCode('course');
-
-        if (empty($group)) {
-            $categories = array();
-        } else {
-            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
-        }
-
-        if (!$categoryArray) {
-            $categoryArrayDescription = array();
-        } else {
-            $categoryArrayDescription = $categoryArray['description'];
-            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
-        }
-
-        if (!$categoryArray) {
-            $categoryParent = '';
-        } else {
-            if (!$categoryArray['parentId']) {
-                $categoryParent = '';
-            } else {
-                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
-            'courses'                  => $courses,
-            'category'                 => $category,
-            'filter'                   => $filter,
-            'orderBy'                  => $orderBy,
-            'paginator'                => $paginator,
-            'categories'               => $categories,
-            'consultDisplay'           => true,
-            'path'                     => 'course_explore',
-            'categoryArray'            => $categoryArray,
-            'group'                    => $group,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'levels'                   => $levels
-        ));
+        return $categories;
     }
 
     public function archiveAction(Request $request)
@@ -194,7 +42,11 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+
+            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+            $tagIds = ArrayToolkit::column($tags, 'id');
+
+            $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
             $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
@@ -211,7 +63,8 @@ class CourseController extends CourseBaseController
     {
         $course   = $this->getCourseService()->getCourse($id);
         $lessons  = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
+        $tagIds = $this->getTagIdsByCourse($course);
+        $tags     = $this->getTagService()->findTagsByIds($tagIds);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
 
         if (!$course) {
@@ -237,8 +90,8 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-
-        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $tagIds = $this->getTagIdsByCourse($course);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         if ($lessonId == '' && $lessons != null) {
             $currentLesson = $lessons[0];
@@ -266,18 +119,13 @@ class CourseController extends CourseBaseController
             }
         }
 
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course'   => $course,
             'member'   => $member,
-            'category' => $category,
-            'tags'     => $tags
         ));
     }
 
-    public function LessonListAction(Request $request, $id)
+    public function lessonListAction(Request $request, $id)
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
@@ -363,10 +211,21 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'classroom',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
             'member' => $member,
-            'items'  => $items
+            'items'  => $items,
+            'tags'   => $tags
         ));
     }
 
@@ -404,7 +263,7 @@ class CourseController extends CourseBaseController
         $user        = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
             throw $this->createAccessDeniedException();
         }
 
@@ -446,8 +305,7 @@ class CourseController extends CourseBaseController
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
-
-var_dump($member);
+        
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
@@ -629,7 +487,7 @@ var_dump($member);
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course'       => $course,
-            'users'        => $users,
+            'users'        => $users
         ));
     }
 
@@ -753,7 +611,8 @@ var_dump($member);
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+            $tagIds = $this->getTagIdsByCourse($course);
+            $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
             $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
@@ -796,6 +655,10 @@ var_dump($member);
 
     public function relatedCoursesBlockAction($course)
     {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+        
+        $course['tags'] = ArrayToolkit::column($tags, 'id');
+
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
 
         return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
@@ -885,6 +748,13 @@ var_dump($member);
         }
 
         return true;
+    }
+
+    protected function getTagIdsByCourse($course)
+    {
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+        return ArrayToolkit::column($tags, 'id');
     }
 
     protected function getTokenService()

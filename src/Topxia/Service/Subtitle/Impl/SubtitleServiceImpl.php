@@ -80,7 +80,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
 
         $subtitle = array();
 
-        $subtitle['name'] = $fields['name'];
+        $subtitle['name'] = rtrim($fields['name'], '.srt');
         if (empty($fields['ext'])) {
             $subtitle['ext'] = (string) substr(strrchr($fields['name'], '.'), 1);
         } else {
@@ -98,7 +98,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
 
         $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true);
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
         foreach ($files as $file) {
             if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
                 continue;

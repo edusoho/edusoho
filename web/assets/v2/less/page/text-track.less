@@ -81,13 +81,13 @@
         right: 40px;
         top: 8px;
         color: white;
-        &.convert-ok{
+        &.convert-success{
           background: #46c37b;
         }
         &.convert-error{
           background: red;
         }
-        &.convert-processing{
+        &.convert-doing{
           background: blue;
         }
         &.convert-waiting{
@@ -129,13 +129,20 @@
   &.none{
     background: @gray;
   }
-  &.processing{
+  &.doing{
     background: @brand-info;
   }
-  &.ok{
+  &.success{
     background: @brand-primary;
   }
   &.error{
     background: @brand-danger;
   }
+}
+.subtitle-name{
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

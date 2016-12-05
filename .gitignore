@@ -1,6 +1,5 @@
 *.py
 Gruntfile.js
-package.json
 **/node_modules/
 **/node_modules/*
 npm-debug.log
@@ -8,8 +7,10 @@ npm-debug.log
 /.idea
 /web/bundles/
 /app/cache/*
+/app/config/plugin_installed.php
+/app/config/plugin.php
 /app/config/parameters.yml
-/app/config/config_test.yml
+/app/config/parameters_test.yml
 /app/config/menu_blacklist.yml
 /app/data/*
 /app/logs/*
@@ -20,9 +21,10 @@ npm-debug.log
 /app/config/windid_client_config.php
 /app/config/routing_plugins.yml
 /plugins/*
+!/plugins/.gitkeep
 /build/
-/vendor/
-/bin/
+/bin/*
+!/bin/phpmig
 /composer.phar
 /scripts
 /etc/sublimetext2/edusoho.sublime-workspace
@@ -38,6 +40,7 @@ src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 /web/themes/*
+/web/build/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
@@ -57,4 +60,3 @@ web/assets/img/default/video.png
 *.css.map
 *.codekit
 web/php-performance.php
-

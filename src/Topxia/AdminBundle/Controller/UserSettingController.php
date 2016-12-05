@@ -196,7 +196,19 @@ class UserSettingController extends BaseController
             $setting['email_filter'] = $data['email_filter'];
 
             $setting['partner_config']['discuz'] = $data['discuzConfig'];
-            // $setting['partner_config']['phpwind'] = empty($data['phpwindConfig'])? array(): $data['phpwindConfig'];
+
+            if($setting['mode'] == 'phpwind') {
+                $setting['partner_config']['phpwind'] = $data['phpwind_config'];
+                $phpwindConfig = $data['phpwind_config'];
+                $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
+                $phpwindConfigPath = $configDirectory.'windid_client_config.php';
+                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
+                    $this->setFlashMessage('danger', $this->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
+                    goto response;
+                }
+
+                file_put_contents($phpwindConfigPath, $phpwindConfig);
+            }
 
             $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
@@ -204,13 +216,14 @@ class UserSettingController extends BaseController
 
         }
 
-        // $phpwindConfig = $setting['partner_config']['phpwind'];
-        $discuzConfig  = $setting['partner_config']['discuz'];
+        response:
+        $discuzConfig = $setting['partner_config']['discuz'];
+        $phpwindConfig  = empty($setting['partner_config']['phpwind'])? '' : $setting['partner_config']['phpwind'];
 
         return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
             'setting'       => $setting,
             'discuzConfig'  => $discuzConfig,
-            // 'phpwindConfig' => $phpwindConfig
+            'phpwindConfig' => $phpwindConfig
         ));
     }
 
@@ -249,7 +262,7 @@ class UserSettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth          = $this->getSettingService()->get('auth', array());
 
-        $commomFields     = $this->get('topxia.twig.web_extension')->getDict('userInfoFields');
+        $commomFields     = $this->get('codeages_plugin.dict_twig_extension')->getDict('userInfoFields');
         $commomFieldsKeys = array_keys($commomFields);
 
         if (isset($auth['registerFieldNameArray'])) {

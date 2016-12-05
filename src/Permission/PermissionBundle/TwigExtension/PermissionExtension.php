@@ -135,11 +135,6 @@ class PermissionExtension extends \Twig_Extension
         return PermissionBuilder::instance();
     }
 
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
-    }
-
     public function getName()
     {
         return 'permission.permission_extension';

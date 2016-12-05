@@ -11,7 +11,7 @@
       <a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">字幕</a>
     </li>
   </ul>
-  <a href="{{ path('media_preview', {mediaId:media.id}) }}" class="btn btn-info btn-preview" target="_blank">
+  <a href="{{ path('media_subtitle_preview', {mediaId:media.id}) }}" class="btn btn-info btn-preview" target="_blank">
     {{'预览'|trans}}
   </a>
 <div class="tab-content">
@@ -22,7 +22,7 @@
           {% set token = uploader_token('subtitle', media.id, 'private') %}
           <div class="caption-uploader js-select-file pull-left" id="uploader" style="width: 130px;{% if subtitles|length > 3 %}display: none;{% endif %}" data-media-id="{{ media.id }}" data-media-global-id="{{ media.globalId }}" data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}" data-subtitle-list-url="{{ url('media_subtitle_list', {mediaId: media.id}) }}" data-init-url="{{ url('uploader_init', {token:token}) }}" data-finish-url="{{ url('uploader_finished', {token:token}) }}">
           </div>
-          <div class="caption-notify pull-left" style="width: 250px; padding-left: 0">
+          <div class="caption-notify pull-left" style="width: 270px; padding-left: 0">
             目前仅支持srt字幕，最多上传4个字幕
           </div>
         </div>
