@@ -65,12 +65,6 @@ class InitAutoOpenSaasCommand extends InitCommand
         $output->writeln($log);
     }
 
-
-
-
-
-
-
     private function initUser($user)
     {
         $registerUser = array(
@@ -86,8 +80,6 @@ class InitAutoOpenSaasCommand extends InitCommand
         ));
     }
 
-  
-
     private function initSetting($data)
     {
         foreach ($data as $key => $value) {
@@ -96,8 +88,6 @@ class InitAutoOpenSaasCommand extends InitCommand
             $this->getSettingService()->set($key, $value);
         }
     }
-
-
 
     protected function initServiceKernel()
     {
