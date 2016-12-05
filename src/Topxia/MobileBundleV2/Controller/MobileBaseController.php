@@ -372,16 +372,14 @@ class MobileBaseController extends BaseController
             }
 
             if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
-                $userVip = $this->getVipService()->getMemberByUserId($user['id']);
+                $userVip = $controller->getVipService()->getMemberByUserId($user['id']);
 
                 if (!empty($userVip)) {
-                    $userVipLevel = $this->getLevelService()->getLevel($userVip['levelId']);
+                    $userVipLevel = $controller->getLevelService()->getLevel($userVip['levelId']);
 
-                    $user['vipName'] = $userVipLevel['name'];
-
-                    $userVipHistory = $this->getVipService()->getVipDetailByUserId($user['id']);
-
-                    $user['VipDeadLine'] = $userVipHistory['deadline'];
+                    $user['vip']['levelId']     = $userVip['levelId'];
+                    $user['vip']['vipName']     = $userVipLevel['name'];
+                    $user['vip']['VipDeadLine'] = $userVip['deadline'];
                 }
             }
 
