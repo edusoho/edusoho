@@ -63,16 +63,24 @@ class SmsCodes extends BaseResource
         $type   = $request->request->get('type');
         $mobile = $request->request->get('mobile');
 
-        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'sms_registration'))) {
+        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'sms_third_registration'))) {
             return $this->error('500', '短信服务不支持该业务');
         }
         if (empty($mobile)) {
             return $this->error('500', '手机号为空');
         }
 
-        if ($type == 'sms_registration') {
+        if ($type == 'sms_third_registration') {
+            if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
+                return $this->error('500', '该手机号已被绑定');
+            }
+            
+            $user = $this->getCurrentUser();
+
+            $this->getUserService()->changeMobile($user['id'], $mobile);
+
             try {
-                $result = $this->getSmsService()->sendVerifySms('sms_registration', $mobile);
+                $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
             } catch(Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
