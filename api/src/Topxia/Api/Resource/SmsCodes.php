@@ -61,8 +61,8 @@ class SmsCodes extends BaseResource
         }
 
 
-        $type   = $request->request->get('type');
-        $mobile = $request->request->get('mobile');
+        $type   = $fields['type'];
+        $mobile = $fields['mobile'];
 
         if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'sms_third_registration'))) {
             return $this->error('500', '短信服务不支持该业务');
@@ -72,15 +72,13 @@ class SmsCodes extends BaseResource
         }
 
         if ($type == 'sms_third_registration') {
-            if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
-                return $this->error('500', '该手机号已被绑定');
-            }
-            
-            $user = $this->getCurrentUser();
-
-            $this->getUserService()->changeMobile($user['id'], $mobile);
-
             try {
+                if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
+                    throw new Exception("该手机号已被绑定");
+                }
+                $user = $this->getCurrentUser();
+                $this->getUserService()->changeMobile($user['id'], $mobile);
+
                 $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
             } catch(Exception $e) {
                 return $this->error('500', $e->getMessage());
