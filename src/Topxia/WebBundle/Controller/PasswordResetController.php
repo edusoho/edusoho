@@ -119,17 +119,14 @@ class PasswordResetController extends BaseController
         ));
     }
 
-    public function changeRawPassword(Request $request)
+    public function changeRawPasswordAction(Request $request)
     {
         $fields = $request->query->all();
-
-        $id = $fields['userId'];
-
-        $flag = $this->getUserService()->changeRawPassword($id, $fields['rawPassword']);
+        $user_token = $this->getTokenService()->verifyToken($fields['type'], $fields['token']);
+        $flag = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
 
         if (!$flag) {
             throw new \Exception("重置密码失败", 1);
-            
         }
 
         return $this->redirect('homepage');
@@ -195,5 +192,10 @@ class PasswordResetController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace Topxia\Service\Common\Mail;
-
 use Topxia\Service\Common\ServiceKernel;
 
 class MailFactory
