@@ -64,6 +64,24 @@ class TaskManageController extends BaseController
         ));
     }
 
+
+    public function publishAction(Request $request, $courseId, $id)
+    {
+        $this->tryManageCourse($courseId, $id);
+        $this->getTaskService()->publishTask($id);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unPublishAction(Request $request, $courseId, $id)
+    {
+        $this->tryManageCourse($courseId, $id);
+        $this->getTaskService()->unPublishTask($id);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+
     public function taskFieldsAction(Request $request, $courseId, $mode)
     {
         $course = $this->tryManageCourse($courseId);

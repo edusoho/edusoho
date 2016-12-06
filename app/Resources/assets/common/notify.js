@@ -1,6 +1,7 @@
 import 'bootstrap-notify';
 
 const notify = (level, message) => {
+  $('[data-notify="container"]').remove();
   $.notify({
     message: message
   }, {

@@ -7,15 +7,13 @@
     <div class="col-sm-2 control-label">
       <label for="mediaId" class="style">Flash</label>
     </div>
-    <div class="hidden-data">
-      <input type="hidden" value="{{ flash.mediaId|default('') }}" name="mediaId" id="mediaId" data-display="Flash"/>
-    </div>
-    <div class="col-xs-10">
+    <div class="col-sm-10">
       {% include 'WebBundle:FileChooser:file-choose.html.twig' with {
       mediaType: 'flash',
       fileType:'flash',
       file: flash.media|default(null)
       } %}
+      <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
     </div>
   </div>
 {% endblock %}

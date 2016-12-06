@@ -44,10 +44,10 @@ class DownloadActivity extends Activity
         $that      = $this;
         $ext       = $this->getConnection()->transactional(function () use ($materials, $that) {
             //1. created ext
-            $downloadActivity = $that->parseDownloadExtension($materials);
+            $downloadActivity = array('mediaCount' => count($materials));
             $downloadActivity = $that->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
-            $files = $this->parseDownloadFiles($downloadActivity['id'], $materials);
+            $files = $that->parseDownloadFiles($downloadActivity['id'], $materials);
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }
@@ -113,21 +113,16 @@ class DownloadActivity extends Activity
         return $downloadActivity;
     }
 
-    protected function parseDownloadExtension($materials)
-    {
-        return array('mediaCount' => count($materials));
-    }
-
-    protected function parseDownloadFiles($downloadActivityId, $materials)
+    public function parseDownloadFiles($downloadActivityId, $materials)
     {
         $files = array();
         array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
             $file = array(
                 'downloadActivityId' => $downloadActivityId,
-                'title'      => $material['name'],
-                'fileId'     => intval($material['id']),
-                'fileSize'   => $material['size'],
-                'indicate'   => intval($material['id']),
+                'title'              => $material['name'],
+                'fileId'             => intval($material['id']),
+                'fileSize'           => $material['size'],
+                'indicate'           => intval($material['id']),
             );
             if (intval($material['id']) == 0) {
                 $file['link']     = $material['link'];
@@ -138,12 +133,12 @@ class DownloadActivity extends Activity
         return $files;
     }
 
-    protected function getDownloadActivityDao()
+    public function getDownloadActivityDao()
     {
         return $this->getBiz()->dao('DownloadActivity:DownloadActivityDao');
     }
 
-    protected function getDownloadFileDao()
+    public function getDownloadFileDao()
     {
         return $this->getBiz()->dao('DownloadActivity:DownloadFileDao');
     }

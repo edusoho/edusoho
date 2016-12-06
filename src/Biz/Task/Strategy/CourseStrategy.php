@@ -14,6 +14,10 @@ interface CourseStrategy
 
     public function canLearnTask($task);
 
+    public function publishTask($task);
+
+    public function unpublishTask($task);
+
     /**
      * 任务列表管理页面
      * @return page path
