@@ -152,7 +152,7 @@ class BaseStrategy
     /**
      * @return ActivityService
      */
-    protected function getActivityService()
+    public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }

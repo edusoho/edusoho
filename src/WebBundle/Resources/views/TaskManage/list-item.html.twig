@@ -1,3 +1,4 @@
+{% set chapter = task %}
 <li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ chapter.id }}">
   {% set tasks = array_index(chapter.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
