@@ -235,7 +235,6 @@ course_set_manage_testpaper_deletes:
     path: /course_set/{courseSetId}/manage/testpaper/deletes
     defaults: { _controller: WebBundle:TestpaperManage:deletes }
     methods: [POST]
->>>>>>> feature/course2.0-testpaper-manage
 
 course_manage_testpaper_check:
   path: /course/{courseId}/manage/testpaper/{resultId}/check
