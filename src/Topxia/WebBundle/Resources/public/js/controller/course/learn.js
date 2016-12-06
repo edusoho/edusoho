@@ -449,7 +449,7 @@ define(function(require, exports, module) {
                                     $.each(lesson.replays, function(i, n) {
                                         //ES直播，直接播放云资源，TODO(后期需要和其他直播供应商一致的行为)
                                         if (lesson.liveProvider == 5) {
-                                            //路由要重构,写死很恶心
+                                            //路由要重构
                                             var playerUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/play_es_live_replay';
                                             $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ playerUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
                                         } else {
@@ -926,7 +926,14 @@ define(function(require, exports, module) {
 
             if (promptlyPost || learningCounter >= this.interval) {
                 var url = "../../../../course/" + this.lessonId + '/learn/time/' + learningCounter;
-                $.get(url);
+                $.get(url, function(response) {
+                    if (response.error === 'loginLimit') {
+                        $('#login-limit-modal').modal({backdrop: 'static', keyboard: false});
+                        setTimeout(function() {
+                            location.href = response.url;
+                        }, 5000);
+                    }
+                });
                 learningCounter = 0;
             }
 
@@ -949,6 +956,12 @@ define(function(require, exports, module) {
                 var url = "../../../../course/" + this.lessonId + '/watch/time/' + mediaPlayingCounter;
                 var self = this;
                 $.get(url, function(response) {
+                    if (response.error === 'loginLimit') {
+                        $('#login-limit-modal').modal({backdrop: 'static', keyboard: false});
+                        setTimeout(function() {
+                            location.href = response.url;
+                        }, 5000);
+                    }
                     if (self.watchLimit && response.watchLimited) {
                         window.location.reload();
                     }

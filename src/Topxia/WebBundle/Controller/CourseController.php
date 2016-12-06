@@ -386,13 +386,30 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
+        $loginLimitResponse = $this->createLoginLimitResponse($request);
+        if (!empty($loginLimitResponse)) {
+            return $loginLimitResponse;
+        }
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function createLoginLimitResponse($request)
+    {
+        $user = $this->getCurrentUser();
+        $setting = $this->getSettingService()->get('login_bind');
+        
+        $userLoginToken = $request->getSession()->getId();
+
+        if (!empty($setting['login_limit']) && $setting['login_limit'] == 1 && (empty($user['loginSessionId']) || ($userLoginToken != $user['loginSessionId']))) {
+            $url = $this->generateUrl('login');
+            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
+        }
     }
 
     public function detailDataAction($id)
@@ -435,10 +452,15 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
+        $loginLimitResponse = $this->createLoginLimitResponse($request);
+        if (!empty($loginLimitResponse)) {
+            return $loginLimitResponse;
+        }
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
+        
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
         $isLimit = $this->setting('magic.lesson_watch_limit');
