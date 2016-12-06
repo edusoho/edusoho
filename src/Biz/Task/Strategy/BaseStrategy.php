@@ -3,6 +3,7 @@
 namespace Biz\Task\Strategy;
 
 
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
@@ -109,6 +110,9 @@ class BaseStrategy
         return false;
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
@@ -127,7 +131,7 @@ class BaseStrategy
      */
     protected function getTaskDao()
     {
-        return $this->biz->service('Task:TaskDao');
+        return $this->biz->dao('Task:TaskDao');
     }
 
     /**
