@@ -60,9 +60,6 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
             $question['seq']       = $item['seq'];
             $question['missScore'] = $item['missScore'];
 
-            $questionConfig       = $this->getQuestionService()->getQuestionConfig($item['questionType']);
-            $question['template'] = $questionConfig->getTemplate('do');
-
             if ($item['parentId'] > 0) {
                 $formatQuestions[$item['parentId']]['subs'][$questionId] = $question;
             } else {

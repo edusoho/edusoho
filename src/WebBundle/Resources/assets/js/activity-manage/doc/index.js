@@ -1,10 +1,40 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+let $mediaId = $('[name="mediaId"]');
+let $select = $('#condition-select');
+let fileChooser = new FileChooser();
 
-let onConditionTimeType = () => {
+showChooserType($mediaId);
+inItStep2form();
+
+function inItStep2form() {
+  var $step2_form = $("#step2-form");
+  var validator = $step2_form.data('validator');
+  validator = $step2_form.validate({
+      rules: {
+        title:{
+            required: true,
+            maxlength: 50,
+        },
+        mediaId: 'required',
+      },
+      messages: {
+        mediaId: {
+          required:'请上传或选择%display%'
+        }
+      }
+  });
+}
+
+function onConditionTimeType() {
   let $step3_form = $("#step3-form");
   let validator = $step3_form.validate({
     onkeyup: false,
     rules: {
+      title: {
+        required: true,
+        maxlength: 50,
+      },
       finishDetail: {
         required: true,
         digits: true
@@ -22,16 +52,13 @@ let onConditionTimeType = () => {
   $conditionsDetail.removeClass('hidden');
 };
 
-let $select = $('#condition-select');
-
 if($select.children('option:selected').val() === 'time'){
   onConditionTimeType();
 }
 
-let fileChooser = new FileChooser();
-
 fileChooser.on('select', (file) => {
-  $('.hidden-data').find('#mediaId').val(file.id);
+  chooserUiClose();
+  $mediaId.val(file.id);
 });
 
 $select.on('change', event => {

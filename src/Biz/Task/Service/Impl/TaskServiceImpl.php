@@ -3,6 +3,7 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
@@ -33,11 +34,29 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function publishTask($id)
+    {
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->publishTask($task);
+        return $task;
+    }
+
+    public function unpublishTask($id)
+    {
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->unpublishTask($task);
+        return $task;
+    }
+
     public function updateSeq($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'courseChapterId'
+            'categoryId'
         ));
         return $this->getTaskDao()->update($id, $fields);
     }
@@ -46,13 +65,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($id);
 
-        if (!$this->canManageCourse($task['courseId'])) {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
-        $currentSeq = $task['seq'];
-        $result     = $this->getTaskDao()->delete($id);
-        $this->getActivityService()->deleteActivity($task['activityId']);
-        $this->getTaskDao()->waveSeqBiggerThanSeq($currentSeq, -1);
+        $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
 
         return $result;
     }
@@ -174,7 +190,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-        if ($this->isLastTask($task)) {
+
+        // if the task is last task, no next test can be return
+        $nextTask = $this->getTaskDao()->getNextTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (empty($nextTask)) {
             return array();
         }
 
@@ -183,13 +202,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //if the task is first, when get next task, we need to know if the task if finish, if not  return null;
-        if ($this->isFirstTask($task)) {
+        $firstTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (!empty($firstTask)) {
             $isTaskLearned = $this->isTaskLearned($taskId);
             if (!$isTaskLearned) {
                 return array();
             }
         }
-        return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
+        return $nextTask;
     }
 
     public function canLearnTask($taskId)
@@ -213,14 +233,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
     }
 
-    public function getMaxNumberByCourseId($courseId)
-    {
-        return $this->getTaskDao()->getMaxNumberByCourseId($courseId);
-    }
-
     public function findTasksByChapterId($chapterId)
     {
-        return $this->getTaskDao()->findTasksByChapterId($chapterId);
+        return $this->getTaskDao()->findByChapterId($chapterId);
     }
 
     /**
@@ -229,17 +244,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
-    }
-
-    protected function isFirstTask($task)
-    {
-        return 1 == $task['seq'];
-    }
-
-    protected function isLastTask($task)
-    {
-        $maxSeq = $this->getMaxSeqByCourseId($task['courseId']);
-        return $maxSeq == $task['seq'];
     }
 
     protected function createCourseStrategy($courseId)

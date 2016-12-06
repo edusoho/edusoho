@@ -18,6 +18,11 @@
               <span></span>{{'课程封面'|trans}}
             </a>
           </li>
+          <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+            <a href="{{ path('course_set_manage_question', {id:id}) }}">
+              <span></span>{{'题目管理'|trans}}
+            </a>
+          </li>
           <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
             <a href="{{ path('course_set_manage_testpaper', {id:id}) }}">
               <span></span>{{'试卷管理'|trans}}

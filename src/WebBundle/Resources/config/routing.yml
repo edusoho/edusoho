@@ -34,6 +34,7 @@ course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller:WebBundle:CourseManage:list}
 
+
 course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
   defaults: {_controller: WebBundle:CourseManage:create}
@@ -58,6 +59,21 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: WebBundle:CourseManage:students}
 
+course_set_manage_course_quit_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
+  defaults: {_controller: WebBundle:CourseManage:studentQuitRecords}
+
+course_set_manage_course_students_add:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
+  defaults: {_controller: WebBundle:CourseManage:createCourseStudent}
+
+course_set_manage_course_students_remove:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
+  defaults: {_controller: WebBundle:CourseManage:removeCourseStudent}
+
+course_set_manage_course_students_check:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
+  defaults: {_controller: WebBundle:CourseManage:checkStudent}
 
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
@@ -71,10 +87,6 @@ course_set_manage_course_publish:
   path: /course_set/{courseSetId}/course/{courseId}/publish
   defaults: {_controller: WebBundle:CourseManage:publish}
 
-
-course_manage_tasks:
-  path:  /course/{courseId}/manage/tasks
-  defaults: { _controller: WebBundle:CourseManage:tasks }
 
 course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
@@ -97,6 +109,14 @@ course_manage_chapter_delete:
 course_manage_task_create:
   path:  /course/{courseId}/task
   defaults: { _controller: WebBundle:TaskManage:create}
+
+course_manage_task_publish:
+  path:  /course/{courseId}/task/{id}/publish
+  defaults: { _controller: WebBundle:TaskManage:publish }
+
+course_manage_task_unpublish:
+  path:  /course/{courseId}/task/{id}/unpublish
+  defaults: { _controller: WebBundle:TaskManage:unPublish }
 
 course_manage_task_fields:
   path:  /course/{courseId}/task_fields/{mode}
@@ -162,28 +182,21 @@ uploader_finished_v2:
   defaults: { _controller: WebBundle:Uploader:finished }
   methods: [GET]
 
-#question
-course_manage_question:
-    path: /course/{courseId}/manage/question
-    defaults: { _controller: WebBundle:QuestionManage:index }
 
-course_manage_question_create:
-    path: /course/{courseId}/manage/question/{type}/create
-    defaults: { _controller: WebBundle:QuestionManage:create }
 
-course_manage_question_update:
-    path: /course/{courseId}/manage/question/{id}/update
-    defaults: { _controller: WebBundle:QuestionManage:update }
+#testpaper
+course_set_manage_testpaper:  
+  path: /course_set/{id}/manage/testpaper
+  defaults: { _controller: WebBundle:TestpaperManage:index }
 
-course_manage_question_delete:
-    path: /course/{courseId}/manage/question/delete/{id}
-    defaults: { _controller: WebBundle:QuestionManage:delete }
-    methods: [POST]
+course_set_manage_testpaper_create:
+  path: /course_set/{id}/manage/testpaper/create
+  defaults: { _controller: WebBundle:TestpaperManage:create }
 
-course_manage_question_deletes:
-    path: /course/{courseId}/manage/question/deletes
-    defaults: { _controller: WebBundle:QuestionManage:deletes }
-    methods: [POST]
+course_set_manage_testpaper_info:
+  path: /course_set/{id}/manage/testpaper/info
+  defaults: { _controller: WebBundle:TestpaperManage:info }
+  methods: [POST]
 
 course_set_manage_question_preview:
     path: /course_set/{courseSetId}/manage/question/{questionId}/preview
@@ -259,7 +272,6 @@ course_set_manage_testpaper_questions:
 course_set_manage_testpaper_preivew:
   path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
   defaults: { _controller: WebBundle:TestpaperManage:preview }
-
 
 testpaper_do:
   path: /lesson/{lessonId}/testpaper/{testId}/do
@@ -339,6 +351,5 @@ exercise_finish:
   path: /exercise/result/{resultId}/finish
   defaults: { _controller: WebBundle:Exercise:submit }
   methods: [POST]
-
 
 

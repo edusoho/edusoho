@@ -1,21 +1,32 @@
 {% extends 'WebBundle:CourseManage:layout.html.twig' %}
-{% do script(['web/course-manage/student/index.js']) %}
+{% do script(['web/course-manage/students/index.js']) %}
+
+{% set side_nav = 'plan' %}
+{% set active = 'students' %}
 
 {% block course %}
+<div class="panel-bar">
+  <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加学员'|trans}}</button>
+  {% if course.status == 'published' %}
+   {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% else %}
+    {# <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% endif %}
+  {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
+</div>
 <ul class="nav nav-tabs mbl">
   <li class="active">
-    <a href="">{{ '正式学员'|trans }}</a>
+    <a href="javascript:;">{{ '正式学员'|trans }}</a>
   </li>
 
   <li class="">
-    <a href="">{{ '退出记录'|trans }}</a>
+    <a href="{{path('course_set_manage_course_quit_records', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '退出记录'|trans }}</a>
   </li>
 </ul>
-<form class="form-inline well well-sm " action="" method="get" novalidate>
+<form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
   <div class="form-group col-md-7">
     <input class="form-control " type="text" style="width:45%" placeholder="{{'请输入用户名/邮箱/手机号'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
-
-    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    <button type="submit" class="btn btn-primary">{{'搜索'|trans}}</button>
   </div>
   <div class="clearfix"></div>
 </form>
@@ -23,51 +34,55 @@
   <thead>
     <tr>
       <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
-      <th width="20%">{{'服务期限'|trans}}</th>
+      {# <th width="20%">{{'服务期限'|trans}}</th> #}
       <th width="20%">{{'学习进度'|trans}}</th>
       <th width="30%%">{{'操作'|trans}}</th>
     </tr>
   </thead>
   <tbody>
-    <tr class="students-item js-students-item">
-      <td class="media media-middle" >
-        <a class="pull-left js-user-card" href="/user/1343" data-card-url="/user/1343/card/show" data-user-id="1343">
-          <img class="avatar-sm" src="/files/user/2016/10-31/111925dea8d8374811.jpg"></a>
-        <a target="_blank" href="/user/1343">feyfey</a>
-        <div class="text-muted text-sm">加入时间：2016-11-28 10:01</div>
-      </td>
-      <td>
-      剩余：360天
-      </td>
-      <td>
-        <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#my-student"><span class="color-primary">20%</span><span class="text-xs">（查看详情）</span></a>
-      </td>
-      <td>
-        <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/1343">发私信</a>
-        <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="/course/232/manage/students/1343/show">查看资料</a>
-        <div class="btn-group">
-          <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
-            更多
-            <span class="caret mls"></span>
+    {% for student in students %}
+      <tr class="students-item js-students-item">
+        <td class="media media-middle" >
+          <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
+            {# <img class="avatar-sm" src="{{student.smallAvatar}}"> #}
+            {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
           </a>
-          <ul class="dropdown-menu pull-right">
-            <li>
-              <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/232/manage/student/1343/remark">备注</a>
-            </li>
-            <li>
-              <a class="follow-student-btn" href="javascript:;" data-url="/user/1343/follow">关注</a>
-              <a class="unfollow-student-btn" href="javascript:;" data-url="/user/1343/unfollow" style="display:none;">已关注</a>
-            </li>
-            <li>
-              <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/232/set_expiryday/1343">增加有效期</a>
-            </li>
-            <li>
-              <a class="student-remove" href="javascript:;" data-url="/course/232/manage/student/1343/remove" data-user="学员">移除</a>
-            </li>
-          </ul>
-        </div>
-      </td>
-    </tr>
+          <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
+          <div class="text-muted text-sm">{{student.createdTime|date_format()}}</div>
+        </td>
+       {#  <td>
+        剩余：360天
+        </td> #}
+        <td>
+          <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#my-student"><span class="color-primary">20%</span><span class="text-xs">（查看详情）</span></a>
+        </td>
+        <td>
+          <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">发私信</a>
+          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/students/{{student.userId}}/show">查看资料</a>
+          <div class="btn-group">
+            <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
+              更多
+              <span class="caret mls"></span>
+            </a>
+            <ul class="dropdown-menu pull-right">
+             {#  <li>
+                <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/student/{{student.userId}}/remark">备注</a>
+              </li> #}
+              {# <li>
+                <a class="follow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/follow">关注</a>
+                <a class="unfollow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/unfollow" style="display:none;">已关注</a>
+              </li> #}
+             {#  <li>
+                <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
+              </li> #}
+              <li>
+                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 
@@ -217,16 +232,4 @@
   </div>
 </div>
 
-
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-

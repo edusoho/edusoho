@@ -123,9 +123,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
                 $question['testResult'] = $questionResults[$question['id']];
             }
 
-            $questionConfig       = $this->getQuestionService()->getQuestionConfig($question['type']);
-            $question['template'] = $questionConfig->getTemplate('do');
-            $question['seq']      = $i;
+            $question['seq'] = $i;
 
             if ($question['parentId'] > 0) {
                 $formatQuestions[$question['parentId']]['subs'][$question['id']] = $question;

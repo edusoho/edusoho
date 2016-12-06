@@ -570,7 +570,7 @@ class TestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($testpaper['status'] != 'open') {
+        if ($testpaper['status'] == 'closed') {
             return $this->createMessageResponse('warning', '试卷已关闭，不能查看！');
         }
 

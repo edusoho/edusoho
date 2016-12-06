@@ -73,8 +73,6 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
             $question['score']     = $item['score'];
             $question['seq']       = $item['seq'];
             $question['missScore'] = $item['missScore'];
-            $questionConfig        = $this->getQuestionService()->getQuestionConfig($item['questionType']);
-            $question['template']  = $questionConfig->getTemplate('do');
 
             if (!empty($itemResults[$questionId])) {
                 $question['testResult'] = $itemResults[$questionId];

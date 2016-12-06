@@ -22,7 +22,10 @@
             {% if question.isDeleted|default(null) %}
               {% include 'WebBundle:Question/Part:question-delete.html.twig' with {showScore:1,question:question}%}
             {% else %}
-              {% include question.template %}
+              {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+              {% if questionTemplate %}
+                {% include questionTemplate %}
+              {% endif %}
             {% endif %}
           {% endfor %}
         </div>
