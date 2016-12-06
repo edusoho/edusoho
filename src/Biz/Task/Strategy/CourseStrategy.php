@@ -24,6 +24,11 @@ interface CourseStrategy
      */
     public function getTasksRenderPage();
 
+    /**
+     * @return 新增任务的列表片段页面
+     */
+    public function getTaskItemRenderPage();
+
     //课时的api
     public function findCourseItems($courseId);
 

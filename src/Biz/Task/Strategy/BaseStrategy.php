@@ -3,6 +3,7 @@
 namespace Biz\Task\Strategy;
 
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
@@ -145,7 +146,7 @@ class BaseStrategy
     /**
      * @return ActivityService
      */
-    protected function getActivityService()
+    public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }

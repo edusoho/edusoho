@@ -6,6 +6,7 @@ use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
 use Biz\Task\Strategy\page;
+use Biz\Task\Strategy\新增任务的列表片段页面;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
@@ -39,7 +40,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
-                return $task;
+                $task['activity']    = $this->getActivityService()->getActivityFetchExt($task['activityId']);
+                $chapter['tasks']    = array($task);
+                return $chapter;
             });
         } else {
             $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
@@ -49,6 +52,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $field['status'] = $lessonTask['status'];
             $task            = $this->baseCreateTask($field);
         }
+
         return $task;
     }
 
@@ -75,7 +79,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             } else {
                 $that->getTaskDao()->delete($task['id']);
             }
-          //  $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
         });
         return $result;
     }
@@ -84,6 +87,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function getTasksRenderPage()
     {
         return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
+    }
+
+    public function getTaskItemRenderPage()
+    {
+        return 'WebBundle:TaskManage:list-item.html.twig';
     }
 
     /**

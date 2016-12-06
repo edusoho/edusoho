@@ -1,4 +1,4 @@
-<li id="chapter-{{chapter.id}}" class="task-manage-item drag task-manage-{{chapter.type}} clearfix">
+<li id="chapter-{{chapter.id}}" class="task-chapter task-manage-item drag task-manage-{{chapter.type}} clearfix">
   <div class="item-content">
     </i>第<span class="number">{{chapter.number}}</span>{% if chapter.type == 'chapter' %}{{ setting('default.chapter_name')|default('章'|trans) }}{% elseif chapter.type == 'unit' %}{{ setting('default.part_name')|default('节'|trans) }}{% elseif chapter.type == 'lesson' %}{{ '课时'|trans }}{% endif %}：{{chapter.title}}
   </div>
@@ -9,12 +9,12 @@
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
         {% if chapter.type == 'chapter' %}
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">{{'添加'|trans}}{{ setting('default.part_name')|default('节'|trans) }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">{{'添加'|trans}}{{ setting('default.part_name')|default('节'|trans) }}</a>
           </li>
         {% endif %}
         {% if chapter.type != 'lesson' %}
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">{{'添加'|trans}}{{ '任务'|trans }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,chapterId:'chapter-'~chapter.id}) }}">{{'添加'|trans}}{{ '任务'|trans }}</a>
           </li>
         {% endif %}
       </ul>
