@@ -2747,7 +2747,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['lessonId']    = $lessonId;
             $fields['title']       = $replay['subject'];
             $fields['replayId']    = $replay['id'];
-            $fields['globalId']    = emtpy($replay['resourceNo']) ? '':$replay['resourceNo'];
+            //$fields['globalId']    = emtpy($replay['resourceNo']) ? '':$replay['resourceNo'];
+            $fields['globalId'] = '42d5651917324bbda69dd65c7fdd5956';
             $fields['userId']      = $this->getCurrentUser()->id;
             $fields['createdTime'] = time();
             $courseLessonReplay    = $this->addCourseLessonReplay($fields);
