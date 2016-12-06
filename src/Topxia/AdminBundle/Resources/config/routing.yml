@@ -51,14 +51,11 @@ admin_course_explore:
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
 
-<<<<<<< HEAD
-=======
 admin_dashboard:
     path:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
     permissions: [admin]
 
->>>>>>> beta/7.3.5
 admin_opencourse_analysis:
     path:  /opencourse/analysis
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
@@ -247,11 +244,7 @@ admin_tag_group:
 
 admin_tag_group_create:
     path: /tag/group/create
-<<<<<<< HEAD
-    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
-=======
     defaults: { _controller: TopxiaAdminBundle:TagGroup:create }
->>>>>>> beta/7.3.5
 
 admin_tag_group_update:
     path: /tag/group/{groupId}/update
@@ -725,11 +718,6 @@ admin_setting_payment:
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
     permissions: [admin_payment]
 
-<<<<<<< HEAD
-admin_setting_cloud_video:
-    path:  /setting/cloud/video
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
-=======
 admin_cloud_video_overview:
     path:  /cloud/video/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoOverview }
@@ -737,7 +725,6 @@ admin_cloud_video_overview:
 admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSetting }
->>>>>>> beta/7.3.5
 
 admin_setting_cloud:
     path:  /setting/cloud
@@ -1346,15 +1333,12 @@ admin_category_delete:
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
 
-<<<<<<< HEAD
-=======
 admin_category_upload:
     path: /category/uploadfile
     defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
     methods: [POST]
     permissions: [admin_course_category_manage]
 
->>>>>>> beta/7.3.5
 admin_category_sort:
     path:  /category/sort
     defaults: { _controller: TopxiaAdminBundle:Category:sort }
@@ -1756,14 +1740,11 @@ admin_system_status:
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
     permissions: [admin]
 
-<<<<<<< HEAD
-=======
 admin_official_messages:
     path:  /official/messages
     defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
     permissions: [admin]
 
->>>>>>> beta/7.3.5
 admin_uploadfile_head_leader_params:
     path: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
@@ -1895,11 +1876,6 @@ admin_common_remove:
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-<<<<<<< HEAD
-    path:  /setting/edu_cloud/sms
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
-    permissions: [admin_edu_cloud_sms_setting]
-=======
     path:  /edu_cloud/sms/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsOverview }
     permissions: [admin_edu_cloud_sms_overview]
@@ -1907,7 +1883,6 @@ admin_edu_cloud_sms:
 admin_edu_cloud_setting_sms:
     path:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsSetting }
->>>>>>> beta/7.3.5
 
 admin_edu_cloud_sms_status:
     path:  /setting/sms/status
@@ -1929,13 +1904,6 @@ admin_edu_cloud_sms_no_message:
     permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
-<<<<<<< HEAD
-    path: /setting/edu_cloud/email
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
-    permissions: [admin_edu_cloud_email_seeting]
-
-admin_edu_cloud_search:
-=======
     path: /edu_cloud/email/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
     permissions: [admin_edu_cloud_email_overview]
@@ -1955,7 +1923,6 @@ admin_edu_cloud_search:
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOverview }
 
 admin_edu_cloud_setting_search:
->>>>>>> beta/7.3.5
     path: /setting/edu_cloud/search
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
 
@@ -2067,9 +2034,6 @@ admin_report_status_email_send:
 admin_cloud_attachment:
     path: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
-<<<<<<< HEAD
-    permissions: [admin_cloud_attachment_manage]
-=======
     permissions: [admin_cloud_attachment_manage]
 
 admin_cloud_attachment_render:
