@@ -4,9 +4,9 @@ namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Strategy\StrategyContext;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
@@ -23,6 +23,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
         $task = $strategy->createTask($fields);
+
+        $this->biz['dispatcher']->dispatch("course.task.create", new Event($task));
         return $task;
     }
 
@@ -52,7 +54,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
-
     public function updateSeq($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array(
@@ -70,7 +71,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
-
+        $this->biz['dispatcher']->dispatch("course.task.delete", new Event($task));
         return $result;
     }
 
@@ -215,7 +216,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
+        $task                  = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);

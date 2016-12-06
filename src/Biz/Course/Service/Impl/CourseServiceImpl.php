@@ -126,6 +126,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateCourseStatistics($id, $fields)
+    {
+        return $this->getCourseDao()->update($id, $fields);
+    }
+
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
@@ -268,7 +273,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         //TODO create order
 
-        return $this->getMemberDao()->create($fields);
+        $result = $this->getMemberDao()->create($fields);
+
+        $this->biz['dispatcher']->dispatch("course.student.create", new Event($result));
+        return $result;
     }
 
     public function removeCourseStudent($courseId, $userId)
@@ -286,7 +294,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
 
-        return $this->getMemberDao()->delete($member['id']);
+        $result = $this->getMemberDao()->delete($member['id']);
+
+        $this->biz['dispatcher']->dispatch("course.student.create", new Event($member));
+
+        return $result;
     }
 
     public function getUserRoleInCourse($courseId, $userId)

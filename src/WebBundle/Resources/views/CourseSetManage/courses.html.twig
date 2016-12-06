@@ -29,8 +29,8 @@
               <span class="label label-warning mll">{{'会员免费'|trans}}</span>
               <span class="label label-warning mll">{{'6折'|trans}}</span>
             </td>
-      			<td>course.taskNum</td>
-      			<td>course.stuNum</td>
+      			<td>{{course.taskCount|default(0)}}</td>
+      			<td>{{course.studentCount|default(0)}}</td>
       			<td>{{course.price|currency}}{{'元'|trans}}</td> {# 货币国际化？ #}
       			<td>
       				<div class="btn-group">
