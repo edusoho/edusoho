@@ -58,6 +58,9 @@ class LiveActivityController extends BaseController implements ActivityActionInt
         if (empty($activity)) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播任务不存在！'));
         }
+        if ($activity['fromCourseId'] != $courseId) {
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('参数非法！'));
+        }
 
         if (empty($activity['ext']['liveId'])) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播教室不存在！'));
@@ -85,8 +88,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
         } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            $params['role'] = 'student';
-            // return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
         }
 
         $params['id']       = $user['id'];
@@ -100,6 +102,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
 
     public function triggerAction(Request $request, $courseId, $activityId)
     {
+        $this->getCourseService()->tryTakeCourse($courseId);
         $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
