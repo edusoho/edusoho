@@ -16,6 +16,17 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function getQuestionTypes()
     {
         return array(
+            'single_choice'    => array(
+                'name'      => '单选题',
+                'actions'   => array(
+                    'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
+                    'edit'   => 'AppBundle:Question/SingleChoiceQuestion:edit',
+                    'show'   => 'AppBundle:Question/SingleChoiceQuestion:show'
+                ),
+                'templates' => array(
+                    'do' => 'question/single-choice-do.html.twig'
+                )
+            ),
             'choice'           => array(
                 'name'      => '多选题',
                 'actions'   => array(
@@ -27,15 +38,15 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'do' => 'question/choice:do.html.twig'
                 )
             ),
-            'single_choice'    => array(
-                'name'      => '单选题',
+            'essay'            => array(
+                'name'      => '问答题',
                 'actions'   => array(
-                    'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
-                    'edit'   => 'AppBundle:Question/SingleChoiceQuestion:edit',
-                    'show'   => 'AppBundle:Question/SingleChoiceQuestion:show'
+                    'create' => 'AppBundle:Question/EssayQuestion:create',
+                    'edit'   => 'AppBundle:Question/EssayQuestion:edit',
+                    'show'   => 'AppBundle:Question/EssayQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/single-choice-do.html.twig'
+                    'do' => 'question/essay-do.html.twig'
                 )
             ),
             'uncertain_choice' => array(
@@ -58,17 +69,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/determine-do.html.twig'
-                )
-            ),
-            'essay'            => array(
-                'name'      => '判断题',
-                'actions'   => array(
-                    'create' => 'AppBundle:Question/EssayQuestion:create',
-                    'edit'   => 'AppBundle:Question/EssayQuestion:edit',
-                    'show'   => 'AppBundle:Question/EssayQuestion:show'
-                ),
-                'templates' => array(
-                    'do' => 'question/essay-do.html.twig'
                 )
             ),
             'fill'             => array(

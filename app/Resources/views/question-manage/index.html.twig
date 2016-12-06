@@ -15,19 +15,20 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
       <div class="pull-right">
-        <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'single_choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'单选题'|trans}}</a>
-        <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'多选题'|trans}}</a>
-        <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:'essay',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'问答题'|trans}}</a>
+        {% for type,name in questionTypes %}
+          {% if loop.index <= 3 %}
+            <a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{ name }}</a>
+          {% endif %}
+        {% endfor %}
         
         <div class="btn-group">
         <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
         <ul class="dropdown-menu pull-right">
           {% for type,name in questionTypes %}
-            {% if type not in ['single_choice','choice','essay','material'] or (type == 'material' and not parentQuestion) %}
+            {% if loop.index > 3 %}
               <li><a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-sm"><span class="glyphicon glyphicon-plus"></span> {{ name }}</a></li>
             {% endif %}
           {% endfor %}
-
         </ul>
       </div>
 
