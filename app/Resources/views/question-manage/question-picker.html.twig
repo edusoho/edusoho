@@ -9,7 +9,7 @@
 
 {% block body %}
 <div id="question-picker-body">
-  <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {courseId:courseSet.id}) }}" novalidate>
+  <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {id:courseSet.id}) }}" novalidate>
     <div class="form-group">
       <select class="form-control" name="target" style="width:200px;height:32px;">
         {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
