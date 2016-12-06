@@ -6,7 +6,7 @@ export const closeCourse = () => {
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
-    $.post($(evt.target).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
         notify('success', '关闭成功');
         location.reload();
@@ -30,7 +30,7 @@ export const deleteCourse = () => {
     if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
       return;
     }
-    $.post($(evt.target).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
         notify('success', '删除成功');
         location.reload();
@@ -43,16 +43,16 @@ export const deleteCourse = () => {
 
 export const deleteTask = () => {
   $('body').on('click', '.delete-item', function (evt) {
-    if ($(evt.target).data('type') == 'task') {
+    if ($(evt.currentTarget).data('type') == 'task') {
       if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
         return;
       }
-    } else if ($(evt.target).data('type') == 'chapter') {
+    } else if ($(evt.currentTarget).data('type') == 'chapter') {
       if (!confirm(Translator.trans('是否确定删除该章节吗？'))) {
         return;
       }
     }
-    $.post($(evt.target).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
         notify('success', '删除成功');
         $(evt.target).parents('.task-manage-item').remove();
@@ -95,7 +95,7 @@ export const publishCourse = () => {
     if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
       return;
     }
-    $.post($(evt.target).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
         notify('success', '发布成功');
         location.reload();

@@ -12,7 +12,7 @@ class Marketing {
 			rules: {
 				price: {
 					required: '#chargeMode:checked',
-					digits: true
+					currency: true
 				},
 				tryLookLength: {
 					required: '#enableTryLook:checked',
@@ -24,11 +24,22 @@ class Marketing {
 				}
 			},
 			messages: {
-				price: Translator.trans('请输入价格'),
+				price: {
+					required: Translator.trans('请输入价格'),
+					currency: Translator.trans('请输入价格，最多两位小数')
+				},
 				tryLookLength: Translator.trans('请输入试看时长'),
 				tryLookLimit: Translator.trans('请输入视频观看时长限制')
 			}
 		});
+
+		$.validator.addMethod(
+            "currency",
+            function(value, element, params) {
+                return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
+            },
+            Translator.trans('请输入价格，最多两位小数')
+        );
 
 		$('input[name="isFree"]').on('change', function(event){
             $('.js-is-free').toggle($('input[name="isFree"]:checked').val() == 0 ? 'show' : 'hide');

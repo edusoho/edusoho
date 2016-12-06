@@ -50,13 +50,26 @@ class CourseManageController extends BaseController
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
         $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
-
+        $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
         return $this->render($tasksRenderPage, array(
-            'tasks'     => $tasks,
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'items'     => $courseItems
+            'tasks'      => $tasks,
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'items'      => $courseItems,
+            'taskPerDay' => $taskPerDay
         ));
+    }
+
+    protected function getFinishedTaskPerDay($course, $tasks)
+    {
+        $taskCount = count($tasks);
+        if ($course['expiryMode'] == 'days') {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? $taskCount : $taskCount / $course['expiryDays'];
+        } else {
+            $diffDay            = ($course['expiryEndDate'] + 60 * 60 * 24 - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? $taskCount : $taskCount / $diffDay;
+        }
+        return round($finishedTaskPerDay, 1);
     }
 
     protected function createCourseStrategy($course)
@@ -124,6 +137,17 @@ class CourseManageController extends BaseController
             'courseSet' => $courseSet,
             'course'    => $course,
             'students'  => $students
+        ));
+    }
+
+    public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        return $this->render('WebBundle:CourseManage:quit-records.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'records'   => array()
         ));
     }
 

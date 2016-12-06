@@ -4,7 +4,6 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Common\ServiceKernel;
@@ -119,6 +118,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
+        }
+        if ($fields['price']) {
+            $fields['price'] = round(floatval($fields['price']) * 100, 0);
         }
 
         return $this->getCourseDao()->update($id, $fields);
@@ -344,7 +346,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->tryManageCourse($courseId);
 
         $this->createCourseStrategy($course)->sortCourseItems($courseId, $ids);
-
     }
 
     public function createChapter($chapter)
