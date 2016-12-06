@@ -96,6 +96,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $listener->handle($activity, array());
             }
             $this->commit();
+
             return $activity;
         } catch (\Exception $e) {
             $this->rollback();

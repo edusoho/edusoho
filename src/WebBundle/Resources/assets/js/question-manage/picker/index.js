@@ -1,3 +1,5 @@
+import Emitter from 'common/es-event-emitter';
+
 class QuestionPicker
 {
 	constructor($pickerEle, $pickedForm)
@@ -5,15 +7,16 @@ class QuestionPicker
 		this.$pickBody = $pickerEle;
 		this.$modal = this.$pickBody.closest('.modal');
 		this.$form = $pickedForm;
+    this.emitter = new Emitter();
 
 		this._initEvent();
 	}
 
 	_initEvent()
 	{	
-		this.$pickBody.find('.search-question-btn').on('click', event=>this._searchQuestion(event));
+		this.$pickBody.find('[data-role="search-btn"]').on('click', event=>this._searchQuestion(event));
 		this.$pickBody.find('[data-role="picked-item"]').on('click', event=>this._pickItem(event));
-		this.$pickBody.find('.question-preview').on('click', event=>this._questionPreview(event));
+		this.$pickBody.find('[data-role="preview-btn"]').on('click', event=>this._questionPreview(event));
 	}
 
 	_searchQuestion(event)
@@ -29,22 +32,22 @@ class QuestionPicker
 
 	_pickItem(event)
 	{
-		let $this = $(event.currentTarget);
-		let replace = parseInt($this.data('replace'));
-		let obj = this;
+		let $target = $(event.currentTarget);
+		let replace = parseInt($target.data('replace'));
+		let self = this;
 
-		$.get($this.data('url'), function(html) {
-			
+		$.get($target.data('url'), function(html) {
       if (replace) {
-        $("#question-item-" + replace).parents('tbody').find('[data-parent-id=' + replace + ']').remove();
-        $("#question-item-" + replace).replaceWith(html);
+        self.$form.find('tr[data-id="'+replace+'"]').replaceWith(html);
       } else {
-        obj.$form.find('tbody').append(html);
+        self.$form.find('tbody:visible').append(html).removeClass('hide');
       }
-      obj._refreshSeqs();
-      obj._refreshPassedDivShow();
+      self._refreshSeqs();
+      self._refreshPassedDivShow();
 
-      obj.$modal.modal('hide');
+      self.$modal.modal('hide');
+
+      self.emitter.trigger('question_picked');
 	  });
 	}
 
@@ -88,4 +91,5 @@ class QuestionPicker
 	}
 }
 
-new QuestionPicker($('#question-picker-body',window.parent.document), $('#step2-form'));
+//new QuestionPicker($('#question-picker-body',window.parent.document), $('#step2-form'));
+new QuestionPicker($('#question-picker-body'), $('#question-checked-form'));

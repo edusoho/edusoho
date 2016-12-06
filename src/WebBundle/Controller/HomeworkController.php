@@ -45,7 +45,7 @@ class HomeworkController extends BaseController
             throw new ResourceNotFoundException('homework', $result['testId']);
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 

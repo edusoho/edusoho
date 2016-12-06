@@ -29,13 +29,21 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($resultId)
+    public function showTestItems($testId, $resultId)
     {
-        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $items          = $this->getTestpaperService()->findItemsByTestId($homeworkResult['testId']);
+        $test  = $this->getTestpaperService()->getTestpaper($testId);
+        $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
+        if (!$items) {
+            return array();
+        }
 
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
-        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        $itemResults = array();
+        if (!empty($resultId)) {
+            $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
+            $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        }
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
@@ -51,9 +59,6 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
             $question['score']     = $item['score'];
             $question['seq']       = $item['seq'];
             $question['missScore'] = $item['missScore'];
-
-            $questionConfig       = $this->getQuestionService()->getQuestionConfig($item['questionType']);
-            $question['template'] = $questionConfig->getTemplate('do');
 
             if ($item['parentId'] > 0) {
                 $formatQuestions[$item['parentId']]['subs'][$questionId] = $question;

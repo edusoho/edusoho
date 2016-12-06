@@ -45,7 +45,7 @@ class ExerciseController extends BaseController
             throw new ResourceNotFoundException('exercise', $result['testId']);
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id'], $result['id']);
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 

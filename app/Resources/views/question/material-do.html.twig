@@ -4,10 +4,11 @@
 		{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
 	</div>
 
-	{% for question in question.subs|default([]) %}
-    {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+	{% for subQuestion in question.subs|default([]) %}
+  
+    {% set questionTemplate = getQuestionTypeTemplate(subQuestion.type,'do') %}
     {% if questionTemplate %}
-      {% include questionTemplate %}
+      {% include questionTemplate with {question:subQuestion, parentQuestion:question, seq:loop.index} %}
     {% endif %}
 	{% endfor %}
 </div>

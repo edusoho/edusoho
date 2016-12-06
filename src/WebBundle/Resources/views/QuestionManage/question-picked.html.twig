@@ -1,3 +1,4 @@
-<table class="picked-items">
-{% include 'WebBundle:QuestionManage:question-tr.html.twig' %}
-</table>
+{% include 'WebBundle:QuestionManage:question-picked-tr.html.twig' %}
+{% for question in subQuestions %}
+  {% include 'WebBundle:QuestionManage:question-picked-tr.html.twig' %}
+{% endfor %}

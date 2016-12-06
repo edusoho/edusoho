@@ -17,7 +17,7 @@
         <h1 class="testpaper-title">
           {{ paper.name }} <br>
           <small class="text-sm">
-            {% if paperResult.status|default(null) in ['reviewing','finished'] %}
+            {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
               {{'答题人：'|trans}}{{ student.nickname }} 
               {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} 
               {{'用时：'|trans}}{{ paperResult.usedTime|duration }}
@@ -25,9 +25,9 @@
           </small>
         </h1>
         <div class="testpaper-status">
-          {% if paperResult.status|default(null) == 'doing' %}
+          {% if paperResult.status|default('doing') == 'doing' %}
             <div class="label label-primary">{{'答题中'|trans}}</div>
-          {% elseif paperResult.status|default(null) == 'reviewing' %}
+          {% elseif paperResult.status|default('doing') == 'reviewing' %}
             <div class="label label-info">{{'批阅中'|trans}}</div>
           {% else %}
             <div class="label label-success">{{'批阅完成'|trans}}</div>

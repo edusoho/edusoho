@@ -27,13 +27,17 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         }
     }
 
-    public function showTestItems($resultId)
+    public function showTestItems($testId, $resultId)
     {
-        $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $exercise       = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
+        $exercise = $this->getTestpaperService()->getTestpaper($testId);
 
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id']);
-        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        $itemResults = array();
+        if ($resultId) {
+            $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id']);
+            $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+        }
 
         if ($itemResults) {
             $questionIds = ArrayToolkit::column($itemResults, 'questionId');
@@ -119,9 +123,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
                 $question['testResult'] = $questionResults[$question['id']];
             }
 
-            $questionConfig       = $this->getQuestionService()->getQuestionConfig($question['type']);
-            $question['template'] = $questionConfig->getTemplate('do');
-            $question['seq']      = $i;
+            $question['seq'] = $i;
 
             if ($question['parentId'] > 0) {
                 $formatQuestions[$question['parentId']]['subs'][$question['id']] = $question;

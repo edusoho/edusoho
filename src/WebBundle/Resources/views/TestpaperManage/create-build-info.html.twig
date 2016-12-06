@@ -45,18 +45,18 @@
   <div class="col-md-10 controls" id="testpaper-question-options">
     {% for type in types %}
       <div class="testpaper-question-option-item">
-        <button type="button" class="btn btn-link testpaper-question-option-item-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
+        <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
         <span style="min-width:85px;display:inline-block;_display:inline;">{{type.name}}</span>
         <span class="mlm">{{'题目数量'|trans}}:</span>
-        <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]"  value="0" />/
+        <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]" data-role="count"  value="0" />/
         <span class="text-info question-num" role="questionNum" type="{{type.key}}">{{questionNums[type.key]["questionNum"]|default(0)}}</span>
 
         <span class="mlm">{{'题目分值'|trans}}:</span>
-        <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{type.key}}]"  value="2" />
+        <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{type.key}}]"  value="2" data-role="score" />
 
         {% if type.hasMissScore %}
           <span class="mlm">{{'漏选分值'|trans}}:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-miss-score" name="missScores[{{type.key}}]"  value="0" />
+          <input type="text" class="form-control width-input width-input-mini input-sm item-miss-score" name="missScores[{{type.key}}]"  value="0" data-role="missScore" />
         {% endif %}
       </div>
 
@@ -67,5 +67,3 @@
 <input type="hidden" name="percentages[simple]">
 <input type="hidden" name="percentages[normal]">
 <input type="hidden" name="percentages[difficulty]">
-
-<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

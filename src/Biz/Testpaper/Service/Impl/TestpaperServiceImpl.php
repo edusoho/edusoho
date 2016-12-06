@@ -32,7 +32,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $testpaper = $this->getTestpaper($id);
 
-        if (empty($testpaper)) {
+        if (!$testpaper) {
             throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
         }
 
@@ -51,12 +51,29 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function deleteTestpaper($id)
     {
         $testpaper = $this->getTestpaper($id);
-        $result    = $this->getTestpaperDao()->delete($id);
-        $this->deleteTestpaperItemByTestId($id);
+        if (!$testpaper) {
+            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+        }
+
+        $result = $this->getTestpaperDao()->delete($testpaper['id']);
+        $this->deleteItemsByTestId($testpaper['id']);
 
         $this->dispatchEvent('testpaper.delete', $testpaper);
 
         return $result;
+    }
+
+    public function deleteTestpapers($ids)
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        foreach ($ids as $id) {
+            $this->deleteTestpaper($id);
+        }
+
+        return true;
     }
 
     public function findTestpapersByIds($ids)
@@ -102,6 +119,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function deleteItem($id)
     {
         return $this->getItemDao()->delete($id);
+    }
+
+    public function deleteItemsByTestId($testpaperId)
+    {
+        return $this->getItemDao()->deleteItemsByTestpaperId($testpaperId);
     }
 
     public function getItemsCountByParams(array $conditions, $groupBy = '')
@@ -296,11 +318,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $total;
     }
 
-    public function deleteTestpaperItemByTestId($testpaperId)
-    {
-        return $this->getItemDao()->deleteItemsByTestpaperId($testpaperId);
-    }
-
     public function canBuildTestpaper($type, $options)
     {
         $builder = $this->getTestpaperBuilder($type);
@@ -381,12 +398,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
     }
 
-    public function showTestpaperItems($resultId)
+    public function showTestpaperItems($testId, $resultId = 0)
     {
-        $result           = $this->getTestpaperResult($resultId);
-        $testpaperBuilder = $this->getTestpaperBuilder($result['type']);
+        $testpaper        = $this->getTestpaper($testId);
+        $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
 
-        return $testpaperBuilder->showTestItems($resultId);
+        return $testpaperBuilder->showTestItems($testId, $resultId);
     }
 
     public function makeAccuracy($resultId)
@@ -545,101 +562,185 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
     }
 
-    public function updateTestpaperItems($testpaperId, $items)
+    public function updateTestpaperItems($testpaperId, $fields)
     {
+        $newItems = $fields['questions'];
+        if (!$newItems) {
+            return false;
+        }
+
         $testpaper = $this->getTestpaper($testpaperId);
-        $argument  = $items;
+        $argument  = $fields;
 
         if (empty($testpaperId)) {
             throw $this->createServiceException();
         }
 
         $existItems  = $this->findItemsByTestId($testpaperId);
-        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questionIds = array_keys($newItems);
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        try {
+            $this->beginTransaction();
 
-        if (count($items) != count($questions)) {
-            throw $this->createServiceException($this->getKernel()->trans('数据缺失'));
+            $this->deleteItemsByTestId($testpaper['id']);
+            $items = $this->createItems($newItems, $questions, $testpaper['id']);
+
+            $this->updateTestpaperByItems($testpaper['id'], $fields);
+            $this->commit();
+
+            return $items;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-
-        $types      = array();
-        $totalScore = 0;
-        $seq        = 1;
-        $items      = ArrayToolkit::index($items, 'questionId');
-
-        /*foreach ($items as $questionId => $item) {
-        if ($questions[$questionId]['type'] == 'material') {
-        $items[$questionId]['score'] = 0;
-        }
-
-        if ($questions[$questionId]['parentId'] > 0) {
-        $items[$questions[$questionId]['parentId']]['score'] += $item['score'];
-        }
-        }*/
-
-        foreach ($items as $item) {
-            $question      = $questions[$item['questionId']];
-            $item['seq']   = $seq;
-            $item['score'] = $question['type'] == 'material' ? 0 : $item['score'];
-
-            if ($question['subCount'] == 0) {
-                $seq++;
-                $totalScore += $item['score'];
-            }
-
-            if ($question['parentId'] > 0) {
-                $items[$question['parentId']]['score'] += $item['score'];
-            }
-
-            if (empty($existItems[$item['questionId']])) {
-                $item['questionType'] = $question['type'];
-                $item['parentId']     = $question['parentId'];
-
-// @todo, wellming.
-
-                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
-                    $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
-                } else {
-                    $item['missScore'] = 0;
-                }
-
-                $item['testId'] = $testpaperId;
-                $item           = $this->createItem($item);
-            } else {
-                $existItem = $existItems[$item['questionId']];
-
-                if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
-                    $existItem['seq']   = $item['seq'];
-                    $existItem['score'] = $item['score'];
-                    $item               = $this->updateItem($existItem['id'], $existItem);
-                } else {
-                    $item = $existItem;
-                }
-
-                unset($existItems[$item['questionId']]);
-            }
-
-            if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
-                $types[] = $item['questionType'];
-            }
-        }
-
-        foreach ($existItems as $existItem) {
-            $this->deleteItem($existItem['id']);
-        }
-
-        $metas                      = empty($testpaper['metas']) ? array() : $testpaper['metas'];
-        $metas['question_type_seq'] = $types;
-
-        $this->dispatchEvent("testpaper.item.update", array('testpaper' => $testpaper, 'argument' => $argument));
-
-        $testpaper = $this->updateTestpaper($testpaper['id'], array(
-            'itemCount' => $seq - 1,
-            'score'     => $totalScore,
-            'metas'     => $metas
-        ));
     }
+
+    protected function createItems($fields, $questions, $testpaperId)
+    {
+        if (!$questions) {
+            return false;
+        }
+
+        $index = 1;
+        foreach ($questions as $key => $question) {
+            $filter['seq']          = $index++;
+            $filter['questionId']   = $question['id'];
+            $filter['questionType'] = $question['type'];
+            $filter['testId']       = $testpaperId;
+            $filter['score']        = $fields[$question['id']]['score'];
+            $filter['missScore']    = empty($fields[$question['id']]['missScore']) ? 0 : $fields[$question['id']]['missScore'];
+            $filter['parentId']     = $question['parentId'];
+            $items[]                = $this->createItem($filter);
+
+            if ($question['type'] == 'material') {
+                $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+                return $this->createItems($fields, $questionSubs, $testpaperId);
+            }
+        }
+
+        return $items;
+    }
+
+    protected function updateTestpaperByItems($testpaperId, $fields)
+    {
+        $testpaper = $this->getTestpaper($testpaperId);
+
+        $items      = $this->findItemsByTestId($testpaperId);
+        $conditions = array(
+            'testId'          => $testpaperId,
+            'parentIdDefault' => 0
+        );
+        $fields['itemCount'] = $this->searchItemCount($conditions);
+        $fields['metas']     = $testpaper['metas'];
+
+        $totalScore = 0;
+        if ($items) {
+            $type = array();
+            foreach ($items as $item) {
+                if ($item['questionType'] != 'material') {
+                    $totalScore += $item['score'];
+                }
+
+                if (!in_array($item['questionType'], $type) && $item['parentId'] != 0) {
+                    $type[] = $item['questionType'];
+                }
+            }
+            $fields['metas']['question_type_seq'] = $type;
+        }
+
+        $fields['score'] = $totalScore;
+
+        $testpaper = $this->updateTestpaper($testpaperId, $fields);
+
+        return $testpaper;
+    }
+
+    /*public function updateTestpaperItems($testpaperId, $items)
+    {
+    $testpaper = $this->getTestpaper($testpaperId);
+    $argument  = $items;
+
+    if (empty($testpaperId)) {
+    throw $this->createServiceException();
+    }
+
+    $existItems  = $this->findItemsByTestId($testpaperId);
+    $questionIds = ArrayToolkit::column($items, 'questionId');
+
+    $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+    if (count($items) != count($questions)) {
+    throw $this->createServiceException($this->getKernel()->trans('数据缺失'));
+    }
+
+    $types      = array();
+    $totalScore = 0;
+    $seq        = 1;
+    $items      = ArrayToolkit::index($items, 'questionId');
+
+    foreach ($items as $item) {
+    $question      = $questions[$item['questionId']];
+    $item['seq']   = $seq;
+    $item['score'] = $question['type'] == 'material' ? 0 : $item['score'];
+
+    if ($question['subCount'] == 0) {
+    $seq++;
+    $totalScore += $item['score'];
+    }
+
+    if ($question['parentId'] > 0) {
+    $items[$question['parentId']]['score'] += $item['score'];
+    }
+
+    if (empty($existItems[$item['questionId']])) {
+    $item['questionType'] = $question['type'];
+    $item['parentId']     = $question['parentId'];
+
+    // @todo, wellming.
+
+    if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
+    $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
+    } else {
+    $item['missScore'] = 0;
+    }
+
+    $item['testId'] = $testpaperId;
+    $item           = $this->createItem($item);
+    } else {
+    $existItem = $existItems[$item['questionId']];
+
+    if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
+    $existItem['seq']   = $item['seq'];
+    $existItem['score'] = $item['score'];
+    $item               = $this->updateItem($existItem['id'], $existItem);
+    } else {
+    $item = $existItem;
+    }
+
+    unset($existItems[$item['questionId']]);
+    }
+
+    if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
+    $types[] = $item['questionType'];
+    }
+    }
+
+    foreach ($existItems as $existItem) {
+    $this->deleteItem($existItem['id']);
+    }
+
+    $metas                      = empty($testpaper['metas']) ? array() : $testpaper['metas'];
+    $metas['question_type_seq'] = $types;
+
+    $this->dispatchEvent("testpaper.item.update", array('testpaper' => $testpaper, 'argument' => $argument));
+
+    $testpaper = $this->updateTestpaper($testpaper['id'], array(
+    'itemCount' => $seq - 1,
+    'score'     => $totalScore,
+    'metas'     => $metas
+    ));
+    }*/
 
     public function canTeacherCheck($id)
     {
@@ -736,6 +837,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    //new
     protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
         $resultStatus = array(
@@ -771,6 +873,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $resultStatus;
     }
 
+    public function findAttachments($testId)
+    {
+        $items       = $this->findItemsByTestId($testId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $conditions  = array(
+            'type'        => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds'   => $questionIds
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
+        array_walk($attachments, function (&$attachment) {
+            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
+        });
+
+        return ArrayToolkit::group($attachments, 'dkey');
+    }
+
     public function getTestpaperBuilder($type)
     {
         return TestpaperBuilderFactory::create($this->biz, $type);
@@ -804,6 +923,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getCourseService()
     {
         return $this->getKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getKernel()->createService('File.UploadFileService');
     }
 
     protected function getMemberDao()
