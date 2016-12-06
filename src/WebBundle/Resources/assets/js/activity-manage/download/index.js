@@ -1,6 +1,6 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
-import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
 jQuery.validator.addMethod("url", function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
@@ -30,44 +30,43 @@ function _inItStep2form() {
 }
 
 $('#step2-form').on('click', '.js-btn-delete', function () {
-    let $parent = $(this).parents('li');
-    let mediaId = $parent.data('id');
-    let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-    if (items && items[mediaId]) {
-      delete items[mediaId];
-      $("#materials").val(JSON.stringify(items));
-    }
-    if($parent.siblings('li').length <= 0) {
-      $('[name="mediaId"]').val(null);
-    }
-    $parent.remove();
+  let $parent = $(this).parents('li');
+  let mediaId = $parent.data('id');
+  let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+  if (items && items[mediaId]) {
+    delete items[mediaId];
+    $("#materials").val(JSON.stringify(items));
+  }
+  if ($parent.siblings('li').length <= 0) {
+    $('[name="mediaId"]').val(null);
+  }
+  $parent.remove();
 })
 
 $('#step2-form').on('click', '.js-video-import', function () {
-  addfile();
+  addFile();
 })
 
 
-
-function addfile() {
+function addFile() {
   if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
     let data = {
       source: 'link',
       id: $("#link").val(),
       name: $("#link").val(),
       link: $("#link").val(),
+      summary: $("#file-summary").val(),
       size: 0
     };
     $("#media").val(JSON.stringify(data));
   }
 
   let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-
+  media.summary = $("#file-summary").val();
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
 
   if (isEmpty(media)) {
-    alert('add file first')
-     notify('success', 'add file first');
+    notify('danger', '请先选择文件');
     return;
   }
 
@@ -81,6 +80,7 @@ function addfile() {
 
   $("#media").val(null);
   $('#link').val(null);
+  $("#file-summary").val(null);
 
   let item_tpl = '';
   if (media.link) {
@@ -112,7 +112,7 @@ function isEmpty(obj) {
 const fileSelect = file => {
   $("input[name=media]").val(JSON.stringify(file));
   chooserUiOpen();
-  addfile();
+  addFile();
   console.log('action triggered', file);
 }
 
