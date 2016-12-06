@@ -45,9 +45,7 @@ export default class UploaderChooser extends Chooser {
     });
 
     this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
-    this._sdk.on('error',function(eror) {
-      console.log(this.arguments);
-    })
+    
     return this;
   }
 
