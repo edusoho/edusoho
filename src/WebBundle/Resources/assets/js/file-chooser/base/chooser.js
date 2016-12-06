@@ -12,7 +12,6 @@ class Chooser extends Emitter {
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
     }
-
 }
 
 export default Chooser;

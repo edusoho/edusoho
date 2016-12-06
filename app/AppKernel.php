@@ -1,16 +1,15 @@
 <?php
 
 use Topxia\Common\ExtensionManager;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpKernel\Kernel;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
-use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
-
 
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
@@ -31,7 +30,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         parent::__construct($environment, $debug);
         date_default_timezone_set('Asia/Shanghai');
-        $this->extensionManger = ExtensionManager::init($this);
+        $this->extensionManger            = ExtensionManager::init($this);
         $this->pluginConfigurationManager = new PluginConfigurationManager($this->getRootDir());
     }
 
@@ -85,7 +84,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new WebBundle\WebBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
-            new AppBundle\AppBundle(),
+            new AppBundle\AppBundle()
         );
 
         $bundles = array_merge($bundles, $this->pluginConfigurationManager->getInstalledPluginBundles());
@@ -105,7 +104,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     public function getPlugins()
@@ -126,20 +125,25 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     protected function initializeBiz()
     {
-        $biz = $this->getContainer()->get('biz');
-        $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
+        $biz                            = $this->getContainer()->get('biz');
+        $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
 
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
+
+        $collector = $this->getContainer()->get('biz.service_provider.collector');
+        foreach ($collector->all() as $provider) {
+            $biz->register($provider);
+        }
 
         $biz->boot();
     }
 
     protected function initializeServiceKernel()
     {
-        if(!$this->isServiceKernelInit){
-            $container     = $this->getContainer();
-            $biz = $container->get('biz');
+        if (!$this->isServiceKernelInit) {
+            $container = $this->getContainer();
+            $biz       = $container->get('biz');
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
@@ -159,11 +163,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                     'host'          => $this->request->getHttpHost(),
                     'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
                     'basePath'      => $this->request->getBasePath(),
-                    'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+                    'baseUrl'       => $this->request->getSchemeAndHttpHost().$this->request->getBasePath()))
                 ->setTranslatorEnabled(true)
                 ->setTranslator($container->get('translator'))
                 ->setParameterBag($container->getParameterBag())
-                ->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+                ->registerModuleDirectory(dirname(__DIR__).'/plugins');
 
             $this->isServiceKernelInit = true;
         }

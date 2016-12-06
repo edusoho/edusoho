@@ -1,7 +1,11 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+let $mediaId = $('[name="mediaId"]');
+let $select = $('#condition-select');
+let fileChooser = new FileChooser();
 
+showChooserType($mediaId);
 inItStep2form();
-
 
 function inItStep2form() {
   var $step2_form = $("#step2-form");
@@ -22,9 +26,7 @@ function inItStep2form() {
   });
 }
 
-
-
-let onConditionTimeType = () => {
+function onConditionTimeType() {
   let $step3_form = $("#step3-form");
   let validator = $step3_form.validate({
     onkeyup: false,
@@ -50,16 +52,13 @@ let onConditionTimeType = () => {
   $conditionsDetail.removeClass('hidden');
 };
 
-let $select = $('#condition-select');
-
 if($select.children('option:selected').val() === 'time'){
   onConditionTimeType();
 }
 
-let fileChooser = new FileChooser();
-
 fileChooser.on('select', (file) => {
-  $('[name="mediaId"]').val(file.id);
+  chooserUiClose();
+  $mediaId.val(file.id);
 });
 
 $select.on('change', event => {

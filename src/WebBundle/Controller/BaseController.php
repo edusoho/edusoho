@@ -62,6 +62,11 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
     protected function setting($name, $default = null)
     {
         return $this->get('topxia.twig.web_extension')->getSetting($name, $default);

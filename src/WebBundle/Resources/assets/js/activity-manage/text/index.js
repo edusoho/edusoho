@@ -39,6 +39,11 @@ class Text{
                     max:300,
                 },
             },
+            messages: {
+                finishDetail: {
+                    required: '请输入至少观看多少分钟',
+                },
+            }
         });
     }
 }

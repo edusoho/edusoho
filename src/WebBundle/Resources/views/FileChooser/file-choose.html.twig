@@ -23,6 +23,10 @@
     {% endif %}
   </ul>
 
+  {% if mediaType == 'download' %}
+    <input class="form-control mbm" type="text" name="" placeholder="填写资料简介（可选）">
+  {% endif %}
+
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
       {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' %}
@@ -36,11 +40,11 @@
       {% include 'WebBundle:FileChooser/Parts:course-file-choose.html.twig' %}
     </div>
 
-    {% if mediaType == 'video' %}
+   {% if mediaType == 'video' %}
       <div class="tab-pane" id="import-video-panel">
         {% include 'WebBundle:FileChooser/Parts:import-video.html.twig' %}
       </div>
-    {% endif %}
+   {% endif %}
     {% if mediaType == 'download' %}
       <div class="tab-pane" id="import-link-panel">
         {% include 'WebBundle:FileChooser/Parts:import-link.html.twig' %}

@@ -72,7 +72,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             if ($task['mode'] == 'lesson') {
                 $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有课程，
                 $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-                $that->getChapterDao()->delete($task['categoryId']); //删除该课时
+                $that->getChapterDao()->delete($task['chapterId']); //删除该课时
             } else {
                 $that->getTaskDao()->delete($task['id']);
             }
