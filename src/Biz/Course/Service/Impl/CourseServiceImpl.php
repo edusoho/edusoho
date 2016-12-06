@@ -141,7 +141,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 ));
             } elseif ($field === 'taskCount') {
                 $taskCount = $this->getTaskService()->countTasksByCourseId($id);
-                var_dump($taskCount);
                 $this->getCourseDao()->update($id, array(
                     'taskCount' => $taskCount
                 ));
