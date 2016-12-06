@@ -14,13 +14,33 @@ class SmsCodes extends BaseResource
 
     public function post(Application $app, Request $request)
     {
-        $biz = $this->getServiceKernel()->getBiz();
+        $fields = $request->request->all();
+
+        $biz     = $this->getServiceKernel()->getBiz();
         $factory = $biz['ratelimiter.factory'];
         $limiter = $factory('ip', 5, 86400);
 
         $remain = $limiter->check($request->getClientIp());
 
-        if ($request->request->get('img_code') && $request->request->get('img_token')) {
+        if ($remain == 0 && empty($fields['img_code']) && empty($fields['img_token'])) {
+            $this->imgBuilder = new CaptchaBuilder;
+            $str = $this->buildImg();
+
+            $imgToken = $this->getTokenService()->makeToken('img_verify', array(
+                'times'    => 5,
+                'duration' => 60 * 2,
+                'userId'   => 0,
+                'data'     => array(
+                    'img_code' => $this->imgBuilder->getPhrase(),
+                )
+            ));
+
+            $this->imgBuilder = null;
+            
+            return array('img_code' => $str, 'img_token' => $imgToken['token'], 'status' => 'limited');
+        }
+
+        if (!empty($fields['img_code']) && !empty($fields['img_token'])) {
             $imgCode  = $request->request->get('img_code');
             $imgToken = $request->request->get('img_token');
 
@@ -38,27 +58,8 @@ class SmsCodes extends BaseResource
             } catch(Expection $e) {
                 return array('500', $e->getMessage());
             }
-
-            $remain = -1;
         }
 
-        if ($remain == 0) {
-            $this->imgBuilder = new CaptchaBuilder;
-            $str = $this->buildImg();
-
-            $imgToken = $this->getTokenService()->makeToken('img_verify', array(
-                'times'    => 5,
-                'duration' => 60 * 2,
-                'userId'   => 0,
-                'data'     => array(
-                    'img_code' => $this->imgBuilder->getPhrase(),
-                )
-            ));
-
-            $this->imgBuilder = null;
-            
-            return array('img_code' => $str, 'img_token' => $imgToken['token'], 'status' => 'limited');
-        }
 
         $type   = $request->request->get('type');
         $mobile = $request->request->get('mobile');
