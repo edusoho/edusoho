@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceImpl extends BaseService implements CourseService
