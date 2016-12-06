@@ -18,11 +18,11 @@ function _inItStep2form() {
         maxlength: 50,
       },
       link: 'url',
-      mediaId: 'required',
+      materials: 'required',
     },
     messages: {
       link: "链接地址不正确",
-      mediaId: '请上传或选择%display%'
+      materials: '请上传或选择%display%'
     }
   });
 
@@ -99,7 +99,6 @@ function addfile() {
     </li>
   `;
   }
-  $('[name="mediaId"]').val(items);
   $("#material-list").append(item_tpl);
   $("#step2-form").data('validator').valid();
 }
