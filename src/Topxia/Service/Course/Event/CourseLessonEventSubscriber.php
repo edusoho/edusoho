@@ -431,13 +431,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lessonId = $replay['lessonId'];
         $lesson = $this->getCourseService()->getLesson($lessonId);
         if ($lesson['liveProvider'] == 5) {
-            $result = $this->getCourseService()->entryReplay($lessonId, $replay['id']);
-            $globalId = $result['resourceNo'];
+            $globalId = $replay['globalId'];
             $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
             $currentUser = $this->getCurrentUser();
             $cloudFile['status'] = 'ok';
             $cloudFile['targetId'] = $replay['id'];
-            $cloudFile['targetType'] = 'repaly';
             $cloudFile['targetType'] = 'repaly';
             $cloudFile['convertHash'] = $cloudFile['hashId'];
             $cloudFile['etag'] = $cloudFile['hashId'];

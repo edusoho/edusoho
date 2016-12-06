@@ -49,8 +49,7 @@ class LessonReplay extends BaseResource
             // play es replay
             if ($lesson['liveProvider'] == 5) {
                 //获取globalid
-                $res = $this->getCourseService()->entryReplay($lesson['id'], $visableReplays[0]['id']);
-                $globalId = empty($res['resourceNo']) ? 0 : $res['resourceNo'];
+                $globalId = $visableReplays[0]['globalId'];
                 $options = array(
                     'fromApi' => true,
                     'times' => 2,
