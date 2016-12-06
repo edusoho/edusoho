@@ -22,6 +22,11 @@ class Material implements TypeInterface
     {
     }
 
+    public function judge($question, $answer)
+    {
+        return array('status' => 'none', 'score' => 0);
+    }
+
     public function filter($fields)
     {
         if (!empty($fields['target']) && $fields['target'] > 0) {

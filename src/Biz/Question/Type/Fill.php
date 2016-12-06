@@ -23,6 +23,43 @@ class Fill implements TypeInterface
     {
     }
 
+    public function judge($question, $answer)
+    {
+        $questionAnswers = array_values($question['answer']);
+        $answer          = array_values($answer);
+
+        if (count($answer) != count($questionAnswers)) {
+            return array('status' => 'wrong', 'score' => 0);
+        }
+
+        $rightCount = 0;
+        foreach ($questionAnswers as $index => $rightAnswer) {
+            $expectAnswer = array();
+            foreach ($rightAnswer as $key => $value) {
+                $value          = trim($value);
+                $value          = preg_replace("/([\x20\s\t]){2,}/", " ", $value);
+                $expectAnswer[] = $value;
+            }
+
+            $actualAnswer = trim($answer[$index]);
+            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", " ", $actualAnswer);
+            if (in_array($actualAnswer, $expectAnswer)) {
+                $rightCount++;
+            }
+        }
+
+        if ($rightCount == 0) {
+            return array('status' => 'wrong', 'score' => 0);
+        } elseif ($rightCount < count($questionAnswers)) {
+            $percentage = intval($rightCount / count($questionAnswers) * 100);
+            $score      = ($question['score'] * $percentage) / 100;
+            $score      = number_format($score, 1, '.', '');
+            return array('status' => 'partRight', 'percentage' => $percentage, 'score' => $score);
+        } else {
+            return array('status' => 'right', 'score' => $question['score']);
+        }
+    }
+
     public function filter($fields)
     {
         $fields = $this->commonFilter($fields);

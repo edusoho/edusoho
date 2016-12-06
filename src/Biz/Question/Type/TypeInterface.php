@@ -11,5 +11,7 @@ interface TypeInterface
 
     public function get($id);
 
+    public function judge($question, $answer);
+
     public function filter($fields);
 }
