@@ -30,7 +30,6 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
     {
         $activity = $this->getActivityService()->getActivityFetchExt($activityId);
 
-
         $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
         if (empty($materials)) {
             throw $this->createNotFoundException('activity not found');
