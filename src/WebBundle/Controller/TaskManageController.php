@@ -102,15 +102,15 @@ class TaskManageController extends BaseController
         }
     }
 
-    public function deleteAction(Request $request, $courseId, $id)
+    public function deleteAction(Request $request, $courseId, $taskId)
     {
         $course = $this->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getTask($id);
+        $task   = $this->getTaskService()->getTask($taskId);
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');
         }
 
-        $this->getTaskService()->deleteTask($id);
+        $this->getTaskService()->deleteTask($taskId);
         return $this->createJsonResponse(array('success' => true));
     }
 

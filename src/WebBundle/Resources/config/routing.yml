@@ -126,7 +126,7 @@ course_manage_task_update:
   defaults: { _controller: WebBundle:TaskManage:update }
 
 course_manage_task_delete:
-  path:  /course/{courseId}/task/{id}/delete
+  path:  /course/{courseId}/task/{taskId}/delete
   defaults: { _controller: WebBundle:TaskManage:delete }
 
 course_task_show:
