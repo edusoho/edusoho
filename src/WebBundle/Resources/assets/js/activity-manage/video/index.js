@@ -8,7 +8,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, "秒数只能在0-59之间");
 
-showChooserType();
+showChooserType($('[name="ext[mediaSource]"]'));
 
 function _inItStep2form() {
   var $step2_form = $('#step2-form');
@@ -33,7 +33,7 @@ function _inItStep2form() {
       second: {
         required: '请输入时长',
       },
-      'ext[mediaSource]': "请选择或者上传视频"
+      'ext[mediaSource]': "请上传或选择%display%"
     }
   });
   $step2_form.data('validator', validator);
@@ -61,7 +61,7 @@ const onSelectFile = file => {
     $("#minute").val(minute);
     $("#second").val(second);
   }
-  $("#ext_mediaSource").val(file.source);
+  $('[name="ext[mediaSource]"]').val(file.source);
   if (file.source == 'self') {
     $("#ext_mediaId").val(file.id);
   } else {
