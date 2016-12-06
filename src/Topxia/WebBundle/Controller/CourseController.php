@@ -386,9 +386,9 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        $loginLimitResponse = $this->createLoginLimitResponse($request);
-        if (!empty($loginLimitResponse)) {
-            return $loginLimitResponse;
+        if ($this->checkLoginLimit($request)) {
+            $url = $this->generateUrl('login');
+            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
         }
 
         if (!$user->isLogin()) {
@@ -399,7 +399,7 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLoginLimitResponse($request)
+    private function checkLoginLimit($request)
     {
         $user = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('login_bind');
@@ -407,9 +407,10 @@ class CourseController extends CourseBaseController
         $userLoginToken = $request->getSession()->getId();
 
         if (!empty($setting['login_limit']) && $setting['login_limit'] == 1 && (empty($user['loginSessionId']) || ($userLoginToken != $user['loginSessionId']))) {
-            $url = $this->generateUrl('login');
-            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
+            return true;
         }
+
+        return false;
     }
 
     public function detailDataAction($id)
@@ -452,9 +453,9 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        $loginLimitResponse = $this->createLoginLimitResponse($request);
-        if (!empty($loginLimitResponse)) {
-            return $loginLimitResponse;
+        if ($this->checkLoginLimit($request)) {
+            $url = $this->generateUrl('login');
+            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
         }
 
         if (!$user->isLogin()) {
