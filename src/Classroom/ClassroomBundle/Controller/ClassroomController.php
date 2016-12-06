@@ -980,7 +980,7 @@ class ClassroomController extends BaseController
             return $enableds;
         }
 
-        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment  = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {

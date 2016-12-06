@@ -3,6 +3,17 @@ namespace Topxia\WebBundle\Twig\Extension;
 
 class HtmlExtension extends \Twig_Extension
 {
+    protected $scripts = array();
+
+    protected $csses = array();
+
+    protected $container;
+
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
     public function getFunctions()
     {
         $options = array('is_safe' => array('html'));

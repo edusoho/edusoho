@@ -62,5 +62,4 @@ class NotHasPermissionRoutingsCommand extends BaseCommand
         }
 
     }
-
 }

@@ -53,12 +53,12 @@
   app.mainScript = '{{ script_main }}';
   app.lang = '{{ app.request.locale }}';
 </script>
+<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+<script src="{{ url('bazinga_jstranslation_js', {'domain': 'js'}) }}"></script>
 <script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
 <script src="{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}"></script>
 <script src="{{ asset('assets/libs/seajs/seajs-text/1.1.1/seajs-text.min.js') }}"></script>
 <script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
-<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-{#<script src="{{ url('bazinga_jstranslation_js') }}"></script>#}
 <script>
   seajs.use(app.mainScript);
 </script>

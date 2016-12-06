@@ -11,7 +11,9 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
     sudo apt update 
     sudo apt install php5.6 php5.6-cli php5.6-curl php5.6-fpm php5.6-intl php5.6-mcrypt php5.6-mysqlnd php5.6-gd php5.6-redis
 ## 下载EduSoho源码
-    git clone https://github.com/EduSoho/EduSoho.git /var/www/edusoho
+    * git clone https://github.com/EduSoho/EduSoho.git /var/www/edusoho
+    * git submodule init    #初始化git子模块
+    * git submodule update  #更新git子模块
 
 由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。有权限访问公司内网，优先使用公司内网地址。
 
@@ -36,9 +38,8 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
     mysql> exit;
     ````
 
-
 ## 初始化程序基础数据
-    app/console doctrine:migrations:migrate
+    bin/phpmig migrate
     app/console topxia:init
 
 ## 配置Nginx

@@ -104,7 +104,8 @@ class BlockTookitTest extends BaseTestCase
         
         $index = 0;
         $index2 = 0;
-        if (!empty(trim($content))) {
+        $content = trim($content);
+        if (!empty($content)) {
             preg_match_all('/< *dt.*?>(.*?)<\/dt>/is', $content, $textMatchs);
             preg_match_all('/< *dl.*?>.*?<\/dl>/is', $content, $dlMatchs);
             foreach ($data as $key => &$object) {

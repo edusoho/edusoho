@@ -61,11 +61,11 @@ class SearchServiceImpl extends BaseService implements SearchService
         $urls = urlencode(json_encode($urls));
 
         $callbackUrl = $siteUrl . $callbackRouteUrl;
-        $sign        = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
+        $sign        = $this->getSignEncoder()->encodePassword($callbackUrl, $api->getAccessKey());
         $callbackUrl .= '?sign=' . rawurlencode($sign);
 
         $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
-
+        
         if ($result['success']) {
             $this->setCloudSearchWaiting();
         }

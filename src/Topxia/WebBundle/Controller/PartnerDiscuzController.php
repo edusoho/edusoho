@@ -122,7 +122,7 @@ class PartnerDiscuzController extends BaseController
         if(!API_SYNLOGOUT) {
             return API_RETURN_FORBIDDEN;
         }
-        $this->get('security.context')->setToken(null);
+        $this->get('security.token_storage')->setToken(null);
         $this->get('request')->getSession()->invalidate();
 
         return API_RETURN_SUCCEED;

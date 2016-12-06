@@ -38,14 +38,3 @@ services:
     topxia.target_helper:
         class:          Topxia\WebBundle\Util\TargetHelper
         arguments:      ['@service_container']
-
-    topxia.file_locator:
-        class:          Topxia\WebBundle\Theme\FileLocator
-        arguments:      ['@kernel', '%kernel.root_dir%/Resources']
-    # file_locator:
-    #     alias:          topxia.file_locator
-    topxia.templating.locator:
-        class:          %templating.locator.class%
-        arguments:      ['@topxia.file_locator', '%kernel.cache_dir%']
-    templating.locator:
-        alias:          topxia.templating.locator

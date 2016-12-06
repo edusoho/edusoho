@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Topxia\Service\Common\ServiceKernel;
 
-class ServiceEvent extends GenericEvent
+use Codeages\Biz\Framework\Event\Event;
+
+class ServiceEvent extends Event
 {
 
     public function getKernel()
