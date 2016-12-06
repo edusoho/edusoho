@@ -24,7 +24,7 @@ class MaterialQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
-        return $this->render('question-manage/material/form.html.twig', array(
+        return $this->render('question-manage/material-form.html.twig', array(
             'courseSet'      => $courseSet,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,
@@ -38,7 +38,7 @@ class MaterialQuestionController extends BaseController
         $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
         $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
 
-        return $this->render('question-manage/material/form.html.twig', array(
+        return $this->render('question-manage/material-form.html.twig', array(
             'courseSet'      => $courseSet,
             'parentQuestion' => array(),
             'courseTasks'    => $courseTasks,

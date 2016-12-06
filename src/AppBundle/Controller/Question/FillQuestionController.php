@@ -25,7 +25,7 @@ class FillQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
-        return $this->render('question-manage/fill/form.html.twig', array(
+        return $this->render('question-manage/fill-form.html.twig', array(
             'courseSet'      => $courseSet,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,
@@ -42,7 +42,7 @@ class FillQuestionController extends BaseController
         $parentId       = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);
 
-        return $this->render('question-manage/fill/form.html.twig', array(
+        return $this->render('question-manage/fill-form.html.twig', array(
             'courseSet'      => $courseSet,
             'parentQuestion' => $parentQuestion,
             'courseTasks'    => $courseTasks,

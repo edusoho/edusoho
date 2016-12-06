@@ -3,7 +3,7 @@
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
 	<div class="testpaper-question-body">
-    {% include 'AppBundle:question/part:question-stem.html.twig' %}
+    {% include 'question/part/question-stem.html.twig' %}
 
 		<ul class="testpaper-question-choices">
 			{% for key, choice in question.metas.choices %}
@@ -37,10 +37,10 @@
 		  </div>
 
 			<div class="testpaper-question-actions pull-right">
-				{% include 'AppBundle:question/part:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 			</div>
 		</div>
-		{% include 'AppBundle:question/part:show-analysis.html.twig' with {showAnalysis:1} %}
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 		
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
@@ -57,7 +57,7 @@
 		  </div>
 
 		  <div class="testpaper-question-actions pull-right">
-				{% include 'AppBundle:question/part:flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+				{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
 
@@ -70,5 +70,5 @@
 		{% endif %}
 	{% endif %}
 
-	{% include 'AppBundle:question/part:show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
 </div>

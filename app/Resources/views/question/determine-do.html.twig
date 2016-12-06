@@ -1,6 +1,6 @@
 <div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
 	<div class="testpaper-question-body">
-	  {% include 'AppBundle:question/part:question-stem.html.twig' %}
+	  {% include 'question/part/question-stem.html.twig' %}
   </div>
 
 	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
@@ -18,11 +18,11 @@
 		  </div>
 
 		  <div class="testpaper-question-actions pull-right">
-				{% include 'AppBundle:question/part:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 		  </div>
 		</div>
 		
-		{% include 'AppBundle:question/part:show-analysis.html.twig' with {showAnalysis:1} %}
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs">
@@ -31,7 +31,7 @@
 	 		</div>
 
 	 		<div class="testpaper-question-actions pull-right">
-		  	{% include 'AppBundle:question/part:flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
 
@@ -45,6 +45,6 @@
 
 	{% endif %}
 
-	{% include 'AppBundle:question/part:show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
 </div>
 

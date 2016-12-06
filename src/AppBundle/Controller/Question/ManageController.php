@@ -1,14 +1,15 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Question;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
-class QuestionManageController extends BaseController
+class ManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {

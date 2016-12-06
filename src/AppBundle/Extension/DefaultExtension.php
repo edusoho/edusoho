@@ -35,7 +35,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/SingleChoiceQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/single-choice/do.html.twig'
+                    'do' => 'question/single-choice-do.html.twig'
                 )
             ),
             'uncertain_choice' => array(
@@ -46,7 +46,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/UncertainChoiceQuesiton:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/uncertain-choice/do.html.twig'
+                    'do' => 'question/uncertain-choice-do.html.twig'
                 )
             ),
             'determine'        => array(
@@ -57,7 +57,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/DetermineQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/determine/do.html.twig'
+                    'do' => 'question/determine-do.html.twig'
                 )
             ),
             'essay'            => array(
@@ -68,7 +68,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/EssayQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/essay/do.html.twig'
+                    'do' => 'question/essay-do.html.twig'
                 )
             ),
             'fill'             => array(
@@ -79,7 +79,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/FillQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/fill/do.html.twig'
+                    'do' => 'question/fill-do.html.twig'
                 )
             ),
             'material'         => array(
@@ -90,7 +90,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/MaterialQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/material/do.html.twig'
+                    'do' => 'question/material-do.html.twig'
                 )
             )
         );

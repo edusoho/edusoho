@@ -1,38 +1,38 @@
 #question
 course_set_manage_question:
     path: /course_set/{id}/manage/question
-    defaults: { _controller: AppBundle:QuestionManage:index }
+    defaults: { _controller: AppBundle:Question/Manage:index }
 
 course_set_manage_question_create:
     path: /course_set/{id}/manage/question/{type}/create
-    defaults: { _controller: AppBundle:QuestionManage:create }
+    defaults: { _controller: AppBundle:Question/Manage:create }
 
 course_set_manage_question_update:
     path: /course_set/{courseSetId}/manage/question/{questionId}/update
-    defaults: { _controller: AppBundle:QuestionManage:update }
+    defaults: { _controller: AppBundle:Question/Manage:update }
 
 course_set_manage_question_delete:
     path: /course_set/{courseSetId}/manage/question/delete/{questionId}
-    defaults: { _controller: AppBundle:QuestionManage:delete }
+    defaults: { _controller: AppBundle:Question/Manage:delete }
     methods: [POST]
 
 course_set_manage_question_deletes:
     path: /course_set/{courseSetId}/manage/question/deletes
-    defaults: { _controller: AppBundle:QuestionManage:deletes }
+    defaults: { _controller: AppBundle:Question/Manage:deletes }
     methods: [POST]
 
 course_set_manage_question_preview:
     path: /course_set/{courseSetId}/manage/question/{questionId}/preview
-    defaults: { _controller: AppBundle:QuestionManage:preview }
+    defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
   path: /course_set/{courseId}/manage/question/picker
-  defaults: { _controller: AppBundle:QuestionManage:questionPicker }
+  defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
   path:  /course_set/{courseId}/manage/question/{questionId}/picked
-  defaults: { _controller: AppBundle:QuestionManage:pickedQuestion }
+  defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
 
 course_set_manage_question_check:
   path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:QuestionManage:check }
+  defaults: { _controller: AppBundle:Question/Manage:check }
