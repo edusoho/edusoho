@@ -38,6 +38,8 @@ interface CourseService
 
     public function findStudentsByCourseId($courseId);
 
+    public function countStudentsByCourseId($courseId);
+
     public function isCourseTeacher($courseId, $userId);
 
     public function isCourseStudent($courseId, $userId);

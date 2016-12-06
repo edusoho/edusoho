@@ -129,7 +129,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseStatistics($id, $fields)
     {
-        return $this->getCourseDao()->update($id, $fields);
+        if (empty($fields)) {
+            return null;
+        }
+
+        foreach ($fields as $field) {
+            if ($field === 'studentCount') {
+                $studentCount = $this->countStudentsByCourseId($id);
+                $this->getCourseDao()->update($id, array(
+                    'studentCount' => $studentCount
+                ));
+            } elseif ($field === 'taskCount') {
+                $taskCount = $this->getTaskService()->countTasksByCourseId($id);
+                var_dump($taskCount);
+                $this->getCourseDao()->update($id, array(
+                    'taskCount' => $taskCount
+                ));
+            }
+        }
+
+        return $this->getCourseDao()->get($id);
     }
 
     public function deleteCourse($id)
@@ -231,6 +250,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $students;
+    }
+
+    public function countStudentsByCourseId($courseId)
+    {
+        return $this->getMemberDao()->count(array(
+            'courseId' => $courseId,
+            'role'     => 'student'
+        ));
     }
 
     public function isCourseMember($courseId, $userId)

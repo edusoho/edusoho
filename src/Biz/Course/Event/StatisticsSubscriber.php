@@ -18,14 +18,12 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         );
     }
 
-    /* update task count in course when task created or deleted */
     public function onTaskNumberChange(Event $event)
     {
         $task     = $event->getSubject();
         $courseId = $task['courseId'];
-        $tasks    = $this->getTaskService()->findTasksByCourseId($courseId);
         $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'taskCount' => count($tasks)
+            'taskCount'
         ));
     }
 
@@ -38,15 +36,9 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         $courseId = $member['courseId'];
-        $students = $this->getCourseService()->findStudentsByCourseId($courseId);
         $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'studentCount' => count($students)
+            'studentCount'
         ));
-    }
-
-    protected function getTaskService()
-    {
-        return $this->getBiz()->service('Task:TaskService');
     }
 
     protected function getCourseService()

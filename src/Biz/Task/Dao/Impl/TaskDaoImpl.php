@@ -2,8 +2,8 @@
 
 namespace Biz\Task\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Task\Dao\TaskDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 {
@@ -58,6 +58,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
     public function declares()
     {
-        return array();
+        return array(
+            'conditions' => array(
+                'courseId = :courseId'
+            )
+        );
     }
 }
