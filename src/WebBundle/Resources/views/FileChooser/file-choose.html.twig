@@ -13,7 +13,7 @@
           href="#chooser-upload-panel">上传资料</a></li>
     <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
     <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
-    {% if mediaType == 'video' %}
+    {% if mediaType == 'video' %}#}
       <li role="presentation"><a href="#import-video-panel">导入网络视频</a>
       </li>
     {% endif %}
@@ -22,6 +22,10 @@
       </li>
     {% endif %}
   </ul>
+
+  {% if mediaType == 'download' %}
+    <input class="form-control mbm" type="text" name="" placeholder="填写资料简介（可选）">
+  {% endif %}
 
   <div class="tab-content">
     <div class="tab-pane active" id="chooser-upload-panel">
@@ -36,11 +40,11 @@
       {% include 'WebBundle:FileChooser/Parts:course-file-choose.html.twig' %}
     </div>
 
-    {% if mediaType == 'video' %}
+   {% if mediaType == 'video' %}
       <div class="tab-pane" id="import-video-panel">
         {% include 'WebBundle:FileChooser/Parts:import-video.html.twig' %}
       </div>
-    {% endif %}
+   {% endif %}
     {% if mediaType == 'download' %}
       <div class="tab-pane" id="import-link-panel">
         {% include 'WebBundle:FileChooser/Parts:import-link.html.twig' %}

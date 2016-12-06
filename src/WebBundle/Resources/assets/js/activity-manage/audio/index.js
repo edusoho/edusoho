@@ -1,4 +1,5 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
     return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "必须为非负整数");
@@ -6,6 +7,9 @@ jQuery.validator.addMethod("unsigned_integer", function (value, element) {
 jQuery.validator.addMethod("second_range", function (value, element) {
     return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, "秒数只能在0-59之间");
+
+showChooserType();
+
 
 function _inItStep2form() {
     var $step1_form = $('#step2-form');
@@ -60,6 +64,7 @@ $(".js-length").blur(function () {
 const fileChooser = new FileChooser();
 
 const onSelectFile = file => {
+    chooserUiClose();
     if (file.length) {
         let minute = parseInt(file.length / 60);
         let second = Math.round(file.length % 60);
