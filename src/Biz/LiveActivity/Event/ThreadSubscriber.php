@@ -2,17 +2,12 @@
 
 namespace Biz\LiveActivity\Event;
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-    private $logger;
-
     public static function getSubscribedEvents()
     {
         return array(
@@ -53,13 +48,7 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
 
     protected function getLogger($name)
     {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
-
-        return $this->logger;
+        $biz = $this->getBiz();
+        return $biz['logger'];
     }
 }

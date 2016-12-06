@@ -2,9 +2,6 @@
 
 namespace WebBundle\Controller;
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,8 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BaseController extends Controller
 {
-    protected $logger;
-
     protected function getBiz()
     {
         return $this->get('biz');
@@ -80,17 +75,5 @@ class BaseController extends Controller
     {
         $biz = $this->getBiz();
         return $biz->service($alias);
-    }
-
-    protected function getLogger($name)
-    {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
-
-        return $this->logger;
     }
 }
