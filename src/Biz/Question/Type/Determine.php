@@ -33,11 +33,6 @@ class Determine implements TypeInterface
         return array('status' => $status, 'score' => $score);
     }
 
-    public function judge($question, $answer)
-    {
-        return array('status' => 'none', 'score' => 0);
-    }
-
     public function filter($fields)
     {
         if (!empty($fields['target']) && $fields['target'] > 0) {
