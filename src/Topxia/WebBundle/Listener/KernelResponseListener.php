@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -51,15 +50,9 @@ class KernelResponseListener
         }
     }
 
-    private function generateUserActiveLog(Request $request)
+    private function generateUserActiveLog($request)
     {
-        $session = $request->getSession();
-
-        if(empty($session)){
-            return;
-        }
-
-        $activeUserTime = $session->get('active_user_time', 0);
+        $activeUserTime = $request->getSession()->get('active_user_time', 0);
         //当天登录激活
         if ($activeUserTime != strtotime("today")) {
             $currentUser  = $this->getUserService()->getCurrentUser();

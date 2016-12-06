@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
@@ -8,8 +7,6 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-
-        $("[data-toggle='popover']").popover();
 
         var $form = $("#cloud-setting-form");
         var uploader = new Uploader({
@@ -60,6 +57,7 @@ define(function(require, exports, module) {
                 Notify.success(Translator.trans('上传云视频内嵌水印成功！'));
             }
         });
+
         $("#cloud-video-embed-watermark-remove").on('click', function(){
             if (!confirm(Translator.trans('确认要删除云视频水印吗？'))) return false;
             var $btn = $(this);
@@ -154,8 +152,7 @@ define(function(require, exports, module) {
                 validator.removeItem('[name="video_fingerprint_time"]');
             }
         })
-
-
+        
     }
 
 })
