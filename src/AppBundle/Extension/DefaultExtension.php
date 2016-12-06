@@ -35,7 +35,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Question/ChoiceQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'question/choice:do.html.twig'
+                    'do' => 'question/choice-do.html.twig'
                 )
             ),
             'essay'            => array(

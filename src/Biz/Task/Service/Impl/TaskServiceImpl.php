@@ -179,7 +179,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw $this->createAccessDeniedException("the Task is Locked");
+            // throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 

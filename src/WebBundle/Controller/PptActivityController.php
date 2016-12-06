@@ -63,6 +63,7 @@ class PptActivityController extends BaseController implements ActivityActionInte
         $ppt      = $config->get($activity['mediaId']);
 
         $file                             = $this->getUploadFileService()->getFile($ppt['mediaId']);
+
         $ppt['media'] = $file;
 
         return $this->render('WebBundle:PptActivity:edit-modal.html.twig', array(

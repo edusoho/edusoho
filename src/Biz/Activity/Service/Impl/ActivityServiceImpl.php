@@ -8,9 +8,7 @@ use Biz\Activity\Dao\ActivityDao;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Activity\Config\ActivityFactory;
 use Biz\Activity\Service\ActivityService;
-use Topxia\Common\Exception\AccessDeniedException;
 use Biz\Activity\Listener\ActivityLearnLogListener;
-use Topxia\Common\Exception\InvalidArgumentException;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -33,6 +31,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function findActivities($ids)
     {
         return $this->getActivityDao()->findByIds($ids);
+    }
+
+    public function findActivitiesByCourseIdAndType($courseId, $type)
+    {
+        $conditions = array(
+            'fromCourseId' => $courseId,
+            'mediaType'    => $type
+        );
+        return $this->getActivityDao()->search($conditions, null, 0, 1000);
     }
 
     public function trigger($id, $eventName, $data = array())

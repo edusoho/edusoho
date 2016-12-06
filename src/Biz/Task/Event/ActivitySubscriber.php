@@ -1,14 +1,13 @@
 <?php
 namespace Biz\Task\Event;
 
-
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInterface
+class ActivitySubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -30,13 +29,13 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
     {
         $taskId = $event->getArgument('taskId');
 
-        if(!$event->hasArgument('timeStep')){
+        if (!$event->hasArgument('timeStep')) {
             $time = TaskService::LEARN_TIME_STEP;
-        }else{
+        } else {
             $time = $event->getArgument('timeStep');
         }
 
-        if(empty($taskId)){
+        if (empty($taskId)) {
             return;
         }
 
@@ -47,12 +46,12 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
     {
         $activity = $event->getSubject();
 
-        if($event->hasArgument('taskId')){
+        if ($event->hasArgument('taskId')) {
             $taskId = $event->getArgument('taskId');
             $this->getTaskService()->finishTask($taskId);
-        }else{
+        } else {
             $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByActivityId($activity['id']);
-            foreach ($taskResults as $taskResult){
+            foreach ($taskResults as $taskResult) {
                 $this->getTaskService()->finishTask($taskResult['courseTaskId']);
             }
         }
@@ -73,5 +72,4 @@ class ActivitySubscriber extends EventSubscriber  implements EventSubscriberInte
     {
         return $this->getBiz()->service('Task:TaskResultService');
     }
-
 }

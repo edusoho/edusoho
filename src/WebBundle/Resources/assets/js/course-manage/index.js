@@ -8,9 +8,8 @@ if ($('#sortable-list').length) {
 }
 closeCourse();
 deleteCourse();
+publishCourse();
 deleteTask();
 publishTask();
 unpublishTask();
-publishCourse();
-// deleteTask();
 showSettings();
