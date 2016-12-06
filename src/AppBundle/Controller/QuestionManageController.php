@@ -44,7 +44,7 @@ class QuestionManageController extends BaseController
         $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
-        return $this->render('AppBundle:question-manage:index.html.twig', array(
+        return $this->render('question-manage/index.html.twig', array(
             'courseSet'      => $courseSet,
             'questions'      => $questions,
             'users'          => $users,
@@ -67,10 +67,10 @@ class QuestionManageController extends BaseController
             $question = $this->getQuestionService()->create($data);
 
             if ($data['submission'] == 'continue') {
-                $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
-                $urlParams['type']     = $type;
-                $urlParams['courseId'] = $courseSet['id'];
-                $urlParams['goto']     = $request->query->get('goto', null);
+                $urlParams         = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
+                $urlParams['type'] = $type;
+                $urlParams['id']   = $courseSet['id'];
+                $urlParams['goto'] = $request->query->get('goto', null);
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
             } elseif ($data['submission'] == 'continue_sub') {
@@ -166,9 +166,9 @@ class QuestionManageController extends BaseController
             $question['subs'] = $questionSubs;
         }
 
-        $template = 'AppBundle:question-manage:preview-modal.html.twig';
+        $template = 'question-manage/preview-modal.html.twig';
         if ($isNewWindow) {
-            $template = 'AppBundle:question-manage:preview.html.twig';
+            $template = 'question-manage/preview.html.twig';
         }
 
         return $this->render($template, array(
@@ -235,7 +235,7 @@ class QuestionManageController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
 
-        return $this->render('AppBundle:question-manage:question-picker.html.twig', array(
+        return $this->render('question-manage/question-picker.html.twig', array(
             'courseSet'     => $courseSet,
             'questions'     => $questions,
             'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
@@ -261,7 +261,7 @@ class QuestionManageController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-        return $this->render('AppBundle:question-manage:question-item-picked.html.twig', array(
+        return $this->render('question-manage/question-item-picked.html.twig', array(
             'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,

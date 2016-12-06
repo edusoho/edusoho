@@ -24,7 +24,7 @@ class ChoiceQuestionController extends BaseController
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
 
-        return $this->render('AppBundle:question-manage/choice:form.html.twig', array(
+        return $this->render('question-manage/choice/form.html.twig', array(
             'courseSet'      => $courseSet,
             'question'       => $question,
             'parentQuestion' => $parentQuestion,
@@ -41,7 +41,7 @@ class ChoiceQuestionController extends BaseController
         $parentId       = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);
 
-        return $this->render('AppBundle:question-manage/choice:form.html.twig', array(
+        return $this->render('question-manage/choice/form.html.twig', array(
             'courseSet'      => $courseSet,
             'parentQuestion' => $parentQuestion,
             'courseTasks'    => $courseTasks,

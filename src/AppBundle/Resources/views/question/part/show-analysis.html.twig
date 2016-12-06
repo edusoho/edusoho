@@ -1,6 +1,0 @@
-{% if showAnalysis|default(0) %}
-	<div class="testpaper-question-analysis well">
-		{{ question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}
-		{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.analysis', targetId:question.id  } %}
-	</div>
-{% endif %}
