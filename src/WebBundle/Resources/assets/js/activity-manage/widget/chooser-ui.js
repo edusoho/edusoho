@@ -8,10 +8,10 @@ export  const chooserUiClose = () => {
   $('.file-chooser-bar').removeClass('hidden');
 }
 
-export const showChooserType = () => {
+export const showChooserType = ($item) => {
   $('#iframe-content').on('click','.file-chooser-bar',function() {
     chooserUiOpen();
-    console.log("ok");
+    $item.val(null);
   })
 }
 

@@ -1,4 +1,7 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+
+showChooserType();
 
 let onConditionTimeType = () => {
 
@@ -35,6 +38,7 @@ if($select.children('option:selected').val() === 'time') {
 let fileChooser = new FileChooser();
 
 fileChooser.on('select', (file) => {
+  chooserUiClose();
   $('.hidden-data').find('#mediaId').val(file.id);
 });
 
