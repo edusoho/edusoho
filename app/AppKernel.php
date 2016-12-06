@@ -128,6 +128,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz->register(new DoctrineServiceProvider());
+        $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $biz->boot();
     }
 
