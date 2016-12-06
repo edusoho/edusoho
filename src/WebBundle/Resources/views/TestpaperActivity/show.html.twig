@@ -1,3 +1,38 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block body %}
+   <div  class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:block">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body task-state-modal">
+		        <div class="title font-blod">
+		          <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>考试说明
+		        </div>
+		        <div class="content">
+		          <div class="content-title">
+		          	本次考试共<span class="text-success">{{ testpaper.itemCount }}题</span>，总分<span class="text-success">{{ testpaper.score }}分</span>
+	          		{% if testpaperActivity.finishCondition.type == 'score' %}
+	          			，及格为<span class="text-success">{{ testpaperActivity.finishCondition.finishScore}}分</span>
+	          		{% endif %}；<br/>
+
+		          	{% if testpaperActivity.limitedTime %}
+		          		请在<span class="text-success">{{ testpaperActivity.limitedTime }}分钟</span>内作答。
+		          	{% endif %}
+		          </div>
+		          
+		        </div>
+		        <div class="footer text-right">
+		          <a class="btn btn-primary">{{'开始考试'|trans}}</a>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+{% endblock %}
+
+
+
+{#
 {% if activity.startTime|default(0) and activity.startTime > "now"|date("U") %}
 	<div>
 		<span>考试将在{{ activity.startTime|date('Y-m-d H:i:s') }}开始，请到时再来。</span>
@@ -34,4 +69,4 @@
 		<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'正在批阅'|trans}}</a>
 	{% endif %}
 	
-{% endif %}
+{% endif %}#}
