@@ -36,8 +36,7 @@ class FlashActivityController extends BaseController implements ActivityActionIn
 
         $file = $this->getUploadFileService()->getFile($flash['mediaId']);
 
-        $activity['ext']['media']['name'] = $file['filename'];
-        $activity['ext']['media']['id']   = $file['id'];
+        $flash['media'] = $file;
 
         return $this->render('WebBundle:FlashActivity:edit-modal.html.twig', array(
             'activity' => $activity,

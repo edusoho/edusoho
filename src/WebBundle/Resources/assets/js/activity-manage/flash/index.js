@@ -1,4 +1,29 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+let $mediaId = $('[name="mediaId"]');
+
+showChooserType($mediaId);
+_inItStep2form();
+
+function _inItStep2form() {
+  var $form = $('#step2-form');
+  var validator = $form.validate({
+    rules: {
+      title: {
+        required: true,
+        maxlength: 50,
+      },
+      mediaId: 'required',
+    },
+    messages: {
+      mediaId: {
+        required:'请上传或选择%display%'
+      }
+    }
+  });
+
+  $form.data('validator', validator);
+}
 
 let onConditionTimeType = () => {
 
@@ -12,12 +37,10 @@ let onConditionTimeType = () => {
         digits: true
       },
     },
-
     messages: {
       finishDetail: {
-        required: "请输入完成条件",
-        digits: "完成条件必须为数字"
-      }
+        required: '请输入至少观看多少分钟',
+      },
     }
   });
 
@@ -35,7 +58,8 @@ if($select.children('option:selected').val() === 'time') {
 let fileChooser = new FileChooser();
 
 fileChooser.on('select', (file) => {
-  $('.hidden-data').find('#mediaId').val(file.id);
+  chooserUiClose();
+  $mediaId.val(file.id);
 });
 
 $select.on('change', event => {

@@ -55,3 +55,28 @@
   background-color: #fff;
   padding: 0 20px;
 }
+
+.download-list {
+  list-style: none;
+  padding-left: 0;
+  li {
+    padding-top: 4px;
+    >a {
+      color: @gray-darker;
+      font-weight: bold;
+    }
+    .btn {
+      color: @gray-dark;
+      visibility: hidden;
+      font-size: 16px;
+    }
+    &:hover {
+      >a {
+        color: @brand-primary;
+      }
+      >.btn {
+        visibility: visible;
+      }
+    }
+  }
+}

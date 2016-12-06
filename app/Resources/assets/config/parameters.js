@@ -6,6 +6,7 @@
  */
 const parameters = {
   registeredBundles: [ //register php bundles
+    'AppBundle',
     'WebBundle',
   ],
   output: {

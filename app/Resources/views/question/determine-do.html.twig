@@ -1,0 +1,50 @@
+<div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'question/part/question-stem.html.twig' %}
+  </div>
+
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		  	{{'正确答案是'|trans}} <strong class="text-success">
+		  		{% if question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>，
+				{% if question.testResult.status == 'right' %}
+					{{'你答对了'|trans}}
+				{% elseif question.testResult.status == 'wrong' %}
+					{{'你<strong class="color-danger">答错</strong>了'|trans|raw}}
+				{% elseif question.testResult.status == 'noAnswer' %}
+					{{'你未答题'|trans}}
+				{% endif %}
+		  </div>
+
+		  <div class="testpaper-question-actions pull-right">
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+		  </div>
+		</div>
+		
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+	{% else %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-determine-inputs js-testpaper-question-label">
+				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'正确'|trans}}</label>
+		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'错误'|trans}}</label>
+	 		</div>
+
+	 		<div class="testpaper-question-actions pull-right">
+		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  </div>
+		</div>
+
+		{% if showAnswer|default(0) %}
+			<div class="testpaper-preview-answer clearfix mtl mbl">
+			  <div class="testpaper-question-result">
+				  {{'正确答案是'|trans}} <strong class="text-success">{% if question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">
+				</div>
+		  </div>
+	  {% endif %}
+
+	{% endif %}
+
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+</div>
+
