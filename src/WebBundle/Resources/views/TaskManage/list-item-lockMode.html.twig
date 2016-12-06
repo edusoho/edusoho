@@ -38,7 +38,7 @@
         </li>
          {% endif %}
         <li>
-          <a class='delete-item'  href="javascript:;"  data-type="task" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">
+          <a class='delete-item'  href="javascript:;"  data-type="task" data-url="{{path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId})}}">
             <i class="es-icon es-icon-delete mrs"></i>
             删除
           </a>
