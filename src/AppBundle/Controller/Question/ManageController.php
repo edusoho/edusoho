@@ -199,15 +199,15 @@ class ManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function questionPickerAction(Request $request, $courseId)
+    public function questionPickerAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = $request->query->all();
 
-        if (empty($conditions['target'])) {
-            $conditions['targetPrefix'] = "course-{$courseSet['id']}";
-        }
+        /*if (empty($conditions['target'])) {
+        $conditions['targetPrefix'] = "course-{$courseSet['id']}";
+        }*/
 
         $conditions['parentId'] = 0;
 
@@ -234,7 +234,7 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+        /*$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));*/
 
         return $this->render('question-manage/question-picker.html.twig', array(
             'courseSet'     => $courseSet,
@@ -242,15 +242,15 @@ class ManageController extends BaseController
             'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator'     => $paginator,
             'targetChoices' => $this->getQuestionRanges($courseSet),
-            'targets'       => $targets,
+            //'targets'       => $targets,
             'conditions'    => $conditions,
             'target'        => $request->query->get('target', 'testpaper')
         ));
     }
 
-    public function pickedQuestionAction(Request $request, $courseId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $question = $this->getQuestionService()->get($questionId);
 
@@ -260,13 +260,13 @@ class ManageController extends BaseController
 
         $subQuestions = array();
 
-        $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
+        //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-        return $this->render('question-manage/question-item-picked.html.twig', array(
+        return $this->render('question-manage/question-picked-tr.html.twig', array(
             'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,
-            'targets'      => $targets,
+            //'targets'      => $targets,
             'type'         => $question['type'],
             'target'       => $request->query->get('target', 'testpaper')
         ));
