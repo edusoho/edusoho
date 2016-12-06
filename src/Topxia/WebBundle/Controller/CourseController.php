@@ -386,7 +386,7 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->checkLoginLimit($request)) {
+        if ($this->checkLoginLimit($request) === true) {
             $url = $this->generateUrl('login');
             return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
         }
@@ -453,7 +453,7 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->checkLoginLimit($request)) {
+        if ($this->checkLoginLimit($request) === true) {
             $url = $this->generateUrl('login');
             return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
         }
