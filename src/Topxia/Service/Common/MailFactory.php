@@ -4,6 +4,7 @@
 namespace Topxia\Service\Common;
 
 
+
 class MailFactory
 {
     public static function create($mailOptions)
