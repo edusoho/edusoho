@@ -4,7 +4,7 @@
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionId[]" value="{{ question.id }}">
   </td>
-  <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
+  <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}
@@ -19,18 +19,17 @@
   </td>
   <td>{{ dict_text('questionType',question.type ) }}</td>
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>
-  {% if target|default('testpaper') == 'testpaper' %}
-    <td>
-      <input name="scores[]" class="notMoveHandle form-control input-sm"
-        {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ item.score|default(question.score)|score_text }}" data-miss-score="{{ testpaper.metas.missScore[type]|default(0) }}" >
-    </td>
-  {% endif %}
+  <td>
+    <input name="scores[]" class="notMoveHandle form-control input-sm"
+      {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ question.score|default(question.score)|score_text }}" data-miss-score="{{ testpaper.metas.missScore[type]|default(0) }}" >
+  </td>
+
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id, }) }}" class="notMoveHandle btn btn-default btn-sm">{{'预览'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm item-delete-btn">{{'删除'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="pick-item" data-url="{{ path('course_set_manage_question_picker', {id:courseSet.id,questionId:question.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}" class="notMoveHandle btn btn-default btn-sm">{{'预览'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="item-delete-btn">{{'删除'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="replace-item" data-url="{{ path('course_set_manage_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
       {% endif %}
     </div>
   </td>

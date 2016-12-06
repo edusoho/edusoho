@@ -26,12 +26,13 @@ course_set_manage_question_preview:
     defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
-  path: /course_set/{courseId}/manage/question/picker
+  path: /course_set/{id}/manage/question/picker
   defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
-  path:  /course_set/{courseId}/manage/question/{questionId}/picked
+  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
   defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
+
 
 course_set_manage_question_check:
   path: /course_set/{id}/manage/question/check

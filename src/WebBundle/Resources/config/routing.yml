@@ -198,19 +198,6 @@ course_set_manage_testpaper_info:
   defaults: { _controller: WebBundle:TestpaperManage:info }
   methods: [POST]
 
-course_set_manage_question_preview:
-    path: /course_set/{courseSetId}/manage/question/{questionId}/preview
-    defaults: { _controller: WebBundle:QuestionManage:preview }
-
-course_set_manage_question_picker:
-  path: /course_set/{id}/manage/question/picker
-  defaults: { _controller: WebBundle:QuestionManage:questionPicker }
-
-course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
-  defaults: { _controller: WebBundle:QuestionManage:pickedQuestion }
-
-
 #testpaper
 course_set_manage_testpaper:  
   path: /course_set/{id}/manage/testpaper

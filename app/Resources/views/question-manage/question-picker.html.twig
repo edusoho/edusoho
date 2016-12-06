@@ -9,48 +9,38 @@
 
 {% block body %}
 <div id="question-picker-body">
-  <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {courseId:courseSet.id}) }}" novalidate>
-    <div class="form-group">
-      <select class="form-control" name="target" style="width:200px;height:32px;">
-        {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
-      </select>
-    </div>
+  
+  {% include 'question-manage/picker-search-form.html.twig' %}
 
-    <div class="form-group">
-      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
-    </div>
-
-    <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|default('')|join(',')|default(null) }}">
-    <input type="hidden" name="type" value="{{ conditions.type|default(null)}}">
-
-    <button class="btn btn-primary btn-sm search-question-btn">搜索</button>
-
-  </form>
-
-  <table class="table table-condensed" id="homework-item-picker-table">
+  <table class="table table-condensed" id="item-picker-table">
     <thead>
     <tr>
-      {% if not replace %}
-    <th><input type="checkbox" data-role="item-batch-select"></th>
+      {% if not replace|default(null) %}
+        <th><input type="checkbox" data-role="item-batch-select"></th>
       {% endif %}
-      <th width="45%">题干</th>
-      <th>类型</th>
-      <th>操作</th>
+      <th width="45%">{{'题干'|trans}}</th>
+      <th>{{'类型'|trans}}</th>
+      <th>{{'分值'|trans}}</th>
+      <th>{{'操作'|trans}}</th>
     </tr>
     </thead>
     <tbody>
       {% for question in questions if (question.type != 'material' or question.subCount > 0) %}
-        {% include 'WebBundle:QuestionManage:question-pick-tr.html.twig' %}
+        {% include 'question-manage/question-pick-tr.html.twig' %}
       {% else %}
-        <tr><td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:courseSet.id}) }}">创建题目</a></div></td></tr>
+        <tr>
+          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:courseSet.id}) }}">创建题目</a></div>
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
   {% if not replace %}
-  <div id="homework-item-operate">
-    <label class="checkbox-inline"><input type="checkbox" data-role="item-batch-select"> 全选</label>
-    
-  </div>
+    <div id="item-operate">
+      <label class="checkbox-inline">
+        <input type="checkbox" data-role="item-batch-select">{{'全选'|trans}}
+      </label>
+    </div>
   {% endif %}
   {{ web_macro.paginator(paginator) }}
 </div>
@@ -58,7 +48,7 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="button" class="btn btn-primary" type="submit" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
+    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
 
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
 {% endblock %}

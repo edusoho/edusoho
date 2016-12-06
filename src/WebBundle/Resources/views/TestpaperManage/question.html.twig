@@ -68,10 +68,10 @@ tr.placeholder:before {
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="testpaper-table-tbody {% if loop.index != 1 %}hide{% endif %}" data-role="question-body">
             {% for question in questions[type]|default(null) if question %}
               
-              {% include 'WebBundle:QuestionManage:question-picked-tr.html.twig' %}
+              {% include 'question-manage/question-picked-tr.html.twig' %}
               {% if question.subs|default(null) %}
                 {% for question in question.subs %}
-                  {% include 'WebBundle:QuestionManage:question-picked-tr.html.twig' %}
+                  {% include 'question-manage/question-picked-tr.html.twig' %}
                 {% endfor %}
               {% endif %}
             {% endfor %}
