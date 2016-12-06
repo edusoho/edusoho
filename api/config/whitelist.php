@@ -19,6 +19,6 @@ return array(
         '/^\/api\/users\/login$/',
         '/^\/api\/users\/bind_login$/',
         '/^\/api\/sms_codes$/',
-        '/^\/api\/users\/password$/',
+        '/^\/api\/users\/password$/'
     )
 );
