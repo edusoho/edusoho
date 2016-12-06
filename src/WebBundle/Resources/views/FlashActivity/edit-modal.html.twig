@@ -4,13 +4,11 @@
 {% block activity_content %}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="media" class="style">Flash</label>
-    </div>
-    <div class="hidden-data">
-      <input type="hidden" value="{{ flash.mediaId|default(0) }}" name="mediaId" id="mediaId"/>
+      <label for="mediaId" class="style">Flash</label>
     </div>
     <div class="col-sm-10">
       {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+      <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
     </div>
   </div>
 {% endblock %}

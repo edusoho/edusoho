@@ -9,7 +9,7 @@ class VideoImport extends Chooser {
 
     initEvent() {
         $(this.container).on('click', '.js-video-import', this._onImport.bind(this));
-        $('.js-choose-trigger').on('click', this._open.bind(this))
+        // $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
 
@@ -51,7 +51,7 @@ class VideoImport extends Chooser {
     }
 
     _onChange(file) {
-        this._close();
+        // this._close();
         var value = file ? JSON.stringify(file) : '';
         this.trigger('file.select', file);
         $('[data-role="placeholder"]').html(file.name);
