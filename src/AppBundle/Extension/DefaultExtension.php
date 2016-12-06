@@ -19,78 +19,78 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'choice'           => array(
                 'name'      => '多选题',
                 'actions'   => array(
-                    'create' => 'WebBundle:ChoiceQuestion:create',
-                    'edit'   => 'WebBundle:ChoiceQuestion:edit',
-                    'show'   => 'WebBundle:ChoiceQuestion:show'
+                    'create' => 'AppBundle:Question/ChoiceQuestion:create',
+                    'edit'   => 'AppBundle:Question/ChoiceQuestion:edit',
+                    'show'   => 'AppBundle:Question/ChoiceQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:ChoiceQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/choice:do.html.twig'
                 )
             ),
             'single_choice'    => array(
                 'name'      => '单选题',
                 'actions'   => array(
-                    'create' => 'WebBundle:SingleChoiceQuestion:create',
-                    'edit'   => 'WebBundle:SingleChoiceQuestion:edit',
-                    'show'   => 'WebBundle:SingleChoiceQuestion:show'
+                    'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
+                    'edit'   => 'AppBundle:Question/SingleChoiceQuestion:edit',
+                    'show'   => 'AppBundle:Question/SingleChoiceQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:SingleChoiceQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/single-choice:do.html.twig'
                 )
             ),
             'uncertain_choice' => array(
                 'name'      => '不定项选择题',
                 'actions'   => array(
-                    'create' => 'WebBundle:UncertainChoiceQuesiton:create',
-                    'edit'   => 'WebBundle:UncertainChoiceQuesiton:edit',
-                    'show'   => 'WebBundle:UncertainChoiceQuesiton:show'
+                    'create' => 'AppBundle:Question/UncertainChoiceQuesiton:create',
+                    'edit'   => 'AppBundle:Question/UncertainChoiceQuesiton:edit',
+                    'show'   => 'AppBundle:Question/UncertainChoiceQuesiton:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:UncertainChoiceQuesiton:do.html.twig'
+                    'do' => 'AppBundle:question/uncertain-choice:do.html.twig'
                 )
             ),
             'determine'        => array(
                 'name'      => '判断题',
                 'actions'   => array(
-                    'create' => 'WebBundle:DetermineQuestion:create',
-                    'edit'   => 'WebBundle:DetermineQuestion:edit',
-                    'show'   => 'WebBundle:DetermineQuestion:show'
+                    'create' => 'AppBundle:Question/DetermineQuestion:create',
+                    'edit'   => 'AppBundle:Question/DetermineQuestion:edit',
+                    'show'   => 'AppBundle:Question/DetermineQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:DetermineQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/determine:do.html.twig'
                 )
             ),
             'essay'            => array(
                 'name'      => '判断题',
                 'actions'   => array(
-                    'create' => 'WebBundle:EssayQuestion:create',
-                    'edit'   => 'WebBundle:EssayQuestion:edit',
-                    'show'   => 'WebBundle:EssayQuestion:show'
+                    'create' => 'AppBundle:Question/EssayQuestion:create',
+                    'edit'   => 'AppBundle:Question/EssayQuestion:edit',
+                    'show'   => 'AppBundle:Question/EssayQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:EssayQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/essay:do.html.twig'
                 )
             ),
             'fill'             => array(
                 'name'      => '填空题',
                 'actions'   => array(
-                    'create' => 'WebBundle:FillQuestion:create',
-                    'edit'   => 'WebBundle:FillQuestion:edit',
-                    'show'   => 'WebBundle:FillQuestion:show'
+                    'create' => 'AppBundle:Question/FillQuestion:create',
+                    'edit'   => 'AppBundle:Question/FillQuestion:edit',
+                    'show'   => 'AppBundle:Question/FillQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:FillQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/fill:do.html.twig'
                 )
             ),
             'material'         => array(
                 'name'      => '材料题',
                 'actions'   => array(
-                    'create' => 'WebBundle:MaterialQuestion:create',
-                    'edit'   => 'WebBundle:MaterialQuestion:edit',
-                    'show'   => 'WebBundle:MaterialQuestion:show'
+                    'create' => 'AppBundle:Question/MaterialQuestion:create',
+                    'edit'   => 'AppBundle:Question/MaterialQuestion:edit',
+                    'show'   => 'AppBundle:Question/MaterialQuestion:show'
                 ),
                 'templates' => array(
-                    'do' => 'WebBundle:MaterialQuestion:do.html.twig'
+                    'do' => 'AppBundle:question/material:do.html.twig'
                 )
             )
         );
