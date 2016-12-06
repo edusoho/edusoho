@@ -364,6 +364,11 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        if ('normal' == $course['type']){
+            $this->dispatchEvent('course.browse',
+                new ServiceEvent($course, array('userId' => $user['id'])));
+        }
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
             'member' => $member,
