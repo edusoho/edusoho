@@ -17,7 +17,7 @@
   </div>#}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="media" class="style">{{ '选择资料'|trans }}</label>
+      <label for="mediaId" class="style">{{ '选择资料'|trans }}</label>
     </div>
     <div class="col-sm-10">
       <ul class="download-list" id="material-list">
@@ -33,24 +33,13 @@
           </li>
         {% endfor %}
       </ul>
-      {#{% if not activity.ext.materials|default(null) %}
-        <div class="js-empty-list">
-          <span class="text-warning">{{ '暂无资料，请上传。'|trans }}</span>
-        </div>
-      {% endif %}#}
       {% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: mediaType,fileType:'',file: null } %}
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
+      <input id="materials" class="form-control" type="hidden" name="materials"
+      {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
+      <input id="media" type="hidden" name="media" value="">
     </div>
   </div>
-  {#<div class="form-group">
-    <div class="col-sm-2 control-label"></div>
-    <div class="col-sm-10 col-md-offset-1 controls">
-      <a href="javascript:;" class="btn btn-primary js-download-material-add" role="button">{{ '添加'|trans }}</a>
-    </div>
-  </div>#}
-  <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
-  <input id="materials" class="form-control" type="hidden" name="materials"
-      {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
-  <input id="media" type="hidden" name="media" value="">
 {% endblock %}
 
 {% block activity_finish %}

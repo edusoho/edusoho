@@ -5,7 +5,7 @@ jQuery.validator.addMethod("url", function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
 
-showChooserType($("input[name=media]"));
+// showChooserType($("input[name=mediaId]"));
 
 _inItStep2form();
 
@@ -18,11 +18,11 @@ function _inItStep2form() {
         maxlength: 50,
       },
       link: 'url',
-      media: 'required',
+      mediaId: 'required',
     },
     messages: {
       link: "链接地址不正确",
-      media: '请上传或选择%display%'
+      mediaId: '请上传或选择%display%'
     }
   });
 
@@ -34,8 +34,11 @@ $('#step2-form').on('click', '.js-btn-delete', function () {
     let mediaId = $parent.data('id');
     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     if (items && items[mediaId]) {
-        delete items[mediaId];
-        $("#materials").val(JSON.stringify(items));
+      delete items[mediaId];
+      $("#materials").val(JSON.stringify(items));
+    }
+    if($parent.siblings('li').length <= 0) {
+      $('[name="mediaId"]').val(null);
     }
     $parent.remove();
 })
@@ -82,21 +85,23 @@ function addfile() {
   let item_tpl = '';
   if (media.link) {
     item_tpl = `
-    <li class="list-group-item clearfix" data-id="${media.link}">
-      <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
+    <li class="download-item " data-id="${media.link}">
         <a href="${ media.link }" target="_blank">${ media.name }</a>
+        <a class="btn btn-xs js-btn-delete"  title="{{'删除'|trans}}" data-url="">&times;</a>
         <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
     </li>
   `;
   } else {
     item_tpl = `
-    <li class="list-group-item clearfix" data-id="${media.id}">
-      <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
-        <a href="${ media.id }">${ media.name }</a>
+    <li class="download-item " data-id="${media.id}">
+      <a href="${ media.id }">${ media.name }</a>
+      <a class="btn btn-xs js-btn-delete" title="{{'删除'|trans}}" data-url="">&times;</a>
     </li>
   `;
   }
+  $('[name="mediaId"]').val(items);
   $("#material-list").append(item_tpl);
+  $("#step2-form").data('validator').valid();
 }
 
 _inItStep2form();
