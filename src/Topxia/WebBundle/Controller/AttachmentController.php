@@ -107,7 +107,6 @@ class AttachmentController extends BaseController
         ));
     }
 
-
     public function deleteAction(Request $request, $id)
     {
         $previewType = $request->query->get('type', 'attachment');

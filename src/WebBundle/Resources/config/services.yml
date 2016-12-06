@@ -6,6 +6,12 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+            
+    live_activity_event_subscriber:
+        class: Biz\LiveActivity\Event\ThreadSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
 
     web.twig.activity_extension:
         class: WebBundle\Twig\ActivityExtension
@@ -17,3 +23,4 @@ services:
         arguments: ['@biz'] 
         tags: 
             - { name: twig.extension }
+    

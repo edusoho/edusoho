@@ -23,13 +23,13 @@
       <ul class="download-list" id="material-list">
         {% for media in activity.ext.materials|default(null) %}
           <li class="download-item" data-id="{{ media.link|default(media.id) }}">
-            <a class="delete-btn" title="{{ '删除'|trans }}"data-url="">&times;</a>
             {% if media.link|default(null) %}
               <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
               <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
             {% else %}
               <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
             {% endif %}
+            <a class="btn btn-xs js-btn-delete" title="{{ '删除'|trans }}"data-url="">&times;</a>
           </li>
         {% endfor %}
       </ul>

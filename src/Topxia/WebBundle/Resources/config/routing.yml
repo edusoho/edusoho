@@ -2,10 +2,6 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-test:
-    path:  /test
-    defaults: { _controller: TopxiaWebBundle:Test:test }
-
 webpack_test:
     path:  /webpack_test
     defaults: { _controller: TopxiaWebBundle:Default:webpackTest }
@@ -902,31 +898,31 @@ question_file_url:
     path: /question_ajax/file_url
     defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
 
-course_manage_question:
-    path: /course/{courseId}/manage/question
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:index }
+# course_manage_question:
+#     path: /course/{courseId}/manage/question
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:index }
 
-course_manage_question_create:
-    path: /course/{courseId}/manage/question/create/{type}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:create }
+# course_manage_question_create:
+#     path: /course/{courseId}/manage/question/create/{type}
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:create }
 
-course_manage_question_update:
-    path: /course/{courseId}/manage/question/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
+# course_manage_question_update:
+#     path: /course/{courseId}/manage/question/{id}/update
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
 
-course_manage_question_delete:
-    path: /course/{courseId}/manage/question/delete/{id}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
-    methods: [POST]
+# course_manage_question_delete:
+#     path: /course/{courseId}/manage/question/delete/{id}
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
+#     methods: [POST]
 
-course_manage_question_deletes:
-    path: /course/{courseId}/manage/question/deletes
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
-    methods: [POST]
+# course_manage_question_deletes:
+#     path: /course/{courseId}/manage/question/deletes
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
+#     methods: [POST]
 
-course_manage_question_preview:
-    path: /course/{courseId}/manage/question/{id}/preview
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
+# course_manage_question_preview:
+#     path: /course/{courseId}/manage/question/{id}/preview
+#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
 
 course_manage_upload_question_attachment:
     path:  /course/{id}/manage/upload/question/attachment/{targetType}
@@ -1052,9 +1048,9 @@ course_manage_testpaper_items:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
-course_manage_testpaper_items_get:
-    path: /course/{courseId}/manage/testpaper/items_get
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
+# course_manage_testpaper_items_get:
+#     path: /course/{courseId}/manage/testpaper/items_get
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
 
 course_manage_testpaper_items_reset:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset

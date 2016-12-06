@@ -1,0 +1,17 @@
+<form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {id:courseSet.id}) }}" novalidate>
+  <div class="form-group">
+    <select class="form-control" name="target" style="width:200px;height:32px;">
+      {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}">
+  </div>
+
+  <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|default('')|join(',')|default(null) }}">
+  <input type="hidden" name="type" value="{{ conditions.type|default(null)}}">
+
+  <button class="btn btn-primary btn-sm search-question-btn" data-role="search-btn">{{'搜索'|trans}}</button>
+
+</form>

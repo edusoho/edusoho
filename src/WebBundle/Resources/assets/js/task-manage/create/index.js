@@ -90,6 +90,7 @@ class Editor {
               $(this).before(html);
               add = 1;
               return false;
+
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);

@@ -41,6 +41,22 @@ export const deleteCourse = () => {
   });
 }
 
+export const publishCourse = () => {
+  $('body').on('click', '.js-publish-course', function (evt) {
+    if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
+      return;
+    }
+    $.post($(evt.target).data('url'), function (data) {
+      if (data.success) {
+        notify('success', '发布成功');
+        location.reload();
+      } else {
+        notify('danger', '发布失败：' + data.message);
+      }
+    });
+  });
+}
+
 export const deleteTask = () => {
   $('body').on('click', '.delete-item', function (evt) {
     if ($(evt.currentTarget).data('type') == 'task') {
@@ -88,22 +104,6 @@ export const unpublishTask = () => {
       }
     });
   })
-}
-
-export const publishCourse = () => {
-  $('body').on('click', '.js-publish-course', function (evt) {
-    if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
-      return;
-    }
-    $.post($(evt.currentTarget).data('url'), function (data) {
-      if (data.success) {
-        notify('success', '发布成功');
-        location.reload();
-      } else {
-        notify('danger', '发布失败：' + data.message);
-      }
-    });
-  });
 }
 
 export const showSettings = () => {
