@@ -432,8 +432,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson = $this->getCourseService()->getLesson($lessonId);
         if ($lesson['liveProvider'] == 5) {
             $result = $this->getCourseService()->entryReplay($lessonId, $replay['id']);
-            //$globalId = $result['resourceNo'];
-            $globalId = '507868be3524496eb80c8df7c4ceeeda';
+            $globalId = $result['resourceNo'];
             $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
             $currentUser = $this->getCurrentUser();
             $cloudFile['status'] = 'ok';
