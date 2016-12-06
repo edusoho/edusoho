@@ -155,7 +155,7 @@ class Testpaper {
     let limitedTime = $this.val();
     let startTime = $('input[name="startTime"]').val();
 
-    if (startTime != '') {
+    if (!startTime) {
       let endTime = new Date(Date.parse(startTime) + limitedTime * 60 * 1000);
       let endDate = endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' 
                     + endTime.getDate() + ' ' + endTime.getHours() + ':' + endTime.getMinutes();  
