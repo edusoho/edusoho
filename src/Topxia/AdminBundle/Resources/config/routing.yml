@@ -1806,7 +1806,6 @@ admin_edu_cloud_sms_no_message:
     path: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms_setting]
-    permissions: [admin_edu_cloud_sms_overview]
 
 admin_edu_cloud_email:
     path: /setting/edu_cloud/email
