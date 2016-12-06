@@ -1,0 +1,57 @@
+.task-create-editor {
+  padding: 0 20px;
+  .task-create-type-list {
+    padding: 0 55px;
+    margin-bottom: 0;
+    list-style: none;
+    .task-create-type-item {
+      margin-bottom: 20px;
+      >a {
+        height: 110px;
+        background-color: #f4f6f8;
+        display: block;
+        text-align: center;
+        color: @gray;
+        .es-transition;
+        .border-radius(4px);
+        border: 3px solid #f4f6f8;
+      }
+      &:hover  {
+        >a {
+          background: #f4f6f8;
+          border: 3px solid @brand-primary;
+          .es-transition;
+        }
+      }
+      &.active {
+        >a {
+          background: @brand-primary;
+          color: #fff;
+          border: 3px solid @brand-primary;
+          .es-transition;
+        }
+      }
+      i {
+        display: block;
+        font-size: 35px;
+        line-height: 1;
+        padding-top: 18px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .task-create-content {
+    min-height: 200px;
+    position: relative;
+    .task-create-content-iframe {
+      width: 100%;
+      border: none;
+      min-height: 300px;
+    }
+  }
+}
+
+.task-iframe-body {
+  background-color: #fff;
+  padding: 0 20px;
+}
