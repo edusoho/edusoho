@@ -2,15 +2,19 @@
 
 namespace WebBundle\Controller;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
 class BaseController extends Controller
 {
+    protected $logger;
+
     protected function getBiz()
     {
         return $this->get('biz');
@@ -36,11 +40,11 @@ class BaseController extends Controller
     /**
      * 创建消息提示响应
      *
-     * @param  string $type 消息类型：info, warning, error
-     * @param  string $message 消息内容
-     * @param  string $title 消息抬头
-     * @param  integer $duration 消息显示持续的时间
-     * @param  string $goto 消息跳转的页面
+     * @param  string     $type     消息类型：info, warning, error
+     * @param  string     $message  消息内容
+     * @param  string     $title    消息抬头
+     * @param  integer    $duration 消息显示持续的时间
+     * @param  string     $goto     消息跳转的页面
      * @return Response
      */
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
@@ -68,9 +72,8 @@ class BaseController extends Controller
         return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
-
     /**
-     * @param  string $alias
+     * @param  string        $alias
      * @return BaseService
      */
     protected function createService($alias)
@@ -79,4 +82,15 @@ class BaseController extends Controller
         return $biz->service($alias);
     }
 
+    protected function getLogger($name)
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+
+        return $this->logger;
+    }
 }

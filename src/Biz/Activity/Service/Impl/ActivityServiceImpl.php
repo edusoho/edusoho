@@ -33,6 +33,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->findByIds($ids);
     }
 
+    public function findActivitiesByCourseIdAndType($courseId, $type)
+    {
+        $conditions = array(
+            'fromCourseId' => $courseId,
+            'mediaType'    => $type
+        );
+        return $this->getActivityDao()->search($conditions, null, 0, 1000);
+    }
+
     public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
