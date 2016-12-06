@@ -200,7 +200,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled') && $user['id']) {
+        if ($this->setting('vip.enabled') && $user['id'] && $this->isPluginInstalled('Vip')) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
