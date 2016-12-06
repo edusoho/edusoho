@@ -73,7 +73,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTaskItemRenderPage()
     {
-        return 'WebBundle:TaskManage:list-item-lockMode.html.twig';
+        return 'WebBundle:TaskManage:list-item-lock-mode.html.twig';
     }
 
 
