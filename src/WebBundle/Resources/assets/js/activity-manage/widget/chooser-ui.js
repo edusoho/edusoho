@@ -1,3 +1,4 @@
+//@TODO 重构 activity编辑页  依赖了file-chooser页面组件的元素
 export const  chooserUiOpen =   () => {
   $('.file-chooser-bar').addClass('hidden');
   $('.file-chooser-main').removeClass('hidden');
