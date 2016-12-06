@@ -1,3 +1,5 @@
+import  ActivityEmitter from '../../activity/activity-emitter';
+
 class LiveShow {
 
   constructor() {
@@ -5,38 +7,44 @@ class LiveShow {
     }
 
     init(){
-      var that = this;
-    var liveStartTimeFormat = live_activity_data.liveStartTimeFormat;
-      var liveEndTimeFormat = live_activity_data.liveEndTimeFormat;
-      var startTime = live_activity_data.startTime;
-      var endTime = live_activity_data.endTime;
+      let that = this;
+      let activityData = JSON.parse($('#activity-data').text());
+      console.log('activityData : ', activityData);
+      let liveStartTimeFormat = activityData.startTimeFormat;
+      let liveEndTimeFormat = activityData.endTimeFormat;
+      let startTime = parseInt(activityData.startTime);
+      let endTime = parseInt(activityData.endTime);
+      let nowDate = parseInt(activityData.nowDate);
+      let summary = $('#activity-summary').text();
 
-      var courseId = live_activity_data.courseId;
-      var activityId = live_activity_data.id;
+      let courseId = activityData.fromCourseId;
+      let activityId = activityData.id;
+      let replayStatus = null;
 
-      var $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
+      let $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
       
-      var iID;
+      let iID;
       if (iID) {
           clearInterval(iID);
       }
 
-      var intervalSecond = 0;
+      let intervalSecond = 0;
+      this.entry_url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
 
       function generateHtml() {
-          var nowDate = live_activity_data.nowDate + intervalSecond;
-          var startLeftSeconds = parseInt(startTime - nowDate);
-          var endLeftSeconds = parseInt(endTime - nowDate);
-          var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
-          var modulo = startLeftSeconds % (60 * 60 * 24);
-          var hours = Math.floor(modulo / (60 * 60));
+          nowDate = nowDate + intervalSecond;
+          let startLeftSeconds = parseInt(startTime - nowDate);
+          let endLeftSeconds = parseInt(endTime - nowDate);
+          let days = Math.floor(startLeftSeconds / (60 * 60 * 24));
+          let modulo = startLeftSeconds % (60 * 60 * 24);
+          let hours = Math.floor(modulo / (60 * 60));
           modulo = modulo % (60 * 60);
-          var minutes = Math.floor(modulo / 60);
-          var seconds = modulo % 60;
-          var $replayGuid = Translator.trans('老师们：');
+          let minutes = Math.floor(modulo / 60);
+          let seconds = modulo % 60;
+          let $replayGuid = Translator.trans('老师们：');
           $replayGuid += "<br>";
 
-          if (live_activity_data.liveProvider == 1) {
+          if (activityData.ext.liveProvider == 1) {
               $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;"+Translator.trans('录制直播课程时，需在直播课程间点击');
               $replayGuid += "<span style='color:red'>"+Translator.trans('录制面板')+"</span>";
               $replayGuid += Translator.trans('，录制完成后点击');
@@ -53,28 +61,26 @@ class LiveShow {
               $replayGuid += "<br>";
           }
 
-          var $countDown = that._getCountDown(days, hours, minutes, seconds);
+          let $countDown = that._getCountDown(days, hours, minutes, seconds);
 
 
           if (0 < startLeftSeconds && startLeftSeconds < 7200) {
               $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
-              var url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
-              if (live_activity_data.isTeacher) {
+              if (!!activityData.isTeacher) {
                   $countDown = $replayGuid + $countDown;
-                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               } else {
-                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               }
           };
           if (startLeftSeconds <= 0) {
               clearInterval(iID);
               $liveNotice = "<p>" + Translator.trans('直播已经开始，直播将于%liveEndTime%结束。', {liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'}) + "</p>";
-              var url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
-              if (live_activity_data.isTeacher) {
+              if (!!activityData.isTeacher) {
                   $countDown = $replayGuid;
-                  $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown += "<p><a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               } else {
-                  $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
+                  $countDown = "<p><a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
               }
           };
 
@@ -83,44 +89,61 @@ class LiveShow {
               $liveNotice = "<p style='margin: 10px 0 0 10px; font-weight: bold; font-size: 1.5em;'>"+Translator.trans('直播已经结束')+"</p>";
               $countDown = "";
 
-              if (live_activity_data.replayStatus == 'videoGenerated') {
+              if (replayStatus == 'videoGenerated') {
                   
-                  $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ live_activity_data.id +"'>查看回放</button>&nbsp;&nbsp;";
+                  $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ activityData.id +"'>查看回放</button>&nbsp;&nbsp;";
                   $('body').on('click','.live-video-play-btn',function(){
                       
-                      if (live_activity_data.liveId == 0 || ($.inArray('liveMediaError',live_activity_data) != -1 && live_activity_data.liveMediaError != '')) {
+                      if (activityData.ext.liveId == 0 || ($.inArray('liveMediaError', activityData) != -1 && activityData.liveMediaError != '')) {
                           Notify.danger('抱歉，视频文件不存在，暂时无法学习。');
                           return;
                       }
                       $('#lesson-live-content').hide();
                       $('#lesson-video-content').html('');
-                      self._videoPlay(live_activity_data);
+                      self._videoPlay(activityData);
                   });
               } else {
-                  if (live_activity_data.replays && live_activity_data.replays.length > 0) {
-                      $.each(live_activity_data.replays, function(i, n) {
+                  if (activityData.replays && activityData.replays.length > 0) {
+                      $.each(activityData.replays, function(i, n) {
                           $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
                       });
                   }
               }
           };
-          var $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + live_activity_data.summary + '</div>' + '<br>' + $countDown;
+          let $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
           $("#lesson-live-content").find('.lesson-content-text-body').html($content);
 
           intervalSecond++;
       }
 
       generateHtml();
-      if (live_activity_data.endTime > live_activity_data.nowDate) {
+      if (endTime > nowDate) {
         iID = setInterval(generateHtml, 1000);
       }
 
       $("#lesson-live-content").show();
       $("#lesson-live-content").scrollTop(0);
+
+      that.started = false;
+    }
+
+    entryLiveRoom(){
+      let that = this;
+      console.log('startLive', that.started, that.entry_url);
+      if(!that.started){
+        that.started = true;
+        let emitter = new ActivityEmitter();
+        emitter.emit('start', {}).then(() => {
+          console.log('live.start');
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      window.open(that.entry_url, '_blank');  
     }
 
     _getCountDown(days, hours, minutes, seconds) {
-        var content = Translator.trans('还剩: ');
+        let content = Translator.trans('还剩: ');
         content += days ? "<strong class='text-info'>" + days + "</strong>"+Translator.trans('天') : "";
         content += hours ? "<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时'): "";
         content += minutes ? "<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟') : "";
@@ -130,4 +153,4 @@ class LiveShow {
     }
 }
 
-new LiveShow(); 
+window.liveShow = new LiveShow(); 

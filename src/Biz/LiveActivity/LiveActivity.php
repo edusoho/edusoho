@@ -17,7 +17,7 @@ class LiveActivity extends Activity
     protected function registerListeners()
     {
         return array(
-            'text.finish' => 'Biz\\LiveActivity\\Listener\\LiveFinishListener'
+            'live.finish' => 'Biz\\LiveActivity\\Listener\\LiveFinishListener'
         );
     }
 

@@ -30,7 +30,6 @@ class CourseSetManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
-
         return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses

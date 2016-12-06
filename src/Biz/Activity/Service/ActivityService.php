@@ -12,6 +12,8 @@ interface ActivityService
 
     public function findActivities($ids);
 
+    public function findActivitiesByCourseIdAndType($courseId, $type);
+
     public function createActivity($activity);
 
     public function updateActivity($id, $fields);
@@ -19,7 +21,7 @@ interface ActivityService
     public function deleteActivity($id);
 
     /**
-     * @param  string $type 活动类型
+     * @param  string     $type 活动类型
      * @return Activity
      */
     public function getActivityConfig($type);
