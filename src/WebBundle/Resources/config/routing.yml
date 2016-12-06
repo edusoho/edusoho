@@ -198,8 +198,23 @@ course_set_manage_testpaper_info:
   defaults: { _controller: WebBundle:TestpaperManage:info }
   methods: [POST]
 
-course_manage_testpaper_publish:
-  path: /course/{courseId}/manage/testpaper/{id}/publish
+
+#testpaper
+course_set_manage_testpaper:  
+  path: /course_set/{id}/manage/testpaper
+  defaults: { _controller: WebBundle:TestpaperManage:index }
+
+course_set_manage_testpaper_create:
+  path: /course_set/{id}/manage/testpaper/create
+  defaults: { _controller: WebBundle:TestpaperManage:create }
+
+course_set_manage_testpaper_info:
+  path: /course_set/{id}/manage/testpaper/info
+  defaults: { _controller: WebBundle:TestpaperManage:info }
+  methods: [POST]
+
+course_set_manage_testpaper_publish:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/publish
   defaults: { _controller: WebBundle:TestpaperManage:publish }
   #methods: [POST]
 
