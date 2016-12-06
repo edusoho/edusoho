@@ -2054,4 +2054,3 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
->>>>>>> beta/7.3.5
