@@ -18,18 +18,18 @@ class QuestionEventSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onQuestionCreate(Event $event)
     {
-        $question   = $event->getSubject();
-        $argument   = $event->getArgument('argument');
-        $attachment = $argument['attachment'];
+        $question = $event->getSubject();
+        //$argument   = $event->getArgument('argument');
+        //$attachment = $argument['attachment'];
 
         //do something
     }
 
     public function onQuestionUpdate(Event $event)
     {
-        $question   = $event->getSubject();
-        $argument   = $event->getArgument('argument');
-        $attachment = $argument['fields']['attachment'];
+        $question = $event->getSubject();
+        //$argument   = $event->getArgument('argument');
+        //$attachment = $argument['fields']['attachment'];
 
         //do something
     }
