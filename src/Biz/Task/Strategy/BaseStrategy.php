@@ -120,7 +120,7 @@ class BaseStrategy
     /**
      * @return CourseChapterDao
      */
-    protected function getChapterDao()
+    public function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
     }
@@ -128,7 +128,7 @@ class BaseStrategy
     /**
      * @return TaskService
      */
-    protected function getTaskService()
+    public function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
@@ -136,7 +136,7 @@ class BaseStrategy
     /**
      * @return TaskDao
      */
-    protected function getTaskDao()
+    public function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
     }
