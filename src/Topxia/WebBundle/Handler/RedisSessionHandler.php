@@ -10,6 +10,7 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
@@ -37,7 +38,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     /**
      * @var SecurityContext
      */
-    private $context;
+    private $storage;
 
     /**
      * Constructor.
@@ -50,7 +51,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * @param  array                     $options An associative array of Redis options
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct($redisFactory, SecurityContext $context, array $options = array())
+    public function __construct($redisFactory, TokenStorage $storage, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -62,7 +63,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
         $this->ttl    = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
 
-        $this->context = $context;
+        $this->storage = $storage;
     }
 
     /**
@@ -130,7 +131,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
     private function getCurrentUserId()
     {
-        $token = $this->context->getToken();
+        $token = $this->storage->getToken();
 
         if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;

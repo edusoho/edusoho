@@ -1,71 +1,58 @@
 admin:
-    pattern:  /
+    path:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_homepage:
-    pattern:  /homepage
-    defaults: { _controller: TopxiaAdminBundle:Default:homepage }
-
-admin_notice_modal:
-    pattern:  /notice/modal
-    defaults: { _controller: TopxiaAdminBundle:Default:notice }
-
 admin_question_remind_teachers:
-    pattern: /course/{courseId}/question/{questionId}/remindTeachers
+    path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
     methods:  [POST]
     permissions: [admin]
 
 admin_operation_analysis:
-    pattern:  /operation/analysis
+    path:  /operation/analysis
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
     permissions: [admin]
 
 admin_user_statistic:
-    pattern: /user/statistic/{period}
+    path: /user/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:userStatistic }
     permissions: [admin]
 
 admin_lesson_learn_statistic:
-    pattern: /lesson/learn/statistic/{period}
+    path: /lesson/learn/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:lessonLearnStatistic }
     permissions: [admin]
 
 admin_study_statistic:
-    pattern: /study/statistic/{period}
+    path: /study/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:studyStatistic }
     permissions: [admin]
 
 admin_order_statistic:
-    pattern: /order/statistic/{period}
+    path: /order/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:orderStatistic }
     permissions: [admin]
 
 admin_course_explore:
-    pattern: /course/explore/{period}
+    path: /course/explore/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:courseExplore }
     permissions: [admin]
 # admin_online_count:
-#     pattern: /online/count
+#     path: /online/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
 #     permissions: [admin]
 
 # admin_login_count:
-#     pattern: /login/count
+#     path: /login/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
 
-admin_dashboard:
-    pattern:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-    permissions: [admin]
-
 admin_opencourse_analysis:
-    pattern:  /opencourse/analysis
+    path:  /opencourse/analysis
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
 
 admin_opencourse_analysis_referer_summary:
-    pattern:  /opencourse/analysis/referer/summary
+    path:  /opencourse/analysis/referer/summary
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
 
 admin_opencourse_analysis_referer_watch_statistics:
@@ -73,231 +60,231 @@ admin_opencourse_analysis_referer_watch_statistics:
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:watch }
 
 admin_opencourse_analysis_referer_summary_list:
-    pattern:  /opencourse/analysis/referer/list
+    path:  /opencourse/analysis/referer/list
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
 
 admin_opencourse_analysis_referer_detail:
-    pattern:  /opencourse/{id}/analysis/referer/detail
+    path:  /opencourse/{id}/analysis/referer/detail
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detail }
 
 admin_opencourse_analysis_referer_detail_list:
-    pattern:  /opencourse/{id}/analysis/referer/detailList
+    path:  /opencourse/{id}/analysis/referer/detailList
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detailList }
 
 admin_opencourse_analysis_conversion:
-    pattern:  opencourse/analysis/conversion
+    path:  opencourse/analysis/conversion
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
 
 admin_opencourse_analysis_conversion_result:
-    pattern:  /opencourse/{courseId}/analysis/conversion/result
+    path:  /opencourse/{courseId}/analysis/conversion/result
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversionResult }
 
 
 admin_content:
-    pattern:  /content
+    path:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
 
 admin_dictionary:
-    pattern:  /dictionary
+    path:  /dictionary
     defaults: { _controller: TopxiaAdminBundle:Dictionary:index }
 
 admin_dictionary_create:
-    pattern: /dictionary/create/{type}
+    path: /dictionary/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
 
 admin_dictionary_delete:
-    pattern:  /dictionary/{id}/delete
+    path:  /dictionary/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Dictionary:delete }
     methods: [POST]
 
 admin_dictionary_edit:
-    pattern:  /dictionary/{id}/edit
+    path:  /dictionary/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Dictionary:edit }
 
 admin_dictionary_name_check:
-    pattern:  /dictionary/{id}/name_check
+    path:  /dictionary/{id}/name_check
     defaults: { _controller: TopxiaAdminBundle:Dictionary:checkName }
 
 admin_content_create:
-    pattern:  /content/create/{type}
+    path:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
     permissions: [admin_content]
 
 admin_content_edit:
-    pattern:  /content/{id}/edit
+    path:  /content/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Content:edit }
     permissions: [admin_content]
 
 admin_content_publish:
-    pattern:  /content/{id}/publish
+    path:  /content/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Content:publish }
     methods:  [POST]
     permissions: [admin_content]
 
 admin_content_trash:
-    pattern:  /content/{id}/trash
+    path:  /content/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Content:trash }
     methods:  [POST]
     permissions: [admin_content]
 
 admin_content_delete:
-    pattern:  /content/{id}/delete
+    path:  /content/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Content:delete }
     methods:  [POST]
     permissions: [admin_content]
 
 admin_content_alias_check:
-    pattern:  /content/alias/check
+    path:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
     permissions: [admin_content]
 
 admin_block:
-    pattern:  /block/list-{category}
+    path:  /block/list-{category}
     defaults: { _controller: TopxiaAdminBundle:Block:index }
 
 admin_block_match:
-    pattern:  /block/list/quikSearch
+    path:  /block/list/quikSearch
     defaults: { _controller: TopxiaAdminBundle:Block:blockMatch }
 
 admin_block_create:
-    pattern:  /block/create
+    path:  /block/create
     defaults: { _controller: TopxiaAdminBundle:Block:create }
 
 admin_block_delete:
-    pattern:  /block/{id}/delete
+    path:  /block/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Block:delete }
     methods:  [POST]
 
 admin_block_code_check_forcreate:
-    pattern:  /block/code/check/forcreate
+    path:  /block/code/check/forcreate
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForCreate }
 
 admin_block_code_check_foredit:
-    pattern:  /block/code/{id}/check/foredit
+    path:  /block/code/{id}/check/foredit
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockTemplateCodeForEdit }
 
 admin_block_update:
-    pattern:  /block/{blockTemplateId}/update
+    path:  /block/{blockTemplateId}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
 
 admin_block_edit:
-    pattern:  /block/{blockTemplateId}/edit
+    path:  /block/{blockTemplateId}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
 admin_block_visual_edit:
-    pattern:  /blockTemplate/{blockTemplateId}/visual/edit
+    path:  /blockTemplate/{blockTemplateId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
 admin_block_visual_view_data:
-    pattern:  /block/{blockTemplateId}/data/view
+    path:  /block/{blockTemplateId}/data/view
     defaults: { _controller: TopxiaAdminBundle:Block:dataView }
 
 admin_block_visual_edit_history:
-    pattern:  /blockTemplate/{blockTemplateId}/visual/edit/history
+    path:  /blockTemplate/{blockTemplateId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
 
 admin_block_recovery:
-    pattern:  /block/{blockTemplateId}/history/{historyId}/recovery
+    path:  /block/{blockTemplateId}/history/{historyId}/recovery
     defaults: { _controller: TopxiaAdminBundle:Block:recovery }
 
 admin_block_history_data:
-    pattern:  /block/histroy/{blockId}
+    path:  /block/histroy/{blockId}
     defaults: { _controller: TopxiaAdminBundle:Block:blockHistoriesData }
 
 admin_block_picture_upload:
-    pattern:  /block/{blockId}/picture/upload
+    path:  /block/{blockId}/picture/upload
     defaults: { _controller: TopxiaAdminBundle:Block:upload }
 
 admin_block_picture_preview:
-    pattern:  /block/{blockId}/picture/preview
+    path:  /block/{blockId}/picture/preview
     defaults: { _controller: TopxiaAdminBundle:Block:picPreview }
 
 admin_blockhistory_preview:
-    pattern:  /blockhistory/{id}/preview
+    path:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }
 
 admin_tag:
-    pattern:  /tag
+    path:  /tag
     defaults: { _controller: TopxiaAdminBundle:Tag:index }
     permissions: [admin_course_tag_manage]
 
 admin_tag_create:
-    pattern:  /tag/create
+    path:  /tag/create
     defaults: { _controller: TopxiaAdminBundle:Tag:create }
     permissions: [admin_course_tag_add]
 
 admin_tag_checkname:
-    pattern:  /tag/checkname
+    path:  /tag/checkname
     defaults: { _controller: TopxiaAdminBundle:Tag:checkName}
     permissions: [admin_course_tag_manage]
 
 admin_tag_update:
-    pattern:  /tag/{id}/update
+    path:  /tag/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Tag:update }
     permissions: [admin_course_tag_manage]
 
 admin_tag_delete:
-    pattern:  /tag/{id}/delete
+    path:  /tag/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
     permissions: [admin_course_tag_manage]
 
 admin_tag_group:
-    pattern: /tag/group
+    path: /tag/group
     defaults: { _controller: TopxiaAdminBundle:TagGroup:index }
 
 admin_tag_group_create:
-    pattern: /tag/group/create
+    path: /tag/group/create
     defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
 
 admin_tag_group_update:
-    pattern: /tag/group/{groupId}/update
+    path: /tag/group/{groupId}/update
     defaults: { _controller: TopxiaAdminBundle:TagGroup:update }
 
 admin_tag_group_checkname:
-    pattern: /tag/group/checkname
+    path: /tag/group/checkname
     defaults: { _controller: TopxiaAdminBundle:TagGroup:checkName }
 
 admin_tag_group_delete:
-    pattern: /tag/group/{tagId}/delete
+    path: /tag/group/{tagId}/delete
     defaults: { _controller: TopxiaAdminBundle:TagGroup:delete }
 
 admin_user:
-    pattern:  /user
+    path:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
     permissions: [admin_user_manage]
 
 admin_user_create:
-    pattern:  /user/create
+    path:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }
 
 admin_user_create_email_check:
-    pattern:  /user/create/email/check
+    path:  /user/create/email/check
     defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
     permissions: [admin_user_manage]
 
 admin_user_create_mobile_check:
-    pattern:  /user/create/mobile/check
+    path:  /user/create/mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:mobileCheck }
     permissions: [admin_user_manage]
 
 admin_user_create_email_or_mobile_check:
-    pattern:  /user/create/email_or_mobile/check
+    path:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
     permissions: [admin_user_manage]
 
 admin_user_create_nickname_check:
-    pattern:  /user/create/nickname/check
+    path:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
     permissions: [admin_user_manage]
 
 admin_user_show:
-    pattern:  /user/{id}
+    path:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
     permissions: [admin]
 
 admin_user_edit:
-    pattern:  /user/{id}/edit
+    path:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
 
 admin_user_org_update:
@@ -305,1392 +292,1380 @@ admin_user_org_update:
     defaults: { _controller: TopxiaAdminBundle:User:orgUpdate}
 
 admin_user_lock:
-    pattern:  /user/{id}/lock
+    path:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }
     methods:  [POST]
 
 admin_user_unlock:
-    pattern:  /user/{id}/unlock
+    path:  /user/{id}/unlock
     defaults: { _controller: TopxiaAdminBundle:User:unlock }
     methods:  [POST]
 
 admin_user_roles:
-    pattern:  /user/{id}/roles
+    path:  /user/{id}/roles
     defaults: { _controller: TopxiaAdminBundle:User:roles }
 
 admin_user_avatar:
-    pattern:  /user/{id}/avatar
+    path:  /user/{id}/avatar
     defaults: { _controller: TopxiaAdminBundle:User:avatar }
 
 admin_user_avatar_crop:
-    pattern:  /user/{id}/avatar/crop
+    path:  /user/{id}/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
     permissions: [admin_user_avatar]
 
 admin_teacher:
-    pattern:  /teacher
+    path:  /teacher
     defaults: { _controller: TopxiaAdminBundle:Teacher:index }
 
 admin_teacher_promote:
-    pattern:  /teacher/{id}/promote
+    path:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
 
 admin_teacher_promote_list:
-    pattern: /teacher/promote/list
+    path: /teacher/promote/list
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteList }
     permissions: [admin_teacher_promote]
 
 admin_teacher_promote_cancel:
-    pattern:  /teacher/{id}/promote/cancel
+    path:  /teacher/{id}/promote/cancel
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteCancel }
     methods:  [POST]
     permissions: [admin_teacher,admin_teacher_promote]
 
 admin_user_change_password:
-    pattern:  /user/{userId}/change/password
+    path:  /user/{userId}/change/password
     defaults: { _controller: TopxiaAdminBundle:User:changePassword }
 
 admin_user_send_passwordreset_email:
-    pattern:  /user/{id}/send_passwordreset_email
+    path:  /user/{id}/send_passwordreset_email
     defaults: { _controller: TopxiaAdminBundle:User:sendPasswordResetEmail }
     methods:  [POST]
 
 admin_user_send_emailverify_email:
-    pattern:  /user/{id}/send_emailverify_email
+    path:  /user/{id}/send_emailverify_email
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
     methods:  [POST]
 
 admin_navigation:
-    pattern:  /setting/navigation
+    path:  /setting/navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }
     permissions: [admin_top_navigation,admin_foot_navigation]
 
 admin_navigation_seqs_update:
-    pattern:  /setting/navigation/seqs/update
+    path:  /setting/navigation/seqs/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:updateSeqs }
     permissions: [admin_top_navigation,admin_foot_navigation]
 
 admin_navigation_create:
-    pattern:  /setting/navigation/create
+    path:  /setting/navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
     permissions: [admin_top_navigation,admin_foot_navigation]
 
 admin_navigation_update:
-    pattern:  /setting/navigation/{id}/update
+    path:  /setting/navigation/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:update }
     permissions: [admin_top_navigation,admin_foot_navigation]
 
 admin_navigation_delete:
-    pattern:  /setting/navigation/{id}/delete
+    path:  /setting/navigation/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Navigation:delete }
     methods: [POST]
     permissions: [admin_top_navigation,admin_foot_navigation]
 
 admin_review:
-    pattern:  /review
+    path:  /review
     defaults: { _controller: TopxiaAdminBundle:CourseReview:index }
     permissions: [admin_course_review_tab]
 
 admin_review_delete:
-    pattern: /review/{id}/delete
+    path: /review/{id}/delete
     defaults: {_controller: TopxiaAdminBundle:CourseReview:delete }
     methods: [POST]
     permissions: [admin_course_review_tab]
 
 admin_review_batch_delete:
-    pattern: /review/batch_delete
+    path: /review/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseReview:batchDelete }
     methods: [POST]
     permissions: [admin_course_review_tab]
 
 admin_course_note:
-    pattern: /note
+    path: /note
     defaults: { _controller: TopxiaAdminBundle:CourseNote:index }
     permissions: [admin_course_note_manage]
 
 admin_note_delete:
-    pattern: /note/{id}/delete
+    path: /note/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:CourseNote:delete }
     methods: [POST]
     permissions: [admin_course_note_manage]
 
 admin_note_batch_delete:
-    pattern: /note/batch_delete
+    path: /note/batch_delete
     defaults: { _controller: TopxiaAdminBundle:CourseNote:batchDelete }
     methods: [POST]
     permissions: [admin_course_note_manage]
 
 admin_course:
-    pattern:  /course/{filter}/index
+    path:  /course/{filter}/index
     defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
     permissions: [admin_course_manage]
 
 admin_course_delete:
-    pattern:  /course/{courseId}/delete/{type}
+    path:  /course/{courseId}/delete/{type}
     defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
     permissions: [admin_course_manage]
 
 admin_open_course_delete:
-    pattern: /open/course/{courseId}/delete/{type}
+    path: /open/course/{courseId}/delete/{type}
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete, type:'' }
     methods: [POST]
 
 admin_check_password:
-    pattern:  /check/password
+    path:  /check/password
     defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
     permissions: [admin_course_manage]
 
 admin_course_publish:
-    pattern: /course/{id}/publish
+    path: /course/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Course:publish }
     methods: [POST]
     permissions: [admin_course_manage]
 
 admin_open_course_publish:
-    pattern: /open/course/{id}/publish
+    path: /open/course/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:publish }
     methods: [POST]
 
 admin_course_close:
-    pattern: /course/{id}/close
+    path: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
     permissions: [admin_course_close]
 
 admin_open_course_close:
-    pattern: /open/course/{id}/close
+    path: /open/course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:close }
     methods: [POST]
 
 admin_open_course_recommend_list:
-    pattern: /open/course/recommend/list
+    path: /open/course/recommend/list
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommendList }
 
 admin_open_course_recommend:
-    pattern: /open/course/{id}/recommend
+    path: /open/course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommend }
 
 admin_open_course_cancel_recommend:
-    pattern: /open/course/{id}/recommend/cancel/{target}
+    path: /open/course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:cancelRecommend }
     methods: [POST]
 
 admin_course_copy:
-    pattern: /course/{id}/copy
+    path: /course/{id}/copy
     defaults: { _controller: TopxiaAdminBundle:Course:copy }
     permissions: [admin_course_manage]
 
 admin_course_coping:
-    pattern: /course/{id}/coping
+    path: /course/{id}/coping
     defaults: { _controller: TopxiaAdminBundle:Course:coping }
     permissions: [admin_course_manage]
 
 admin_course_recommend:
-    pattern: /course/{id}/recommend
+    path: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
     permissions: [admin_course_recommend_list, admin_course_recommend]
 
 admin_course_cancel_recommend:
-    pattern: /course/{id}/recommend/cancel/{target}
+    path: /course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
     permissions: [admin_course_recommend_list, admin_course_cancel_recommend]
 
 admin_course_chooser:
-    pattern: /course/chooser
+    path: /course/chooser
     defaults: { _controller: TopxiaAdminBundle:Course:chooser }
 
 admin_course_recommend_list:
-    pattern: /course/recommend/list
+    path: /course/recommend/list
     defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
 
 admin_course_category:
-    pattern: /course/category
+    path: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }
     permissions: [admin_course_category_manage]
 
 admin_course_data:
-    pattern:  /course/{filter}/data
+    path:  /course/{filter}/data
     defaults: { _controller: TopxiaAdminBundle:Course:data , filter:'normal'}
 
 admin_course_lesson_data:
-    pattern:  /course/lesson/data/{id}
+    path:  /course/lesson/data/{id}
     defaults: { _controller: TopxiaAdminBundle:Course:lessonData }
     permissions: [admin_course_data]
 
 # admin_course_disk:
-#     pattern: /course/disk
+#     path: /course/disk
 #     defaults: { _controller: TopxiaAdminBundle:CourseDisk:index }
 
 # admin_course_disk_delete:
-#     pattern: /disk/{id}/delete
+#     path: /disk/{id}/delete
 #     defaults: { _controller: TopxiaAdminBundle:CourseDisk:delete }
 #     methods: [POST]
 
 # admin_course_disk_batch_delete:
-#     pattern: /disk/batch_delete
+#     path: /disk/batch_delete
 #     defaults: { _controller: TopxiaAdminBundle:CourseDisk:batchDelete }
 #     methods: [POST]
 
 admin_course_order_manage:
-    pattern: /course/order/manage
+    path: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
 admin_course_search:
-    pattern: /course/search
+    path: /course/search
     defaults: { _controller: TopxiaAdminBundle:Course:search }
     permissions: [admin_operation_mobile_select_manage]
 
 admin_course_search_to_fill_banner:
-    pattern: /course/search_to_fill_banner
+    path: /course/search_to_fill_banner
     defaults: { _controller: TopxiaAdminBundle:Course:searchToFillBanner }
     permissions: [admin_operation_mobile_select_manage]
 
 admin_live_course:
-    pattern: /livecourse/{status}
+    path: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
     permissions: [admin_live_course_manage]
 
 admin_open_course:
-    pattern: /open/course/{filter}
+    path: /open/course/{filter}
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:index, filter:'open' }
 
 admin_live_get_max_online:
-    pattern: /livecourse/get/maxOnline
+    path: /livecourse/get/maxOnline
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:getMaxOnline }
     permissions: [admin_live_course_manage]
 
 admin_order_detail:
-    pattern: /order/{id}/detail
+    path: /order/{id}/detail
     defaults: { _controller: TopxiaAdminBundle:Order:detail }
 
 admin_order_refunds:
-    pattern: /order/refunds/{targetType}
+    path: /order/refunds/{targetType}
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:refunds }
     permissions: [admin_finance]
 
 admin_order_cancel_refund:
-    pattern: /order/{id}/cancel_refund
+    path: /order/{id}/cancel_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:cancelRefund }
     methods: [POST]
     permissions: [admin_finance]
 
 admin_order_audit_refund:
-    pattern: /order/{id}/audit_refund
+    path: /order/{id}/audit_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:auditRefund }
     permissions: [admin_finance]
 
 admin_setting_site:
-    pattern:  /setting/site
+    path:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:site }
     permissions: [admin_setting_message]
 
 admin_operation_mobile:
-    pattern:  /operation/mobile
+    path:  /operation/mobile
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobile }
     permissions: [admin_operation_mobile_banner_manage]
 
 admin_operation_mobile_select:
-    pattern:  /operation/mobile/select
+    path:  /operation/mobile/select
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
     permissions: [admin_operation_mobile_select_manage]
 
 admin_operation_mobile_customization_upgrade:
-    pattern:  /operation/mobile/customization_upgrade
+    path:  /operation/mobile/customization_upgrade
     defaults: { _controller: TopxiaAdminBundle:Mobile:customizationUpgrade }
     methods: [POST]
 
 admin_discovery_column_delete:
-    pattern:  /discovery_column/{id}/delete
+    path:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
     methods: [POST]
 
 admin_discovery_column_edit:
-    pattern:  /discovery_column/{id}/edit
+    path:  /discovery_column/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
 
 admin_discovery_column_title_check:
-    pattern:  /discovery_column/{id}/title_check
+    path:  /discovery_column/{id}/title_check
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:checkTitle }
 
 admin_discovery_column_sort:
-    pattern:  /discovery_column/sort
+    path:  /discovery_column/sort
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:sort }
 
 admin_discovery_column_index:
-    pattern:  /discovery_column/index
+    path:  /discovery_column/index
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:index }
 
 admin_discovery_column_create:
-    pattern:  /discovery_column/create
+    path:  /discovery_column/create
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:create }
 
 admin_setting_mobile:
-    pattern:  /setting/mobile
+    path:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
     permissions: [admin_setting_mobile_settings]
 
 admin_setting_mobile_iap_product:
-    pattern:  /setting/mobile_iap_product
+    path:  /setting/mobile_iap_product
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProduct }
 
 admin_setting_mobile_iap_product_delete:
-    pattern:  /setting/mobile_iap_product_delete/{productId}
+    path:  /setting/mobile_iap_product_delete/{productId}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobileIapProductDelete }
     methods: [POST]
 
 admin_operation_mobile_picture_upload:
-    pattern:  /operation/mobile/picture/upload/{type}
+    path:  /operation/mobile/picture/upload/{type}
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobilePictureUpload }
     methods: [POST]
     permissions: [admin_operation_mobile_banner_manage]
 
 admin_setting_mobile_picture_upload:
-    pattern:  /setting/mobile/picture/upload/{type}
+    path:  /setting/mobile/picture/upload/{type}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureUpload }
     methods: [POST]
     permissions: [admin_setting_mobile_settings]
 
 admin_operation_mobile_picture_remove:
-    pattern:  /operation/mobile/picture/remove/{type}
+    path:  /operation/mobile/picture/remove/{type}
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobilePictureRemove }
     methods: [POST]
     permissions: [admin_operation_mobile_banner_manage]
 
 admin_setting_mobile_picture_remove:
-    pattern:  /setting/mobile/picture/remove/{type}
+    path:  /setting/mobile/picture/remove/{type}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureRemove }
     methods: [POST]
     permissions: [admin_setting_mobile_settings]
 
 admin_setting_logo_upload:
-    pattern:  /setting/logo/upload
+    path:  /setting/logo/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:logoUpload }
     methods: [POST]
     permissions: [admin_setting_message]
 
 admin_setting_logo_remove:
-    pattern:  /setting/logo/remove
+    path:  /setting/logo/remove
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
     methods: [POST]
     permissions: [admin_setting_message]
 
 admin_setting_live_logo_upload:
-    pattern:  /setting/live/logo/upload
+    path:  /setting/live/logo/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoUpload }
     methods: [POST]
     permissions: [admin_setting_live_course]
 
 admin_setting_live_logo_remove:
-    pattern:  /setting/live/logo/remove
+    path:  /setting/live/logo/remove
     defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoRemove }
     methods: [POST]
     permissions: [admin_setting_live_course]
 
 admin_setting_favicon_upload:
-    pattern: /setting/favicon/upload
+    path: /setting/favicon/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:faviconUpload }
     methods: [POST]
     permissions: [admin_setting_message]
 
 admin_setting_favicon_remove:
-    pattern: /setting/favicon/remove
+    path: /setting/favicon/remove
     defaults: { _controller: TopxiaAdminBundle:Setting:faviconRemove }
     methods: [POST]
     permissions: [admin_setting_message]
 
 admin_setting_auth:
-    pattern:  /setting/auth
+    path:  /setting/auth
     defaults: { _controller: TopxiaAdminBundle:UserSetting:auth }
     permissions: [admin_user_auth]
 
 admin_setting_mailer:
-    pattern:  /setting/mailer
+    path:  /setting/mailer
     defaults: { _controller: TopxiaAdminBundle:Setting:mailer }
 
 admin_setting_mailer_test:
-    pattern:  /setting/mailer/test
+    path:  /setting/mailer/test
     defaults: { _controller: TopxiaAdminBundle:Setting:mailerTest }
     methods: [GET]
 
 admin_setting_login_bind:
-    pattern:  /setting/login-connect
+    path:  /setting/login-connect
     defaults: { _controller: TopxiaAdminBundle:UserSetting:loginConnect }
 
 admin_setting_payment:
-    pattern:  /setting/payment
+    path:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
     permissions: [admin_payment]
 
 admin_setting_cloud_video:
-    pattern:  /setting/cloud/video
+    path:  /setting/cloud/video
     defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
 
 admin_setting_cloud:
-    pattern:  /setting/cloud
+    path:  /setting/cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key:
-    pattern:  /setting/cloud/key
+    path:  /setting/cloud/key
     defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_info:
-    pattern:  /setting/cloud/key/info
+    path:  /setting/cloud/key/info
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyInfo }
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_bind:
-    pattern:  /setting/cloud/key/bind
+    path:  /setting/cloud/key/bind
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyBind }
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_update:
-    pattern:  /setting/cloud/key/update
+    path:  /setting/cloud/key/update
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyUpdate }
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_apply:
-    pattern:  /setting/cloud/key/apply
+    path:  /setting/cloud/key/apply
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyApply }
     methods: [POST]
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_copyright:
-    pattern:  /setting/cloud/key/copyright
+    path:  /setting/cloud/key/copyright
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyCopyright }
     methods: [POST]
     permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_video_watermark_upload:
-    pattern: /setting/cloud/video_watermark/upload
+    path: /setting/cloud/video_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkUpload }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_watermark_remove:
-    pattern: /setting/cloud/video_watermark/remove
+    path: /setting/cloud/video_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_embed_watermark_upload:
-    pattern: /setting/cloud/video_embed_watermark/upload
+    path: /setting/cloud/video_embed_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_embed_watermark_remove:
-    pattern: /setting/cloud/video_embed_watermark/remove
+    path: /setting/cloud/video_embed_watermark/remove
     defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_refund:
-    pattern:  /setting/refund
+    path:  /setting/refund
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:refund }
 
 # admin_setting_default:
-#     pattern:  /setting/default
+#     path:  /setting/default
 #     defaults: { _controller: TopxiaAdminBundle:Setting:default }
 
 admin_setting_share:
-    pattern:  /setting/share
+    path:  /setting/share
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:share }
 
 admin_setting_default_avatar_crop:
-    pattern:  /setting/default/avatar/crop
+    path:  /setting/default/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatarCrop }
     permissions: [admin_setting_avatar]
 
 admin_setting_default_course_picture_crop:
-    pattern:  /setting/default/course/picture/crop
+    path:  /setting/default/course/picture/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
     permissions: [admin_setting_avatar,course_manage_picture]
 
 admin_setting_ip_blacklist:
-    pattern:  /setting/ip-blacklist
+    path:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
     permissions: [admin_setting_ip_blacklist_manage]
 
 admin_setting_theme:
-    pattern:  /setting/theme
+    path:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
 
 admin_setting_theme_change:
-    pattern:  /setting/theme/change
+    path:  /setting/theme/change
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
     permissions: [admin_setting_theme]
 
 admin_theme_manage:
-    pattern:  /theme/{uri}/manage
+    path:  /theme/{uri}/manage
     defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
     permissions: [admin_setting_theme]
 
 admin_reset_currentTheme_config:
-    pattern:  /theme/{uri}/config/reset
+    path:  /theme/{uri}/config/reset
     defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
     permissions: [admin_setting_theme]
 
 admin_save_themes_config:
-    pattern:  /theme/{uri}/config/save
+    path:  /theme/{uri}/config/save
     defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
     methods:  [POST]
     permissions: [admin_setting_theme]
 
 admin_confirm_themes_config:
-    pattern:  /theme/{uri}/config/confirm
+    path:  /theme/{uri}/config/confirm
     defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
     permissions: [admin_setting_theme]
 
 admin_themes_show:
-    pattern:  /theme/{uri}/show
+    path:  /theme/{uri}/show
     defaults: { _controller: TopxiaAdminBundle:Theme:show }
     permissions: [admin_setting_theme]
 
 admin_themes_config_edit:
-    pattern:  /theme/{uri}/config/edit
+    path:  /theme/{uri}/config/edit
     defaults: { _controller: TopxiaAdminBundle:Theme:themeConfigEdit }
     permissions: [admin_setting_theme]
 
 admin_setting_user_center:
-    pattern:  /setting/user-center
+    path:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
 
 admin_setting_avatar:
-    pattern:  /setting/user-avatar
+    path:  /setting/user-avatar
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userAvatar }
     permissions: [admin_setting_avatar]
 
 admin_setting_user_fields:
-    pattern:  /setting/user-fields
+    path:  /setting/user-fields
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userFields }
 
 admin_setting_course_setting:
-    pattern:  /setting/course-setting
+    path:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseSetting }
     permissions: [admin_setting_course]
 
 admin_setting_course_avatar:
-    pattern:  /setting/course-avatar
+    path:  /setting/course-avatar
     defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseAvatar }
 
 admin_setting_live_course_setting:
-    pattern:  /setting/live-course-setting
+    path:  /setting/live-course-setting
     defaults: { _controller: TopxiaAdminBundle:CourseSetting:liveCourseSetting }
     permissions: [admin_setting_live_course]
 
 admin_setting_questions_setting:
-    pattern: /setting/questions-setting
+    path: /setting/questions-setting
     defaults: { _controller: TopxiaAdminBundle:CourseSetting:questionsSetting }
 
 admin_setting_consult_setting:
-    pattern:  /setting/consult-setting
+    path:  /setting/consult-setting
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
 admin_setting_es_bar:
-    pattern:  /setting/es-bar
+    path:  /setting/es-bar
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
 
 admin_setting_consult_upload:
-    pattern:  /setting/consult-upload
+    path:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
     permissions: [admin_setting_consult_setting]
 
 admin_setting_consult_webchat_delete:
-    pattern:  /setting/consult-webchat-delete
+    path:  /setting/consult-webchat-delete
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:deleteWebchat }
     methods:  [POST]
     permissions: [admin_setting_consult_setting]
 
 admin_setting_admin_sync:
-    pattern:  /setting/admin_sync
+    path:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
     permissions: [admin_setting_user_center]
 
 admin_setting_developer:
-    pattern:  /setting/developer
+    path:  /setting/developer
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:index }
     permissions: [admin]
 
 admin_setting_developer_version:
-    pattern:  /setting/developer/version
+    path:  /setting/developer/version
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:version }
 
 admin_setting_developer_magic:
-    pattern:  /setting/developer/magic
+    path:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
 admin_setting_developer_sync_file_data:
-    pattern:  /setting/developer/sync_upload_file
+    path:  /setting/developer/sync_upload_file
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:syncUploadFile }
 
 admin_setting_post_num_rules:
-    pattern:  /setting/post_num_rules
+    path:  /setting/post_num_rules
     defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
     permissions: [admin_setting_post_num_rules_settings]
 
 admin_setting_cdn:
-    pattern:  /setting/cdn
+    path:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
 admin_setting_redis:
-    pattern:  /setting/developer/redis
+    path:  /setting/developer/redis
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
 
 admin_optimize:
-    pattern:  /setting/optimize
+    path:  /setting/optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
     permissions: [admin_optimize_settings]
 
 admin_optimize_remove_cache:
-    pattern:  /setting/optimize/remove-cache
+    path:  /setting/optimize/remove-cache
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeCache }
     methods: [POST]
     permissions: [admin_optimize_settings]
 
 admin_optimize_remove_tmp:
-    pattern:  /optimize/remove-tmp
+    path:  /optimize/remove-tmp
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeTemp }
     methods: [POST]
     permissions: [admin_optimize_settings]
 
 admin_optimize_remove_backup:
-    pattern:  /setting/optimize/remove-backup
+    path:  /setting/optimize/remove-backup
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeBackup }
     methods: [POST]
     permissions: [admin_optimize_settings]
 
 admin_optimize_backupdb:
-    pattern:  /setting/optimize/backupdb
+    path:  /setting/optimize/backupdb
     defaults: { _controller: TopxiaAdminBundle:Optimize:backupdb }
     methods: [POST]
     permissions: [admin_optimize_settings]
 
 admin_optimize_remove_upload_files:
-    pattern:  /setting/optimize/remove-unusedfiles
+    path:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
     permissions: [admin_optimize_settings]
 
 admin_optimize_remove_show_progressbar:
-    pattern:  /setting/optimize/show-progressbar
+    path:  /setting/optimize/show-progressbar
     defaults: { _controller: TopxiaAdminBundle:Optimize:showProgressbar }
     permissions: [admin_optimize_settings]
 
 admin_jobs:
-    pattern: /setting/jobs
+    path: /setting/jobs
     defaults: { _controller: TopxiaAdminBundle:Job:index }
     permissions: [admin_jobs_manage]
 
 admin_logs:
-    pattern:  /setting/logs
+    path:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 admin_performance:
-    pattern:  /setting/performance
+    path:  /setting/performance
     defaults: { _controller: TopxiaAdminBundle:Setting:performance }
 
 admin_logs_prod:
-    pattern:  /setting/logs/prod
+    path:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
 admin_logs_action_dicts:
-    pattern:  /setting/logs/logActions
+    path:  /setting/logs/logActions
     defaults: { _controller: TopxiaAdminBundle:Log:logActions }
 
 admin_cloud_access:
-    pattern:  /cloud/access
+    path:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_bill:
-    pattern:  /cloud/bill
+    path:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_recharge:
-    pattern:  /cloud/recharge
+    path:  /cloud/recharge
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_detail:
-    pattern:  /cloud/detail
+    path:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_buy:
-    pattern:  /cloud/{type}/buy
+    path:  /cloud/{type}/buy
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_tlp:
-    pattern:  /cloud/tlp
+    path:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_video:
-    pattern:  /cloud/video
+    path:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_doc:
-    pattern:  /cloud/doc
+    path:  /cloud/doc
     defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_live:
-    pattern:  /cloud/live
+    path:  /cloud/live
     defaults: { _controller: TopxiaAdminBundle:Cloud:live }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_sms_account:
-    pattern:  /cloud/sms/account
+    path:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_video_account:
-    pattern:  /cloud/video/account
+    path:  /cloud/video/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoAccount }
 
 admin_cloud_video_upgrade:
-    pattern:  /cloud/video/upgrade
+    path:  /cloud/video/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
     permissions: [admin_my_cloud_overview]
 
 admin_cloud_video_renew:
-    pattern:  /cloud/video/renew
+    path:  /cloud/video/renew
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
     permissions: [admin_my_cloud_overview]
 
 # admin_customer_service:
-#     pattern: /customer/service
+#     path: /customer/service
 #     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
 admin_app_center:
-    pattern:  /app/center/{postStatus}
+    path:  /app/center/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:center, postStatus:'all' }
 
 admin_my_cloud:
-    pattern:  /setting/my/cloud
+    path:  /setting/my/cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloud }
     permissions: [admin_my_cloud_overview]
 
 admin_my_cloud_overview:
-    pattern:  /setting/my/cloud/overview
+    path:  /setting/my/cloud/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloudOverview }
 
 # admin_app_cloud:
-#     pattern:  /app/center/cloud
+#     path:  /app/center/cloud
 #     defaults: { _controller: TopxiaAdminBundle:App:cloud }
 admin_cloud_file:
-    pattern:  /cloud_files
+    path:  /cloud_files
     defaults: { _controller: TopxiaAdminBundle:CloudFile:index }
 
 admin_cloud_file_manage:
-    pattern:  /cloud_files/manage
+    path:  /cloud_files/manage
     defaults: { _controller: TopxiaAdminBundle:CloudFile:manage }
 
 admin_cloud_file_render_table:
-    pattern:  /cloud_files/table/render
+    path:  /cloud_files/table/render
     defaults: { _controller: TopxiaAdminBundle:CloudFile:render }
 
 admin_cloud_file_detail:
-    pattern:  /cloud_file/{globalId}/detail
+    path:  /cloud_file/{globalId}/detail
     defaults: { _controller: TopxiaAdminBundle:CloudFile:detail }
 
 admin_cloud_file_edit:
-    pattern:  /cloud_file/{globalId}/edit
+    path:  /cloud_file/{globalId}/edit
     defaults: { _controller: TopxiaAdminBundle:CloudFile:edit, fields:'' }
     methods: [POST]
 
 admin_cloud_file_preview:
-    pattern:  /cloud_file/{globalId}/preview
+    path:  /cloud_file/{globalId}/preview
     defaults: { _controller: TopxiaAdminBundle:CloudFile:preview }
 
 # admin_cloud_file_play:
-#     pattern:  /cloud_files/{globalId}/play
+#     path:  /cloud_files/{globalId}/play
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:player }
 
 admin_cloud_file_reconvert:
-    pattern: /cloud_file/{globalId}/reconvert
+    path: /cloud_file/{globalId}/reconvert
     defaults: { _controller: TopxiaAdminBundle:CloudFile:reconvert }
 
 admin_cloud_file_download:
-    pattern: /cloud_file/{globalId}/download
+    path: /cloud_file/{globalId}/download
     defaults: { _controller: TopxiaAdminBundle:CloudFile:download }
 
 admin_cloud_file_delete:
-    pattern: /cloud_file/{globalId}/delete
+    path: /cloud_file/{globalId}/delete
     defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
     methods:  [POST]
 
 admin_cloud_file_batch_delete:
-    pattern: /cloud_file/delete/batch
+    path: /cloud_file/delete/batch
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchDelete }
     methods:  [POST]
 
 admin_cloud_file_delete_modal_show:
-    pattern: /cloud_file/delete/show
+    path: /cloud_file/delete/show
     defaults: { _controller: TopxiaAdminBundle:CloudFile:deleteShow }
 
 admin_cloud_file_tag_show:
-    pattern: /cloud_file/tag/show
+    path: /cloud_file/tag/show
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchTagShow }
 
 # global_file_hls_playlist:
-#     pattern:  /global_file/{globalId}/playlist/{token}.m3u8
+#     path:  /global_file/{globalId}/playlist/{token}.m3u8
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:playlist }
 
 # global_file_hls_stream:
-#     pattern:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+#     path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:stream }
 
 # global_file_hls_clef:
-#     pattern:  /global_file/{globalId}/clef/{token}
+#     path:  /global_file/{globalId}/clef/{token}
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:clef }
 
 # global_file_ppt:
-#     pattern:  /global_file/{globalId}/ppt
+#     path:  /global_file/{globalId}/ppt
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:ppt }
 
 # global_file_document:
-#     pattern:  /global_file/{globalId}/document
+#     path:  /global_file/{globalId}/document
 #     defaults: { _controller: TopxiaAdminBundle:CloudFile:document }
 
 admin_app_installed:
-    pattern:  /app/installed/{postStatus}
+    path:  /app/installed/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:installed }
 
 admin_app_uninstall:
-    pattern:  /app/uninstall
+    path:  /app/uninstall
     defaults: { _controller: TopxiaAdminBundle:App:uninstall }
     permissions: [admin_app_installed]
 
 admin_app_upgrades:
-    pattern:  /app/upgrades
+    path:  /app/upgrades
     defaults: { _controller: TopxiaAdminBundle:App:upgrades }
 
 admin_app_upgrades_count:
-    pattern:  /app/upgrades_count
+    path:  /app/upgrades_count
     defaults: { _controller: TopxiaAdminBundle:App:upgradesCount }
     permissions: [admin_app_upgrades]
 
 admin_oldUpgradeCheck:
-    pattern:  /upgrade/check
+    path:  /upgrade/check
     defaults: { _controller: TopxiaAdminBundle:App:oldUpgradeCheck }
     permissions: [admin_app_upgrades]
 
 admin_app_logs:
-    pattern:  /app/logs
+    path:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
 
 admin_app_package_update_modal:
-    pattern:  /app/package_update/{id}/modal
+    path:  /app/package_update/{id}/modal
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:modal }
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_check_environment:
-    pattern: /app/package_update/{id}/check_environment
+    path: /app/package_update/{id}/check_environment
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkEnvironment }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_check_depends:
-    pattern: /app/package_update/{id}/check_depends
+    path: /app/package_update/{id}/check_depends
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDepends }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_check_last_error:
-    pattern: /app/package_update/{id}/check_lasterror
+    path: /app/package_update/{id}/check_lasterror
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checklastError }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_backup_file:
-    pattern: /app/package_update/{id}/backup_file
+    path: /app/package_update/{id}/backup_file
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupFile }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_backup_db:
-    pattern: /app/package_update/{id}/backup_db
+    path: /app/package_update/{id}/backup_db
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupDb }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_download_and_extract:
-    pattern: /app/package_update/{id}/download_extract
+    path: /app/package_update/{id}/download_extract
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:downloadAndExtract }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_check_download_and_extract:
-    pattern: /app/package_update/{id}/check_download_extract
+    path: /app/package_update/{id}/check_download_extract
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDownloadAndExtract }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
 admin_app_package_update_begin_upgrade:
-    pattern: /app/package_update/{id}/begin_upgrade
+    path: /app/package_update/{id}/begin_upgrade
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }
     methods: [POST]
     permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
 
-admin_category:
-    pattern: /category
-    defaults: { _controller: TopxiaAdminBundle:Category:index }
+
     permissions: [admin_course_category_manage]
 
 admin_app_package_update_check_newest:
-    pattern: /app/package_update/check/newest/code/{code}
+    path: /app/package_update/check/newest/code/{code}
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
     methods: [POST]
 
 admin_category_create:
-    pattern: /category/create
+    path: /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
 
 admin_category_checkcode:
-    pattern:  /category/checkcode
+    path:  /category/checkcode
     defaults: { _controller: TopxiaAdminBundle:Category:checkCode }
     permissions: [admin_course_category_manage]
 
 admin_category_edit:
-    pattern:  /category/{id}/edit
+    path:  /category/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Category:edit }
     permissions: [admin_course_category_manage]
 
 admin_category_delete:
-    pattern:  /category/{id}/delete
+    path:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
 
-admin_category_upload:
-    pattern: /category/uploadfile
-    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
-    methods: [POST]
-    permissions: [admin_course_category_manage]
-
 admin_category_sort:
-    pattern:  /category/sort
+    path:  /category/sort
     defaults: { _controller: TopxiaAdminBundle:Category:sort }
     methods: [POST]
 
 # admin_file:
-#     pattern:  /file
+#     path:  /file
 #     defaults: { _controller: TopxiaAdminBundle:File:index }
 
 # admin_file_delete:
-#     pattern:  /file/{id}/delete
+#     path:  /file/{id}/delete
 #     defaults: { _controller: TopxiaAdminBundle:File:delete }
 #     methods: [POST]
 
 admin_message:
-    pattern: /message
+    path: /message
     defaults: { _controller: TopxiaAdminBundle:Message:index }
     permissions: [admin_message_manage]
 
 admin_message_delete_messages:
-    pattern: /delete/choosed/messages
+    path: /delete/choosed/messages
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
     permissions: [admin_message_manage]
 
 admin_login_record:
-    pattern: /login_record
+    path: /login_record
     defaults: { _controller: TopxiaAdminBundle:LoginRecord:index }
 
 admin_login_record_details:
-    pattern: /login_record/{id}/details
+    path: /login_record/{id}/details
     defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
     permissions: [admin_login_record]
 
 admin_thread:
-    pattern:  /thread
+    path:  /thread
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
     permissions: [admin_course_thread]
 
 admin_thread_delete:
-    pattern: /thread/{id}/delete
+    path: /thread/{id}/delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:delete }
     methods: [POST]
     permissions: [admin_course_thread, admin_course_question_manage]
 
 admin_thread_batch_delete:
-    pattern: /thread/batch_delete
+    path: /thread/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
     permissions: [admin_course_thread]
 
 admin_question:
-    pattern:  /question/{postStatus}
+    path:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
     permissions: [admin_course_question_manage]
 
 admin_approval_approvals:
-    pattern:  approvals/{approvalStatus}
+    path:  approvals/{approvalStatus}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approvals}
 
 admin_approval_approve:
-    pattern:  approvals/{id}/approve
+    path:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
     permissions: [admin_approval_approvals]
 
 admin_approval_info_view:
-    pattern:  approvals/{id}/view
+    path:  approvals/{id}/view
     defaults: { _controller: TopxiaAdminBundle:UserApproval:viewApprovalInfo }
     permissions: [admin_approval_approvals]
 
 admin_approval_cancel:
-    pattern:  approvals/{id}/cancel
+    path:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
     methods:  [POST]
     permissions: [admin_approval_cancel]
 
 show_idcard:
-    pattern:   approvals/idcard/show/{userId}/{type}
+    path:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }
     permissions: [admin_approval_approvals]
 
 admin_article_category:
-    pattern: /article/category
+    path: /article/category
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:index }
     permissions: [admin_operation_article_category]
 
 admin_article_category_create:
-    pattern:  /article/category/create
+    path:  /article/category/create
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
     permissions: [admin_operation_article_category]
 
 admin_article_category_checkparentid:
-    pattern:  /article/category/checkparentid
+    path:  /article/category/checkparentid
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkParentId }
     permissions: [admin_operation_article_category]
 
 admin_article_category_checkcode:
-    pattern:  /article/category/checkcode
+    path:  /article/category/checkcode
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkCode }
     permissions: [admin_operation_article_category]
 
 admin_article_category_edit:
-    pattern:  /article/category/{id}/edit
+    path:  /article/category/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:edit }
     permissions: [admin_operation_article_category]
 
 admin_article_category_delete:
-    pattern:  /article/category/{id}/delete
+    path:  /article/category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
     methods: [POST]
 admin_article_category_sort:
-    pattern:  /article/category/sort
+    path:  /article/category/sort
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:sort }
     methods: [POST]
 
 admin_article_setting:
-    pattern: /setting/article
+    path: /setting/article
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:articleSet }
 
 admin_article:
-    pattern:  /article
+    path:  /article
     defaults: { _controller: TopxiaAdminBundle:Article:index }
     permissions: [admin_operation_article_manage]
 
 # admin_article_create:
-#     pattern:  /article/create/{type}
+#     path:  /article/create/{type}
 #     defaults: { _controller: TopxiaAdminBundle:Article:create }
 
 admin_article_create:
-    pattern:  /article/create
+    path:  /article/create
     defaults: { _controller: TopxiaAdminBundle:Article:create }
     permissions: [admin_operation_article_create]
 
 admin_article_picture_crop:
-    pattern:  /article/picture/crop
+    path:  /article/picture/crop
     defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }
     permissions: [admin_operation_article_manage]
 
 admin_article_show_upload:
-    pattern:  /article/show/upload
+    path:  /article/show/upload
     defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
     permissions: [admin_operation_article_manage]
 
 admin_article_set_property:
-    pattern:  /article/set/property/{id}/{property}
+    path:  /article/set/property/{id}/{property}
     defaults: { _controller: TopxiaAdminBundle:Article:setArticleProperty }
     permissions: [admin_operation_article_manage]
 
 admin_article_cancel_property:
-    pattern:  /article/cancel/property/{id}/{property}
+    path:  /article/cancel/property/{id}/{property}
     defaults: { _controller: TopxiaAdminBundle:Article:cancelArticleProperty }
     permissions: [admin_operation_article_manage]
 
 admin_article_edit:
-    pattern:  /article/{id}/edit
+    path:  /article/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Article:edit }
     permissions: [admin_operation_article_manage]
 
 admin_article_publish:
-    pattern:  /article/{id}/publish
+    path:  /article/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Article:publish }
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
 admin_article_unpublish:
-    pattern:  /article/{id}/unpublish
+    path:  /article/{id}/unpublish
     defaults: { _controller: TopxiaAdminBundle:Article:unpublish }
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
 admin_article_thumb_remove:
-    pattern:  /article/thumb/{id}/remove
+    path:  /article/thumb/{id}/remove
     defaults: { _controller: TopxiaAdminBundle:Article:thumbRemove }
     permissions: [admin_operation_article_manage]
 
 admin_article_trash:
-    pattern:  /article/{id}/trash
+    path:  /article/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Article:trash }
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
 admin_article_delete:
-    pattern:  /article/delete
+    path:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
 admin_invite:
-    pattern:  /invite
+    path:  /invite
     defaults: { _controller: TopxiaAdminBundle:Invite:index }
     permissions: [admin_operation_invite]
 
 admin_invite_detail:
-    pattern:  /invite/detail
+    path:  /invite/detail
     defaults: { _controller: TopxiaAdminBundle:Invite:inviteDetail }
     permissions: [admin_operation_invite]
 
 admin_invite_set:
-    pattern:  /setting/invite
+    path:  /setting/invite
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
 
 admin_invite_coupon:
-    pattern: /invite/{filter}/coupon/
+    path: /invite/{filter}/coupon/
     defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'}
 
+
 admin_invite_coupon_query:
-    pattern: /invite/coupon/query/
+    path: /invite/coupon/query/
     defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon }
 
 admin_group:
-    pattern:  /group/
+    path:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
     permissions: [admin_operation_group_manage]
 
 admin_group_set:
-    pattern:  /setting/group
+    path:  /setting/group
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:groupSet }
 
 admin_groupThread:
-    pattern:  /group/thread
+    path:  /group/thread
     defaults: { _controller: TopxiaAdminBundle:Group:thread }
     permissions: [admin_operation_group_thread]
 
 admin_groupThread_batch_delete:
-    pattern:  /group/batchDeleteThread
+    path:  /group/batchDeleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
     permissions: [admin_operation_group_thread]
     methods:  [POST]
 
 admin_group_close:
-    pattern:  /group/{id}/close
+    path:  /group/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
     permissions: [admin_operation_group_manage]
 
 admin_group_open:
-    pattern:  /group/{id}/open
+    path:  /group/{id}/open
     defaults: { _controller: TopxiaAdminBundle:Group:openGroup }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_cancel_elite:
-    pattern:  /group/thread/{threadId}/removeElite
+    path:  /group/thread/{threadId}/removeElite
     defaults: { _controller: TopxiaAdminBundle:Group:removeElite }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_set_elite:
-    pattern:  /group/thread/{threadId}/setElite
+    path:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaAdminBundle:Group:setElite }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_cancel_stick:
-    pattern:  /group/thread/{threadId}/removeStick
+    path:  /group/thread/{threadId}/removeStick
     defaults: { _controller: TopxiaAdminBundle:Group:removeStick }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_set_stick:
-    pattern:  /group/thread/{threadId}/setStick
+    path:  /group/thread/{threadId}/setStick
     defaults: { _controller: TopxiaAdminBundle:Group:setStick }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_close:
-    pattern:  /group/thread/{threadId}/closeThread
+    path:  /group/thread/{threadId}/closeThread
     defaults: { _controller: TopxiaAdminBundle:Group:closeThread }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_open:
-    pattern:  /group/thread/{threadId}/openThread
+    path:  /group/thread/{threadId}/openThread
     defaults: { _controller: TopxiaAdminBundle:Group:openThread }
     permissions: [admin_operation_group_manage]
 
 admin_group_thread_delete:
-    pattern:  /group/thread/{threadId}/deleteThread
+    path:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
     permissions: [admin_operation_group_manage]
     methods:  [POST]
 
 admin_group_transfer:
-    pattern:  /group/transfer/{groupId}
+    path:  /group/transfer/{groupId}
     defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }
     permissions: [admin_operation_group_manage]
 
 admin_operation_analysis_register:
-    pattern:  /operation/analysis/register/{tab}
+    path:  /operation/analysis/register/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:register }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_login:
-    pattern:  /operation/analysis/login/{tab}
+    path:  /operation/analysis/login/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:login }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_course:
-    pattern:  /operation/analysis/course/{tab}
+    path:  /operation/analysis/course/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:course }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson:
-    pattern:  /operation/analysis/lesson/{tab}
+    path:  /operation/analysis/lesson/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:lesson }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_join:
-    pattern:  /operation/analysis/lesson/join/{tab}
+    path:  /operation/analysis/lesson/join/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:joinLesson }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_paid:
-    pattern:  /operation/analysis/lesson/paid/{tab}
+    path:  /operation/analysis/lesson/paid/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:paidLesson }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_finished:
-    pattern:  /operation/analysis/lesson/finished/{tab}
+    path:  /operation/analysis/lesson/finished/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_classroom_paid:
-    pattern:  /operation/analysis/classroom/paid/{tab}
+    path:  /operation/analysis/classroom/paid/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:paidClassroom }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_video_viewed:
-    pattern:  /operation/analysis/video/viewed/{tab}
+    path:  /operation/analysis/video/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_video_cloud_viewed:
-    pattern:  /operation/analysis/video/cloud/viewed/{tab}
+    path:  /operation/analysis/video/cloud/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:cloudVideoViewed }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_video_local_viewed:
-    pattern:  /operation/analysis/video/local/viewed/{tab}
+    path:  /operation/analysis/video/local/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:localVideoViewed }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_video_net_viewed:
-    pattern:  /operation/analysis/video/net/viewed/{tab}
+    path:  /operation/analysis/video/net/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:netVideoViewed }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_income:
-    pattern:  /operation/analysis/income/{tab}
+    path:  /operation/analysis/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:income }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_course_income:
-    pattern:  /operation/analysis/course/income/{tab}
+    path:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_classroom_income:
-    pattern:  /operation/analysis/classroom/income/{tab}
+    path:  /operation/analysis/classroom/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:classroomIncome }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_vip_income:
-    pattern:  /operation/analysis/vip/income/{tab}
+    path:  /operation/analysis/vip/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:vipIncome }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_course_sum:
-    pattern:  /operation/analysis/course/sum/{tab}
+    path:  /operation/analysis/course/sum/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseSum }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_user_sum:
-    pattern:  /operation/analysis/user/sum/{tab}
+    path:  /operation/analysis/user/sum/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:userSum }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_rount:
-    pattern:  /operation/analysis/rountByanalysisDateType/{tab}
+    path:  /operation/analysis/rountByanalysisDateType/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:rountByanalysisDateType }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_exit:
-    pattern:  /operation/analysis/lesson/exit/{tab}
+    path:  /operation/analysis/lesson/exit/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:exitLesson }
     permissions: [admin_operation_analysis]
 
 admin_user_fields_add:
-    pattern:  /user_fields/add
+    path:  /user_fields/add
     defaults: { _controller: TopxiaAdminBundle:UserSetting:addUserFields }
     permissions: [admin_setting_user_fields]
 
 admin_user_fields_edit:
-    pattern:  /user_fields/edit/{id}
+    path:  /user_fields/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:UserSetting:editUserFields }
     permissions: [admin_setting_user_fields]
 
 admin_user_fields_delete:
-    pattern:  /user_fields/delete/{id}
+    path:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:UserSetting:deleteUserFields }
     permissions: [admin_setting_user_fields]
 
 admin_system_status:
-    pattern:  /system/status
+    path:  /system/status
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
     permissions: [admin]
 
-admin_official_messages:
-    pattern:  /official/messages
-    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
-    permissions: [admin]
-
 admin_uploadfile_head_leader_params:
-    pattern: /uploadfile/video/head/leader/params
+    path: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
     permissions: [admin_setting_cloud_video]
 
 admin_coin_picture:
-    pattern: /coin/picture
+    path: /coin/picture
     defaults: { _controller: TopxiaAdminBundle:Coin:picture }
     methods: [POST]
     permissions: [admin_coin_settings]
 
 admin_coin_picture_remove:
-    pattern: /coin/picture/remove
+    path: /coin/picture/remove
     defaults: { _controller: TopxiaAdminBundle:Coin:pictureRemove }
     methods: [POST]
     permissions: [admin_coin_settings]
@@ -1728,20 +1703,20 @@ admin_coin_orders_log:
 #     defaults: { _controller: TopxiaAdminBundle:Coin:checkNickname }
 
 admin_bill:
-    pattern: /coin/bill
+    path: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
 
 admin_bill_export_csv:
-    pattern: /coin/bill/export/{cashType}
+    path: /coin/bill/export/{cashType}
     defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
     permissions: [admin_bill,admin_coin_records]
 
 admin_order_manage_export_csv:
-    pattern: /order/manage/export/{targetType}
+    path: /order/manage/export/{targetType}
     defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
 
 admin_order_manage_export_coin_csv:
-    pattern: /order/manage/coin
+    path: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
 
 # admin_account_center:
@@ -1761,7 +1736,7 @@ admin_order_manage_export_coin_csv:
 #     defaults: { _controller: TopxiaAdminBundle:Account:paymentRank }
 
 # admin_account_statistic:
-#     pattern: /account/statistic/{period}
+#     path: /account/statistic/{period}
 #     defaults: { _controller: TopxiaAdminBundle:Account:accountStatistic }
 #     permissions: [admin]
 
@@ -1790,168 +1765,163 @@ admin_coin_model_save:
     permissions: [admin_coin_user_records]
 
 admin_common_add:
-    pattern:  /common/add
+    path:  /common/add
     defaults: { _controller: TopxiaAdminBundle:CommonAdmin:addCommonAdmin }
     permissions: [admin]
 
 admin_common_admin:
-    pattern:  /common/admin
+    path:  /common/admin
     defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonAdmin }
     permissions: [admin]
 
 admin_common_remove:
-    pattern:  /common/remove/{id}
+    path:  /common/remove/{id}
     defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonRemove }
     permissions: [admin]
 
 # admin_edu_cloud:
-#     pattern:  /edu_cloud
+#     path:  /edu_cloud
 #     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /setting/edu_cloud/sms
+    path:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
     permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_sms_status:
-    pattern:  /setting/sms/status
+    path:  /setting/sms/status
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsStatus }
 
 admin_edu_cloud_apply_for_sms:
-    pattern:  /edu_cloud/apply_for_sms
+    path:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
     permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_sms_bill:
-    pattern:  /edu_cloud/sms_bill
+    path:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
     permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_sms_no_message:
-    pattern: /edu_cloud/admin_edu_cloud_sms_no_message
+    path: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_email:
-    pattern: /setting/edu_cloud/email
+    path: /setting/edu_cloud/email
     defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
     permissions: [admin_edu_cloud_email_seeting]
 
 admin_edu_cloud_search:
-    pattern: /setting/edu_cloud/search
+    path: /setting/edu_cloud/search
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
 
 admin_edu_cloud_attachment:
-    pattern: /setting/edu_cloud/attachment
+    path: /setting/edu_cloud/attachment
     defaults: { _controller: TopxiaAdminBundle:EduCloud:attachment }
     permissions: [admin_edu_cloud_attachment]
 
 admin_edu_cloud_search_clause:
-    pattern: /setting/edu_cloud/search/clause
+    path: /setting/edu_cloud/search/clause
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
     permissions: [admin_edu_cloud_search]
 
 admin_edu_cloud_search_reapply:
-    pattern: /setting/edu_cloud/search/reapply
+    path: /setting/edu_cloud/search/reapply
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchReapply }
 
 admin_edu_cloud_search_open:
-    pattern: /setting/edu_cloud/search/open
+    path: /setting/edu_cloud/search/open
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOpen }
 
 admin_edu_cloud_search_close:
-    pattern: /setting/edu_cloud/search/close
+    path: /setting/edu_cloud/search/close
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
     permissions: [admin_edu_cloud_search]
 
 admin_app_im:
-    pattern: /setting/app/im
+    path: /setting/app/im
     defaults: { _controller: TopxiaAdminBundle:EduCloud:appIm }
 
 admin_app_im_update:
-    pattern: /setting/app/im/update
+    path: /setting/app/im/update
     defaults: { _controller: TopxiaAdminBundle:EduCloud:appImUpdateStatus }
     methods: [POST]
 
 admin_announcement:
-    pattern:  /announcement
+    path:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
 
 admin_announcement_create:
-    pattern:  /announcement/create
+    path:  /announcement/create
     defaults: { _controller: TopxiaAdminBundle:Announcement:create }
 
 admin_announcement_delete:
-    pattern:  /announcement/delete/{id}
+    path:  /announcement/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Announcement:delete }
     methods: [POST]
     permissions: [admin_announcement]
 
 admin_announcement_edit:
-    pattern:  /announcement/edit/{id}
+    path:  /announcement/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:Announcement:edit }
     permissions: [admin_announcement]
 
 admin_batch_notification:
-    pattern: /batch_notification
+    path: /batch_notification
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:index }
 
 admin_batch_notification_create:
-    pattern: /batch_notification/create
+    path: /batch_notification/create
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:create }
 
 admin_batch_notification_edit:
-    pattern: /batch_notification/edit/{id}
+    path: /batch_notification/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:edit }
     permissions: [admin_batch_notification]
 
 admin_batch_notification_delete:
-    pattern: /batch_notification/delete/{id}
+    path: /batch_notification/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:delete }
     methods: [POST]
     permissions: [admin_batch_notification]
 
 admin_batch_notification_send:
-    pattern: /batch_notification/send/{id}
+    path: /batch_notification/send/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
     methods:  [POST]
     permissions: [admin_batch_notification]
 
 admin_feedback:
-    pattern: /feedback
+    path: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
     permissions: [admin]
 
 admin_report_status:
-    pattern: /reports/status
+    path: /reports/status
     defaults: { _controller: TopxiaAdminBundle:System:report }
     permissions: [admin_report_status_list]
 
 admin_report_status_php:
-    pattern: /reports/status/php
+    path: /reports/status/php
     defaults: { _controller: TopxiaAdminBundle:System:php }
     permissions: [admin_report_status_list]
 
 admin_report_status_directory:
-    pattern: /reports/status/directory
+    path: /reports/status/directory
     defaults: { _controller: TopxiaAdminBundle:System:checkDir }
     permissions: [admin_report_status_list]
 
 admin_report_status_ucenter:
-    pattern: /reports/status/ucenter
+    path: /reports/status/ucenter
     defaults: { _controller: TopxiaAdminBundle:System:ucenter }
     permissions: [admin_report_status_list]
 
 admin_report_status_email_send:
-    pattern: /reports/status/email/send
+    path: /reports/status/email/send
     defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }
 
 admin_cloud_attachment:
-    pattern: /cloud_attachment
+    path: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
-    permissions: [admin_cloud_attachment_manage]
-
-admin_cloud_attachment_render:
-    pattern: /cloud_attachment/render
-    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }
     permissions: [admin_cloud_attachment_manage]
