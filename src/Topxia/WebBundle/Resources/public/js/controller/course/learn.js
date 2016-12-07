@@ -903,7 +903,7 @@ define(function(require, exports, module) {
             this.dashboard = dashboard;
             this.courseId = courseId;
             this.lessonId = lessonId;
-            this.interval = 30;
+            this.interval = 120;
             this.watched = false;
             this.watchLimit = watchLimit;
         },
