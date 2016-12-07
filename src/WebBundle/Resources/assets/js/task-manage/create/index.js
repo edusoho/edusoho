@@ -134,6 +134,7 @@ class Editor {
         .then((response) => {
           notify('success', '删除成功');
           this.$element.modal('hide');
+          document.location.reload();
         })
         .fail(error => {
           notify('warning', '删除失败~~');
