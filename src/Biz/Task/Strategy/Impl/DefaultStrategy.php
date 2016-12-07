@@ -39,7 +39,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
-                return $task;
+                $task['activity']    = $this->getActivityService()->getActivityFetchExt($task['activityId']);
+                $chapter['tasks']    = array($task);
+                return $chapter;
             });
         } else {
             $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
@@ -49,6 +51,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $field['status'] = $lessonTask['status'];
             $task            = $this->baseCreateTask($field);
         }
+
         return $task;
     }
 
@@ -68,7 +71,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $that   = $this;
         $result = $this->biz['db']->transactional(function () use ($task, $that) {
-            $currentSeq = $task['seq'];
             if ($task['mode'] == 'lesson') {
                 $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有课程，
                 $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
@@ -76,7 +78,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             } else {
                 $that->getTaskDao()->delete($task['id']);
             }
-            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
         });
         return $result;
     }
@@ -85,6 +86,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function getTasksRenderPage()
     {
         return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
+    }
+
+    public function getTaskItemRenderPage()
+    {
+        return 'WebBundle:TaskManage:list-item.html.twig';
     }
 
     /**

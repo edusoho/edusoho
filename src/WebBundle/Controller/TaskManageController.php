@@ -2,6 +2,7 @@
 namespace WebBundle\Controller;
 
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,12 +15,19 @@ class TaskManageController extends BaseController
         $course     = $this->tryManageCourse($courseId);
         $taskMode   = $request->query->get('type');
         $categoryId = $request->query->get('categoryId');
+        $chapterId  = $request->query->get('chapterId');
         if ($request->isMethod('POST')) {
             $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
             $task['fromUserId'] = $this->getUser()->getId();
-            $this->getTaskService()->createTask($this->parseTimeFields($task));
-            return $this->createJsonResponse(true);
+            $task               = $this->getTaskService()->createTask($this->parseTimeFields($task));
+
+            $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
+            return $this->render($tasksRenderPage, array(
+                'course' => $course,
+                'task'   => $task
+            ));
+
         }
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
@@ -27,7 +35,8 @@ class TaskManageController extends BaseController
             'mode'       => 'create',
             'types'      => $this->getActivityService()->getActivityTypes(),
             'taskMode'   => $taskMode,
-            'categoryId' => $categoryId
+            'categoryId' => $categoryId,
+            'chapterId'  => $chapterId
         ));
     }
 
@@ -141,6 +150,11 @@ class TaskManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
     //datetime to int

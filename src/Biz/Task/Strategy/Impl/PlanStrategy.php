@@ -7,13 +7,17 @@ use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\LearningStrategy;
+use Biz\Task\Strategy\新增任务的列表片段页面;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class PlanStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
-        return $this->baseCreateTask($field);
+        $task = $this->baseCreateTask($field);
+
+        $task['activity'] = $this->getActivityService()->getActivityFetchExt($task['activityId']);
+        return $task;
     }
 
     public function updateTask($id, $fields)
@@ -25,10 +29,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     {
         $that = $this;
         $this->biz['db']->transactional(function () use ($task, $that) {
-            $currentSeq = $task['seq'];
             $that->getTaskDao()->delete($task['id']);
             $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-            $that->getTaskDao()->waveSeqBiggerThanSeq($task['courseId'], $currentSeq, -1);
         });
         return true;
     }
@@ -67,6 +69,11 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     public function getTasksRenderPage()
     {
         return 'WebBundle:CourseManage/LockMode:tasks.html.twig';
+    }
+
+    public function getTaskItemRenderPage()
+    {
+        return 'WebBundle:TaskManage:list-item-lock-mode.html.twig';
     }
 
 

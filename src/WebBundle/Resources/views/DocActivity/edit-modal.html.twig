@@ -1,13 +1,17 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 {% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/activity-manage/doc/index.js']) %}
-{% set mediaType = 'document' %}
+
 {% block activity_content %}
   <div class="form-group">
     <div class="col-sm-2 control-label">
       <label for="mediaId" class="style">文档</label>
     </div>
     <div class="col-sm-10">
-      {% include 'WebBundle:FileChooser:file-choose.html.twig' %}
+      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {
+      mediaType: 'document',
+      fileType:'document',
+      file: doc.media|default(null)
+      } %}
       <input type="hidden" value="{{ doc.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
       <div id="file-choose-type" class="hidden" data-type="doc"></div>
     </div>
