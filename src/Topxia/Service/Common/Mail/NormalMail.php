@@ -1,5 +1,8 @@
 <?php
-namespace Topxia\Service\Common;
+namespace Topxia\Service\Common\Mail;
+
+use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
+use Topxia\Service\Common\ServiceKernel;
 
 class NormalMail extends Mail
 {
@@ -59,11 +62,19 @@ class NormalMail extends Mail
         }
     }
 
+    private function on_effect_email_reset_password()
+    {
+        return array(
+            'title' => $this->getKernel()->trans('生效%nickname%在%sitename%修改密码的操作', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name'))),
+            'body'  => $this->renderBody('effect-reset.txt.twig')
+        );
+    }
+
     private function on_email_reset_password()
     {
         return array(
             'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的密码', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('TopxiaWebBundle:PasswordReset:reset.txt.twig')
+            'body'  => $this->renderBody('reset.txt.twig')
         );
     }
 
@@ -95,7 +106,7 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('TopxiaWebBundle:Settings:email-change.txt.twig')
+            'body'  => $this->renderBody('email-change.txt.twig')
         );
     }
 
@@ -103,15 +114,15 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('验证%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('TopxiaWebBundle:Settings:email-verify.txt.twig')
+            'body'  => $this->renderBody('email-verify.txt.twig')
         );
     }
 
     private function renderBody($view)
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-        return $container->get('templating')->render($view, $this->params);
+        $loader = new \Twig_Loader_Filesystem(__DIR__."/template");
+        $twig = new \Twig_Environment($loader);
+        return  $twig->render($view, $this->params);
     }
 
     protected function getKernel()

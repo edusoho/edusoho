@@ -37,7 +37,7 @@ class SmsCodes extends BaseResource
 
             $this->imgBuilder = null;
             
-            return array('img_code' => $str, 'img_token' => $imgToken['token'], 'status' => 'limited');
+            return array('img_code' => $str, 'verified_token' => $imgToken['token'], 'status' => 'limited');
         }
 
         if (!empty($fields['img_code']) && !empty($fields['img_token'])) {
@@ -112,7 +112,7 @@ class SmsCodes extends BaseResource
 
         return array(
             'mobile'    => $mobile,
-            'sms_token' => $smsToken['token'],
+            'verified_token' => $smsToken['token'],
             'status'    => 'ok'
         );
     }

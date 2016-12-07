@@ -120,4 +120,5 @@ $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
 
+$app->post(_u('/emails'), 'res.Emails:post');
 $app->post(_u('/sms_codes'), 'res.SmsCodes:post');

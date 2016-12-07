@@ -68,6 +68,7 @@ $resources = array(
     'IM/MePush',
     'IM/Member',
     'IM/MemberSync',
+    'Emails',
     'User/Password',
     'SmsCodes',
     'User/VerifiedMobile'

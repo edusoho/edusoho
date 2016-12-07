@@ -1,5 +1,7 @@
 <?php
-namespace Topxia\Service\Common;
+namespace Topxia\Service\Common\Mail;
+
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class Mail
 {
@@ -32,10 +34,18 @@ abstract class Mail
 
     protected function setting($name, $default)
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-        return $container->get('topxia.twig.web_extension')->getSetting($name, $default);
+        return $this->getSettingService()->get($name, $default);
     }
 
     public abstract function send();
+
+    protected function getSettingService()
+    {
+        return $this->getKernel()->createService('System.SettingService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }
