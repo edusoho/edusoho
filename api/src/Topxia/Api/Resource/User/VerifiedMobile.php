@@ -27,14 +27,18 @@ class VerifiedMobile extends BaseResource
         }
 
         $smsUtil = new SmsUtil();
-        try {
-            $smsUtil->verifySmsCode('sms_verify_mobile', $smsCode, $smsToken);
-
-            if (!empty($this->getUserService()->getUserByVerifiedMobile($mobile))) {
-                throw new \Exception("手机号已绑定");
+        $result = $smsUtil->verifySmsCode('sms_verify_mobile', $smsCode, $smsToken);
+        if( $result !== true ){
+            if( $result == 'sms_code_expired' ){
+                return $this->error('sms_code_expired', '验证码已过期');
+            }else{
+                return $this->error('500', '验证码错误');
             }
-        } catch(Expection $e) {
-            return array('cdde' => '500', 'message' => $e->getMessage());
+        }
+
+        $userInfo = $this->getUserService()->getUserByVerifiedMobile($mobile);
+        if ($userInfo) {
+            return $this->error('500', '手机号已绑定');
         }
 
         $user = $this->getCurrentUser();
