@@ -281,7 +281,7 @@ class OrderController extends BaseController
         foreach ($orders as $key => $order) {
             $member = "";
             $member .= $order['sn'].",";
-            $member .= $status[$orders['status']].",";
+            $member .= $status[$order['status']].",";
             $member .= $order['title'].",";
 
             $member .= $order['totalPrice'].",";
