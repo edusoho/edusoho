@@ -130,7 +130,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseStatistics($id, $fields)
     {
         if (empty($fields)) {
-            return null;
+            throw $this->createInvalidArgumentException('Invalid Arguments');
         }
 
         $updateFields = array();
@@ -143,11 +143,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        if (!empty($updateFields)) {
-            return $this->getCourseDao()->update($id, $updateFields);
+        if (empty($updateFields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
         }
 
-        return $this->getCourseDao()->get($id);
+        return $this->getCourseDao()->update($id, $updateFields);
     }
 
     public function deleteCourse($id)
