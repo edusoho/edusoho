@@ -11,17 +11,10 @@ export default class UploaderChooser extends Chooser {
 
   reopen() {
     this.destroy();
-    this.open()
-        ._initSdk()
-        ._bindEvent();
+    this._initSdk();
+    this._bindEvent();
   }
-
-  open() {
-    $('.file-chooser-bar').addClass('hidden');
-    $('.file-chooser-main').removeClass('hidden');
-    return this;
-  }
-
+  
   _initSdk() {
     if (this._sdk !== undefined) {
       return this;
@@ -52,7 +45,7 @@ export default class UploaderChooser extends Chooser {
     });
 
     this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
-
+    
     return this;
   }
 
@@ -87,12 +80,10 @@ export default class UploaderChooser extends Chooser {
   }
 
   destroy() {
-    this._close();
-
+    // this._close();
     if (this._sdk === undefined) {
       return;
     }
-
     this._sdk.destroy();
     this._sdk = undefined;
   }

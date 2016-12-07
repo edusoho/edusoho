@@ -13,6 +13,8 @@ class FlashActivityDaoImpl extends GeneralDaoImpl implements FlashActivityDao
 
     public function declares()
     {
-
+        return array(
+            'timestamps' => array('createdTime', 'updatedTime')
+        );
     }
 }

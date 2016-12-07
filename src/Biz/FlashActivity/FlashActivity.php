@@ -43,7 +43,6 @@ class FlashActivity extends Activity
 
         $biz                  = $this->getBiz();
         $flash['createdUserId'] = $biz['user']['id'];
-        $flash['createdTime']   = time();
 
         $flash = $this->getFlashActivityDao()->create($flash);
         return $flash;
@@ -57,7 +56,6 @@ class FlashActivity extends Activity
             'finishDetail',
         ));
 
-        $updateFields['updatedTime'] = time();
         return $this->getFlashActivityDao()->update($targetId, $updateFields);
     }
 

@@ -1,6 +1,10 @@
 import FileChooser from '../../file-chooser/file-choose';
+import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+let $mediaId = $('[name="mediaId"]');
 
+showChooserType($mediaId);
 inItStep2form();
+
 function inItStep2form() {
   var $step2_form = $("#step2-form");
   var validator = $step2_form.data('validator');
@@ -51,12 +55,12 @@ if($select.children('option:selected').val() === 'time'){
 let fileChooser = new FileChooser();
 
 fileChooser.on('select', (file) => {
-  $('[name="mediaId"]').val(file.id);
+  chooserUiClose();
+  $mediaId.val(file.id);
 });
 
 $select.on('change', event => {
   let conditionsType = $(event.currentTarget).children('option:selected').val();
-
   let $conditionsDetail = $("#condition-group");
   if(conditionsType !== 'time'){
     $conditionsDetail.addClass('hidden');

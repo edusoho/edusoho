@@ -1,7 +1,7 @@
 {% extends 'WebBundle:Activity:content-layout.html.twig' %}
 {# {% do script(['libs/perfect-scrollbar.js', 'web/task/show.js']) %} #}
 {% do script(['web/task/live/index.js']) %}
-{% block content %} 
+{% block body %} 
 	<style type="text/css">
 	.btn-primary {
 		text-decoration: none;
@@ -24,28 +24,15 @@
 	}
 	</style>
 	<script type="text/javascript">
-	var live_activity_data  = {
-		liveStartTimeFormat: '{{activity.startTimeFormat}}',
-		liveEndTimeFormat: '{{activity.endTimeFormat}}',
-		startTime: '{{activity.startTime}}',
-		endTime: '{{activity.endTime}}',
-		courseId: '{{activity.fromCourseId}}',
-		id: '{{activity.id}}',
-		liveId: '{{activity.ext.liveId}}',
-		liveProvider: '{{activity.ext.liveProvider}}',
-		isTeacher: !!{{activity.isTeacher}},
-		replayStatus: null, //'videoGenerated'
-		liveMediaError: null,
-		replays: null,
-		summary: '{{activity.remark}}',
-		nowDate : parseInt({{activity.nowDate}})
-	};
+	
 	
 	</script>
 	{# <pre>{{activity.remark|raw}}</pre> #}
 
 	<div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content"
          style="display:none;">
+         <pre id="activity-data" style="display:none !important;">{{activity|json_encode()|raw}}</pre>
+         <pre id="activity-summary" style="display:none !important;">{{summary|raw}}</pre>
       <div class="lesson-content-text-body" style="padding-left: 15px;"></div>
     </div>
 {% endblock %}

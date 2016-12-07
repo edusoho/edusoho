@@ -2,11 +2,15 @@
   "use strict";
   var paths = [
     {% for path in script() %}
-    {% if path starts with 'http://' %}
-    "{{ path ~ '?' ~ asset_version('')}}",
-    {% else %}
-    "{{ asset('build/' ~ path, 'webpack') }}",
-    {% endif %}
+      {% if path starts with 'http' %}
+        {% if 'js-sdk/uploader' in path %}
+          "{{ path ~ '?' ~ random(date().timestamp / 1000) }}",
+        {% else %}
+          "{{ path ~ '?' ~ asset_version('') }}",
+        {% endif %}
+      {% else %}
+        "{{ asset('build/' ~ path, 'webpack') }}",
+      {% endif %}
     {% endfor %}
   ];
 
@@ -37,7 +41,7 @@
       };
 
       script.src = path;
-      document.getElementById('modal').appendChild(script);
+      document.body.appendChild(script);
     };
 
     return {

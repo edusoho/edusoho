@@ -4,11 +4,9 @@ namespace WebBundle\Controller;
 
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Course\CourseService;
 
 class DownLoadActivityController extends BaseController implements ActivityActionInterface
 {
@@ -40,9 +38,10 @@ class DownLoadActivityController extends BaseController implements ActivityActio
 
     public function downloadFileAction(Request $request, $courseId, $activityId)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $downloadFileId = $request->query->get('fileId');
 
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $downloadFileId = $request->query->get('fileId');
         $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $downloadFileId);
 
         if (!empty($downloadFile['link'])) {
@@ -73,7 +72,7 @@ class DownLoadActivityController extends BaseController implements ActivityActio
     protected function getCourseService()
     {
 
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
