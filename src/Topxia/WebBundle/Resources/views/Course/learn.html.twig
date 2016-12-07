@@ -175,24 +175,6 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
-  {% if setting('login_bind.login_limit')|default(0) %}
-    <div class="modal" id="login-limit-modal" style="display:none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ '登录提示'|trans }}</h4>
-          </div>
-          <div class="modal-body">
-            <p class="text-danger">{{ '此帐号已在别处登录，请重新登录'|trans }}</p>
-          </div>
-          <div class="modal-footer">
-            <a href="{{ path('login') }}" class="btn btn-primary">{{ '点此重新登录'|trans }}</a>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  {% endif %}
-
   <div class="modal" id="mediaPlayed-control-modal" style="display:none;">
     <div class="modal-dialog">
       <div class="modal-content">

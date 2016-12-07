@@ -903,7 +903,7 @@ define(function(require, exports, module) {
             this.dashboard = dashboard;
             this.courseId = courseId;
             this.lessonId = lessonId;
-            this.interval = 120;
+            this.interval = 30;
             this.watched = false;
             this.watchLimit = watchLimit;
         },
@@ -926,14 +926,7 @@ define(function(require, exports, module) {
 
             if (promptlyPost || learningCounter >= this.interval) {
                 var url = "../../../../course/" + this.lessonId + '/learn/time/' + learningCounter;
-                $.get(url, function(response) {
-                    if (response.error === 'loginLimit') {
-                        $('#login-limit-modal').modal({backdrop: 'static', keyboard: false});
-                        setTimeout(function() {
-                            location.href = response.url;
-                        }, 5000);
-                    }
-                });
+                $.get(url);
                 learningCounter = 0;
             }
 
@@ -956,12 +949,6 @@ define(function(require, exports, module) {
                 var url = "../../../../course/" + this.lessonId + '/watch/time/' + mediaPlayingCounter;
                 var self = this;
                 $.get(url, function(response) {
-                    if (response.error === 'loginLimit') {
-                        $('#login-limit-modal').modal({backdrop: 'static', keyboard: false});
-                        setTimeout(function() {
-                            location.href = response.url;
-                        }, 5000);
-                    }
                     if (self.watchLimit && response.watchLimited) {
                         window.location.reload();
                     }

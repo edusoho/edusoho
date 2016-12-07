@@ -48,6 +48,10 @@ define(function(require, exports, module) {
             return;
         }
 
+        if (error.name == 'loginlimit') {
+            location.href = '/login';
+        }
+
         if (error.name == 'Unlogin') {
             var ua = navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
