@@ -14,7 +14,7 @@ class Emails extends BaseResource
         $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
         if (!$user) {
-            return $this->error('5003', '该邮箱未在网校注册');
+            return $this->error('500', '该邮箱未在网校注册');
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -22,6 +22,7 @@ class Emails extends BaseResource
             'salt'     => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
         );
+
         $tokenType = 'email_password_reset';
         $EmailToken = $this->getTokenService()->makeToken($tokenType, array(
             'times'    => 5,
@@ -65,6 +66,7 @@ class Emails extends BaseResource
             );   
         }
     }
+
     public function filter($res)
     {
         return $res;

@@ -56,7 +56,7 @@ class SmsCodes extends BaseResource
             try {
                 $imgCodeUtil->verifyImgCode('img_verify', $imgCode, $imgToken);
             } catch(\Exception $e) {
-                return array('500', $e->getMessage());
+                return $this->error('500', $e->getMessage());
             }
         }
 
