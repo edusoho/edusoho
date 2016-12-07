@@ -103,7 +103,7 @@ class SmsCodes extends BaseResource
         
         $smsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
-            'duration' => 60 * 2,
+            'duration' => 60 * 30,
             'userId'   => 0,
             'data'     => array(
                 'sms_code' => $result['captcha_code'],
