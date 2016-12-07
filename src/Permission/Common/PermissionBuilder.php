@@ -246,7 +246,12 @@ class PermissionBuilder
             }
 
             $code          = ucfirst($app['code']);
-            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+
+            if ($app['protocol'] == 2) {
+                $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+            } else {
+                $configPaths[] = "{$rootDir}/plugins/{$code}Plugin/Resources/config/menus_{$position}.yml";
+            }
         }
 
         return $configPaths;
@@ -272,7 +277,6 @@ class PermissionBuilder
         }
 
         $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
-
         $this->cached['getOriginPermissionTree'][$index] = $tree;
         return $tree;
     }
@@ -292,7 +296,9 @@ class PermissionBuilder
 
         $configs     = $this->getPermissionConfig();
         $permissions = array();
+
         foreach ($configs as $config) {
+
             if (!file_exists($config)) {
                 continue;
             }
@@ -300,6 +306,8 @@ class PermissionBuilder
             if (empty($menus)) {
                 continue;
             }
+
+
 
             $menus       = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);

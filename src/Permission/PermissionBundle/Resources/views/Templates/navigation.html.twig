@@ -19,6 +19,9 @@
         <a
             title="{{ m.name|trans }}"
             href="{{ permission_path(tabMenu) }}"
+            {% if m.blank|default(false)%}
+              target="_blank"
+            {% endif %}
         >
           {{ m.name|trans }}
         </a>
