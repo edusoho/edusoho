@@ -55,7 +55,6 @@ class NormalMail extends Mail
         }
 
         $method = 'on_'.$this->template;
-        var_dump($method);
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method));
         } else {
