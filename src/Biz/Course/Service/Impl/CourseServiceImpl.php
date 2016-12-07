@@ -133,18 +133,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             return null;
         }
 
+        $updateFields = array();
+
         foreach ($fields as $field) {
             if ($field === 'studentCount') {
-                $studentCount = $this->countStudentsByCourseId($id);
-                $this->getCourseDao()->update($id, array(
-                    'studentCount' => $studentCount
-                ));
+                $updateFields['studentCount'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskCount') {
-                $taskCount = $this->getTaskService()->countTasksByCourseId($id);
-                $this->getCourseDao()->update($id, array(
-                    'taskCount' => $taskCount
-                ));
+                $updateFields['taskCount'] = $this->getTaskService()->countTasksByCourseId($id);
             }
+        }
+
+        if (!empty($updateFields)) {
+            return $this->getCourseDao()->update($id, $updateFields);
         }
 
         return $this->getCourseDao()->get($id);
