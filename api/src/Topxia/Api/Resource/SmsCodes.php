@@ -22,7 +22,7 @@ class SmsCodes extends BaseResource
 
         $remain = $limiter->check($request->getClientIp());
 
-        if ($remain == 0 && empty($fields['img_code']) && empty($fields['img_token'])) {
+        if ($remain == 0 && empty($fields['img_code']) && empty($fields['verified_token'])) {
             $this->imgBuilder = new CaptchaBuilder;
             $str = $this->buildImg();
 
@@ -40,9 +40,9 @@ class SmsCodes extends BaseResource
             return array('img_code' => $str, 'verified_token' => $imgToken['token'], 'status' => 'limited');
         }
 
-        if (!empty($fields['img_code']) && !empty($fields['img_token'])) {
+        if (!empty($fields['img_code']) && !empty($fields['verified_token'])) {
             $imgCode  = $request->request->get('img_code');
-            $imgToken = $request->request->get('img_token');
+            $imgToken = $request->request->get('verified_token');
 
             if (empty($imgCode)) {
                 return $this->error('500', '图形验证码为空');

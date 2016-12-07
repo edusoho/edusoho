@@ -15,7 +15,7 @@ class Password extends BaseResource
     {
         $password = $request->request->get('password');
         $smsCode  = $request->request->get('sms_code');
-        $smsToken = $request->request->get('sms_token');
+        $smsToken = $request->request->get('verified_token');
         $type     = $request->request->get('type');
 
         if (!in_array($type, array('sms', 'email'))) {
