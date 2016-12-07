@@ -291,7 +291,8 @@ abstract class BaseDao
 
     protected function generateKeyWhenSearch($conditions, $orderBy, $start, $limit)
     {
-        $keys = 'search';
+        $version = $this->getCacheVersion("{$this->table}:search");
+        $keys = 'search:'.$version;
 
         if(!empty($conditions)) {
             ksort($conditions);
@@ -303,8 +304,7 @@ abstract class BaseDao
                 }
             }
         }
-        $version = $this->getCacheVersion("{$this->table}:search");
-        return "{$keys}:{$version}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+        return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
     }
 
     protected function generateKeyWhenCount($conditions)
