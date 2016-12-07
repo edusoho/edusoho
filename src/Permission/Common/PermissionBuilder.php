@@ -296,7 +296,6 @@ class PermissionBuilder
         }
         $configs     = $this->getPermissionConfig();
         $permissions = array();
-
         foreach ($configs as $config) {
             if (!file_exists($config)) {
                 continue;
@@ -305,7 +304,6 @@ class PermissionBuilder
             if (empty($menus)) {
                 continue;
             }
-            
             $menus       = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);
         }
