@@ -40,15 +40,15 @@ class SmsCodes extends BaseResource
             return array('img_code' => $str, 'verified_token' => $imgToken['token'], 'status' => 'limited');
         }
 
-        if (!empty($fields['img_code']) && !empty($fields['verified_token'])) {
+        if (isset($fields['img_code']) && isset($fields['verified_token'])) {
             $imgCode  = $request->request->get('img_code');
             $imgToken = $request->request->get('verified_token');
 
-            if (empty($imgCode)) {
+            if (empty($fields['img_code'])) {
                 return $this->error('500', '图形验证码为空');
             }
 
-            if (empty($imgToken)) {
+            if (empty($fields['verified_token'])) {
                 return $this->error('500', 'Token为空');
             }            
 
