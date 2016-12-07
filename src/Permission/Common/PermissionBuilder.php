@@ -305,7 +305,7 @@ class PermissionBuilder
             if (empty($menus)) {
                 continue;
             }
-            
+
             $menus       = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);
         }

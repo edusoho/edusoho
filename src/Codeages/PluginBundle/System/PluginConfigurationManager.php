@@ -56,7 +56,7 @@ class PluginConfigurationManager
 
     public function getInstalledPluginBundles()
     {
-        $bundles = array();
+        $bundlues  = array();
         $plugins = $this->getInstalledPlugins();
 
         foreach ($plugins as $plugin) {
@@ -71,10 +71,10 @@ class PluginConfigurationManager
                 $class = "{$code}Plugin\\{$code}Plugin";
             }
 
-            $bundles[] = new $class();
+            $bundlues [] = new $class();
         }
 
-        return $bundles;
+        return $bundlues;
     }
 
     public function save()
