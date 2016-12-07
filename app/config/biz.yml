@@ -1,0 +1,20 @@
+parameters:
+    biz_config:
+        debug: "%kernel.debug%"
+        db.options:
+            dbname: "%database_name%"
+            user: "%database_user%"
+            password: "%database_password%"
+            host: "%database_host%"
+            port: "%database_port%"
+            driver: pdo_mysql
+            charset: UTF8
+        cache_directory: "%kernel.cache_dir%"
+        log_directory: "%kernel.logs_dir%"
+        plugin.directory: "%kernel.root_dir%/../plugins"
+        plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
+
+services:
+    biz:
+        class: Codeages\Biz\Framework\Context\Biz
+        arguments: ["%biz_config%"]

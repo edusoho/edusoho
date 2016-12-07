@@ -262,7 +262,7 @@ class UserSettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth          = $this->getSettingService()->get('auth', array());
 
-        $commomFields     = $this->get('topxia.twig.web_extension')->getDict('userInfoFields');
+        $commomFields     = $this->get('codeages_plugin.dict_twig_extension')->getDict('userInfoFields');
         $commomFieldsKeys = array_keys($commomFields);
 
         if (isset($auth['registerFieldNameArray'])) {

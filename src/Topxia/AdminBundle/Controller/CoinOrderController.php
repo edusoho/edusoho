@@ -112,7 +112,7 @@ class CoinOrderController extends BaseController
         }
 
         $status  = array('created' => $this->trans('未付款'), 'paid' => $this->trans('已付款'), 'cancelled' => $this->trans('已关闭'));
-        $payment = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
