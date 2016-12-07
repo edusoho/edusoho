@@ -12,7 +12,6 @@ class SideBar {
     this.activePlugins = activePlugins;
     this.plugins = {};
     this._currentPane = null;
-    console.log( $(element));
     this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
     // this.$dashboardPane = this.$element.find('#dashboard-pane');
     this.$dashboardcontent = $('#dashboard-content');
