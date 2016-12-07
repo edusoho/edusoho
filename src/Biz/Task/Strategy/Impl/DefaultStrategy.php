@@ -39,7 +39,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
-                $task['activity']    = $this->getActivityService()->getActivityFetchExt($task['activityId']);
+                $task['activity']    = $that->getActivityService()->getActivityFetchExt($task['activityId']);
                 $chapter['tasks']    = array($task);
                 return $chapter;
             });
