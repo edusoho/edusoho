@@ -386,31 +386,12 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->checkLoginLimit($request) === true) {
-            $url = $this->generateUrl('login');
-            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
-        }
-
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
         return $this->createJsonResponse(true);
-    }
-
-    private function checkLoginLimit($request)
-    {
-        $user = $this->getCurrentUser();
-        $setting = $this->getSettingService()->get('login_bind');
-        
-        $userLoginToken = $request->getSession()->getId();
-
-        if (!empty($setting['login_limit']) && $setting['login_limit'] == 1 && (empty($user['loginSessionId']) || ($userLoginToken != $user['loginSessionId']))) {
-            return true;
-        }
-
-        return false;
     }
 
     public function detailDataAction($id)
@@ -452,11 +433,6 @@ class CourseController extends CourseBaseController
     public function recordWatchingTimeAction(Request $request, $lessonId, $time)
     {
         $user = $this->getCurrentUser();
-
-        if ($this->checkLoginLimit($request) === true) {
-            $url = $this->generateUrl('login');
-            return $this->createJsonResponse(array('error'=>'loginLimit','url'=>$url));
-        }
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
