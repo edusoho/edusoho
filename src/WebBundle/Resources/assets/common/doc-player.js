@@ -1,7 +1,6 @@
 import swfobject from 'es-swfobject';
 
 (function($) {
-
   $.fn.WaterMark = function(options) {
     var settings = $.extend({
       'duringTime': 5 * 60 * 1000,
@@ -39,10 +38,10 @@ import swfobject from 'es-swfobject';
         'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"
       });
       $watermarkDiv.css(settings.style);
-      if (IEversion >= 8 && IEversion < 9 ) {
+      if (IEversion >= 8 && IEversion < 9) {
         $watermarkDiv.css({
           'height': 60,
-          'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity="+ (parseFloat(settings.opacity) * 100) +")"
+          'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity=" + (parseFloat(settings.opacity) * 100) + ")"
         });
       }
       $watermarkDiv.html(settings.contents);
@@ -119,15 +118,13 @@ import swfobject from 'es-swfobject';
       }
     }
 
-    function getInternetExplorerVersion()
-    {
+    function getInternetExplorerVersion() {
       var rv = -1; // Return value assumes failure.
-      if (navigator.appName == 'Microsoft Internet Explorer')
-      {
+      if (navigator.appName == 'Microsoft Internet Explorer') {
         var ua = navigator.userAgent;
-        var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+        var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
         if (re.exec(ua) != null)
-          rv = parseFloat( RegExp.$1 );
+          rv = parseFloat(RegExp.$1);
       }
       return rv;
     }
@@ -143,7 +140,7 @@ import swfobject from 'es-swfobject';
 })($);
 
 class DocPlayer {
-  constructor({element, swfUrl, pdfUrl, watermarkOptions, canCopy}){
+  constructor({ element, swfUrl, pdfUrl, watermarkOptions, canCopy }) {
     this.element = $(element);
     this.swfUrl = swfUrl || '';
     this.pdfUrl = pdfUrl || '';
@@ -156,10 +153,10 @@ class DocPlayer {
 
   }
 
-  init(){
-    if(this.isSupportHtml5() && !this.isIE9()){
+  init() {
+    if (this.isSupportHtml5() && !this.isIE9()) {
       this.initPDFJSViewer();
-    }else {
+    } else {
       this.initSwfViewer();
     }
   }
@@ -168,16 +165,16 @@ class DocPlayer {
     return navigator.appVersion.indexOf("MSIE 9.") != -1;
   }
 
-  isSupportHtml5(){
+  isSupportHtml5() {
     return $.support.leadingWhitespace;
   }
 
-  initPDFJSViewer(){
+  initPDFJSViewer() {
     $("html").attr('dir', 'ltr');
 
-    let src = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'+this.pdfUrl;
+    let src = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#' + this.pdfUrl;
 
-    if(!this.canCopy){
+    if (!this.canCopy) {
       src += '#false';
     }
 
@@ -191,7 +188,7 @@ class DocPlayer {
     this.addWatermark();
   }
 
-  initSwfViewer(){
+  initSwfViewer() {
     $.html(`<div id="website"><p align="center" class="style1">${Translator.trans('您还没有安装flash播放器 请点击')}<a href="http://www.adobe.com/go/getflashplayer">${Translator.trans('这里')}</a>${Translator.trans('安装')}</p></div>`);
 
     let flashVars = {
@@ -212,21 +209,21 @@ class DocPlayer {
     };
 
     swfobject.embedSWF(
-        this.swfPlayerUrl,
-        'website',
-        this.swfPlayerWidth,
-        this.swfPlayerHeight,
-        "9.0.45",
-        null,
-        flashVars,
-        params,
-        attributes
+      this.swfPlayerUrl,
+      'website',
+      this.swfPlayerWidth,
+      this.swfPlayerHeight,
+      "9.0.45",
+      null,
+      flashVars,
+      params,
+      attributes
     );
 
     this.addWatermark();
   }
 
-  addWatermark(){
+  addWatermark() {
     this.watermarkOptions && this.element.WaterMark(this.watermarkOptions);
   }
 }

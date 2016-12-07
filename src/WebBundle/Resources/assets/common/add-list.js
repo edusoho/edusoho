@@ -68,7 +68,6 @@ class FriendsContainer extends React.Component {
   }
 
   render (){
-    console.log('render');
     return (
       <div className="panes">
         <FriendList removeItem={(index)=>this.removeItem(index)} list={this.state.items}  />

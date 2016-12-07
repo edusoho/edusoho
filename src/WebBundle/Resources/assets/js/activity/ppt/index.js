@@ -15,13 +15,13 @@ let createPPT = (watermark) => {
   });
 
 
-  if($content.data('finishType') === 'end'){
+  if ($content.data('finishType') === 'end') {
     ppt.once('end', () => {
       emitter.emit('finish');
     });
-  }else{
+  } else {
     emitter.receive('doing', (data) => {
-      if(data.learnedTime >= finishTime){
+      if (data.learnedTime >= finishTime) {
         emitter.emit('finish');
       }
     })
@@ -34,10 +34,10 @@ if (watermarkUrl === undefined) {
   let ppt = createPPT();
 } else {
   $.get(watermarkUrl)
-      .then((watermark) => {
-        let ppt = createPPT(watermark);
-      })
-      .fail(error => {
-        console.error(error);
-      });
+    .then((watermark) => {
+      let ppt = createPPT(watermark);
+    })
+    .fail(error => {
+      console.error(error);
+    });
 }

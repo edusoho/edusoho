@@ -15,20 +15,20 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
   $el.show();
 } else {
   swfobject.embedSWF($el.data('uri'),
-      'flash-player', '100%', '100%', "9.0.0", null, null, {
-        wmode: 'opaque',
-        allowFullScreen: 'true'
-      });
+    'flash-player', '100%', '100%', "9.0.0", null, null, {
+      wmode: 'opaque',
+      allowFullScreen: 'true'
+    });
 }
 
 let activityEmitter = new ActivityEmitter();
 
 let finishType = $el.data('finishType');
 
-if(finishType == 'time'){
+if (finishType == 'time') {
   let finishDetail = $el.data('finishDetail');
   activityEmitter.receive('doing', (data) => {
-    if(finishDetail <= data.learnedTime){
+    if (finishDetail <= data.learnedTime) {
       activityEmitter.emit('finish');
     }
   });

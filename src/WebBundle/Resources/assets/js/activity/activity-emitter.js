@@ -13,7 +13,7 @@ export default class ActivityEmitter {
     this.receiveMessenger = new Messenger('task-content-iframe', 'TaskEvent');
     this.receiveMessenger.addTarget(window.parent, 'parent');
     this.receiveMessenger.listen(message => {
-      let {event, data} = JSON.parse(message);
+      let { event, data } = JSON.parse(message);
       let listeners = this.eventMap.receives[event];
       if (typeof listeners !== 'undefined') {
         listeners.forEach(callback => callback(data));
@@ -29,7 +29,7 @@ export default class ActivityEmitter {
         data: data
       });
 
-     this.emitMessenger.send(message);
+      this.emitMessenger.send(message);
 
       this.emitMessenger.listen((message) => {
         message = JSON.parse(message);

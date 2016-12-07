@@ -4,7 +4,7 @@ import TaskEventEmitter from './widget/task-event-emitter';
 import Emitter from 'common/es-event-emitter'
 
 class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode}) {
+  constructor({ element, courseId, taskId, mode }) {
     super();
     this.element = $(element);
     this.courseId = courseId;
@@ -22,7 +22,7 @@ class TaskShow extends Emitter {
     this.initPlugin();
     this.sidebar();
 
-    if(this.mode != 'preview'){
+    if (this.mode != 'preview') {
       this.bindEvent();
     }
   }
@@ -35,7 +35,7 @@ class TaskShow extends Emitter {
     });
   }
 
-  bindEvent(){
+  bindEvent() {
     let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
@@ -54,7 +54,7 @@ class TaskShow extends Emitter {
     this.trigger('doing', timeStep);
 
     this.element.on('click', '.js-btn-learn', event => {
-      this.eventEmitter.emit('finish', {taskId: this.taskId}).then(() => {
+      this.eventEmitter.emit('finish', { taskId: this.taskId }).then(() => {
         this.ui.learned();
         //@TODO 弹框
       })
@@ -79,7 +79,7 @@ class TaskShow extends Emitter {
   sidebar() {
     this.sideBar = new SideBar({
       element: '.js-task-dashboard-page',
-      activePlugins: ['task',"note", "question"],
+      activePlugins: ['task', "note", "question"],
       courseId: this.courseId,
       taskId: this.taskId,
     });
@@ -92,7 +92,3 @@ new TaskShow({
   taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
   mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });
-
-
-
-

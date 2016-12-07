@@ -16,18 +16,18 @@ export default class TaskEventEmitter {
     this.receiveMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
     this.receiveMessenger.listen(message => {
-      let {event, data} = JSON.parse(message);
-      console.log("event, data",event, data);
+      let { event, data } = JSON.parse(message);
+      console.log("event, data", event, data);
       let listeners = this.eventMap.receives[event];
-      $.post(this.element.data('eventUrl'), {eventName: event, data: data})
-        .done(({event, data}) => {
+      $.post(this.element.data('eventUrl'), { eventName: event, data: data })
+        .done(({ event, data }) => {
           if (typeof listeners !== 'undefined') {
             listeners.forEach(callback => callback(data));
           }
-          this.receiveMessenger.send(JSON.stringify({event: event, data: data}));
+          this.receiveMessenger.send(JSON.stringify({ event: event, data: data }));
         })
         .fail((error) => {
-          this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
+          this.receiveMessenger.send(JSON.stringify({ event: event, error: error }));
         })
     });
 
@@ -39,14 +39,14 @@ export default class TaskEventEmitter {
   //发送事件到activity
   emit(event, data) {
     return new Promise((resolve, reject) => {
-      $.post(this.eventUrl, {eventName: event, data: data})
-          .done((response) => {
-            this.emitMessenger.send(JSON.stringify({event: response.event, data: response.data}));
-            resolve(response.data);
-          })
-          .fail((error) => {
-            reject(error);
-          });
+      $.post(this.eventUrl, { eventName: event, data: data })
+        .done((response) => {
+          this.emitMessenger.send(JSON.stringify({ event: response.event, data: response.data }));
+          resolve(response.data);
+        })
+        .fail((error) => {
+          reject(error);
+        });
     });
   }
 

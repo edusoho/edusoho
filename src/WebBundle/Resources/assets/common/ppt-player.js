@@ -2,7 +2,7 @@ import Emitter from "common/es-event-emitter";
 import screenfull from "screenfull";
 
 export default class PPT extends Emitter {
-  constructor({element, slides, watermark}) {
+  constructor({ element, slides, watermark }) {
     super();
 
     this.element = $(element);
@@ -64,10 +64,9 @@ export default class PPT extends Emitter {
     this._page = currentPage;
 
     this.trigger('change', {
-          current: currentPage,
-          before: beforePage
-        }
-    );
+      current: currentPage,
+      before: beforePage
+    });
   }
 
   _init() {
@@ -114,7 +113,7 @@ export default class PPT extends Emitter {
     this.element.on('click', '.fullscreen', this._onFullScreen.bind(this));
     this.element.on('change', '.goto-page', this._onChangePage.bind(this));
     let self = this;
-    this.on('change', ({current, before}) => {
+    this.on('change', ({ current, before }) => {
       if (current == self.total) {
         self.trigger('end');
       }

@@ -1,6 +1,6 @@
 class TaskPane {
   constructor(option) {
-    this.plugin= option.plugin;
+    this.plugin = option.plugin;
     this.toolbar = this.plugin.toolbar;
     this.$element = option.element;
     this.init();
@@ -9,8 +9,8 @@ class TaskPane {
   init() {
     this.$element.perfectScrollbar();
     $.get('http://www.esdev.com/lessonplugin/lesson/list', {
-          courseId:toolbar.courseId,
-    },html=> {
+      courseId: toolbar.courseId,
+    }, html => {
       // that.element.html(html).show();
       // that._setLessonItemActive(toolbar.get('lessonId'));
 

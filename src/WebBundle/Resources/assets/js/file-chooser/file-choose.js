@@ -18,7 +18,7 @@ class FileChooser extends Emitter {
   }
 
   initTab() {
-    $("#material a").click(function (e) {
+    $("#material a").click(function(e) {
       e.preventDefault();
       let $this = $(this);
       $this.find('[type="radio"]').prop('checked', 'checked');
@@ -44,4 +44,4 @@ class FileChooser extends Emitter {
 
 }
 
-export default FileChooser ;
+export default FileChooser;

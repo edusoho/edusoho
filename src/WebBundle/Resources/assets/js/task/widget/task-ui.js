@@ -10,7 +10,7 @@ export default class TaskUi {
   learnedWeakPrompt() {
     this.learnprompt.removeClass('open');
     this.learningPrompt.addClass('moveup');
-    window.setTimeout(()=> {
+    window.setTimeout(() => {
       this.learningPrompt.removeClass('moveup');
       this.learnedPrompt.addClass('moveup');
     }, 2000);
