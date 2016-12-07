@@ -32,7 +32,7 @@ class Password extends BaseResource
             $smsUtil = new SmsUtil();
             try {
                 $smsUtil->verifySmsCode('sms_change_password', $smsCode, $smsToken);
-            } catch(Expection $e) {
+            } catch(\Exception $e) {
                 return array('500', $e->getMessage());
             }
 

@@ -55,7 +55,7 @@ class SmsCodes extends BaseResource
             $imgCodeUtil = new ImgCodeUtil();
             try {
                 $imgCodeUtil->verifyImgCode('img_verify', $imgCode, $imgToken);
-            } catch(Expection $e) {
+            } catch(\Exception $e) {
                 return array('500', $e->getMessage());
             }
         }
@@ -74,13 +74,13 @@ class SmsCodes extends BaseResource
         if ($type == 'sms_third_registration') {
             try {
                 if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
-                    throw new Exception("该手机号已被绑定");
+                    throw new \Exception("该手机号已被绑定");
                 }
                 $user = $this->getCurrentUser();
                 $this->getUserService()->changeMobile($user['id'], $mobile);
 
                 $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
-            } catch(Exception $e) {
+            } catch(\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
@@ -88,7 +88,7 @@ class SmsCodes extends BaseResource
         if ($type == 'sms_change_password') {
             try {
                 $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
-            } catch(Exception $e) {
+            } catch(\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
@@ -96,7 +96,7 @@ class SmsCodes extends BaseResource
         if ($type == 'sms_verify_mobile') {
             try {
                 $result = $this->getSmsService()->sendVerifySms('sms_bind', $mobile);
-            } catch(Exception $e) {
+            } catch(\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
@@ -107,6 +107,7 @@ class SmsCodes extends BaseResource
             'userId'   => 0,
             'data'     => array(
                 'sms_code' => $result['captcha_code'],
+                'mobile' => $mobile
             )
         ));
 
