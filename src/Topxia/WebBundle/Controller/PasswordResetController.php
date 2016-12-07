@@ -129,7 +129,8 @@ class PasswordResetController extends BaseController
             throw new \Exception("重置密码失败", 1);
         }
 
-        return $this->redirect('homepage');
+        $url = $this->generateUrl('homepage');
+        return $this->redirect($url);
     }
 
     public function resetBySmsAction(Request $request)

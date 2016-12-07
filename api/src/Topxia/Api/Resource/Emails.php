@@ -36,7 +36,7 @@ class Emails extends BaseResource
             )
         ));
 
-        $url  = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('token' => $EmailToken, 'type' => $tokenType));
+        $url  = $this->getHttpHost().'/raw/password/update?'.http_build_query(array('token' => $EmailToken['token'], 'type' => $tokenType));
         $site = $this->getSettingService()->get('site', array());
 
         try {
