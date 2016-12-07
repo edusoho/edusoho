@@ -47,9 +47,7 @@ class AjaxExceptionListener
 
         if ($statusCode == 403) {
             $user = $this->getUser($event);
-            if ($error['message'] == 'LoginLimit') {
-                $error = array('name' => 'LoginLimit', 'message' => $this->getServiceKernel()->trans('此帐号已在别处登录!'));
-            } elseif ($user) {
+            if ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
             } else {
                 $error = array('name' => 'Unlogin', 'message' => $this->getServiceKernel()->trans('当前操作，需要登录！'));
