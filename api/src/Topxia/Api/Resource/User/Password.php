@@ -49,7 +49,14 @@ class Password extends BaseResource
         }
 
         $token = $this->getTokenService()->verifyToken('sms_change_password', $smsToken);
-        $user  = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
+        
+        $user = $this->getCurrentUser();
+        if($user->isLogin()){
+            $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
+        }else{
+             $user  = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
+        }
+       
         $this->getUserService()->changePassword($user['id'], $password);
         $this->getTokenService()->destoryToken($currentToken);
 

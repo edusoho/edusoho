@@ -77,7 +77,6 @@ class SmsCodes extends BaseResource
                     throw new \Exception("该手机号已被绑定");
                 }
                 $user = $this->getCurrentUser();
-                $this->getUserService()->changeMobile($user['id'], $mobile);
 
                 $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
             } catch(\Exception $e) {
