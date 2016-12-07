@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             return;
         }
 
-        if (error.name == 'loginlimit') {
+        if (error.name == 'LoginLimit') {
             location.href = '/login';
         }
 

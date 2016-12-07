@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Topxia\Common\Exception\RedirectException;
+use Topxia\Common\Exception\AccessDeniedException;
 
 class UserLoginTokenListener
 {
@@ -91,8 +91,8 @@ class UserLoginTokenListener
         if ($userLoginToken != $user['loginSessionId']) {
             $request->getSession()->invalidate();
 
-            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-                throw new RedirectException("此帐号已在别处登录", 302); 
+            if ($request->isXmlHttpRequest()) {
+                throw new AccessDeniedException("LoginLimit", 403); 
             }
             $this->container->get("security.token_storage")->setToken(null);
 

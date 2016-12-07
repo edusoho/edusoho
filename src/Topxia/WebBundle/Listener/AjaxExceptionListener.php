@@ -45,13 +45,11 @@ class AjaxExceptionListener
             $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
         }
 
-        if ($statusCode == 302) {
-            $error = array('name' => 'loginlimit', 'message' => $this->getServiceKernel()->trans('此帐号已在别处登录'));
-        }
-
         if ($statusCode == 403) {
             $user = $this->getUser($event);
-            if ($user) {
+            if ($error['message'] == 'LoginLimit') {
+                $error = array('name' => 'LoginLimit', 'message' => $this->getServiceKernel()->trans('此帐号已在别处登录!'));
+            } elseif ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
             } else {
                 $error = array('name' => 'Unlogin', 'message' => $this->getServiceKernel()->trans('当前操作，需要登录！'));
