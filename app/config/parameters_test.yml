@@ -2,7 +2,7 @@ parameters:
     biz_config:
         debug: "%kernel.debug%"
         db.options:
-            dbname: edusoho_test
+            dbname: edusoho-test
             user: root
             password: 
             host: "%database_host%"
