@@ -35,8 +35,8 @@ class RedisFlushallCommand extends BaseCommand
             if (empty($cnf['servers'])) {
                 $this->flushall($cnf);
             } else {
-                foreach ($cnf['servers'] as $servers) {
-                    $this->flushall($servers);
+                foreach ($cnf['servers'] as $server) {
+                    $this->flushall($server);
                 }                
             }
         }
