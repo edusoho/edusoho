@@ -41,7 +41,7 @@ class MediaServiceImpl extends BaseService implements MediaService
                     'duration' => $options['duration']
                 ));
 
-                $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format={$options['format']}&line=".$options['line'];
+                $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=".$options['line'];
             } else {
                 $url = $client->generateHLSQualitiyListUrl($file['metas2'], $options['duration']);
             }
@@ -61,7 +61,6 @@ class MediaServiceImpl extends BaseService implements MediaService
                 $url = $client->generateFileUrl($key, $options['duration']);
             }
         }
-       
 
         return $url;
     }
@@ -69,6 +68,11 @@ class MediaServiceImpl extends BaseService implements MediaService
     private function getHttpHost()
     {
         return $this->getKernel()->getEnvVariable('schemeAndHost');
+    }
+
+    public function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 
     protected function getUploadFileService()
