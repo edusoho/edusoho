@@ -95,7 +95,7 @@
               {% if task.isOptional %}
                 <span class="label label-success mrm">选修</span>
               {% endif %}
-              <a class="text-overflow"  {% if task_lock %} data-url {% else  %} href {% endif %} ="{{path('course_task_show', {id:task.id,courseId:task.courseId})}}">{{task.title}}</a>
+              <a class="text-overflow"  {% if task_lock and not preview %} data-url {% else  %} href {% endif %} ="{{path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview})}}">{{task.title}}</a>
               {% if task_lock %}
                 <span class="right-menu mouse-leave">{{task.activity.length|activity_length_format}}
                   <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mlm"></i>
