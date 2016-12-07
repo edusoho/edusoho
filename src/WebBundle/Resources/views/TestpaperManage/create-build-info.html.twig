@@ -40,11 +40,11 @@
 </div>
 
 <div class="form-group">
-  <style>.testpaper-question-option-item{margin-left:-12px;margin-bottom:5px;}</style>
+  <style>.testpaper-question-option-item{margin-left:-12px;margin-bottom:5px;list-style: none;}</style>
   <div class="col-md-2 control-label"><label>{{'题目设置'|trans}}</label></div>
-  <div class="col-md-10 controls" id="testpaper-question-options">
+  <ul class="col-md-10 controls" id="testpaper-question-options">
     {% for type in types %}
-      <div class="testpaper-question-option-item">
+      <li class="testpaper-question-option-item">
         <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
         <span style="min-width:85px;display:inline-block;_display:inline;">{{type.name}}</span>
         <span class="mlm">{{'题目数量'|trans}}:</span>
@@ -58,10 +58,10 @@
           <span class="mlm">{{'漏选分值'|trans}}:</span>
           <input type="text" class="form-control width-input width-input-mini input-sm item-miss-score" name="missScores[{{type.key}}]"  value="0" data-role="missScore" />
         {% endif %}
-      </div>
+      </li>
 
     {% endfor %}
-  </div>
+  </ul>
 </div>
 
 <input type="hidden" name="percentages[simple]">
