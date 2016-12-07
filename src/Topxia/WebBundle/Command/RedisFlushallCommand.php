@@ -1,15 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Redis;
 
 
@@ -55,6 +48,5 @@ class RedisFlushallCommand extends BaseCommand
         $redis->pconnect($cnf['host'], $cnf['port'], $cnf['timeout'], $cnf['reserved'], $cnf['retry_interval']);
         $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
         $redis->flushall();
-        sleep(10);
     }
 }
