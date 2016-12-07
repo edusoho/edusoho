@@ -2,7 +2,7 @@
 namespace WebBundle\Controller;
 
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,38 +12,45 @@ class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId)
     {
-        $course = $this->tryManageCourse($courseId);
-
+        $course     = $this->tryManageCourse($courseId);
+        $taskMode   = $request->query->get('type');
+        $categoryId = $request->query->get('categoryId');
+        $chapterId  = $request->query->get('chapterId');
         if ($request->isMethod('POST')) {
             $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
             $task['fromUserId'] = $this->getUser()->getId();
-            $savedTask          = $this->getTaskService()->createTask($this->parseTimeFields($task));
-            return $this->createJsonResponse(true);
+            $task               = $this->getTaskService()->createTask($this->parseTimeFields($task));
+
+            $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
+            return $this->render($tasksRenderPage, array(
+                'course' => $course,
+                'task'   => $task
+            ));
+
         }
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
-            'course' => $course,
-            'mode'   => 'create',
-            'types'  => $this->getActivityService()->getActivityTypes()
+            'course'     => $course,
+            'mode'       => 'create',
+            'types'      => $this->getActivityService()->getActivityTypes(),
+            'taskMode'   => $taskMode,
+            'categoryId' => $categoryId,
+            'chapterId'  => $chapterId
         ));
     }
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $course = $this->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getTask($id);
+        $course   = $this->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($id);
+        $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');
         }
 
         if ($request->getMethod() == 'POST') {
-            $task = $request->request->all();
-
-            // unset($task['mediaType']);
-            // unset($task['fromCourseSetId']);
-            // unset($task['fromCourseId']);
-
+            $task               = $request->request->all();
             $task['_base_url']  = $request->getSchemeAndHttpHost();
             $task['fromUserId'] = $this->getUser()->getId();
             $savedTask          = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
@@ -61,9 +68,28 @@ class TaskManageController extends BaseController
             'types'               => $this->getActivityService()->getActivityTypes(),
             'activity_controller' => $editController,
             'course'              => $course,
-            'task'                => $task
+            'task'                => $task,
+            'taskMode'            => $taskMode
         ));
     }
+
+
+    public function publishAction(Request $request, $courseId, $id)
+    {
+        $this->tryManageCourse($courseId, $id);
+        $this->getTaskService()->publishTask($id);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unPublishAction(Request $request, $courseId, $id)
+    {
+        $this->tryManageCourse($courseId, $id);
+        $this->getTaskService()->unPublishTask($id);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
 
     public function taskFieldsAction(Request $request, $courseId, $mode)
     {
@@ -85,38 +111,16 @@ class TaskManageController extends BaseController
         }
     }
 
-    public function deleteAction(Request $request, $courseId, $id)
+    public function deleteAction(Request $request, $courseId, $taskId)
     {
         $course = $this->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getTask($id);
+        $task   = $this->getTaskService()->getTask($taskId);
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');
         }
 
-        $this->getTaskService()->deleteTask($id);
+        $this->getTaskService()->deleteTask($taskId);
         return $this->createJsonResponse(array('success' => true));
-    }
-
-    // TODO 是否移到CourseManageController
-    public function tasksAction(Request $request, $courseId)
-    {
-        $courseItems = $this->getCourseService()->getCourseItems($courseId);
-        $course      = $this->tryManageCourse($courseId);
-        $tasks       = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        // $tasks       = $this->getTaskService()->findTasksByCourseId($courseId);
-        return $this->render('WebBundle:TaskManage:list.html.twig', array(
-            'tasks'  => $tasks,
-            'course' => $course,
-            'items'  => $courseItems
-        ));
-    }
-
-    // TODO 重命名或移动到其它Controller（wuli create）
-    public function courseSetAction(Request $request, $courseId) {
-        $course      = $this->tryManageCourse($courseId);
-        return $this->render('WebBundle:PlanManage:list.html.twig',array(
-            'course' => $course
-        ));
     }
 
     protected function tryManageCourse($courseId)
@@ -129,7 +133,7 @@ class TaskManageController extends BaseController
      */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -146,6 +150,11 @@ class TaskManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
     //datetime to int

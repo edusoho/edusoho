@@ -1,0 +1,30 @@
+services:
+    extension.manager:
+        class: AppBundle\Extension\ExtensionManager
+
+    extension.default:
+        class: AppBundle\Extension\DefaultExtension
+        tags:
+            - { name: extension }
+
+    biz.service_provider.collector:
+        class: Biz\ServiceProviderCollector
+
+    upload_file_event_subscriber:
+        class: Biz\File\Event\UploadFileEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    question_event_subscriber:
+        class: Biz\Question\Event\QuestionEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    web.twig.question_type_extension:
+        class: AppBundle\Twig\QuestionTypeExtension
+        arguments:    ['@service_container','@biz']
+        tags:
+            - { name: twig.extension }
+

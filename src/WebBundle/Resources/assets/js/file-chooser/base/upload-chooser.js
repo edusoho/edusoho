@@ -1,51 +1,51 @@
-import Emitter from 'es6-event-emitter';
+import Chooser from './chooser';
 
-export default class UploaderChooser extends Emitter{
-  constructor() {
+export default class UploaderChooser extends Chooser {
+  constructor(element) {
     super();
-    this.element = $('#chooser-upload-panel');
+    this.element = $(element);
     this._sdk = undefined;
     this._initSdk()
         ._bindEvent();
   }
 
-  get sdk() {
-    return undefined;
-  }
-
   reopen() {
     this.destroy();
-    this.open()
-        ._initSdk()
-        ._bindEvent();
+    this._initSdk();
+    this._bindEvent();
   }
-
-  open() {
-    $('.file-chooser-bar').addClass('hidden');
-    $('.file-chooser-main').removeClass('hidden');
-    return this;
-  }
-
+  
   _initSdk() {
     if (this._sdk !== undefined) {
       return this;
     }
 
-    let $uploader = $('#uploader-container');
+    let $uploader = this.element.find('#uploader-container');
     this._sdk = new UploaderSDK({
       id: $uploader.attr('id'),
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
       process: $uploader.data('process'),
-      ui:'single'
+      ui: 'single'
     });
     return this;
   }
 
   _bindEvent() {
-    this._sdk.on('file.finish', this._onFileUploadFinish.bind(this));
+
     $('.js-choose-trigger').on('click', this.reopen.bind(this));
+
+    this.element.on('change', '.js-upload-params', (event) => {
+      let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
+        prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
+        return prams;
+      }, {});
+      this._sdk.setProcess(uploadProcess);
+    });
+
+    this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
+    
     return this;
   }
 
@@ -80,13 +80,10 @@ export default class UploaderChooser extends Emitter{
   }
 
   destroy() {
-    $('.file-chooser-main').addClass('hidden');
-    $('.file-chooser-bar').removeClass('hidden');
-
-    if(this._sdk === undefined){
+    // this._close();
+    if (this._sdk === undefined) {
       return;
     }
-
     this._sdk.destroy();
     this._sdk = undefined;
   }

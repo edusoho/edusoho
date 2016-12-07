@@ -6,13 +6,17 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TaskDao extends GeneralDaoInterface
 {
-    public function findByCourseId($courseId);
+    public function deleteByCategoryId($categoryId);
 
-    public function getByCourseIdAndSeq($courseId, $seq);
+    public function findByCourseId($courseId);
 
     public function getMaxSeqByCourseId($courseId);
 
-    public function findTasksByChapterId($chapterId);
+    public function getNextTaskByCourseIdAndSeq($courseId, $seq);
 
-    public function waveSeqBiggerThanSeq($seq, $diff);
+    public function getPreTaskByCourseIdAndSeq($courseId, $seq);
+
+    public function getByChapterIdAndMode($chapterId, $mode);
+
+    public function findByChapterId($chapterId);
 }

@@ -54,7 +54,6 @@ class KernelRequestListener
             $request->request->remove('_csrf_token');
 
             $expectedToken = $this->container->get('form.csrf_provider')->generateCsrfToken('site');
-
             if ($token != $expectedToken) {
 // @todo 需要区分ajax的response
 

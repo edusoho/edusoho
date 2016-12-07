@@ -1,18 +1,17 @@
 <?php
 namespace WebBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Course\Service\CourseService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $preview = $request->query->get('preview');
-
-        $task     = $this->tryLearnTask($courseId, $id, $preview);
+        $preview  = $request->query->get('preview');
+        $task     = $this->tryLearnTask($courseId, $id, (bool) $preview);
         $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
@@ -44,29 +43,17 @@ class TaskController extends BaseController
         ));
     }
 
-    public function triggerAction(Request $request, $courseId, $id, $eventName)
-    {
-        $task         = $this->tryLearnTask($courseId, $id);
-        $data         = $request->request->all();
-        $data['task'] = $task;
-
-        return $this->forward('WebBundle:Activity:trigger', array(
-            'id'        => $task['activityId'],
-            'eventName' => $eventName,
-            'data'      => $data
-        ));
-    }
-
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-            }
+            //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
+            /*if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+            throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            }*/
             $task = $this->getTaskService()->getTask($taskId);
         } else {
-            $this->getCourseService()->tryLearnCourse($courseId);
+            $this->getCourseService()->tryTakeCourse($courseId);
             $task = $this->getTaskService()->tryTakeTask($taskId);
         }
 
@@ -80,9 +67,12 @@ class TaskController extends BaseController
         return $task;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**

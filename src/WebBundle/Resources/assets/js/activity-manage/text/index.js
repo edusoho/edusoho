@@ -6,19 +6,10 @@ class Text{
     }
 
     _init() {
-        $('#condition-select').on('change',event=>this._change(event));
         this._inItStep2form();
-        initEditor($('[name="content"]'));
-    }
-
-    _change(event) {
-        var val = $(event.currentTarget).children('option:selected').val();
-        if(val != 'auto') {
-            $("#condition-group").addClass('hidden');
-            return;
-        }
         this._inItStep3form();
-        $("#condition-group").removeClass('hidden');
+        initEditor($('[name="content"]'));
+        console.log($('body').height());
     }
 
     _inItStep2form() {
@@ -27,13 +18,12 @@ class Text{
         validator = $step2_form.validate({
             onkeyup: false,
             rules: {
-                title:'required',
+                title:{
+                    required: true,
+                    maxlength: 50,
+                },
                 content: 'required',
             },
-            messages: {
-                title:'请输入标题',
-                content:"请输入内容"
-            }
         });
     }
 
@@ -43,13 +33,17 @@ class Text{
         validator = $step3_form.validate({
             onkeyup: false,
             rules: {
-                'condition_detail': {
+                'finishDetail': {
                     required: true,
                     digits:true,
                     max:300,
                 },
-
             },
+            messages: {
+                finishDetail: {
+                    required: '请输入至少观看多少分钟',
+                },
+            }
         });
     }
 }

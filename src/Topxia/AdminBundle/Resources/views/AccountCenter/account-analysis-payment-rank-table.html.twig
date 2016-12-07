@@ -1,0 +1,23 @@
+<table class="table table-condensed table-noborder table-overflow">
+  <thead>
+    <tr>
+      <th width="10%"></th>
+      <th width="70%">{{ '用户名'|trans }}</th>
+      <th class="text-right prl" width="25%">{{ '现金支出'|trans }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for amount in amounts %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>
+        <a class="link-primary"
+           target="_blank" href="{{ path('user_show', {id:amount.userId}) }}">{{users[amount.userId].nickname}}</a>
+      </td>
+      <td class="text-right prl">{{amount.count}}</td>
+    </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'暂无消费'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>

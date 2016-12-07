@@ -8,7 +8,11 @@ interface ActivityService
 {
     public function getActivity($id);
 
+    public function getActivityFetchExt($id);
+
     public function findActivities($ids);
+
+    public function findActivitiesByCourseIdAndType($courseId, $type);
 
     public function createActivity($activity);
 

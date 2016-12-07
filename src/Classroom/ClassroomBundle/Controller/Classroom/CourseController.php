@@ -33,13 +33,7 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = array();
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUsers($courses);
 
         return $this->render("ClassroomBundle:ClassroomManage/Course:course-pick-modal.html.twig", array(
             'users'       => $users,
@@ -122,18 +116,25 @@ class CourseController extends BaseController
             5
         );
 
-        $userIds = array();
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+       $users = $this->getUsers($courses);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
             'courses' => $courses
         ));
+    }
+
+    protected function getUsers($courses)
+    {
+        $userIds = array();
+        foreach ($courses as &$course) {
+            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+
+            $course['tags'] = ArrayToolkit::column($tags, 'id');
+            $userIds        = array_merge($userIds, $course['teacherIds']);
+        }
+
+        return $this->getUserService()->findUsersByIds($userIds);
     }
 
     private function previewAsMember($previewAs, $member, $classroom)

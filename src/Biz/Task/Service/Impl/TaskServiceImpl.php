@@ -2,16 +2,15 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
+use Biz\Task\Service\TaskResultService;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Course\CourseService;
+use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -22,82 +21,58 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function createTask($fields)
     {
-        if ($this->invalidTask($fields)) {
-            throw $this->createInvalidArgumentException('task is invalid');
-        }
+        $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
-        if (!$this->canManageCourse($fields['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权创建任务');
-        }
+        $task = $strategy->createTask($fields);
 
-        $activity = $this->getActivityService()->createActivity($fields);
-
-        $fields['activityId']    = $activity['id'];
-        $fields['createdUserId'] = $activity['fromUserId'];
-        $fields['courseId']      = $activity['fromCourseId'];
-        $currentSeq              = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['seq']           = $currentSeq + 1;
-
-
-        $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'seq',
-            'courseChapterId',
-            'activityId',
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status',
-            'createdUserId'
-        ));
-        $task = $this->getTaskDao()->create($fields);
+        $this->biz['dispatcher']->dispatch("course.task.create", new Event($task));
         return $task;
     }
 
     public function updateTask($id, $fields)
     {
-        $savedTask = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($fields['fromCourseId']);
 
-        if (!$this->canManageCourse($savedTask['courseId'])) {
-            throw $this->createAccessDeniedException('无权更新任务');
-        }
-        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
-
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status'
-        ));
-
-        return $this->getTaskDao()->update($id, $fields);
+        $task = $strategy->updateTask($id, $fields);
+        return $task;
     }
 
-    public function updateSeq($id, $fileds)
+    public function publishTask($id)
     {
-        $fileds = ArrayToolkit::parts($fileds, array(
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->publishTask($task);
+        return $task;
+    }
+
+    public function unpublishTask($id)
+    {
+        $task     = $this->getTask($id);
+        $strategy = $this->createCourseStrategy($task['courseId']);
+
+        $task = $strategy->unpublishTask($task);
+        return $task;
+    }
+
+    public function updateSeq($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'courseChapterId',
+            'categoryId'
         ));
-        return $this->getTaskDao()->update($id, $fileds);
+        return $this->getTaskDao()->update($id, $fields);
     }
 
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
 
-        if (!$this->canManageCourse($task['courseId'])) {
+        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
-        $currentSeq = $task['seq'];
-        $result = $this->getTaskDao()->delete($id);
-        $this->getActivityService()->deleteActivity($task['activityId']);
-        $this->getTaskDao()->waveSeqBiggerThanSeq($currentSeq, -1);
-
+        $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+        $this->biz['dispatcher']->dispatch("course.task.delete", new Event($task));
         return $result;
     }
 
@@ -106,15 +81,20 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseId($courseId);
     }
 
+    public function countTasksByCourseId($courseId)
+    {
+        return $this->getTaskDao()->count(array('courseId' => $courseId));
+    }
+
     public function findTasksFetchActivityByCourseId($courseId)
     {
-        $tasks = $this->findTasksByCourseId($courseId);
-        $activityIds     = ArrayToolkit::column($tasks, 'activityId');
-        $activities      = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
+        $tasks       = $this->findTasksByCourseId($courseId);
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
 
         array_walk($tasks, function (&$task) use ($activities) {
-            $activity     = $activities[$task['activityId']];
+            $activity         = $activities[$task['activityId']];
             $task['activity'] = $activity;
         });
 
@@ -124,12 +104,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findUserTasksFetchActivityAndResultByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
-        if ($this->getCourseService()->isCourseStudent($courseId, $user->getId())) {
+        if (!$this->getCourseService()->isCourseMember($courseId, $user->getId())) {
             return array();
         }
 
         $tasks = $this->findTasksFetchActivityByCourseId($courseId);
-
         if (empty($tasks)) {
             return array();
         }
@@ -137,8 +116,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-        $that            = $this;
-        array_walk($tasks, function (&$task) use ($taskResults, $that) {
+        array_walk($tasks, function (&$task) use ($taskResults) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
                     continue;
@@ -171,6 +149,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->createTaskResult($taskResult);
     }
 
+    public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if (empty($taskResult)) {
+            throw new AccessDeniedException('任务不在进行状态');
+        }
+
+        $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
+    }
+
     public function finishTask($taskId)
     {
         $task = $this->tryTakeTask($taskId);
@@ -194,7 +185,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            throw $this->createAccessDeniedException("the Task is Locked");
+            // throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 
@@ -207,7 +198,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getNextTask($taskId)
     {
         $task = $this->getTask($taskId);
-        if ($this->isLastTask($task)) {
+
+        // if the task is last task, no next test can be return
+        $nextTask = $this->getTaskDao()->getNextTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (empty($nextTask)) {
             return array();
         }
 
@@ -216,40 +210,23 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         //if the task is first, when get next task, we need to know if the task if finish, if not  return null;
-        if ($this->isFirstTask($task)) {
+        $firstTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+        if (!empty($firstTask)) {
             $isTaskLearned = $this->isTaskLearned($taskId);
             if (!$isTaskLearned) {
                 return array();
             }
         }
-        return $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] + 1);
+        return $nextTask;
     }
-
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
-        $this->getCourseService()->tryTakeCourse($task['courseId']);
+        $task                  = $this->getTask($taskId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
-        if ($this->isFirstTask($task)) {
-            return true;
-        }
-
-        if ($task['isOptional']) {
-            return true;
-        }
-
-        //获取教学方法策略 新的 course 中应该纪录当前的教方法 teach method: freedom|order
-        //先按照默认实现
-        $preTask = $this->getTaskDao()->getByCourseIdAndSeq($task['courseId'], $task['seq'] - 1);
-        if (empty($preTask)) {
-            throw $this->createNotFoundException("previous task does is lost");
-        }
-        $isTaskLearned = $this->isTaskLearned($preTask['id']);
-        if ($isTaskLearned) {
-            return true;
-        }
-        return false;
+        $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
+        return $canLearnTask;
     }
 
     public function isTaskLearned($taskId)
@@ -266,7 +243,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findTasksByChapterId($chapterId)
     {
-        return $this->getTaskDao()->findTasksByChapterId($chapterId);
+        return $this->getTaskDao()->findByChapterId($chapterId);
     }
 
     /**
@@ -277,33 +254,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createDao('Task:TaskDao');
     }
 
-    protected function canManageCourse($courseId)
+    protected function createCourseStrategy($courseId)
     {
-        return true;
-    }
-
-    protected function invalidTask($task)
-    {
-        if (!ArrayToolkit::requireds($task, array(
-            'title',
-            'fromCourseId'
-        ))
-        ) {
-            return true;
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            throw $this->createNotFoundException('course does not exist');
         }
 
-        return false;
-    }
-
-    protected function isFirstTask($task)
-    {
-        return 1 == $task['seq'];
-    }
-
-    protected function isLastTask($task)
-    {
-        $maxSeq = $this->getMaxSeqByCourseId($task['courseId']);
-        return $maxSeq == $task['seq'];
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
     }
 
     /**

@@ -13,15 +13,6 @@ class OpenCourseController extends BaseController
 
         $conditions['types'] = array('open', 'liveOpen');
 
-        if (!empty($conditions['tags'])) {
-            $tags               = $conditions['tags'];
-            $tagNames           = explode(",", $conditions['tags']);
-            $tagIds             = ArrayToolkit::column($this->getTagService()->findTagsByNames($tagNames), 'id');
-            $conditions['tags'] = $tagIds;
-        } else {
-            unset($conditions['tags']);
-        }
-
         if (empty($conditions["categoryId"])) {
             unset($conditions["categoryId"]);
         }

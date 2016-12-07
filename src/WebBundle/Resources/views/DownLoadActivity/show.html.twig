@@ -3,19 +3,22 @@
 {% do script(['web/task/download/index.js']) %}
 
 
-{% block content %}
-  <div class="dashboard-body">
-    {#<div class="summary">{{ activity.content }}</div>#}
+{% block body %}
+<div class="task-content-view download-activity-show">
+  <ul class="download-activity-list">
     {% for file in activity.ext.materials|default(null) %}
-      <li class="media list-item">
-        <div class="media-body list-item-body">
-          <div class="title">
-            <a href="/course/1/material/30/download" target="_blank">{{ file.title }}</a>
-            <span class="meta">({{ file.fileSize|file_size }})</span>
-          </div>
-        </div>
-      </li>
-
+    <li>
+      <a class="link-darker" href="{{ path('course_activity_download', {courseId:courseId, activityId:activity.id , fileId:file.id }) }}" target="_blank">{{ file.title }}
+        {% if file.link|default(null) %}
+        (link)
+        {% else %}
+        ({{ file.fileSize|file_size }})
+        {% endif %}
+        <i class="es-icon es-icon-filedownload download-icon"></i>
+      <div class="text-xs color-gray mts">{{ file.summary|default('') }}</div>
+      </a>
+    </li>
     {% endfor %}
-  </div>
+  </ul>
+</div>
 {% endblock %}

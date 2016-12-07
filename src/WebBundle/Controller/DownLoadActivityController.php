@@ -1,29 +1,28 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 03/11/2016
- * Time: 10:05
- */
 
 namespace WebBundle\Controller;
 
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class DownLoadActivityController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivity($id);
+        $activity             = $this->getActivityService()->getActivityFetchExt($id);
         $activity['courseId'] = $courseId;
         return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
             'activity' => $activity,
+            'courseId' => $courseId
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivity($id);
+        $activity  = $this->getActivityService()->getActivityFetchExt($id);
         $materials = array();
 
         foreach ($activity['ext']['materials'] as $media) {
@@ -37,9 +36,19 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         ));
     }
 
-    public function downloadFileAction(Request $request, $activity, $fileId)
+    public function downloadFileAction(Request $request, $courseId, $activityId)
     {
 
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $downloadFileId = $request->query->get('fileId');
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $downloadFileId);
+
+        if (!empty($downloadFile['link'])) {
+            return $this->redirect($downloadFile['link']);
+        } else {
+            return $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $downloadFile['fileId']));
+        }
     }
 
     public function createAction(Request $request, $courseId)
@@ -49,9 +58,28 @@ class DownLoadActivityController extends BaseController implements ActivityActio
         ));
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return DownloadActivityService
+     */
+    protected function getDownloadActivityService()
+    {
+        return $this->getBiz()->service('DownloadActivity:DownloadActivityService');
+    }
 }
