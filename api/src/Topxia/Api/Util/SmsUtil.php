@@ -11,10 +11,10 @@ class SmsUtil
         $token = $this->getTokenService()->verifyToken($type, $smsToken);
 
         if (empty($token)) {
-            throw new \Exception('验证码已过期');
+            return 'sms_code_expired';
         }
         if ($smsCode != $token['data']['sms_code']) {
-            throw new \Exception("验证码错误");
+            return 'sms_code_error';
         }
 
         return true;
