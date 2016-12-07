@@ -294,6 +294,7 @@ class PermissionBuilder
             $this->cached['getOriginPermissions'] = include $cacheFile;
             return $this->cached['getOriginPermissions'];
         }
+
         $configs     = $this->getPermissionConfig();
         $permissions = array();
         foreach ($configs as $config) {
@@ -304,6 +305,7 @@ class PermissionBuilder
             if (empty($menus)) {
                 continue;
             }
+            
             $menus       = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);
         }
