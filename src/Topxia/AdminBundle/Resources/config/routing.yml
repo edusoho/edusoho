@@ -235,7 +235,7 @@ admin_tag_group:
 
 admin_tag_group_create:
     path: /tag/group/create
-    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }    
+    defaults: { _controller: TopxiaAdminBundle:TagGroup:create }
 
 admin_tag_group_update:
     path: /tag/group/{groupId}/update

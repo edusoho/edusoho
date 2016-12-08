@@ -17,6 +17,9 @@ return array(
     'POST' => array(
         '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
-        '/^\/api\/users\/bind_login$/'
+        '/^\/api\/users\/bind_login$/',
+        '/^\/api\/sms_codes$/',
+        '/^\/api\/users\/password$/',
+        '/^\/api\/emails$/'
     )
 );

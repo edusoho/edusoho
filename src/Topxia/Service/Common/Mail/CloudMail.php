@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Common;
+namespace Topxia\Service\Common\Mail;
 
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
