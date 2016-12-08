@@ -38,18 +38,23 @@ $('#step2-form').on('click', '.js-btn-delete', function () {
     $("#materials").val(JSON.stringify(items));
   }
   if ($parent.siblings('li').length <= 0) {
-    $('[name="mediaId"]').val(null);
+    $("#materials").val(null);
   }
   $parent.remove();
 })
 
 $('#step2-form').on('click', '.js-video-import', function () {
-  addFile();
+  addFile(false);
 })
 
+$('#step2-form').on('click', '.js-add-file-list', function () {
+  addFile(true);
+})
 
-function addFile() {
+function addFile(addlist) {
   if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
+    console.log("ok");
+
     let data = {
       source: 'link',
       id: $("#link").val(),
@@ -58,15 +63,16 @@ function addFile() {
       summary: $("#file-summary").val(),
       size: 0
     };
+    $('.js-current-file').text($("#link").val());
     $("#media").val(JSON.stringify(data));
   }
 
   let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-  media.summary = $("#file-summary").val();
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+  console.log(isEmpty(media));
 
   if (isEmpty(media)) {
-    notify('danger', '请先选择文件');
+    notify('danger', '请先选择资料');
     return;
   }
 
@@ -75,12 +81,28 @@ function addFile() {
     $("#media").val(null);
     return;
   }
+
+  if(!addlist) {
+    return;
+  }
+
+  if (!isEmpty(items) && items[media.id]) {
+    notify('danger', '选择重复');
+    $("#media").val(null);
+    return;
+  }
+
+  $('.js-current-file').text('无');
+
+  media.summary = $("#file-summary").val();
   items[media.id] = media;
   $("#materials").val(JSON.stringify(items));
 
   $("#media").val(null);
   $('#link').val(null);
   $("#file-summary").val(null);
+
+  
 
   let item_tpl = '';
   if (media.link) {
@@ -100,7 +122,7 @@ function addFile() {
   `;
   }
   $("#material-list").append(item_tpl);
-  $("#step2-form").data('validator').valid();
+  $("#step2-form").data('validator').form();
 }
 
 _inItStep2form();
@@ -112,7 +134,8 @@ function isEmpty(obj) {
 const fileSelect = file => {
   $("input[name=media]").val(JSON.stringify(file));
   chooserUiOpen();
-  addFile();
+  addFile(false);
+  $('.js-current-file').text(file.name);
   console.log('action triggered', file);
 }
 
