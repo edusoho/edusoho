@@ -47,6 +47,7 @@ class MultiGroup extends Component {
       <div className="multi-group">
         <List removeItem={(index)=>this.removeItem(index)} compKey={this.state.key} sortable={this.props.sortable} list={this.state.items}  />
         <InputGroup addItem={(item)=>this.addItem(item)} search = {false}/>
+        <input type='hidden' id={this.state.key} name={this.props.fieldName} value={JSON.stringify(this.state.items)} />
       </div>
     );
   }
