@@ -66,7 +66,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $this->biz['dispatcher']->dispatch("activity.operated", new Event($activity, $data));
-
     }
 
     public function createActivity($fields)

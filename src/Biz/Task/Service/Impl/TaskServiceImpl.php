@@ -140,7 +140,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $taskResult = array(
-            'activityId'   => $task['id'],
+            'activityId'   => $task['activityId'],
             'courseId'     => $task['courseId'],
             'courseTaskId' => $task['id'],
             'userId'       => $user['id']
@@ -173,7 +173,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->finishTaskResult($taskId);
     }
 
-    protected function finishTaskResult($taskId)
+    public function finishTaskResult($taskId)
     {
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 

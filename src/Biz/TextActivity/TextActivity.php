@@ -39,6 +39,11 @@ class TextActivity extends Activity
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
+    public function canFinish($id)
+    {
+        return true;
+    }
+
     public function delete($targetId)
     {
         return $this->getTextActivityDao()->delete($targetId);
