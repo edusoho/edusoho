@@ -156,14 +156,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('task is not doing. ');
+            throw $this->createAccessDeniedException("task #{taskId} can not do. ");
         }
 
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
-
-        if($this->canFinish($task)) {
-            $this->finishTaskResult($taskId);
-        }
     }
 
     public function finishTask($taskId)
@@ -196,10 +192,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $taskResult;
     }
 
-    protected function canFinish($task)
+    public function canFinish($taskId)
     {
+        $task = $this->getTask($taskId);
         $course = $this->getCourseService()->getCourse($task['courseId']);
-
         // TODO
         return $course && $this->getActivityService()->canFinishActivity($task['activityId']);
     }

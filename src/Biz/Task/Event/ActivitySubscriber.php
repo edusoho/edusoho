@@ -10,15 +10,25 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'activity.start'  => 'onActivityStart',
-            'activity.doing'  => 'onActivityDoing',
+            'activity.start'    => 'onActivityStart',
+            'activity.doing'    => 'onActivityDoing',
+            'activity.operated' => 'onActivityOperated'
         );
+    }
+
+    public function onActivityOperated(Event $event)
+    {
+        $activity = $event->getSubject();
+        $taskId = $event->getArgument('taskId');
+        $task = $this->getTaskService()->getTask($taskId);
+        if($this->getTaskService()->canFinish($task)) {
+            $this->getTaskService()->finishTaskResult($taskId);
+        }
     }
 
     public function onActivityStart(Event $event)
     {
         $task = $event->getArgument('task');
-
         $this->getTaskService()->startTask($task['id']);
     }
 
