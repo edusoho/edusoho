@@ -30,7 +30,6 @@ export default class List extends Component {
       onDrop: function(item, container, _super){
         _super(item, container);
         //也许应该使用redux之类的东东进行组件间数据通讯
-        // self.setState({items: $sortComp.sortable('serialize').get()});
         $(document).trigger('items-sorted', [self.props.compKey, $sortComp.sortable('serialize').get()]);
       },
       serialize: function(parent, children, isContainer) {

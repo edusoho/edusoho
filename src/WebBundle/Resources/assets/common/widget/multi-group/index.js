@@ -20,11 +20,9 @@ class MultiGroup extends Component {
       if(self.state.key !== key){
         return;
       }
-      setTimeout(function(){
-        self.setState({
-          items: sortedItems
-        });
-      }, 300);
+      self.setState({
+        items: sortedItems
+      });
     });
   }
 
