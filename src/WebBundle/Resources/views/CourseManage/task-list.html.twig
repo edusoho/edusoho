@@ -1,11 +1,9 @@
 {% extends 'WebBundle:CourseManage:layout.html.twig' %}
 
-{% do css(['web/course-manage/index.css']) %}
-{% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}
-
 {% set content_tab = 'task-list' %}
 
 {% block task_manage %}
+  {% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}
   <div id="test">111</div>
   <div class="task-list-header clearfix">
     任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
