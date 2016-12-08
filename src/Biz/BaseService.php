@@ -36,6 +36,11 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
+    protected function createService($alias)
+    {
+        return $this->biz->service($alias);
+    }
+
     protected function beginTransaction()
     {
         $this->biz['db']->beginTransaction();
