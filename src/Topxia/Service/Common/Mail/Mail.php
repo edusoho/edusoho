@@ -34,7 +34,36 @@ abstract class Mail
 
     protected function setting($name, $default)
     {
-        return $this->getSettingService()->get($name, $default);
+        
+        $names = explode('.', $name);
+
+        $name = array_shift($names);
+
+        if (empty($name)) {
+            return $default;
+        }
+
+        $value = $this->getSettingService()->get($name,$default);
+
+        if (!isset($value)) {
+            return $default;
+        }
+
+        if (empty($names)) {
+            return $value;
+        }
+
+        $result = $value;
+
+        foreach ($names as $name) {
+            if (!isset($result[$name])) {
+                return $default;
+            }
+
+            $result = $result[$name];
+        }
+
+        return $result;
     }
 
     public abstract function send();
