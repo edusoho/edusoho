@@ -59,9 +59,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $this->validateTaskMode($fields);
         $task = $this->baseUpdateTask($id, $fields);
-
         if ($task['mode'] == 'lesson') {
-            $this->getCourseService()->updateChapter($task['courseId'], $task['chapterId'], array('title' => $task['title']));
+            $this->getCourseService()->updateChapter($task['courseId'], $task['categoryId'], array('title' => $task['title']));
         }
 
         return $task;

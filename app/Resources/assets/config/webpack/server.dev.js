@@ -1,5 +1,6 @@
 import appConfig from '../config';
 import express from 'express';
+import cors from 'cors';
 import webpack from 'webpack';
 import path from 'path';
 import serveIndex from 'serve-index';
@@ -10,6 +11,7 @@ import webpackConfig from '../webpack/webpack.config';
 
 const app = express();
 const compiler = webpack(webpackConfig);
+app.use(cors());
 app.use(webpackDevMiddleware(compiler, webpackConfig.output.publicPath));
 app.use(webpackConfig.output.publicPath, serveIndex(webpackConfig.output.path, {'icons': true}));
 

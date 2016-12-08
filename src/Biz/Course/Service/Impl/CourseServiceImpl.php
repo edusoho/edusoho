@@ -366,11 +366,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($user->hasPermission('admin_course')) {
             return true;
         }
-
-        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-            return true;
-        }
         
+        //TODO 未实现
+//        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+//            return true;
+//        }
+
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
