@@ -41,6 +41,7 @@ class PlayerController extends BaseController
                     $result = $api->get("/resources/{$file['globalId']}/player");
 
                     if (isset($result['subtitles'])) {
+                        $this->filterSubtitles($result['subtitles']);
                         $context['subtitles'] = $result['subtitles'];
                     }
 
@@ -339,6 +340,13 @@ class PlayerController extends BaseController
             return false;
         } else {
             return true;
+        }
+    }
+
+    private function filterSubtitles(&$subtitles)
+    {
+        foreach ($subtitles as &$subtitle) {
+            $subtitle['name'] = rtrim($subtitle['name'], '.srt');
         }
     }
 

@@ -360,6 +360,8 @@ define(function(require, exports, module) {
                 'doc': 'document',
                 'docx': 'document',
                 'pdf': 'document',
+                'xls': 'document',
+                'xlsx': 'document',
                 'ppt': 'ppt',
                 'pptx': 'ppt',
                 'mp3': 'audio'

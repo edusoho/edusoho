@@ -92,7 +92,12 @@ class ServiceKernel
             return self::$_dispatcher;
         }
 
-        self::$_dispatcher = self::instance()->biz['dispatcher'];
+        //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
+        if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+            self::$_dispatcher = new EventDispatcher();
+        }else{
+            self::$_dispatcher = self::instance()->biz['dispatcher'];
+        }
 
         return self::$_dispatcher;
     }
@@ -135,8 +140,14 @@ class ServiceKernel
 
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
 
+
         foreach ($subscribers as $subscriber) {
-            $this->biz['subscribers'][] = $subscriber;
+            //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
+            if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+                $this->dispatcher()->addSubscriber(new $subscriber());
+            }else{
+                $this->biz['subscribers'][] = $subscriber;
+            }
         }
     }
 
@@ -338,6 +349,9 @@ class ServiceKernel
 
     public function getBiz()
     {
+        if (!$this->biz) {
+            throw new \RuntimeException('The `Biz Container` of ServiceKernel is not setted!');
+        }
         return $this->biz;
     }
 

@@ -1,11 +1,13 @@
 define(function(require, exports, module) {
 
+
     require('new-uploader');
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 
     var SubtitleDialog = Widget.extend({
         uploader: null,
+        media: null,
         attrs:{
             subtitleUploader:$('#subtitle-uploader')
         },
@@ -13,13 +15,49 @@ define(function(require, exports, module) {
             'click .js-subtitle-delete':'subtitleDelete'
         },
         setup: function(){
-            this.initUploader();
+            var self = this;
+            $('#media-choosers .file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
+                var $target = $(e.target);
+                if ($target.attr('href') == '#video-chooser-import-pane') {
+                    self.hide();
+                } else {
+                    self.show();
+                }
+            });
+        },
+        renderHTML: function()
+        {
+            if ('id' in this.media) {
+                this.element.html('加载字幕...');
+                var self = this;
+                $.get(this.element.data('dialogUrl'), {mediaId:this.media.id}, function(html){
+                    self.element.html(html);
+                    self.initUploader();
+                });
+            }
+        },
+        show: function()
+        {
+            var parent = this.element.parent('.form-group');
+            if (parent.length > 0) {
+                parent.removeClass('hide');
+            }
+        },
+        hide: function()
+        {
+            var parent = this.element.parent('.form-group');
+            if (parent.length > 0) {
+                parent.addClass('hide');
+            }
         },
         initUploader: function()
         {
+            if (this.uploader) {
+                return;
+            }
             var _self = this;
             var $elem = this.$('#subtitle-uploader');
-            var mediaId = this.element.data('mediaId');
+            var mediaId = this.$('.js-subtitle-dialog').data('mediaId');
             var uploader = new UploaderSDK({
                 initUrl:$elem.data('initUrl'),
                 finishUrl:$elem.data('finishUrl'),
@@ -46,10 +84,10 @@ define(function(require, exports, module) {
                     "subtitleId": file.id,
                     "mediaId": mediaId
                 }).success(function (data) {
-                    console.log(data);
+                    var convertStatus = require('./convert-status-map');
                     $('.js-media-subtitle-list').append('<li class="pvs">'+
                             '<span class="subtitle-name prl">'+data.name+'</span>'+
-                            '<span class="subtitle-transcode-status waiting">'+ '等待转码' +'</span>'+
+                            '<span class="subtitle-transcode-status '+data.convertStatus+'">'+ convertStatus(data.convertStatus) +'</span>'+
                             '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/'+ mediaId+'/subtitle/'+ data.id +'/delete">删除</a>'+
                         '</li>');
                     if($('.js-media-subtitle-list li').length > 3){
@@ -78,12 +116,12 @@ define(function(require, exports, module) {
             if (!this.uploader) {
                 return ;
             }
+            this.uploader.__events = null;
             this.uploader.destroy();
             this.uploader = null;
         },
 
         destroy: function () {
-            this.uploader.__events = null;
             this._destoryUploader();
             SubtitleDialog.superclass.destroy.call(this);
         }

@@ -281,6 +281,7 @@ class MobileBaseController extends BaseController
             }
 
             unset($course['teacherIds']);
+            unset($course['tags']);
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
             return $course;

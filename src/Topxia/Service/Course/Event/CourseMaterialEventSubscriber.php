@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class CourseMaterialEventSubscriber implements EventSubscriberInterface
 {
@@ -35,6 +36,9 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     {
         $course = $event->getSubject();
         $this->getMaterialService()->deleteMaterialsByCourseId($course['id']);
+
+        $tagOwnerManager = new TagOwnerManager('course', $course['id']);
+        $tagOwnerManager->delete();
     }
 
     public function onCourseLessonCreate(ServiceEvent $event)

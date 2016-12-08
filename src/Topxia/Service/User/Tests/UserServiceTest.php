@@ -8,11 +8,10 @@ class UserServiceTest extends BaseTestCase
 {
     /**
      * @group current
-     * @return [type] [description]
      */
     public function testRegister()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -35,7 +34,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testRegisterByNotDefault()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com',
@@ -58,7 +57,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorEmail()
     {
@@ -71,7 +70,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithRegistedNickname()
     {
@@ -91,7 +90,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithRegistedEmail()
     {
@@ -111,7 +110,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorNickname1()
     {
@@ -123,7 +122,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorNickname2()
     {
@@ -136,7 +135,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -151,7 +150,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserByNickname()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -166,7 +165,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserByLoginField()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -186,7 +185,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserByVerifiedMobile()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -200,7 +199,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserByEmail()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -245,8 +244,8 @@ class UserServiceTest extends BaseTestCase
         $conditions = array(
             'nickname' => 'user1'
         );
-        $orderBy = array('createdTime', 'ASC');
-        $result  = $this->getUserService()->SearchUsers($conditions, $orderBy, 0, 20);
+        $orderBy    = array('createdTime', 'ASC');
+        $result     = $this->getUserService()->SearchUsers($conditions, $orderBy, 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -272,7 +271,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  @group current
+     * @group current
      */
     public function testSearchUsersWithOneParamter()
     {
@@ -316,13 +315,15 @@ class UserServiceTest extends BaseTestCase
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
             'nickname' => 'user',
-            'email'    => 'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+            'email'    => 'user1@user1.com'
+        ), array('createdTime', 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
             'nickname' => 'user',
-            'email'    => 'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+            'email'    => 'user1@user1.com'
+        ), array('createdTime', 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
@@ -335,14 +336,16 @@ class UserServiceTest extends BaseTestCase
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
             'nickname' => 'user',
-            'email'    => 'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
+            'email'    => 'user2@user2.com'
+        ), array('createdTime', 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname' => 'user2',
             'roles'    => 'ROLE_ADMIN',
             'loginIp'  => '',
             'nickname' => 'user',
-            'email'    => 'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+            'email'    => 'user1@user1.com'
+        ), array('createdTime', 'DESC'), 0, 10);
     }
 
     public function testSearchUserCount()
@@ -358,9 +361,9 @@ class UserServiceTest extends BaseTestCase
 
     public function testSearchUserCountWithZeroResult()
     {
-        $user1          = $this->createUser('user1');
-        $user2          = $this->createUser('user2');
-        
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'nickname', 'keyword' => 'not_exist_nickname'));
         $this->assertEquals(0, $foundUserCount);
 
@@ -377,7 +380,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testSetEmailVerified()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -396,7 +399,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangeNickname()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -408,7 +411,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testChangeNicknameOne()
     {
@@ -417,11 +420,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeNicknameTwo()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -431,12 +434,12 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeNicknameThree()
     {
-        $user     = $this->createUser('user');
-        $userInfo = array(
+        $user           = $this->createUser('user');
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -447,7 +450,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangeEmail()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -459,11 +462,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithErrorEmailFormat1()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -473,11 +476,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithErrorEmailFormat2()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -487,7 +490,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithExistEmail()
     {
@@ -496,34 +499,21 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->changeEmail($user1['id'], 'user2@user2.com');
     }
 
-// public function testChangeAvatar()//*
+    public function testChangeAvatar()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email'    => 'test_email@email.com'
+        );
 
-// {
-
-//     $userInfo = array(
-
-//         'nickname'=>'test_nickname',
-
-//         'password'=> 'test_password',
-
-//         'email'=>'test_email@email.com'
-
-//     );
-
-//     $registeredUser = $this->getUserService()->register($userInfo);
-
-//     $data = array(
-
-//         'id'=>'1',
-
-//         'type'=>'jpg',
-
-//     );
-
-//     $a = $this->getUserService()->changeAvatar($registeredUser['id'],$data);
-
-//
-    // }
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $data           = array(
+            'id'   => '1',
+            'type' => 'jpg',
+        );
+        //$a              = $this->getUserService()->changeAvatar($registeredUser['id'], $data);
+    }
 
     public function testIsEmailAvaliable()
     {
@@ -568,7 +558,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangePassword()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -582,11 +572,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePasswordTwice()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -596,11 +586,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePayPasswordOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -611,7 +601,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangePayPasswordTwice()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -623,7 +613,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testIsMobileUnique()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -638,7 +628,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testChangeMobileOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -650,11 +640,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeMobileTwice()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -666,7 +656,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserSecureQuestionsByUserId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -688,7 +678,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testAddUserSecureQuestionsWithUnHashedAnswers()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname'       => 'test_nickname',
             'password'       => 'test_password',
             'email'          => 'test_email@email.com',
@@ -719,7 +709,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testVerifyPasswordOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -730,7 +720,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPayPasswordTwice()
     {
@@ -757,7 +747,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testParseRegistrationThird()
     {
@@ -768,7 +758,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationForth()
     {
@@ -788,7 +778,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationSixth()
     {
@@ -799,7 +789,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationSeventh()
     {
@@ -841,7 +831,7 @@ class UserServiceTest extends BaseTestCase
             'nickname' => 'test_nickname',
             'password' => 'test_password'
         );
-        $email = $this->getUserService()->generateEmail($userInfo);
+        $email    = $this->getUserService()->generateEmail($userInfo);
         $this->assertNotNull($email);
     }
 
@@ -862,7 +852,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testSetupAccount()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com',
@@ -875,7 +865,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testSetupAccountTwice()
     {
@@ -884,11 +874,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\RuntimeException
+     * @expectedException \Topxia\Common\Exception\RuntimeException
      */
     public function testSetupAccountThird()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -898,11 +888,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePasswordWithEmptyPassword()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -912,7 +902,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testChangePasswordWithNotExistUserId()
     {
@@ -920,7 +910,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPasswordTwice()
     {
@@ -928,11 +918,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPasswordWithNotExistUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1039,7 +1029,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFollowTwice()
     {
@@ -1049,7 +1039,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testFollowThird()
     {
@@ -1058,7 +1048,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\RuntimeException
+     * @expectedException \Topxia\Common\Exception\RuntimeException
      */
     public function testFollowForth()
     {
@@ -1070,7 +1060,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testhasAdminRoles()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1079,7 +1069,8 @@ class UserServiceTest extends BaseTestCase
         $result         = $this->getUserService()->HasAdminRoles($registeredUser['id']);
         $this->assertFalse($result);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+        ));
         $result = $this->getUserService()->HasAdminRoles($registeredUser['id']);
         $this->assertTrue($result);
     }
@@ -1097,7 +1088,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnFollowTwcie()
     {
@@ -1107,7 +1098,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\RuntimeException
+     * @expectedException \Topxia\Common\Exception\RuntimeException
      */
     public function testUnFollowThird()
     {
@@ -1118,7 +1109,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnFollowNotExistUser()
     {
@@ -1129,7 +1120,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Common\Exception\RuntimeException
+     * @expectedException \Topxia\Common\Exception\RuntimeException
      */
     public function testUnFollowWithoutFollowed()
     {
@@ -1153,7 +1144,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowedTwice()
     {
@@ -1164,7 +1155,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowedThird()
     {
@@ -1175,7 +1166,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetLastestApprovalByUserIdAndStatus()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1198,7 +1189,7 @@ class UserServiceTest extends BaseTestCase
 
 // }
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testApplyUserApprovalTwice()
     {
@@ -1215,7 +1206,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testPassApprovalTwice()
     {
@@ -1226,7 +1217,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testRejectApproval()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1237,7 +1228,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testRejectApprovalTwice()
     {
@@ -1257,7 +1248,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testRememberLoginSessionIdOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1270,7 +1261,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testRememberLoginSessionIdTwice()
     {
@@ -1314,7 +1305,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   follow
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowWithNotExistToId()
     {
@@ -1324,7 +1315,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   follow
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowWithNotExistFromId()
     {
@@ -1337,7 +1328,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserProfile()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1372,9 +1363,10 @@ class UserServiceTest extends BaseTestCase
             'company'   => 'company',
             'job'       => 'job',
             'signature' => 'signature',
-            'about'     => 'about');
+            'about'     => 'about'
+        );
 
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1397,11 +1389,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUpdateUserProfileWithNotExistUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1412,11 +1404,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorGender()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1427,11 +1419,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorBirthday()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1442,11 +1434,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorMobile()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1457,11 +1449,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorQQ()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1476,7 +1468,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testChangeUserRoles()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1484,13 +1476,15 @@ class UserServiceTest extends BaseTestCase
         $registeredUser = $this->getUserService()->register($userInfo);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+                'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+            )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'), $foundUser['roles']);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')
+                'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'
+            )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'), $foundUser['roles']);
@@ -1498,11 +1492,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeUserRolesWithEmptyRoles()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1513,12 +1507,12 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      *
      */
     public function testChangeUserRolesWithNotExistUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1529,12 +1523,12 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      *
      */
     public function testChangeUserRolesWithIllegalRoles()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1548,7 +1542,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testMakeToken()
     {
-        $userInfo = array(
+        $userInfo          = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1562,7 +1556,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetToken()
     {
-        $userInfo = array(
+        $userInfo                = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1580,7 +1574,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetTokenSuccess()
     {
-        $userInfo = array(
+        $userInfo                = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1599,7 +1593,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetTokenFailedWithErrorTypeAndErrorToken()
     {
-        $userInfo = array(
+        $userInfo          = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1619,7 +1613,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetTokenFailedWithExpiredTimeLessNow()
     {
-        $userInfo = array(
+        $userInfo          = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1633,7 +1627,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testSearchTokenCount()
     {
-        $userInfo = array(
+        $userInfo         = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1649,7 +1643,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testDeleteToken()
     {
-        $userInfo = array(
+        $userInfo          = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1665,7 +1659,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testDeleteTokenFailed()
     {
-        $userInfo = array(
+        $userInfo          = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1687,7 +1681,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testLockUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1701,7 +1695,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   lock
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testLockUserTwice()
     {
@@ -1711,7 +1705,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  lock
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testLockNotExistUser()
     {
@@ -1723,7 +1717,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testUnLockUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1737,7 +1731,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnLockUserTwice()
     {
@@ -1747,7 +1741,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testPromoteUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1760,7 +1754,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testPromoteUserTwice()
     {
@@ -1770,7 +1764,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testCancelPromoteUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1785,7 +1779,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testCancelPromoteUserTwice()
     {
@@ -1795,14 +1789,15 @@ class UserServiceTest extends BaseTestCase
 
     public function testFindLatestPromotedTeacher()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+        ));
         $this->getUserService()->promoteUser($registeredUser['id'], 1);
         $result = $this->getUserService()->findLatestPromotedTeacher(0, 20);
         $result = $result['0'];
@@ -1811,7 +1806,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testWaveUserCounter()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1823,11 +1818,11 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testWaveUserCounterTwice()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1838,7 +1833,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testClearUserCounter()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1854,7 +1849,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  lock
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnLockNotExistUser()
     {
@@ -1866,7 +1861,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testBindUser()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1884,7 +1879,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testMarkLoginFailed()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1897,7 +1892,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testMarkLoginSuccess()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1910,7 +1905,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testCheckLoginForbidden()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1923,7 +1918,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testBindNotExistUser()
     {
@@ -1932,11 +1927,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1950,7 +1945,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserBind()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -1970,14 +1965,15 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserBindWithErrorType()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array(
-            'token' => 'token', 'expiredTime' => strtotime('+1 day')));
+            'token' => 'token', 'expiredTime' => strtotime('+1 day')
+        ));
         $this->getUserService()->getUserBindByTypeAndFromId('douban', 123123123);
     }
 
@@ -1986,7 +1982,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserBindWithErrorParamaters()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2002,7 +1998,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserBindWithExpiredTimeInvalidate()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2017,7 +2013,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testGetUserBindByTypeAndUserId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2033,7 +2029,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testGetUserBindByTypeAndUserIdTwice()
     {
@@ -2043,11 +2039,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testGetUserBindByTypeAndUserIdThird()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2059,11 +2055,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testGetUserBindWithInvalidateUserId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2075,11 +2071,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2094,7 +2090,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testFindBindsByUserIdOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2117,7 +2113,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFindBindsByUserIdTwice()
     {
@@ -2127,11 +2123,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFindBindsByErrorUserId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2148,7 +2144,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testUnBindUserByTypeAndToIdOne()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2165,7 +2161,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnBindUserByTypeAndToIdTwice()
     {
@@ -2176,12 +2172,12 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUnBindUserByTypeAndToIdThird()
     {
-        $type     = null;
-        $userInfo = array(
+        $type           = null;
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2192,7 +2188,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testGetUserBindByTypeAndFromId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2261,11 +2257,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException \Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnBindUserByTypeAndToIdWithErrorUserId()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2277,11 +2273,11 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
     {
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
@@ -2297,7 +2293,7 @@ class UserServiceTest extends BaseTestCase
     public function testChangeAvatarFromImgUrl()
     {
         $this->initFile();
-        $userInfo = array(
+        $userInfo       = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
             'email'    => 'test_email@email.com'

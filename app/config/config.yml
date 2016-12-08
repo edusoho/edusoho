@@ -4,6 +4,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: biz.yml }
+    - { resource: services.xml }
 
 framework:
     # esi:             ~
@@ -24,11 +25,11 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.0'
-        packages:
-            webpack:
-                base_urls:
-                    - "%webpack_base_url%"
+        version: '7.3.4'
+#        packages:
+#            webpack:
+#                base_urls:
+#                    - "%webpack_base_url%"
 
 # Twig Configuration
 twig:

@@ -229,6 +229,7 @@ class SystemInitializer
 
         $defaultSetting                 = array();
         $defaultSetting['chapter_name'] = '章';
+        $defaultSetting['user_name']    = '学员';
         $defaultSetting['part_name']    = '节';
 
         $default        = $settingService->get('default', array());
@@ -331,24 +332,47 @@ EOD;
     {
         $this->output->write('  初始化分类分组');
 
-        $group = $this->getCategoryService()->getGroupByCode('course');
+        $courseGroup = $this->getCategoryService()->getGroupByCode('course');
 
-        if(empty($group)){
-            $group = $this->getCategoryService()->addGroup(array(
+        if(empty($courseGroup)){
+            $courseGroup = $this->getCategoryService()->addGroup(array(
                 'name'  => '课程分类',
                 'code'  => 'course',
                 'depth' => 3
             ));
         }
 
-        $category = $this->getCategoryService()->getCategoryByCode('default');
+        $courseCategory = $this->getCategoryService()->getCategoryByCode('default');
 
-        if(empty($category)){
+        if(empty($courseCategory)){
             $this->getCategoryService()->createCategory(array(
                 'name'     => '默认分类',
                 'code'     => 'default',
                 'weight'   => 100,
-                'groupId'  => $group['id'],
+                'groupId'  => $courseGroup['id'],
+                'parentId' => 0
+            ));
+        }
+
+
+        $classroomGroup = $this->getCategoryService()->getGroupByCode('classroom');
+
+        if (!$classroomGroup) {
+            $classroomGroup = $this->getCategoryService()->addGroup(array(
+                'name'  => '班级分类',
+                'code'  => 'classroom',
+                'depth' => 3
+            ));
+        }
+
+        $classroomCategory = $this->getCategoryService()->getCategoryByCode('classroomdefault');
+
+        if (!$classroomCategory) {
+            $this->getCategoryService()->createCategory(array(
+                'name'     => '默认分类',
+                'code'     => 'classroomdefault',
+                'weight'   => 100,
+                'groupId'  => $classroomGroup['id'],
                 'parentId' => 0
             ));
         }

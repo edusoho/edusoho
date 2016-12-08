@@ -601,7 +601,7 @@ class LiveCourseController extends BaseController
             $start = 0;
             $limit = $pageSize - ($futureLiveCoursesCount % $pageSize);
         } else {
-            $start = ($currentPage - $pages - 1) * $pageSize;
+            $start = ($currentPage - 1) * $pageSize;
             $limit = $pageSize;
         }
 

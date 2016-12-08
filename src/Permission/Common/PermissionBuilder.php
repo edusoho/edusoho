@@ -295,6 +295,21 @@ class PermissionBuilder
             return $this->cached['getOriginPermissions'];
         }
 
+        $permissions = $this->loadPermissionsFromAllConfig();
+        $this->cached['getOriginPermissions'] = $permissions;
+
+        if (in_array($environment, array('test', 'dev'))) {
+            return $permissions;
+        }
+
+        $cache = "<?php \nreturn ".var_export($permissions, true).';';
+        file_put_contents($cacheFile, $cache);
+
+        return $permissions;
+    }
+
+    public function loadPermissionsFromAllConfig()
+    {
         $configs     = $this->getPermissionConfig();
         $permissions = array();
         foreach ($configs as $config) {
@@ -309,16 +324,6 @@ class PermissionBuilder
             $menus       = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);
         }
-
-        $this->cached['getOriginPermissions'] = $permissions;
-
-        if (in_array($environment, array('test', 'dev'))) {
-            return $permissions;
-        }
-
-        $cache = "<?php \nreturn ".var_export($permissions, true).';';
-        file_put_contents($cacheFile, $cache);
-
         return $permissions;
     }
 
