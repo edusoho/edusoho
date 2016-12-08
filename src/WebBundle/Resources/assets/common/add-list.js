@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class FriendList extends React.Component {
+class ListView extends Component {
   render() {
     var List = this.props.list.map( (item,i) => {
       return (<li className="list-group-item" key={item}>{item}<a className="pull-right" onClick={event=>this.deleteItem(event)} id={i}>删除</a></li>);
@@ -14,7 +14,7 @@ class FriendList extends React.Component {
   }
 };
 
-class AddFriend extends React.Component {
+class InputGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +45,7 @@ class AddFriend extends React.Component {
   }
 }
 
-class FriendsContainer extends React.Component {
+class MultiGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,13 +70,11 @@ class FriendsContainer extends React.Component {
   render (){
     return (
       <div className="panes">
-        <FriendList removeItem={(index)=>this.removeItem(index)} list={this.state.items}  />
-        <AddFriend  addItem={(item)=>this.addItem(item)}/>
+        <ListView removeItem={(index)=>this.removeItem(index)} list={this.state.items}  />
+        <InputGroup  addItem={(item)=>this.addItem(item)}/>
       </div>
     );
   }
 }
 
-export default FriendsContainer;
-
-
+export default MultiGroup;
