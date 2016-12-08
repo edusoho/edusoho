@@ -20,18 +20,18 @@
       </label>
     </div>
   </div>
-  <div class="form-group js-is-free" {% if course.isFree|default(0) == 1 %}style="display: none;"{% endif %}>
+  <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}"  data-role="tab-content">
     <label class="col-sm-2 control-label">{{'价格'|trans}}</label>
     <div class="col-sm-4">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      <input type="text" name="price" value="{{course.price|default(0)|currency}}">{{'元'|trans}}
+      <input class="form-control" id="course_price" type="text" name="price" value="{{course.price|default(0)|currency}}" style="display: inline-block; width: 200px; margin-right: 10px;">{{'元'|trans}}
     </div>
   </div>
-  <div class="form-group js-is-free" {% if course.isFree|default(0) == 1 %}style="display: none;"{% endif %}>
+  <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
     <label class="col-sm-2 control-label">{{'会员规则设置'|trans}}</label>
     <div class="col-sm-4">
       <!-- TODO 需要从会员插件里提取会员列表，这里用select展示，实际存储level_id -->
-      <input type="text" name="vipLevelId" value="{{course.vipLevelId|default('')}}">
+      <input class="form-control" type="text" name="vipLevelId" value="{{course.vipLevelId|default('')}}" style="width: 200px;">
       <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
     </div>
   </div>
@@ -78,16 +78,16 @@
       <div class="help-block">{{'常用于收费视频内容的前几分钟免费试看'|trans}}</div>
     </div>
   </div>
-  <div class="form-group js-enable-try-look" {% if course.tryLookable|default(0) == 0 %}style="display: none;"{% endif %}>
+  <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
     <label class="col-sm-2 control-label">{{'试看时长'|trans}}</label>
-    <div class="col-sm-8">
-      <label><input type="text" name="trylookLength" value="{{course.trylookLength|default(1)}}">分钟</label>
+    <div class="col-sm-8 ">
+      <input class="form-control" type="text" name="trylookLength" value="{{course.trylookLength|default(1)}}" style="display: inline-block; width: 200px; margin-right: 10px;">分钟
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'视频观看时长限制'|trans}}</label>
     <div class="col-sm-8">
-      <label><input type="text" name="watchLimit" value="{{course.watchLimit|default(0)}}">{{'倍单视频总时长'|trans}}</label>
+      <input class="form-control" type="text" name="watchLimit" value="{{course.watchLimit|default(0)}}"  style="display: inline-block; width: 200px; margin-right: 10px;">{{'倍单视频总时长'|trans}}
       <div class="help-block">{{'0表示无限制'|trans}}</div>
     </div>
   </div>
