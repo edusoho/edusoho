@@ -43,6 +43,12 @@ class TaskController extends BaseController
         ));
     }
 
+    public function finishTaskAction(Request $request, $courseId, $id)
+    {
+        $result = $this->getTaskService()->finishTask($id);
+        return $this->createJsonResponse($result);
+    }
+
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {

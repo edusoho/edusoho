@@ -160,26 +160,48 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
+
+        if($this->canFinish($task)) {
+            $this->finishTaskResult($taskId);
+        }
     }
 
     public function finishTask($taskId)
     {
         $task = $this->tryTakeTask($taskId);
 
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+        if(!$this->canFinish($task)) {
+            throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
+        }
+
+        return $this->finishTaskResult($taskId);
+    }
+
+    protected function finishTaskResult($taskId)
+    {
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         if (empty($taskResult)) {
             throw $this->createAccessDeniedException('task access denied. ');
         }
 
         if ($taskResult['status'] === 'finish') {
-            return;
+            return $taskResult;
         }
 
         $update['updatedTime']  = time();
         $update['status']       = 'finish';
         $update['finishedTime'] = time();
-        $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+        $taskResult = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+        return $taskResult;
+    }
+
+    protected function canFinish($task)
+    {
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        // TODO
+        return $course && $this->getActivityService()->canFinishActivity($task['activityId']);
     }
 
     public function tryTakeTask($taskId)

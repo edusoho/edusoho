@@ -50,7 +50,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return;
         }
 
-        if (in_array($eventName, array('start', 'doing', 'finish'))) {
+        if (in_array($eventName, array('start', 'doing'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
@@ -173,6 +173,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityConfig->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
+    }
+
+    public function canFinishActivity($id)
+    {
+        $activity = $this->getActivity($id);
+        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
+        return $activityConfig->canFinish($id);
     }
 
     /**

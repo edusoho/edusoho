@@ -29,4 +29,6 @@ interface ActivityService
     public function trigger($activityId, $name, $data = array());
 
     public function getActivityTypes();
+
+    public function canFinishActivity($activityId);
 }
