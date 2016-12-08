@@ -122,7 +122,7 @@ class PasswordResetController extends BaseController
     public function changeRawPasswordAction(Request $request)
     {
         $fields = $request->query->all();
-        $user_token = $this->getTokenService()->verifyToken($fields['type'], $fields['token']);
+        $user_token = $this->getTokenService()->verifyToken('email_password_reset', $fields['token']);
         $flag = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
 
         if (!$flag) {
