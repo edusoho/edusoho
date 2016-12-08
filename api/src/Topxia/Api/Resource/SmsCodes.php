@@ -85,6 +85,9 @@ class SmsCodes extends BaseResource
                     throw new \Exception("该手机号已被绑定");
                 }
                 $user = $this->getCurrentUser();
+                if(!$user->isLogin()){
+                    return $this->error('500', '用户没有登录');
+                }
 
                 $result = $this->getSmsService()->sendVerifySms('sms_bind', $mobile);
             } catch(\Exception $e) {
