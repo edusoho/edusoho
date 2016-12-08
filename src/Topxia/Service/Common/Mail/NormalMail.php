@@ -65,7 +65,7 @@ class NormalMail extends Mail
     private function on_effect_email_reset_password()
     {
         return array(
-            'title' => $this->getKernel()->trans('生效%nickname%在%sitename%修改密码的操作', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name'))),
+            'title' => $this->getKernel()->trans('重置您的%sitename%帐号密码', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name'))),
             'body'  => $this->renderBody('effect-reset.txt.twig')
         );
     }
