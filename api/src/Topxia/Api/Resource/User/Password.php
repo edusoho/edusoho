@@ -13,6 +13,7 @@ class Password extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
+
         $password = $request->request->get('password');
         $smsCode  = $request->request->get('sms_code');
         $smsToken = $request->request->get('verified_token');
@@ -38,6 +39,7 @@ class Password extends BaseResource
         if ($type == 'sms') {
             $smsUtil = new SmsUtil();
             $result = $smsUtil->verifySmsCode('sms_change_password', $smsCode, $smsToken);
+            
             if( $result !== true ){
                 if( $result == 'sms_code_expired' ){
                      return $this->error('sms_code_expired', '验证码已过期');
@@ -46,21 +48,23 @@ class Password extends BaseResource
                 }
             }
 
-        }
-
-        $token = $this->getTokenService()->verifyToken('sms_change_password', $smsToken);
+            $token = $this->getTokenService()->verifyToken('sms_change_password', $smsToken);
+            
         
-        $user = $this->getCurrentUser();
-        if($user->isLogin()){
-            $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
-        }else{
-             $user  = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
-        }
-       
-        $this->getUserService()->changePassword($user['id'], $password);
-        $this->getTokenService()->destoryToken($currentToken);
+            $user = $this->getCurrentUser();
 
-        return array('userId' => $user['id']);
+            if($user->isLogin()){
+                $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
+            }else{
+                 $user  = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
+            }
+           
+            $this->getUserService()->changePassword($user['id'], $password);
+            $this->getTokenService()->destoryToken($currentToken);
+
+            return array('userId' => $user['id']);
+
+        }
     }
 
     public function filter($res)
