@@ -64,21 +64,21 @@ class SmsCodes extends BaseResource
         $type   = $fields['type'];
         $mobile = $fields['mobile'];
 
-        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'sms_third_registration'))) {
+        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile','sms_bind','sms_third_registration'))) {
             return $this->error('500', '短信服务不支持该业务');
         }
         if (empty($mobile)) {
             return $this->error('500', '手机号为空');
         }
 
-        if ($type == 'sms_third_registration') {
+        if ($type == 'sms_bind') {
             try {
                 if ($this->getUserService()->getUserByVerifiedMobile($mobile)) {
                     throw new \Exception("该手机号已被绑定");
                 }
                 $user = $this->getCurrentUser();
 
-                $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
+                $result = $this->getSmsService()->sendVerifySms('sms_bind', $mobile);
             } catch(\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
@@ -98,6 +98,9 @@ class SmsCodes extends BaseResource
             } catch(\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
+        }
+        if($type =='sms_bind'){
+            $type = 'sms_change_password';
         }
         
         $smsToken = $this->getTokenService()->makeToken($type, array(
