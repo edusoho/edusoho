@@ -73,20 +73,21 @@ const Search = React.createClass({
     </div>);
   },
 });
-ReactDOM.render(<Search />, document.getElementById('test'));
+// ReactDOM.render(<Search />, document.getElementById('test'));
 
+function renderMultiGroupComponent(elementId){
+  ReactDOM.render( <MultiGroup items = {$("#"+elementId).data("init-value")} fieldName={$("#"+elementId).data('field-name')} sortable={true}/>,
+    document.getElementById(elementId)
+  );
+}
 
-ReactDOM.render( <MultiGroup items = {[]}  />,
-  document.getElementById('course-objectives')
-);
-ReactDOM.render( <MultiGroup items = {[]}  />,
-  document.getElementById('adapt-crowd')
-);
+renderMultiGroupComponent('course-goals');
+renderMultiGroupComponent('intended-students', $('#intended-students').data('init-value'));
 
-sortList({
-  element: ".sortable-list",
-  itemSelector: 'li',
-});
+// sortList({
+//   element: ".sortable-list",
+//   itemSelector: 'li',
+// });
 
 _initDatePicker('#expiryStartDate');
 _initDatePicker('#expiryEndDate');

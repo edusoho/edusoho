@@ -93,6 +93,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields = $this->validateExpiryMode($fields);
         }
 
+        if (isset($fields['goals'])) {
+            $fields['goals'] = json_decode($fields['goals'], true);
+        }
+        if (isset($fields['audiences'])) {
+            $fields['audiences'] = json_decode($fields['audiences'], true);
+        }
+
         return $this->getCourseDao()->update($id, $fields);
     }
 
@@ -367,9 +374,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
         //TODO 未实现
-//        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-//            return true;
-//        }
+        //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+        //            return true;
+        //        }
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
