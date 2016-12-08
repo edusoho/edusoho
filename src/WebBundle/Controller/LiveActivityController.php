@@ -10,7 +10,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchExt($id);
+        $activity = $this->getActivityService()->getActivityFetchMedia($id);
         $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
@@ -48,12 +48,11 @@ class LiveActivityController extends BaseController implements ActivityActionInt
     public function liveEntryAction(Request $request, $courseId, $activityId)
     {
         $user = $this->getUser();
-
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
-        $activity = $this->getActivityService()->getActivityFetchExt($activityId);
+        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
 
         if (empty($activity)) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播任务不存在！'));
@@ -75,7 +74,6 @@ class LiveActivityController extends BaseController implements ActivityActionInt
         }
 
         $params = array();
-
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findCourseTeachers($courseId);
             $teacher  = array_shift($teachers);
@@ -137,7 +135,7 @@ class LiveActivityController extends BaseController implements ActivityActionInt
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getServiceKernel()
