@@ -79,7 +79,7 @@ class TaskShow extends Emitter {
   sidebar() {
     this.sideBar = new SideBar({
       element: '.js-task-dashboard-page',
-      activePlugins: ['task',"note", "question"],
+      activePlugins: ['task'],
       courseId: this.courseId,
       taskId: this.taskId,
     });
