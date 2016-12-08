@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/24
- * Time: 13:26
- */
 
 namespace WebBundle\Controller;
 

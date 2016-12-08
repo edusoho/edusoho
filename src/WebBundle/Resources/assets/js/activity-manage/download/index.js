@@ -1,7 +1,13 @@
 import FileChooser from '../../file-chooser/file-choose';
+import notify from 'common/notify';
+import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
 jQuery.validator.addMethod("url", function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
+
+// showChooserType($("input[name=mediaId]"));
+
+_inItStep2form();
 
 function _inItStep2form() {
   var $form = $('#step2-form');
@@ -12,105 +18,196 @@ function _inItStep2form() {
         maxlength: 50,
       },
       link: 'url',
-      media: 'required',
-
+      materials: 'required',
     },
     messages: {
       link: "链接地址不正确",
-      media: '请选择文件'
+      materials: '请上传或选择%display%'
     }
   });
 
   $form.data('validator', validator);
 }
 
-_inItStep2form();
-
-
-$('#step2-form').on('click', '.close.delete-btn', function () {
-  let $parent = $(this).parents('.list-group-item');
+$('#step2-form').on('click', '.js-btn-delete', function () {
+  let $parent = $(this).parents('li');
   let mediaId = $parent.data('id');
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
   if (items && items[mediaId]) {
     delete items[mediaId];
     $("#materials").val(JSON.stringify(items));
   }
+  if ($parent.siblings('li').length <= 0) {
+    $("#materials").val(null);
+  }
   $parent.remove();
 })
 
-$('#step2-form').on('click', '.js-download-material-add', function () {
+$('#step2-form').on('click', '.js-video-import', function () {
+  addFile(false);
+})
+
+$('#step2-form').on('click', '.js-add-file-list', function () {
+  addFile(true);
+})
+
+function addFile(addlist) {
   if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
+    console.log("ok");
+
     let data = {
       source: 'link',
       id: $("#link").val(),
       name: $("#link").val(),
       link: $("#link").val(),
+      summary: $("#file-summary").val(),
       size: 0
     };
+    $('.js-current-file').text($("#link").val());
     $("#media").val(JSON.stringify(data));
   }
 
   let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+  console.log(isEmpty(media));
 
   if (isEmpty(media)) {
-    alert('add file first')
+    notify('danger', '请先选择资料');
     return;
   }
 
   if (!isEmpty(items) && items[media.id]) {
+    notify('danger', '选择重复');
     $("#media").val(null);
     return;
   }
 
+  if(!addlist) {
+    return;
+  }
+
+  if (!isEmpty(items) && items[media.id]) {
+    notify('danger', '选择重复');
+    $("#media").val(null);
+    return;
+  }
+
+  $('.js-current-file').text('无');
+
+  media.summary = $("#file-summary").val();
   items[media.id] = media;
   $("#materials").val(JSON.stringify(items));
 
   $("#media").val(null);
   $('#link').val(null);
+  $("#file-summary").val(null);
+
+  
 
   let item_tpl = '';
   if (media.link) {
     item_tpl = `
-        <li class="list-group-item clearfix" data-id="${media.link}">
-          <button class="close delete-btn" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
-            <a href="${ media.link }" target="_blank">${ media.name }</a>
-            <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
-        </li>
-    `;
+    <li class="download-item " data-id="${media.link}">
+        <a href="${ media.link }" target="_blank">${ media.name }</a>
+        <a class="btn btn-xs js-btn-delete"  title="{{'删除'|trans}}" data-url="">&times;</a>
+        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
+    </li>
+  `;
   } else {
     item_tpl = `
-        <li class="list-group-item clearfix" data-id="${media.id}">
-          <button class="close delete-btn" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
-            <a href="${ media.id }">${ media.name }</a>
-        </li>
-    `;
+    <li class="download-item " data-id="${media.id}">
+      <a href="${ media.id }">${ media.name }</a>
+      <a class="btn btn-xs js-btn-delete" title="{{'删除'|trans}}" data-url="">&times;</a>
+    </li>
+  `;
   }
-  $(".js-empty-list").addClass('hidden');
   $("#material-list").append(item_tpl);
-  open();
-
-});
-setTimeout(function () {
-  open();
-
-}, 500)
-function open() {
-  var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-  $('[data-role=placeholder]').empty();
-  $('.file-chooser-bar').addClass('hidden');
-  $('.file-chooser-main').removeClass('hidden');
-  $parentiframe.height($parentiframe.contents().find('body').height());
+  $("#step2-form").data('validator').form();
 }
+
+_inItStep2form();
+
+
 function isEmpty(obj) {
   return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
 }
 const fileSelect = file => {
   $("input[name=media]").val(JSON.stringify(file));
+  chooserUiOpen();
+  addFile(false);
+  $('.js-current-file').text(file.name);
   console.log('action triggered', file);
 }
 
 const fileChooser = new FileChooser();
 
 fileChooser.on('select', fileSelect);
+
+// setTimeout(function () {
+//     open();
+
+// }, 500)
+// function open() {
+//     var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
+//     $('[data-role=placeholder]').empty();
+//     $('.file-chooser-bar').addClass('hidden');
+//     $('.file-chooser-main').removeClass('hidden');
+//     $parentiframe.height($parentiframe.contents().find('body').height());
+// }
+// $('#step2-form').on('click', '.js-download-material-add', function () {
+//     if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
+//         let data = {
+//             source: 'link',
+//             id: $("#link").val(),
+//             name: $("#link").val(),
+//             link: $("#link").val(),
+//             size: 0
+//         };
+//         $("#media").val(JSON.stringify(data));
+//     }
+
+//     let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
+
+//     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+
+//     if (isEmpty(media)) {
+//         console.log('add file last');
+//         alert('add file first')
+//         return;
+//     }
+
+//     if (!isEmpty(items) && items[media.id]) {
+//         console.log('ok');
+//         notify('success', '选择重复');
+//         $("#media").val(null);
+//         return;
+//     }
+
+//     items[media.id] = media;
+//     $("#materials").val(JSON.stringify(items));
+
+//     $("#media").val(null);
+//     $('#link').val(null);
+
+//     let item_tpl = '';
+//     if (media.link) {
+//         item_tpl = `
+//         <li class="list-group-item clearfix" data-id="${media.link}">
+//           <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
+//             <a href="${ media.link }" target="_blank">${ media.name }</a>
+//             <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
+//         </li>
+//     `;
+//     } else {
+//         item_tpl = `
+//         <li class="list-group-item clearfix" data-id="${media.id}">
+//           <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
+//             <a href="${ media.id }">${ media.name }</a>
+//         </li>
+//     `;
+//     }
+//     $(".js-empty-list").addClass('hidden');
+//     $("#material-list").append(item_tpl);
+//     open();
+
+// });

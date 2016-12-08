@@ -3,7 +3,7 @@
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{activity_metas(task.activity.mediaType).icon}} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    {{task.title}}
+    {{task.title}}  {% if task.status != 'published' %}<span class="color-warning"> (未发布)</span> {% endif %}
     {% if task.activity.mediaType is same as('live') %}
       {% if task.result.status|default('') == 'finished' %}
         <span class="color-gray mls">已结束</span>
@@ -38,7 +38,7 @@
         </li>
          {% endif %}
         <li>
-          <a class='delete-item'  href="javascript:;"  data-type="task" data-url="{{path('course_manage_task_delete', {id:task.id,courseId:task.courseId})}}">
+          <a class='delete-item'  href="javascript:;"  data-type="task" data-url="{{path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId})}}">
             <i class="es-icon es-icon-delete mrs"></i>
             删除
           </a>

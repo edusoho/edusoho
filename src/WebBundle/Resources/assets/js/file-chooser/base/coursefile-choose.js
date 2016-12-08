@@ -16,7 +16,7 @@ class CourseFileChoose extends Chooser {
     _initEvent() {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $('.js-choose-trigger').on('click', this._open.bind(this))
+        // $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
@@ -37,7 +37,7 @@ class CourseFileChoose extends Chooser {
         var $that = $(event.currentTarget);
         var file = $that.data();
         this._onChange(file);
-        this._close();
+        // this._close();
     }
 
     _onChange(file) {

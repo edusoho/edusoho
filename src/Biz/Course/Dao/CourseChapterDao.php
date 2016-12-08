@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Dao;
 
-interface CourseChapterDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface CourseChapterDao extends GeneralDaoInterface
 {
     public function findChaptersByCourseId($courseId);
 

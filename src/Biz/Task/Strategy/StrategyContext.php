@@ -75,6 +75,10 @@ class StrategyContext
         return $this->strategy->getTasksRenderPage();
     }
 
+    public function getTaskItemRenderPage(){
+        return $this->strategy->getTaskItemRenderPage();
+    }
+
     public function publishTask($task)
     {
         return $this->strategy->publishTask($task);

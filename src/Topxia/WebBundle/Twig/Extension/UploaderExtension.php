@@ -54,6 +54,7 @@ class UploaderExtension extends \Twig_Extension
     {
         $targetAcceptTypes = array(
             'courselesson'   => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
+            'course-activity' => array('video', 'audio', 'flash', 'ppt', 'document', 'all'),
             'coursematerial' => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'materiallib'    => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'attachment'     => array('video', 'audio', 'ppt', 'document', 'zip')

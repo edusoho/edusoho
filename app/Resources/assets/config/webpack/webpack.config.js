@@ -42,6 +42,9 @@ let config = {
     },
     extensions: ['', '.js', '.jsx'],
   },
+// eslint: {
+//   configFile: appConfig.rootDir + '/.eslintrc'
+// },
   module: {
     noParse: [],
 

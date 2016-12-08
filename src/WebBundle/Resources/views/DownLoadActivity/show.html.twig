@@ -15,7 +15,7 @@
         ({{ file.fileSize|file_size }})
         {% endif %}
         <i class="es-icon es-icon-filedownload download-icon"></i>
-      <div class="text-xs color-gray mts">{{ activity.content }}</div>
+      <div class="text-xs color-gray mts">{{ file.summary|default('') }}</div>
       </a>
     </li>
     {% endfor %}

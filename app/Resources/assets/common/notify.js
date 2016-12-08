@@ -1,11 +1,12 @@
 import 'bootstrap-notify';
 
 const notify = (level, message) => {
+  $('[data-notify="container"]').remove();
   $.notify({
     message: message
   }, {
     type: level, //info,danger,warning,success
-    delay: 5000,
+    delay: 500000000,
     placement: {
       from: 'top',
       align: 'center'

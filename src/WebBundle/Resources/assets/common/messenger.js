@@ -1,7 +1,7 @@
 import Messenger from 'es-messenger';
 import Emitter from 'es6-event-emitter';
 
-class EsMessenger extends Emitter {
+export default class EsMessenger extends Emitter {
     constructor(options) {
         super();
 
@@ -51,5 +51,3 @@ class EsMessenger extends Emitter {
     }
 
 }
-
-export default  EsMessenger;

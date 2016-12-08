@@ -3,16 +3,23 @@
 namespace Biz\Task\Strategy;
 
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
+use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Common\ArrayToolkit;
 
 class BaseStrategy
 {
+    /**
+     * @var Biz
+     */
+    protected $biz;
+
     public function __construct($biz)
     {
         $this->biz = $biz;
@@ -58,7 +65,7 @@ class BaseStrategy
         $savedTask = $this->getTaskService()->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($savedTask['courseId'])) {
-            throw $this->createAccessDeniedException('无权更新任务');
+            throw new AccessDeniedException('无权更新任务');
         }
         $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
@@ -113,7 +120,7 @@ class BaseStrategy
     /**
      * @return CourseChapterDao
      */
-    protected function getChapterDao()
+    public function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
     }
@@ -121,7 +128,7 @@ class BaseStrategy
     /**
      * @return TaskService
      */
-    protected function getTaskService()
+    public function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
@@ -129,7 +136,7 @@ class BaseStrategy
     /**
      * @return TaskDao
      */
-    protected function getTaskDao()
+    public function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
     }
@@ -145,7 +152,7 @@ class BaseStrategy
     /**
      * @return ActivityService
      */
-    protected function getActivityService()
+    public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
     }

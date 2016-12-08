@@ -20,7 +20,7 @@ class MaterialLibChoose extends Chooser {
         $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $('.js-choose-trigger').on('click', this._open.bind(this))
+        // $('.js-choose-trigger').on('click', this._open.bind(this))
     }
 
     _loadList() {
@@ -108,7 +108,7 @@ class MaterialLibChoose extends Chooser {
         $('[data-role="placeholder"]').html(file.name);
 
         this.trigger('select', file);
-        this._close();
+        // this._close();
     }
 
     _getUrlParameter(url, param) {
