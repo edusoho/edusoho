@@ -126,11 +126,12 @@ class PasswordResetController extends BaseController
         $flag = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
 
         if (!$flag) {
-            throw new \Exception("重置密码失败", 1);
+            $errorUrl = $this->generateUrl('homepage');
+            return $this->redirect($errorUrl);
         }
 
-        $url = $this->generateUrl('homepage');
-        return $this->redirect($url);
+        $successUrl = $this->generateUrl('homepage');
+        return $this->redirect($successUrl);
     }
 
     public function resetBySmsAction(Request $request)
