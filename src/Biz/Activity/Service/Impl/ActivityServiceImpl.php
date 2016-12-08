@@ -60,15 +60,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
 
-        $listeners        = array();
         $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
         if (!is_null($activityListener)) {
-            $listeners[] = $activityListener;
+            $activityListener->handle($activity, $data);
         }
 
-        foreach ($listeners as $listener) {
-            $listener->handle($activity, $data);
-        }
     }
 
     public function createActivity($fields)
