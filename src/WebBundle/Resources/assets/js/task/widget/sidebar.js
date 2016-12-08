@@ -1,5 +1,3 @@
-import NotePlugin from '../plugins/note/plugin';
-import QuestionPlugin from '../plugins/question/plugin';
 import TaskPlugin from '../plugins/task/plugin';
 import 'store';
 
@@ -20,8 +18,6 @@ class SideBar {
 
   _init() {
     this._registerPlugin(new TaskPlugin(this));
-    this._registerPlugin(new NotePlugin(this));
-    this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
     this._isRenderSiderBar();
   }
