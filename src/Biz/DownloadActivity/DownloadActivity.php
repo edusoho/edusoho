@@ -117,12 +117,14 @@ class DownloadActivity extends Activity
     {
         $files = array();
         array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
+
             $file = array(
                 'downloadActivityId' => $downloadActivityId,
                 'title'              => $material['name'],
                 'fileId'             => intval($material['id']),
                 'fileSize'           => $material['size'],
                 'indicate'           => intval($material['id']),
+                'summary'            => $material['summary']
             );
             if (intval($material['id']) == 0) {
                 $file['link']     = $material['link'];

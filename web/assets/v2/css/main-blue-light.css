@@ -6673,6 +6673,12 @@ textarea {
   line-height: 1.5;
   padding: 4px 13px;
 }
+.nav-pills.nav-pills-gray > li > a {
+  background-color: #f8fbfd;
+}
+.nav-pills.nav-pills-gray > li.active > a {
+  background: #4bbbfa;
+}
 .nav-pills.nav-pills-course > li {
   position: relative;
   margin-left: 0;
@@ -6881,6 +6887,9 @@ textarea {
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
   padding: 10px 15px;
+}
+.table-hover > tbody > tr:hover {
+  background-color: #f6f6f6;
 }
 .table-striped .sort-handle {
   padding: 5px;

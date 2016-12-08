@@ -1,4 +1,5 @@
-import loadAnimation from "common/load-animation";
+import loadAnimation from 'common/load-animation'
+import 'jquery-sortable';
 import notify from "common/notify";
 
 class Editor {
@@ -74,16 +75,52 @@ class Editor {
 
     $(event.currentTarget).attr('disabled', 'disabled');
     let postData = $('#step1-form').serializeArray()
-        .concat(this.$iframe_body.find('#step2-form').serializeArray())
-        .concat(this.$iframe_body.find("#step3-form").serializeArray());
+      .concat(this.$iframe_body.find('#step2-form').serializeArray())
+      .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
-        .done((response) => {
-          this.$element.modal('hide');
-          // location.reload();
+      .done((html) => {
+        this.$element.modal('hide');
+
+        let chapterId = postData.find(function (input) {
+          return input.name == 'chapterId';
         })
-        .fail((response) => {
-          this.$element.modal('hide');
+
+        var add = 0;
+        let $parent = $('#' + chapterId.value);
+
+        if ($parent.length) {
+          $parent.nextAll().each(function () {
+            if ($(this).hasClass('task-manage-chapter')) {
+              $(this).before(html);
+              add = 1;
+              return false;
+
+            }
+            if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
+              $(this).before(html);
+              add = 1;
+              return false;
+            }
+          });
+          if (add != 1) {
+            $("#sortable-list").append(html);
+            add = 1;
+          }
+        } else {
+          $("#sortable-list").append(html);
+        }
+
+        let data = $('#sortable-list').sortable("serialize").get();
+        $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
+          if (response) {
+            document.location.reload();
+          }
         });
+
+      })
+      .fail((response) => {
+        this.$element.modal('hide');
+      });
   }
 
   _onDelete(event) {
@@ -97,6 +134,7 @@ class Editor {
         .then((response) => {
           notify('success', '删除成功');
           this.$element.modal('hide');
+          document.location.reload();
         })
         .fail(error => {
           notify('warning', '删除失败~~');

@@ -7,7 +7,7 @@
 {% block course %}
   {% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}
   <div class="task-list-header clearfix">
-    任务总数：<span class="color-warning space">{{ tasks|length }}</span> 日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务
+    任务总数：<span class="color-warning space">{{ tasks|length }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
     <div class="pull-right">
       <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal"
               data-backdrop="static" data-keyboard="false"
@@ -43,9 +43,9 @@
       data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
     {% for key, item in items %}
       {% if item.itemType == 'task' %}
-        {% include 'WebBundle:TaskManage:list-item-lockMode.html.twig' with {task:item} %}
+        {% include 'WebBundle:TaskManage:list-item-lock-mode.html.twig' with {task:item} %}
       {% elseif item.itemType == 'chapter' %}
-        {% include 'WebBundle:CourseChapterManage:list-item-lockMode.html.twig' with {chapter:item, course:course} %}
+        {% include 'WebBundle:CourseChapterManage:list-item-lock-mode.html.twig' with {chapter:item, course:course} %}
       {% endif %}
     {% endfor %}
   </ul>

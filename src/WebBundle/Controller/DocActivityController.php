@@ -26,7 +26,7 @@ class DocActivityController extends BaseController implements ActivityActionInte
             throw $this->createNotFoundException();
         }
 
-        if($file['type'] != 'document'){
+        if ($file['type'] != 'document') {
             throw $this->createAccessDeniedException('file type error, expect document');
         }
 
@@ -62,9 +62,8 @@ class DocActivityController extends BaseController implements ActivityActionInte
         $config   = $this->getActivityService()->getActivityConfig('doc');
         $doc      = $config->get($activity['mediaId']);
 
-        $file                             = $this->getUploadFileService()->getFile($doc['mediaId']);
-        $activity['ext']['media']['name'] = $file['filename'];
-        $activity['ext']['media']['id']   = $file['id'];
+        $file         = $this->getUploadFileService()->getFile($doc['mediaId']);
+        $doc['media'] = $file;
         return $this->render('WebBundle:DocActivity:edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,

@@ -17,27 +17,27 @@
   </div>#}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="mediaId" class="style">{{ '选择资料'|trans }}</label>
+      <label for="materials" class="style">{{ '选择资料'|trans }}</label>
     </div>
     <div class="col-sm-10">
       <ul class="download-list" id="material-list">
         {% for media in activity.ext.materials|default(null) %}
           <li class="download-item" data-id="{{ media.link|default(media.id) }}">
-            <a class="delete-btn" title="{{ '删除'|trans }}"data-url="">&times;</a>
             {% if media.link|default(null) %}
               <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
               <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
             {% else %}
               <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
             {% endif %}
+            <a class="btn btn-xs js-btn-delete" title="{{ '删除'|trans }}"data-url="">&times;</a>
           </li>
         {% endfor %}
       </ul>
-      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: mediaType,fileType:'',file: null } %}
+      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: mediaType, fileType:'all',file: null } %}
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
       <input id="materials" class="form-control" type="hidden" name="materials"
       {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
-      <input id="media" type="hidden" name="media" value="">
+      <input id="media" type="hidden" name="media" value="{{null}}">
     </div>
   </div>
 {% endblock %}

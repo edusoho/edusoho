@@ -46,7 +46,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
-    {   
+    {
         $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'course');
 
         $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
@@ -461,14 +461,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     public function updateCourse($id, $fields)
-    {   
+    {
         $user = $this->getCurrentUser();
 
         $argument = $fields;
 
-        $tagIds   = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
-        $course   = $this->getCourseDao()->getCourse($id);
+        $course = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
             throw $this->createServiceException($this->getKernel()->trans('课程不存在，更新失败！'));
@@ -478,14 +478,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         //非法提交直接报错,service应该有反馈
         if (!empty($fields['expiryMode']) &&
             $course['status'] == 'published' &&
-            $fields['expiryMode'] != $course['expiryMode']) {
+            $fields['expiryMode'] != $course['expiryMode']
+        ) {
             throw $this->createServiceException('已发布的课程不允许修改学员有效期');
         }
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields        = $this->fillOrgId($fields);
-        $fields        = CourseSerialize::serialize($fields);
+        $fields = $this->fillOrgId($fields);
+        $fields = CourseSerialize::serialize($fields);
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
@@ -558,7 +559,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             });
         }
 
@@ -626,7 +627,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -1528,7 +1529,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $lesson                = $this->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson) || $lesson['courseId'] != $courseId) {
             throw $this->createNotFoundException();
@@ -1550,7 +1551,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function startLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return false;
@@ -1907,7 +1908,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
+        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -1926,7 +1927,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                     break;
                 case 'chapter':
-                    $item    = $currentChapter    = $items[$itemId];
+                    $item    = $currentChapter = $items[$itemId];
                     $chapter = $this->getChapter($courseId, $item['id']);
 
                     if ($item['type'] == 'unit') {
@@ -2146,7 +2147,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function isCourseStudent($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->isCourseMember($courseId, $userId);
 
         if (!$member) {
             return false;
@@ -2256,7 +2257,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('课程学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
         return $this->getMemberDao()->updateMember($member['id'], $fields);
     }
 
@@ -2343,8 +2344,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'   => 'finished',
             'courseId' => $courseId
         );
-        $count  = $this->getLessonLearnDao()->searchLearnCount($conditions);
-        $fields = array(
+        $count      = $this->getLessonLearnDao()->searchLearnCount($conditions);
+        $fields     = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
@@ -2393,7 +2394,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $fields = array(
+        $fields   = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
@@ -2536,7 +2537,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->updateMember($member['id'], array(
-            'noteNum'            => (int) $number,
+            'noteNum'            => (int)$number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -2545,10 +2546,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
-     * @param  int|string                                $courseId
-     * @param  null|string                               $otherPermission
-     * @param  int|string                                $courseId
-     * @param  null|string                               $otherPermission
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
      * @throws NotFoundException|AccessDeniedException
      * @return array
      * @return array
@@ -2575,10 +2576,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int|string                                $courseId
-     * @param  null|string                               $actionPermission
-     * @param  int|string                                $courseId
-     * @param  null|string                               $actionPermission
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
      * @throws NotFoundException|AccessDeniedException
      * @return array
      * @return array
@@ -2809,7 +2810,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
-        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
         $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);

@@ -45,6 +45,7 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
+
         $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
@@ -64,10 +65,11 @@ class CourseManageController extends BaseController
     {
         $taskCount = count($tasks);
         if ($course['expiryMode'] == 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? $taskCount : $taskCount / $course['expiryDays'];
+
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskCount / $course['expiryDays'];
         } else {
-            $diffDay            = ($course['expiryEndDate'] + 60 * 60 * 24 - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? $taskCount : $taskCount / $diffDay;
+            $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskCount / $diffDay;
         }
         return round($finishedTaskPerDay, 1);
     }

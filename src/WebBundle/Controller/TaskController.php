@@ -23,8 +23,11 @@ class TaskController extends BaseController
             'task' => $task
         ));
 
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'     => $task,
+            'taskResult' => $taskResult,
             'tasks'    => $tasks,
             'activity' => $activity,
             'preview'  => $preview,
@@ -43,17 +46,29 @@ class TaskController extends BaseController
         ));
     }
 
-    public function triggerAction(Request $request, $courseId, $id, $eventName)
+    public function triggerAction(Request $request, $courseId, $taskId)
     {
-        $task         = $this->tryLearnTask($courseId, $id);
-        $data         = $request->request->all();
-        $data['task'] = $task;
+        $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->forward('WebBundle:Activity:trigger', array(
-            'id'        => $task['activityId'],
-            'eventName' => $eventName,
-            'data'      => $data
+        $eventName = $request->request->get('eventName');
+        if (empty($eventName)) {
+            throw $this->createNotFoundException('task event is empty');
+        }
+
+        $data = $request->request->get('data', array());
+        $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
+
+        return $this->createJsonResponse(array(
+            'event'     => $eventName,
+            'data'      => $data,
+            'result'    => $result
         ));
+    }
+
+    public function finishTaskAction(Request $request, $courseId, $id)
+    {
+        $result = $this->getTaskService()->finishTask($id);
+        return $this->createJsonResponse($result);
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
@@ -94,6 +109,11 @@ class TaskController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**

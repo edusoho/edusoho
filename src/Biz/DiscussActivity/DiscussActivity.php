@@ -17,7 +17,7 @@ class DiscussActivity extends Activity
     protected function registerListeners()
     {
         return array(
-            'text.finish' => 'Biz\\DiscussActivity\\Listener\\DiscussFinishListener'
+            'discuss.finish' => 'Biz\\DiscussActivity\\Listener\\DiscussFinishListener'
         );
     }
 

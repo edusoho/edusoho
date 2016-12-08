@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -126,6 +127,29 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateCourseStatistics($id, $fields)
+    {
+        if (empty($fields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        $updateFields = array();
+
+        foreach ($fields as $field) {
+            if ($field === 'studentCount') {
+                $updateFields['studentCount'] = $this->countStudentsByCourseId($id);
+            } elseif ($field === 'taskCount') {
+                $updateFields['taskCount'] = $this->getTaskService()->countTasksByCourseId($id);
+            }
+        }
+
+        if (empty($updateFields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        return $this->getCourseDao()->update($id, $updateFields);
+    }
+
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
@@ -227,6 +251,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $students;
     }
 
+    public function countStudentsByCourseId($courseId)
+    {
+        return $this->getMemberDao()->count(array(
+            'courseId' => $courseId,
+            'role'     => 'student'
+        ));
+    }
+
     public function isCourseMember($courseId, $userId)
     {
         $role = $this->getUserRoleInCourse($courseId, $userId);
@@ -268,7 +300,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         //TODO create order
 
-        return $this->getMemberDao()->create($fields);
+        $result = $this->getMemberDao()->create($fields);
+
+        $this->biz['dispatcher']->dispatch("course.student.create", new Event($result));
+        return $result;
     }
 
     public function removeCourseStudent($courseId, $userId)
@@ -286,7 +321,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
 
-        return $this->getMemberDao()->delete($member['id']);
+        $result = $this->getMemberDao()->delete($member['id']);
+
+        $this->biz['dispatcher']->dispatch("course.student.create", new Event($member));
+
+        return $result;
     }
 
     public function getUserRoleInCourse($courseId, $userId)
@@ -327,10 +366,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($user->hasPermission('admin_course')) {
             return true;
         }
+        
+        //TODO 未实现
+//        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+//            return true;
+//        }
 
-        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-            return true;
-        }
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {

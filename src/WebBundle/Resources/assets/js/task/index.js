@@ -38,7 +38,7 @@ class TaskShow extends Emitter {
   bindEvent(){
     let learnedTime = 0;
     let minute = 60 * 1000;
-    let timeStep = 2; // 分钟
+    let timeStep = 0.1; // 分钟
     this.delay('doing', (timeStep) => {
 
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
@@ -79,7 +79,7 @@ class TaskShow extends Emitter {
   sidebar() {
     this.sideBar = new SideBar({
       element: '.js-task-dashboard-page',
-      activePlugins: ['task',"note", "question"],
+      activePlugins: ['task'],
       courseId: this.courseId,
       taskId: this.taskId,
     });

@@ -20,6 +20,8 @@ interface TaskService
 
     public function findTasksByCourseId($courseId);
 
+    public function countTasksByCourseId($courseId);
+
     public function findTasksFetchActivityByCourseId($courseId);
 
     public function findUserTasksFetchActivityAndResultByCourseId($courseId);
@@ -30,26 +32,27 @@ interface TaskService
 
     public function finishTask($taskId);
 
+    public function canFinish($taskId);
+
     public function tryTakeTask($taskId);
 
     /**
      * return next Task that can be learned of the  course plan, or return empty array()
-     * @param $taskId
+     * @param  $taskId
      * @return mixed
-     *
      */
     public function getNextTask($taskId);
 
     /**
      *  return if the task can learn or not
-     * @param $taskId
-     * @return  True|False
+     * @param  $taskId
+     * @return True|False
      */
     public function canLearnTask($taskId); // 任务是否可学
 
     /**
      * return if the task has been learned
-     * @param $taskId
+     * @param  $taskId
      * @return True|False
      */
     public function isTaskLearned($taskId);
@@ -57,5 +60,7 @@ interface TaskService
     public function getMaxSeqByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
-}
 
+    public function finishTaskResult($taskId);
+
+}

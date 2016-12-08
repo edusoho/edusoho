@@ -1,6 +1,7 @@
 import  videojs from 'video.js'
 import Emitter from 'es6-event-emitter';
-require('file-loader?name=libs/[name].[ext]!nodeModulesDir/video.js/dist/video-js/video-js.swf');
+let videoSwf = require('video.js/dist/video-js/video-js.swf');
+let webpack_base_url = 'http://127.0.0.1:3030';
 class LocalVideoPlayer extends Emitter {
   constructor(options) {
     super();
@@ -19,12 +20,11 @@ class LocalVideoPlayer extends Emitter {
       techOrder: techOrder,
       loop: false,
       flash: {
-        swf: '/build/libs/video-js.swf'
+        swf: webpack_base_url + videoSwf
       },
     });
 
     player.dimensions('100%', '100%');
-    console.log(this.options.url);
     player.src(this.options.url);
 
     player.on('error', error => {
@@ -78,6 +78,7 @@ class LocalVideoPlayer extends Emitter {
   }
 
   _onEnded(e) {
+    this.player.stop();
     this.player.currentTime(0);
   }
 

@@ -1,3 +1,4 @@
+{% set chapter = task %}
 <li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ chapter.id }}">
   {% set tasks = array_index(chapter.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
@@ -5,7 +6,7 @@
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    </i>第<span class="number">{{ chapter.number }}</span>课时： {{ task.title }}
+    </i>第<span class="number">{{ chapter.number }}</span>课时： {{ task.title }}  {% if task.status != 'published' %}<span class="color-warning"> (未发布)</span> {% endif %}
     {% if task.activity.mediaType is same as('live') %}
       {% if task.result.status|default('') == 'finished' %}
         <span class="color-gray mls">已结束</span>

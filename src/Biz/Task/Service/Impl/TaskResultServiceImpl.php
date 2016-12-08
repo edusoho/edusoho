@@ -70,7 +70,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if(!$user->isLogin()){
-            throw $this->createAccessDeniedException('无权访问');
+            throw $this->createAccessDeniedException('unlogin');
         }
 
         $conditions = array(
