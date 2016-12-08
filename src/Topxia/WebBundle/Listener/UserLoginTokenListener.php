@@ -90,12 +90,12 @@ class UserLoginTokenListener
         }
   
         if ($userLoginToken != $user['loginSessionId']) {
-            $request->getSession()->invalidate();
             if ($request->isXmlHttpRequest()) {
                 $response = new Response('LoginLimit', 403);
                 $response->headers->clearCookie('REMEMBERME');
                 $response->send(); 
             }
+            $request->getSession()->invalidate();
 
             $this->container->get("security.token_storage")->setToken(null);
 
