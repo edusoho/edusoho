@@ -44,6 +44,7 @@ $biz = new \Codeages\Biz\Framework\Context\Biz(array(
 
 $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
 $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
+$biz->register(new \Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
 $biz['subscribers'] = new \ArrayObject();
 $biz->boot();
 
