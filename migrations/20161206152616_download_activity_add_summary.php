@@ -11,7 +11,7 @@ class DownloadActivityAddSummary extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db = exec("
+        $db->exec("
           ALTER TABLE `download_file` ADD COLUMN  `summary` TEXT COMMENT '文件描述';
         ");
     }
@@ -23,7 +23,7 @@ class DownloadActivityAddSummary extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db = exec("
+        $db->exec("
           ALTER TABLE `download_file` DROP  COLUMN `summary`;
         ");
 
