@@ -127,8 +127,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
-        if ($fields['price']) {
+        if (isset($fields['price'])) {
             $fields['price'] = round(floatval($fields['price']) * 100, 0);
+        }
+
+        if (isset($fields['services'])) {
+            $fields['services'] = json_decode($fields['services'], true);
         }
 
         return $this->getCourseDao()->update($id, $fields);

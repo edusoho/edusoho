@@ -1,3 +1,8 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+import MultiGroup from '../../../common/widget/multi-group';
+import sortList from 'common/sortable';
+
 class Marketing {
   constructor() {
     this.init();
@@ -5,6 +10,10 @@ class Marketing {
 
   init() {
     let $form = $('#course-marketing-form');
+
+    ReactDOM.render( <MultiGroup items = {$("#course-services").data("init-value")} fieldName={$("#course-services").data('field-name')} sortable={true}/>,
+      document.getElementById('course-services')
+    );
 
     let validator = $form.validate({
       onkeyup: false,
