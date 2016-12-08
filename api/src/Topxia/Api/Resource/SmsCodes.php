@@ -40,6 +40,14 @@ class SmsCodes extends BaseResource
             return array('img_code' => $str, 'verified_token' => $imgToken['token'], 'status' => 'limited');
         }
 
+        if (isset($fields['img_code'])&& !isset($fields['verified_token'])) {
+            return $this->error('500', '非法请求');
+        }
+
+        if (!isset($fields['img_code'])&& isset($fields['verified_token'])) {
+            return $this->error('500', '非法请求');
+        }
+
         if (isset($fields['img_code']) && isset($fields['verified_token'])) {
             $imgCode  = $request->request->get('img_code');
             $imgToken = $request->request->get('verified_token');
