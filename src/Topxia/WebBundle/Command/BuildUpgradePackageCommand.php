@@ -196,6 +196,10 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
+        if(!is_file("{$root}/{$opFile}")){
+            return;
+        }
+
         $this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
     }
 
