@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
+import './style.less'
 
 class MultiGroup extends Component {
   constructor(props) {
@@ -41,11 +42,11 @@ class MultiGroup extends Component {
   }
 
   render (){
+    console.log('render parent');
     return (
-      <div className="panes">
+      <div className="multi-group">
         <List removeItem={(index)=>this.removeItem(index)} compKey={this.state.key} sortable={this.props.sortable} list={this.state.items}  />
-        <InputGroup addItem={(item)=>this.addItem(item)}/>
-        <input type='hidden' id={this.state.key} name={this.props.fieldName} value={JSON.stringify(this.state.items)} />
+        <InputGroup addItem={(item)=>this.addItem(item)} search = {false}/>
       </div>
     );
   }

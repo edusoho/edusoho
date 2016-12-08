@@ -4,6 +4,7 @@ import React from 'react';
 import MultiGroup from '../../../common/widget/multi-group';
 import sortList from 'common/sortable';
 
+
 import Select, { Option } from 'rc-select';
 
 //测试数据
@@ -83,6 +84,7 @@ function renderMultiGroupComponent(elementId){
 
 renderMultiGroupComponent('course-goals');
 renderMultiGroupComponent('intended-students', $('#intended-students').data('init-value'));
+
 
 // sortList({
 //   element: ".sortable-list",
