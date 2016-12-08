@@ -1367,6 +1367,10 @@ password_reset_update:
     path:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+raw_password_update:
+    pattern: /raw/password/update
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:changeRawPassword }
+
 password_reset_check_mobile:
     path:  /password/reset/check/mobile
     defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
