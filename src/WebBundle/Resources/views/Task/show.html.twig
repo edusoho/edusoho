@@ -13,6 +13,7 @@
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
+    <input type="hidden" name="plugins_url" value="{{ path('course_task_show_plugins', {courseId: task.courseId, taskId: task.id}) }}">
   </div>
 
   <div class="task-dashboard-page js-task-dashboard-page">

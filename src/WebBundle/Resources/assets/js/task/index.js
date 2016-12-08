@@ -1,7 +1,8 @@
-import SideBar from './widget/sidebar';
+import TaskSidebar from './widget/sidebar';
 import TaskUi from './widget/task-ui';
 import TaskEventEmitter from './widget/task-event-emitter';
 import Emitter from 'common/es-event-emitter'
+import ReactDom from 'react-dom';
 
 class TaskShow extends Emitter {
   constructor({element, courseId, taskId, mode}) {
@@ -20,7 +21,7 @@ class TaskShow extends Emitter {
 
   init() {
     this.initPlugin();
-    this.sidebar();
+    this.initSidebar();
 
     if(this.mode != 'preview'){
       this.bindEvent();
@@ -76,13 +77,11 @@ class TaskShow extends Emitter {
     this.ui.learned();
   }
 
-  sidebar() {
-    this.sideBar = new SideBar({
-      element: '.js-task-dashboard-page',
-      activePlugins: ['task',"note", "question"],
-      courseId: this.courseId,
-      taskId: this.taskId,
-    });
+  initSidebar() {
+    ReactDom.render(
+        <TaskSidebar url={$('body').find('#js-hidden-data [name="plugins_url"]').val()}/>,
+        document.getElementById('dashboard-sidebar')
+    );
   }
 }
 

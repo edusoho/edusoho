@@ -43,6 +43,28 @@ class TaskController extends BaseController
         ));
     }
 
+    public function taskPluginsAction(Request $request, $courseId, $taskId)
+    {
+        $task = $this->tryLearnTask($courseId, $taskId);
+        return $this->createJsonResponse(array(
+            'task-list' => array(
+                'name' => '课程',
+                'icon' => 'es-icon-menu',
+                'controller' => 'TaskPluginTaskListController'
+            ),
+            'note' => array(
+                'name' => '笔记',
+                'icon' => 'es-icon-edit',
+                'controller' => 'TaskPluginNoteController'
+            ),
+            'question' => array(
+                'name' => '问答',
+                'icon' => 'es-icon-help',
+                'controller' => 'TaskPluginQuestionController'
+            ),
+        ));
+    }
+
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {

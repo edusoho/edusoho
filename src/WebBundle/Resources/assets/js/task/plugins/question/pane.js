@@ -19,7 +19,7 @@ class QuestionPane {
 
   showList() {
     let toolbar = this.plugin.toolbar;
-    $.get('http://www.esdev.com/lessonplugin/question/init', {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
+    $.get('/lessonplugin/question/init', {courseId:toolbar.courseId, lessonId:toolbar.lessonId}, (html) => {
         this._dataInitialized = true;
         this.$element.html(html);
         this.createFormElement = $('#' + this.createFormId);

@@ -5,7 +5,7 @@ import 'store';
 
 class SideBar {
 
-  constructor({element,courseId, taskId, activePlugins}) {
+  constructor({element, courseId, taskId, activePlugins}) {
     this.$element = $(element);
     this.courseId = courseId;
     this.taskId = taskId;
