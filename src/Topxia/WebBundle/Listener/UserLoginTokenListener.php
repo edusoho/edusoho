@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Topxia\Common\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserLoginTokenListener
 {
@@ -87,13 +88,15 @@ class UserLoginTokenListener
         if (empty($userLoginToken) && !empty($REMEMBERME)) {
             return;
         }
-
+  
         if ($userLoginToken != $user['loginSessionId']) {
             $request->getSession()->invalidate();
-
             if ($request->isXmlHttpRequest()) {
-                throw new AccessDeniedException("LoginLimit", 403); 
+                $response = new Response('LoginLimit', 403);
+                $response->headers->clearCookie('REMEMBERME');
+                $response->send(); 
             }
+
             $this->container->get("security.token_storage")->setToken(null);
 
             $goto = $this->container->get('router')->generate('login');
