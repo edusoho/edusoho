@@ -1,3 +1,5 @@
+{% set questionTypeDict = getQuestionTypes() %}
+
 <div class="media testpaper-result">
   <div class="testpaper-result-total">
     <div class="well">
@@ -17,7 +19,7 @@
         <thead>
           <th></th>
           {% for type in questionTypes|default([]) %}
-            <th>{{ dict_text('questionType',type) }} <small class="text-muted">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
+            <th>{{ questionTypeDict[type] }} <small class="text-muted">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
           {% endfor %}
         </thead>
         <tbody>

@@ -15,11 +15,11 @@ class HomeworkManageController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在！");
+            throw $this->createResourceNotFoundException('course', $courseId);
         }
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+            throw $this->createResourceNotFoundException('lesson', $lessonId);
         }
 
         if ($request->getMethod() == 'POST') {
@@ -49,17 +49,17 @@ class HomeworkManageController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在！");
+            throw $this->createResourceNotFoundException('course', $courseId);
         }
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+            throw $this->createResourceNotFoundException('lessonId', $lessonId);
         }
 
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
 
         if (empty($homework)) {
-            throw $this->createNotFoundException("作业(#{$homeworkId})不存在！");
+            throw $this->createResourceNotFoundException('homework', $homeworkId);
         }
 
         $homeworkItems      = $this->getHomeworkService()->findItemsByHomeworkId($homeworkId);
@@ -113,7 +113,7 @@ class HomeworkManageController extends BaseController
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
 
         if (empty($homework)) {
-            throw $this->createNotFoundException('作业不存在');
+            throw $this->createResourceNotFoundException('homework', $homeworkId);
         }
 
         if ($request->getMethod() == 'POST') {
@@ -166,15 +166,15 @@ class HomeworkManageController extends BaseController
         ));
     }
 
-    public function questionPickerAction(Request $request, $courseId)
+    public function questionPickerAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = $request->query->all();
 
-        if (empty($conditions['target'])) {
-            $conditions['targetPrefix'] = "course-{$course['id']}";
-        }
+        /*if (empty($conditions['target'])) {
+        $conditions['targetPrefix'] = "course-{$courseSet['id']}";
+        }*/
 
         $conditions['parentId'] = 0;
 
@@ -188,54 +188,51 @@ class HomeworkManageController extends BaseController
             $conditions['stem'] = trim($conditions['keyword']);
         }
 
-        $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-
         $paginator = new Paginator(
             $request,
-            $this->getQuestionService()->searchQuestionsCount($conditions),
+            $this->getQuestionService()->searchCount($conditions),
             7
         );
 
-        $questions = $this->getQuestionService()->searchQuestions(
+        $questions = $this->getQuestionService()->search(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+        /*$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));*/
 
         return $this->render('WebBundle:HomeworkManage:question-picker.html.twig', array(
-            'course'        => $course,
+            'courseSet'     => $courseSet,
             'questions'     => $questions,
-            'replace'       => $replace,
+            'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($course, true),
-            'targets'       => $targets,
-            'conditions'    => $conditions
+            'targetChoices' => $this->getQuestionRanges($courseSet),
+            //'targets'       => $targets,
+            'conditions'    => $conditions,
+            'target'        => $request->query->get('target', 'testpaper')
         ));
     }
 
-    public function questionPickedAction(Request $request, $courseId)
+    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
+        $question = $this->getQuestionService()->get($questionId);
 
         if (empty($question)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('question', $questionId);
         }
 
         $subQuestions = array();
 
-        $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
-
-        return $this->render('WebBundle:HomeworkManage:question-picked.html.twig', array(
-            'course'       => $course,
+        return $this->render('WebBundle:HomeworkManage:question-picked-tr.html.twig', array(
+            'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,
-            'targets'      => $targets,
-            'type'         => $question['type']
+            'type'         => $question['type'],
+            'target'       => $request->query->get('target', 'testpaper')
         ));
     }
 
@@ -250,7 +247,7 @@ class HomeworkManageController extends BaseController
         $homework = $this->getHomeworkService()->getHomework($id);
 
         if (empty($homework)) {
-            throw $this->createNotFoundException();
+            throw $this->createResourceNotFoundException('homework', $homeworkId);
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
@@ -430,14 +427,19 @@ class HomeworkManageController extends BaseController
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    protected function getQuestionService()
+    {
+        return $this->createService('Question:QuestionService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getQuestionService()
-    {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
     protected function getMessageService()

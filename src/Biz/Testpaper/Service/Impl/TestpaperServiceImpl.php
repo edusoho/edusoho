@@ -234,14 +234,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaperBuilder->build($fields);
     }
 
-    public function submitTestpaper($resultId, $answers)
-    {
-        $result           = $this->getTestpaperResult($resultId);
-        $testpaperBuilder = $this->getTestpaperBuilder($result['type']);
-
-        return $testpaperBuilder->submit($fields);
-    }
-
     public function finishTest($resultId, $formData)
     {
         $user = $this->getCurrentUser();
@@ -416,8 +408,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $accuracy = array();
 
-        foreach ($itemResults as $itemResult) {
-            $item = $items[$itemResult['questionId']];
+        foreach ($items as $item) {
+            $itemResult = empty($itemResults[$item['questionId']]) ? array() : $itemResults[$item['questionId']];
 
             if ($item['parentId'] > 0 || $item['questionType'] == 'material') {
                 $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
@@ -849,24 +841,27 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'wrong'      => empty($resultStatus['wrong']) ? 0 : $resultStatus['wrong'],
             'noAnswer'   => empty($resultStatus['noAnswer']) ? 0 : $resultStatus['noAnswer']
         );
-        $resultStatus['score'] += $questionResult['score'];
+
+        $score  = empty($questionResult['score']) ? 0 : $questionResult['score'];
+        $status = empty($questionResult['status']) ? 'noAnswer' : $questionResult['status'];
+        $resultStatus['score'] += $score;
         $resultStatus['totalScore'] += $item['score'];
 
         $resultStatus['all']++;
 
-        if ($questionResult['status'] == 'right') {
+        if ($status == 'right') {
             $resultStatus['right']++;
         }
 
-        if ($questionResult['status'] == 'partRight') {
+        if ($status == 'partRight') {
             $resultStatus['partRight']++;
         }
 
-        if ($questionResult['status'] == 'wrong') {
+        if ($status == 'wrong') {
             $resultStatus['wrong']++;
         }
 
-        if ($questionResult['status'] == 'noAnswer') {
+        if ($status == 'noAnswer') {
             $resultStatus['noAnswer']++;
         }
 

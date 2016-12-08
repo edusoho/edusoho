@@ -10,7 +10,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 
     public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finish' ORDER BY id DESC ";
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finished' ORDER BY id DESC ";
         return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId));
     }
 

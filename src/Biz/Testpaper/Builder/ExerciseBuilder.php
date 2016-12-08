@@ -4,12 +4,16 @@ namespace Biz\Testpaper\Builder;
 use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
 use Biz\Testpaper\Builder\TestpaperLibBuilder;
-use Topxia\Common\Exception\InvalidArgumentException;
 
 class ExerciseBuilder extends Factory implements TestpaperLibBuilder
 {
     public function build($fields)
     {
+        $fields['type']            = 'exercise';
+        $fields['status']          = 'open';
+        $fields['pattern']         = 'questionType';
+        $fields['passedCondition'] = array(0);
+
         $fields = $this->filterFields($fields);
         return $this->getTestpaperService()->createTestpaper($fields);
     }
@@ -27,7 +31,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         }
     }
 
-    public function showTestItems($testId, $resultId)
+    public function showTestItems($testId, $resultId = 0)
     {
         $exercise = $this->getTestpaperService()->getTestpaper($testId);
 
@@ -69,29 +73,32 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
 
     public function filterFields($fields, $mode = 'create')
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
-            throw new \InvalidArgumentException('exercise field is invalid');
+        if (!empty($fields['questionTypes'])) {
+            $filtedFields['metas']['questionTypes'] = $fields['questionTypes'];
         }
 
-        $filtedFields = array();
+        if (!empty($fields['questionTypes'])) {
+            $filtedFields['metas']['difficulty'] = $fields['difficulty'];
+        }
 
-        $filtedFields['itemCount'] = $fields['itemCount'];
-        $filtedFields['courseId']  = $fields['courseId'];
-        $filtedFields['lessonId']  = $fields['lessonId'];
-        $filtedFields['type']      = 'exercise';
-        $filtedFields['status']    = 'open';
-        $filtedFields['pattern']   = 'questionType';
-        $filtedFields['copyId']    = empty($fields['copyId']) ? 0 : $fields['copyId'];
-        $filtedFields['metas']     = empty($fields['metas']) ? array() : $fields['metas'];
-        $filtedFields['name']      = empty($fields['name']) ? '' : $fields['name'];
+        if (!empty($fields['range'])) {
+            $filtedFields['metas']['range'] = $fields['range'];
+        }
 
-        $filtedFields['metas']['questionTypes'] = empty($fields['questionTypes']) ? array() : $fields['questionTypes'];
-        $filtedFields['metas']['difficulty']    = empty($fields['difficulty']) ? '' : $fields['difficulty'];
-        $filtedFields['metas']['range']         = empty($fields['range']) ? 'course' : $fields['range'];
+        $fields = ArrayToolkit::parts($fields, array(
+            'name',
+            'itemCount',
+            'courseId',
+            'lessonId',
+            'type',
+            'status',
+            'pattern',
+            'copyId',
+            'metas',
+            'passedCondition'
+        ));
 
-        $filtedFields['passedCondition'] = array(0);
-
-        return $filtedFields;
+        return $fields;
     }
 
     public function updateSubmitedResult($resultId, $usedTime)

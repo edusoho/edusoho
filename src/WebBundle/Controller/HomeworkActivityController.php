@@ -11,9 +11,23 @@ class HomeworkActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $user = $this->getUser();
+
+        $activity       = $this->getActivityService()->getActivity($id);
+        $homework       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
+
+        if (!$homeworkResult || ($homeworkResult['status'] == 'doing' && !$homeworkResult['updateTime'])) {
+            return $this->render('WebBundle:HomeworkActivity:show.html.twig', array(
+                'activity'       => $activity,
+                'homeworkResult' => $homeworkResult,
+                'homework'       => $homework,
+                'courseId'       => $activity['fromCourseId']
+            ));
+        }
 
         return $this->forward('WebBundle:Homework:startDo', array(
+            'lessonId'   => $activity['id'],
             'homeworkId' => $activity['mediaId']
         ));
     }

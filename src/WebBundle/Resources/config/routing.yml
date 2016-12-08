@@ -291,12 +291,17 @@ course_manage_homework_create:
   path: /course/{courseId}/manage/lesson/{lessonId}/homework/create
   defaults: { _controller: WebBundle:HomeworkManage:create }
 
-course_manage_homework_question_picked:
-  path: /course/{courseId}/manage/question/picked
-  defaults: { _controller: WebBundle:HomeworkManage:questionPicked }
+course_set_manage_homework_question_picker:
+  path: /course_set/{id}/manage/homework/question/picker
+  defaults: { _controller: WebBundle:HomeworkManage:questionPicker }
+
+course_set_manage_homework_question_picked:
+  path:  /course_set/{courseSetId}/manage/homework/question/{questionId}/picked
+  defaults: { _controller: WebBundle:HomeworkManage:pickedQuestion }
+
 
 homework_start_do:
-    pattern: /homework/{homeworkId}/startDo
+    pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
     defaults: { _controller: WebBundle:Homework:startDo }
 
 homework_show:
@@ -323,15 +328,15 @@ course_manage_exercise_check:
   defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
 
 exercise_start_do:
-    pattern: /exercise/{exerciseId}/startDo
+    path: /lesson/{lessonId}/exercise/{exerciseId}/startDo
     defaults: { _controller: WebBundle:Exercise:startDo }
 
 exercise_show:
-    pattern: /exercise/{resultId}/show
+    path: /exercise/{resultId}/show
     defaults: { _controller: WebBundle:Exercise:doTest }
 
 exercise_result_show:
-    pattern: /exercise/result/{resultId}/show
+    path: /exercise/result/{resultId}/show
     defaults: { _controller: WebBundle:Exercise:showResult }
 
 exercise_finish:

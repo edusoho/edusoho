@@ -39,7 +39,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($testId, $resultId)
+    public function showTestItems($testId, $resultId = 0)
     {
         $test  = $this->getTestpaperService()->getTestpaper($testId);
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);

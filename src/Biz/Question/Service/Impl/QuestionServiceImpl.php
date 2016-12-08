@@ -228,6 +228,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function filterQuestionFields($conditions)
     {
+        if (!empty($conditions['range']) && $conditions['range'] == 'lesson') {
+            $conditions['lessonId'] = 0;
+        }
+
+        if (empty($conditions['difficulty'])) {
+            unset($conditions['difficulty']);
+        }
+
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
             unset($conditions['keyword']);

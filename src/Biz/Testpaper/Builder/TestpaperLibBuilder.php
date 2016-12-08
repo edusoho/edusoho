@@ -7,7 +7,7 @@ interface TestpaperLibBuilder
 
     public function canBuild($options);
 
-    public function showTestItems($testId, $resultId);
+    public function showTestItems($testId, $resultId = 0);
 
     public function updateSubmitedResult($resultId, $usedTime);
 }

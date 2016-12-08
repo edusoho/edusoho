@@ -14,8 +14,14 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
             throw new \InvalidArgumentException('homework field is invalid');
         }
         $questionIds = $fields['questionIds'];
-        $fields      = $this->filterFields($fields);
-        $homework    = $this->getTestpaperService()->createTestpaper($fields);
+
+        $fields['status']  = 'open';
+        $fields['pattern'] = 'questionType';
+        $fields['type']    = 'homework';
+
+        $fields = $this->filterFields($fields);
+
+        $homework = $this->getTestpaperService()->createTestpaper($fields);
 
         $this->createQuestionItems($homework['id'], $questionIds);
 
@@ -29,7 +35,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($testId, $resultId)
+    public function showTestItems($testId, $resultId = 0)
     {
         $test  = $this->getTestpaperService()->getTestpaper($testId);
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
@@ -72,36 +78,31 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
 
     public function filterFields($fields, $mode = 'create')
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
-            throw new \InvalidArgumentException('homework field is invalid');
-        }
-
-        $filtedFields = array();
-
-        $filtedFields['courseId'] = $fields['courseId'];
-        $filtedFields['lessonId'] = $fields['lessonId'];
-        $filtedFields['type']     = 'homework';
-
-        if (!empty($fields['name'])) {
-            $filtedFields['name'] = $fields['name'];
-        }
-
-        if (!empty($fields['description'])) {
-            $filtedFields['description'] = $fields['description'];
-        }
-
-        if (!empty($fields['passedCondition'])) {
-            $filtedFields['passedCondition'] = $fields['correctPercent'];
+        if (!empty($fields['correctPercent'])) {
+            $fields['passedCondition'] = $fields['correctPercent'];
         }
 
         if (!empty($fields['questionIds'])) {
-            $filtedFields['itemCount'] = count($fields['questionIds']);
+            $fields['itemCount'] = count($fields['questionIds']);
         }
 
-        $filtedFields['status']  = 'open';
-        $filtedFields['pattern'] = 'questionType';
+        $fields = ArrayToolkit::parts($fields, array(
+            'name',
+            'description',
+            'courseId',
+            'lessonId',
+            'type',
+            'status',
+            'limitedTime',
+            'score',
+            'passedCondition',
+            'itemCount',
+            'copyId',
+            'pattern',
+            'metas'
+        ));
 
-        return $filtedFields;
+        return $fields;
     }
 
     public function updateSubmitedResult($resultId, $usedTime)

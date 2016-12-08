@@ -1,13 +1,7 @@
 {% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
 
-{% block paper_description %}
-  <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
-  <div class="testpaper-metas">
-    {{'共 %paper.itemCount% 题，总分 %paper.score% 分'|trans({'%paper.itemCount%': paper.itemCount,'%paper.score%': paper.score})}}
-      {% if paper['passedCondition'][0] > 0 %}，{{'及格为 %paper.passedScore% 分'|trans({'%paper.passedScore%': paper['passedCondition']['0'] })}}{% endif %}
-      {% if paper.limitedTime > 0 %}，{{'请在 %paper.limitedTime% 分钟内作答'|trans({'%paper.limitedTime%': paper.limitedTime})}}{% endif %}
-      。
-  </div>
+{% block paper_header %}
+
 {% endblock %}
 
 {% block paper_question_type_bar %}

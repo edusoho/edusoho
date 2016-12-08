@@ -24,17 +24,17 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，
-				{% if question.testResult.status == 'right' %}
+				{% if question.testResult.status|default('noAnswer') == 'right' %}
 					{{'回答正确'|trans}}
-				{% elseif question.testResult.status == 'partRight' %}
+				{% elseif question.testResult.status|default('noAnswer') == 'partRight' %}
 					{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>
 					{{'。回答部分正确。'|trans}}
 					{% if showScore|default(1) %}
 						{{'得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
 					{% endif %}
-				{% elseif question.testResult.status == 'wrong' %}
+				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
 				{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'你答错了'|trans}}
-				{% elseif question.testResult.status == 'noAnswer' %}
+				{% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
 				  {{'你未答题'|trans}}
 				{% endif %}
 		  </div>

@@ -14,13 +14,13 @@
 			    	<li>
 			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="text-success">{{ answer|join(' 或 '|trans) }}</strong>
 			    	  {% if userAnswer == '' %}
-			    	  {{'。你未回答'|trans}}
-			    	  {% elseif question.testResult.status == "right" %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
-			    	  {% elseif question.testResult.status == "partRight" %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
+			    	  	{{'。你未回答'|trans}}
+			    	  {% elseif question.testResult.status|default('noAnswer') == "right" %}
+			    	  	{{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
+			    	  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
+			    	  	{{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
-			    	  {{'，你的答案'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
+			    	  	{{'，你的答案'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}

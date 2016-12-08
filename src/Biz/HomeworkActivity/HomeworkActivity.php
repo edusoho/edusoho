@@ -66,8 +66,8 @@ class HomeworkActivity extends Activity
     protected function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array(
-            'finishCondition',
-            'finishScore'))
+            'finishCondition'
+        ))
         ) {
             throw new InvalidArgumentException('homework fields is invalid');
         }
@@ -77,8 +77,8 @@ class HomeworkActivity extends Activity
             'description',
             'questionIds',
             'finishCondition',
-            'finisheScore',
-            'fromCourseId'
+            'fromCourseId',
+            'fromCourseSetId'
         ));
 
         $finishCondition = array();
@@ -87,14 +87,9 @@ class HomeworkActivity extends Activity
             $finishCondition['type'] = $fields['finishCondition'];
         }
 
-        if (!empty($fields['finisheScore'])) {
-            $finishCondition['finisheScore'] = $fields['finisheScore'];
-            unset($fields['finisheScore']);
-        }
-
         $fields['finishCondition'] = $finishCondition;
 
-        $fields['courseId'] = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
+        $fields['courseId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
         $fields['lessonId'] = 0;
         $fields['name']     = empty($fields['title']) ? '' : $fields['title'];
 

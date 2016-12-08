@@ -110,10 +110,11 @@ class TestpaperController extends BaseController
         }
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
+        $limitedTime = $testpaperResult['limitedTime'] ? $testpaperResult['limitedTime'] : $testpaperActivity['limitedTime'];
 
         return $this->render('WebBundle:Testpaper:start-do-show.html.twig', array(
             'questions'         => $questions,
-            'limitTime'         => $testpaperResult['limitedTime'] * 60,
+            'limitedTime'       => $limitedTime,
             'paper'             => $testpaper,
             'paperResult'       => $testpaperResult,
             'activity'          => $activity,
@@ -148,7 +149,7 @@ class TestpaperController extends BaseController
         }
 
         $builder   = $this->getTestpaperService()->getTestpaperBuilder($testpaper['type']);
-        $questions = $builder->showTestItems($testpaperResult['id']);
+        $questions = $builder->showTestItems($testpaper['id'], $testpaperResult['id']);
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);
 
@@ -158,7 +159,7 @@ class TestpaperController extends BaseController
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
-        $attachments = $this->findAttachments($testpaper['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
         return $this->render('WebBundle:Testpaper:result.html.twig', array(
             'questions'     => $questions,
             'accuracy'      => $accuracy,

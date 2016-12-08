@@ -9,7 +9,7 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class ExerciseController extends BaseController
 {
-    public function startDoAction(Request $request, $exerciseId)
+    public function startDoAction(Request $request, $lessonId, $exerciseId)
     {
         $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
         if (empty($exercise)) {
@@ -18,7 +18,7 @@ class ExerciseController extends BaseController
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($exercise['courseId']);
 
-        $result = $this->getTestpaperService()->startTestpaper($exerciseId, $exercise['lessonId']);
+        $result = $this->getTestpaperService()->startTestpaper($exercise['id'], $lessonId);
 
         if ($result['status'] == 'doing') {
             return $this->redirect($this->generateUrl('exercise_show', array(
@@ -81,7 +81,7 @@ class ExerciseController extends BaseController
         }
 
         $builder   = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
-        $questions = $builder->showTestItems($exerciseResult['id']);
+        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id']);
 
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 

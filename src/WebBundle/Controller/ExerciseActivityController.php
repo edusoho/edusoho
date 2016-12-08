@@ -9,9 +9,23 @@ class ExerciseActivityController extends BaseController implements ActivityActio
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $user = $this->getUser();
+
+        $activity       = $this->getActivityService()->getActivity($id);
+        $exercise       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
+
+        if (!$exerciseResult || ($exerciseResult['status'] == 'doing' && !$exerciseResult['updateTime'])) {
+            return $this->render('WebBundle:ExerciseActivity:show.html.twig', array(
+                'activity'       => $activity,
+                'exerciseResult' => $exerciseResult,
+                'exercise'       => $exercise,
+                'courseId'       => $activity['fromCourseId']
+            ));
+        }
 
         return $this->forward('WebBundle:Exercise:startDo', array(
+            'lessonId'   => $activity['id'],
             'exerciseId' => $activity['mediaId']
         ));
     }

@@ -1,9 +1,11 @@
 {% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
 
+{% block paper_header %}{% endblock %}
+
 {% block paper_body %}
   <div class="panel panel-default border-radius-none">
     <div class="panel-heading">
-      {{ '作业'|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':0}) }}</small>
+      {{ '作业'|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':paper.itemCount}) }}</small>
     </div>
 
     <div class="panel-body">
@@ -12,7 +14,10 @@
           {% if question.isDelete|default(false) %}
             {% include 'WebBundle:Question/Part:question-delete.html.twig' with {showScore:0,question:question}%}
           {% else %}
-            {% include question.template with {showScore:0} %}
+            {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+            {% if questionTemplate %}
+              {% include questionTemplate with {showScore:0} %}
+            {% endif %}
           {% endif %}
 
         {% endfor %}
@@ -22,8 +27,29 @@
   </div>
 {% endblock %}
 
-{% block finish_dialog_btn %}
-  <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('homework_result_show', { resultId: paperResult.id|default(0) }) }}">{{'确认提交'|trans}}</button>
+{% block testpaper_finished_dialog %}
+  <div id="testpaper-finished-dialog" class="modal in" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body task-state-modal">
+          <div class="title font-blod">
+            <i class="es-icon es-icon-zanting color-warning"></i>
+            {{'确认提交'|trans}}
+          </div>
+          <div class="content">
+            <div class="content-title mbl">
+              {{'您真的要提交吗？'|trans}}
+            </div>
+          </div>
+          <div class="footer text-right">
+            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
+              {{'确认提交'|trans}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block paper_sidebar %}

@@ -81,7 +81,7 @@ class HomeworkController extends BaseController
         }
 
         $builder   = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);
-        $questions = $builder->showTestItems($homeworkResult['id']);
+        $questions = $builder->showTestItems($homework['id'], $homeworkResult['id']);
 
         $student = $this->getUserService()->getUser($homeworkResult['userId']);
 

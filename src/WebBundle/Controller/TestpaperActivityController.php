@@ -14,21 +14,21 @@ class TestpaperActivityController extends BaseController implements ActivityActi
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], 0, 'testpaper');
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaperResult['status'] == 'reviewing') {
-            return $this->forward('WebBundle:Testpaper:doTestpaper', array(
-                'testId'   => $testpaperActivity['mediaId'],
-                'lessonId' => $activity['id']
+        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime'])) {
+            return $this->render('WebBundle:TestpaperActivity:show.html.twig', array(
+                'activity'          => $activity,
+                'testpaperActivity' => $testpaperActivity,
+                'testpaperResult'   => $testpaperResult,
+                'testpaper'         => $testpaper,
+                'courseId'          => $activity['fromCourseId']
             ));
         }
 
-        return $this->render('WebBundle:TestpaperActivity:show.html.twig', array(
-            'activity'          => $activity,
-            'testpaperActivity' => $testpaperActivity,
-            'testpaperResult'   => $testpaperResult,
-            'testpaper'         => $testpaper,
-            'courseId'          => $activity['fromCourseId']
+        return $this->forward('WebBundle:Testpaper:doTestpaper', array(
+            'testId'   => $testpaperActivity['mediaId'],
+            'lessonId' => $activity['id']
         ));
     }
 

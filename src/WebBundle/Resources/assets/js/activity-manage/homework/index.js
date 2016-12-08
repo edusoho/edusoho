@@ -14,11 +14,16 @@ class Homework
         filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl'),
     });
 
+    editor.on( 'change', () => {    
+      $('#homework-about-field').val(editor.getData());
+    });
+
     this._inItStep2form();
   }
 
   _initEvent() {
   	this.$element.on('click', '[data-role="pick-item"]',event=>this._showPickQuestion(event));
+
   }
 
   _showPickQuestion(event) {
@@ -71,6 +76,9 @@ class Homework
     var validator = $step3_form.validate({
       onkeyup: false,
       rules: {
+        title:{
+          required:true
+        },
         checkType: {
           required: true,
         },
@@ -79,6 +87,7 @@ class Homework
         }
       },
       messages: {
+        title: "请填写标题",
         checkType: "考评方式",
         finishCondition: "请选择完成条件"
       }
@@ -119,21 +128,31 @@ class QuestionPicked
 
   _initEvent()
   {
-    this.$form.on('click', '.item-delete-btn',event=>this._deleteItemQuestion(event));
-    this.$form.on('click', '.question-preview', event=>this._questionPreview(event));
+    this.$form.on('click', '[data-role="preview-btn"]', event=>this._questionPreview(event));
+    this.$form.on('click','[data-role="item-delete-btn"]',event => this._deleteItem(event));
+    this.$form.on('click','[data-role="replace-item"]',event => this._replaceItem(event));
   }
 
-  _deleteItemQuestion(event)
-  {
-    let $btn = $(event.currentTarget);
-    if (!confirm('您真的要删除该题目吗？')) {
-        return;
-    }
-    var $tr = $btn.parents('tr');
-    //$tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
-    $tr.remove();
-    this._refreshSeqs();
-    this._refreshPassedDivShow();
+  _deleteItem(event) {
+    let $target = $(event.currentTarget);
+    let id = $target.closest('tr').data('id');
+    $target.closest('tbody').find('[data-parent-id="'+id+'"]').remove();
+    $target.closest('tr').remove();
+  }
+
+  _replaceItem(event) {
+    let $target = $(event.currentTarget);
+    let excludeIds = [];
+
+    $('[data-role="question-body"]:visible').find('[name="questionId[]"]').each(function(){
+      excludeIds.push($(this).val());
+    })
+
+    let $modal = $("#attachment-modal",window.parent.document).modal();
+    $modal.data('manager', this);
+    $.get($target.data('url'), {excludeIds: excludeIds.join(','), type: this.currentType}, function(html) {
+        $modal.html(html);
+    });
   }
 
   _refreshSeqs()
@@ -169,6 +188,7 @@ class QuestionPicked
 
   _questionPreview(event)
   {
+    event.preventDefault();
     window.open($(event.currentTarget).data('url'), '_blank',
                 "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
   }
