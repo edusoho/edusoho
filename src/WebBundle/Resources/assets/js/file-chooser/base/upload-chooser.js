@@ -6,7 +6,7 @@ export default class UploaderChooser extends Chooser {
     this.element = $(element);
     this._sdk = undefined;
     this._initSdk()
-        ._bindEvent();
+      ._bindEvent();
   }
 
   reopen() {
@@ -14,7 +14,7 @@ export default class UploaderChooser extends Chooser {
     this._initSdk();
     this._bindEvent();
   }
-  
+
   _initSdk() {
     if (this._sdk !== undefined) {
       return this;
@@ -45,7 +45,7 @@ export default class UploaderChooser extends Chooser {
     });
 
     this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
-    
+
     return this;
   }
 

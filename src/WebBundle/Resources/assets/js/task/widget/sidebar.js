@@ -5,7 +5,7 @@ import 'store';
 
 class SideBar {
 
-  constructor({element,courseId, taskId, activePlugins}) {
+  constructor({ element, courseId, taskId, activePlugins }) {
     this.$element = $(element);
     this.courseId = courseId;
     this.taskId = taskId;
@@ -35,11 +35,11 @@ class SideBar {
 
   _initPlugin() {
     let html = '';
-    $.each(this.activePlugins, (i, name)=> {
+    $.each(this.activePlugins, (i, name) => {
       let plugin = this.plugins[name];
       html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
     });
-    $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]',(event)=>{
+    $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]', (event) => {
       let $this = $(event.currentTarget);
       if ($this.hasClass('active')) {
         this._rendBar($this, false);
@@ -89,7 +89,7 @@ class SideBar {
     if (!store.get('USER-START-LEARN')) {
       store.set('USER-START-LEARN', true);
       this._renderSiderBar(true, '2000');
-      window.setTimeout(()=> {
+      window.setTimeout(() => {
         this._renderSiderBar(false, '2000');
       }, 2000);
     }
@@ -98,7 +98,7 @@ class SideBar {
   createPane(name) {
     let $pane = this._getPane(name);
     if (!$pane) {
-      $pane = $('<div data-pane="'+ name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this.$dashboardsidebar);
+      $pane = $('<div data-pane="' + name + '" class="dashboard-pane ' + name + '-pane"></div>').appendTo(this.$dashboardsidebar);
     }
     return $pane;
   }

@@ -19,14 +19,11 @@ let activityEmitter = new ActivityEmitter();
 
 let finishType = $element.data('finishType');
 
-if(finishType == 'time'){
+if (finishType == 'time') {
   let finishDetail = $element.data('finishDetail');
   activityEmitter.receive('doing', (data) => {
-    if(finishDetail <= data.learnedTime){
+    if (finishDetail <= data.learnedTime) {
       activityEmitter.emit('finish');
     }
   });
 }
-
-
-

@@ -2,11 +2,11 @@ import notify from 'common/notify';
 import 'jquery-sortable';
 
 export const closeCourse = () => {
-  $('body').on('click', '.js-close-course', function (evt) {
+  $('body').on('click', '.js-close-course', function(evt) {
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
-    $.post($(evt.currentTarget).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function(data) {
       if (data.success) {
         notify('success', '关闭成功');
         location.reload();
@@ -19,18 +19,18 @@ export const closeCourse = () => {
 
 export const sortList = (element = '#sortable-list') => {
   let data = $(element).sortable("serialize").get();
-  $.post($(element).data('sortUrl'), {ids: data}, (response) => {
+  $.post($(element).data('sortUrl'), { ids: data }, (response) => {
     if (response) {
-        document.location.reload();
+      document.location.reload();
     }
   });
 }
 export const deleteCourse = () => {
-  $('body').on('click', '.js-delete-course', function (evt) {
+  $('body').on('click', '.js-delete-course', function(evt) {
     if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
       return;
     }
-    $.post($(evt.currentTarget).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function(data) {
       if (data.success) {
         notify('success', '删除成功');
         location.reload();
@@ -42,11 +42,11 @@ export const deleteCourse = () => {
 }
 
 export const publishCourse = () => {
-  $('body').on('click', '.js-publish-course', function (evt) {
+  $('body').on('click', '.js-publish-course', function(evt) {
     if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
       return;
     }
-    $.post($(evt.target).data('url'), function (data) {
+    $.post($(evt.target).data('url'), function(data) {
       if (data.success) {
         notify('success', '发布成功');
         location.reload();
@@ -58,7 +58,7 @@ export const publishCourse = () => {
 }
 
 export const deleteTask = () => {
-  $('body').on('click', '.delete-item', function (evt) {
+  $('body').on('click', '.delete-item', function(evt) {
     if ($(evt.currentTarget).data('type') == 'task') {
       if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
         return;
@@ -68,7 +68,7 @@ export const deleteTask = () => {
         return;
       }
     }
-    $.post($(evt.currentTarget).data('url'), function (data) {
+    $.post($(evt.currentTarget).data('url'), function(data) {
       if (data.success) {
         notify('success', '删除成功');
         $(evt.target).parents('.task-manage-item').remove();
@@ -82,7 +82,7 @@ export const deleteTask = () => {
 
 export const publishTask = () => {
   $('body').on('click', '.publish-item', (event) => {
-    $.post($(event.target).data('url'), function (data) {
+    $.post($(event.target).data('url'), function(data) {
       if (data.success) {
         notify('success', '发布成功');
         location.reload();
@@ -95,7 +95,7 @@ export const publishTask = () => {
 
 export const unpublishTask = () => {
   $('body').on('click', '.unpublish-item', (event) => {
-    $.post($(event.target).data('url'), function (data) {
+    $.post($(event.target).data('url'), function(data) {
       if (data.success) {
         notify('success', '取消发布成功');
         location.reload();
@@ -118,7 +118,7 @@ export const showSettings = () => {
 }
 
 export const TabChange = () => {
-  $('[data-role="tab"]').click(function () {
+  $('[data-role="tab"]').click(function() {
     let $this = $(this);
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });

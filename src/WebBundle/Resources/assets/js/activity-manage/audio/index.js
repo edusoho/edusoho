@@ -1,10 +1,11 @@
 import FileChooser from '../../file-chooser/file-choose';
-import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
-jQuery.validator.addMethod("unsigned_integer", function (value, element) {
+import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
+
+jQuery.validator.addMethod("unsigned_integer", function(value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "必须为非负整数");
 
-jQuery.validator.addMethod("second_range", function (value, element) {
+jQuery.validator.addMethod("second_range", function(value, element) {
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, "秒数只能在0-59之间");
 
@@ -43,7 +44,6 @@ function _inItStep2form() {
 
 _inItStep2form();
 
-
 $(".js-length").blur(function () {
   let validator = $("#step2-form").data('validator');
   if (validator && validator.form()) {
@@ -52,7 +52,6 @@ $(".js-length").blur(function () {
     $("#length").val(minute * 60 + second);
   }
 });
-
 
 const fileChooser = new FileChooser();
 
@@ -76,4 +75,3 @@ const onSelectFile = file => {
 }
 
 fileChooser.on('select', onSelectFile);
-

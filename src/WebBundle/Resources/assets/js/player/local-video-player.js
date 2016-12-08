@@ -1,4 +1,4 @@
-import  videojs from 'video.js'
+import videojs from 'video.js'
 import Emitter from 'es6-event-emitter';
 let videoSwf = require('video.js/dist/video-js/video-js.swf');
 let webpack_base_url = 'http://127.0.0.1:3030';
@@ -34,7 +34,7 @@ class LocalVideoPlayer extends Emitter {
       Notify.danger(message, 60);
     });
 
-    player.on('fullscreenchange', function (e) {
+    player.on('fullscreenchange', function(e) {
       if ($(e.target).hasClass('vjs-fullscreen')) {
         $("#site-navbar").hide();
       }
@@ -113,4 +113,4 @@ class LocalVideoPlayer extends Emitter {
     this.player.dispose();
   }
 }
-export  default LocalVideoPlayer;
+export default LocalVideoPlayer;

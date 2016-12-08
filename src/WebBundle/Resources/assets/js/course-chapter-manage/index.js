@@ -2,12 +2,12 @@ import notify from "common/notify";
 let sortList = function ($list) {
   let data = $list.sortable("serialize").get();
 
-  $.post($list.data('sortUrl'), {ids: data}, function (response) {
+  $.post($list.data('sortUrl'), { ids: data }, function(response) {
     let lessonNum = 0;
     let chapterNum = 0;
     let unitNum = 0;
 
-    $list.find('.task-manage-unit, .task-manage-chapter').each(function () {
+    $list.find('.task-manage-unit, .task-manage-chapter').each(function() {
       let $item = $(this);
       if ($item.hasClass('item-lesson')) {
         lessonNum++;
@@ -25,7 +25,7 @@ let sortList = function ($list) {
 };
 
 
-$('#course-chapter-btn').on('click', function () {
+$('#course-chapter-btn').on('click', function() {
   let $this = $(this);
   let $form = $('#course-chapter-form');
 
@@ -35,7 +35,7 @@ $('#course-chapter-btn').on('click', function () {
     },
     ajax: true,
     currentDom: $this,
-    submitSuccess: function (html) {
+    submitSuccess: function(html) {
       $this.closest('.modal').modal('hide');
 
       let $item = $('#' + $(html).attr('id'));
@@ -58,11 +58,9 @@ $('#course-chapter-btn').on('click', function () {
           if (add != 1) {
             $("#sortable-list").append(html);
           }
-
         } else {
           $("#sortable-list").append(html);
         }
-
 
         let $list = $("#sortable-list");
         sortList($list);
@@ -70,4 +68,3 @@ $('#course-chapter-btn').on('click', function () {
     },
   });
 })
-

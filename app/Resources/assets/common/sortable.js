@@ -18,6 +18,7 @@ const sortList = (options) => {
       let data = $list.sortable("serialize").get();
 
       //排序URL
+      return;
       $.post($list.data('sortUrl'), {ids: data}, (response) => {
 
         settings.success ? settings.success(response) : document.location.reload();

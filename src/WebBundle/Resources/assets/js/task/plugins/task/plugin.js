@@ -6,8 +6,8 @@ class TaskPlugin extends BasePlugin {
     super(props);
     this.code = 'task';
     this.name = Translator.trans('课程');
-    this. iconClass =  'es-icon es-icon-menu';
-    this.api =  {
+    this.iconClass = 'es-icon es-icon-menu';
+    this.api = {
       list: '../../lessonplugin/lesson/list'
     };
     this.pane = null;

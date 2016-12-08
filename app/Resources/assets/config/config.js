@@ -63,6 +63,9 @@ for (let key in parameters.libs) {
   });
 }
 
+
+
+
 let onlyCopys = [];
 let copyitem = {};
 parameters.onlyCopys.forEach((item) => {

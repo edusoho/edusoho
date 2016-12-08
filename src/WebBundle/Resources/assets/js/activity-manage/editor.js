@@ -11,9 +11,7 @@ export const initEditor = ($item) => {
     allowedContent: true,
     height: 300
   });
-  editor.on( 'change', () => {    
+  editor.on('change', () => {
     $item.val(editor.getData());
   });
 }
-
-
