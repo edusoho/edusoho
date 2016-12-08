@@ -26,7 +26,7 @@ class Password extends BaseResource
             return $this->error('500', '短信验证码为空，请输入');
         }
         if (empty($smsToken)) {
-            return $this->error('500', 'smsToken字段为空');
+            return $this->error('500', 'verified_token字段为空');
         }
 
         if (empty($password)) {
