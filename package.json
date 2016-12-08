@@ -65,6 +65,7 @@
     "jquery-jcrop": "0.9.13",
     "jquery-sortable": "0.9.13",
     "jquery-validation": "1.15.1",
+    "rc-select": "^6.6.9",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "reset.css": "2.0.2",

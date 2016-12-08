@@ -5,8 +5,14 @@ import MultiGroup from '../../../common/widget/multi-group';
 import sortList from 'common/sortable';
 
 ReactDOM.render( <MultiGroup items = {[]}  />,
-    document.getElementById('list-test-id')
+  document.getElementById('course-objectives')
 );
+
+ReactDOM.render( <MultiGroup items = {[]}  />,
+  document.getElementById('adapt-crowd')
+);
+
+
 
 sortList({
   element: ".sortable-list",

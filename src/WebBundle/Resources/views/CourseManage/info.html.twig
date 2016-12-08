@@ -78,7 +78,8 @@
         <label>{{'课程目标'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-        <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
+        <div id="course-objectives"></div>
+        {#<ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
           <input class="form-control" id="goals" name="goals" type="text" data-role="item-input" value="{{course.goals|default('')}}">          
           <span class="input-group-btn">
@@ -95,7 +96,7 @@
               <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
             </li>
           {% endverbatim %}
-        </script>
+        </script>#}
       </div>
     </div>
     <div class="form-group" id="course-audiences-form-group">
@@ -103,8 +104,8 @@
         <label>{{'适应人群'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-
-        <ul class="list-group sortable-list dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
+        <div id="adapt-crowd"></div>
+        {#<ul class="list-group sortable-list dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
           <input class="form-control" id="audiences" name="audiences" type="text" data-role="item-input" value="{{course.audiences|default('')}}">          
           <span class="input-group-btn">
@@ -122,13 +123,12 @@
               <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
             </li>
           {% endverbatim %}
-        </script>
+        </script>#}
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-8">
         <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
-        <div id="list-test-id"></div>
       </div>
     </div>
   </form>
