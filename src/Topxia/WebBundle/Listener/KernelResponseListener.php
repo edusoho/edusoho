@@ -52,6 +52,12 @@ class KernelResponseListener
 
     private function generateUserActiveLog($request)
     {
+        $session = $request->getSession();
+
+        if(empty($session)){
+            return;
+        }
+
         $activeUserTime = $request->getSession()->get('active_user_time', 0);
         //当天登录激活
         if ($activeUserTime != strtotime("today")) {
