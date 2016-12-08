@@ -3,16 +3,33 @@
 namespace WebBundle\Controller;
 
 
-
+use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 
 class TaskPluginTaskListController extends BaseController
 {
     public function pageContentAction($courseSetId, $courseId, $taskId)
     {
-        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $task = $this->getTaskService()->getTask($taskId);
 
-        return $this->render('@Web/TaskPlugin/task-list.html.twig', array('tasks' => $tasks));
+        if (empty($task)) {
+            throw $this->createNotFoundException();
+        }
+
+        $activity = $this->getActivityService()->getActivity($task['id']);
+        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        return $this->render('@Web/TaskPlugin/task-list.html.twig', array(
+            'tasks'    => $tasks,
+            'activity' => $activity
+        ));
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

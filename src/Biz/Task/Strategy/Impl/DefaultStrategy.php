@@ -39,7 +39,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
-                $task['activity']    = $this->getActivityService()->getActivityFetchExt($task['activityId']);
+                $task['activity']    = $that->getActivityService()->getActivityFetchExt($task['activityId']);
                 $chapter['tasks']    = array($task);
                 return $chapter;
             });
@@ -59,9 +59,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $this->validateTaskMode($fields);
         $task = $this->baseUpdateTask($id, $fields);
-
         if ($task['mode'] == 'lesson') {
-            $this->getCourseService()->updateChapter($task['courseId'], $task['chapterId'], array('title' => $task['title']));
+            $this->getCourseService()->updateChapter($task['courseId'], $task['categoryId'], array('title' => $task['title']));
         }
 
         return $task;

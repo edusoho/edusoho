@@ -47,21 +47,27 @@ class TaskController extends BaseController
     {
         $task = $this->tryLearnTask($courseId, $taskId);
         return $this->createJsonResponse(array(
-            'task-list' => array(
+            array(
+                'code' => 'task-list',
                 'name' => '课程',
                 'icon' => 'es-icon-menu',
-                'controller' => 'TaskPluginTaskListController'
+                'url' => $this->generateUrl('course_task_show_plugin_task_list', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
             ),
-            'note' => array(
-                'name' => '笔记',
-                'icon' => 'es-icon-edit',
-                'controller' => 'TaskPluginNoteController'
-            ),
-            'question' => array(
-                'name' => '问答',
-                'icon' => 'es-icon-help',
-                'controller' => 'TaskPluginQuestionController'
-            ),
+//            array(
+//                'code' => 'note',
+//                'name' => '笔记',
+//                'icon' => 'es-icon-edit',
+//                'url' => 'TaskPluginNoteController'
+//            ),
+//            array(
+//                'code' => 'question',
+//                'name' => '问答',
+//                'icon' => 'es-icon-help',
+//                'url' => 'TaskPluginQuestionController'
+//            )
         ));
     }
 

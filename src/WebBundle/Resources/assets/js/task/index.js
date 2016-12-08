@@ -1,8 +1,7 @@
-import TaskSidebar from './widget/sidebar';
-import TaskUi from './widget/task-ui';
-import TaskEventEmitter from './widget/task-event-emitter';
-import Emitter from 'common/es-event-emitter'
-import ReactDom from 'react-dom';
+import TaskSidebar from "./widget/sidebar";
+import TaskUi from "./widget/task-ui";
+import TaskEventEmitter from "./widget/task-event-emitter";
+import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
   constructor({element, courseId, taskId, mode}) {
@@ -23,7 +22,7 @@ class TaskShow extends Emitter {
     this.initPlugin();
     this.initSidebar();
 
-    if(this.mode != 'preview'){
+    if (this.mode != 'preview') {
       this.bindEvent();
     }
   }
@@ -36,7 +35,7 @@ class TaskShow extends Emitter {
     });
   }
 
-  bindEvent(){
+  bindEvent() {
     let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
@@ -77,11 +76,25 @@ class TaskShow extends Emitter {
     this.ui.learned();
   }
 
+
   initSidebar() {
-    ReactDom.render(
-        <TaskSidebar url={$('body').find('#js-hidden-data [name="plugins_url"]').val()}/>,
-        document.getElementById('dashboard-sidebar')
-    );
+    this.sidebar = new TaskSidebar({
+      element: this.element.find('#dashboard-sidebar'),
+      url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
+    });
+
+    this.sidebar
+        .on('popup', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time);
+        })
+        .on('fold', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time)
+        })
+
   }
 }
 

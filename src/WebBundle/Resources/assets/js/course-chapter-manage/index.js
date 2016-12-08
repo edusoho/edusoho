@@ -1,3 +1,4 @@
+import notify from "common/notify";
 let sortList = function ($list) {
   let data = $list.sortable("serialize").get();
 
@@ -37,29 +38,35 @@ $('#course-chapter-btn').on('click', function () {
     submitSuccess: function (html) {
       $this.closest('.modal').modal('hide');
 
-      let $parent = $('#' + $form.data('parentid'));
-      if ($parent.length) {
-        let add = 0;
-        $parent.nextAll().each(function () {
-          if ($(this).hasClass('task-manage-chapter')) {
-            $(this).before(html);
-            add = 1;
-            return false;
+      let $item = $('#' + $(html).attr('id'));
+
+      if ($item.length) {
+        $item.replaceWith(html);
+        notify('success',Translator.trans('信息已保存'));
+      } else {
+        let $parent = $('#' + $form.data('parentid'));
+        if ($parent.length) {
+          let add = 0;
+          $parent.nextAll().each(function () {
+            if ($(this).hasClass('task-manage-chapter')) {
+              $(this).before(html);
+              add = 1;
+              return false;
+            }
+
+          });
+          if (add != 1) {
+            $("#sortable-list").append(html);
           }
 
-        });
-        if (add != 1) {
+        } else {
           $("#sortable-list").append(html);
         }
 
-      } else {
-        $("#sortable-list").append(html);
+
+        let $list = $("#sortable-list");
+        sortList($list);
       }
-
-
-      let $list = $("#sortable-list");
-      sortList($list);
-
     },
   });
 })

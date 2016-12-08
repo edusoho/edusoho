@@ -1,5 +1,3 @@
-import NotePlugin from '../plugins/note/plugin';
-import QuestionPlugin from '../plugins/question/plugin';
 import TaskPlugin from '../plugins/task/plugin';
 import 'store';
 
@@ -12,7 +10,6 @@ class SideBar {
     this.activePlugins = activePlugins;
     this.plugins = {};
     this._currentPane = null;
-    console.log( $(element));
     this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
     // this.$dashboardPane = this.$element.find('#dashboard-pane');
     this.$dashboardcontent = $('#dashboard-content');
@@ -21,8 +18,6 @@ class SideBar {
 
   _init() {
     this._registerPlugin(new TaskPlugin(this));
-    this._registerPlugin(new NotePlugin(this));
-    this._registerPlugin(new QuestionPlugin(this));
     this._initPlugin();
     this._isRenderSiderBar();
   }
@@ -55,20 +50,7 @@ class SideBar {
     });
   }
 
-  _renderSiderBar(show, time = '') {
-    let sider_right = '0px';
-    let content_right = '379px';
-    if (!show) {
-      sider_right = '-' + this.$dashboardsidebar.width() + 'px';
-      content_right = '26px';
-    }
-    this.$dashboardsidebar.animate({
-      right: sider_right,
-    }, time);
-    this.$dashboardcontent.animate({
-      right: content_right,
-    }, time);
-  }
+
 
   _rendBar($item, show) {
     show ? $item.addClass('active').siblings('li').removeClass('active') : $item.removeClass('active');
