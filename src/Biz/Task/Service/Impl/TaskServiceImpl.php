@@ -264,6 +264,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByChapterId($chapterId);
     }
 
+    public function trigger($id, $eventName, $data = array())
+    {
+        $task = $this->getTask($id);
+        $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
+        return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+    }
+
     /**
      * @return TaskDao
      */

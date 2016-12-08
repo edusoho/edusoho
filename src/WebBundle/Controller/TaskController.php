@@ -23,8 +23,11 @@ class TaskController extends BaseController
             'task' => $task
         ));
 
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'     => $task,
+            'taskResult' => $taskResult,
             'tasks'    => $tasks,
             'activity' => $activity,
             'preview'  => $preview,
@@ -40,6 +43,25 @@ class TaskController extends BaseController
         return $this->forward('WebBundle:Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
+        ));
+    }
+
+    public function triggerAction(Request $request, $courseId, $taskId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $eventName = $request->request->get('eventName');
+        if (empty($eventName)) {
+            throw $this->createNotFoundException('task event is empty');
+        }
+
+        $data = $request->request->get('data', array());
+        $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
+
+        return $this->createJsonResponse(array(
+            'event'     => $eventName,
+            'data'      => $data,
+            'result'    => $result
         ));
     }
 
@@ -87,6 +109,11 @@ class TaskController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**

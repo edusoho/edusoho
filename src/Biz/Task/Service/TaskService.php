@@ -60,6 +60,7 @@ interface TaskService
     public function getMaxSeqByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
-    
+
     public function finishTaskResult($taskId);
+
 }

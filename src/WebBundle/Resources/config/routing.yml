@@ -158,9 +158,9 @@ task_live_trigger:
   path: /course/{courseId}/activity/{activityId}/live_trigger
   defaults: {_controller: WebBundle:LiveActivity:trigger}
 
-course_activity_trigger:
-  path: /course/{courseId}/activity/{activityId}/trigger
-  defaults: { _controller: WebBundle:Activity:trigger }
+course_task_trigger:
+  path: /course/{courseId}/task/{taskId}/trigger
+  defaults: { _controller: WebBundle:Task:trigger }
   methods: [POST]
 
 media_materiallib_choose:
