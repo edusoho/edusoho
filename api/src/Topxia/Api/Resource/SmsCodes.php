@@ -28,7 +28,7 @@ class SmsCodes extends BaseResource
 
             $imgToken = $this->getTokenService()->makeToken('img_verify', array(
                 'times'    => 5,
-                'duration' => 60 * 2,
+                'duration' => 60 * 30,
                 'userId'   => 0,
                 'data'     => array(
                     'img_code' => $this->imgBuilder->getPhrase(),
