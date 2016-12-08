@@ -45,6 +45,7 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
+
         $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);

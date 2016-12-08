@@ -370,6 +370,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
             return true;
         }
+        
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {

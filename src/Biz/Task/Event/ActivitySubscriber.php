@@ -18,10 +18,9 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     public function onActivityOperated(Event $event)
     {
-        $activity = $event->getSubject();
         $taskId = $event->getArgument('taskId');
-        $task = $this->getTaskService()->getTask($taskId);
-        if($this->getTaskService()->canFinish($task)) {
+
+        if($this->getTaskService()->canFinish($taskId)) {
             $this->getTaskService()->finishTaskResult($taskId);
         }
     }
