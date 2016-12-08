@@ -11,12 +11,6 @@ class DetailEditor {
   init() {
     this.renderMultiGroupComponent('course-goals');
     this.renderMultiGroupComponent('intended-students');
-    // ReactDOM.render( <MultiGroup items = {[]}  />,
-    //   document.getElementById('course-goals')
-    // );
-    // ReactDOM.render( <MultiGroup items = {[]}  />,
-    //   document.getElementById('intended-students')
-    // );
 
     CKEDITOR.replace('summary', {
       allowedContent: true,
@@ -30,7 +24,6 @@ class DetailEditor {
       $('#courseset-detail-form').submit();
     });
   }
-
 
   renderMultiGroupComponent(elementId){
     ReactDOM.render( <MultiGroup items = {$("#"+elementId).data("init-value")} fieldName={$("#"+elementId).data('field-name')} />,

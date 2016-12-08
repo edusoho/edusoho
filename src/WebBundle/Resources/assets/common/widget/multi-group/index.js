@@ -6,7 +6,8 @@ class MultiGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.props.items
+      items: this.props.items,
+      key: this.props.fieldName + '-' + (Math.random() + "").substr(2)
     }
   }
 
@@ -14,27 +15,17 @@ class MultiGroup extends Component {
     if(!this.props.sortable){
       return;
     }
-    //FIXME 这里的拖拽逻辑应该在list.js处理，然后后者通知当前组件更新state.items。
-    // let self = this;
-    // console.log('sortable : ', this.state.items);
-    // $('.sortable-list').sortable(Object.assign({}, {
-    //   element: '.sortable-list',
-    //   distance: 20,
-    //   itemSelector: "li",
-    //   onDrop: function(item, container, _super){
-    //     _super(item, container);
-    //     let _items = $('ul.sortable-list').find('li');
-    //     let sortedItems = [];
-    //     $.each(_items, function(i,v){
-    //       console.log('for each : ', i,v);
-    //       sortedItems.push($(v).find('span').text());
-    //     });
-    //     console.log('sortedItems: ', sortedItems);
-    //     self.setState({
-    //       items: sortedItems
-    //     });
-    //   }
-    // }));
+    let self = this;
+    $(document).bind('items-sorted', function(event, key, sortedItems){
+      if(self.state.key !== key){
+        return;
+      }
+      setTimeout(function(){
+        self.setState({
+          items: sortedItems
+        });
+      }, 300);
+    });
   }
 
   removeItem(index) {
@@ -54,9 +45,9 @@ class MultiGroup extends Component {
   render (){
     return (
       <div className="panes">
-        <List removeItem={(index)=>this.removeItem(index)} list={this.state.items}  />
+        <List removeItem={(index)=>this.removeItem(index)} compKey={this.state.key} sortable={this.props.sortable} list={this.state.items}  />
         <InputGroup addItem={(item)=>this.addItem(item)}/>
-        <input type='hidden' name={this.props.fieldName} value={JSON.stringify(this.state.items)} />
+        <input type='hidden' id={this.state.key} name={this.props.fieldName} value={JSON.stringify(this.state.items)} />
       </div>
     );
   }
