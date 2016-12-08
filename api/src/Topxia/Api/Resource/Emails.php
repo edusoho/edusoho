@@ -6,12 +6,29 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Service\Common\Mail\MailFactory;
+use Topxia\Common\SimpleValidator;
 
 class Emails extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
         $data = $request->request->all();
+
+        if (!isset($data['email'])) {
+            return $this->error('500', '请输入邮箱!');
+        }
+
+        if (!isset($data['password'])) {
+            return $this->error('500', '请输入更改后的密码!');
+        }
+
+        if (!SimpleValidator::email($data['email'])) {
+            return $this->error('500', 'email不符合要求');
+        }
+
+        if (!SimpleValidator::password($data['password'])) {
+            return $this->error('500', '密码不符合要求');
+        }
         $user = $this->getUserService()->getUserByEmail($data['email']);
         if (!$user) {
             return $this->error('500', '该邮箱未在网校注册');
