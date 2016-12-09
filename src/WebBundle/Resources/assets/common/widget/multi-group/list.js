@@ -10,6 +10,13 @@ export default class List extends Component {
     removeItem: React.PropTypes.func.isRequired,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: this.props.list
+    }
+  }
+
   componentDidMount(){
     if(!this.props.sortable){
       return;
@@ -33,7 +40,7 @@ export default class List extends Component {
   };
 
   render() {
-    var List = this.props.list.map( (item,i) => {
+    var List = this.state.items.map( (item,i) => {
       return (
         <li className="list-group-item mbs" key={i}>{item}
           <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={i}>
