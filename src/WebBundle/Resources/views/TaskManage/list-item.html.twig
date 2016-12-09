@@ -40,22 +40,22 @@
         </li>
         {% else %}
           <li>
-            <a class='publish-item' href="javascript:;" data-type="task"
-               data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-               <i class="es-icon es-icon-publish mrm"></i>发布
+            <a class='publish-item' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
+               <i class="es-icon es-icon--check-circle mrm"></i>发布
              </a>
           </li>
         {% endif %}
 
         <li>
-          <a class='delete-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">删除</a>
+          <a class='delete-item' href="javascript:;" data-type="task"data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+            <i class="es-icon es-icon-delete mrm"></i>删除
+          </a>
         </li>
       </ul>
     </span>
   </div>
   <div class="settings-list js-settings-list clearfix">
-    <div class="settings-item ">
+    <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
           {% if not tasks.preparation|default(null) %}
          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
@@ -74,7 +74,7 @@
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
-    <div class="settings-item ">
+    <div class="settings-item {% if tasks.exercise|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
           {% if not tasks.exercise|default(null) %}
          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
@@ -86,7 +86,7 @@
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
-    <div class="settings-item ">
+    <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
           {% if not tasks.homework|default(null) %}
          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
@@ -98,7 +98,7 @@
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
-    <div class="settings-item ">
+    <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
       <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
           {% if not  tasks.extraClass|default(null) %}
          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
