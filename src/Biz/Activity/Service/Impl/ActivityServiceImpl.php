@@ -17,7 +17,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
-    public function getActivityFetchExt($id)
+    public function getActivityFetchMedia($id)
     {
         $activity = $this->getActivity($id);
         if (!empty($activity['mediaId'])) {
@@ -50,7 +50,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return;
         }
 
-        if (in_array($eventName, array('start', 'doing', 'finish'))) {
+        if (in_array($eventName, array('start', 'doing'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
@@ -60,15 +60,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
 
-        $listeners        = array();
         $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
         if (!is_null($activityListener)) {
-            $listeners[] = $activityListener;
+            $activityListener->handle($activity, $data);
         }
 
-        foreach ($listeners as $listener) {
-            $listener->handle($activity, $data);
-        }
+        $this->biz['dispatcher']->dispatch("activity.operated", new Event($activity, $data));
     }
 
     public function createActivity($fields)
@@ -177,6 +174,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityConfig->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
+    }
+
+    public function canFinishActivity($id)
+    {
+        $activity = $this->getActivity($id);
+        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
+        return $activityConfig->canFinish($id);
     }
 
     /**

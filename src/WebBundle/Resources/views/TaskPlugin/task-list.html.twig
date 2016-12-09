@@ -3,16 +3,17 @@
 {% set preview = 1 %}
 
 {% block content %}
+
   <ul class="task-list ">
     {% for task in tasks %}
-      {% set task_lock =  (task.resultStatus is not defined  or task.resultStatus.status is empty ) ? true : false %}
+      {% set task_lock =  not  task.result|default(null) %}
       <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
         <i class="es-icon
-              {% if task.resultStatus is not defined  or task.resultStatus.status is empty %}
+              {% if task_lock %}
                 es-icon-lock
-              {% elseif task.resultStatus.status == 'start' %}
+              {% elseif task.result.status == 'start' %}
                 es-icon-doing
-              {% elseif task.resultStatus.status == 'finish' %}
+              {% elseif task.result.status == 'finish' %}
                 es-icon-iccheckcircleblack24px
               {% endif %}
                 left-menu"></i>
@@ -35,4 +36,5 @@
       </li>
     {% endfor %}
   </ul>
+
 {% endblock %}

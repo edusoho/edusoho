@@ -17,7 +17,7 @@
   </div>#}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="mediaId" class="style">{{ '选择资料'|trans }}</label>
+      <label for="materials" class="style">{{ '选择资料'|trans }}</label>
     </div>
     <div class="col-sm-10">
       <ul class="download-list" id="material-list">
@@ -27,9 +27,9 @@
               <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
               <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
             {% else %}
-              <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
+              <a class="gray-primary" href="{{ media.link }}" target="_blank">{{ media.name }}</a>
             {% endif %}
-            <a class="btn btn-xs js-btn-delete" title="{{ '删除'|trans }}"data-url="">&times;</a>
+            <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  title="{{ '删除1111'|trans }}"data-url=""><i class="es-icon es-icon-cuowu"></i></a>
           </li>
         {% endfor %}
       </ul>
@@ -37,7 +37,7 @@
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
       <input id="materials" class="form-control" type="hidden" name="materials"
       {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
-      <input id="media" type="hidden" name="media" value="">
+      <input id="media" type="hidden" name="media" value="{{null}}">
     </div>
   </div>
 {% endblock %}

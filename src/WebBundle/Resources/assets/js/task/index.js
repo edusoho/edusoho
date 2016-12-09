@@ -46,36 +46,32 @@ class TaskShow extends Emitter {
         timeStep: timeStep,
         learnedTime: learnedTime,
         taskId: this.taskId
-      }).then(data => {
+      }).then(response => {
         this.trigger('doing', timeStep);
+        if(response.result.status == 'finish') {
+          this.ui.learnedWeakPrompt();
+        }
       })
     }, timeStep * minute);
 
     this.trigger('doing', timeStep);
 
-    this.element.on('click', '.js-btn-learn', event => {
-      this.eventEmitter.emit('finish', {taskId: this.taskId}).then(() => {
-        this.ui.learned();
-        //@TODO 弹框
+    this.element.on('click', '#learn-btn', event => {
+      console.log(event);
+      $.post($('#learn-btn').data('url'), response => {
+          $('#modal').modal('show');
+          $('#modal').html(response);
+          this.ui.learned();
       })
     });
-    this.bindEmitterEvent();
-  }
 
-  bindEmitterEvent() {
-    this.eventEmitter.receive('finish', (data) => {
-      this.onActivityFinish(data);
+    this.eventEmitter.receive('finish', response => {
+      if(response.result.status == 'finish') {
+        this.ui.learnedWeakPrompt();
+      }
     });
+
   }
-
-  onActivityFinish(transition) {
-    if (transition === 'url') {
-
-    }
-    this.ui.learnedWeakPrompt();
-    this.ui.learned();
-  }
-
 
   initSidebar() {
     this.sidebar = new TaskSidebar({
