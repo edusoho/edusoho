@@ -39,7 +39,7 @@ class TaskShow extends Emitter {
       }).then(response => {
         this.trigger('doing', timeStep);
         if(response.result.status == 'finish') {
-          this.ui.learnedWeakPrompt();
+          this.ui.autoLearned();
         }
       })
     }, timeStep * minute);
@@ -57,7 +57,7 @@ class TaskShow extends Emitter {
 
     this.eventEmitter.receive('finish', response => {
       if(response.result.status == 'finish') {
-        this.ui.learnedWeakPrompt();
+        this.ui.autoLearned();
       }
     });
 
