@@ -134,7 +134,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $updateFields = array();
-
         foreach ($fields as $field) {
             if ($field === 'studentCount') {
                 $updateFields['studentCount'] = $this->countStudentsByCourseId($id);
@@ -274,6 +273,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function isCourseTeacher($courseId, $userId)
     {
         $role = $this->getUserRoleInCourse($courseId, $userId);
+
         return $role == 'teacher';
     }
 
@@ -301,7 +301,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         //TODO create order
 
         $result = $this->getMemberDao()->create($fields);
-
         $this->biz['dispatcher']->dispatch("course.student.create", new Event($result));
         return $result;
     }
@@ -320,11 +319,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
-
         $result = $this->getMemberDao()->delete($member['id']);
 
-        $this->biz['dispatcher']->dispatch("course.student.create", new Event($member));
-
+        $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
         return $result;
     }
 
@@ -366,11 +363,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($user->hasPermission('admin_course')) {
             return true;
         }
-        
+
         //TODO 未实现
-//        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
-//            return true;
-//        }
+        //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+        //            return true;
+        //        }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
