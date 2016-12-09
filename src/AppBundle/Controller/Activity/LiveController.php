@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-class LiveActivityController extends BaseController implements ActivityActionInterface
+class LiveController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {

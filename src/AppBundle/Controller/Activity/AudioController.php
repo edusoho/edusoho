@@ -6,7 +6,7 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-class AudioActivityController extends BaseController implements ActivityActionInterface
+class AudioController extends BaseController implements ActivityActionInterface
 {
 
     public function showAction(Request $request, $id, $courseId)

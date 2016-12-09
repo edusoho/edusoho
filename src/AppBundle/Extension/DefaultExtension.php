@@ -114,9 +114,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'name'      => '图文',
                 'icon'      => 'es-icon es-icon-graphicclass',
                 'actions'   => array(
-                    'create' => 'AppBundle:Activity/TextActivity:create',
-                    'edit'   => 'AppBundle:Activity/TextActivity:edit',
-                    'show'   => 'AppBundle:Activity/TextActivity:show',
+                    'create' => 'AppBundle:Activity/Text:create',
+                    'edit'   => 'AppBundle:Activity/Text:edit',
+                    'show'   => 'AppBundle:Activity/Text:show',
                 ),
                 'templates' => array()
 
@@ -125,9 +125,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'name'      => '视频',
                 'icon'      => 'es-icon es-icon-videoclass',
                 'actions'   => array(
-                    'create' => 'AppBundle:Activity/VideoActivity:create',
-                    'edit'   => 'AppBundle:Activity/VideoActivity:edit',
-                    'show'   => 'AppBundle:Activity/VideoActivity:show',
+                    'create' => 'AppBundle:Activity/Video:create',
+                    'edit'   => 'AppBundle:Activity/Video:edit',
+                    'show'   => 'AppBundle:Activity/Video:show',
                 ),
                 'templates' => array()
             ),
@@ -135,18 +135,18 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'name'    => '音频',
                 'icon'    => 'es-icon es-icon-audioclass',
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/AudioActivity:create',
-                    'edit'   => 'AppBundle:Activity/AudioActivity:edit',
-                    'show'   => 'AppBundle:Activity/AudioActivity:show'
+                    'create' => 'AppBundle:Activity/Audio:create',
+                    'edit'   => 'AppBundle:Activity/Audio:edit',
+                    'show'   => 'AppBundle:Activity/Audio:show'
                 )
             ),
             'download' => array(
                 'name'    => '下载资料',
                 'icon'    => 'es-icon es-icon-filedownload',
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/DownLoadActivity:create',
-                    'edit'   => 'AppBundle:Activity/DownLoadActivity:edit',
-                    'show'   => 'AppBundle:Activity/DownLoadActivity:show'
+                    'create' => 'AppBundle:Activity/DownLoad:create',
+                    'edit'   => 'AppBundle:Activity/DownLoad:edit',
+                    'show'   => 'AppBundle:Activity/DownLoad:show'
                 )
             )
 

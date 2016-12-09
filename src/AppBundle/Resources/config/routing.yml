@@ -45,7 +45,7 @@ course_activity_trigger:
 
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
-    defaults: { _controller: AppBundle:Activity/DownLoadActivity:downloadFile }
+    defaults: { _controller: AppBundle:Activity/DownLoad:downloadFile }
 
 #task
 course_task_show:

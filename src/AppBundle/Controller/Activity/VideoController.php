@@ -8,7 +8,7 @@ use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
-class VideoActivityController extends BaseController implements ActivityActionInterface
+class VideoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
