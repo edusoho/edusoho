@@ -34,11 +34,11 @@
 
       <div class="dashboard-footer ">
         <div class="state-opration "> 
-          <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
+          <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
 
-          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
+          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container=".js-learning-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
 
-          <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-placement="top" data-content=''>
+          <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content=''>
             <div class="task-state-modal task-state-modal-xs">
               <div class="title">
                 <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
@@ -79,16 +79,6 @@
           {% endif %}
           学过了
         </a>
-      <!--
-        <a type="button" class="btn btn-transparent btn-learn js-btn-learn" >
-          <i class="es-icon es-icon-undone-check doing"></i>
-          <i class="es-icon es-icon--check-circle done"></i>
-          学过了
-        </a>
-        <a class="btn btn-primary js-test">弱提示效果</a>
-        <a class="btn btn-primary " data-toggle="modal" data-target="#myModal">完成任务</a>
-        <a class="btn btn-primary " data-toggle="modal" data-target="#myModal2">任务失败</a>
-      -->
       </div>
     </div>
     <div class="dashboard-sidebar" id="dashboard-sidebar">
