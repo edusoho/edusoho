@@ -95,13 +95,79 @@ task_live_trigger:
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: WebBundle:CourseChapterManage:create }
+    defaults: { _controller: AppBundle:CourseChapterManage:create }
 
 course_manage_chapter_edit:
     path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: WebBundle:CourseChapterManage:edit }
+    defaults: { _controller: AppBundle:CourseChapterManage:edit }
 
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
-    defaults: { _controller: WebBundle:CourseChapterManage:delete }
+    defaults: { _controller: AppBundle:CourseChapterManage:delete }
     methods: [POST]
+
+#course
+course_set_manage_courses:
+  path: /course_set/{courseSetId}/manage/courses
+  defaults: {_controller: AppBundle:CourseManage:list}
+
+course_set_manage_course_create:
+  path: /course_set/{courseSetId}/manage/course/create
+  defaults: {_controller: AppBundle:CourseManage:create}
+
+course_set_manage_course_info:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/info
+  defaults: {_controller: AppBundle:CourseManage:info}
+
+course_set_manage_course_tasks:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
+  defaults: {_controller: AppBundle:CourseManage:tasks}
+
+course_set_manage_course_marketing:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
+  defaults: {_controller: AppBundle:CourseManage:marketing}
+
+course_set_manage_course_teachers:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/teachers
+  defaults: {_controller: AppBundle:CourseManage:teachers}
+
+course_set_manage_course_students:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students
+  defaults: {_controller: AppBundle:CourseManage:students}
+
+course_set_manage_course_quit_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
+  defaults: {_controller: AppBundle:CourseManage:studentQuitRecords}
+
+course_set_manage_course_students_add:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
+  defaults: {_controller: AppBundle:CourseManage:createCourseStudent}
+
+course_set_manage_course_students_remove:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
+  defaults: {_controller: AppBundle:CourseManage:removeCourseStudent}
+  methods: [POST]
+
+course_set_manage_course_students_check:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
+  defaults: {_controller: AppBundle:CourseManage:checkStudent}
+
+course_set_manage_course_close:
+  path: /course_set/{courseSetId}/course/{courseId}/close
+  defaults: {_controller: AppBundle:CourseManage:close}
+  methods: [POST]
+
+course_set_manage_course_delete:
+  path: /course_set/{courseSetId}/course/{courseId}/delete
+  defaults: {_controller: AppBundle:CourseManage:delete}
+  methods: [POST]
+
+course_set_manage_course_publish:
+  path: /course_set/{courseSetId}/course/{courseId}/publish
+  defaults: {_controller: AppBundle:CourseManage:publish}
+  methods: [POST]
+
+course_manage_items_sort:
+  path:  /course/{courseId}/manage/items/sort
+  defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
+  methods: ['POST']
