@@ -78,7 +78,7 @@
         <label>{{'课程目标'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-        <div id="course-objectives"></div>
+        <div id="course-goals" data-field-name="goals" data-init-value="{{course.goals|default([])|json_encode()}}"></div>
         {#<ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
           <input class="form-control" id="goals" name="goals" type="text" data-role="item-input" value="{{course.goals|default('')}}">          
@@ -104,7 +104,7 @@
         <label>{{'适应人群'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-        <div id="adapt-crowd"></div>
+        <div id="intended-students" data-field-name="audiences" data-init-value="{{course.audiences|default([])|json_encode()}}"></div>
         {#<ul class="list-group sortable-list dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
           <input class="form-control" id="audiences" name="audiences" type="text" data-role="item-input" value="{{course.audiences|default('')}}">          

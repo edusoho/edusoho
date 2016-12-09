@@ -1,5 +1,7 @@
 import loadAnimation from 'common/load-animation'
 import 'jquery-sortable';
+import notify from "common/notify";
+
 class Editor {
   constructor($modal) {
     this.$element = $modal;
@@ -24,6 +26,8 @@ class Editor {
     $('#course-tasks-prev').click(event => this._onPrev(event));
     if (this.mode != 'edit') {
       $('.js-course-tasks-item').click(event => this._onSetType(event));
+    } else {
+      $('.delete-task').click(event => this._onDelete(event));
     }
   }
 
@@ -117,6 +121,24 @@ class Editor {
       .fail((response) => {
         this.$element.modal('hide');
       });
+  }
+
+  _onDelete(event) {
+    let $btn = $(event.currentTarget);
+    let url = $btn.data('url');
+    if (url === undefined) {
+      return;
+    }
+
+    $.post(url)
+        .then((response) => {
+          notify('success', '删除成功');
+          this.$element.modal('hide');
+          document.location.reload();
+        })
+        .fail(error => {
+          notify('warning', '删除失败~~');
+        })
   }
 
   _switchPage() {

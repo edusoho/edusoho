@@ -1,6 +1,6 @@
 import FileChooser from '../../file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
-jQuery.validator.addMethod("unsigned_integer", function(value, element) {
+import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
+jQuery.validator.addMethod("unsigned_integer", function (value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
 
@@ -60,6 +60,7 @@ const onSelectFile = file => {
     let second = Math.round(file.length % 60);
     $("#minute").val(minute);
     $("#second").val(second);
+    $("#length").val(minute * 60 + second);
   }
   $('[name="ext[mediaSource]"]').val(file.source);
   if (file.source == 'self') {

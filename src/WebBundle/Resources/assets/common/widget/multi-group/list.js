@@ -8,6 +8,28 @@ export default class List extends Component {
 
   static propTypes = {
     removeItem: React.PropTypes.func.isRequired,
+  }
+
+  componentDidMount(){
+    if(!this.props.sortable){
+      return;
+    }
+    let self = this;
+    
+    let $sortComp = $('.sortable-list').sortable(Object.assign({}, {
+      element: '.sortable-list',
+      distance: 20,
+      delay: 100,
+      onDrop: function(item, container, _super){
+        _super(item, container);
+        //也许应该使用redux之类的东东进行组件间数据通讯
+        // self.setState({items: $sortComp.sortable('serialize').get()});
+        $(document).trigger('items-sorted', [self.props.compKey, $sortComp.sortable('serialize').get()]);
+      },
+      serialize: function(parent, children, isContainer) {
+        return isContainer ? children : parent.find('span').text();
+      }
+    }));
   };
 
   render() {

@@ -13,6 +13,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_statistics_event_subscriber:     
+        class: Biz\Course\Event\StatisticsSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     web.twig.activity_extension:
         class: WebBundle\Twig\ActivityExtension
         arguments: ['@biz']

@@ -7,8 +7,26 @@ class MultiGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.props.items
+      items: this.props.items,
+      key: this.props.fieldName + '-' + (Math.random() + "").substr(2)
     }
+  }
+
+  componentDidMount(){
+    if(!this.props.sortable){
+      return;
+    }
+    let self = this;
+    $(document).bind('items-sorted', function(event, key, sortedItems){
+      if(self.state.key !== key){
+        return;
+      }
+      setTimeout(function(){
+        self.setState({
+          items: sortedItems
+        });
+      }, 300);
+    });
   }
 
   removeItem(index) {
@@ -19,7 +37,7 @@ class MultiGroup extends Component {
   }
 
   addItem(item) {
-    this.state.items.push([item]);
+    this.state.items.push(item);
     this.setState({
       items: this.state.items
     });
@@ -29,8 +47,8 @@ class MultiGroup extends Component {
     console.log('render parent');
     return (
       <div className="multi-group">
-        <List removeItem={(index)=>this.removeItem(index)} list = {this.state.items}  />
-        <InputGroup addItem={(item)=>this.addItem(item)} search = {true}/>
+        <List removeItem={(index)=>this.removeItem(index)} compKey={this.state.key} sortable={this.props.sortable} list={this.state.items}  />
+        <InputGroup addItem={(item)=>this.addItem(item)} search = {false}/>
       </div>
     );
   }
