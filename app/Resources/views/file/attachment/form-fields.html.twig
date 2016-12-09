@@ -1,0 +1,49 @@
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) and setting('storage.upload_mode') == 'cloud' %}
+  {% do load_script('topxiawebbundle/controller/attachment/upload-form') %}
+  
+  {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~fileType  : 'js-attachment-ids'%}
+  {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
+  {% set reupload = attachments|default(null)|length %}
+  
+  <div class="form-group">
+    {% if showLabel|default(false) %}
+      <label class="col-xs-2 control-label" for="thread_title">{% if targetType == 'question.stem' %}{{ '题干附件'|trans }}{% elseif targetType == 'question.analysis' %}{{ '解析附件'|trans }}{% else %}{{ '附件'|trans }}{% endif %}</label>
+      <div class="col-xs-7 controls">
+    {% else %}
+      <div class="controls"> 
+    {% endif %}
+      <div class="js-attachment-list {{list_class}}" style="inline-height:60px">
+        {% for attachment in attachments  if attachment.file %}
+          <div class="well well-sm">
+            <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
+            {{ attachment.file.filename }}
+            <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" style="margin-top:13px">删除</button> 
+             <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="btn btn-primary js-upload-file  {% if reupload %} hidden {% endif %}" data-toggle="modal" data-backdrop="static"
+         data-target="#modal"
+         data-url="{{ path('attachment_upload', {idsClass: ids_class, listClass : list_class, token:uploader_token('attachment', app.user.id, 'private')}) }}"
+         title="上传附件" data-placement="bottom" data-title="上传附件">
+         上传附件
+      </a>
+    </div>
+    {# 应该标记该附件是否新增,或者修改 #}
+    
+    <input class="{{ids_class}}" 
+      value="{{ attachments|array_column('fileId')|join(',') }}" 
+      name="{% if useType|default(false)%} attachment[{{fileType}}][fileIds] {% else %} attachment[fileIds]{% endif %}" 
+      type="hidden">
+
+    <input class="js-file-target-type" 
+      value="{{ targetType }}" 
+      name="{% if useType|default(false)%} attachment[{{fileType}}][targetType] {% else %} attachment[targetType]{% endif %}"
+      type="hidden">
+
+    <input class="js-file-type" 
+      value="{{ type }}" 
+      name="{% if useType|default(false)%} attachment[{{fileType}}][type] {% else %} attachment[type]{% endif %}"
+      type="hidden">
+  </div>
+{% endif %}

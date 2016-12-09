@@ -37,3 +37,9 @@ course_set_manage_question_picked:
 course_set_manage_question_check:
   path: /course_set/{id}/manage/question/check
   defaults: { _controller: AppBundle:Question/Manage:check }
+
+#attachment
+attachment_upload:
+    path: /attachment/upload
+    defaults: { _controller: AppBundle:File/Attachment:upload }
+    methods: [GET]

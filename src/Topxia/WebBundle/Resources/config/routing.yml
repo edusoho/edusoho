@@ -168,10 +168,10 @@ file_img_crop:
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
-attachment_upload:
-    path: /attachment/upload
-    defaults: { _controller: TopxiaWebBundle:Attachment:upload }
-    methods: [GET]
+# attachment_upload:
+#     path: /attachment/upload
+#     defaults: { _controller: TopxiaWebBundle:Attachment:upload }
+#     methods: [GET]
 
 attachment_list:
     path: /attachments/{targetType}/{targetId}
