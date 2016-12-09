@@ -59,6 +59,7 @@ class DeleteAction {
       } else {
         $btn.closest('[data-role=item]').remove();
         notify('success', "删除成功");
+        window.location.reload();
       }
     });
   }

@@ -27,7 +27,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ));
     }
 
-    /* update student count in course when student added to course or deleted from course */
     public function onStudentNumberChange(Event $event)
     {
         $member = $event->getSubject();
