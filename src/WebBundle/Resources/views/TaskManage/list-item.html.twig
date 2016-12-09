@@ -91,7 +91,7 @@
           {% if not tasks.homework|default(null) %}
          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
         {% else %}
-          data-url="{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
+          data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
         {% endif %}
         <i class="es-icon es-icon-mylibrarybooks mrm"></i>
         作业
