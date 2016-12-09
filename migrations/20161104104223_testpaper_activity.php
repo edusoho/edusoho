@@ -37,10 +37,6 @@ class TestpaperActivity extends Migration
         $connection->exec("ALTER TABLE testpaper_result ADD `courseId` int(10) NOT NULL DEFAULT '0' AFTER `userId`");
         $connection->exec("ALTER TABLE testpaper_result ADD `lessonId` int(10) NOT NULL DEFAULT '0' AFTER `courseId`");
         $connection->exec("ALTER TABLE testpaper_result ADD `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型';");
-
-        $connection->exec("ALTER TABLE testpaper DROP column `target`");
-        $connection->exec("ALTER TABLE testpaper_result DROP column `target`");
-        $connection->exec("ALTER TABLE testpaper_result DROP column `active`");
     }
 
     /**
@@ -59,10 +55,6 @@ class TestpaperActivity extends Migration
         $connection->exec("ALTER TABLE testpaper_result DROP column `courseId`");
         $connection->exec("ALTER TABLE testpaper_result DROP column `lessonId`");
         $connection->exec("ALTER TABLE testpaper_result DROP column `type`");
-
-        $connection->exec("ALTER TABLE testpaper ADD `target` varchar(255) NOT NULL DEFAULT ''");
-        $connection->exec("ALTER TABLE testpaper_result ADD `target` varchar(255) NOT NULL DEFAULT ''");
-        $connection->exec("ALTER TABLE testpaper_result ADD `active` tinyint(3) NOT NULL DEFAULT '0'");
 
         $connection->exec("ALTER TABLE testpaper CHANGE passedCondition passedScore float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '通过考试的分数线'");
 

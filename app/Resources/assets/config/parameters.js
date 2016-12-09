@@ -44,7 +44,6 @@ const parameters = {
     'jquery-sortable/source/js/jquery-sortable.js',
     'jquery-nstslider/dist/jquery.nstSlider.js',
     '../libs/js/jquery-timer.js',
-
   ],
   onlyCopys: [
     {

@@ -211,43 +211,6 @@ course_set_manage_testpaper_info:
   methods: [POST]
 
 #testpaper
-course_set_manage_testpaper:  
-  path: /course_set/{id}/manage/testpaper
-  defaults: { _controller: WebBundle:TestpaperManage:index }
-
-course_set_manage_testpaper_create:
-  path: /course_set/{id}/manage/testpaper/create
-  defaults: { _controller: WebBundle:TestpaperManage:create }
-
-course_set_manage_testpaper_info:
-  path: /course_set/{id}/manage/testpaper/info
-  defaults: { _controller: WebBundle:TestpaperManage:info }
-  methods: [POST]
-
-course_set_manage_testpaper_publish:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/publish
-  defaults: { _controller: WebBundle:TestpaperManage:publish }
-  methods: [POST]
-
-course_set_manage_testpaper_close:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/close
-  defaults: { _controller: WebBundle:TestpaperManage:close }
-  methods: [POST]
-
-course_set_manage_testpaper_update:
-    path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/update
-    defaults: { _controller: WebBundle:TestpaperManage:update }
-
-course_set_manage_testpaper_delete:
-    path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/delete
-    defaults: { _controller: WebBundle:TestpaperManage:delete }
-    methods: [POST]
-
-course_set_manage_testpaper_deletes:
-    path: /course_set/{courseSetId}/manage/testpaper/deletes
-    defaults: { _controller: WebBundle:TestpaperManage:deletes }
-    methods: [POST]
-
 course_manage_testpaper_check:
   path: /course/{courseId}/manage/testpaper/{resultId}/check
   defaults: { _controller: WebBundle:CourseTestpaperManage:check }
@@ -260,17 +223,9 @@ course_manage_testpaper_result_list:
   path: /course/{id}/manage/testpaper/{testpaperId}/result
   defaults: { _controller: WebBundle:CourseTestpaperManage:resultList }
 
-course_set_manage_testpaper_questions:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/questions
+course_manage_testpaper_questions:
+  path: /course/{courseId}/manage/testpaper/{testpaperId}/items
   defaults: { _controller: WebBundle:TestpaperManage:questions }
-
-# course_manage_testpaper_items_get:
-#   path: /course/{courseId}/manage/testpaper/items/get
-#   defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
-#   
-course_set_manage_testpaper_preivew:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
-  defaults: { _controller: WebBundle:TestpaperManage:preview }
 
 testpaper_do:
   path: /lesson/{lessonId}/testpaper/{testId}/do
@@ -292,6 +247,10 @@ testpaper_result_submit:
 testpaper_finish:
   path: /testpaper/result/{resultId}/finish
   defaults: { _controller: WebBundle:Testpaper:finishTest }
+
+testpaper_do_suspend:
+    path: /testpaper/result/{resultId}/suspend
+    defaults: { _controller: WebBundle:Testpaper:testSuspend }
 
 
 #homework

@@ -359,37 +359,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $questions;
     }
 
-    public function previewTestpaper($testpaperId)
-    {
-        $items     = $this->findItemsByTestId($testpaperId);
-        $items     = ArrayToolkit::index($items, 'questionId');
-        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
-        $questions = ArrayToolkit::index($questions, 'id');
-
-        $questions = $this->completeQuestion($items, $questions);
-
-        $formatItems = array();
-
-        foreach ($items as $questionId => $item) {
-            $items[$questionId]['question'] = $questions[$questionId];
-            if ($item['parentId'] != 0) {
-                if (!array_key_exists('items', $items[$item['parentId']])) {
-                    $items[$item['parentId']]['items'] = array();
-                }
-
-                $items[$item['parentId']]['items'][$questionId]                    = $items[$questionId];
-                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
-                unset($items[$questionId]);
-            } else {
-                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
-            }
-        }
-
-        ksort($formatItems);
-        return $formatItems;
-        // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
-    }
-
     public function showTestpaperItems($testId, $resultId = 0)
     {
         $testpaper        = $this->getTestpaper($testId);
@@ -476,7 +445,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     }
 
     //new
-    protected function submitAnswers($id, $answers)
+    public function submitAnswers($id, $answers)
     {
         if (empty($answers)) {
             return array();
@@ -576,19 +545,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $this->beginTransaction();
 
             $this->deleteItemsByTestId($testpaper['id']);
-            $items = $this->createItems($newItems, $questions, $testpaper['id']);
+            $this->createItems($newItems, $questions, $testpaper['id']);
 
-            $this->updateTestpaperByItems($testpaper['id'], $fields);
+            $testpaper = $this->updateTestpaperByItems($testpaper['id'], $fields);
             $this->commit();
 
-            return $items;
+            return $testpaper;
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
     }
 
-    protected function createItems($fields, $questions, $testpaperId)
+    protected function createItems($newItems, $questions, $testpaperId)
     {
         if (!$questions) {
             return false;
@@ -600,18 +569,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['questionId']   = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId']       = $testpaperId;
-            $filter['score']        = $fields[$question['id']]['score'];
-            $filter['missScore']    = empty($fields[$question['id']]['missScore']) ? 0 : $fields[$question['id']]['missScore'];
+            $filter['score']        = $newItems[$question['id']]['score'];
+            $filter['missScore']    = empty($newItems[$question['id']]['missScore']) ? 0 : $newItems[$question['id']]['missScore'];
             $filter['parentId']     = $question['parentId'];
             $items[]                = $this->createItem($filter);
 
-            if ($question['type'] == 'material') {
+            if ($question['type'] == 'material' && $question['subCount'] > 0) {
                 $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-                return $this->createItems($fields, $questionSubs, $testpaperId);
+                return $this->createItems($newItems, $questionSubs, $testpaperId);
             }
         }
-
-        return $items;
     }
 
     protected function updateTestpaperByItems($testpaperId, $fields)
@@ -646,187 +613,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->updateTestpaper($testpaperId, $fields);
 
         return $testpaper;
-    }
-
-    /*public function updateTestpaperItems($testpaperId, $items)
-    {
-    $testpaper = $this->getTestpaper($testpaperId);
-    $argument  = $items;
-
-    if (empty($testpaperId)) {
-    throw $this->createServiceException();
-    }
-
-    $existItems  = $this->findItemsByTestId($testpaperId);
-    $questionIds = ArrayToolkit::column($items, 'questionId');
-
-    $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-
-    if (count($items) != count($questions)) {
-    throw $this->createServiceException($this->getKernel()->trans('数据缺失'));
-    }
-
-    $types      = array();
-    $totalScore = 0;
-    $seq        = 1;
-    $items      = ArrayToolkit::index($items, 'questionId');
-
-    foreach ($items as $item) {
-    $question      = $questions[$item['questionId']];
-    $item['seq']   = $seq;
-    $item['score'] = $question['type'] == 'material' ? 0 : $item['score'];
-
-    if ($question['subCount'] == 0) {
-    $seq++;
-    $totalScore += $item['score'];
-    }
-
-    if ($question['parentId'] > 0) {
-    $items[$question['parentId']]['score'] += $item['score'];
-    }
-
-    if (empty($existItems[$item['questionId']])) {
-    $item['questionType'] = $question['type'];
-    $item['parentId']     = $question['parentId'];
-
-    // @todo, wellming.
-
-    if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
-    $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
-    } else {
-    $item['missScore'] = 0;
-    }
-
-    $item['testId'] = $testpaperId;
-    $item           = $this->createItem($item);
-    } else {
-    $existItem = $existItems[$item['questionId']];
-
-    if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
-    $existItem['seq']   = $item['seq'];
-    $existItem['score'] = $item['score'];
-    $item               = $this->updateItem($existItem['id'], $existItem);
-    } else {
-    $item = $existItem;
-    }
-
-    unset($existItems[$item['questionId']]);
-    }
-
-    if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
-    $types[] = $item['questionType'];
-    }
-    }
-
-    foreach ($existItems as $existItem) {
-    $this->deleteItem($existItem['id']);
-    }
-
-    $metas                      = empty($testpaper['metas']) ? array() : $testpaper['metas'];
-    $metas['question_type_seq'] = $types;
-
-    $this->dispatchEvent("testpaper.item.update", array('testpaper' => $testpaper, 'argument' => $argument));
-
-    $testpaper = $this->updateTestpaper($testpaper['id'], array(
-    'itemCount' => $seq - 1,
-    'score'     => $totalScore,
-    'metas'     => $metas
-    ));
-    }*/
-
-    public function canTeacherCheck($id)
-    {
-        $paper = $this->getTestpaper($id);
-
-        if (!$paper) {
-            throw $this->createServiceException($this->getKernel()->trans('试卷不存在'));
-        }
-
-        $user = $this->getCurrentUser();
-
-        if ($user->isSuperAdmin()) {
-            return $user['id'];
-        }
-
-        $target = explode('-', $paper['target']);
-
-        if ($target[0] == 'course') {
-            $targetId = explode('/', $target[1]);
-            $member   = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
-
-// @todo: 这个是有问题的。
-
-            if ($member['role'] == 'teacher') {
-                return $user['id'];
-            }
-
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
-
-            if (!empty($classroom)) {
-                $isTeacher              = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'], $user['id']);
-                $isAssistant            = $this->getClassroomService()->isClassroomAssistant($classroom['classroomId'], $user['id']);
-                $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'], $user['id']);
-
-                if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
-                    return $user['id'];
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function canLookTestpaper($resultId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
-        }
-
-        $paperResult = $this->getTestpaperResult($resultId);
-
-        if (!$paperResult) {
-            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
-        }
-
-        $paper = $this->getTestpaper($paperResult['testId']);
-
-        if (!$paper) {
-            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
-        }
-
-        if (($paperResult['status'] == 'doing' || $paper['status'] == 'paused') && ($paperResult['userId'] != $user['id'])) {
-            throw $this->createNotFoundException('无权查看此试卷');
-        }
-
-        if ($user->isAdmin()) {
-            return $user['id'];
-        }
-
-        $member = $this->getCourseService()->getCourseMember($paper['courseId'], $user['id']);
-
-        if ($member['role'] == 'teacher') {
-            return $user['id'];
-        }
-
-        if ($paperResult['userId'] == $user['id']) {
-            return $user['id'];
-        }
-
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($paper['courseId']);
-
-        if (!empty($classroom)) {
-            $isTeacher              = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'], $user['id']);
-            $isAssistant            = $this->getClassroomService()->isClassroomAssistant($classroom['classroomId'], $user['id']);
-            $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'], $user['id']);
-
-            if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
-                return $user['id'];
-            }
-        }
-
-        return false;
     }
 
     //new
@@ -915,29 +701,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('Question:QuestionService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getKernel()->createService('Course.CourseService');
-    }
-
     protected function getUploadFileService()
     {
         return $this->getKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getMemberDao()
-    {
-        return $this->getKernel()->createDao('Course.CourseMemberDao');
-    }
-
-    protected function getStatusService()
-    {
-        return $this->getKernel()->createService('User.StatusService');
-    }
-
-    protected function getClassroomService()
-    {
-        return $this->getKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getKernel()

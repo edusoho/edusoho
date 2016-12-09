@@ -1,4 +1,5 @@
 import QuestionTypeBuilder from './question-type-builder';
+import CopyDeny from './copy-deny';
 import ActivityEmitter from "../../js/activity/activity-emitter";
 
 class DoTestBase
@@ -10,10 +11,14 @@ class DoTestBase
     this.$form = $container.find('form');
     this._initEvent();
     this._initUsedTimer();
+    new CopyDeny();
   }
 
   _initEvent() {
-    $(".testpaper-activity-show").perfectScrollbar();
+    /*if ($(".testpaper-activity-show").length > 0) {
+      $(this).perfectScrollbar();
+    }*/
+    
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="paper-submit"]',event=>this._btnSubmit(event));
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
@@ -61,6 +66,7 @@ class DoTestBase
 
   _choiceLable(event) {
     let $inputParents = $(event.delegateTarget);
+
     $inputParents.find('label').each(function(){
       $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
     });
@@ -69,7 +75,7 @@ class DoTestBase
   }
 
   _renderBtnIndex(id,num) {
-    num > 0 ? $('a[data-anchor="#question' + id + '"]').addClass('active') : $('a[data-anchor="#question' + id + '"]').removeClass('active');
+    num > 0 ? $showLight.addClass('active') : $showLight.removeClass('active');
   }
 
   _showEssayInputEditor(event) {

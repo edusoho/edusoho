@@ -81,8 +81,6 @@ interface TestpaperService
 
     public function canBuildTestpaper($builder, $options);
 
-    public function canLookTestpaper($resultId);
-
     /**
      * 开始做试卷
      *
@@ -91,16 +89,8 @@ interface TestpaperService
      */
     public function startTestpaper($id, $lessonId);
 
-    public function previewTestpaper($testpaperId);
-
-    //public function showTestpaper($testpaperResultId, $isAccuracy = null);
-
-    //public function submitAnswers($resultId, $answers);
-
     public function finishTest($resultId, $formData);
 
     public function updateTestpaperItems($testpaperId, $items);
-
-    public function getTestpaperBuilder($type);
 
 }

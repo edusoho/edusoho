@@ -259,10 +259,13 @@ class ManageController extends BaseController
         }
 
         $subQuestions = array();
+        if ($question['subCount'] > 0) {
+            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        }
 
         //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-        return $this->render('question-manage/question-picked-tr.html.twig', array(
+        return $this->render('question-manage/question-picked.html.twig', array(
             'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,

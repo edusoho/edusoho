@@ -5,7 +5,6 @@ class Homework
 		this._setValidateRule();
     this._init();
     this._initEvent();
-    this.$parentIframe = $(window.parent.document).find('#task-manage-content-iframe');
   }
 
   _init() {
@@ -56,13 +55,13 @@ class Homework
         title:{
           required:true
         },
-        'questionId[]':{
+        'questionIds[]':{
           required:true
         }
       },
       messages: {
         title:"请填写标题",
-        'questionId[]':{
+        'questionIds[]':{
           required:"请选择题目"
         }
       },
