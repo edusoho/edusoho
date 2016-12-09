@@ -164,7 +164,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减', array('%field%' => $field, '%fields%' => implode(',', $fields)))));
         }
 
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $this->clearCached();
 
