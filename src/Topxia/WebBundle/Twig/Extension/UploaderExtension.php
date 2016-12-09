@@ -38,16 +38,16 @@ class UploaderExtension extends \Twig_Extension
     {
         $modes = array(
             'courselesson'   => 'auto',
-            'coursematerial' => 'none',
+            'coursematerial' => 'auto',
             'materiallib'    => 'auto',
-            'courseactivity' => 'auto'
+            'course-activity' => 'auto'
         );
 
         if (isset($modes[$targetType])) {
             return $modes[$targetType];
         }
 
-        return 'none';
+        return 'auto';
     }
 
     public function getUploadFileAccept($targetType, $only = '')

@@ -25,8 +25,11 @@
       z-index: 1;
       .back-link {
         color: @gray;
-        padding-right: 30px;
-        font-size: 22px;
+        padding-right: 20px;
+        i {
+          font-size: 22px;
+          line-height: 1;
+        }
         &:hover {
           color: @brand-primary;
         }
@@ -167,6 +170,10 @@
   }
 }
 
+
+
+
+
 .task-state-modal {
   .title {
     text-align: center;
@@ -184,7 +191,6 @@
     background-color: #fafafa;
     padding: 30px 70px;
     text-align: center;
-    margin-bottom: 15px;
     .content-title {
       line-height: 1;
       font-size: 16px;

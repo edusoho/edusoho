@@ -6,6 +6,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\File\UploadFileService;
@@ -31,24 +32,22 @@ class DocController extends BaseController implements ActivityActionInterface
             throw $this->createAccessDeniedException('file type error, expect document');
         }
 
-        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
+        $result = $this->getMaterialLibService()->player($file['globalId']);
+
+        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != 'success';
+        $isPrivate = !isset($result['pdf']) && !isset($result['swf']);
+
+        if ($isConvertNotSuccess || $isPrivate) {
+            if ($file['convertStatus'] == 'error' || $isPrivate) {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
                 $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-
-                $error = array(
-                    'error' => array('code' => 'error', 'message' => $message)
-                );
+                $error = array('code' => 'error', 'message' => $message);
             } else {
-                $error = array(
-                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
-                );
+                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
             }
         } else {
             $error = array();
         }
-
-        $result = $this->getMaterialLibService()->player($file['globalId']);
 
         return $this->render('WebBundle:DocActivity:show.html.twig', array(
             'doc'      => $doc,
@@ -95,6 +94,9 @@ class DocController extends BaseController implements ActivityActionInterface
         return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
         return ServiceKernel::instance()->createService('MaterialLib:MaterialLib.MaterialLibService');

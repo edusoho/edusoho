@@ -12,7 +12,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchExt($id);
+        $activity = $this->getActivityService()->getActivityFetchMedia($id);
         if ($this->getMediaSource($activity) == 'self') {
             return $this->render('WebBundle:VideoActivity:show.html.twig', array(
                 'activity' => $activity,
@@ -37,7 +37,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchExt($id);
+        $activity = $this->getActivityService()->getActivityFetchMedia($id);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
             'activity' => $activity,

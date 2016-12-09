@@ -140,7 +140,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $taskResult = array(
-            'activityId'   => $task['id'],
+            'activityId'   => $task['activityId'],
             'courseId'     => $task['courseId'],
             'courseTaskId' => $task['id'],
             'userId'       => $user['id']
@@ -156,7 +156,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         if (empty($taskResult)) {
-            throw new AccessDeniedException('任务不在进行状态');
+            throw $this->createAccessDeniedException("task #{taskId} can not do. ");
         }
 
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
@@ -166,20 +166,38 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
 
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+        if (!$this->canFinish($taskId)) {
+            throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
+        }
+
+        return $this->finishTaskResult($taskId);
+    }
+
+    public function finishTaskResult($taskId)
+    {
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         if (empty($taskResult)) {
-            throw $this->createAccessDeniedException('该任务不在进行状态');
+            throw $this->createAccessDeniedException('task access denied. ');
         }
 
         if ($taskResult['status'] === 'finish') {
-            return;
+            return $taskResult;
         }
 
         $update['updatedTime']  = time();
         $update['status']       = 'finish';
         $update['finishedTime'] = time();
-        $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+        $taskResult             = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+        return $taskResult;
+    }
+
+    public function canFinish($taskId)
+    {
+        $task   = $this->getTask($taskId);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        // TODO
+        return $course && $this->getActivityService()->canFinishActivity($task['activityId']);
     }
 
     public function tryTakeTask($taskId)
@@ -222,7 +240,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task                  = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -244,6 +262,29 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findByChapterId($chapterId);
+    }
+
+    public function findTasksFetchActivityByChapterId($chapterId)
+    {
+        $tasks = $this->findTasksByChapterId($chapterId);
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
+
+        array_walk($tasks, function (&$task) use ($activities) {
+            $activity         = $activities[$task['activityId']];
+            $task['activity'] = $activity;
+        });
+        return $tasks;
+    }
+
+
+    public function trigger($id, $eventName, $data = array())
+    {
+        $task = $this->getTask($id);
+        $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
+        return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
     }
 
     /**

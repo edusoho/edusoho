@@ -13,7 +13,7 @@ class DownLoadController extends BaseController implements ActivityActionInterfa
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivityFetchExt($id);
+        $activity             = $this->getActivityService()->getActivityFetchMedia($id);
         $activity['courseId'] = $courseId;
         return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
             'activity' => $activity,
@@ -23,7 +23,7 @@ class DownLoadController extends BaseController implements ActivityActionInterfa
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivityFetchExt($id);
+        $activity  = $this->getActivityService()->getActivityFetchMedia($id);
         $materials = array();
 
         foreach ($activity['ext']['materials'] as $media) {

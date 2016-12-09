@@ -17,17 +17,17 @@ class TaskManageController extends BaseController
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
         if ($request->isMethod('POST')) {
-            $task               = $request->request->all();
-            $task['_base_url']  = $request->getSchemeAndHttpHost();
-            $task['fromUserId'] = $this->getUser()->getId();
-            $task               = $this->getTaskService()->createTask($this->parseTimeFields($task));
+            $task                    = $request->request->all();
+            $task['_base_url']       = $request->getSchemeAndHttpHost();
+            $task['fromUserId']      = $this->getUser()->getId();
+            $task['fromCourseSetId'] = $course['courseSetId'];
+            $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
             $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
             return $this->render($tasksRenderPage, array(
                 'course' => $course,
                 'task'   => $task
             ));
-
         }
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
@@ -50,10 +50,9 @@ class TaskManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $task               = $request->request->all();
-            $task['_base_url']  = $request->getSchemeAndHttpHost();
-            $task['fromUserId'] = $this->getUser()->getId();
-            $savedTask          = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+            $task              = $request->request->all();
+            $task['_base_url'] = $request->getSchemeAndHttpHost();
+            $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 
@@ -73,7 +72,6 @@ class TaskManageController extends BaseController
         ));
     }
 
-
     public function publishAction(Request $request, $courseId, $id)
     {
         $this->tryManageCourse($courseId, $id);
@@ -89,7 +87,6 @@ class TaskManageController extends BaseController
 
         return $this->createJsonResponse(array('success' => true));
     }
-
 
     public function taskFieldsAction(Request $request, $courseId, $mode)
     {
