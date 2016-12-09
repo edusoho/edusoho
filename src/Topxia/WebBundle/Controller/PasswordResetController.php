@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
@@ -119,6 +119,19 @@ class PasswordResetController extends BaseController
         ));
     }
 
+    public function changeRawPasswordAction(Request $request)
+    {
+        $fields = $request->query->all();
+        $user_token = $this->getTokenService()->verifyToken('email_password_reset', $fields['token']);
+        $flag = $this->getUserService()->changeRawPassword($user_token['data']['userId'], $user_token['data']['rawPassword']);
+
+        if (!$flag) {
+            return $this->render('TopxiaWebBundle:PasswordReset:raw-error.html.twig');
+        } else {
+            return $this->render('TopxiaWebBundle:PasswordReset:raw-success.html.twig');
+        }
+    }
+
     public function resetBySmsAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -179,5 +192,10 @@ class PasswordResetController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 }

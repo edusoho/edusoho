@@ -10,6 +10,7 @@ use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 
+
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
@@ -128,6 +129,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz->register(new DoctrineServiceProvider());
+        $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $biz->boot();
     }
 
