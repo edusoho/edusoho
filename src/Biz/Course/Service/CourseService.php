@@ -48,4 +48,6 @@ interface CourseService
 
     public function removeCourseStudent($courseId, $userId);
 
+    public function setMemberNoteNumber($courseId, $userId, $num);
+
 }

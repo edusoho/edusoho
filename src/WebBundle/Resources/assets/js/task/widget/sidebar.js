@@ -60,19 +60,29 @@ export default class TaskSidebar extends Emitter{
       }
 
       if($btn.data('loaded')){
-
+        this.operationContent($btn);
+        return;
       }
 
       $.get(url)
           .then(html => {
             $pane.html(html);
-            if($btn.hasClass('active')){
-              this.foldContent();
-            }else {
-              this.popupContent();
-            }
+            $btn.data('loaded', true);
+            this.operationContent($btn);
           })
     });
+  }
+
+  operationContent($btn){
+    if($btn.hasClass('active')){
+      this.foldContent();
+      $btn.removeClass('active');
+    }else {
+      $btn.addClass('active');
+      this.element.find('[data-pane]').hide();
+      this.element.find(`[data-pane="${$btn.data('plugin')}"]`).show();
+      this.popupContent();
+    }
   }
 
   popupContent(time=0) {

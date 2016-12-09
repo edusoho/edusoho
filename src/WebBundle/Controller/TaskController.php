@@ -66,6 +66,15 @@ class TaskController extends BaseController
                     'taskId'   => $taskId
                 ))
             ),
+            array(
+                'code' => 'note',
+                'name' => '笔记',
+                'icon' => 'es-icon-edit',
+                'url'  => $this->generateUrl('course_task_plugin_note', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
+            )
 //            array(
 //                'code' => 'note',
 //                'name' => '笔记',
