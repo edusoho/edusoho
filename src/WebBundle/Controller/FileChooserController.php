@@ -31,13 +31,12 @@ class FileChooserController extends BaseController
         }
         $conditions = $request->query->all();
         $conditions = $this->filterMaterialConditions($conditions, $currentUser);
-
-        $paginator = new Paginator(
+        $paginator  = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
             10
         );
-        $files     = $this->getUploadFileService()->searchFiles(
+        $files      = $this->getUploadFileService()->searchFiles(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -82,7 +81,7 @@ class FileChooserController extends BaseController
 
         $conditions         = array();
         $conditions['ids']  = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
-        $conditions['type'] = empty($query['type']) ? null : $query['type'];
+        $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
 
         $paginator = new Paginator(
             $request,
@@ -129,7 +128,7 @@ class FileChooserController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
-
+        $conditions['type'] = (empty($conditions['type']) || ($conditions['type'] == 'all')) ? null : $conditions['type'];
         return $conditions;
     }
 
