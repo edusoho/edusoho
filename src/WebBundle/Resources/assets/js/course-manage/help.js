@@ -119,7 +119,6 @@ export const showSettings = () => {
 
 export const TabChange = () => {
   $('[data-role="tab"]').click(function (event) {
-    console.log('tag change : ', event);
     let $this = $(this);
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
