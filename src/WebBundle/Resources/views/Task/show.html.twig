@@ -90,11 +90,13 @@
       <div data-pane="task" class="task-pane">
         <ul class="task-list ">
           {% for task in tasks %}
-            {% set task_lock =  not  task.result|default(null) %}
+            {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
               <i class="es-icon 
               {% if task_lock %}
-                es-icon-lock 
+                es-icon-lock
+              {% elseif  not task.result|default(null) %}
+                es-icon-undone-check
               {% elseif task.result.status == 'start' %}
                 es-icon-doing 
               {% elseif task.result.status == 'finish' %}
