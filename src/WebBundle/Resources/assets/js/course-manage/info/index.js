@@ -5,24 +5,27 @@ import MultiGroup from '../../../common/widget/multi-group';
 import sortList from 'common/sortable';
 
 
-let items = {
-  "success": 1,
-  "result": {
-       "token": "12312312312",
-       "userId": 123
-    }
-}
+let items = [{
+  id:1,
+  value: '这是内容',
+  checked: true,
+  sqe: 1,
+}];
 
-function renderMultiGroupComponent(elementId){
-  ReactDOM.render( <MultiGroup items = {$("#"+elementId).data("init-value")} fieldName={$("#"+elementId).data('field-name')} sortable={true}/>,
-    document.getElementById(elementId)
-  );
-}
+ReactDOM.render( <MultiGroup items = {items} />,
+  document.getElementById('course-goals')
+);
 
-console.log($("#course-goals").data("init-value"));
+// function renderMultiGroupComponent(elementId){
+//   ReactDOM.render( <MultiGroup datas = {items} fieldName={$("#"+elementId).data('field-name')} sortable={true}/>,
+//     document.getElementById(elementId)
+//   );
+// }
 
-renderMultiGroupComponent('course-goals');
-renderMultiGroupComponent('intended-students', $('#intended-students').data('init-value'));
+// console.log($("#course-goals").data("init-value"));
+
+// renderMultiGroupComponent('course-goals');
+// renderMultiGroupComponent('intended-students', $('#intended-students').data('init-value'));
 
 
 // sortList({

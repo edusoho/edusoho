@@ -54,7 +54,14 @@ export default class InputGroup extends Component {
 
   handleAdd()  {
     if(this.state.itemName.length>0) {
-      this.props.addItem(this.state.itemName);
+      let obj = {
+        id: 1,
+        value : this.state.itemName,
+        checked: true,
+        sqe: 0,
+      }
+      //@TODO序号应该再哪里去加；
+      this.props.addItem(obj);
     }
     this.setState({
       itemName:'',
