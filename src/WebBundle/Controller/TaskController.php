@@ -65,10 +65,16 @@ class TaskController extends BaseController
         ));
     }
 
-    public function finishTaskAction(Request $request, $courseId, $id)
+    public function finishAction(Request $request, $courseId, $taskId)
     {
-        $result = $this->getTaskService()->finishTask($id);
-        return $this->createJsonResponse($result);
+        $result = $this->getTaskService()->finishTask($taskId);
+        $task = $this->getTaskService()->getTask($taskId);
+        $nextTask = $this->getTaskService()->getNextTask($taskId);
+        return $this->render('WebBundle:Task:finish-result.html.twig', array(
+            'result' => $result,
+            'task' => $task,
+            'nextTask' => $nextTask
+        ));
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
