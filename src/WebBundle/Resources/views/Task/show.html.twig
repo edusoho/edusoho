@@ -31,10 +31,13 @@
           style="width:100%;height:100%;border:0px">
         </iframe>
       </div>
+      
       <div class="dashboard-footer ">
         <div class="state-opration "> 
           <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
-          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>XXX任务已完成</a>
+
+          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
+
           <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-placement="top" data-content='
             <div class="task-state-modal task-state-modal-xs">
               <div class="title">
@@ -57,14 +60,15 @@
             <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </a>
         </div>
+
         <a type="button" 
-        href="javascript:;" 
+          href="javascript:;" 
         {% if taskResult.status != 'finish' %}
-        class="btn btn-transparent btn-learn js-btn-learn" 
-        id = 'learn-btn'
-        data-url='{{path("course_task_finish",{courseId: task.courseId, taskId: task.id})}}' 
+          class="btn btn-transparent btn-learn js-btn-learn" 
+          id = 'learn-btn'
+          data-url='{{path("course_task_finish",{courseId: task.courseId, taskId: task.id})}}' 
         {% else %}
-        class="btn btn-transparent btn-learn js-btn-learn active" 
+          class="btn btn-transparent btn-learn js-btn-learn active" 
         {% endif %}
         >
           {% if taskResult.status == 'finish' %}
