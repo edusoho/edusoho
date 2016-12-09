@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BuildPackageAutoCommand extends BaseCommand
+class BuildUpgradePackageCommand extends BaseCommand
 {
     /**
      * @var Filesystem
@@ -450,7 +450,7 @@ class BuildPackageAutoCommand extends BaseCommand
         while (!feof($file)) {
             $line   = fgets($file);
             $opFile = trim(substr($line, 1));
-            if (strpos($opFile, 'migrations') === 0) {
+            if (strpos($opFile, 'migrations') !== false) {
                 $askSqlUpgrade = true;
                 $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
             }
