@@ -1,54 +1,23 @@
-<script type="text/javascript">
+<script id="script-loader-async" type="text/javascript">
   "use strict";
-  var paths = [
-    {% for path in script() %}
-      {% if path starts with 'http' %}
-        {% if 'js-sdk/uploader' in path %}
-          "{{ path ~ '?' ~ random(date().timestamp / 1000) }}",
+  (function() {
+    var paths = [
+      {% for path in script() %}
+        {% if path starts with 'http' %}
+          {% if 'js-sdk/uploader' in path %}
+            "{{ path ~ '?' ~ random(date().timestamp / 1000) }}",
+          {% else %}
+            "{{ path ~ '?' ~ asset_version('')}}",
+          {% endif %}
         {% else %}
-          "{{ path ~ '?' ~ asset_version('') }}",
+          "{{ asset('build/' ~ path, 'webpack') }}",
         {% endif %}
-      {% else %}
-        "{{ asset('build/' ~ path, 'webpack') }}",
-      {% endif %}
-    {% endfor %}
-  ];
+      {% endfor %}
+    ];
 
-  var Loader = (function () {
-    var loadScript = function (paths, index) {
-      var path = paths[index];
-      if(path === undefined){
-        return;
-      }
-      var script = document.createElement('script');
-      script.type = "text/javascript";
-
-      if (script.readyState) {  //IE
-        script.onreadystatechange = function () {
-          if (script.readyState == "loaded" || script.readyState == "complete") {
-            script.onreadystatechange = null;
-            loadScript(paths, index + 1);
-          }
-        };
-      } else {  //Others
-        script.onload = function () {
-          loadScript(paths, index + 1);
-        };
-      }
-
-      script.onerror = function (error) {
-        console.error("The script " + error.target.src + " is not accessible.");
-      };
-
-      script.src = path;
-      document.body.appendChild(script);
-    };
-
-    return {
-      load: loadScript,
-    };
-
+    script(paths, function() {
+      var node = document.getElementById('script-loader-async');
+      node.parentNode.removeChild(node);
+    }, document.getElementById('modal'));
   })();
-
-  Loader.load(paths, 0);
 </script>

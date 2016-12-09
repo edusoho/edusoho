@@ -80,7 +80,7 @@
       <div class="col-md-8 controls">
         <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
-          <input class="form-control" id="goals" name="goals" type="text" data-role="item-input" value="{{course.goals|default('')}}">          
+          <input class="form-control" id="goals" name="goals" type="text" data-role="item-input" value="{{course.goals|default([])|json_encode}}">          
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
           </span>
@@ -106,7 +106,7 @@
 
         <ul class="list-group sortable-list dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
         <div class="input-group">
-          <input class="form-control" id="audiences" name="audiences" type="text" data-role="item-input" value="{{course.audiences|default('')}}">          
+          <input class="form-control" id="audiences" name="audiences" type="text" data-role="item-input" value="{{course.audiences|default([])|json_encode}}">          
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
           </span>

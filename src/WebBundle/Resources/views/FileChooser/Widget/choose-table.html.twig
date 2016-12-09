@@ -1,4 +1,5 @@
-<table class="table table-striped table-hover">
+{% if files %}
+<div class="chooser-list"><table class="table table-striped table-hover">
   <tbody>
   {% for file in files %}
     <tr id="material-table-tr-{{ file.id }}" class="file-browser-item"
@@ -13,7 +14,10 @@
       <td> {{ file.createdTime|date('Y-m-d') }}</td>
     </tr>
   {% else %}
-    <div class="empty">没有资源...</div>
+    
   {% endfor %}
   </tbody>
-</table>
+  </table></div>
+    {% else %}
+    <div class="empty">没有资源...</div>
+    {% endif %}

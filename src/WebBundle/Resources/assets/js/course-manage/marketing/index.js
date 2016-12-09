@@ -1,3 +1,4 @@
+import { TabChange } from '../help';
 
 class Marketing {
 	constructor(){
@@ -6,6 +7,7 @@ class Marketing {
 
 	init(){
 		let $form = $('#course-marketing-form');
+		TabChange();
 
 		let validator = $form.validate({
 			onkeyup: false,
@@ -42,10 +44,19 @@ class Marketing {
         );
 
 		$('input[name="isFree"]').on('change', function(event){
-            $('.js-is-free').toggle($('input[name="isFree"]:checked').val() == 0 ? 'show' : 'hide');
+			if($('input[name="isFree"]:checked').val() == 0){
+				$('.js-is-free').removeClass('hidden');
+			}else{
+				$('.js-is-free').addClass('hidden');
+			}
         });
         $('input[name="tryLookable"]').on('change', function(event){
-            $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
+        	if($('input[name="tryLookable"]:checked').val() == 1){
+				$('.js-enable-try-look').removeClass('hidden');
+			}else{
+				$('.js-enable-try-look').addClass('hidden');
+			}
+            // $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
         });
 
 		$('#course-submit').click(function(evt){

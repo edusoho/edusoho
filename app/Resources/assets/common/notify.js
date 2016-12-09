@@ -6,12 +6,12 @@ const notify = (level, message) => {
     message: message
   }, {
     type: level, //info,danger,warning,success
-    delay: 5000,
+    delay: 2000,
     placement: {
       from: 'top',
       align: 'center'
     },
-    offset: 5,
+    offset: 0,
     z_index: 1051,
   });
 }

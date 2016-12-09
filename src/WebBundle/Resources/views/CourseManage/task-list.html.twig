@@ -1,0 +1,50 @@
+{% extends 'WebBundle:CourseManage:layout.html.twig' %}
+
+{% set content_tab = 'task-list' %}
+
+{% block task_manage %}
+  {% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}
+  <div id="test">111</div>
+  <div class="task-list-header clearfix">
+    任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
+    <div class="pull-right">
+      <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> 任务 </button>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+          <i class="es-icon es-icon-anonymous-iconfont"></i>
+          {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}/课时
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{'添加%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)})}}
+            </a>
+          </li>
+          <li>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{'添加%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节')})}}
+            </a>
+          </li>
+          <li>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'lesson'}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{'添加课时'|trans}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{path("course_manage_items_sort",{courseId:1})}}'>
+    {% for key, item in items %}
+      {% if item.itemType == 'task' %}
+        {% include 'WebBundle:TaskManage:list-item.html.twig' with {task:item} %}
+      {% elseif item.itemType == 'chapter' %}
+        {% include 'WebBundle:CourseChapterManage:list-item.html.twig' with {chapter:item, course:course} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endblock %}

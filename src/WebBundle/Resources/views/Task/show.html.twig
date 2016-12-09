@@ -18,30 +18,33 @@
   <div class="task-dashboard-page js-task-dashboard-page">
     <div class="dashboard-content" id="dashboard-content">
       <div class="dashboard-header">
-        <a class="back-link" href="javascript:;">
+        <a class="back-link" href="{{backUrl}}">
           <i class="es-icon es-icon-chevronleft"></i>
         </a>
-        任务1：{{ task.title }}
+        任务：{{ task.title }}
       </div>
       <div class="dashboard-body">
         <iframe id="task-content-iframe" class="task-content-iframe"
 
-          data-event-url="{{ path('course_activity_trigger', {courseId: task.courseId, activityId: task.activityId}) }}"
+          data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, taskId: task.id}) }}"
           src="{{path('course_task_activity_show',{ id:task.id,courseId:task.courseId, preview: preview })}}"
           style="width:100%;height:100%;border:0px">
         </iframe>
       </div>
+
       <div class="dashboard-footer ">
         <div class="state-opration "> 
           <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a>
-          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>XXX任务已完成</a>
+
+          <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件</p>点击“看过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
+
           <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-placement="top" data-content='
             <div class="task-state-modal task-state-modal-xs">
               <div class="title">
                 <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
               </div>
               <div class="content">
-                <div class="content-title">《 第1个任务：集合的定义和使用 》</div>
+                <div class="content-title">《 任务：集合的定义和使用 》</div>
                 学习进度
                 <div class="content-progress">
                   <div class="progress progress-radius mts mb0">
@@ -54,14 +57,29 @@
                 <a class="btn btn-primary btn-sm">下一任务</a>
               </div>
             </div>'>
+            
             <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </a>
         </div>
-        <a type="button" class="btn btn-transparent btn-learn js-btn-learn" data-toggle="modal"  data-target="#myModal">
-          <i class="es-icon es-icon-undone-check doing"></i>
+
+        <a type="button" 
+          href="javascript:;" 
+        {% if taskResult.status != 'finish' %}
+          class="btn btn-transparent btn-learn js-btn-learn" 
+          id = 'learn-btn'
+          data-url='{{path("course_task_finish",{courseId: task.courseId, taskId: task.id})}}' 
+        {% else %}
+          class="btn btn-transparent btn-learn js-btn-learn active" 
+        {% endif %}
+        >
+          {% if taskResult.status == 'finish' %}
           <i class="es-icon es-icon--check-circle done"></i>
+          {% else %}
+          <i class="es-icon es-icon-undone-check doing"></i>
+          {% endif %}
           学过了
         </a>
+      <!--
         <a type="button" class="btn btn-transparent btn-learn js-btn-learn" >
           <i class="es-icon es-icon-undone-check doing"></i>
           <i class="es-icon es-icon--check-circle done"></i>
@@ -70,6 +88,7 @@
         <a class="btn btn-primary js-test">弱提示效果</a>
         <a class="btn btn-primary " data-toggle="modal" data-target="#myModal">完成任务</a>
         <a class="btn btn-primary " data-toggle="modal" data-target="#myModal2">任务失败</a>
+      -->
       </div>
     </div>
     <div class="dashboard-sidebar" id="dashboard-sidebar">
@@ -113,47 +132,4 @@
     </div>
   </div>
 
-  <div  class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body task-state-modal">
-          <div class="title font-blod">
-            <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
-          </div>
-          <div class="content">
-            <div class="content-title">恭喜完成<span class="font-blod mlm">《 第1个任务：集合的定义和使用 》</span></div>
-            <div class="progress progress-radius progress-md content-progress">
-              <div class="progress-bar progress-bar-left progress-bar-success "  role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:50%">60%</div>
-              <span class="mrl">100%</span>
-            </div>
-            <span class="text-success">已完成了整个课程的18%，加油吧！</span>
-          </div>
-          <div class="footer text-right">
-            <a class="btn btn-info mrm">分享</a>
-            <a class="btn btn-primary">下一任务</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div  class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body task-state-modal">
-          <div class="title font-blod">
-            <i class="es-icon es-icon-cuowu text-danger"></i>完成任务
-          </div>
-          <div class="content">
-            <div class="content-title mbl">
-              完成任务需要<span class="mlm text-success">作业得分  80分</span>
-              <p class="mtm">继续加油吧！</p>
-            </div>
-          </div>
-          <div class="footer text-right">
-            <a class="btn btn-primary">重新学习</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 {% endblock %}

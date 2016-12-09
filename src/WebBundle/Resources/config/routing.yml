@@ -158,9 +158,14 @@ task_live_trigger:
   path: /course/{courseId}/activity/{activityId}/live_trigger
   defaults: {_controller: WebBundle:LiveActivity:trigger}
 
-course_activity_trigger:
-  path: /course/{courseId}/activity/{activityId}/trigger
-  defaults: { _controller: WebBundle:Activity:trigger }
+course_task_trigger:
+  path: /course/{courseId}/task/{taskId}/trigger
+  defaults: { _controller: WebBundle:Task:trigger }
+  methods: [POST]
+
+course_task_finish:
+  path: /course/{courseId}/task/{taskId}/finish
+  defaults: { _controller: WebBundle:Task:finish }
   methods: [POST]
 
 media_materiallib_choose:
@@ -172,7 +177,7 @@ media_materiallib_contacts:
     defaults: { _controller: WebBundle:FileChooser:findMySharingContacts }
 
 media_course_file_choose:
-    path: /media/corusefile/{courseId}/choose
+    path: /media/coursefile/{courseId}/choose
     defaults: { _controller: WebBundle:FileChooser:courseFileChoose }
 
 media_video_import:
