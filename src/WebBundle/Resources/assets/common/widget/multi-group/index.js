@@ -26,6 +26,16 @@ function deleteItem(id,items) {
 }
 
 
+function createItem(value,items) {
+  let obj = {
+    id: items.length + 1,
+    value : value,
+    checked: false,
+    sqe: items.length + 1,
+  }
+  items.push(obj);
+}
+
 
 
 class MultiGroup extends Component {
@@ -41,24 +51,9 @@ class MultiGroup extends Component {
     // }
   }
 
-  componentDidMount(){
-    // if(!this.props.sortable){
-    //   return;
-    // }
-    // let self = this;
-    // $(document).bind('items-sorted', function(event, key, sortedItems){
-    //   if(self.state.key !== key){
-    //     return;
-    //   }
-    //   self.setState({
-    //     datas: sortedItems
-    //   });
-    // });
-  }
-
   listCheckChange(event) {
     let id = event.currentTarget.value;
-    updateChecked(index,this.state.datas);
+    updateChecked(id,this.state.datas);
     this.setState({
       datas: this.state.datas
     });
@@ -73,20 +68,19 @@ class MultiGroup extends Component {
   }
 
   addItem(value) {
-    console.log(value);
-    this.state.datas.push(value);
+    createItem(value,this.state.datas);
     this.setState({
       datas: this.state.datas
     });
   }
 
   render (){
-    const { openSort,showListCheck,openSearch, outputDataElement} = this.props;
+    const { enableSort,enableChecked,enableSearch, outputDataElement} = this.props;
     let  outputDataElementId = outputDataElement + '-' + (Math.random() + "").substr(2);
     return (
       <div className="multi-group">
-        <List datas={this.state.datas}  showListCheck ={showListCheck} openSort = {openSort} removeItem={(index)=>this.removeItem(index)}  listCheckChange={(event)=>this.listCheckChange(event)} />
-        <InputGroup openSearch = {openSearch} addItem={(value)=>this.addItem(value)} />
+        <List datas={this.state.datas}  enableChecked ={ enableChecked } enableSort = {enableSort} removeItem={(index)=>this.removeItem(index)}  listCheckChange={(event)=>this.listCheckChange(event)} />
+        <InputGroup enableSearch = { enableSearch } addItem={(value)=>this.addItem(value)} />
         <input type='hidden' id={outputDataElementId} name={outputDataElement} value={JSON.stringify(this.state.datas)} />
       </div>
     );
@@ -100,13 +94,13 @@ MultiGroup.propTypes = {
 MultiGroup.defaultProps = {
   className: 'multi-group',
   datas: [],
-  openSort: false,
-  openSearch: false,
-  showListCheck:true,
+  enableSort: false,
+  enableSearch: false,
+  enableChecked:false,
   outputDataElement:'',
 };
 
-// <List removeItem={(index)=>this.removeItem(index)} datas={this.state.datas}  openSort = {openSort} sortable={this.props.sortable}  compKey={this.state.key} />
+// <List removeItem={(index)=>this.removeItem(index)} datas={this.state.datas}  enableSort = {enableSort} sortable={this.props.sortable}  compKey={this.state.key} />
 
 
 

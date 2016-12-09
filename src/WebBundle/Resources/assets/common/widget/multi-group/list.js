@@ -31,8 +31,7 @@ export default class List extends Component {
   };
 
   render() {
-    const { showListCheck } =  this.props;
-    console.log(this.state.datas);
+    const { enableChecked } =  this.props;
     return (
       <ul className="list-group teacher-list-group sortable-list mb0">
       {
@@ -40,7 +39,7 @@ export default class List extends Component {
           return (
             <li className="list-group-item mbs" key={i}>
               {item.value}
-              {showListCheck && <input type="checkbox" value={item.id} checked={item.checked} onChange = {event=>this.props.listCheckChange(event)}/>}
+              { enableChecked && <input type="checkbox" value={item.id} checked={item.checked} onChange = {event=>this.props.listCheckChange(event)}/>}
               <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.id}>
                 <i className = "es-icon es-icon-close01"></i>
               </a>

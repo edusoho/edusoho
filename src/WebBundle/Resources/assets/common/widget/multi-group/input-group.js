@@ -8,11 +8,11 @@ export default class InputGroup extends Component {
     super(props);
     this.state = {
       itemName: "",
-      isSerach: true,
       canSerach: true,
       haveOptions:false,
       optionsData:[],
     }
+    this.enableSearch = this.props.enableSearch;
   }
 
   selectChange(event) {
@@ -39,7 +39,7 @@ export default class InputGroup extends Component {
       haveOptions:false,
     });
 
-    if(this.state.isSerach && value.length > 0 && this.state.canSerach) {
+    if(this.enableSearch && value.length > 0 && this.state.canSerach) {
       console.log('seach..');
       send('/course/274/manage/teachersMatch?q='+value,optionsData=>{
         if(this.state.itemName.length>0) {
@@ -54,14 +54,8 @@ export default class InputGroup extends Component {
 
   handleAdd()  {
     if(this.state.itemName.length>0) {
-      let obj = {
-        id: 1,
-        value : this.state.itemName,
-        checked: true,
-        sqe: 0,
-      }
       //@TODO序号应该再哪里去加；
-      this.props.addItem(obj);
+      this.props.addItem(this.state.itemName);
     }
     this.setState({
       itemName:'',
@@ -75,7 +69,7 @@ export default class InputGroup extends Component {
       <div className="input-group">
         <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus = {event=>this.onFocus(event)}  />
         { 
-          this.state.isSerach && this.state.haveOptions && <Options items ={this.state.optionsData} selectChange ={(event)=>this.selectChange(event)} haveOptions={true}/>
+          this.enableSearch && this.state.haveOptions && <Options items ={this.state.optionsData} selectChange ={(event)=>this.selectChange(event)} haveOptions={true}/>
         }
         <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span>
       </div>
