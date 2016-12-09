@@ -13,9 +13,9 @@ class TaskController extends BaseController
         $preview  = $request->query->get('preview');
         $task     = $this->tryLearnTask($courseId, $id, (bool) $preview);
         $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
-        $backUrl = '';
         if ($this->getCourseService()->isCourseStudent($courseId, $this->getUser()->getId())) {
             $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
         } else {
@@ -31,7 +31,6 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-
         return $this->render('WebBundle:Task:show.html.twig', array(
             'task'       => $task,
             'taskResult' => $taskResult,

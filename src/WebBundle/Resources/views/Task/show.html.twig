@@ -38,7 +38,7 @@
 
           <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container=".js-learning-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
 
-          <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='
+          <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content=''>
             <div class="task-state-modal task-state-modal-xs">
               <div class="title">
                 <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
@@ -56,7 +56,7 @@
               <div class="footer text-right">
                 <a class="btn btn-primary btn-sm">下一任务</a>
               </div>
-            </div>'>
+            </div>
             
             <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </a>
@@ -90,14 +90,14 @@
       <div data-pane="task" class="task-pane">
         <ul class="task-list ">
           {% for task in tasks %}
-            {% set task_lock =  (task.resultStatus is not defined  or task.resultStatus.status is empty ) ? true : false %}
+            {% set task_lock =  not  task.result|default(null) %}
             <li class="task-item {% if task.activityId == activity.id %} active {% endif %} mouse-control">
               <i class="es-icon 
-              {% if task.resultStatus is not defined  or task.resultStatus.status is empty %}
+              {% if task_lock %}
                 es-icon-lock 
-              {% elseif task.resultStatus.status == 'start' %}
+              {% elseif task.result.status == 'start' %}
                 es-icon-doing 
-              {% elseif task.resultStatus.status == 'finish' %}
+              {% elseif task.result.status == 'finish' %}
                 es-icon-iccheckcircleblack24px 
               {% endif %} 
                 left-menu"></i>
