@@ -31,13 +31,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 'title'    => $field['title'],
                 'type'     => 'lesson'
             );
-            $task = $this->biz['db']->transactional(function () use ($field, $chapter, $that) {
+            $task    = $this->biz['db']->transactional(function () use ($field, $chapter, $that) {
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
-                $task['activity']    = $that->getActivityService()->getActivityFetchMedia($task['activityId']);
-                $chapter['tasks']    = array($task);
-                return $chapter;
+                return $task;
             });
         } else {
             $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
@@ -47,8 +45,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $field['status'] = $lessonTask['status'];
             $task            = $this->baseCreateTask($field);
         }
-
-        return $task;
+        $chapter          = $this->getChapterDao()->get($lessonTask['categoryId']);
+        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
+        $chapter['tasks'] = $tasks;
+        return $chapter;
     }
 
     public function updateTask($id, $fields)
