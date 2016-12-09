@@ -3,10 +3,10 @@ namespace Biz\Testpaper\Builder;
 
 use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
-use Biz\Testpaper\Builder\TestpaperLibBuilder;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Topxia\Common\Exception\InvalidArgumentException;
 
-class HomeworkBuilder extends Factory implements TestpaperLibBuilder
+class HomeworkBuilder extends Factory implements TestpaperBuilderInterface
 {
     public function build($fields)
     {

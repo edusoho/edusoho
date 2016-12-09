@@ -61,6 +61,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         $formatItems = array();
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            print_r($question);
             if (!$question) {
                 $question = array(
                     'isDeleted' => true,

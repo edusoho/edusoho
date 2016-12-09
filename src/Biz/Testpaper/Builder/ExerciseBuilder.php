@@ -3,9 +3,9 @@ namespace Biz\Testpaper\Builder;
 
 use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
-use Biz\Testpaper\Builder\TestpaperLibBuilder;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
-class ExerciseBuilder extends Factory implements TestpaperLibBuilder
+class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
 {
     public function build($fields)
     {

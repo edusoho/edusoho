@@ -559,6 +559,11 @@ class ManageController extends BaseController
         return $questionTypes;
     }
 
+    protected function getQuestionConfig()
+    {
+        return $this->get('extension.default')->getQuestionTypes();
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
