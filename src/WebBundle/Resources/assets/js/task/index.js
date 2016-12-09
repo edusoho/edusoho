@@ -19,20 +19,10 @@ class TaskShow extends Emitter {
   }
 
   init() {
-    this.initPlugin();
     this.sidebar();
-
     if(this.mode != 'preview'){
       this.bindEvent();
     }
-  }
-
-  initPlugin() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover({
-      html: true,
-      trigger: 'hover',
-    });
   }
 
   bindEvent(){
@@ -56,8 +46,9 @@ class TaskShow extends Emitter {
 
     this.trigger('doing', timeStep);
 
-    this.element.on('click', '.js-btn-learn', event => {
-      $.post($('.js-btn-learn').data('url'), response => {
+    this.element.on('click', '#learn-btn', event => {
+      console.log(event);
+      $.post($('#learn-btn').data('url'), response => {
           $('#modal').modal('show');
           $('#modal').html(response);
           this.ui.learned();
