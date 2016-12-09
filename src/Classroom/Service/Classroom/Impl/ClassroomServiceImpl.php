@@ -574,7 +574,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => '|student|',
             'remark'      => empty($order['note']) ? '' : $order['note'],
-            'createdTime' => time()
         );
 
         if (empty($fields['remark'])) {
@@ -590,7 +589,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $member['role']    = array('student');
                 $member['orderId'] = $fields['orderId'];
-                $member['createdTime'] = time();
             }
 
             $member = MemberSerialize::serialize($member);

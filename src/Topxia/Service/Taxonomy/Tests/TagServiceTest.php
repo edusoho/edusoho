@@ -401,6 +401,23 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvalieable('测试标签组', '测试标签组2'));
     }
 
+    public function testFindTagIdsfindByOwnerTypeAndOwnerIds()
+    {
+        $fields = array(
+            'tagId'     => 1,
+            'ownerType' => 'course',
+            'ownerId'   => 1
+        );
+
+        $this->getTagService()->addTagOwnerRelation($fields);
+        $fields['tagId'] = 2;
+        $this->getTagService()->addTagOwnerRelation($fields);
+
+        $tagIds = $this->getTagService()->findTagIdsfindByOwnerTypeAndOwnerIds('course', array(1));
+        $this->assertEquals(1,$tagIds['1'][0]);
+        $this->assertEquals(2,$tagIds['1'][1]);   
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
