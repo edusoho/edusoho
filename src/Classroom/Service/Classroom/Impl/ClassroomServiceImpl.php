@@ -121,7 +121,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->fillOrgId($classroom);
 
-        $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");

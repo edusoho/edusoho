@@ -21,6 +21,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function addMember($member)
     {
+        $member['createdTime'] = time();
         $affected = $this->getConnection()->insert($this->table, $member);
 
         if ($affected <= 0) {

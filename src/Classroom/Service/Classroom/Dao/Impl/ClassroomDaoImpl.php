@@ -113,7 +113,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function addClassroom($classroom)
     {
         $classroom = $this->createSerializer()->serialize($classroom, $this->serializeFields);
-
+        $classroom['createdTime'] = time();
+        $classroom['updatedTime'] = $classroom['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $classroom);
         $this->clearCached();
 
@@ -147,6 +148,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function updateClassroom($id, $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         $this->clearCached();

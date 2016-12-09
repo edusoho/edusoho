@@ -28,7 +28,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function addMember($member)
     {
         $member['createdTime'] = time();
-        $member['updatedTime'] = time();
+        $member['updatedTime'] = $member['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $member);
         $this->clearCached();
 
