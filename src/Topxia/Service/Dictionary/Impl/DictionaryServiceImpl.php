@@ -2,12 +2,18 @@
 namespace Topxia\Service\Dictionary\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Dictionary\Dao\DictionaryDao;
 use Topxia\Service\Dictionary\DictionaryService;
 use Topxia\Common\ArrayToolkit;
 
 class DictionaryServiceImpl extends BaseService implements DictionaryService
 {
-	public function findAllDictionaries()
+    public function addDictionary($dictionary)
+    {
+        return $this->getDictionaryDao()->create($dictionary);
+    }
+
+    public function findAllDictionaries()
 	{
 		return $this->getDictionaryDao()->findAllDictionaries();
 	}
@@ -52,7 +58,10 @@ class DictionaryServiceImpl extends BaseService implements DictionaryService
 	{
 		return $this->createDao('Dictionary.DictionaryItemDao');
 	}
-	
+
+    /**
+     * @return DictionaryDao
+     */
 	protected function getDictionaryDao()
 	{
 		return $this->createDao('Dictionary.DictionaryDao');

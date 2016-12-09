@@ -263,7 +263,7 @@ class CourseController extends CourseBaseController
         $user        = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
             throw $this->createAccessDeniedException();
         }
 
@@ -305,8 +305,7 @@ class CourseController extends CourseBaseController
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
-
-var_dump($member);
+        
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
@@ -390,7 +389,6 @@ var_dump($member);
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
         return $this->createJsonResponse(true);
@@ -439,7 +437,7 @@ var_dump($member);
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
+        
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
         $isLimit = $this->setting('magic.lesson_watch_limit');
@@ -488,7 +486,7 @@ var_dump($member);
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course'       => $course,
-            'users'        => $users,
+            'users'        => $users
         ));
     }
 

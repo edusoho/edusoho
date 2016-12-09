@@ -14,11 +14,10 @@ admin_user_org_update:
     parent: admin_user_manage
     mode: modal
     group: groupButton
-    visable: ( app.user.id != user.id )
+    visable: ( app.user.id != user.id and setting('magic.enable_org', 0) == 1 )
     router_params:
         id: (user.id)
     disable: true
-    visable: false
 
 # admin_move_course_to_org:
 #     name: 推送课程

@@ -2,14 +2,17 @@
 
 namespace Topxia\WebBundle\Listener;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Topxia\Common\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserLoginTokenListener
 {
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -27,7 +30,7 @@ class UserLoginTokenListener
         $user           = $this->getUserService()->getCurrentUser();
 
         if (isset($user['locked']) && $user['locked'] == 1) {
-            $this->container->get("security.context")->setToken(null);
+            $this->container->get("security.token_storage")->setToken(null);
             setcookie("REMEMBERME");
             return;
         }
@@ -54,7 +57,7 @@ class UserLoginTokenListener
             && ($request->getMethod() != 'POST')
         ) {
             $request->getSession()->invalidate();
-            $this->container->get("security.context")->setToken(null);
+            $this->container->get("security.token_storage")->setToken(null);
 
             $goto = $this->container->get('router')->generate('register_submited', array(
                 'id' => $user['id'], 'hash' => $this->makeHash($user)
@@ -85,10 +88,16 @@ class UserLoginTokenListener
         if (empty($userLoginToken) && !empty($REMEMBERME)) {
             return;
         }
-
+  
         if ($userLoginToken != $user['loginSessionId']) {
+            if ($request->isXmlHttpRequest()) {
+                $response = new Response('LoginLimit', 403);
+                $response->headers->clearCookie('REMEMBERME');
+                $response->send(); 
+            }
             $request->getSession()->invalidate();
-            $this->container->get("security.context")->setToken(null);
+
+            $this->container->get("security.token_storage")->setToken(null);
 
             $goto = $this->container->get('router')->generate('login');
 

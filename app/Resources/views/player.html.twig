@@ -18,7 +18,8 @@
 
 {% elseif player == 'youku' %}
 
-{% set url = url | youku_player_url %}
+{# @todo fix_update_vendor #}
+{# {% set url = url | youku_player_url %} #}
 
 <object type="application/x-shockwave-flash" width="600" height="450" id="movie_player" data="{{ url }}">
   <param name="allowFullScreen" value="true"/>

@@ -118,7 +118,7 @@ class OrderController extends BaseController
             'cancelled' => $this->trans('已关闭')
         );
 
-        $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
         $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -281,7 +281,7 @@ class OrderController extends BaseController
         foreach ($orders as $key => $order) {
             $member = "";
             $member .= $order['sn'].",";
-            $member .= $status[$orders['status']].",";
+            $member .= $status[$order['status']].",";
             $member .= $order['title'].",";
 
             $member .= $order['totalPrice'].",";

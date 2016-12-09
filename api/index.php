@@ -2,51 +2,13 @@
 
 date_default_timezone_set('UTC');
 
-require_once __DIR__.'/../vendor2/autoload.php';
+require_once __DIR__ . '/bootstrap.php';
 
-// use Doctrine\DBAL\DriverManager;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Debug\ErrorHandler;
-use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\Debug\Debug;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Routing\Loader\YamlFileLoader;
-use Symfony\Component\Routing\RouteCollection;
-use Topxia\Common\AppConnectionFactory;
 
-if (API_ENV == 'prod') {
-    ErrorHandler::register(0);
-    ExceptionHandler::register(false);
-}
-
-$paramaters         = include __DIR__.'/config/paramaters.php';
-$paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
-
-// $connection = DriverManager::getConnection(array(
-//     'wrapperClass' => 'Topxia\Service\Common\Connection',
-//     'dbname'       => $paramaters['database_name'],
-//     'user'         => $paramaters['database_user'],
-//     'password'     => $paramaters['database_password'],
-//     'host'         => $paramaters['database_host'],
-//     'driver'       => $paramaters['database_driver'],
-//     'charset'      => 'utf8'
-// ));
-
-$request = Request::createFromGlobals();
-$serviceKernel = ServiceKernel::create($paramaters['environment'], true);
-$serviceKernel->setParameterBag(new ParameterBag($paramaters));
-$serviceKernel->setConnectionFactory(new AppConnectionFactory());
-$serviceKernel->setEnvVariable(array(
-    'host'          => $request->getHttpHost(),
-    'schemeAndHost' => $request->getSchemeAndHttpHost(),
-    'basePath'      => $request->getBasePath(),
-    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
-));
 include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
@@ -54,7 +16,6 @@ $app = new Silex\Application();
 include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/templates',
 ));

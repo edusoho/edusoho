@@ -42,11 +42,15 @@ define(function(require, exports, module) {
     }
 
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
+        if (jqxhr.responseText === 'LoginLimit') {
+            location.href = '/login';
+        }
         var json = jQuery.parseJSON(jqxhr.responseText);
         error = json.error;
         if (!error) {
             return;
         }
+
         if (error.name == 'Unlogin') {
             var ua = navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {

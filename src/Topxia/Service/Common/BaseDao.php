@@ -73,7 +73,13 @@ abstract class BaseDao
      */
     public function getConnection()
     {
-        return $this->connectionFactory->getConnection();
+        return $this->connection;
+    }
+
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+        return $this;
     }
 
     public function setConnectionFactory($connectionFactory)
@@ -291,7 +297,8 @@ abstract class BaseDao
 
     protected function generateKeyWhenSearch($conditions, $orderBy, $start, $limit)
     {
-        $keys = 'search';
+        $version = $this->getCacheVersion("{$this->table}:search");
+        $keys = 'search:'.$version;
 
         if(!empty($conditions)) {
             ksort($conditions);
@@ -303,13 +310,13 @@ abstract class BaseDao
                 }
             }
         }
-
         return "{$keys}:{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
     }
 
     protected function generateKeyWhenCount($conditions)
     {
-        $keys = 'count';
+        $version = $this->getCacheVersion("{$this->table}:search");
+        $keys = "count:{$version}";
         foreach ($conditions as $key => $value) {
             if(is_array($value)) {
                 $keys .= ":{$key}:".implode('-', $value);

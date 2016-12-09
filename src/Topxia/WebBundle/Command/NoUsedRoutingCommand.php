@@ -66,5 +66,4 @@ class NoUsedRoutingCommand extends BaseCommand
             }
         }
     }
-
 }

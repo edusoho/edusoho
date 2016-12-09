@@ -626,7 +626,7 @@ class CoinController extends BaseController
      */
     public function exportCsvAction(Request $request, $cashType)
     {
-        $payment    = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment    = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $conditions = $request->query->all();
 
         if (!empty($conditions) && $cashType == 'Coin') {
