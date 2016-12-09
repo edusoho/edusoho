@@ -97,32 +97,6 @@ course_manage_items_sort:
   defaults: { _controller: WebBundle:CourseManage:courseItemsSort }
   methods: ['POST']
 
-course_manage_chapter_create:
-    path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: WebBundle:CourseChapterManage:create }
-
-course_manage_chapter_edit:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: WebBundle:CourseChapterManage:edit }
-
-course_manage_chapter_delete:
-    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
-    defaults: { _controller: WebBundle:CourseChapterManage:delete }
-    methods: [POST]
-
-task_live_entry:
-  path: /course/{courseId}/activity/{activityId}/live_entry
-  defaults: {_controller: WebBundle:LiveActivity:liveEntry}
-
-task_liveroom_ticket:
-  path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
-  defaults: {_controller: WebBundle:Liveroom:ticket}
-
-task_live_trigger:
-  path: /course/{courseId}/activity/{activityId}/live_trigger
-  defaults: {_controller: WebBundle:LiveActivity:trigger}
-
-
 media_materiallib_choose:
     path: /media/materiallib/choose
     defaults: { _controller: WebBundle:FileChooser:materialChoose }

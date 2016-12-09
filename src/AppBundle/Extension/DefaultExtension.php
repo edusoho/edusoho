@@ -96,16 +96,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-//'text' => new TextActivity($biz),
-//'video' => new VideoActivity($biz),
-//'audio' => new AudioActivity($biz),
-//'live' => new LiveActivity($biz),
-//'discuss' => new DiscussActivity($biz),
-//'download' => new DownloadActivity($biz),
-//'flash' => new FlashActivity($biz),
-//'ppt' => new PptActivity($biz),
-//'doc' => new DocActivity($biz)
-
 
     public function getActivities()
     {

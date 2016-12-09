@@ -1,16 +1,17 @@
 <?php
 
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\File\UploadFileService;
 
-class PptActivityController extends BaseController implements ActivityActionInterface
+class PptController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {

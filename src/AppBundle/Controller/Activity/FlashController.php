@@ -1,8 +1,9 @@
 <?php
 
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;

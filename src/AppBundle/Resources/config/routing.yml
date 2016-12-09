@@ -80,3 +80,28 @@ course_manage_task_delete:
     path:  /course/{courseId}/task/{taskId}/delete
     defaults: { _controller: AppBundle:TaskManage:delete }
 
+task_live_entry:
+    path: /course/{courseId}/activity/{activityId}/live_entry
+    defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+
+task_liveroom_ticket:
+    path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
+    defaults: {_controller:  AppBundle:Liveroom:ticket}
+
+task_live_trigger:
+    path: /course/{courseId}/activity/{activityId}/live_trigger
+    defaults: {_controller:  AppBundle:Activity/Live:trigger}
+
+#course_chapter
+course_manage_chapter_create:
+    path:  /course/{id}/manage/chapter/create
+    defaults: { _controller: WebBundle:CourseChapterManage:create }
+
+course_manage_chapter_edit:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: WebBundle:CourseChapterManage:edit }
+
+course_manage_chapter_delete:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: WebBundle:CourseChapterManage:delete }
+    methods: [POST]

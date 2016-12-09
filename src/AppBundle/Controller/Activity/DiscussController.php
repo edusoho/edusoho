@@ -2,10 +2,11 @@
 
 namespace WebBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-class DiscussActivityController extends BaseController implements ActivityActionInterface
+class DiscussController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
