@@ -1,13 +1,9 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 02/11/2016
- * Time: 14:03
- */
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
 
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class AudioActivityController extends BaseController implements ActivityActionInterface

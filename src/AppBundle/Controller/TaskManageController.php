@@ -1,5 +1,5 @@
 <?php
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
@@ -97,14 +97,14 @@ class TaskManageController extends BaseController
 
         if ($mode === 'create') {
             $type = $request->query->get('type');
-            return $this->forward('WebBundle:Activity:create', array(
+            return $this->forward('AppBundle:Activity/Activity:create', array(
                 'courseId' => $courseId,
                 'type'     => $type
             ));
         } else {
             $id   = $request->query->get('id');
             $task = $this->getTaskService()->getTask($id);
-            return $this->forward('WebBundle:Activity:update', array(
+            return $this->forward('AppBundle:Activity/Activity:update', array(
                 'id'       => $task['activityId'],
                 'courseId' => $courseId
             ));

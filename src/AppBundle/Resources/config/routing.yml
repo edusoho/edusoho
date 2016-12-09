@@ -26,14 +26,57 @@ course_set_manage_question_preview:
     defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
-  path: /course_set/{id}/manage/question/picker
-  defaults: { _controller: AppBundle:Question/Manage:questionPicker }
+    path: /course_set/{id}/manage/question/picker
+    defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
-  defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
-
+    path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
+    defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
 
 course_set_manage_question_check:
-  path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:Question/Manage:check }
+    path: /course_set/{id}/manage/question/check
+    defaults: { _controller: AppBundle:Question/Manage:check }
+
+#activity
+course_activity_trigger:
+    path: /course/{courseId}/activity/{activityId}/trigger
+    defaults: { _controller: AppBundle:Activity/Activity:trigger }
+    methods: [POST]
+
+course_activity_download:
+    path: /course/{courseId}/activiy/{activityId}/download
+    defaults: { _controller: AppBundle:Activity/DownLoadActivity:downloadFile }
+
+#task
+course_task_show:
+    path:  /course/{courseId}/task/{id}/show
+    defaults: { _controller: AppBundle:Task:show }
+
+course_task_activity_show:
+    path:  /course/{courseId}/task/{id}/activity_show
+    defaults: { _controller: AppBundle:Task:taskActivity }
+
+course_manage_task_create:
+    path:  /course/{courseId}/task
+    defaults: { _controller: AppBundle:TaskManage:create}
+
+course_manage_task_publish:
+    path:  /course/{courseId}/task/{id}/publish
+    defaults: { _controller: AppBundle:TaskManage:publish }
+
+course_manage_task_unpublish:
+    path:  /course/{courseId}/task/{id}/unpublish
+    defaults: { _controller: AppBundle:TaskManage:unPublish }
+
+course_manage_task_fields:
+    path:  /course/{courseId}/task_fields/{mode}
+    defaults: { _controller: AppBundle:TaskManage:taskFields }
+
+course_manage_task_update:
+    path:  /course/{courseId}/task/{id}/update
+    defaults: { _controller: AppBundle:TaskManage:update }
+
+course_manage_task_delete:
+    path:  /course/{courseId}/task/{taskId}/delete
+    defaults: { _controller: AppBundle:TaskManage:delete }
+

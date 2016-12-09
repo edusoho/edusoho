@@ -1,14 +1,15 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-class DownLoadActivityController extends BaseController implements ActivityActionInterface
+class DownLoadController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {

@@ -1,9 +1,10 @@
 <?php
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class ActivityController extends BaseController
 {
@@ -14,9 +15,8 @@ class ActivityController extends BaseController
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-
-        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $showController = $config->getAction('show');
+        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
+        $showController = $actionConfig['show'];
         return $this->forward($showController, array(
             'id'       => $id,
             'courseId' => $courseId,
@@ -26,8 +26,8 @@ class ActivityController extends BaseController
     public function updateAction(Request $request, $id, $courseId)
     {
         $activity       = $this->getActivityService()->getActivity($id);
-        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $editController = $config->getAction('edit');
+        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
+        $editController = $actionConfig['edit'];
         return $this->forward($editController, array(
             'id'       => $activity['id'],
             'courseId' => $courseId
@@ -36,8 +36,8 @@ class ActivityController extends BaseController
 
     public function createAction(Request $request, $type, $courseId)
     {
-        $config           = $this->getActivityService()->getActivityConfig($type);
-        $createController = $config->getAction('create');
+        $actionConfig     = $this->getActivityActionConfig($type);
+        $createController = $actionConfig['create'];
         return $this->forward($createController, array(
             'courseId' => $courseId
         ));
@@ -71,6 +71,17 @@ class ActivityController extends BaseController
     }
 
 
+    protected function getActivityConfig()
+    {
+        return $this->get('extension.default')->getActivities();
+    }
+
+    protected function getActivityActionConfig($type)
+    {
+        $config = $this->getActivityConfig();
+        return $config[$type]['actions'];
+    }
+
     /**
      * @return ActivityService
      */
@@ -79,9 +90,11 @@ class ActivityController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
-
 }

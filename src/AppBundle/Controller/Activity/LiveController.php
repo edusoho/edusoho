@@ -1,7 +1,8 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;;
 
+use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;

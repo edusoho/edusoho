@@ -1,18 +1,11 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 26/10/2016
- * Time: 19:25
- */
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
 
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface

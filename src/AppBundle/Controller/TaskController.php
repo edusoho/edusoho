@@ -1,5 +1,5 @@
 <?php
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;

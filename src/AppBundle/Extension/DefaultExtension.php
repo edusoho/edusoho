@@ -96,29 +96,90 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
     }
 
+//'text' => new TextActivity($biz),
+//'video' => new VideoActivity($biz),
+//'audio' => new AudioActivity($biz),
+//'live' => new LiveActivity($biz),
+//'discuss' => new DiscussActivity($biz),
+//'download' => new DownloadActivity($biz),
+//'flash' => new FlashActivity($biz),
+//'ppt' => new PptActivity($biz),
+//'doc' => new DocActivity($biz)
+
+
+    public function getActivities()
+    {
+        return array(
+            'text'     => array(
+                'name'      => '图文',
+                'icon'      => 'es-icon es-icon-graphicclass',
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/TextActivity:create',
+                    'edit'   => 'AppBundle:Activity/TextActivity:edit',
+                    'show'   => 'AppBundle:Activity/TextActivity:show',
+                ),
+                'templates' => array()
+
+            ),
+            'video'    => array(
+                'name'      => '视频',
+                'icon'      => 'es-icon es-icon-videoclass',
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/VideoActivity:create',
+                    'edit'   => 'AppBundle:Activity/VideoActivity:edit',
+                    'show'   => 'AppBundle:Activity/VideoActivity:show',
+                ),
+                'templates' => array()
+            ),
+            'audio'    => array(
+                'name'    => '音频',
+                'icon'    => 'es-icon es-icon-audioclass',
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/AudioActivity:create',
+                    'edit'   => 'AppBundle:Activity/AudioActivity:edit',
+                    'show'   => 'AppBundle:Activity/AudioActivity:show'
+                )
+            ),
+            'download' => array(
+                'name'    => '下载资料',
+                'icon'    => 'es-icon es-icon-filedownload',
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/DownLoadActivity:create',
+                    'edit'   => 'AppBundle:Activity/DownLoadActivity:edit',
+                    'show'   => 'AppBundle:Activity/DownLoadActivity:show'
+                )
+            )
+
+        );
+    }
+
     public function register(Container $container)
     {
-        $container['question_type.choice'] = function () {
+        $this->registerQuestionTypes($container);
+    }
+
+    protected function registerQuestionTypes($container)
+    {
+        $container['question_type.choice']           = function () {
             return new Choice();
         };
-        $container['question_type.single_choice'] = function () {
+        $container['question_type.single_choice']    = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine'] = function () {
+        $container['question_type.determine']        = function () {
             return new Determine();
         };
-        $container['question_type.essay'] = function () {
+        $container['question_type.essay']            = function () {
             return new Essay();
         };
-        $container['question_type.fill'] = function () {
+        $container['question_type.fill']             = function () {
             return new Fill();
         };
-        $container['question_type.material'] = function () {
+        $container['question_type.material']         = function () {
             return new Material();
         };
-
     }
 }

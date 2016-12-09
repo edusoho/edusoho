@@ -110,42 +110,6 @@ course_manage_chapter_delete:
     defaults: { _controller: WebBundle:CourseChapterManage:delete }
     methods: [POST]
 
-course_manage_task_create:
-  path:  /course/{courseId}/task
-  defaults: { _controller: WebBundle:TaskManage:create}
-
-course_manage_task_publish:
-  path:  /course/{courseId}/task/{id}/publish
-  defaults: { _controller: WebBundle:TaskManage:publish }
-
-course_manage_task_unpublish:
-  path:  /course/{courseId}/task/{id}/unpublish
-  defaults: { _controller: WebBundle:TaskManage:unPublish }
-
-course_manage_task_fields:
-  path:  /course/{courseId}/task_fields/{mode}
-  defaults: { _controller: WebBundle:TaskManage:taskFields }
-
-course_manage_task_update:
-  path:  /course/{courseId}/task/{id}/update
-  defaults: { _controller: WebBundle:TaskManage:update }
-
-course_manage_task_delete:
-  path:  /course/{courseId}/task/{taskId}/delete
-  defaults: { _controller: WebBundle:TaskManage:delete }
-
-course_task_show:
-  path:  /course/{courseId}/task/{id}/show
-  defaults: { _controller: WebBundle:Task:show }
-
-course_activity_download:
-    path: /course/{courseId}/activiy/{activityId}/download
-    defaults: { _controller: WebBundle:DownLoadActivity:downloadFile }
-
-course_task_activity_show:
-  path:  /course/{courseId}/task/{id}/activity_show
-  defaults: { _controller: WebBundle:Task:taskActivity }
-
 task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller: WebBundle:LiveActivity:liveEntry}
@@ -158,10 +122,6 @@ task_live_trigger:
   path: /course/{courseId}/activity/{activityId}/live_trigger
   defaults: {_controller: WebBundle:LiveActivity:trigger}
 
-course_activity_trigger:
-  path: /course/{courseId}/activity/{activityId}/trigger
-  defaults: { _controller: WebBundle:Activity:trigger }
-  methods: [POST]
 
 media_materiallib_choose:
     path: /media/materiallib/choose
