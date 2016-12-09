@@ -6,7 +6,6 @@ namespace WebBundle\Controller;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\File\UploadFileService;
 use Topxia\Service\Util\CloudClientFactory;

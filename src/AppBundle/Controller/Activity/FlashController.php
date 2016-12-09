@@ -10,7 +10,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\File\UploadFileService;
 
-class FlashActivityController extends BaseController implements ActivityActionInterface
+class FlashController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {

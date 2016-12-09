@@ -5,7 +5,7 @@
  * Time: 11:42
  */
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceKernel;

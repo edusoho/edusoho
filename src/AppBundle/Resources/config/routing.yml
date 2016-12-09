@@ -171,3 +171,70 @@ course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
   defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
   methods: ['POST']
+
+#course_set
+course_set_show:
+  path: /course_set/{id}
+  defaults: {_controller: WebBundle:CourseSet:show}
+
+course_set_preview:
+  path: /course_set/{id}/preview
+  defaults: {_controller: WebBundle:CourseSet:preview}
+
+course_set_manage_create:
+  path: /course_set/create
+  defaults: {_controller: AppBundle:CourseSetManage:create}
+
+course_set_manage:
+  path: /course_set/{id}/manage
+  defaults: {_controller: AppBundle:CourseSetManage:index}
+
+course_set_manage_base:
+  path: /course_set/{id}/manage/base
+  defaults: {_controller: AppBundle:CourseSetManage:base}
+
+course_set_manage_detail:
+  path: /course_set/{id}/manage/detail
+  defaults: {_controller: AppBundle:CourseSetManage:detail}
+
+course_set_manage_cover:
+  path: /course_set/{id}/manage/cover
+  defaults: {_controller: AppBundle:CourseSetManage:cover}
+
+course_set_manage_cover_crop:
+  path: /course_set/{id}/manage/cover_crop
+  defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
+
+#file chooser
+media_materiallib_choose:
+    path: /media/materiallib/choose
+    defaults: { _controller: AppBundle:FileChooser:materialChoose }
+
+media_materiallib_contacts:
+    path: /media/materiallib/contacts
+    defaults: { _controller: AppBundle:FileChooser:findMySharingContacts }
+
+media_course_file_choose:
+    path: /media/coursefile/{courseId}/choose
+    defaults: { _controller: AppBundle:FileChooser:courseFileChoose }
+
+media_video_import:
+    path: /media/course/{courseId}/import
+    defaults: { _controller: AppBundle:FileChooser:import }
+
+#Uploader
+uploader_auth_v2:
+    path:  /uploader/v2/auth
+    defaults: { _controller: WebBundle:Uploader:auth }
+    methods: [GET]
+
+uploader_init_v2:
+    path:  /uploader/v2/init
+    defaults: { _controller: WebBundle:Uploader:init }
+    methods: [GET]
+
+uploader_finished_v2:
+    path:  /uploader/v2/finished
+    defaults: { _controller: WebBundle:Uploader:finished }
+    methods: [GET]
+

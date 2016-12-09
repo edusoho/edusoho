@@ -1,6 +1,6 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
