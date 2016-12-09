@@ -18,7 +18,6 @@ export default class TaskUi {
 
 
   learned() {
-    console.log(this.btnLearn);
     this.btnLearn.addClass('active');
   }
 }
