@@ -12,6 +12,7 @@
   <div id="js-hidden-data">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
     <input type="hidden" name="task-id" value="{{ task.id }}">
+    <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
   </div>
 
