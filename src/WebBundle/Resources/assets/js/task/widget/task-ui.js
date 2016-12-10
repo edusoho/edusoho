@@ -7,10 +7,6 @@ export default class TaskUi {
     this.btnLearn = this.element.find('.js-btn-learn');
   }
 
-  autoLearned() {
-    this.learnedWeakPrompt();
-  }
-
   learnedWeakPrompt() {
     this.learnprompt.removeClass('open');
     this.learningPrompt.addClass('moveup');
