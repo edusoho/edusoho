@@ -7,6 +7,14 @@ import './style.less'
 
 //items 数据列表，1、isSor是否拖动排序，输入时是否可搜索（true,false）,是否选中
 //list 数据为什么要放到父组件本身呢》
+//组件为甚要关心你要什么数据；
+//
+
+function isType(type) {
+  return function(obj) {
+    return {}.toString.call(obj) == "[object " + type + "]"
+  }
+}
 
 function updateChecked(itemId,items) {
   items.map(function(item,index){
@@ -40,19 +48,30 @@ function updateItemSeq(data,datas) {
 
 function createItem(value,items) {
   let obj = {
-    itemId: items.length + 1,
+    itemId: math.random(),
     value : value,
-    checked: false,
-    sqe: items.length + 1,
+    label: value, 
+    checked: value.checked,
+    seq: index,
   }
   items.push(obj);
 }
 
+
+
+
 class MultiGroup extends Component {
   constructor(props) {
     super(props);
+    var value = this.props.datas;
+    for (let i = 0;i< value.length ;i++) {
+      //1，判断value是字符串还是数组；
+      var isObject = isType("Object");
+      var isString = isType("String");
+    }
     this.state = {
       datas: this.props.datas,
+      values: this.props.datas,
     }
   }
 

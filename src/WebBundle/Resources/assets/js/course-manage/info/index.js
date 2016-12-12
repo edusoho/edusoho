@@ -5,19 +5,21 @@ import MultiGroup from '../../../common/widget/multi-group';
 import sortList from 'common/sortable';
 
 // 模拟数据
-let datas = [{
-  itemId:1,
-  checked: true,
-  sqe: 1,
-  value: '这是内容',
-}];
+// let datas = [{
+//   itemId:1,
+//   checked: true,
+//   sqe: 1,
+//   value: '这是内容',
+// }];
 
-// ReactDOM.render( <MultiGroup datas = {datas}    />,
-//   document.getElementById('course-goals')
-// );
+//模拟数据，每个数据可能是对象，也可能是字符串；
+let values = [
+  {teacherName: 'xxx',hidden: true},
+  {teacherName: 'yyy', hidden: true, gender: 11}
+];
 
 function renderMultiGroupComponent(elementId){
-  ReactDOM.render( <MultiGroup datas = {[]} outputDataElement={elementId}    enableSearch ={false}/>,
+  ReactDOM.render( <MultiGroup datas = {values}  valueName="teacherName"  checkedName='hidden' outputDataElement={elementId}    enableSearch ={false}  enableChecked/>,
     document.getElementById(elementId)
   );
 }
