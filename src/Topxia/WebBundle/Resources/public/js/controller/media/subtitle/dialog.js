@@ -25,9 +25,10 @@ define(function(require, exports, module) {
                 }
             });
         },
-        renderHTML: function()
+        renderHTML: function(media)
         {
-            if ('id' in this.media) {
+            if (media && 'id' in media && media.id > 0) {
+                this.media = media;
                 this.element.html('加载字幕...');
                 var self = this;
                 $.get(this.element.data('dialogUrl'), {mediaId:this.media.id}, function(html){
