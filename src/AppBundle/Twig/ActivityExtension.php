@@ -39,9 +39,9 @@ class ActivityExtension extends \Twig_Extension
         $activities = $this->container->get('extension.default')->getActivities();
 
         if (empty($type)) {
-             array_walk($activities, function ($activity) {
+            $activities = array_map(function ($activity) {
                 return $activity['meta'];
-            });
+            },$activities);
             return $activities;
         } else {
             if (isset($activities[$type]) && isset($activities[$type]['meta'])) {

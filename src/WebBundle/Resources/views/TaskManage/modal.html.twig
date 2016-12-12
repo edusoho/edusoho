@@ -93,16 +93,15 @@
       <form class="form-horizontal" id="step1-form">
         <ul class="form-group task-create-type-list ">
           {% set types = activity_metas() %}
-          {% for type, value in types %}
-            {{ dump(type, value) }}
-            {#<li class="col-xs-3 task-create-type-item js-course-tasks-item {% if currentType|default(null)==  type %} active {% endif %}"#}
-                {#data-role="activityType" data-type="{{ type }}"#}
-                {#data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">#}
-              {#<a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}> <i#}
-                    {#class="{{ value.metas.icon }}"></i>#}
-                {#{{ value.metas.name }}#}
-              {#</a>#}
-            {#</li>#}
+          {% for type, meta in types %}
+            <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if currentType|default(null)==  type %} active {% endif %}"
+                data-role="activityType" data-type="{{ type }}"
+                data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+              <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}> <i
+                    class="{{ meta.icon }}"></i>
+                {{ meta.name }}
+              </a>
+            </li>
           {% endfor %}
           <li class="col-xs-12">
             <label for="mediaType" class="hidden">分类</label>
