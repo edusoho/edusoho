@@ -87,4 +87,10 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
         return $this->db()->fetchAll($sql) ?: array();
     }
 
+    protected function filterStartLimit(&$start, &$limit)
+    {
+        $start = (int) $start;
+        $limit = (int) $limit;
+    }
+
 }
