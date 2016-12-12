@@ -5,6 +5,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Testpaper\Builder\TestpaperBuilderProvider;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
@@ -130,6 +131,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
+        $biz->register(new TestpaperBuilderProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

@@ -10,6 +10,7 @@ use Biz\Question\Type\Determine;
 use Biz\Question\Type\SingleChoice;
 use Pimple\ServiceProviderInterface;
 use Biz\Question\Type\UncertainChoice;
+use Biz\Testpaper\Pattern\QuestionTypePattern;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
@@ -17,81 +18,88 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'single_choice'    => array(
-                'name'      => '单选题',
-                'actions'   => array(
+                'name'         => '单选题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
                     'edit'   => 'AppBundle:Question/SingleChoiceQuestion:edit',
                     'show'   => 'AppBundle:Question/SingleChoiceQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/single-choice-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 0
             ),
             'choice'           => array(
-                'name'      => '多选题',
-                'actions'   => array(
+                'name'         => '多选题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/ChoiceQuestion:create',
                     'edit'   => 'AppBundle:Question/ChoiceQuestion:edit',
                     'show'   => 'AppBundle:Question/ChoiceQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/choice-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 1
             ),
             'essay'            => array(
-                'name'      => '问答题',
-                'actions'   => array(
+                'name'         => '问答题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/EssayQuestion:create',
                     'edit'   => 'AppBundle:Question/EssayQuestion:edit',
                     'show'   => 'AppBundle:Question/EssayQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/essay-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 0
             ),
             'uncertain_choice' => array(
-                'name'      => '不定项选择题',
-                'actions'   => array(
+                'name'         => '不定项选择题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/UncertainChoiceQuesiton:create',
                     'edit'   => 'AppBundle:Question/UncertainChoiceQuesiton:edit',
                     'show'   => 'AppBundle:Question/UncertainChoiceQuesiton:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/uncertain-choice-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 1
             ),
             'determine'        => array(
-                'name'      => '判断题',
-                'actions'   => array(
+                'name'         => '判断题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/DetermineQuestion:create',
                     'edit'   => 'AppBundle:Question/DetermineQuestion:edit',
                     'show'   => 'AppBundle:Question/DetermineQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/determine-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 0
             ),
             'fill'             => array(
-                'name'      => '填空题',
-                'actions'   => array(
+                'name'         => '填空题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/FillQuestion:create',
                     'edit'   => 'AppBundle:Question/FillQuestion:edit',
                     'show'   => 'AppBundle:Question/FillQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/fill-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 0
             ),
             'material'         => array(
-                'name'      => '材料题',
-                'actions'   => array(
+                'name'         => '材料题',
+                'actions'      => array(
                     'create' => 'AppBundle:Question/MaterialQuestion:create',
                     'edit'   => 'AppBundle:Question/MaterialQuestion:edit',
                     'show'   => 'AppBundle:Question/MaterialQuestion:show'
                 ),
-                'templates' => array(
+                'templates'    => array(
                     'do' => 'question/material-do.html.twig'
-                )
+                ),
+                'hasMissScore' => 0
             )
         );
     }
@@ -118,6 +126,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         };
         $container['question_type.material'] = function () {
             return new Material();
+        };
+
+        $container['testpaper_pattern.questionType'] = function ($container) {
+            return new QuestionTypePattern($container);
         };
 
     }

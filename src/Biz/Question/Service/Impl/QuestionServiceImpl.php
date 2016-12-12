@@ -4,6 +4,7 @@ namespace Biz\Question\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
@@ -136,22 +137,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->biz["question_type.{$type}"];
     }
 
-    public function getCheckedQuestionTypes()
-    {
-        /*$types        = $this->getQuestionTypes();
-    $checkedTypes = array();
-
-    foreach ($types as $type) {
-    if ($this->getQuestionConfig($type)->isNeedCheck()) {
-    $checkedTypes[] = $type;
-    }
-    }
-
-    <<<<<<< HEAD
-    =======
-    return $checkedTypes;*/
-    }
-
     public function waveCount($id, $diffs)
     {
         return $this->getQuestionDao()->wave(array($id), $diffs);
@@ -252,7 +237,32 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($conditions['target']);
         }
 
+        if (empty($conditions['excludeIds'])) {
+            unset($conditions['excludeIds']);
+        } else {
+            $conditions['excludeIds'] = explode(',', $conditions['excludeIds']);
+        }
+
         return $conditions;
+    }
+
+    public function findAttachments($questionIds)
+    {
+        if (empty($questionIds)) {
+            return array();
+        }
+
+        $conditions = array(
+            'type'        => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds'   => $questionIds
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
+        array_walk($attachments, function (&$attachment) {
+            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
+        });
+
+        return ArrayToolkit::group($attachments, 'dkey');
     }
 
     protected function getQuestionDao()
@@ -263,5 +273,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question:QuestionFavoriteDao');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

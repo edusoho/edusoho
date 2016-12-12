@@ -1,13 +1,19 @@
 <?php
 namespace Biz\Testpaper\Pattern;
 
-use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Pattern\TestpaperPattern;
 
-class QuestionTypePattern extends Factory implements TestpaperPattern
+class QuestionTypePattern implements TestpaperPattern
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function getTestpaperQuestions($testpaper, $options)
     {
         $questions = $this->getQuestions($options);
@@ -135,20 +141,21 @@ class QuestionTypePattern extends Factory implements TestpaperPattern
     {
         $conditions        = array();
         $options['ranges'] = array_filter($options['ranges']);
-        /*if (!empty($options['ranges'])) {
-        $conditions['targets'] = $options['ranges'];
-        } else {
-        $conditions['targetPrefix'] = 'course-'.$options['courseId'];
-        }*/
+
         if (empty($options['ranges'])) {
             $conditions['courseId'] = $options['courseId'];
         }
 
         $conditions['parentId'] = 0;
 
-        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $total
+        );
     }
 
     protected function convertQuestionsToItems($testpaper, $questions, $count, $options)
@@ -184,11 +191,6 @@ class QuestionTypePattern extends Factory implements TestpaperPattern
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->biz->service('Question:QuestionService');
     }
 }

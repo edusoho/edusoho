@@ -1,13 +1,20 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Topxia\Common\Exception\InvalidArgumentException;
 
-class HomeworkBuilder extends Factory implements TestpaperBuilderInterface
+class HomeworkBuilder implements TestpaperBuilderInterface
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function build($fields)
     {
         if (empty($fields['questionIds'])) {
@@ -90,6 +97,7 @@ class HomeworkBuilder extends Factory implements TestpaperBuilderInterface
             'name',
             'description',
             'courseId',
+            'courseSetId',
             'lessonId',
             'type',
             'status',
@@ -264,11 +272,11 @@ class HomeworkBuilder extends Factory implements TestpaperBuilderInterface
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->biz->service('Question:QuestionService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 }

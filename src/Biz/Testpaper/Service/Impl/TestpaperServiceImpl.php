@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Testpaper\Builder\TestpaperBuilderFactory;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -333,6 +332,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'status'      => 'doing',
                 'usedTime'    => 0,
                 'courseId'    => $testpaper['courseId'],
+                'courseSetId' => $testpaper['courseSetId'],
                 'lessonId'    => $lessonId,
                 'type'        => $testpaper['type']
             );
@@ -348,10 +348,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($items as $item) {
             if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))) {
                 $questions[$item['questionId']] = array(
+                    'id'        => $item['questionId'],
                     'isDeleted' => true,
                     'stem'      => $this->getKernel()->trans('此题已删除'),
                     'score'     => 0,
-                    'answer'    => ''
+                    'answer'    => '',
+                    'type'      => $item['questionType']
                 );
             }
         }
@@ -658,22 +660,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $items       = $this->findItemsByTestId($testId);
         $questionIds = ArrayToolkit::column($items, 'questionId');
-        $conditions  = array(
-            'type'        => 'attachment',
-            'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds'   => $questionIds
-        );
-        $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
-        array_walk($attachments, function (&$attachment) {
-            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
-        });
 
-        return ArrayToolkit::group($attachments, 'dkey');
+        return $this->getQuestionService()->findAttachments($questionIds);
+    }
+
+    public function canLookTestpaper($resultId)
+    {
     }
 
     public function getTestpaperBuilder($type)
     {
-        return TestpaperBuilderFactory::create($this->biz, $type);
+        return $this->biz["testpaperBuilder.{$type}"];
+    }
+
+    public function getTestpaperPattern($pattern)
+    {
+        return $this->biz["testpaper_pattern.{$pattern}"];
     }
 
     protected function getTestpaperDao()
@@ -699,6 +701,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()

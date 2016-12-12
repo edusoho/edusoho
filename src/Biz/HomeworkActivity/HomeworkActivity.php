@@ -82,16 +82,16 @@ class HomeworkActivity extends Activity
         ));
 
         $finishCondition = array();
-
         if (!empty($fields['finishCondition'])) {
             $finishCondition['type'] = $fields['finishCondition'];
         }
 
         $fields['finishCondition'] = $finishCondition;
 
-        $fields['courseId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
-        $fields['lessonId'] = 0;
-        $fields['name']     = empty($fields['title']) ? '' : $fields['title'];
+        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
+        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
+        $fields['lessonId']    = 0;
+        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
 
         return $fields;
     }

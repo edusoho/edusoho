@@ -64,18 +64,21 @@ class ExerciseActivity extends Activity
 
     protected function filterFields($fields)
     {
-        $fields = ArrayToolkit::filter($fields, array(
-            'title'         => '',
-            'itemCount'     => 0,
-            'range'         => 'course',
-            'difficulty'    => '',
-            'questionTypes' => array(),
-            'fromCourseId'  => 0
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'range',
+            'itemCount',
+            'difficulty',
+            'questionTypes',
+            'finishCondition',
+            'fromCourseId',
+            'fromCourseSetId'
         ));
 
-        $fields['courseId'] = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
-        $fields['lessonId'] = 0;
-        $fields['name']     = empty($fields['title']) ? '' : $fields['title'];
+        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
+        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
+        $fields['lessonId']    = 0;
+        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
 
         return $fields;
     }

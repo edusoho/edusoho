@@ -113,7 +113,7 @@ class Editor {
         let data = $('#sortable-list').sortable("serialize").get();
         $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
           if (response) {
-            document.location.reload();
+            //document.location.reload();
           }
         });
 

@@ -1,23 +1,28 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\Exception\RuntimeException;
-use Biz\Testpaper\Builder\TestpaperLibBuilder;
-use Biz\Testpaper\Pattern\TestpaperPatternFactory;
-use Topxia\Service\Question\Type\QuestionTypeFactory;
+use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
-class TestpaperBuilder extends Factory implements TestpaperLibBuilder
+class TestpaperBuilder implements TestpaperBuilderInterface
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function build($fields)
     {
         $fields = $this->filterFields($fields);
 
         $testpaper = $this->getTestpaperService()->createTestpaper($fields);
 
-        $testpaperPattern = TestpaperPatternFactory::create($this->getBiz(), $testpaper['pattern']);
+        $testpaperPattern = $this->getTestpaperService()->getTestpaperPattern($testpaper['pattern']);
 
         $testpaper['metas']['courseId'] = $testpaper['courseId'];
 
@@ -61,13 +66,15 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         $formatItems = array();
         foreach ($items as $questionId => $item) {
             $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
-            print_r($question);
+
             if (!$question) {
                 $question = array(
+                    'id'        => $item['questionId'],
                     'isDeleted' => true,
                     'stem'      => $this->getServiceKernel()->trans('此题已删除'),
                     'score'     => 0,
-                    'answer'    => ''
+                    'answer'    => '',
+                    'type'      => $item['questionType']
                 );
             }
 
@@ -79,7 +86,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
                 $question['testResult'] = $itemResults[$questionId];
             }
 
-            if ($question['parentId'] > 0) {
+            if ($item['parentId'] > 0) {
                 $formatItems['material'][$item['parentId']]['subs'][$questionId] = $question;
             } else {
                 $formatItems[$item['questionType']][$questionId] = $question;
@@ -117,6 +124,7 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
             'name',
             'description',
             'courseId',
+            'courseSetId',
             'lessonId',
             'type',
             'status',
@@ -173,11 +181,11 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         $seq            = 1;
 
         foreach ($questions as $item) {
-            $questionType = QuestionTypeFactory::create($item['questionType']);
+            $questionType = $this->getQuestionService()->getQuestionConfig($item['questionType']);
 
             $item['seq'] = $seq;
 
-            if (!$questionType->canHaveSubQuestion()) {
+            if (!$item['parentId']) {
                 $seq++;
             }
 
@@ -241,19 +249,14 @@ class TestpaperBuilder extends Factory implements TestpaperLibBuilder
         return array('status' => 'no', 'missing' => $missing);
     }
 
-    protected function createQuestion($testpaper)
-    {
-        return TestpaperPatternFactory::create($testpaper['pattern']);
-    }
-
     protected function getTestpaperService()
     {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->biz->service('Question:QuestionService');
     }
 
     protected function getServiceKernel()

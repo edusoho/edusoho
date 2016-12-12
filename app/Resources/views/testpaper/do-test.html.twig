@@ -1,8 +1,3 @@
-{% if (source|default(null) == 'classroom') %}
-  {% set canHandle = classroom_permit(targetId, 'Handle') %}
-{% else %}
-  {% set canHandle = app.user.isTeacher() %}
-{% endif %}
 
 {% set questionTypeDict = getQuestionTypes() %}
 

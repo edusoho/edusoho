@@ -1,12 +1,19 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Biz\Factory;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
-class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
+class ExerciseBuilder implements TestpaperBuilderInterface
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function build($fields)
     {
         $fields['type']            = 'exercise';
@@ -49,7 +56,7 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
         } else {
             $conditions = array(
                 'types'    => $exercise['metas']['questionTypes'],
-                'courseId' => $exercise['courseId'],
+                'courseId' => $exercise['courseSetId'],
                 'parentId' => 0
             );
             if (!empty($exercise['metas']['difficulty'])) {
@@ -60,12 +67,16 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
                 $conditions['lessonId'] = $exercise['lessonId'];
             }
 
+            $count     = $this->getQuestionService()->searchCount($conditions);
             $questions = $this->getQuestionService()->search(
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,
                 $exercise['itemCount']
             );
+            shuffle($questions);
+
+            $questions = array_slice($questions, 0, $exercise['itemCount']);
         }
 
         return $this->formatQuestions($questions, $itemResults);
@@ -77,7 +88,7 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
             $filtedFields['metas']['questionTypes'] = $fields['questionTypes'];
         }
 
-        if (!empty($fields['questionTypes'])) {
+        if (!empty($fields['difficulty'])) {
             $filtedFields['metas']['difficulty'] = $fields['difficulty'];
         }
 
@@ -89,6 +100,7 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
             'name',
             'itemCount',
             'courseId',
+            'courseSetId',
             'lessonId',
             'type',
             'status',
@@ -124,20 +136,24 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
     protected function formatQuestions($questions, $questionResults)
     {
         $formatQuestions = array();
-        $i               = 1;
+        $index           = 1;
+
         foreach ($questions as $question) {
             if (!empty($questionResults[$question['id']])) {
                 $question['testResult'] = $questionResults[$question['id']];
             }
 
-            $question['seq'] = $i;
+            $question['seq'] = $index;
 
-            if ($question['parentId'] > 0) {
-                $formatQuestions[$question['parentId']]['subs'][$question['id']] = $question;
-            } else {
-                $formatQuestions[$question['id']] = $question;
+            if ($question['subCount'] > 0) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+
+                $question['subs'] = $subQuestions;
             }
-            $i++;
+
+            $formatQuestions[$question['id']] = $question;
+
+            $index++;
         }
 
         return $formatQuestions;
@@ -145,11 +161,11 @@ class ExerciseBuilder extends Factory implements TestpaperBuilderInterface
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->biz->service('Question:QuestionService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 }
