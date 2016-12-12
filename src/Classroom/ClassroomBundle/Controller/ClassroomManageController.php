@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -402,8 +403,12 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportCsvAction(Request $request, $id, $role)
+    public function exportDatasAction(Request $request, $id, $role)
     {
+        $magic = $this->setting('magic');
+        $start = $request->query->get('start', 0);
+        $limit = $magic['export_limit'];
+
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
 
@@ -412,10 +417,24 @@ class ClassroomManageController extends BaseController
         $userinfoFields = array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin');
 
         if ($role == 'student') {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'student'
+            );
         } else {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'auditor'
+            );
         }
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            $condition,
+            array('createdTime', 'DESC'),
+            $start,
+            $limit)
+        ;
+        $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
+        $classroomMemberCount = ($classroomMemberCount>$magic['export_allow_count']) ? $magic['export_allow_count']:$classroomMemberCount;
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -475,10 +494,39 @@ class ClassroomManageController extends BaseController
             $students[] = $member;
         }
 
-        $str .= implode("\r\n", $students);
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+
+        if (($start+$limit*2)>=$classroomMemberCount) {
+            $status = 'export';
+        } else {
+            $status = 'getData';
+        }
+
+        $content = implode("\r\n", $students);
+        if ($start == 0) {
+            $content = $str.$content;
+        }
+        file_put_contents($file, $content."\r\n", FILE_APPEND);
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+        
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+
+        $str = file_get_contents($file);
+        FileToolkit::remove($file);
+        
         $str = chr(239).chr(187).chr(191).$str;
 
-        $filename = sprintf("classroom-%s-students-(%s).csv", $classroom['id'], date('Y-n-d'));
+        $filename = sprintf("classroom-%s-students-(%s).csv", $id, date('Y-n-d'));
 
         // $userId = $this->getCurrentUser()->id;
 
@@ -489,6 +537,13 @@ class ClassroomManageController extends BaseController
         $response->setContent($str);
 
         return $response;
+    }
+
+    private function genereateExportCsvFileName()
+    {
+        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
+        $user     = $this->getCurrentUser();
+        return $rootPath."/export_content_classroom_students".$user['id'].time().".txt";
     }
 
     public function serviceAction(Request $request, $id)

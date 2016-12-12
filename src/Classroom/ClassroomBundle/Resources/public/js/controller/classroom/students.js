@@ -45,6 +45,26 @@ define(function(require, exports, module) {
             
         });
 
+        $('#export-students-btn').on('click', function(){
+            $.get($('#export-students-btn').data('datasUrl'), {start:0}, function(response) {
+                if (response.status === 'getData') {
+                    exportStudents(response.start, response.fileName);
+                } else {
+                    location.href=$('#export-students-btn').data('url')+'?fileName='+response.fileName;
+                }
+            });
+        });
+
+    }
+
+    function exportStudents(start = 0, fileName = '') {
+        $.get($('#export-students-btn').data('datasUrl'), {start:start, fileName:fileName}, function(response) {
+            if (response.status === 'getData') {
+                exportStudents(response.start, response.fileName);
+            } else {
+                location.href=$('#export-students-btn').data('url')+'?fileName='+response.fileName;
+            }
+        });
     }
 
 });

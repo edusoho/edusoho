@@ -19,7 +19,7 @@
       {% else %}
         <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
       {% endif %}
-      <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a>
+      <a class="btn btn-info btn-sm mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('classroom_manage_student_export_csv', {id:classroom.id}) }}" data-datas-url="{{ path('classroom_manage_student_export_datas', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a>
     </div>
    {% endif %}
 
