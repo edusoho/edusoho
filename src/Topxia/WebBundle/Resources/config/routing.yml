@@ -2329,6 +2329,10 @@ open_course_manage_student_export_csv:
     path:  /open/course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
 
+open_course_manage_student_export_datas:
+    path:  /open/course/{id}/manage/student/export/datas
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExportDatas }
+
 open_course_manage_material:
     path:  /open/course/{courseId}/manage/lesson/{lessonId}/material
     defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialModal }
