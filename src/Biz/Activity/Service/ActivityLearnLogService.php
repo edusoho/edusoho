@@ -6,5 +6,5 @@ interface ActivityLearnLogService
 {
     public function createLog($activity, $eventName, $data);
 
-    public function sumLearnTimeByActivityId($activityId);
+    public function sumLearnedTimeByActivityId($activityId);
 }

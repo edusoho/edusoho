@@ -33,8 +33,8 @@ class Text extends Activity
 
     public function canFinish($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnTimeByActivityId($activityId);
-        $textActivity = $this->getTextActivityDao()->get($id);
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $textActivity = $this->getTextActivityDao()->get($activityId);
         return !empty($result) && $result > $textActivity['finishDetail'];
     }
 

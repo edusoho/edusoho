@@ -12,19 +12,20 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     {
         $fields = array(
             'activityId'   => $activity['id'],
-            'courseTaskId'       => !empty($data['task']['id'])? :0,
+            'courseTaskId' => !empty($data['taskId'])? :0,
             'userId'       => $this->getCurrentUser()->getId(),
             'event'        => $eventName,
+            'learnedTime'  => !empty($data['learnedTime'])? :0,
             'data'         => $data,
             'createdTime'  => time()
         );
         return $this->getActivityLearnLogDao()->create($fields);
     }
 
-    public function sumLearnTimeByActivityId($activityId)
+    public function sumLearnedTimeByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
-        return $this->getActivityLearnLogDao()->sumLearnTimeByActivityIdAndUserId($activityId,$user['id']);
+        return $this->getActivityLearnLogDao()->sumLearnedTimeByActivityIdAndUserId($activityId,$user['id']);
     }
 
     /**

@@ -9,9 +9,9 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 {
     protected $table = 'activity_learn_log';
 
-    public function sumLearnTimeByActivityIdAndUserId($activityId, $userId)
+    public function sumLearnedTimeByActivityIdAndUserId($activityId, $userId)
     {
-    	$sql = "SELECT sum(learnTime) FROM {$this->table()} WHERE activityId = ? and userId = ? ";
+    	$sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and userId = ? ";
         return $this->db()->fetchColumn($sql, array($activityId, $userId)) ?: 0;
     }
 

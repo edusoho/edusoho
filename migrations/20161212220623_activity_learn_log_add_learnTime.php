@@ -12,7 +12,7 @@ class ActivityLearnLogAddLearnTime extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-            ALTER TABLE activity_learn_log ADD COLUMN learnTime int(11) DEFAULT 0;
+            ALTER TABLE activity_learn_log ADD COLUMN learnedTime int(11) DEFAULT 0;
         ");
 
     }
@@ -25,7 +25,7 @@ class ActivityLearnLogAddLearnTime extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-            ALTER TABLE activity_learn_log DROP COLUMN learnTime;
+            ALTER TABLE activity_learn_log DROP COLUMN learnedTime;
         ");
     }
 }
