@@ -115,8 +115,4 @@ MultiGroup.defaultProps = {
   outputDataElement:'hidden-input',
 };
 
-// <List removeItem={(index)=>this.removeItem(index)} datas={this.state.datas}  enableSort = {enableSort} sortable={this.props.sortable}  compKey={this.state.key} />
-
-
-
 export default MultiGroup;
