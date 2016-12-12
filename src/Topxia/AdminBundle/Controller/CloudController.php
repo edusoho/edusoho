@@ -60,7 +60,17 @@ class CloudController extends BaseController
 
     public function smsAccountAction(Request $request)
     {
-        return $this->redirectUrl('service_sms_accout');
+        return $this->redirectUrl('service_sms_count');
+    }
+
+    public function emailAccountAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_count');
+    }
+
+    public function emailListAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_list');
     }
 
     public function smsSignAction(Request $request)
