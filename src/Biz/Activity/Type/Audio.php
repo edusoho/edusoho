@@ -54,7 +54,7 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    protected function registerListeners()
+    protected function getListeners()
     {
         return array(
             'audio.start'  => 'Biz\\AudioActivity\\Listener\\AudioStartListener',

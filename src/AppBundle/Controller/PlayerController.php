@@ -1,6 +1,6 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 
 use MaterialLib\Service\MaterialLib\MaterialLibService;
@@ -48,7 +48,7 @@ class PlayerController extends BaseController
             }
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context);
-        return $this->render('WebBundle:Player:show.html.twig', array(
+        return $this->render('player/show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
             'context'          => $context,

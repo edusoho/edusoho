@@ -11,7 +11,7 @@
     <meta content="telephone=no" name="format-detection" />
     <meta content="{{ csrf_token('site') }}" name="csrf-token" /></head>
 
-    {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
+    {% include 'player/stylesheet.html.twig' %}
   </head>
   <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}

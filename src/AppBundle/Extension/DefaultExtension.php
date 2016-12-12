@@ -138,48 +138,52 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'templates' => array()
             ),
             'audio'    => array(
-                'meta'    => array(
+                'meta'      => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
                 ),
-                'actions' => array(
+                'actions'   => array(
                     'create' => 'AppBundle:Activity/Audio:create',
                     'edit'   => 'AppBundle:Activity/Audio:edit',
                     'show'   => 'AppBundle:Activity/Audio:show'
-                )
+                ),
+                'templates' => array()
             ),
             'download' => array(
-                'meta'    => array(
+                'meta'      => array(
                     'name' => '下载资料',
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
-                'actions' => array(
+                'actions'   => array(
                     'create' => 'AppBundle:Activity/Download:create',
                     'edit'   => 'AppBundle:Activity/Download:edit',
                     'show'   => 'AppBundle:Activity/Download:show'
-                )
+                ),
+                'templates' => array()
             ),
             'live'     => array(
-                'meta'    => array(
+                'meta'      => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
                 ),
-                'actions' => array(
+                'actions'   => array(
                     'create' => 'AppBundle:Activity/Live:create',
                     'edit'   => 'AppBundle:Activity/Live:edit',
                     'show'   => 'AppBundle:Activity/Live:show'
-                )
+                ),
+                'templates' => array()
             ),
             'discuss'  => array(
-                'meta'    => array(
+                'meta'      => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
                 ),
-                'actions' => array(
+                'actions'   => array(
                     'create' => 'AppBundle:Activity/Discuss:create',
                     'edit'   => 'AppBundle:Activity/Discuss:edit',
                     'show'   => 'AppBundle:Activity/Discuss:show'
-                )
+                ),
+                'templates' => array()
             )
         );
     }

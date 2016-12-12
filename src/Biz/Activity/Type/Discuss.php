@@ -12,4 +12,9 @@ class Discuss extends Activity
             'discuss.finish' => 'Biz\\Discuss\\Listener\\DiscussFinishListener'
         );
     }
+
+    protected function getListeners()
+    {
+        return array();
+    }
 }

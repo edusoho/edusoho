@@ -9,7 +9,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class Video extends Activity
 {
-    protected function registerListeners()
+    protected function getListeners()
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',

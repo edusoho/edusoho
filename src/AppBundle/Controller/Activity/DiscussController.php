@@ -1,6 +1,6 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;

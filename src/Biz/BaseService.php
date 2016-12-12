@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -20,6 +21,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz['user'];
     }
 
+    /**
+     * @return EventDispatcherInterface
+     */
     protected function getDispatcher()
     {
         return $this->biz['dispatcher'];

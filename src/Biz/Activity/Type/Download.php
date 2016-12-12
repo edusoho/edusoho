@@ -80,6 +80,12 @@ class Download extends Activity
         return $this->getDownloadActivityDao()->delete($id);
     }
 
+    protected function getListeners()
+    {
+        // TODO: Implement getListeners() method.
+    }
+
+
     /**
      * @inheritdoc
      */

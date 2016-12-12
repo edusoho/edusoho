@@ -56,6 +56,14 @@ course_task_activity_show:
     path:  /course/{courseId}/task/{id}/activity_show
     defaults: { _controller: AppBundle:Task:taskActivity }
 
+course_task_trigger:
+    path:  /course/{courseId}/task/{id}/trigger
+    defaults: { _controller: AppBundle:Task:trigger }
+
+course_task_finish:
+    path:  /course/{courseId}/task/{id}/finish
+    defaults: { _controller: AppBundle:Task:finish }
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create}

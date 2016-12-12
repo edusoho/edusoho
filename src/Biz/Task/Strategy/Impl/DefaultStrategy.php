@@ -83,7 +83,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTaskItemRenderPage()
     {
-        return 'WebBundle:TaskManage:list-item.html.twig';
+        return 'task-manage/list-item.html.twig';
     }
 
     /**

@@ -9,14 +9,6 @@ use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
 {
-    public function getMetas()
-    {
-        return array(
-            'name' => '图文',
-            'icon' => 'es-icon es-icon-graphicclass'
-        );
-    }
-
     protected function registerListeners()
     {
         return array();
@@ -67,5 +59,11 @@ class Text extends Activity
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
     }
+
+    protected function getListeners()
+    {
+        // TODO: Implement getListeners() method.
+    }
+
 
 }

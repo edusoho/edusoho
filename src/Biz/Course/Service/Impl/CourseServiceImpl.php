@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseMemberDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
@@ -325,6 +326,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
+    public function setMemberNoteNumber($courseId, $userId, $num)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member)) {
+            return false;
+        }
+
+        $this->getMemberDao()->update($member['id'], array(
+            'noteNum'            => (int) $num,
+            'noteLastUpdateTime' => time()
+        ));
+
+        return true;
+    }
+
+
     public function getUserRoleInCourse($courseId, $userId)
     {
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
@@ -502,6 +520,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return CourseMemberDao
+     */
     protected function getMemberDao()
     {
         return $this->createDao('Course:CourseMemberDao');

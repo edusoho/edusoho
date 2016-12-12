@@ -32,7 +32,7 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-        return $this->render('WebBundle:Task:show.html.twig', array(
+        return $this->render('task/show.html.twig', array(
             'course'     => $course,
             'task'       => $task,
             'taskResult' => $taskResult,
@@ -48,13 +48,48 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
-        return $this->forward('WebBundle:Activity:show', array(
+        return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
         ));
     }
 
-    public function triggerAction(Request $request, $courseId, $taskId)
+
+    public function taskPluginsAction(Request $request, $courseId, $taskId)
+    {
+        $preview = $request->query->get('preview', false);
+
+        $task = $this->tryLearnTask($courseId, $taskId);
+        return $this->createJsonResponse(array(
+            array(
+                'code' => 'task-list',
+                'name' => '课程',
+                'icon' => 'es-icon-menu',
+                'url'  => $this->generateUrl('course_task_show_plugin_task_list', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId,
+                    'preview'  => $preview,
+                ))
+            ),
+            array(
+                'code' => 'note',
+                'name' => '笔记',
+                'icon' => 'es-icon-edit',
+                'url'  => $this->generateUrl('course_task_plugin_note', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
+            )
+//            array(
+//                'code' => 'question',
+//                'name' => '问答',
+//                'icon' => 'es-icon-help',
+//                'url' => 'TaskPluginQuestionController'
+//            )
+        ));
+    }
+
+    public function triggerAction(Request $request, $courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
@@ -64,7 +99,7 @@ class TaskController extends BaseController
         }
 
         $data   = $request->request->get('data', array());
-        $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
+        $result = $this->getTaskService()->trigger($id, $eventName, $data);
 
         return $this->createJsonResponse(array(
             'event'  => $eventName,
@@ -73,12 +108,12 @@ class TaskController extends BaseController
         ));
     }
 
-    public function finishAction(Request $request, $courseId, $taskId)
+    public function finishAction(Request $request, $courseId, $id)
     {
-        $result   = $this->getTaskService()->finishTask($taskId);
-        $task     = $this->getTaskService()->getTask($taskId);
-        $nextTask = $this->getTaskService()->getNextTask($taskId);
-        return $this->render('WebBundle:Task:finish-result.html.twig', array(
+        $result   = $this->getTaskService()->finishTask($id);
+        $task     = $this->getTaskService()->getTask($id);
+        $nextTask = $this->getTaskService()->getNextTask($id);
+        return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
             'task'     => $task,
             'nextTask' => $nextTask

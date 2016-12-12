@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\LiveActivity;
+namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 
@@ -31,6 +31,11 @@ class Live extends Activity
     public function delete($targetId)
     {
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
+    }
+
+    protected function getListeners()
+    {
+        return array();
     }
 
     protected function getLiveActivityService()
