@@ -31,9 +31,11 @@ class Text extends Activity
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
-    public function canFinish($id)
+    public function canFinish($activityId)
     {
-        return true;
+        $result = $this->getActivityLearnLogService()->sumLearnTimeByActivityId($activityId);
+        $textActivity = $this->getTextActivityDao()->get($id);
+        return !empty($result) && $result > $textActivity['finishDetail'];
     }
 
     public function delete($targetId)
@@ -58,6 +60,11 @@ class Text extends Activity
     protected function getTextActivityDao()
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     protected function getListeners()
