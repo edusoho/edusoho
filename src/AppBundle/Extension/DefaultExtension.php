@@ -1,14 +1,16 @@
 <?php
 namespace AppBundle\Extension;
 
-use Biz\Activity\Type\Audio;
-use Biz\Activity\Type\Download;
-use Biz\Activity\Type\Text;
-use Biz\Activity\Type\Video;
 use Pimple\Container;
+use Biz\Activity\Type\Live;
+use Biz\Activity\Type\Text;
 use Biz\Question\Type\Fill;
+use Biz\Activity\Type\Audio;
+use Biz\Activity\Type\Video;
 use Biz\Question\Type\Essay;
 use Biz\Question\Type\Choice;
+use Biz\Activity\Type\Discuss;
+use Biz\Activity\Type\Download;
 use Biz\Question\Type\Material;
 use Biz\Question\Type\Determine;
 use Biz\Question\Type\SingleChoice;
@@ -107,19 +109,18 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-
     public function getActivities()
     {
         return array(
             'text'     => array(
                 'meta'      => array(
                     'name' => '图文',
-                    'icon' => 'es-icon es-icon-graphicclass',
+                    'icon' => 'es-icon es-icon-graphicclass'
                 ),
                 'actions'   => array(
                     'create' => 'AppBundle:Activity/Text:create',
                     'edit'   => 'AppBundle:Activity/Text:edit',
-                    'show'   => 'AppBundle:Activity/Text:show',
+                    'show'   => 'AppBundle:Activity/Text:show'
                 ),
                 'templates' => array()
 
@@ -127,19 +128,19 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'video'    => array(
                 'meta'      => array(
                     'name' => '视频',
-                    'icon' => 'es-icon es-icon-videoclass',
+                    'icon' => 'es-icon es-icon-videoclass'
                 ),
                 'actions'   => array(
                     'create' => 'AppBundle:Activity/Video:create',
                     'edit'   => 'AppBundle:Activity/Video:edit',
-                    'show'   => 'AppBundle:Activity/Video:show',
+                    'show'   => 'AppBundle:Activity/Video:show'
                 ),
                 'templates' => array()
             ),
             'audio'    => array(
                 'meta'    => array(
                     'name' => '音频',
-                    'icon' => 'es-icon es-icon-audioclass',
+                    'icon' => 'es-icon es-icon-audioclass'
                 ),
                 'actions' => array(
                     'create' => 'AppBundle:Activity/Audio:create',
@@ -153,12 +154,33 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/DownLoad:create',
-                    'edit'   => 'AppBundle:Activity/DownLoad:edit',
-                    'show'   => 'AppBundle:Activity/DownLoad:show'
+                    'create' => 'AppBundle:Activity/Download:create',
+                    'edit'   => 'AppBundle:Activity/Download:edit',
+                    'show'   => 'AppBundle:Activity/Download:show'
+                )
+            ),
+            'live'     => array(
+                'meta'    => array(
+                    'name' => '直播',
+                    'icon' => 'es-icon es-icon-videocam'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Live:create',
+                    'edit'   => 'AppBundle:Activity/Live:edit',
+                    'show'   => 'AppBundle:Activity/Live:show'
+                )
+            ),
+            'discuss'  => array(
+                'meta'    => array(
+                    'name' => '讨论',
+                    'icon' => 'es-icon es-icon-comment'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Discuss:create',
+                    'edit'   => 'AppBundle:Activity/Discuss:edit',
+                    'show'   => 'AppBundle:Activity/Discuss:show'
                 )
             )
-
         );
     }
 
@@ -169,45 +191,50 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         $this->registerActivityTypes($container);
     }
 
-
     protected function registerActivityTypes($container)
     {
-        $that                                = $this;
-        $container['activity_type.text']     = function () use ($that) {
+        $that                            = $this;
+        $container['activity_type.text'] = function () use ($that) {
             return new Text($that->biz);
         };
-        $container['activity_type.video']    = function () use ($that) {
+        $container['activity_type.video'] = function () use ($that) {
             return new Video($that->biz);
         };
-        $container['activity_type.audio']    = function () use ($that) {
+        $container['activity_type.audio'] = function () use ($that) {
             return new Audio($that->biz);
         };
         $container['activity_type.download'] = function () use ($that) {
             return new Download($that->biz);
         };
+        $container['activity_type.live'] = function () use ($that) {
+            return new Live($that->biz);
+        };
+        $container['activity_type.discuss'] = function () use ($that) {
+            return new Discuss($that->biz);
+        };
     }
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice']           = function () {
+        $container['question_type.choice'] = function () {
             return new Choice();
         };
-        $container['question_type.single_choice']    = function () {
+        $container['question_type.single_choice'] = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine']        = function () {
+        $container['question_type.determine'] = function () {
             return new Determine();
         };
-        $container['question_type.essay']            = function () {
+        $container['question_type.essay'] = function () {
             return new Essay();
         };
-        $container['question_type.fill']             = function () {
+        $container['question_type.fill'] = function () {
             return new Fill();
         };
-        $container['question_type.material']         = function () {
+        $container['question_type.material'] = function () {
             return new Material();
         };
     }

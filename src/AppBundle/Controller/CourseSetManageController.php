@@ -20,7 +20,7 @@ class CourseSetManageController extends BaseController
         $user        = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user        = $this->getUserService()->getUser($user->getId());
-        return $this->render('WebBundle:CourseSet:create.html.twig', array(
+        return $this->render('courseset/create.html.twig', array(
             'user'        => $user,
             'userProfile' => $userProfile
         ));
@@ -30,7 +30,7 @@ class CourseSetManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
-        return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
+        return $this->render('courseset-manage/courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses
         ));
@@ -40,7 +40,7 @@ class CourseSetManageController extends BaseController
     {
         $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
 
-        return $this->render('WebBundle:CourseSetManage:header.html.twig', array(
+        return $this->render('courseset-manage/header.html.twig', array(
             'courseSet' => $courseSet,
             'users'     => $users
         ));
@@ -48,7 +48,7 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $sideNav)
     {
-        return $this->render('WebBundle:CourseSetManage:sidebar.html.twig', array(
+        return $this->render('courseset-manage/sidebar.html.twig', array(
             'id'       => $courseSetId,
             'side_nav' => $sideNav
         ));
@@ -68,7 +68,7 @@ class CourseSetManageController extends BaseController
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
-        return $this->render('WebBundle:CourseSetManage:base.html.twig', array(
+        return $this->render('courseset-manage/base.html.twig', array(
             'courseSet' => $courseSet,
             'tags'      => ArrayToolkit::column($tags, 'name')
         ));
@@ -82,7 +82,7 @@ class CourseSetManageController extends BaseController
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        return $this->render('WebBundle:CourseSetManage:detail.html.twig', array(
+        return $this->render('courseset-manage/detail.html.twig', array(
             'courseSet' => $courseSet
         ));
     }
@@ -99,7 +99,7 @@ class CourseSetManageController extends BaseController
         // if ($courseSet['cover']) {
         //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
         // }
-        return $this->render('WebBundle:CourseSetManage:cover.html.twig', array(
+        return $this->render('courseset-manage/cover.html.twig', array(
             'courseSet' => $courseSet
         ));
     }
@@ -118,7 +118,7 @@ class CourseSetManageController extends BaseController
 
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
-        return $this->render('WebBundle:CourseSetManage:cover-crop.html.twig', array(
+        return $this->render('courseset-manage/cover-crop.html.twig', array(
             'courseSet'   => $courseSet,
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,

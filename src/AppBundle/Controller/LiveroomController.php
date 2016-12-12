@@ -13,7 +13,7 @@ class LiveroomController extends BaseController
 
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
-        return $this->render("WebBundle:LiveActivity:entry.html.twig", array(
+        return $this->render("activity/live/entry.html.twig", array(
             'courseId'   => $courseId,
             'activityId' => $activityId,
             'roomId'     => $roomId,

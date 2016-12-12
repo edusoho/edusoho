@@ -18,7 +18,7 @@ class CourseManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        return $this->render('WebBundle:CourseManage:create-modal.html.twig', array(
+        return $this->render('course-manage/create-modal.html.twig', array(
             'courseSet' => $courseSet
         ));
     }
@@ -27,7 +27,7 @@ class CourseManageController extends BaseController
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        return $this->render('WebBundle:CourseManage:create-modal.html.twig', array(
+        return $this->render('course-manage/create-modal.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
@@ -37,7 +37,7 @@ class CourseManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
-        return $this->render('WebBundle:CourseSetManage:courses.html.twig', array(
+        return $this->render('courseset-manage/courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses
         ));
@@ -45,7 +45,6 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-
         $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
         $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
@@ -65,7 +64,6 @@ class CourseManageController extends BaseController
     {
         $taskCount = count($tasks);
         if ($course['expiryMode'] == 'days') {
-
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskCount / $course['expiryDays'];
         } else {
             $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
@@ -90,7 +88,7 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('WebBundle:CourseManage:info.html.twig', array(
+        return $this->render('course-manage/info.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
         ));
@@ -107,7 +105,7 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('WebBundle:CourseManage:marketing.html.twig', array(
+        return $this->render('course-manage/marketing.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
@@ -124,7 +122,7 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('WebBundle:CourseManage:teachers.html.twig', array(
+        return $this->render('course-manage/teachers.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
@@ -135,7 +133,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
-        return $this->render('WebBundle:CourseManage:students.html.twig', array(
+        return $this->render('course-manage/students.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'students'  => $students
@@ -146,7 +144,7 @@ class CourseManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('WebBundle:CourseManage:quit-records.html.twig', array(
+        return $this->render('course-manage/quit-records.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'records'   => array()
@@ -163,7 +161,7 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('WebBundle:CourseManage:student-add-modal.html.twig', array(
+        return $this->render('course-manage/student-add-modal.html.twig', array(
             'course'      => $course,
             'courseSetId' => $courseSetId
         ));

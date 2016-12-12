@@ -2,10 +2,8 @@
 
 namespace Biz\Task\Strategy\Impl;
 
-use Biz\Task\Strategy\BaseLearningStrategy;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\LearningStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class PlanStrategy extends BaseStrategy implements CourseStrategy
@@ -35,9 +33,9 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     /**
      * 任务学习
-     * @param $task
-     * @return bool
+     * @param  $task
      * @throws NotFoundException
+     * @return bool
      */
     public function canLearnTask($task)
     {
@@ -66,14 +64,13 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTasksRenderPage()
     {
-        return 'WebBundle:CourseManage/LockMode:tasks.html.twig';
+        return 'course-manage/lock-mode/tasks.html.twig';
     }
 
     public function getTaskItemRenderPage()
     {
         return 'WebBundle:TaskManage:list-item-lock-mode.html.twig';
     }
-
 
     public function findCourseItems($courseId)
     {
@@ -136,7 +133,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                 $id         = str_replace('task-', '', $id);
                 $this->getTaskService()->updateSeq($id, array(
                     'seq'        => $key,
-                    'categoryId' => $categoryId,
+                    'categoryId' => $categoryId
                 ));
             }
         }
@@ -165,6 +162,4 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         $task = $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         return $task;
     }
-
-
 }
