@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Activity;;
+namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
@@ -24,7 +24,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         $activity['isTeacher'] = $this->getUser()->isTeacher();
         $summary               = $activity['remark'];
         unset($activity['remark']);
-        return $this->render('WebBundle:LiveActivity:show.html.twig', array(
+        return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary'  => $summary
         ));
@@ -33,15 +33,14 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        // var_dump($this->formatTimeFields($activity));exit();
-        return $this->render('WebBundle:LiveActivity:modal.html.twig', array(
+        return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity)
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:LiveActivity:modal.html.twig', array(
+        return $this->render('activity/live/modal.html.twig', array(
             'courseId' => $courseId
         ));
     }

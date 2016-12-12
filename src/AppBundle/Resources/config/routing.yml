@@ -181,17 +181,17 @@ course_manage_items_sort:
   methods: ['POST']
 
 #course_set
-course_set_show:
-  path: /course_set/{id}
-  defaults: {_controller: WebBundle:CourseSet:show}
-
-course_set_preview:
-  path: /course_set/{id}/preview
-  defaults: {_controller: WebBundle:CourseSet:preview}
-
 course_set_manage_create:
   path: /course_set/create
   defaults: {_controller: AppBundle:CourseSetManage:create}
+
+course_set_show:
+  path: /course_set/{id}
+  defaults: {_controller: AppBundle:CourseSet:show}
+
+course_set_preview:
+  path: /course_set/{id}/preview
+  defaults: {_controller: AppBundle:CourseSet:preview}
 
 course_set_manage:
   path: /course_set/{id}/manage

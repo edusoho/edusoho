@@ -1,6 +1,6 @@
 <?php
 
-namespace WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,17 +10,16 @@ class CourseSetController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        $courseId  = $request->query->get('courseId', 0);
+        $courseId = $request->query->get('courseId', 0);
 
-        $course    = array();
+        $course = array();
         if ($courseId > 0) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
         }
 
-
-        return $this->render('WebBundle:CourseSet:show.html.twig', array(
+        return $this->render('courseset/show.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
@@ -36,7 +35,7 @@ class CourseSetController extends BaseController
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
-        return $this->render('WebBundle:CourseSet:show.html.twig', array(
+        return $this->render('courseset/show.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));

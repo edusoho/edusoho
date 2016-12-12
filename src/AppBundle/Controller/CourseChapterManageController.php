@@ -16,13 +16,13 @@ class CourseChapterManageController extends BaseController
             $chapter             = $request->request->all();
             $chapter['courseId'] = $course['id'];
             $chapter             = $this->getCourseService()->createChapter($chapter);
-            return $this->render('WebBundle:CourseChapterManage:list-item.html.twig', array(
+            return $this->render('course-manage/chapter/list-item.html.twig', array(
                 'course'  => $course,
                 'chapter' => $chapter
             ));
         }
 
-        return $this->render('WebBundle:CourseChapterManage:chapter-modal.html.twig', array(
+        return $this->render('course-manage/chapter/chapter-modal.html.twig', array(
             'course'   => $course,
             'type'     => $type,
             'parentId' => $parentId
@@ -42,13 +42,13 @@ class CourseChapterManageController extends BaseController
             $fields             = $request->request->all();
             $fields['courseId'] = $course['id'];
             $chapter            = $this->getCourseService()->updateChapter($courseId, $chapterId, $fields);
-            return $this->render('WebBundle:CourseChapterManage:list-item.html.twig', array(
+            return $this->render('course-manage/chapter/list-item.html.twig', array(
                 'course'  => $course,
                 'chapter' => $chapter
             ));
         }
 
-        return $this->render('WebBundle:CourseChapterManage:chapter-modal.html.twig', array(
+        return $this->render('course-manage/chapter/chapter-modal.html.twig', array(
             'course'  => $course,
             'chapter' => $chapter,
             'type'    => $chapter['type']

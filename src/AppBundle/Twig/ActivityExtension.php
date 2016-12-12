@@ -22,7 +22,7 @@ class ActivityExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
+            new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat'))
         );
     }
 
@@ -37,17 +37,19 @@ class ActivityExtension extends \Twig_Extension
     public function getActivityMeta($type = null)
     {
         $activities = $this->container->get('extension.default')->getActivities();
-
         if (empty($type)) {
             $activities = array_map(function ($activity) {
                 return $activity['meta'];
-            },$activities);
+            }, $activities);
             return $activities;
         } else {
             if (isset($activities[$type]) && isset($activities[$type]['meta'])) {
                 return $activities[$type]['meta'];
             }
-            return null;
+            return array(
+                'icon' => '',
+                'name' => ''
+            );
         }
     }
 
