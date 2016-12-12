@@ -29,14 +29,18 @@
               <div class="panel-title">已开通服务</div>
             </div>
             <div class="panel-body">
-            {% if 'video' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-playcircleoutline"></i>
                   云视频
                 </a>
               </div>
-            {% endif %}
+            <div class="col-md-4">
+              <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-search"></i>
+                云搜索
+              </a>
+            </div>
             {% if 'live' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
@@ -103,14 +107,6 @@
               <a href="{{path('admin_cloud_service_overview',{type:'sms'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-textsms"></i>
                 云短信
-              </a>
-            </div>
-          {% endif %}
-          {% if 'search' in unPaidService %}
-            <div class="col-md-4">
-              <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
-                <i class="es-icon es-icon-search"></i>
-                云搜索
               </a>
             </div>
           {% endif %}
