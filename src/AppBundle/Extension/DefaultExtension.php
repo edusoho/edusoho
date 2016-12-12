@@ -145,7 +145,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Audio:create',
                     'edit'   => 'AppBundle:Activity/Audio:edit',
                     'show'   => 'AppBundle:Activity/Audio:show'
-                )
+                ),
+                'templates' => array()
             ),
             'download' => array(
                 'meta'    => array(
@@ -156,7 +157,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/DownLoad:create',
                     'edit'   => 'AppBundle:Activity/DownLoad:edit',
                     'show'   => 'AppBundle:Activity/DownLoad:show'
-                )
+                ),
+                'templates' => array()
             )
 
         );

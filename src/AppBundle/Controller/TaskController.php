@@ -48,13 +48,13 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
-        return $this->forward('WebBundle:Activity:show', array(
+        return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
         ));
     }
 
-    public function triggerAction(Request $request, $courseId, $taskId)
+    public function triggerAction(Request $request, $courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
@@ -64,7 +64,7 @@ class TaskController extends BaseController
         }
 
         $data   = $request->request->get('data', array());
-        $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
+        $result = $this->getTaskService()->trigger($id, $eventName, $data);
 
         return $this->createJsonResponse(array(
             'event'  => $eventName,
@@ -73,11 +73,11 @@ class TaskController extends BaseController
         ));
     }
 
-    public function finishAction(Request $request, $courseId, $taskId)
+    public function finishAction(Request $request, $courseId, $id)
     {
-        $result   = $this->getTaskService()->finishTask($taskId);
-        $task     = $this->getTaskService()->getTask($taskId);
-        $nextTask = $this->getTaskService()->getNextTask($taskId);
+        $result   = $this->getTaskService()->finishTask($id);
+        $task     = $this->getTaskService()->getTask($id);
+        $nextTask = $this->getTaskService()->getNextTask($id);
         return $this->render('WebBundle:Task:finish-result.html.twig', array(
             'result'   => $result,
             'task'     => $task,
