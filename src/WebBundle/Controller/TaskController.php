@@ -10,9 +10,10 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $preview  = $request->query->get('preview');
-        $task     = $this->tryLearnTask($courseId, $id, (bool) $preview);
-        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $preview = $request->query->get('preview');
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $course  = $this->getCourseService()->getCourse($task['courseId']);
+        $tasks   = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
@@ -32,6 +33,7 @@ class TaskController extends BaseController
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         return $this->render('WebBundle:Task:show.html.twig', array(
+            'course'     => $course,
             'task'       => $task,
             'taskResult' => $taskResult,
             'tasks'      => $tasks,
@@ -55,6 +57,8 @@ class TaskController extends BaseController
 
     public function taskPluginsAction(Request $request, $courseId, $taskId)
     {
+        $preview = $request->query->get('preview', false);
+
         $task = $this->tryLearnTask($courseId, $taskId);
         return $this->createJsonResponse(array(
             array(
@@ -63,7 +67,8 @@ class TaskController extends BaseController
                 'icon' => 'es-icon-menu',
                 'url' => $this->generateUrl('course_task_show_plugin_task_list', array(
                     'courseId' => $courseId,
-                    'taskId'   => $taskId
+                    'taskId'   => $taskId,
+                    'preview'  => $preview,
                 ))
             ),
             array(
@@ -75,12 +80,6 @@ class TaskController extends BaseController
                     'taskId'   => $taskId
                 ))
             )
-//            array(
-//                'code' => 'note',
-//                'name' => '笔记',
-//                'icon' => 'es-icon-edit',
-//                'url' => 'TaskPluginNoteController'
-//            ),
 //            array(
 //                'code' => 'question',
 //                'name' => '问答',
@@ -110,12 +109,12 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $taskId)
     {
-        $result = $this->getTaskService()->finishTask($taskId);
-        $task = $this->getTaskService()->getTask($taskId);
+        $result   = $this->getTaskService()->finishTask($taskId);
+        $task     = $this->getTaskService()->getTask($taskId);
         $nextTask = $this->getTaskService()->getNextTask($taskId);
         return $this->render('WebBundle:Task:finish-result.html.twig', array(
-            'result' => $result,
-            'task' => $task,
+            'result'   => $result,
+            'task'     => $task,
             'nextTask' => $nextTask
         ));
     }
