@@ -53,12 +53,14 @@ define(function(require, exports, module) {
         },
         initUploader: function()
         {
-            if (this.uploader) {
-                return;
-            }
             var _self = this;
             var $elem = this.$('#subtitle-uploader');
             var mediaId = this.$('.js-subtitle-dialog').data('mediaId');
+            var globalId = $elem.data('mediaGlobalId');
+        
+            if (this.uploader) {
+                this._destoryUploader();
+            }
             var uploader = new UploaderSDK({
                 initUrl:$elem.data('initUrl'),
                 finishUrl:$elem.data('finishUrl'),
@@ -71,7 +73,7 @@ define(function(require, exports, module) {
                 },
                 type:'sub',
                 process:{
-                    videoNo:$elem.data('mediaGlobalId'),
+                    videoNo:globalId,
                 }
             })
             uploader.on('error',function(err){
@@ -118,7 +120,11 @@ define(function(require, exports, module) {
                 return ;
             }
             this.uploader.__events = null;
-            this.uploader.destroy();
+            try {
+               this.uploader.destroy(); 
+            } catch(e) {
+                //忽略destory异常
+            }
             this.uploader = null;
         },
 
