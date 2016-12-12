@@ -1,7 +1,7 @@
-import SideBar from './widget/sidebar';
-import TaskUi from './widget/task-ui';
-import TaskEventEmitter from './widget/task-event-emitter';
-import Emitter from 'common/es-event-emitter'
+import TaskSidebar from "./widget/sidebar";
+import TaskUi from "./widget/task-ui";
+import TaskEventEmitter from "./widget/task-event-emitter";
+import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
   constructor({element, courseId, taskId, mode}) {
@@ -20,9 +20,9 @@ class TaskShow extends Emitter {
 
   init() {
     this.initPlugin();
-    this.sidebar();
+    this.initSidebar();
 
-    if(this.mode != 'preview'){
+    if (this.mode != 'preview') {
       this.bindEvent();
     }
   }
@@ -35,10 +35,10 @@ class TaskShow extends Emitter {
     });
   }
 
-  bindEvent(){
+  bindEvent() {
     let learnedTime = 0;
     let minute = 60 * 1000;
-    let timeStep = 0.1; // 分钟
+    let timeStep = 2; // 分钟
     this.delay('doing', (timeStep) => {
 
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
@@ -46,43 +46,53 @@ class TaskShow extends Emitter {
         timeStep: timeStep,
         learnedTime: learnedTime,
         taskId: this.taskId
-      }).then(data => {
+      }).then(response => {
         this.trigger('doing', timeStep);
+        if(response.result.status == 'finish') {
+          this.ui.learnedWeakPrompt();
+          this.ui.learned();
+        }
       })
     }, timeStep * minute);
 
     this.trigger('doing', timeStep);
 
-    this.element.on('click', '.js-btn-learn', event => {
-      this.eventEmitter.emit('finish', {taskId: this.taskId}).then(() => {
-        this.ui.learned();
-        //@TODO 弹框
+    this.element.on('click', '#learn-btn', event => {
+      console.log(event);
+      $.post($('#learn-btn').data('url'), response => {
+          $('#modal').modal('show');
+          $('#modal').html(response);
+          this.ui.learned();
       })
     });
-    this.bindEmitterEvent();
-  }
 
-  bindEmitterEvent() {
-    this.eventEmitter.receive('finish', (data) => {
-      this.onActivityFinish(data);
+    this.eventEmitter.receive('finish', response => {
+      if(response.result.status == 'finish') {
+        this.ui.learnedWeakPrompt();
+        this.ui.learned();
+      }
     });
+
   }
 
-  onActivityFinish(transition) {
-    if (transition === 'url') {
-
-    }
-    this.ui.learnedWeakPrompt();
-    this.ui.learned();
-  }
-
-  sidebar() {
-    this.sideBar = new SideBar({
-      element: '.js-task-dashboard-page',
-      activePlugins: ['task'],
-      courseId: this.courseId,
-      taskId: this.taskId,
+  initSidebar() {
+    this.sidebar = new TaskSidebar({
+      element: this.element.find('#dashboard-sidebar'),
+      url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
     });
+
+    this.sidebar
+        .on('popup', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time);
+        })
+        .on('fold', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time)
+        })
+
   }
 }
 

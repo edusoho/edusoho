@@ -61,6 +61,8 @@ interface TaskService
 
     public function findTasksByChapterId($chapterId);
 
+    public function findTasksFetchActivityByChapterId($chapterId);
+
     public function finishTaskResult($taskId);
 
 }

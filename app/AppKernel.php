@@ -5,7 +5,6 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Testpaper\Builder\TestpaperBuilderProvider;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
@@ -82,7 +81,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
-            new WebBundle\WebBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle()
@@ -131,7 +129,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
-        $biz->register(new TestpaperBuilderProvider());
+        $biz->register(new \Biz\DefaultServiceProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

@@ -166,7 +166,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
 
-        if (!$this->canFinish($task)) {
+        if (!$this->canFinish($taskId)) {
             throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
         }
 
@@ -262,6 +262,21 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findTasksByChapterId($chapterId)
     {
         return $this->getTaskDao()->findByChapterId($chapterId);
+    }
+
+    public function findTasksFetchActivityByChapterId($chapterId)
+    {
+        $tasks = $this->findTasksByChapterId($chapterId);
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
+
+        array_walk($tasks, function (&$task) use ($activities) {
+            $activity         = $activities[$task['activityId']];
+            $task['activity'] = $activity;
+        });
+        return $tasks;
     }
 
     public function trigger($id, $eventName, $data = array())

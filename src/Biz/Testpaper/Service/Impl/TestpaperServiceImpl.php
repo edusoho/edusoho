@@ -670,7 +670,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperBuilder($type)
     {
-        return $this->biz["testpaperBuilder.{$type}"];
+        return $this->biz["testpaper_builder.{$type}"];
     }
 
     public function getTestpaperPattern($pattern)

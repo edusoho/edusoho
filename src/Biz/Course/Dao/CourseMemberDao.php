@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Dao;
 
-interface CourseMemberDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface CourseMemberDao extends GeneralDaoInterface
 {
     public function getMemberByCourseIdAndUserId($courseId, $userId);
 
