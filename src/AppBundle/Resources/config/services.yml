@@ -49,7 +49,7 @@ services:
             - { name: twig.extension }
 
     web.twig.app_extension:
-        class: WebBundle\Twig\AppExtension
+        class: AppBundle\Twig\AppExtension
         arguments: ['@biz']
         tags:
             - { name: twig.extension }
