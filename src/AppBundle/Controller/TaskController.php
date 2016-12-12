@@ -32,7 +32,7 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-        return $this->render('WebBundle:Task:show.html.twig', array(
+        return $this->render('task/show.html.twig', array(
             'course'     => $course,
             'task'       => $task,
             'taskResult' => $taskResult,
@@ -78,7 +78,7 @@ class TaskController extends BaseController
         $result   = $this->getTaskService()->finishTask($id);
         $task     = $this->getTaskService()->getTask($id);
         $nextTask = $this->getTaskService()->getNextTask($id);
-        return $this->render('WebBundle:Task:finish-result.html.twig', array(
+        return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
             'task'     => $task,
             'nextTask' => $nextTask
