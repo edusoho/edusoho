@@ -5,6 +5,7 @@ namespace WebBundle\Controller;
 use Biz\Course\Service\CourseService;
 use Biz\Note\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
 class NoteController extends BaseController
 {
