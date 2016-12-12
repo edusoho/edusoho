@@ -30,7 +30,7 @@ class TaskManageController extends BaseController
             ));
         }
 
-        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
+        return $this->render('task-manage/modal.html.twig', array(
             'course'     => $course,
             'mode'       => 'create',
             'taskMode'   => $taskMode,
@@ -61,7 +61,7 @@ class TaskManageController extends BaseController
 
         $editController = $actionConfig['edit'];
 
-        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
+        return $this->render('task-manage/modal.html.twig', array(
             'mode'                => 'edit',
             'currentType'         => $activity['mediaType'],
             'activity'            => $activity,
