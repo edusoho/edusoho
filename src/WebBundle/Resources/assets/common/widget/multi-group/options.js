@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 
-class Options extends Component {
+export default class Options extends Component {
   constructor(props){
     super(props);
     this.state = {
-      showOptions: this.props.showOptions,
+      haveSearchResults: this.props.haveSearchResults,
     }
   }
   render() {
     console.log(this.props.items);
     return (
-      <ul className={`dropdown-menu options ${ this.state.showOptions && 'show' }`}>
+      <ul className={`dropdown-menu options ${ this.state.haveSearchResults && 'show' } `}>
       {
         this.props.items.map((item) => {
           return <li key={item.id}><a id={item.value} onClick={event=>this.handleChange(event)}><i>{item.value}</i></a></li>
@@ -22,7 +22,7 @@ class Options extends Component {
 
   handleChange (event) {
     this.setState({
-      showOptions: false,
+      haveSearchResults: false,
     });
     this.props.selectChange(event);
   }

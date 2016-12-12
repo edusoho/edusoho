@@ -16,6 +16,7 @@ const sortList = (options) => {
       _super(item, container);
 
       let data = $list.sortable("serialize").get();
+      console.log(data);
 
       //排序URL
       return;

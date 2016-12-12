@@ -4,15 +4,15 @@ import React from 'react';
 import MultiGroup from '../../../common/widget/multi-group';
 import sortList from 'common/sortable';
 
-
-let items = [{
-  id:1,
-  value: '这是内容',
+// 模拟数据
+let datas = [{
+  itemId:1,
   checked: true,
   sqe: 1,
+  value: '这是内容',
 }];
 
-ReactDOM.render( <MultiGroup items = {items} />,
+ReactDOM.render( <MultiGroup datas = {datas}    />,
   document.getElementById('course-goals')
 );
 

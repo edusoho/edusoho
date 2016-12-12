@@ -9,25 +9,21 @@ export default class List extends Component {
   }
 
   componentDidMount(){
-    let openSort = this.props.openSort;
-    // if(!this.props.sortable){
-    //   return;
-    // }
-    // let self = this;
-    
-    // let $sortComp = $('.sortable-list').sortable(Object.assign({}, {
-    //   element: '.sortable-list',
-    //   distance: 20,
-    //   delay: 100,
-    //   onDrop: function(item, container, _super){
-    //     _super(item, container);
-    //     //也许应该使用redux之类的东东进行组件间数据通讯
-    //     $(document).trigger('items-sorted', [self.props.compKey, $sortComp.sortable('serialize').get()]);
-    //   },
-    //   serialize: function(parent, children, isContainer) {
-    //     return isContainer ? children : parent.find('span').text();
-    //   }
-    // }));
+    let enableSort = this.props.enableSort;
+    let $list = $('.sortable-list').sortable(Object.assign({}, {
+      element: '.sortable-list',
+      distance: 20,
+      delay: 100,
+      itemSelector: "li",
+      onDrop: (item, container, _super) =>{
+        _super(item, container);
+        var data = $list.sortable("serialize").get();
+        this.props.sortItem(data);
+      },
+      serialize: function(parent, children, isContainer) {
+        return isContainer ? children : parent.attr('id');
+      }
+    }));
   };
 
   render() {
@@ -37,10 +33,10 @@ export default class List extends Component {
       {
         this.state.datas.map( (item,i) => {
           return (
-            <li className="list-group-item mbs" key={i}>
+            <li className="list-group-item mbs" key={i} id={item.itemId} data-sqe={item.sqe}>
               {item.value}
-              { enableChecked && <input type="checkbox" value={item.id} checked={item.checked} onChange = {event=>this.props.listCheckChange(event)}/>}
-              <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.id}>
+              { enableChecked && <input type="checkbox" value={item.itemId} checked={item.checked} onChange = {event=>this.props.listCheckChange(event)}/>}
+              <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
                 <i className = "es-icon es-icon-close01"></i>
               </a>
             </li>
