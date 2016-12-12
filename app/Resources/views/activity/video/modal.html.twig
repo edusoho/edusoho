@@ -1,0 +1,44 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'libs/perfect-scrollbar.js','web/activity-manage/video/index.js']) %}
+
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="ext_mediaSource" class="style">{{ '视频'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+    {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
+    <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
+    </div>
+  </div>
+  <div class="form-group for-video-type" id="lesson-length-form-group">
+    <div class="col-sm-2 control-label for-video-type">
+      <label>{{ '视频时长'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
+      <input class="form-control width-input width-input-small js-length" id="minute" type="text" name="minute"
+             value="{{ activity.minute|default(null) }}">{{ '分'|trans }}
+      <input class="form-control width-input width-input-small js-length" id="second" type="text" name="second"
+             value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
+      <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
+      <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
+      <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
+    </div>
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label>{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <div class="col-sm-4">
+        <select id="finish-condition" name="condition" class="form-control">
+          <option value="downloaded">观看到最后</option>
+        </select>
+      </div>
+    </div>
+  </div>
+{% endblock %}

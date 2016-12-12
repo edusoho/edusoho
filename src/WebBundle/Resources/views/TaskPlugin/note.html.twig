@@ -1,0 +1,33 @@
+{% extends 'WebBundle:TaskPlugin:base.html.twig' %}
+
+{% do script(['web/task/plugin/note/index.js']) %}
+
+{% block content %}
+  <form id="task-note-plugin-form" method="post"
+        action="{{ path('course_task_note_save', {courseId: task.courseId, taskId: task.id}) }}">
+    <div class="form-group note-content">
+      <div class="controls">
+        <div class="col-sm-10">
+          <textarea class="form-control type-hidden" id="note-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">
+            {{ note.content|default('') }}
+          </textarea>
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" value="{{ note.taskId|default(task.id) }}" name="taskId">
+    <input type="hidden" value="{{ note.courseId|default(task.courseId) }}" name="courseId">
+
+    <div class="form-group note-actions">
+      <div class="controls clearfix">
+        <span class="text-muted" data-role="saved-message"></span>
+        <button id="note-save-btn" class="btn btn-primary pull-right" type="submit">{{'保存笔记'|trans}}</button>
+        <label class="text-gray mts">
+          <input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}>
+          {{'分享笔记'|trans}}
+        </label>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

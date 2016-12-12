@@ -138,6 +138,22 @@ course_task_show:
   path:  /course/{courseId}/task/{id}/show
   defaults: { _controller: WebBundle:Task:show }
 
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/save
+  defaults: { _controller: WebBundle:Note:saveNote}
+
+course_task_show_plugins:
+  path: /course/{courseId}/task/{taskId}/show/plugins
+  defaults: { _controller: WebBundle:Task:taskPlugins }
+
+course_task_show_plugin_task_list:
+  path: /course/{courseId}/task/{taskId}/plugin/task_list
+  defaults: { _controller: WebBundle:TaskPlugin:taskList }
+
+course_task_plugin_note:
+  path: /course/{courseId}/task/{taskId}/plugin/note
+  defaults: { _controller: WebBundle:TaskPlugin:note }
+
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: WebBundle:DownLoadActivity:downloadFile }
