@@ -1073,7 +1073,7 @@ admin_cloud_sms_sign:
     path:  /cloud/sms/sign
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsSign }
 
-admin_cloud_email_count:
+admin_cloud_email_account:
     path:  /cloud/email/count
     defaults: { _controller: TopxiaAdminBundle:Cloud:emailAccount }
 
