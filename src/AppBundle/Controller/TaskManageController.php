@@ -33,7 +33,6 @@ class TaskManageController extends BaseController
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'course'     => $course,
             'mode'       => 'create',
-            'types'      => $this->getActivityService()->getActivityTypes(),
             'taskMode'   => $taskMode,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId

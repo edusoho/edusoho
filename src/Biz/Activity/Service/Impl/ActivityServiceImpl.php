@@ -21,7 +21,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
         if (!empty($activity['mediaId'])) {
-            $activityConfig  = ActivityFactory::create($this->biz, $activity['mediaType']);
+            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
             $media           = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
         }
@@ -156,10 +156,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->update($id, $fields);
     }
 
-    public function getActivityConfig($type)
-    {
-        return ActivityFactory::create($this->biz, $type);
-    }
+//    public function getActivityConfig($type)
+//    {
+//        return ActivityFactory::create($this->biz, $type);
+//    }
 
     public function deleteActivity($id)
     {
@@ -178,7 +178,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function canFinishActivity($id)
     {
-        $activity = $this->getActivity($id);
+        $activity       = $this->getActivity($id);
         $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
         return $activityConfig->canFinish($id);
     }
@@ -222,5 +222,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getActivityTypes()
     {
         return ActivityFactory::all($this->biz);
+    }
+
+    public function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
     }
 }

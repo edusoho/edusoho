@@ -1,17 +1,12 @@
 <?php
 
-namespace Biz\VideoActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\VideoActivity\Dao\VideoActivityDao;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\ServiceKernel;
 
-class VideoActivity extends Activity
+class Video extends Activity
 {
     public function getMetas()
     {
@@ -25,7 +20,7 @@ class VideoActivity extends Activity
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
-            'video.doing' => 'Biz\\VideoActivity\\Listener\\VideoWatchingListener',
+            'video.doing'  => 'Biz\\VideoActivity\\Listener\\VideoWatchingListener',
             'video.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
         );
     }

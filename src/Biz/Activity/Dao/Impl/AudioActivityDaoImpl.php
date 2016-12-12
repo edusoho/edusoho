@@ -1,14 +1,9 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 02/11/2016
- * Time: 15:41
- */
 
-namespace Biz\AudioActivity\Dao\Impl;
+namespace Biz\Activity\Type\Audio\Dao\Impl;
 
 
-use Biz\AudioActivity\Dao\AudioActivityDao;
+use Biz\Activity\Type\Audio\Dao\AudioActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class AudioActivityDaoImpl extends GeneralDaoImpl implements AudioActivityDao

@@ -5,8 +5,7 @@
  * Time: 14:17
  */
 
-namespace Biz\VideoActivity\Dao\Impl;
-
+namespace Biz\Activity\Type\Video\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\VideoActivity\Dao\VideoActivityDao;

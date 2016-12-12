@@ -1,13 +1,13 @@
 <?php
 
-namespace Biz\TextActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\TextActivity\Dao\TextActivityDao;
+use Biz\Activity\Dao\TextActivityDao;
 use Topxia\Common\ArrayToolkit;
 
-class TextActivity extends Activity
+class Text extends Activity
 {
     public function getMetas()
     {
@@ -34,7 +34,7 @@ class TextActivity extends Activity
             'finishDetail'
         ));
 
-        $biz                  = $this->getBiz();
+        $biz                   = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
         return $this->getTextActivityDao()->update($targetId, $text);
     }
@@ -49,22 +49,13 @@ class TextActivity extends Activity
         return $this->getTextActivityDao()->delete($targetId);
     }
 
-    public function registerActions()
-    {
-        return array(
-            'create' => 'WebBundle:TextActivity:create',
-            'edit'   => 'WebBundle:TextActivity:edit',
-            'show'   => 'WebBundle:TextActivity:show',
-        );
-    }
-
     public function create($fields)
     {
-        $text = ArrayToolkit::parts($fields, array(
+        $text                  = ArrayToolkit::parts($fields, array(
             'finishType',
             'finishDetail'
         ));
-        $biz                  = $this->getBiz();
+        $biz                   = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
         return $this->getTextActivityDao()->create($text);
     }
@@ -74,7 +65,7 @@ class TextActivity extends Activity
      */
     protected function getTextActivityDao()
     {
-        return $this->getBiz()->dao('TextActivity:TextActivityDao');
+        return $this->getBiz()->dao('Activity:TextActivityDao');
     }
 
 }

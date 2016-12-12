@@ -1,19 +1,12 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 02/11/2016
- * Time: 13:56
- */
 
-namespace Biz\AudioActivity;
-
+namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\AudioActivity\Dao\AudioActivityDao;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use Biz\Activity\Type\Audio\Dao\AudioActivityDao;
 use Topxia\Service\Common\ServiceKernel;
 
-class AudioActivity extends Activity
+class Audio extends Activity
 {
 
     /**
@@ -91,7 +84,7 @@ class AudioActivity extends Activity
      */
     protected function getAudioActivityDao()
     {
-        return $this->getBiz()->dao("AudioActivity:AudioActivityDao");
+        return $this->getBiz()->dao("Activity:Type\\Audio:AudioActivityDao");
     }
 
     /**

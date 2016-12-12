@@ -1,17 +1,10 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 02/11/2016
- * Time: 19:54
- */
-
-namespace Biz\DownloadActivity;
-
+namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Topxia\Common\ArrayToolkit;
 
-class DownloadActivity extends Activity
+class Download extends Activity
 {
     public function registerActions()
     {

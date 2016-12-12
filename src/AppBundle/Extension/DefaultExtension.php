@@ -1,6 +1,10 @@
 <?php
 namespace AppBundle\Extension;
 
+use Biz\Activity\Type\Audio;
+use Biz\Activity\Type\Download;
+use Biz\Activity\Type\Text;
+use Biz\Activity\Type\Video;
 use Pimple\Container;
 use Biz\Question\Type\Fill;
 use Biz\Question\Type\Essay;
@@ -13,6 +17,13 @@ use Biz\Question\Type\UncertainChoice;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
+    private $biz = null;
+
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function getQuestionTypes()
     {
         return array(
@@ -101,8 +112,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'text'     => array(
-                'name'      => '图文',
-                'icon'      => 'es-icon es-icon-graphicclass',
+                'meta'      => array(
+                    'name' => '图文',
+                    'icon' => 'es-icon es-icon-graphicclass',
+                ),
                 'actions'   => array(
                     'create' => 'AppBundle:Activity/Text:create',
                     'edit'   => 'AppBundle:Activity/Text:edit',
@@ -112,8 +125,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
             ),
             'video'    => array(
-                'name'      => '视频',
-                'icon'      => 'es-icon es-icon-videoclass',
+                'meta'      => array(
+                    'name' => '视频',
+                    'icon' => 'es-icon es-icon-videoclass',
+                ),
                 'actions'   => array(
                     'create' => 'AppBundle:Activity/Video:create',
                     'edit'   => 'AppBundle:Activity/Video:edit',
@@ -122,8 +137,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'templates' => array()
             ),
             'audio'    => array(
-                'name'    => '音频',
-                'icon'    => 'es-icon es-icon-audioclass',
+                'meta'    => array(
+                    'name' => '音频',
+                    'icon' => 'es-icon es-icon-audioclass',
+                ),
                 'actions' => array(
                     'create' => 'AppBundle:Activity/Audio:create',
                     'edit'   => 'AppBundle:Activity/Audio:edit',
@@ -131,8 +148,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 )
             ),
             'download' => array(
-                'name'    => '下载资料',
-                'icon'    => 'es-icon es-icon-filedownload',
+                'meta'    => array(
+                    'name' => '下载资料',
+                    'icon' => 'es-icon es-icon-filedownload'
+                ),
                 'actions' => array(
                     'create' => 'AppBundle:Activity/DownLoad:create',
                     'edit'   => 'AppBundle:Activity/DownLoad:edit',
@@ -146,6 +165,26 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function register(Container $container)
     {
         $this->registerQuestionTypes($container);
+
+        $this->registerActivityTypes($container);
+    }
+
+
+    protected function registerActivityTypes($container)
+    {
+        $that                                = $this;
+        $container['activity_type.text']     = function () use ($that) {
+            return new Text($that->biz);
+        };
+        $container['activity_type.video']    = function () {
+            return new Video();
+        };
+        $container['activity_type.audio']    = function () {
+            return new Audio();
+        };
+        $container['activity_type.download'] = function () {
+            return new Download();
+        };
     }
 
     protected function registerQuestionTypes($container)

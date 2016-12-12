@@ -3,15 +3,15 @@
 namespace Biz\Activity\Config;
 
 
-use Biz\AudioActivity\AudioActivity;
+use Biz\Activity\Type\Audio\AudioActivity;
+use Biz\Activity\Type\Download\Download;
+use Biz\Activity\Type\Text\TextActivity;
+use Biz\Activity\Type\Video\VideoActivity;
 use Biz\DiscussActivity\DiscussActivity;
 use Biz\DocActivity\DocActivity;
-use Biz\DownloadActivity\DownloadActivity;
 use Biz\FlashActivity\FlashActivity;
 use Biz\LiveActivity\LiveActivity;
 use Biz\PptActivity\PptActivity;
-use Biz\TextActivity\TextActivity;
-use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
 
 class ActivityFactory
@@ -36,7 +36,7 @@ class ActivityFactory
             'audio'    => new AudioActivity($biz),
             'live'     => new LiveActivity($biz),
             'discuss'  => new DiscussActivity($biz),
-            'download' => new DownloadActivity($biz),
+            'download' => new Download($biz),
             'flash'    => new FlashActivity($biz),
             'ppt'      => new PptActivity($biz),
             'doc'      => new DocActivity($biz)

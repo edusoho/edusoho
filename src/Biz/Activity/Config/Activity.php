@@ -64,7 +64,7 @@ abstract class Activity
      *
      * @return array<String, String>
      */
-    abstract public function registerActions();
+    //abstract public function registerActions();
 
     /**
      * @param  $action
@@ -81,7 +81,7 @@ abstract class Activity
      */
     abstract protected function registerListeners();
 
-    abstract public function getMetas();
+   // abstract public function getMetas();
 
     /**
      * @param  string     $eventName
