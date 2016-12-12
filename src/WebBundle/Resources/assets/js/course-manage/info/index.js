@@ -12,26 +12,19 @@ let datas = [{
   value: '这是内容',
 }];
 
-ReactDOM.render( <MultiGroup datas = {datas}    />,
-  document.getElementById('course-goals')
-);
+// ReactDOM.render( <MultiGroup datas = {datas}    />,
+//   document.getElementById('course-goals')
+// );
 
-// function renderMultiGroupComponent(elementId){
-//   ReactDOM.render( <MultiGroup datas = {items} fieldName={$("#"+elementId).data('field-name')} sortable={true}/>,
-//     document.getElementById(elementId)
-//   );
-// }
+function renderMultiGroupComponent(elementId){
+  ReactDOM.render( <MultiGroup datas = {[]} outputDataElement={elementId}    enableSearch ={false}/>,
+    document.getElementById(elementId)
+  );
+}
 
-// console.log($("#course-goals").data("init-value"));
+renderMultiGroupComponent('course-goals');
+renderMultiGroupComponent('intended-students');
 
-// renderMultiGroupComponent('course-goals');
-// renderMultiGroupComponent('intended-students', $('#intended-students').data('init-value'));
-
-
-// sortList({
-//   element: ".sortable-list",
-//   itemSelector: 'li',
-// });
 
 _initDatePicker('#expiryStartDate');
 _initDatePicker('#expiryEndDate');
