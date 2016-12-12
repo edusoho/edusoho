@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -172,8 +173,19 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function exportCsvAction(Request $request, $id)
+    public function exportDatasAction(Request $request, $id)
     {
+        $magic = $this->setting('magic');
+        $start = $request->query->get('start', 0);
+        if (empty($magic['export_limit'])) {
+            $magic['export_limit'] = 1000;
+        }
+
+        if (empty($magic['export_allow_count'])) {
+            $magic['export_allow_count'] = 10000;   
+        }
+
+        $limit = $magic['export_limit'];
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -189,7 +201,14 @@ class CourseStudentManageController extends BaseController
             $userinfoFields = array_diff($courseSetting['userinfoFields'], array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin'));
         }
 
-        $courseMembers = $this->getCourseService()->searchMembers(array('courseId' => $course['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 20000);
+        $condition = array(
+            'courseId' => $course['id'],
+            'role' => 'student'
+        );
+
+        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
+        $courseMemberCount = $this->getCourseService()->searchCourseCount($condition);
+        $courseMemberCount = ($courseMemberCount>$magic['export_allow_count']) ? $magic['export_allow_count']:$courseMemberCount;
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -253,10 +272,41 @@ class CourseStudentManageController extends BaseController
             $students[] = $member;
         };
 
-        $str .= implode("\r\n", $students);
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+
+        if (($start + $limit * 2) >= $courseMemberCount) {
+            $status = 'export';
+        } else {
+            $status = 'getData';
+        }
+
+        $content = implode("\r\n", $students);
+        if ($start == 0) {
+            $content = $str.$content;
+        }
+
+        file_put_contents($file, $content."\r\n", FILE_APPEND);
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+        
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $str = file_get_contents($file);
+        if (!empty($file)) {
+            FileToolkit::remove($file);
+        }
+
         $str = chr(239).chr(187).chr(191).$str;
 
-        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
+        $filename = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
 
         $userId = $this->getCurrentUser()->id;
 
@@ -267,6 +317,13 @@ class CourseStudentManageController extends BaseController
         $response->setContent($str);
 
         return $response;
+    }
+
+    private function genereateExportCsvFileName()
+    {
+        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
+        $user     = $this->getCurrentUser();
+        return $rootPath."/export_content_course_students".$user['id'].time().".txt";
     }
 
     public function remarkAction(Request $request, $courseId, $userId)
