@@ -11,7 +11,10 @@ use Biz\Question\Type\Essay;
 use Biz\Question\Type\Choice;
 use Biz\Activity\Type\Discuss;
 use Biz\Activity\Type\Download;
+use Biz\Activity\Type\Exercise;
+use Biz\Activity\Type\Homework;
 use Biz\Question\Type\Material;
+use Biz\Activity\Type\Testpaper;
 use Biz\Question\Type\Determine;
 use Biz\Question\Type\SingleChoice;
 use Pimple\ServiceProviderInterface;
@@ -120,78 +123,104 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function getActivities()
     {
         return array(
-            'text'     => array(
-                'meta'      => array(
+            'text'      => array(
+                'meta'    => array(
                     'name' => '图文',
                     'icon' => 'es-icon es-icon-graphicclass'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Text:create',
                     'edit'   => 'AppBundle:Activity/Text:edit',
                     'show'   => 'AppBundle:Activity/Text:show'
-                ),
-                'templates' => array()
-
+                )
             ),
-            'video'    => array(
-                'meta'      => array(
+            'video'     => array(
+                'meta'    => array(
                     'name' => '视频',
                     'icon' => 'es-icon es-icon-videoclass'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Video:create',
                     'edit'   => 'AppBundle:Activity/Video:edit',
                     'show'   => 'AppBundle:Activity/Video:show'
-                ),
-                'templates' => array()
+                )
             ),
-            'audio'    => array(
-                'meta'      => array(
+            'audio'     => array(
+                'meta'    => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Audio:create',
                     'edit'   => 'AppBundle:Activity/Audio:edit',
                     'show'   => 'AppBundle:Activity/Audio:show'
-                ),
-                'templates' => array()
+                )
             ),
-            'download' => array(
-                'meta'      => array(
+            'download'  => array(
+                'meta'    => array(
                     'name' => '下载资料',
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Download:create',
                     'edit'   => 'AppBundle:Activity/Download:edit',
                     'show'   => 'AppBundle:Activity/Download:show'
-                ),
-                'templates' => array()
+                )
             ),
-            'live'     => array(
-                'meta'      => array(
+            'live'      => array(
+                'meta'    => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Live:create',
                     'edit'   => 'AppBundle:Activity/Live:edit',
                     'show'   => 'AppBundle:Activity/Live:show'
-                ),
-                'templates' => array()
+                )
             ),
-            'discuss'  => array(
-                'meta'      => array(
+            'discuss'   => array(
+                'meta'    => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
                 ),
-                'actions'   => array(
+                'actions' => array(
                     'create' => 'AppBundle:Activity/Discuss:create',
                     'edit'   => 'AppBundle:Activity/Discuss:edit',
                     'show'   => 'AppBundle:Activity/Discuss:show'
+                )
+            ),
+            'testpaper' => array(
+                'meta'    => array(
+                    'name' => '考试',
+                    'icon' => 'es-icon es-icon-lesson'
                 ),
-                'templates' => array()
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Testpaper:create',
+                    'edit'   => 'AppBundle:Activity/Testpaper:edit',
+                    'show'   => 'AppBundle:Activity/Testpaper:show'
+                )
+            ),
+            'homework'  => array(
+                'meta'    => array(
+                    'name' => '作业',
+                    'icon' => 'es-icon es-icon-exam'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Homework:create',
+                    'edit'   => 'AppBundle:Activity/Homework:edit',
+                    'show'   => 'AppBundle:Activity/Homework:show'
+                )
+            ),
+            'exercise'  => array(
+                'meta'    => array(
+                    'name' => '练习',
+                    'icon' => 'es-icon es-icon-mylibrarybooks'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Exercise:create',
+                    'edit'   => 'AppBundle:Activity/Exercise:edit',
+                    'show'   => 'AppBundle:Activity/Exercise:show'
+                )
             )
         );
     }
@@ -223,6 +252,15 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         };
         $container['activity_type.discuss'] = function () use ($that) {
             return new Discuss($that->biz);
+        };
+        $container['activity_type.testpaper'] = function () use ($that) {
+            return new Testpaper($that->biz);
+        };
+        $container['activity_type.homework'] = function () use ($that) {
+            return new Homework($that->biz);
+        };
+        $container['activity_type.exercise'] = function () use ($that) {
+            return new Exercise($that->biz);
         };
     }
 

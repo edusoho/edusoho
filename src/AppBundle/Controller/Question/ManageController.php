@@ -205,16 +205,12 @@ class ManageController extends BaseController
 
         $conditions = $request->query->all();
 
-        /*if (empty($conditions['target'])) {
-        $conditions['targetPrefix'] = "course-{$courseSet['id']}";
-        }*/
-
         $conditions['parentId'] = 0;
 
         if (empty($conditions['excludeIds'])) {
             unset($conditions['excludeIds']);
         } else {
-            $conditions['excludeIds'] = explode(',', $conditions['excludeIds']);
+            $conditions['excludeIds'] = $conditions['excludeIds'];
         }
 
         if (!empty($conditions['keyword'])) {

@@ -3,9 +3,9 @@ namespace Biz\Testpaper\Pattern;
 
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\Testpaper\Pattern\TestpaperPattern;
+use Biz\Testpaper\Pattern\TestpaperPatternInterface;
 
-class QuestionTypePattern implements TestpaperPattern
+class QuestionTypePattern implements TestpaperPatternInterface
 {
     protected $biz;
 
