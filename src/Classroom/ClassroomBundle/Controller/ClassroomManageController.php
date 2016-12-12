@@ -506,6 +506,7 @@ class ClassroomManageController extends BaseController
         if ($start == 0) {
             $content = $str.$content;
         }
+
         file_put_contents($file, $content."\r\n", FILE_APPEND);
         return $this->createJsonResponse(
             array(
@@ -514,7 +515,6 @@ class ClassroomManageController extends BaseController
                 'start' => $start+$limit
             )
         );
-        
     }
 
     public function exportCsvAction(Request $request, $id)
@@ -522,7 +522,9 @@ class ClassroomManageController extends BaseController
         $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
         $str = file_get_contents($file);
-        FileToolkit::remove($file);
+        if (!empty($file)) {
+            FileToolkit::remove($file);
+        }
         
         $str = chr(239).chr(187).chr(191).$str;
 
