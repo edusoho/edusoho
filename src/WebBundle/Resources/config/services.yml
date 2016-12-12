@@ -19,11 +19,6 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
-#    web.twig.activity_extension:
-#        class: WebBundle\Twig\ActivityExtension
-#        arguments: ['@biz']
-#        tags:
-#            - { name: twig.extension }
     web.twig.app_extension:
         class: WebBundle\Twig\AppExtension
         arguments: ['@biz'] 
