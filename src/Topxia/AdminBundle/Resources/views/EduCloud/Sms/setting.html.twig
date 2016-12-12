@@ -9,7 +9,7 @@
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.name == '' %}
     <div class="alert alert-warning" role="alert">{{'
-    尚未设置短信签名，不能发送签信，'|trans}}<a href="#">立即设置</a></div>
+    尚未设置短信签名，不能发送签信，'|trans}}<a href="{{ path('admin_cloud_sms_sign') }}" target="_blank">立即设置</a></div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.status == 'stoped' %}
     <div class="alert alert-warning" role="alert">{{'
@@ -37,7 +37,7 @@
           </button>
       </div>
       <div class="help-block">
-        教学资讯，极速送达，尽在掌握。<a href="">点击这里</a>了解详情。
+        教学资讯，极速送达，尽在掌握。<a href="{{path('admin_cloud_show', {type:'sms'})}}" target="_blank">点击这里</a>了解详情。
       </div>
     </div>
   </div>
