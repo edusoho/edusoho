@@ -19,7 +19,7 @@
     </div>
     <div class="col-sm-4">
       <select class="form-control" id="condition-select" name="finishType">
-        <option value="time">至少x观看分钟</option>
+        <option value="time" {% if text.finishType|default('end') == 'time' %}selected{% endif %}>至少观看X分钟</option>
       </select>
     </div>
   </div>
@@ -28,7 +28,7 @@
       <label for="finishDetail">{{ '至少观看'|trans }}</label>
     </div>
     <div class="col-sm-4">
-      <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="1">
+      <input id="finishDetail" class="form-control" type="text" name="finishDetail" value="{{ text.finishDetail|default(1) }}">
     </div>
     <div class="col-sm-4">
       <p class="form-control-static">分钟</p>
