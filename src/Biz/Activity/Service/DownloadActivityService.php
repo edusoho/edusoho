@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\DownloadActivity\Service;
+namespace Biz\Activity\Service;
 
 interface DownloadActivityService
 {

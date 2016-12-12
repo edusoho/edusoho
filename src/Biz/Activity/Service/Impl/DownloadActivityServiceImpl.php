@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\DownloadActivity\Service\Impl;
+namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
 use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
@@ -50,7 +50,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
      */
     protected function getDownloadFileRecordDao()
     {
-        return $this->createDao('DownloadActivity:DownloadFileRecordDao');
+        return $this->createDao('Activity:DownloadFileRecordDao');
     }
 
     protected function getActivityService()

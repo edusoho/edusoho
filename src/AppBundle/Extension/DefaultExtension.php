@@ -176,14 +176,14 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         $container['activity_type.text']     = function () use ($that) {
             return new Text($that->biz);
         };
-        $container['activity_type.video']    = function () {
-            return new Video();
+        $container['activity_type.video']    = function () use ($that) {
+            return new Video($that->biz);
         };
-        $container['activity_type.audio']    = function () {
-            return new Audio();
+        $container['activity_type.audio']    = function () use ($that) {
+            return new Audio($that->biz);
         };
-        $container['activity_type.download'] = function () {
-            return new Download();
+        $container['activity_type.download'] = function () use ($that) {
+            return new Download($that->biz);
         };
     }
 

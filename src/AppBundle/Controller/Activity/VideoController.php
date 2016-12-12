@@ -14,12 +14,14 @@ class VideoController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivityFetchMedia($id);
         if ($this->getMediaSource($activity) == 'self') {
-            return $this->render('WebBundle:VideoActivity:show.html.twig', array(
+
+
+            return $this->render('activity/video/show.html.twig', array(
                 'activity' => $activity,
                 'courseId' => $courseId
             ));
         } else {
-            return $this->render('WebBundle:VideoActivity:swf-show.html.twig', array(
+            return $this->render('activity/video/swf-show.html.twig', array(
                 'activity' => $activity,
             ));
         }
@@ -39,7 +41,7 @@ class VideoController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivityFetchMedia($id);
         $activity = $this->fillMinuteAndSecond($activity);
-        return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
+        return $this->render('activity/video/modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -47,7 +49,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
+        return $this->render('activity/video/modal.html.twig', array(
             'courseId' => $courseId
         ));
     }

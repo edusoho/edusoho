@@ -9,13 +9,14 @@ use Biz\Course\Service\CourseService;
 use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-class DownLoadController extends BaseController implements ActivityActionInterface
+class DownloadController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
         $activity             = $this->getActivityService()->getActivityFetchMedia($id);
         $activity['courseId'] = $courseId;
-        return $this->render('WebBundle:DownLoadActivity:show.html.twig', array(
+
+        return $this->render('activity/download/show.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -31,7 +32,7 @@ class DownLoadController extends BaseController implements ActivityActionInterfa
             $materials[$id] = array('id' => $media['fileId'], 'size' => $media['fileSize'], 'name' => $media['title'], 'link' => $media['link']);
         }
         $activity['ext']['materials'] = $materials;
-        return $this->render('WebBundle:DownLoadActivity:modal.html.twig', array(
+        return $this->render('activity/download/modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -54,7 +55,7 @@ class DownLoadController extends BaseController implements ActivityActionInterfa
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:DownLoadActivity:modal.html.twig', array(
+        return $this->render('activity/download/modal.html.twig', array(
             'courseId' => $courseId
         ));
     }
@@ -81,6 +82,6 @@ class DownLoadController extends BaseController implements ActivityActionInterfa
      */
     protected function getDownloadActivityService()
     {
-        return $this->getBiz()->service('DownloadActivity:DownloadActivityService');
+        return $this->getBiz()->service('Activity:DownloadActivityService');
     }
 }

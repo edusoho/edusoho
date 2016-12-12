@@ -22,7 +22,7 @@ class TextController extends BaseController implements ActivityActionInterface
             throw $this->createNotFoundException('text activity not found');
         }
 
-        return $this->render('WebBundle:TextActivity:show.html.twig', array(
+        return $this->render('activity/text/show.html.twig', array(
             'activity' => $activity,
             'text'     => $text
         ));
@@ -32,14 +32,15 @@ class TextController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivity($id);
 
-        return $this->render('WebBundle:TextActivity:modal.html.twig', array(
+
+        return $this->render('activity/text/modal.html.twig', array(
             'activity' => $activity
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:TextActivity:modal.html.twig');
+        return $this->render('activity/text/modal.html.twig');
     }
 
     /**

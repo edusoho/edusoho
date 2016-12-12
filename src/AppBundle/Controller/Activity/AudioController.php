@@ -12,7 +12,8 @@ class AudioController extends BaseController implements ActivityActionInterface
     public function showAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivityFetchMedia($id);
-        return $this->render('WebBundle:AudioActivity:show.html.twig', array(
+
+        return $this->render('activity/audio/show.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -22,7 +23,7 @@ class AudioController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivityFetchMedia($id);
         $activity = $this->fillMinuteAndSecond($activity);
-        return $this->render('WebBundle:AudioActivity:modal.html.twig', array(
+        return $this->render('activity/audio/modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -30,7 +31,7 @@ class AudioController extends BaseController implements ActivityActionInterface
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:AudioActivity:modal.html.twig', array(
+        return $this->render('activity/audio/modal.html.twig', array(
             'courseId' => $courseId
         ));
     }
