@@ -39,7 +39,6 @@ class TaskController extends BaseController
             'tasks'      => $tasks,
             'activity'   => $activity,
             'preview'    => $preview,
-            'types'      => $this->getActivityService()->getActivityTypes(),
             'backUrl'    => $backUrl
         ));
     }

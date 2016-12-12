@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Activity\Config\ActivityFactory;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
 
@@ -133,7 +132,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw $this->createAccessDeniedException('无权更新教学活动');
         }
 
-        $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
+        $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
+
         if (!empty($savedActivity['mediaId'])) {
             $activityConfig->update($savedActivity['mediaId'], $fields);
         }
@@ -155,10 +155,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->update($id, $fields);
     }
 
-//    public function getActivityConfig($type)
-//    {
-//        return ActivityFactory::create($this->biz, $type);
-//    }
 
     public function deleteActivity($id)
     {
@@ -168,7 +164,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw $this->createAccessDeniedException('无权删除教学活动');
         }
 
-        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
+        $activityConfig = $this->getActivityConfig($activity['mediaType']);
 
         $activityConfig->delete($activity['mediaId']);
 
@@ -178,7 +174,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function canFinishActivity($id)
     {
         $activity       = $this->getActivity($id);
-        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
+        $activityConfig = $this->getActivityConfig($activity['mediaType']);
         return $activityConfig->canFinish($id);
     }
 
@@ -216,11 +212,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
         return false;
-    }
-
-    public function getActivityTypes()
-    {
-        return ActivityFactory::all($this->biz);
     }
 
     public function getActivityConfig($type)

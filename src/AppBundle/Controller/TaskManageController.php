@@ -55,15 +55,16 @@ class TaskManageController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $activity       = $this->getActivityService()->getActivity($task['activityId']);
-        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-        $editController = $config->getAction('edit');
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+
+        $editController = $actionConfig['edit'];
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'mode'                => 'edit',
             'currentType'         => $activity['mediaType'],
             'activity'            => $activity,
-            'types'               => $this->getActivityService()->getActivityTypes(),
             'activity_controller' => $editController,
             'course'              => $course,
             'task'                => $task,
@@ -151,6 +152,17 @@ class TaskManageController extends BaseController
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+    }
+
+    protected function getActivityConfig()
+    {
+        return $this->get('extension.default')->getActivities();
+    }
+
+    protected function getActivityActionConfig($type)
+    {
+        $config = $this->getActivityConfig();
+        return $config[$type]['actions'];
     }
 
     //datetime to int
