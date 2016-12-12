@@ -84,8 +84,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
                 throw $this->createAccessDeniedException('无权创建教学活动');
             }
-
-            $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
+            $activityConfig = $this->getActivityConfig($fields['mediaType']);
             $media          = $activityConfig->create($fields);
 
             if (!empty($media)) {
@@ -212,10 +211,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ) {
             return true;
         }
-        if (!in_array($activity['mediaType'], array_keys($this->getActivityTypes()))) {
+        $activity = $this->getActivityConfig($activity['mediaType']);
+        if (!is_object($activity)) {
             return true;
         }
-
         return false;
     }
 

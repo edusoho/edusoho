@@ -1,9 +1,9 @@
 <?php
 
-namespace Biz\DownloadActivity\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
+use Biz\Activity\Dao\DownloadFileRecordDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class DownloadFileRecordDaoImpl extends GeneralDaoImpl implements DownloadFileRecordDao

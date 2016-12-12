@@ -1,9 +1,9 @@
 <?php
 
-namespace Biz\Activity\Type\Audio\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\Activity\Type\Audio\Dao\AudioActivityDao;
+use Biz\Activity\Dao\AudioActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class AudioActivityDaoImpl extends GeneralDaoImpl implements AudioActivityDao

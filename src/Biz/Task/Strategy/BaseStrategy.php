@@ -35,7 +35,6 @@ class BaseStrategy
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             throw new AccessDeniedException('无权创建任务');
         }
-
         $activity = $this->getActivityService()->createActivity($fields);
 
         $fields['activityId']    = $activity['id'];

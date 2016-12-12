@@ -1,14 +1,9 @@
 <?php
-/**
- * User: Edusoho V8
- * Date: 01/11/2016
- * Time: 14:17
- */
 
-namespace Biz\Activity\Type\Video\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\VideoActivity\Dao\VideoActivityDao;
+use Biz\Activity\Dao\VideoActivityDao;
 
 class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
 {

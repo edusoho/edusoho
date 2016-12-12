@@ -5,10 +5,10 @@
  * Time: 15:41
  */
 
-namespace Biz\DownloadActivity\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\DownloadActivity\Dao\DownloadActivityDao;
+use Biz\Activity\Dao\DownloadActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivityDao

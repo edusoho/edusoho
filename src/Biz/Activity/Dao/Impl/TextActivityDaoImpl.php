@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Biz\TextActivity\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\TextActivity\Dao\TextActivityDao;
+use Biz\Activity\Dao\TextActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TextActivityDaoImpl extends GeneralDaoImpl implements TextActivityDao
