@@ -12,6 +12,7 @@ use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseNoteServiceImpl extends BaseService implements CourseNoteService
@@ -58,7 +59,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $this->getCourseService()->tryTakeCourse($note['courseId']);
         $user = $this->getCurrentUser();
 
-        $task   = $this->getTaskService()->getTask('taskId');
+        $task   = $this->getTaskService()->getTask($note['taskId']);
 
         if (empty($task)) {
             throw $this->createServiceException('task not found');
@@ -66,7 +67,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $note = ArrayToolkit::filter($note, array(
             'courseId' => 0,
-            'task' => 0,
+            'taskId' => 0,
             'content'  => '',
             'status'   => 0
         ));
@@ -78,10 +79,11 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         if (!$existNote) {
             $note['userId']      = $user['id'];
             $note                = $this->getNoteDao()->create($note);
-            $this->getDispatcher()->dispatch('course.note.create', $note);
+            $this->dispatchEvent('course.note.create', $note);
         } else {
+            unset($note['id']);
             $note                = $this->getNoteDao()->update($existNote['id'], $note);
-            $this->getDispatcher()->dispatch('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
+            $this->dispatchEvent('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
         }
 
         $this->getCourseService()->setMemberNoteNumber(

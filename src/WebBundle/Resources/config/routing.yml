@@ -138,13 +138,9 @@ course_task_show:
   path:  /course/{courseId}/task/{id}/show
   defaults: { _controller: WebBundle:Task:show }
 
-course_task_note_create:
-  path: /course/{courseId}/task/{taskId}/create
-  defaults: { _controller: WebBundle:Note:createNote}
-
-course_task_note_edit:
-  path: /course/{courseId}/task/{taskId}/edit
-  defaults: { _controller: WebBundle:Note:editNote}
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/save
+  defaults: { _controller: WebBundle:Note:saveNote}
 
 course_task_show_plugins:
   path: /course/{courseId}/task/{taskId}/show/plugins

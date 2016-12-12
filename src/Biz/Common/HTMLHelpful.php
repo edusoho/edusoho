@@ -26,7 +26,7 @@ class HTMLHelpful
         }
 
         $config = array(
-            'cacheDir' => $this->biz['kernel.cache_dir'] . '/htmlpurifier'
+            'cacheDir' => $this->biz['cache_directory'] . '/htmlpurifier'
         );
 
         $factory  = new HTMLPurifierFactory($config);
