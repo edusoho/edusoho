@@ -7,7 +7,7 @@
       <label for="ext_mediaSource" class="style">{{ '视频'|trans }}</label>
     </div>
     <div class="col-sm-10">
-    {% include 'WebBundle:FileChooser:file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
+    {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
     <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
     </div>
   </div>

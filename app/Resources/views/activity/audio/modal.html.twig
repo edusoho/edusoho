@@ -20,7 +20,7 @@
       <label for="ext_mediaId">{{ '音频'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      {% include 'WebBundle:FileChooser:file-choose.html.twig'with {mediaType: mediaType,fileType:'audio',file: activity.ext.file|default(null) } %}
+      {% include 'file-chooser/file-choose.html.twig'with {mediaType: mediaType,fileType:'audio',file: activity.ext.file|default(null) } %}
       <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
     </div>
   </div>

@@ -46,14 +46,12 @@ class FileChooserController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
+        return $this->render('file-chooser/widget/choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
         ));
-
     }
-
 
     public function findMySharingContactsAction(Request $request)
     {
@@ -99,12 +97,11 @@ class FileChooserController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('WebBundle:FileChooser/Widget:choose-table.html.twig', array(
+        return $this->render('file-chooser/widget/choose-table.html.twig', array(
             'files'        => $files,
             'createdUsers' => $createdUsers,
             'paginator'    => $paginator
         ));
-
     }
 
 
