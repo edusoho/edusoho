@@ -17,10 +17,6 @@
     float: left;
     width: 480px;
     background-color: #fff;
-    @media (max-width: @screen-xs-max) {
-      .border-top-left-radius();
-      .border-top-right-radius(); 
-    }
     .course-img-cover {
       position: absolute;
       display: block;
@@ -81,22 +77,26 @@
       font-size: 12px;
     }
     .discount-price {
-      font-size: 24px;
       color: @gray-darker;
       font-weight: bold;
       margin-right: 20px;
+      .price {
+        font-size: 24px;
+      }
     }
     .original-price {
-      position: relative;
-      margin-left: 4px;
-      &:after {
-        content: '';
-        position: absolute;
-        left: -2px;
-        top:50%;
-        right: -2px;
-        height: 1px;
-        background-color: @gray;
+      .price {
+        position: relative;
+        margin-left: 4px;
+        &:after {
+          content: '';
+          position: absolute;
+          left: -2px;
+          top:50%;
+          right: -2px;
+          height: 1px;
+          background-color: @gray;
+        }
       }
     }
   }
@@ -117,48 +117,7 @@
       }
     }
   }
-  .expiry-date {
-    margin-bottom: 0;
-  }
-  .discount-price {
-    .price {
-      font-size: 24px;
-      color: @gray-darker;
-      margin-right: 10px;
-      i {
-        font-size: 14px;
-        font-style: normal;
-      }
-    }
-    .discount {
-      position: relative;
-      margin-left: 12px;
-      padding: 0 15px 0 15px;
-      font-size: 14px;
-      height: 24px;
-      line-height: 24px;
-      vertical-align: super;
-      &:before {
-        top: 0;
-        left: -12px;
-        border-width: 12px 12px 12px 0;
-      }
-      &:after {
-        top: 10px;
-        left: 1px;
-      }
-    }
-  }
-  .activity {
-    margin-bottom: 0;
-    .name {
-      color: @gray-darker;
-      margin-right: 10px;
-    }
-    i {
-      margin-right: 5px;
-    }
-  }
+
   .tags {
     float: left;
     margin-right: 10px;
@@ -259,6 +218,35 @@
 
 
 
+
+  // .expiry-date {
+  //   margin-bottom: 0;
+  // }
+  // .discount-price {
+  //   color: @gray-darker;
+  //   margin-right: 10px;
+  //   .price {
+  //     font-size: 24px;
+  //   }
+  //   .discount {
+  //     position: relative;
+  //     margin-left: 12px;
+  //     padding: 0 15px 0 15px;
+  //     font-size: 14px;
+  //     height: 24px;
+  //     line-height: 24px;
+  //     vertical-align: super;
+  //     &:before {
+  //       top: 0;
+  //       left: -12px;
+  //       border-width: 12px 12px 12px 0;
+  //     }
+  //     &:after {
+  //       top: 10px;
+  //       left: 1px;
+  //     }
+  //   }
+  // }
 
 
 // course2.0删除
