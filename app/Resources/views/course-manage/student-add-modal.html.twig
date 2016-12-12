@@ -61,7 +61,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button id="student-add-submit" type="button" class="btn btn-primary pull-right" data-submiting-text="{{'正在保存'|trans}}..." >{{'保存'|trans}}</button>
+    <button id="student-add-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{'正在保存'|trans}}..." >{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
 {% endblock %}
