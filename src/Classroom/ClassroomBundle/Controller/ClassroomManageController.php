@@ -407,6 +407,14 @@ class ClassroomManageController extends BaseController
     {
         $magic = $this->setting('magic');
         $start = $request->query->get('start', 0);
+        if (empty($magic['export_limit'])) {
+            $magic['export_limit'] = 1000;
+        }
+
+        if (empty($magic['export_allow_count'])) {
+            $magic['export_allow_count'] = 10000;   
+        }
+
         $limit = $magic['export_limit'];
 
         $this->getClassroomService()->tryManageClassroom($id);
@@ -434,7 +442,7 @@ class ClassroomManageController extends BaseController
             $limit)
         ;
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
-        $classroomMemberCount = ($classroomMemberCount>$magic['export_allow_count']) ? $magic['export_allow_count']:$classroomMemberCount;
+        $classroomMemberCount = ($classroomMemberCount > $magic['export_allow_count']) ? $magic['export_allow_count']:$classroomMemberCount;
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -496,7 +504,7 @@ class ClassroomManageController extends BaseController
 
         $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
-        if (($start+$limit*2)>=$classroomMemberCount) {
+        if (($start + $limit * 2) >= $classroomMemberCount) {
             $status = 'export';
         } else {
             $status = 'getData';
