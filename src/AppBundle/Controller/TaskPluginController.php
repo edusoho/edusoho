@@ -26,7 +26,7 @@ class TaskPluginController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($task['id']);
         $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
-        return $this->render('@Web/TaskPlugin/task-list.html.twig', array(
+        return $this->render('task/plugin/task-list.html.twig', array(
             'tasks'    => $tasks,
             'course'   => $course,
             'activity' => $activity,
@@ -44,7 +44,7 @@ class TaskPluginController extends BaseController
 
         $note = $this->getNoteService()->getUserTaskNote($currentUser['id'], $taskId);
 
-        return $this->render('WebBundle:TaskPlugin:note.html.twig', array(
+        return $this->render('task/plugin/note.html.twig', array(
             'note' => $note,
             'task' => $task
         ));
