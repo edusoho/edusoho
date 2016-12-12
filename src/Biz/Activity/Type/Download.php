@@ -6,26 +6,10 @@ use Topxia\Common\ArrayToolkit;
 
 class Download extends Activity
 {
-    public function registerActions()
-    {
-        return array(
-            'create' => 'WebBundle:DownLoadActivity:create',
-            'edit'   => 'WebBundle:DownLoadActivity:edit',
-            'show'   => 'WebBundle:DownLoadActivity:show',
-        );
-    }
 
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.
-    }
-
-    public function getMetas()
-    {
-        return array(
-            'name' => '下载资料',
-            'icon' => 'es-icon es-icon-filedownload'
-        );
     }
 
     /**
@@ -130,12 +114,12 @@ class Download extends Activity
 
     public function getDownloadActivityDao()
     {
-        return $this->getBiz()->dao('DownloadActivity:DownloadActivityDao');
+        return $this->getBiz()->dao('Activity:DownloadActivityDao');
     }
 
     public function getDownloadFileDao()
     {
-        return $this->getBiz()->dao('DownloadActivity:DownloadFileDao');
+        return $this->getBiz()->dao('Activity:DownloadFileDao');
     }
 
     protected function getConnection()

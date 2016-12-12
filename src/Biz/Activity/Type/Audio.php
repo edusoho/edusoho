@@ -54,15 +54,6 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    public function registerActions()
-    {
-        return array(
-            'create' => 'WebBundle:AudioActivity:create',
-            'edit'   => 'WebBundle:AudioActivity:edit',
-            'show'   => 'WebBundle:AudioActivity:show',
-        );
-    }
-
     protected function registerListeners()
     {
         return array(
@@ -71,20 +62,12 @@ class Audio extends Activity
         );
     }
 
-    public function getMetas()
-    {
-        return array(
-            'name' => '音频',
-            'icon' => 'es-icon es-icon-audioclass'
-        );
-    }
-
     /**
      * @return AudioActivityDao
      */
     protected function getAudioActivityDao()
     {
-        return $this->getBiz()->dao("Activity:Type\\Audio:AudioActivityDao");
+        return $this->getBiz()->dao("Activity:AudioActivityDao");
     }
 
     /**
