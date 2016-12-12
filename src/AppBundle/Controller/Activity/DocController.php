@@ -49,7 +49,7 @@ class DocController extends BaseController implements ActivityActionInterface
             $error = array();
         }
 
-        return $this->render('WebBundle:DocActivity:show.html.twig', array(
+        return $this->render('activity/doc/show.html.twig', array(
             'doc'      => $doc,
             'error'    => $error,
             'docMedia' => $result
@@ -64,7 +64,7 @@ class DocController extends BaseController implements ActivityActionInterface
 
         $file         = $this->getUploadFileService()->getFile($doc['mediaId']);
         $doc['media'] = $file;
-        return $this->render('WebBundle:DocActivity:edit-modal.html.twig', array(
+        return $this->render('activity/doc/edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
             'doc'      => $doc
@@ -73,7 +73,7 @@ class DocController extends BaseController implements ActivityActionInterface
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:DocActivity:edit-modal.html.twig', array(
+        return $this->render('activity/doc/edit-modal.html.twig', array(
             'courseId' => $courseId
         ));
     }

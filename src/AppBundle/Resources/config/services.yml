@@ -1,4 +1,11 @@
 services:
+
+    task_event_subscriber:
+        class: Biz\Task\Event\ActivitySubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
 
