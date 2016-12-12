@@ -54,6 +54,41 @@ class TaskController extends BaseController
         ));
     }
 
+
+    public function taskPluginsAction(Request $request, $courseId, $taskId)
+    {
+        $preview = $request->query->get('preview', false);
+
+        $task = $this->tryLearnTask($courseId, $taskId);
+        return $this->createJsonResponse(array(
+            array(
+                'code' => 'task-list',
+                'name' => '课程',
+                'icon' => 'es-icon-menu',
+                'url'  => $this->generateUrl('course_task_show_plugin_task_list', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId,
+                    'preview'  => $preview,
+                ))
+            ),
+            array(
+                'code' => 'note',
+                'name' => '笔记',
+                'icon' => 'es-icon-edit',
+                'url'  => $this->generateUrl('course_task_plugin_note', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
+            )
+//            array(
+//                'code' => 'question',
+//                'name' => '问答',
+//                'icon' => 'es-icon-help',
+//                'url' => 'TaskPluginQuestionController'
+//            )
+        ));
+    }
+
     public function triggerAction(Request $request, $courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);

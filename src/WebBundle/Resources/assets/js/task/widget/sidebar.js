@@ -1,111 +1,108 @@
-import TaskPlugin from '../plugins/task/plugin';
-import 'store';
+import Emitter from 'es6-event-emitter'
 
-class SideBar {
+export default class TaskSidebar extends Emitter{
+  constructor({element, url}){
+    super();
+    this.url = url;
+    this.element = $(element);
 
-  constructor({element,courseId, taskId, activePlugins}) {
-    this.$element = $(element);
-    this.courseId = courseId;
-    this.taskId = taskId;
-    this.activePlugins = activePlugins;
-    this.plugins = {};
-    this._currentPane = null;
-    this.$dashboardsidebar = this.$element.find('#dashboard-sidebar');
-    // this.$dashboardPane = this.$element.find('#dashboard-pane');
-    this.$dashboardcontent = $('#dashboard-content');
-    this._init();
+    this.init();
   }
 
-  _init() {
-    this._registerPlugin(new TaskPlugin(this));
-    this._initPlugin();
-    this._isRenderSiderBar();
+  init() {
+    this.fetchPlugins()
+        .then((plugins) => {
+          this.plugins = plugins;
+          this.renderToolbar();
+          this.renderPane();
+          this.bindEvent();
+        })
+        .fail(error => {
+          console.log(error);
+        })
   }
 
-  _registerPlugin(plugin) {
-    this.plugins[plugin.code] = plugin;
-    if (plugin.onRegister) {
-      plugin.onRegister();
-    }
+  fetchPlugins() {
+    return $.post(this.url);
   }
 
-  _initPlugin() {
-    let html = '';
-    $.each(this.activePlugins, (i, name)=> {
-      let plugin = this.plugins[name];
-      html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><div class="mbs ' + plugin.iconClass + '"></div>' + plugin.name + '</a></li>'
-    });
-    $('#dashboard-toolbar-nav').append(html).on('click', 'li[data-plugin]',(event)=>{
-      let $this = $(event.currentTarget);
-      if ($this.hasClass('active')) {
-        this._rendBar($this, false);
-        this._renderSiderBar(false);
+  renderToolbar() {
+    let html = `
+    <div class="dashboard-toolbar">
+      <ul class="dashboard-toolbar-nav" id="dashboard-toolbar-nav">
+        ${this.plugins.reduce((html, plugin) => {
+          return html += `<li data-plugin="${plugin.code}" data-url="${plugin.url}"><a href="#"><div class="mbs es-icon ${plugin.icon}"></div>${plugin.name}</a></li>`;
+        }, '')}
+      </ul>
+    </div>
+`;
+    this.element.html(html);
+  }
+
+  renderPane() {
+    let html = this.plugins.reduce((html, plugin) => {
+      return html += `<div data-pane="${plugin.code}" class="task-pane"></div>`
+    }, '');
+
+    this.element.append(html);
+  }
+
+  bindEvent(){
+
+    this.element.find('#dashboard-toolbar-nav').on('click', 'li', (event) => {
+      let $btn = $(event.currentTarget);
+      let pluginCode = $btn.data('plugin');
+      let url = $btn.data('url');
+      let $pane = this.element.find(`[data-pane="${pluginCode}"]`);
+
+      if(pluginCode === undefined || url === undefined){
         return;
       }
-      if (!this._currentPane || $this.data('plugin') != this._currentPane) {
-        this.plugins[$this.data('plugin')].execute();
+
+      if($btn.data('loaded')){
+        this.operationContent($btn);
+        return;
       }
-      this._rendBar($this, true);
-      this._renderSiderBar(true);
+
+      $.get(url)
+          .then(html => {
+            $pane.html(html);
+            $btn.data('loaded', true);
+            this.operationContent($btn);
+          })
     });
   }
 
-  _renderSiderBar(show, time = '') {
-    let sider_right = '0px';
+  operationContent($btn){
+    if($btn.hasClass('active')){
+      this.foldContent();
+      $btn.removeClass('active');
+    }else {
+      this.element.find('#dashboard-toolbar-nav li').removeClass('active');
+      $btn.addClass('active');
+      this.element.find('[data-pane]').hide();
+      this.element.find(`[data-pane="${$btn.data('plugin')}"]`).show();
+      this.popupContent();
+    }
+  }
+
+  popupContent(time=0) {
+    let side_right = '0px';
     let content_right = '379px';
-    if (!show) {
-      sider_right = '-' + this.$dashboardsidebar.width() + 'px';
-      content_right = '26px';
-    }
-    this.$dashboardsidebar.animate({
-      right: sider_right,
-    }, time);
-    this.$dashboardcontent.animate({
-      right: content_right,
+
+    this.trigger('popup', content_right, time);
+    this.element.animate({
+      right: side_right,
     }, time);
   }
 
-  _rendBar($item, show) {
-    show ? $item.addClass('active').siblings('li').removeClass('active') : $item.removeClass('active');
-  }
+  foldContent(time=0){
+    let side_right = '-' + this.element.width() + 'px';
+    let content_right = '26px';
 
-  _getPaneContainer() {
-    return this.$element;
-  }
-
-  _getPane(name) {
-    let $pane = this._getPaneContainer().find('[data-pane=' + name + ']');
-    if ($pane.length === 0) {
-      return undefined;
-    }
-    return $pane;
-  }
-
-  _isRenderSiderBar() {
-    if (!store.get('USER-START-LEARN')) {
-      store.set('USER-START-LEARN', true);
-      this._renderSiderBar(true, '2000');
-      window.setTimeout(()=> {
-        this._renderSiderBar(false, '2000');
-      }, 2000);
-    }
-  }
-
-  createPane(name) {
-    let $pane = this._getPane(name);
-    if (!$pane) {
-      $pane = $('<div data-pane="'+ name + '" class="dashboard-pane ' + name +'-pane"></div>').appendTo(this.$dashboardsidebar);
-    }
-    return $pane;
-  }
-
-  showPane(name) {
-    this._getPaneContainer().find('[data-pane]').hide();
-    this._getPaneContainer().find('[data-pane=' + name + ']').show();
-    this._getPaneContainer().show();
-    this._currentPane = name;
-    $('.hide-pane').show();
+    this.trigger('fold', content_right, time);
+    this.element.animate({
+      right: side_right
+    }, time)
   }
 }
-
-export default SideBar;
