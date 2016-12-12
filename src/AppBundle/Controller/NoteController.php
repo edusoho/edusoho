@@ -1,6 +1,7 @@
 <?php
 
 
+
 namespace AppBundle\Controller;
 
 
@@ -14,10 +15,10 @@ class NoteController extends BaseController
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        if($request->isMethod('POST')){
-            $note = $request->request->all();
+        if ($request->isMethod('POST')) {
+            $note           = $request->request->all();
             $note['status'] = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
-            $note = $this->getNoteService()->saveNote($note);
+            $note           = $this->getNoteService()->saveNote($note);
             return $this->createJsonResponse($note);
         }
     }
@@ -37,5 +38,4 @@ class NoteController extends BaseController
     {
         return $this->createService('Course:CourseService');
     }
-
 }
