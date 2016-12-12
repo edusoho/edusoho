@@ -7,7 +7,7 @@ namespace Biz\Common;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Util\HTMLPurifierFactory;
 
-class HTMLHelpful
+class HTMLHelper
 {
     /**
      * @var $biz Biz

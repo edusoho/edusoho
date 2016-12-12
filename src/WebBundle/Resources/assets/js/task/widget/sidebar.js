@@ -78,6 +78,7 @@ export default class TaskSidebar extends Emitter{
       this.foldContent();
       $btn.removeClass('active');
     }else {
+      this.element.find('#dashboard-toolbar-nav li').removeClass('active');
       $btn.addClass('active');
       this.element.find('[data-pane]').hide();
       this.element.find(`[data-pane="${$btn.data('plugin')}"]`).show();

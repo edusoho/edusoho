@@ -1,16 +1,18 @@
 <?php
 
+
 namespace WebBundle\Controller;
 
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
-class TaskPluginTaskListController extends BaseController
+class TaskPluginController extends BaseController
 {
-    public function pageContentAction(Request $request, $courseId, $taskId)
+    public function taskListAction(Request $request, $courseId, $taskId)
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
 
@@ -29,6 +31,22 @@ class TaskPluginTaskListController extends BaseController
             'course'   => $course,
             'activity' => $activity,
             'preview'  => $preview
+        ));
+    }
+
+    public function noteAction(Request $request, $courseId, $taskId)
+    {
+        $currentUser = $this->getUser();
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $task = $this->getTaskService()->getTask($taskId);
+
+        $note = $this->getNoteService()->getUserTaskNote($currentUser['id'], $taskId);
+
+        return $this->render('WebBundle:TaskPlugin:note.html.twig', array(
+            'note' => $note,
+            'task' => $task
         ));
     }
 
@@ -55,4 +73,14 @@ class TaskPluginTaskListController extends BaseController
     {
         return $this->getBiz()->service('Task:TaskService');
     }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getNoteService()
+    {
+        return $this->createService('Note:CourseNoteService');
+    }
+
 }
+

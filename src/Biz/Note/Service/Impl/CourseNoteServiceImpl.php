@@ -72,7 +72,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             'status'   => 0
         ));
 
-        $note['content'] = $this->biz['html_helpful']->purify($note['content']) ?: '';
+        $note['content'] = $this->biz['html_helper']->purify($note['content']) ?: '';
         $note['length']  = $this->calculateContentLength($note['content']);
 
         $existNote = $this->getUserTaskNote($user['id'], $note['taskId']);

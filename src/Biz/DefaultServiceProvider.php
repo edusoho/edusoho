@@ -4,7 +4,7 @@
 namespace Biz;
 
 
-use Biz\Common\HTMLHelpful;
+use Biz\Common\HTMLHelper;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -12,7 +12,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
-        $biz['html_helpful'] = new HTMLHelpful($biz);
+        $biz['html_helper'] = new HTMLHelper($biz);
     }
 
 }

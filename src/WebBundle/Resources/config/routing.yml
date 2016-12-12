@@ -148,11 +148,11 @@ course_task_show_plugins:
 
 course_task_show_plugin_task_list:
   path: /course/{courseId}/task/{taskId}/plugin/task_list
-  defaults: { _controller: WebBundle:TaskPluginTaskList:pageContent }
+  defaults: { _controller: WebBundle:TaskPlugin:taskList }
 
 course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
-  defaults: { _controller: WebBundle:TaskPluginNote:note }
+  defaults: { _controller: WebBundle:TaskPlugin:note }
 
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
