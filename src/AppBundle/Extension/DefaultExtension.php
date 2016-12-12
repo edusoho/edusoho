@@ -154,9 +154,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/DownLoad:create',
-                    'edit'   => 'AppBundle:Activity/DownLoad:edit',
-                    'show'   => 'AppBundle:Activity/DownLoad:show'
+                    'create' => 'AppBundle:Activity/Download:create',
+                    'edit'   => 'AppBundle:Activity/Download:edit',
+                    'show'   => 'AppBundle:Activity/Download:show'
                 ),
                 'templates' => array()
             )
