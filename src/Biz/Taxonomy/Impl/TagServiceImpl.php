@@ -5,6 +5,9 @@ namespace Biz\Taxonomy\Impl;
 
 use Biz\BaseService;
 use Biz\Taxonomy\Dao\TagDao;
+use Biz\Taxonomy\Dao\TagGroupDao;
+use Biz\Taxonomy\Dao\TagGroupTagDao;
+use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\TagService;
 use Topxia\Common\ArrayToolkit;
 
@@ -34,10 +37,6 @@ class TagServiceImpl extends  BaseService implements  TagService
         return $this->getTagOwnerDao()->getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $owner['ownerType'], $owner['ownerId']);
     }
 
-    public function isUserLevelNameAvailable($name, $exclude)
-    {
-    }
-
     public function getTagByLikeName($name)
     {
         return $this->getTagDao()->getByLikeName($name);
@@ -55,7 +54,7 @@ class TagServiceImpl extends  BaseService implements  TagService
 
     public function findTagGroups()
     {
-        return $this->getTagGroupDao()->findTagGroups();
+        return $this->getTagGroupDao()->find();
     }
 
     public function findTagRelationsByTagIds($tagIds)
@@ -69,7 +68,7 @@ class TagServiceImpl extends  BaseService implements  TagService
 
         $groupIds = ArrayToolkit::column($tagRelations, 'groupId');
 
-        return $this->getTagGroupDao()->findTagGroupsByGroupIds($groupIds);
+        return $this->getTagGroupDao()->findByIds($groupIds);
     }
 
     public function findTagsByGroupId($groupId)
@@ -154,7 +153,7 @@ class TagServiceImpl extends  BaseService implements  TagService
             return true;
         }
 
-        $tag = $this->getTagGroupDao()->findTagGroupByName($name);
+        $tag = $this->getTagGroupDao()->findByName($name);
 
         return $tag ? false : true;
     }
@@ -178,7 +177,7 @@ class TagServiceImpl extends  BaseService implements  TagService
             throw $this->createServiceException("标签组名字未填写，请添加");
         }
 
-        if ($this->getTagGroupDao()->findTagGroupByName($fields['name'])) {
+        if ($this->getTagGroupDao()->findByName($fields['name'])) {
             throw $this->createServiceException("标签组名字已存在，请重新填写");
         }
 
@@ -204,7 +203,7 @@ class TagServiceImpl extends  BaseService implements  TagService
 
     public function addTagOwnerRelation($fields)
     {
-        return $this->getTagOwnerDao()->add($fields);
+        return $this->getTagOwnerDao()->create($fields);
     }
 
     protected function setTagOrg($tag)
@@ -335,14 +334,20 @@ class TagServiceImpl extends  BaseService implements  TagService
         return ArrayToolkit::parts($fields, $this->allowFields);
     }
 
+    /**
+     * @return TagOwnerDao
+     */
     protected function getTagOwnerDao()
     {
-        return $this->createDao('Taxonomy.TagOwnerDao');
+        return $this->createDao('Taxonomy:TagOwnerDao');
     }
 
+    /**
+     * @return TagGroupTagDao
+     */
     protected function getTagGroupTagDao()
     {
-        return $this->createDao('Taxonomy.TagGroupTagDao');
+        return $this->createDao('Taxonomy:TagGroupTagDao');
     }
 
     /**
@@ -353,9 +358,12 @@ class TagServiceImpl extends  BaseService implements  TagService
         return $this->createDao('Taxonomy:TagDao');
     }
 
+    /**
+     * @return TagGroupDao
+     */
     protected function getTagGroupDao()
     {
-        return $this->createDao('Taxonomy.TagGroupDao');
+        return $this->createDao('Taxonomy:TagGroupDao');
     }
 
     protected function getLogService()

@@ -6,6 +6,7 @@ namespace Biz\Taxonomy\Impl;
 use Biz\BaseService;
 use Biz\Taxonomy\CategoryService;
 use Biz\Taxonomy\Dao\CategoryDao;
+use Biz\Taxonomy\Dao\CategoryGroupDao;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -321,32 +322,32 @@ class CategoryServiceImpl extends BaseService implements CategoryService
      */
     public function getGroup($id)
     {
-        return $this->getGroupDao()->getGroup($id);
+        return $this->getGroupDao()->get($id);
     }
 
     public function getGroupByCode($code)
     {
-        return $this->getGroupDao()->findGroupByCode($code);
+        return $this->getGroupDao()->findByCode($code);
     }
 
     public function getGroups($start, $limit)
     {
-        return $this->getGroupDao()->findGroups($start, $limit);
+        return $this->getGroupDao()->find($start, $limit);
     }
 
     public function findAllGroups()
     {
-        return $this->getGroupDao()->findAllGroups();
+        return $this->getGroupDao()->findAll();
     }
 
     public function addGroup(array $group)
     {
-        return $this->getGroupDao()->addGroup($group);
+        return $this->getGroupDao()->create($group);
     }
 
     public function deleteGroup($id)
     {
-        return $this->getGroupDao()->deleteGroup($id);
+        return $this->getGroupDao()->delete($id);
     }
 
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
@@ -434,9 +435,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->createDao('Taxonomy:CategoryDao');
     }
 
+    /**
+     * @return CategoryGroupDao
+     */
     protected function getGroupDao()
     {
-        return $this->createDao('Taxonomy.CategoryGroupDao');
+        return $this->createDao('Taxonomy:CategoryGroupDao');
     }
 
     protected function getLogService()
