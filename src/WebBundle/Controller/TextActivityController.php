@@ -7,17 +7,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TextActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id,  $courseId)
+    public function showAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
 
-        if(empty($activity)){
+        if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
 
         $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
-        if(empty($text)){
+        if (empty($text)) {
             throw $this->createNotFoundException('text activity not found');
         }
 
@@ -30,9 +30,11 @@ class TextActivityController extends BaseController implements ActivityActionInt
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
+        $text     = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
         return $this->render('WebBundle:TextActivity:modal.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
+            'text'     => $text
         ));
     }
 
