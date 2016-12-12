@@ -100,6 +100,23 @@ task_live_trigger:
     path: /course/{courseId}/activity/{activityId}/live_trigger
     defaults: {_controller:  AppBundle:Activity/Live:trigger}
 
+#task_plugin
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/save
+  defaults: { _controller: AppBundle:Note:saveNote}
+
+course_task_show_plugins:
+  path: /course/{courseId}/task/{taskId}/show/plugins
+  defaults: { _controller: AppBundle:Task:taskPlugins }
+
+course_task_show_plugin_task_list:
+  path: /course/{courseId}/task/{taskId}/plugin/task_list
+  defaults: { _controller: AppBundle:TaskPlugin:taskList }
+
+course_task_plugin_note:
+  path: /course/{courseId}/task/{taskId}/plugin/note
+  defaults: { _controller: AppBundle:TaskPlugin:note }
+
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create
@@ -233,16 +250,16 @@ media_video_import:
 #Uploader
 uploader_auth_v2:
     path:  /uploader/v2/auth
-    defaults: { _controller: WebBundle:Uploader:auth }
+    defaults: { _controller: AppBundle:Uploader:auth }
     methods: [GET]
 
 uploader_init_v2:
     path:  /uploader/v2/init
-    defaults: { _controller: WebBundle:Uploader:init }
+    defaults: { _controller: AppBundle:Uploader:init }
     methods: [GET]
 
 uploader_finished_v2:
     path:  /uploader/v2/finished
-    defaults: { _controller: WebBundle:Uploader:finished }
+    defaults: { _controller: AppBundle:Uploader:finished }
     methods: [GET]
 

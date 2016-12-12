@@ -49,7 +49,7 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $slides = isset($result['images']) ? $result['images'] : array();
 
-        return $this->render('WebBundle:PptActivity:show.html.twig', array(
+        return $this->render('activity/ppt/show.html.twig', array(
             'ppt'      => $ppt,
             'slides'   => $slides,
             'error'    => $error,
@@ -67,7 +67,7 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $ppt['media'] = $file;
 
-        return $this->render('WebBundle:PptActivity:edit-modal.html.twig', array(
+        return $this->render('activity/ppt/edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
             'ppt'      => $ppt
@@ -76,7 +76,7 @@ class PptController extends BaseController implements ActivityActionInterface
 
     public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:PptActivity:edit-modal.html.twig', array(
+        return $this->render('activity/ppt/edit-modal.html.twig', array(
             'courseId' => $courseId
         ));
     }

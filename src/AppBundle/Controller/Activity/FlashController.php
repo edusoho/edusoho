@@ -23,7 +23,7 @@ class FlashController extends BaseController implements ActivityActionInterface
         $result                 = $apiClient->get(sprintf('/resources/%s/player', $file['globalId']));
         $flashMedia['uri'] = $result['url'];
 
-        return $this->render('WebBundle:FlashActivity:index.html.twig', array(
+        return $this->render('activity/flash/index.html.twig', array(
             'flash'      => $flash,
             'flashMedia' => $flashMedia
         ));
@@ -39,7 +39,7 @@ class FlashController extends BaseController implements ActivityActionInterface
 
         $flash['media'] = $file;
 
-        return $this->render('WebBundle:FlashActivity:edit-modal.html.twig', array(
+        return $this->render('activity/flash/edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
             'flash'    => $flash
@@ -49,7 +49,7 @@ class FlashController extends BaseController implements ActivityActionInterface
     public function createAction(Request $request, $courseId)
     {
 
-        return $this->render('WebBundle:FlashActivity:edit-modal.html.twig', array(
+        return $this->render('activity/flash/edit-modal.html.twig', array(
             'courseId' => $courseId
         ));
     }
