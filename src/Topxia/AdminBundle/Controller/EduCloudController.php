@@ -353,7 +353,7 @@ class EduCloudController extends BaseController
         }
 
         if (isset($overview['isBuy'])) {
-            throw new RuntimeException;
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
         }
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
 
@@ -577,7 +577,7 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                throw new RuntimeException;
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
             }
             $status = $request->request->all();
             if (isset($status['email-open'])) {
@@ -1485,7 +1485,7 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                throw new RuntimeException;
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
             }
 
             $liveCourseSetting = $request->request->all();
