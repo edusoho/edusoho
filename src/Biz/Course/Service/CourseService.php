@@ -6,6 +6,8 @@ interface CourseService
 {
     public function getCourse($id);
 
+    public function findCoursesByIds($ids);
+
     public function findCoursesByCourseSetId($courseSetId);
 
     public function getDefaultCourseByCourseSetId($courseSetId);
@@ -49,5 +51,9 @@ interface CourseService
     public function removeCourseStudent($courseId, $userId);
 
     public function setMemberNoteNumber($courseId, $userId, $num);
+
+    public function findUserLeaningCourseCount($userId, $filters = array());
+
+    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
 }

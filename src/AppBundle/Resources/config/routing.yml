@@ -197,6 +197,11 @@ course_manage_items_sort:
   defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
   methods: ['POST']
 
+#my_course
+c_my_courses_learning:
+    path: /my/courses/learning
+    defaults: { _controller: AppBundle:Course/MyCourse:learning }
+
 #course_set
 course_set_manage_create:
   path: /course_set/create
