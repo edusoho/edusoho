@@ -5,7 +5,6 @@ namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\PptActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 class Ppt extends Activity
@@ -87,12 +86,19 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
-    /**
-     * @return PptActivityDao
-     */
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 
 }

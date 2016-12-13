@@ -3,7 +3,6 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Type\Audio\Dao\AudioActivityDao;
 use Topxia\Service\Common\ServiceKernel;
 
 class Audio extends Activity
@@ -70,18 +69,21 @@ class Audio extends Activity
         return array();
     }
 
-
-    /**
-     * @return AudioActivityDao
-     */
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao("Activity:AudioActivityDao");
     }
 
-    /**
-     * @return UploadFileService
-     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
+    }
+
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');

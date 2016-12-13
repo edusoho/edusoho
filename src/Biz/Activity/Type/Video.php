@@ -2,9 +2,7 @@
 
 namespace Biz\Activity\Type;
 
-
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\VideoActivityDao;
 use Topxia\Service\Common\ServiceKernel;
 
 class Video extends Activity
@@ -68,19 +66,23 @@ class Video extends Activity
         return $this->getVideoActivityDao()->delete($id);
     }
 
-    /**
-     * @return VideoActivityDao
-     */
     protected function getVideoActivityDao()
     {
         return $this->getBiz()->dao('Activity:VideoActivityDao');
     }
 
-    /**
-     * @return UploadFileService
-     */
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 }

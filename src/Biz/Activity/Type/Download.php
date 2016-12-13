@@ -133,6 +133,11 @@ class Download extends Activity
         return $this->getBiz()->dao('Activity:DownloadFileDao');
     }
 
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
     protected function getConnection()
     {
         return $this->getBiz()->offsetGet('db');

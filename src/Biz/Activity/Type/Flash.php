@@ -5,7 +5,6 @@ namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\FlashActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
@@ -85,12 +84,19 @@ class Flash extends Activity
         return $this->getFlashActivityDao()->get($targetId);
     }
 
-    /**
-     * @return FlashActivityDao
-     */
     protected function getFlashActivityDao()
     {
         return $this->getBiz()->dao('Activity:FlashActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
     
 }
