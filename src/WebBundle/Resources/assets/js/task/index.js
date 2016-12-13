@@ -48,7 +48,8 @@ class TaskShow extends Emitter {
         taskId: this.taskId
       }).then(response => {
         this.trigger('doing', timeStep);
-        if(response.result.status == 'finish') {
+        if(response.result.status == 'finish'
+          && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
           this.ui.learnedWeakPrompt();
           this.ui.learned();
         }
