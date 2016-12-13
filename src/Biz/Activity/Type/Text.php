@@ -35,7 +35,9 @@ class Text extends Activity
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $textActivity = $this->getTextActivityDao()->get($activityId);
-        return !empty($result) && $result > $textActivity['finishDetail'];
+        return !empty($result) 
+                && $result['finishType'] == 'time' 
+                && $result > $textActivity['finishDetail'];
     }
 
     public function delete($targetId)
