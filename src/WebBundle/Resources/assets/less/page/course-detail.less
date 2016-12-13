@@ -3,12 +3,14 @@
 	.course-detail-header {
 		position: relative;
 		min-height: 50px;
+		// margin-top: 15px;
 		margin-bottom: 20px;
 		.course-detail-title {
 			h1 {
 				margin-top: 0;
 				margin-bottom: 5px;
 				color: @gray-darker;
+				float: left;
 			}
 		}
 	}
@@ -51,11 +53,13 @@
 			right: 0;
 			bottom: 0;
 			color: #fff;
+			opacity: .8;
 		}
 	}
 	.course-detail-info {
 		padding-left: 60px;
 		margin-left: 480px;
+		margin-bottom: 50px;
 		color: @gray;
 		.course-detail-content {
 			background-color: @bg-color;
@@ -71,7 +75,7 @@
 		.course-detail-nav {
 			position: absolute;
 			top:-5px;
-			left: 70px;
+			left: 74px;
 			right: 0;
 		}
 		.course-detail-title {
@@ -84,7 +88,6 @@
 			font-size: 24px;
 			color: @gray-darker;
 			font-weight: bold;
-			margin-right: 20px;
 		}
 		.original-price {
 			position: relative;
@@ -107,19 +110,49 @@
 			margin-left: 11px;
 			height: 24px;
 			color: #fff;
-			line-height: 30px;
+			line-height: 24px;
 			.discount-font{
 				margin-left:25px;
 			}
 		}  
 	}
-.course-detail-activity{
-	.es-icon-activity-time{
+	.course-detail-activity{
+		font-weight: bold;
+		margin-right:27px;
+	}
+	.course-detail-font{
+		text-align: center;
+		margin-right: 5px;
+		cursor: pointer;
+	}
+	.font-xm{
+		font-size: 14px;
+		color: #fff;
+		opacity: .8;
+		margin: 0px;
+	}
+	.course-font{
+		padding-left: 13px;
+		margin-top: 15px;
+	}
+	.course-head-icon{
+		float: left;
+		margin-top: 3px;
+	}
 
-	} 
-}
+	.task-list{
+		// border:1px solid #000;
+		// margin: -50px 30px 0px 50px;
+	}
 
-
+	.task-list-font{
+		padding: 18px 16px;
+		background-color: #fafafa;
+		margin-top: 15px;
+	}
+	.task-icon{
+		margin-right: 16px;
+	}
 	.course-detail-bottom {
 		position: absolute;
 		right: 15px;
@@ -199,9 +232,10 @@
 	}
 }
 
+
 .course-freelearn-section {
 	background-color: @bg-color;
-	margin: 65px -15px 20px;
+	margin-top: 65px -15px 20px;
 	padding: 38px 15px;
 	.course-learn-list {
 		list-style: none;
@@ -214,6 +248,7 @@
 
 .course-orderlearn-section {
 	padding: 40px 0;
+	margin-top: 45px ;
 	.progress-img {
 		position: absolute;
 		margin-top: 20px;
@@ -221,7 +256,16 @@
 	.progress-info {
 		list-style: none;
 		margin-left: 190px;
+		margin-top: -30px;
 		>li {
+			margin-bottom: 10px;
+		}
+		.learn-time{
+			margin-top:35px;
+			margin-bottom: 12px; 
+		}
+		.time-margin{
+			margin-left: 22px;
 		}
 	}
 }
