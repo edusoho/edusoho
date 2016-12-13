@@ -2,6 +2,9 @@
 namespace AppBundle\Extension;
 
 use Pimple\Container;
+use Biz\Activity\Type\Ppt;
+use Biz\Activity\Type\Doc;
+use Biz\Activity\Type\Flash;
 use Biz\Activity\Type\Live;
 use Biz\Activity\Type\Text;
 use Biz\Question\Type\Fill;
@@ -256,6 +259,18 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         };
         $container['activity_type.discuss'] = function () use ($that) {
             return new Discuss($that->getBiz());
+        };
+
+        $container['activity_type.flash'] = function () use ($that) {
+            return new Flash($that->getBiz());
+        };
+
+        $container['activity_type.doc'] = function () use ($that) {
+            return new Doc($that->getBiz());
+        };
+
+        $container['activity_type.ppt'] = function () use ($that) {
+            return new Ppt($that->getBiz());
         };
     }
 
