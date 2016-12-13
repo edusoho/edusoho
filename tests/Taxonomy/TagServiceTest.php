@@ -1,8 +1,9 @@
 <?php
 namespace  Tests\Taxonomy;
 
-use Codeages\Biz\Framework\UnitTests\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
+
+use Biz\Taxonomy\Service\TagService;
+use Topxia\Service\Common\BaseTestCase;
 
 class TagServiceTest extends BaseTestCase
 {
@@ -39,7 +40,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddTagWithEmptyTagName()
     {
@@ -64,7 +65,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddMultiTagNameTag()
     {
@@ -251,7 +252,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUpdateTagWithNotExistId()
     {
@@ -277,7 +278,7 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group update
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUpdateTagWithEmptyName()
     {
@@ -391,18 +392,21 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(2, $this->getTagService()->searchTagCount(array()));
     }
 
-    public function testIsTagGroupNameAvalieable()
+    public function testIsTagGroupNameAvailable()
     {
         $tagGroup = array(
             'name' => '测试标签组'
         );
 
         $this->getTagService()->addTagGroup($tagGroup);
-        $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvalieable('测试标签组', '测试标签组2'));
+        $this->assertEquals(false, $this->getTagService()->isTagGroupNameAvailable('测试标签组', '测试标签组2'));
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 }

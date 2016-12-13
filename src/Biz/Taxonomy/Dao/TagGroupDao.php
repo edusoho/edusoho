@@ -5,7 +5,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TagGroupDao extends  GeneralDaoInterface
 {
-    public function findByName($name);
+    public function getByName($name);
 
     public function find();
 

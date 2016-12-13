@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Taxonomy\Dao\Impl;
+namespace Biz\Taxonomy\Dao\Impl;
 
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -11,7 +11,7 @@ class TagOwnerDaoImpl extends GeneralDaoImpl implements TagOwnerDao
 
     public function declares()
     {
-
+        return array();
     }
 
     public function getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $ownerType, $ownerId)

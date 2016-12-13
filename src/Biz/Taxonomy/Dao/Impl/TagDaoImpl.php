@@ -71,7 +71,7 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
         return $this->db()->fetchAll($sql, array($name));
     }
 
-    public function findAllCount()
+    public function getAllCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table()} ";
         return $this->db()->fetchColumn($sql, array());

@@ -16,7 +16,7 @@ class TagGroupDaoImpl extends GeneralDaoImpl implements TagGroupDao
         );
     }
 
-    public function findByName($name)
+    public function getByName($name)
     {
         $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($name)) ?: null;
