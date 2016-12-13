@@ -240,8 +240,6 @@ class CourseStudentManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($courseMembers as $courseMember) {
@@ -275,7 +273,7 @@ class CourseStudentManageController extends BaseController
         $file = ExportHelp::saveToTempFile($request, $content, $file);
 
         $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
-        
+
         return $this->createJsonResponse(
             array(
                 'status' => $status,

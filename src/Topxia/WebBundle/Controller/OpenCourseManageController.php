@@ -392,8 +392,6 @@ class OpenCourseManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($courseMembers as $courseMember) {

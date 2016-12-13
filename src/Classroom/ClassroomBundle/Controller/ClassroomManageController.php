@@ -469,8 +469,6 @@ class ClassroomManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($classroomMembers as $classroomMember) {
