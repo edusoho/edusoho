@@ -407,6 +407,35 @@ class ClassroomManageController extends BaseController
     {
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
+        list($title, $students, $classroomMemberCount) = $this->getExportContent($id, $role, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $role = $request->query->get('role');
+        $fileName = sprintf("classroom-%s-%s-(%s).csv", $id, $role, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
+    {
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
 
@@ -492,30 +521,7 @@ class ClassroomManageController extends BaseController
 
             $students[] = $member;
         }
-
-        $file = '';
-        if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $str);
-        }
-
-        $content = implode("\r\n", $students);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
-        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
-
-        return $this->createJsonResponse(
-            array(
-                'status' => $status,
-                'fileName' => $file,
-                'start' => $start+$limit
-            )
-        );
-    }
-
-    public function exportCsvAction(Request $request, $id)
-    {
-        $role = $request->query->get('role');
-        $fileName = sprintf("classroom-%s-%s-(%s).csv", $id, $role, date('Y-n-d'));
-        return ExportHelp::exportCsv($request, $fileName);
+        return array($str, $students, $classroomMemberCount);
     }
 
     public function serviceAction(Request $request, $id)

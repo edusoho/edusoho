@@ -177,6 +177,35 @@ class CourseStudentManageController extends BaseController
     {
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
+        list($title, $students, $courseMemberCount) = $this->getExportContent($id, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+    
+    private function getExportContent($id, $start, $limit, $exportAllowCount)
+    {
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -264,29 +293,7 @@ class CourseStudentManageController extends BaseController
             $students[] = $member;
         };
 
-        $file = '';
-        if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request,'course_students', $str);
-        }
-
-        $content = implode("\r\n", $students);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
-
-        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
-
-        return $this->createJsonResponse(
-            array(
-                'status' => $status,
-                'fileName' => $file,
-                'start' => $start+$limit
-            )
-        );
-    }
-
-    public function exportCsvAction(Request $request, $id)
-    {
-        $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
-        return ExportHelp::exportCsv($request, $fileName);
+        return array($str, $students, $courseMemberCount);
     }
 
     public function remarkAction(Request $request, $courseId, $userId)
