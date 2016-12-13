@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Service;
 
+
 interface LiveActivityService
 {
     public function getLiveActivity($id);

@@ -1,21 +1,21 @@
 <?php
 
 
-namespace Biz\PptActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\PptActivity\Dao\PptActivityDao;
+use Biz\Activity\Dao\PptActivityDao;
 use Topxia\Common\ArrayToolkit;
 
-class PptActivity extends Activity
+class Ppt extends Activity
 {
     public function registerActions()
     {
         return array(
-            'edit'   => 'WebBundle:PptActivity:edit',
-            'show'   => 'WebBundle:PptActivity:show',
-            'create' => 'WebBundle:PptActivity:create'
+            'edit'   => 'AppBundle:Ppt:edit',
+            'show'   => 'AppBundle:Ppt:show',
+            'create' => 'AppBundle:Ppt:create'
         );
     }
 
@@ -92,7 +92,7 @@ class PptActivity extends Activity
      */
     protected function getPptActivityDao()
     {
-        return $this->getBiz()->dao('PptActivity:PptActivityDao');
+        return $this->getBiz()->dao('Activity:PptActivityDao');
     }
 
 }

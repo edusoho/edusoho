@@ -26,6 +26,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         $this->biz = $biz;
     }
 
+    public function getBiz()
+    {
+        return $this->biz;
+    }
+
     public function getQuestionTypes()
     {
         return array(
@@ -184,7 +189,43 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Activity/Discuss:show'
                 ),
                 'templates' => array()
-            )
+            ),
+            'flash'  => array(
+                'meta'      => array(
+                    'name' => 'Flash',
+                    'icon' => 'es-icon es-icon-flashclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Flash:create',
+                    'edit'   => 'AppBundle:Activity/Flash:edit',
+                    'show'   => 'AppBundle:Activity/Flash:show'
+                ),
+                'templates' => array()
+            ),
+            'doc'  => array(
+                'meta'      => array(
+                    'name' => '文档',
+                    'icon' => 'es-icon es-icon-docclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Doc:create',
+                    'edit'   => 'AppBundle:Activity/Doc:edit',
+                    'show'   => 'AppBundle:Activity/Doc:show'
+                ),
+                'templates' => array()
+            ),
+            'ppt'  => array(
+                'meta'      => array(
+                    'name' => 'Ppt',
+                    'icon' => 'es-icon es-icon-pptclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Ppt:create',
+                    'edit'   => 'AppBundle:Activity/Ppt:edit',
+                    'show'   => 'AppBundle:Activity/Ppt:show'
+                ),
+                'templates' => array()
+            ),
         );
     }
 
@@ -197,24 +238,24 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerActivityTypes($container)
     {
-        $that                            = $this;
-        $container['activity_type.text'] = function () use ($that) {
-            return new Text($that->biz);
+        $that                                = $this;
+        $container['activity_type.text']     = function () use ($that) {
+            return new Text($that->getBiz());
         };
-        $container['activity_type.video'] = function () use ($that) {
-            return new Video($that->biz);
+        $container['activity_type.video']    = function () use ($that) {
+            return new Video($that->getBiz());
         };
-        $container['activity_type.audio'] = function () use ($that) {
-            return new Audio($that->biz);
+        $container['activity_type.audio']    = function () use ($that) {
+            return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
-            return new Download($that->biz);
+            return new Download($that->getBiz());
         };
         $container['activity_type.live'] = function () use ($that) {
-            return new Live($that->biz);
+            return new Live($that->getBiz());
         };
         $container['activity_type.discuss'] = function () use ($that) {
-            return new Discuss($that->biz);
+            return new Discuss($that->getBiz());
         };
     }
 

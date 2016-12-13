@@ -9,7 +9,6 @@ class Live extends Activity
     protected function registerListeners()
     {
         return array(
-            'live.finish' => 'Biz\\LiveActivity\\Listener\\LiveFinishListener'
         );
     }
 
@@ -33,9 +32,10 @@ class Live extends Activity
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
     }
 
-    protected function getListeners()
+    public function isFinished($activityId)
     {
-        return array();
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'live.start');
+        return !empty($result);
     }
 
     protected function getLiveActivityService()

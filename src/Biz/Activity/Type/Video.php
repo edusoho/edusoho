@@ -9,7 +9,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class Video extends Activity
 {
-    protected function getListeners()
+    protected function registerListeners()
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
@@ -45,6 +45,9 @@ class Video extends Activity
         return $videoActivity;
     }
 
+    /**
+     * TODO观看后完成
+     */
     public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);

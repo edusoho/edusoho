@@ -90,6 +90,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function deleteLiveActivity($id)
     {
+        //删除直播室
         $liveActivity = $this->getLiveActivityDao()->get($id);
         if (empty($liveActivity)) {
             return;

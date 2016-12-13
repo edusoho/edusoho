@@ -7,7 +7,7 @@
       <label for="mediaId" class="style">文档</label>
     </div>
     <div class="col-sm-10">
-      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {
+      {% include 'file-chooser/file-choose.html.twig' with {
       mediaType: 'document',
       fileType:'document',
       file: doc.media|default(null)
