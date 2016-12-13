@@ -86,8 +86,12 @@ classroom_manage_student_check:
     path:  /classroom/{id}/manage/student_check
     defaults: { _controller: ClassroomBundle:ClassroomManage:checkStudent }
 
+classroom_manage_student_export_datas:
+    path:  /classroom/{id}/manage/student/export/{role}/datas
+    defaults: { _controller: ClassroomBundle:ClassroomManage:exportDatas }
+
 classroom_manage_student_export_csv:
-    path:  /classroom/{id}/manage/student/export/{role}
+    path:  /classroom/{id}/manage/student/export
     defaults: { _controller: ClassroomBundle:ClassroomManage:exportCsv }
 
 classroom_manage_student_import:

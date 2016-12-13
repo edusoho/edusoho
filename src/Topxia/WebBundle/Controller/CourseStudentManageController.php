@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -172,7 +173,38 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function exportDatasAction(Request $request, $id)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $courseMemberCount) = $this->getExportContent($id, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
     public function exportCsvAction(Request $request, $id)
+    {
+        $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+    
+    private function getExportContent($id, $start, $limit, $exportAllowCount)
     {
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -189,8 +221,18 @@ class CourseStudentManageController extends BaseController
             $userinfoFields = array_diff($courseSetting['userinfoFields'], array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin'));
         }
 
-        $courseMembers = $this->getCourseService()->searchMembers(array('courseId' => $course['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 20000);
+        $condition = array(
+            'courseId' => $course['id'],
+            'role' => 'student'
+        );
 
+        $courseMemberCount = $this->getCourseService()->searchMemberCount($condition);
+
+        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
@@ -227,8 +269,6 @@ class CourseStudentManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($courseMembers as $courseMember) {
@@ -253,20 +293,7 @@ class CourseStudentManageController extends BaseController
             $students[] = $member;
         };
 
-        $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
-
-        $userId = $this->getCurrentUser()->id;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return array($str, $students, $courseMemberCount);
     }
 
     public function remarkAction(Request $request, $courseId, $userId)
