@@ -49,6 +49,20 @@ class DocActivity extends Activity
         return $doc;
     }
 
+    public function canFinish($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
+        if(!empty($result)) {
+            if($doc['finishType'] == 'time') {
+                return $result > $doc['finishDetail'];
+            }
+            return true;
+        }
+        return false;
+    }
+
     public function update($targetId, $fields)
     {
         $updateFields = ArrayToolkit::parts($fields, array(

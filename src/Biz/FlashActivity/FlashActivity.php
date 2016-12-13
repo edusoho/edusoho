@@ -28,6 +28,20 @@ class FlashActivity extends Activity
         );
     }
 
+    public function canFinish($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if(!empty($result)) {
+            if($flash['finishType'] == 'time') {
+                return $result > $flash['finishDetail'];
+            }
+            return true;
+        }
+        return false;
+    }
+
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.
