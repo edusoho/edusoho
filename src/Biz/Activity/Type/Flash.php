@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Biz\FlashActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\FlashActivity\Dao\FlashActivityDao;
+use Biz\Activity\Dao\FlashActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
-class FlashActivity extends Activity
+class Flash extends Activity
 {
     public function getMetas()
     {
@@ -22,9 +22,9 @@ class FlashActivity extends Activity
     public function registerActions()
     {
         return array(
-            'create' => 'WebBundle:FlashActivity:create',
-            'edit'   => 'WebBundle:FlashActivity:edit',
-            'show'   => 'WebBundle:FlashActivity:show'
+            'create' => 'AppBundle:Flash:create',
+            'edit'   => 'AppBundle:Flash:edit',
+            'show'   => 'AppBundle:Flash:show'
         );
     }
 
@@ -90,7 +90,7 @@ class FlashActivity extends Activity
      */
     protected function getFlashActivityDao()
     {
-        return $this->getBiz()->dao('FlashActivity:FlashActivityDao');
+        return $this->getBiz()->dao('Activity:FlashActivityDao');
     }
     
 }

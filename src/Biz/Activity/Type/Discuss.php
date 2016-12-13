@@ -9,7 +9,6 @@ class Discuss extends Activity
     protected function registerListeners()
     {
         return array(
-            'discuss.finish' => 'Biz\\Discuss\\Listener\\DiscussFinishListener'
         );
     }
 

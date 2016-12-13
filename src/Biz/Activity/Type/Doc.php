@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Biz\DocActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\DocActivity\Dao\DocActivityDao;
+use Biz\Activity\Dao\DocActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
-class DocActivity extends Activity
+class Doc extends Activity
 {
     public function getMetas()
     {
@@ -22,9 +22,9 @@ class DocActivity extends Activity
     public function registerActions()
     {
         return array(
-            'create' => 'WebBundle:DocActivity:create',
-            'edit'   => 'WebBundle:DocActivity:edit',
-            'show'   => 'WebBundle:DocActivity:show'
+            'create' => 'AppBundle:Doc:create',
+            'edit'   => 'AppBundle:Doc:edit',
+            'show'   => 'AppBundle:Doc:show'
         );
     }
 
@@ -92,7 +92,7 @@ class DocActivity extends Activity
      */
     protected function getDocActivityDao()
     {
-        return $this->getBiz()->dao('DocActivity:DocActivityDao');
+        return $this->getBiz()->dao('Activity:DocActivityDao');
     }
     
 }

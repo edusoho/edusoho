@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Biz\FlashActivity\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\FlashActivity\Dao\FlashActivityDao;
+use Biz\Activity\Dao\FlashActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class FlashActivityDaoImpl extends GeneralDaoImpl implements FlashActivityDao
