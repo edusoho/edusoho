@@ -33,7 +33,7 @@ class KernelRequestListener
         if ($request->getMethod() === 'POST') {
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
-            }          
+            }
 
             if (stripos($request->getPathInfo(), '/hls') === 0) {
                 return;

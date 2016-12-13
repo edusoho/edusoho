@@ -74,6 +74,7 @@ class PayCenterController extends BaseController
                 'paidTime' => time()
             );
             $this->getPayCenterService()->processOrder($payData);
+            
             return $this->redirectOrderTarget($order);
         } elseif ($order['amount'] == 0 && $order['coinAmount'] > 0) {
             $payData = array(
