@@ -78,7 +78,7 @@
     }
 
     .balloon-filelist-heading {
-      position: relative;
+      padding: 8px 10px;
       font-weight: bold;
       border-bottom: 2px solid #ddd;
     }
@@ -92,32 +92,25 @@
     .balloon-filelist .file-size,
     .balloon-filelist .file-status,
     .balloon-filelist .file-manage {
-      position: relative;
-      z-index: 1;
+      display: inline-block;
     }
 
     .balloon-filelist .file-name {
-      margin-right: 250px;
-      padding: 8px;
+      width:40%
     }
 
     .balloon-filelist .file-size {
-      position: absolute;
-      top: 0px;
-      right: 150px;
-      width: 100px;
-      text-align: right;
-      padding: 8px;
+      width: 20%;
     }
 
     .balloon-filelist .file-status {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      width: 120px;
-      text-align: left;
-      padding: 8px;
+      width: 18%;
+    }
 
+    .balloon-filelist .file-manage {
+      width: 20%;
+      z-index: 9999;
+      position: absolute;
     }
 
     .balloon-filelist ul {
