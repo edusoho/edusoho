@@ -34,9 +34,10 @@ class Text extends Activity
     public function canFinish($activityId)
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-        $textActivity = $this->getTextActivityDao()->get($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
         return !empty($result) 
-                && $result['finishType'] == 'time' 
+                && $textActivity['finishType'] == 'time' 
                 && $result > $textActivity['finishDetail'];
     }
 
@@ -67,6 +68,11 @@ class Text extends Activity
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     protected function getListeners()

@@ -45,6 +45,14 @@ class Video extends Activity
         return $videoActivity;
     }
 
+    public function canFinish($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        return !empty($result) 
+                && $result > $activity['length'];
+    }
+
     public function get($id)
     {
         $videoActivity         = $this->getVideoActivityDao()->get($id);
