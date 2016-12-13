@@ -31,7 +31,7 @@ class Text extends Activity
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
-    public function canFinish($activityId)
+    public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);

@@ -15,6 +15,12 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         return $this->db()->fetchColumn($sql, array($activityId, $userId)) ?: 0;
     }
 
+    public function findActivityLearnLogsByActivityIdAndUserIdAndEvent($activityId, $userId, $event)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? and event = ?";
+        return $this->db()->fetchColumn($sql, array($activityId, $userId, $event)) ?: 0;
+    }
+
     public function declares()
     {
         return array(

@@ -32,6 +32,23 @@ class PptActivity extends Activity
         );
     }
 
+    public function isFinished($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
+        
+        if($ppt['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return !empty($result) && $result > $ppt['finishDetail'];
+        }
+
+        if($ppt['finishType'] == 'end') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
+            return !empty($result);
+        }
+        return false;
+    }
+
     public function create($fields)
     {
         $ppt = ArrayToolkit::parts($fields, array(

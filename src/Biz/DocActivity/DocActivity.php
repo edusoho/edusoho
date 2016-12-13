@@ -49,7 +49,7 @@ class DocActivity extends Activity
         return $doc;
     }
 
-    public function canFinish($activityId)
+    public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
