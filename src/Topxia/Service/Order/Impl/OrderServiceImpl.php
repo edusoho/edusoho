@@ -657,6 +657,14 @@ class OrderServiceImpl extends BaseService implements OrderService
             $user                 = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
+        if (isset($conditions['mobile'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['email']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
 
         return $conditions;
     }
