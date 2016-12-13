@@ -2,9 +2,9 @@
 
 namespace Biz\System\Impl;
 
+use Biz\BaseService;
 use Biz\System\SessionService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 
 class SessionServiceImpl extends BaseService implements SessionService
 {
@@ -32,7 +32,7 @@ class SessionServiceImpl extends BaseService implements SessionService
 
     protected function getSessionDao()
     {
-        return $this->createDao('System.SessionDao');
+        return $this->createDao('System:SessionDao');
     }
 
 }

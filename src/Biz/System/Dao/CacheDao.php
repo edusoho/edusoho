@@ -4,14 +4,14 @@ namespace Biz\System\Dao;
 
 interface CacheDao
 {
-    public function findCachesByNames(array $names);
+    public function getByName($name);
 
-    public function addCache($cache);
+    public function findByNames(array $names);
 
-    public function updateCache($name, $cache);
+    public function updateByName($name, $cache);
 
-    public function deleteCacheByName($name);
+    public function deleteByName($name);
 
-    public function deleteAllCache();
+    public function deleteAll();
 
 }

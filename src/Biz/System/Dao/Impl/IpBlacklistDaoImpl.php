@@ -5,6 +5,8 @@ namespace Biz\System\Dao\Impl;
 use Biz\System\Dao\IpBlacklistDao;
 use Topxia\Service\Common\BaseDao;
 
+// use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+
 class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
 {
     protected $table = 'ip_blacklist';

@@ -2,9 +2,10 @@
 
 namespace Biz\System\Impl;
 
+use Biz\BaseService;
 use Biz\System\StatisticsService;
-use Topxia\Service\Common\BaseService;
 use Biz\System\Dao\Impl\SessionDaoImpl;
+use Topxia\Common\Service\ServiceKernel;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
 {
@@ -46,16 +47,16 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
      */
     protected function getSessionDao()
     {
-        return $this->createDao('System.SessionDao');
+        return $this->createDao('System:SessionDao');
     }
 
     protected function getRedis($group = 'default')
     {
-        return $this->getKernel()->getRedis($group);
+        return ServiceKernel::instance()->getRedis($group);
     }
 
     protected function getSettingService()
     {
-        return $this->getKernel()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 }

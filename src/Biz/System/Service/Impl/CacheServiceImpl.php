@@ -1,8 +1,8 @@
 <?php
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
+use Biz\BaseService;
 use Biz\System\CacheService;
-use Topxia\Service\Common\BaseService;
 
 class CacheServiceImpl extends BaseService implements CacheService
 {
@@ -24,7 +24,7 @@ class CacheServiceImpl extends BaseService implements CacheService
         }
 
         $datas  = array();
-        $caches = $this->getCacheDao()->findCachesByNames($names);
+        $caches = $this->getCacheDao()->findByNames($names);
         $now    = time();
         foreach ($caches as $cache) {
             if ($cache['expiredTime'] > 0 && $cache['expiredTime'] < $now) {
@@ -47,20 +47,20 @@ class CacheServiceImpl extends BaseService implements CacheService
             'createdTime' => time()
         );
 
-        $cached = $this->getCacheDao()->findCachesByNames(array($name));
+        $cached = $this->getCacheDao()->findByNames(array($name));
         if (empty($cached)) {
-            return $this->getCacheDao()->addCache($cache);
+            return $this->getCacheDao()->create($cache);
         } else {
-            return $this->getCacheDao()->updateCache($name, $cache);
+            return $this->getCacheDao()->updateByName($name, $cache);
         }
     }
 
     public function clear($name = null)
     {
         if (!empty($name)) {
-            return $this->getCacheDao()->deleteCacheByName($name);
+            return $this->getCacheDao()->deleteByName($name);
         } else {
-            return $this->getCacheDao()->deleteAllCache();
+            return $this->getCacheDao()->deleteAll();
         }
     }
 
@@ -73,6 +73,6 @@ class CacheServiceImpl extends BaseService implements CacheService
 
     protected function getCacheDao()
     {
-        return $this->createDao('System.CacheDao');
+        return $this->createDao('System:CacheDao');
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Biz\System\Impl;
 
+use Biz\BaseService;
 use Biz\System\LogService;
 use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\Logger;
-use Topxia\Service\Common\BaseService;
 
 class LogServiceImpl extends BaseService implements LogService
 {
@@ -73,12 +73,12 @@ class LogServiceImpl extends BaseService implements LogService
 
     protected function getLogDao()
     {
-        return $this->createDao('System.LogDao');
+        return $this->createDao('System:LogDao');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function prepareSearchConditions($conditions)

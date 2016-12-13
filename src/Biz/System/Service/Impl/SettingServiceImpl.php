@@ -1,8 +1,8 @@
 <?php
 namespace Biz\System\Impl;
 
+use Biz\BaseService;
 use Biz\System\SettingService;
-use Topxia\Service\Common\BaseService;
 
 class SettingServiceImpl extends BaseService implements SettingService
 {
@@ -84,12 +84,12 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     protected function getCacheService()
     {
-        return $this->createService('System.CacheService');
+        return $this->biz->service('System:CacheService');
     }
 
     protected function getSettingDao()
     {
-        return $this->createDao('System.SettingDao');
+        return $this->createDao('System:SettingDao');
     }
 
     protected function getNameSpace()

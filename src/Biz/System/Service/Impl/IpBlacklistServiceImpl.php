@@ -1,8 +1,8 @@
 <?php
 namespace Biz\System\Impl;
 
+use Biz\BaseService;
 use Biz\System\IpBlacklistService;
-use Topxia\Service\Common\BaseService;
 
 class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 {
@@ -77,11 +77,11 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     protected function getIpBlacklistDao()
     {
-        return $this->createDao('System.IpBlacklistDao');
+        return $this->createDao('System:IpBlacklistDao');
     }
 
     private function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 }
