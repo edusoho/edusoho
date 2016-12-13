@@ -35,7 +35,7 @@ export default class List extends Component {
             <li className="list-group-item mbs" id={item.itemId} key={item.itemId} data-seq={item.seq}>
               <img src ={item.img}/> 
               {item.label}
-              <label><input type="checkbox" checked={item.isVisible} onClick= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
+              <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
               <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
                 <i className = "es-icon es-icon-close01"></i>
               </a>
