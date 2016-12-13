@@ -9,19 +9,16 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
-        $course  = $this->getCourseService()->getCourse($task['courseId']);
-        $tasks   = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if (empty($activity)) {
+            throw $this->createNotFoundException("activity not found");
+        }
 
         if ($this->getCourseService()->isCourseStudent($courseId, $this->getUser()->getId())) {
             $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
         } else {
             $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
-        }
-
-        if (empty($activity)) {
-            throw $this->createNotFoundException("activity not found");
         }
 
         $this->getActivityService()->trigger($activity['id'], 'start', array(
@@ -30,10 +27,9 @@ class TaskController extends BaseController
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         return $this->render('task/show.html.twig', array(
-            'course'     => $course,
+            'course'     => $this->getCourseService()->getCourse($task['courseId']),
             'task'       => $task,
             'taskResult' => $taskResult,
-            'tasks'      => $tasks,
             'activity'   => $activity,
             'preview'    => $preview,
             'backUrl'    => $backUrl
