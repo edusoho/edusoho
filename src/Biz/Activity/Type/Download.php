@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 
 class Download extends Activity
 {
-
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.

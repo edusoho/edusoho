@@ -39,11 +39,6 @@ class Live extends Activity
         return !empty($result);
     }
 
-    protected function getListeners()
-    {
-        return array();
-    }
-
     protected function getLiveActivityService()
     {
         return $this->getBiz()->service('Activity:LiveActivityService');

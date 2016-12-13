@@ -17,8 +17,4 @@ class Discuss extends Activity
         return true;
     }
 
-    protected function getListeners()
-    {
-        return array();
-    }
 }

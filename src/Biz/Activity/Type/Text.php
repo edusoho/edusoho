@@ -75,10 +75,4 @@ class Text extends Activity
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    protected function getListeners()
-    {
-        // TODO: Implement getListeners() method.
-    }
-
-
 }
