@@ -1,9 +1,6 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
-use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -113,10 +110,24 @@ class TaskController extends BaseController
         $result   = $this->getTaskService()->finishTask($id);
         $task     = $this->getTaskService()->getTask($id);
         $nextTask = $this->getTaskService()->getNextTask($id);
+        $course   = $this->getCourseService()->getCourse($task['courseId']);
+        $user = $this->getUser();
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'userId' => $user['id'],
+            'status' => 'finish'
+        );
+
+        $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
+
+        $finishedRate = intval($finishedCount/$course['taskCount']*100);
+
         return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
             'task'     => $task,
-            'nextTask' => $nextTask
+            'nextTask' => $nextTask,
+            'course'   => $course,
+            'finishedRate' => $finishedRate
         ));
     }
 
@@ -144,17 +155,11 @@ class TaskController extends BaseController
         return $task;
     }
 
-    /**
-     * @return CourseService
-     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
-    /**
-     * @return TaskService
-     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
@@ -165,9 +170,6 @@ class TaskController extends BaseController
         return $this->createService('Task:TaskResultService');
     }
 
-    /**
-     * @return ActivityService
-     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
