@@ -3,16 +3,6 @@ import List from './list';
 import InputGroup from './input-group';
 import './style.less'
 
-
-
-//items 数据列表，1、isSor是否拖动排序，输入时是否可搜索（true,false）,是否选中
-//list 数据为什么要放到父组件本身呢》
-//组件为甚要关心你要什么数据；
-//
-//
-//
-
-
 function isType(type) {
   return function(obj) {
     return {}.toString.call(obj) == "[object " + type + "]"
@@ -170,11 +160,8 @@ MultiGroup.defaultProps = {
   className: 'multi-group',
   datas: [],//必须是数组
   enableSort: true,//必须是bool
-  enableSearch: true,//必须是bool
-  enableChecked:true,//必须是bool
+  enableSearch: false,//必须是bool
   outputDataElement:'hidden-input',//必须是string,
-  valueName: "",
-  checkedName: "",
 };
 
 export default MultiGroup;

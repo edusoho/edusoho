@@ -1,43 +1,13 @@
 import { TabChange, publishCourse } from '../help';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import MultiGroup from '../../../common/widget/multi-group';
+import MultiInput from '../../../common/widget/multi-input';
 import sortList from 'common/sortable';
 
-// 模拟数据
-// let datas = [{
-//   itemId:1,
-//   checked: true,
-//   sqe: 1,
-//   value: '这是内容',
-// }];
-
-//模拟数据，每个数据可能是对象，也可能是字符串；
-let values = [
-  {label: 'aaa', value: 'aaa', },
-];
-
-values = [
-  'aaa'
-]
-
-
-
-
-
-//模拟数据，每个数据可能是对象，也可能是字符串；
-// values = [
-//   {teacherName: 'xxx'},
-//   {teacherName: 'yyy'}
-// ];
-
-
-
-
-// values = [];
-
 function renderMultiGroupComponent(elementId){
-  ReactDOM.render( <MultiGroup datas = {values}  valueName="teacherName"  checkedName='hidden' outputDataElement={elementId}    enableSearch ={false}  enableChecked/>,
+  let datas = $('#'+elementId).data('init-value');
+  console.log(datas);
+  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={elementId} />,
     document.getElementById(elementId)
   );
 }
