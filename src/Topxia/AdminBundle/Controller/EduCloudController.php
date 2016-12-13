@@ -2,6 +2,7 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
@@ -343,11 +344,19 @@ class EduCloudController extends BaseController
     {
         $dataUserPosted = $request->request->all();
         $settings       = $this->getSettingService()->get('cloud_sms', array());
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/sms/overview");
+            $cloudInfo = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
+        }
 
+        if (isset($overview['isBuy'])) {
+            throw new RuntimeException;
+        }
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
-        $api       = CloudAPIFactory::create('root');
 
-        $cloudInfo = $api->get('/me');
         if (empty($cloudInfo['accessCloud'])) {
             return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_my_cloud_overview'));
         }
@@ -560,6 +569,16 @@ class EduCloudController extends BaseController
     public function emailSwitchAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
+            try {
+                $api         = CloudAPIFactory::create('root');
+                $overview    = $api->get("/me/email/overview");
+            } catch (\RuntimeException $e) {
+                return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+            }
+
+            if (isset($overview['isBuy'])) {
+                throw new RuntimeException;
+            }
             $status = $request->request->all();
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
@@ -1458,6 +1477,17 @@ class EduCloudController extends BaseController
         $capacity          = $client->getCapacity();
 
         if ($request->getMethod() == 'POST') {
+            try {
+                $api         = CloudAPIFactory::create('root');
+                $overview    = $api->get("/me/live/overview");
+            } catch (\RuntimeException $e) {
+                return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+            }
+
+            if (isset($overview['isBuy'])) {
+                throw new RuntimeException;
+            }
+
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
             $courseSetting = $this->getSettingService()->get('course', array());
