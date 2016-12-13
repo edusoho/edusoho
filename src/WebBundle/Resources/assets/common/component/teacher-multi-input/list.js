@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 export default class List extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dataSource: this.props.dataSource
-    }
   }
 
   componentDidMount(){
-    let enableSort = this.props.enableSort;
+    //paixu de duix ian gyou wenti 
+    let sortable = this.props.sortable;
     let $list = $('.sortable-list').sortable(Object.assign({}, {
       element: '.sortable-list',
       distance: 20,
@@ -19,6 +17,7 @@ export default class List extends Component {
         _super(item, container);
         var data = $list.sortable("serialize").get();
         this.props.sortItem(data);
+        console.log(data);
       },
       serialize: function(parent, children, isContainer) {
         return isContainer ? children : parent.attr('id');
@@ -27,15 +26,16 @@ export default class List extends Component {
   };
 
   render() {
-    const { enableChecked } =  this.props;
+    const { dataSourceUi } = this.props;
     return (
       <ul className="list-group teacher-list-group sortable-list mb0">
       {
-        this.state.dataSource.map( (item,i) => {
+        dataSourceUi.map( (item,i) => {
           return (
-            <li className="list-group-item mbs" key={i} id={item.itemId} data-sqe={item.sqe}>
-              {item.value}
-              { enableChecked && <input type="checkbox" value={item.itemId} checked={item.checked} onChange = {event=>this.props.listCheckChange(event)}/>}
+            <li className="list-group-item mbs" id={item.itemId} key={item.itemId} data-seq={item.seq}>
+              <img src ={item.img}/> 
+              {item.label}
+              <label><input type="checkbox" checked={item.isVisible} onClick= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
               <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
                 <i className = "es-icon es-icon-close01"></i>
               </a>

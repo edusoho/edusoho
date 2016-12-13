@@ -1,36 +1,32 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import MultiGroup from '../../../common/widget/multi-group';
+import MultiInput from '../../../common/widget/multi-input';
 import sortList from 'common/sortable';
 
-class DetailEditor {
-  constructor() {
-    this.init();
-  }
 
-  init() {
-    this.renderMultiGroupComponent('course-goals');
-    this.renderMultiGroupComponent('intended-students');
 
-    CKEDITOR.replace('summary', {
-      allowedContent: true,
-      toolbar: 'Detail',
-      filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
-    });
+CKEDITOR.replace('summary', {
+  allowedContent: true,
+  toolbar: 'Detail',
+  filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+});
 
-    $('#courseset-submit').click(function(evt) {
-      console.log($('#courseset-detail-form').serializeArray());
-      $(evt.currentTarget).button('loading');
-      $('#courseset-detail-form').submit();
-    });
-  }
+$('#courseset-submit').click(function(evt) {
+  console.log($('#courseset-detail-form').serializeArray());
+  $(evt.currentTarget).button('loading');
+  $('#courseset-detail-form').submit();
+});
 
-  renderMultiGroupComponent(elementId){
-    ReactDOM.render( <MultiGroup items = {$("#"+elementId).data("init-value")} fieldName={$("#"+elementId).data('field-name')} />,
-      document.getElementById(elementId)
-    );
-  }
 
+function renderMultiGroupComponent(elementId,name){
+  let datas = $('#'+elementId).data('init-value');
+  console.log(datas);
+  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name} />,
+    document.getElementById(elementId)
+  );
 }
 
-new DetailEditor();
+renderMultiGroupComponent('course-goals','goals');
+renderMultiGroupComponent('intended-students','audiences');
+
+

@@ -4,16 +4,16 @@ import React from 'react';
 import MultiInput from '../../../common/widget/multi-input';
 import sortList from 'common/sortable';
 
-function renderMultiGroupComponent(elementId){
+function renderMultiGroupComponent(elementId,name){
   let datas = $('#'+elementId).data('init-value');
   console.log(datas);
-  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={elementId} />,
+  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name} />,
     document.getElementById(elementId)
   );
 }
 
-renderMultiGroupComponent('course-goals');
-renderMultiGroupComponent('intended-students');
+renderMultiGroupComponent('course-goals','goals');
+renderMultiGroupComponent('intended-students','audiences');
 
 
 _initDatePicker('#expiryStartDate');

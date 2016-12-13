@@ -9,18 +9,18 @@ export default class InputGroup extends Component {
     this.state = {
       itemName: "",
       searched: true,
-      haveSearchResults: false,
-      searchResults:[],
+      resultful: false,
+      searchResult:[],
     }
-    this.enableSearch = this.props.enableSearch;
+    this.searchable = this.props.searchable;
   }
 
   selectChange(event) {
     //在这种情况下，不应该去搜索，那什么时候再搜索呢；
-    console.log(event.target.id);
+    this.props.onSearch(event.target.id);
     this.setState({
       searched: false,
-      itemName: event.target.id,
+      itemName: event.target.innerHTML,
     })
   }
 
@@ -36,26 +36,23 @@ export default class InputGroup extends Component {
     console.log(value);
     this.setState({
       itemName: value,
-      searchResults: [],
-      haveSearchResults:false,
+      searchResult: [],
+      resultful:false,
     });
 
-    console.log(this.enableSearch && value.length > 0 && this.state.searched);
+    console.log(this.searchable && value.length > 0 && this.state.searched);
 
 
-    if(this.enableSearch && value.length > 0 && this.state.searched) {
-      console.log('seach..');
-      send('/course/274/manage/teachersMatch?q='+value,searchResults=>{
+    if(this.searchable && value.length > 0 && this.state.searched) {
+      console.log('seach start..');
+      send('/course/274/manage/teachersMatch?q='+value,searchResult=>{
         if(this.state.itemName.length>0) {
-          console.log("ok");
+          console.log({'searchResult':searchResult});
           this.setState({
-            searchResults:[{
-              id: 1,
-              value: "name",
-            }],
-            haveSearchResults:true,
+            searchResult:[{id: "1526", nickname: "wuli", avatar: "/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",isVisible:1}],
+            resultful:true,
           });
-          console.log(this.state.searchResults);
+          console.log({'searchResult':this.state.searchResult});
         }
       });
     }
@@ -68,22 +65,17 @@ export default class InputGroup extends Component {
     }
     this.setState({
       itemName:'',
-      searchResults:[],
-      haveSearchResults: false,
+      searchResult:[],
+      resultful: false,
     })
   }
 
   render (){
-    console.log(this.state.searchResults);
-    console.log(this.enableSearch);
-    console.log(this.state.haveSearchResults);
-
     return (
       <div className="input-group">
         <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus = {event=>this.onFocus(event)}  />
         { 
-          this.enableSearch && this.state.haveSearchResults && <Options items ={this.state.searchResults} selectChange ={(event)=>this.selectChange(event)} haveSearchResults={this.state.haveSearchResults}/>
-
+          this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event)=>this.selectChange(event)} resultful={this.state.resultful}/>
         }
         <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span>
       </div>

@@ -6,6 +6,7 @@ export default class List extends Component {
   }
 
   componentDidMount(){
+    //paixu de duix ian gyou wenti 
     let sortable = this.props.sortable;
     let $list = $('.sortable-list').sortable(Object.assign({}, {
       element: '.sortable-list',
@@ -30,9 +31,9 @@ export default class List extends Component {
       {
         dataSourceUi.map( (item,i) => {
           return (
-            <li className="list-group-item mbs" id={item.id} key={item.id} data-seq={item.seq}>
+            <li className="list-group-item mbs" id={item.itemId} key={item.itemId} data-seq={item.seq}>
               {item.label}
-              <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.id}>
+              <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
                 <i className = "es-icon es-icon-close01"></i>
               </a>
             </li>
