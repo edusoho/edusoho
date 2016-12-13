@@ -120,7 +120,7 @@ class TaskController extends BaseController
 
         $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
 
-        $finishedRate = intval($finishedCount/$course['taskCount']*100);
+        $finishedRate = empty($course['taskCount'])? 0 : intval($finishedCount/$course['taskCount']*100);
 
         return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
