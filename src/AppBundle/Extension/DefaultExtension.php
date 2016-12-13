@@ -184,7 +184,43 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Activity/Discuss:show'
                 ),
                 'templates' => array()
-            )
+            ),
+            'flash'  => array(
+                'meta'      => array(
+                    'name' => 'Flash',
+                    'icon' => 'es-icon es-icon-flashclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Flash:create',
+                    'edit'   => 'AppBundle:Activity/Flash:edit',
+                    'show'   => 'AppBundle:Activity/Flash:show'
+                ),
+                'templates' => array()
+            ),
+            'doc'  => array(
+                'meta'      => array(
+                    'name' => '文档',
+                    'icon' => 'es-icon es-icon-docclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Doc:create',
+                    'edit'   => 'AppBundle:Activity/Doc:edit',
+                    'show'   => 'AppBundle:Activity/Doc:show'
+                ),
+                'templates' => array()
+            ),
+            'ppt'  => array(
+                'meta'      => array(
+                    'name' => 'Ppt',
+                    'icon' => 'es-icon es-icon-pptclass'
+                ),
+                'actions'   => array(
+                    'create' => 'AppBundle:Activity/Ppt:create',
+                    'edit'   => 'AppBundle:Activity/Ppt:edit',
+                    'show'   => 'AppBundle:Activity/Ppt:show'
+                ),
+                'templates' => array()
+            ),
         );
     }
 
