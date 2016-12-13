@@ -100,7 +100,7 @@ class TagServiceTest extends BaseTestCase
     {
         $tag      = $this->getTagService()->addTag(array('name' => '测试标签'));
         $foundTag = $this->getTagService()->getTag(999);
-        $this->assertFalse($foundTag);
+        $this->assertNull($foundTag);
     }
 
     public function testGetTagByName()
