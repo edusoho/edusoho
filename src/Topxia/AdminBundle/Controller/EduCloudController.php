@@ -353,7 +353,7 @@ class EduCloudController extends BaseController
         }
 
         if (isset($overview['isBuy'])) {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+            throw new RuntimeException;
         }
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
 
@@ -510,7 +510,7 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
         }
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
         if ($isEmailWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
@@ -544,7 +544,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status'])) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
@@ -577,17 +577,17 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+                throw new RuntimeException;
             }
             $status = $request->request->all();
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
 
             if (isset($status['email-close'])) {
                 $emailStatus['status'] = 'disable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
@@ -1108,17 +1108,17 @@ class EduCloudController extends BaseController
         $emailStatus = array_merge($emailStatus, $sign);
 
         if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
-            $this->getSettingService()->set('cloud_email', $emailStatus);
+            $this->getSettingService()->set('cloud_email_crm', $emailStatus);
         }
 
-        $emailStatus = $this->getSettingService()->get('cloud_email', array());
+        $emailStatus = $this->getSettingService()->get('cloud_email_crm', array());
         return $emailStatus;
     }
 
     protected function getSign($operation)
     {
         $api         = CloudAPIFactory::create('root');
-        $settings    = $this->getSettingService()->get('cloud_email', array());
+        $settings    = $this->getSettingService()->get('cloud_email_crm', array());
         $result      = array();
         $sign        = array();
         $emailStatus = array();
@@ -1485,7 +1485,7 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('非法请求！'));
             }
 
             $liveCourseSetting = $request->request->all();
