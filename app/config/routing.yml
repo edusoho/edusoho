@@ -1,7 +1,3 @@
-app:
-    resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   /
-
 bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
 
@@ -63,6 +59,10 @@ custom_web:
 custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
+
+app:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /
 
 #_plugins:
 #    resource: routing_plugins.yml

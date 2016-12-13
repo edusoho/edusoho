@@ -198,7 +198,7 @@ course_manage_items_sort:
   methods: ['POST']
 
 #my_course
-c_my_courses_learning:
+my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:Course/MyCourse:learning }
 
