@@ -2,8 +2,6 @@
 namespace Topxia\Service\Taxonomy\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
