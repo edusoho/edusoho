@@ -41,7 +41,7 @@
         {% if targetType == 'vip' %}
           {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, title: dict_text('targetName', targetType) ~ '名'|trans} %}
         {% else %}
-          {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, targetId: dict_text('targetName', targetType) ~ '编号'|trans, title: dict_text('targetName', targetType) ~ '名'|trans} %}
+          {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, targetId: dict_text('targetName', targetType) ~ '编号'|trans, title: dict_text('targetName', targetType) ~ '名'|trans, phone:'电话'|trans, email:'邮箱'|trans} %}
         {% endif %}
         {{ select_options(options, request.get('keywordType')) }}
       </select>
@@ -49,6 +49,7 @@
     <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'关键词'|trans}}">
     </div>
 
+        {{dump(options)}}
     <button class="btn btn-primary">{{'搜索'|trans}}</button>
     <a class="btn btn-primary btn-export-csv" 
     href="{{ path('admin_order_manage_export_csv',
