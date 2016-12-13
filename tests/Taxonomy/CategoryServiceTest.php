@@ -107,7 +107,7 @@ class CategoryServiceTest extends BaseTestCase
     public function testGetCategoryWithNotExistCategoryId()
     {
         $foundCategory = $this->getCategoryService()->getCategory(999);
-        $this->assertFalse($foundCategory);
+        $this->assertNull($foundCategory);
     }
 
     /**
@@ -234,7 +234,6 @@ class CategoryServiceTest extends BaseTestCase
     public function testGetGroups()
     {
         $groups = $this->getCategoryService()->getGroups(0, 2);
-
         $this->assertEquals(2, count($groups));
         $this->assertContains(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3), $groups);
         $this->assertContains(array('id' => 2, 'code' => 'code2', 'name' => '课程分类2', 'depth' => 3), $groups);
@@ -249,7 +248,7 @@ class CategoryServiceTest extends BaseTestCase
         $this->assertEquals(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3), $group);
 
         $group = $this->getCategoryService()->getGroup(999);
-        $this->assertFalse($group);
+        $this->assertNull($group);
     }
 
     /**

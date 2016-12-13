@@ -329,7 +329,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getGroupByCode($code)
     {
-        return $this->getGroupDao()->findByCode($code);
+        return $this->getGroupDao()->getByCode($code);
     }
 
     public function getGroups($start, $limit)

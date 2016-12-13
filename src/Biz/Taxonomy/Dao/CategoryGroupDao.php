@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CategoryGroupDao extends  GeneralDaoInterface
 {
-    public function findByCode($code);
+    public function getByCode($code);
 
     public function find($start, $limit);
 

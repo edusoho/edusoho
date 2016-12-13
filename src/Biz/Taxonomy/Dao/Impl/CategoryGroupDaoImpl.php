@@ -14,7 +14,7 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
         return array();
     }
 
-    public function findByCode($code)
+    public function getByCode($code)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE code = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($code));
