@@ -38,10 +38,10 @@ class Audio extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result) 
-                && $result > $activity['length'];
+        return !empty($result)
+            && $result > $activity['length'];
     }
 
     /**
@@ -62,13 +62,11 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    protected function getListeners()
+    protected function registerListeners()
     {
-        return array(
-            'audio.start'  => 'Biz\\AudioActivity\\Listener\\AudioStartListener',
-            'audio.finish' => 'Biz\\AudioActivity\\Listener\\AudioFinishListener'
-        );
+        return array();
     }
+
 
     /**
      * @return AudioActivityDao

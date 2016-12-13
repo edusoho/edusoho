@@ -33,11 +33,6 @@ class Live extends Activity
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
     }
 
-    protected function getListeners()
-    {
-        return array();
-    }
-
     protected function getLiveActivityService()
     {
         return $this->getBiz()->service('Activity:LiveActivityService');
