@@ -30,14 +30,16 @@ class FlashActivity extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
-        if(!empty($result)) {
-            if($flash['finishType'] == 'time') {
-                return $result > $flash['finishDetail'];
-            }
-            return true;
+        if($flash['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return $result > $flash['finishDetail'];
+        }
+
+        if($flash['finishType'] == 'click') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'flash.finish');
+            return !empty($result);
         }
         return false;
     }

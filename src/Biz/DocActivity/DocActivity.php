@@ -51,14 +51,16 @@ class DocActivity extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
-        if(!empty($result)) {
-            if($doc['finishType'] == 'time') {
-                return $result > $doc['finishDetail'];
-            }
-            return true;
+        $doc = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if($doc['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return $result > $doc['finishDetail'];
+        }
+
+        if($doc['finishType'] == 'click') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'doc.finish');
+            return !empty($result);
         }
         return false;
     }

@@ -13,6 +13,11 @@ class Discuss extends Activity
         );
     }
 
+    public function isFinished($activityId)
+    {
+        return true;
+    }
+
     protected function getListeners()
     {
         return array();

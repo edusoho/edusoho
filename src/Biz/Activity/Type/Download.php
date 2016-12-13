@@ -80,6 +80,12 @@ class Download extends Activity
         return $this->getDownloadActivityDao()->delete($id);
     }
 
+    public function isFinished($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'download.download');
+        return !empty($result);
+    }
+
     protected function getListeners()
     {
         // TODO: Implement getListeners() method.

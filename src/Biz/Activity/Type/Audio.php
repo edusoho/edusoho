@@ -36,6 +36,9 @@ class Audio extends Activity
         return $audioActivity;
     }
 
+    /**
+     * TODO观看后完成
+     */
     public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);

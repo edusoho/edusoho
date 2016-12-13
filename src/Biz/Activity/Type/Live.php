@@ -33,6 +33,12 @@ class Live extends Activity
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
     }
 
+    public function isFinished($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'live.start');
+        return !empty($result);
+    }
+
     protected function getListeners()
     {
         return array();
