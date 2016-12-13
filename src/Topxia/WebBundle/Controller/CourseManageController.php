@@ -43,10 +43,7 @@ class CourseManageController extends BaseController
 
     public function courseRuleAction()
     {
-        $course = $this->getCourseService()->tryManageCourse(1);
-        return $this->render('TopxiaWebBundle:CourseManage:rule.html.twig', array(
-            'course' => $course
-        ));        
+        return $this->render('TopxiaWebBundle:CourseManage:rule.html.twig');        
     }
 
     public function baseAction(Request $request, $id)
