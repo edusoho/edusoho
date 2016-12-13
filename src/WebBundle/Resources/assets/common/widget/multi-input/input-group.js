@@ -33,15 +33,11 @@ export default class InputGroup extends Component {
 
   handleNameChange (event){
     let value = trim(event.currentTarget.value);
-    console.log(value);
     this.setState({
       itemName: value,
       searchResult: [],
       resultful:false,
     });
-
-    console.log(this.searchable && value.length > 0 && this.state.searched);
-
 
     if(this.searchable && value.length > 0 && this.state.searched) {
       console.log('seach start..');

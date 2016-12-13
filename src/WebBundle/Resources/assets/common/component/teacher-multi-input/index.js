@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import MultiInput from '../../../common/widget/multi-input';
 import List from './list';
 
-//实现cheacked
-//实现搜索
-//实现
-
 function initItem(dataSourceUi,data,index) {
   let obj = {
     itemId:Math.random(),
-    id: data.id,
     label: data.nickname,
     isVisible: data.isVisible == 1 ? true : false,
     img: data.avatar,
@@ -36,8 +31,7 @@ export default class TeacherMultiInput extends MultiInput {
   constructor(props) {
     super(props);
     this.searchResult = null;
-    console.log("dataSource");
-    console.log(this.props.dataSource);
+    console.log({'dataSource':this.props.dataSource});
   }
 
   componentWillMount() {
@@ -73,7 +67,7 @@ export default class TeacherMultiInput extends MultiInput {
     this.setState({
       list: this.getList()
     });
-    console.log({'addItem after',this.state.dataSourceUi});
+    console.log({'addItem after':this.state.dataSourceUi});
   }
 
   onSearch(data) {
