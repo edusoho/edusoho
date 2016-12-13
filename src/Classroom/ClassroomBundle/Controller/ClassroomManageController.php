@@ -439,8 +439,8 @@ class ClassroomManageController extends BaseController
             $condition,
             array('createdTime', 'DESC'),
             $start,
-            $limit)
-        ;
+            $limit
+        );
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
         $classroomMemberCount = ($classroomMemberCount > $magic['export_allow_count']) ? $magic['export_allow_count']:$classroomMemberCount;
 
