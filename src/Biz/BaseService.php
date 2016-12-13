@@ -2,12 +2,12 @@
 
 namespace Biz;
 
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Topxia\Service\Common\ServiceEvent;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -31,10 +31,10 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof Event) {
+        if ($subject instanceof ServiceEvent) {
             $event = $subject;
         } else {
-            $event = new Event($subject);
+            $event = new ServiceEvent($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
