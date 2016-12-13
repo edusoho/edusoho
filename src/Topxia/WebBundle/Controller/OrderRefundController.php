@@ -3,8 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
 
 class OrderRefundController extends BaseController
 {
@@ -90,21 +88,6 @@ class OrderRefundController extends BaseController
         $processor->cancelRefundOrder($member['orderId']);
 
         return $this->createJsonResponse(true);
-    }
-
-    public function getDispatcher()
-    {
-        return ServiceKernel::dispatcher();
-    }
-
-    protected function dispatchEvent($eventName, $subject)
-    {
-        if ($subject instanceof ServiceEvent) {
-            $event = $subject;
-        } else {
-            $event = new ServiceEvent($subject);
-        }
-        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     protected function getOrderService()
