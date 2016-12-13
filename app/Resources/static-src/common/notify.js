@@ -1,3 +1,5 @@
+import 'bootstrap-notify';
+
 const notify = (level, message) => {
   $.notify({
     message: message
@@ -8,8 +10,9 @@ const notify = (level, message) => {
       from: 'top',
       align: 'center'
     },
-    offset: 5,
+    offset: 20,
     z_index: 1051,
+    timer: 1000,
   });
 }
 
