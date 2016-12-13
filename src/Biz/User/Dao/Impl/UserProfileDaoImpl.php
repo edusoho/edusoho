@@ -3,58 +3,15 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserProfileDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserProfileDaoImpl extends BaseDao implements UserProfileDao
+class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 {
     protected $table = 'user_profile';
 
-    public function getProfile($id)
+    public function findByIds(array $ids)
     {
-        $that = $this;
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        );
-    }
-
-    public function addProfile($profile)
-    {
-        $affected = $this->getConnection()->insert($this->table, $profile);
-        $this->clearCached();
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert profile error.');
-        }
-
-        return $this->getProfile($this->getConnection()->lastInsertId());
-    }
-
-    public function updateProfile($id, $profile)
-    {
-        $this->getConnection()->update($this->table, $profile, array('id' => $id));
-        $this->clearCached();
-        return $this->getProfile($id);
-    }
-
-    public function findProfilesByIds(array $ids)
-    {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-
-        $that = $this;
-        $keys = implode(',', $ids);
-        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
-            return $that->getConnection()->fetchAll($sql, $ids);
-        }
-
-        );
+        return $this->findInField('id', $ids);
     }
 
     public function dropFieldData($fieldName)
@@ -101,14 +58,12 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         }
 
         $sql    = "UPDATE {$this->table} set {$fieldName} =null ";
-        $result = $this->getConnection()->exec($sql);
-        $this->clearCached();
+        $result = $this->db()->exec($sql);
         return $result;
     }
 
-    public function searchProfiles($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $builder = $this->createProfileQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -117,7 +72,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchProfileCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->createProfileQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -126,11 +81,11 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function findDistinctMobileProfiles($start, $limit)
     {
-        $start = (int) $start;
-        $limit = (int) $limit;
+        // $start = (int) $start;
+        // $limit = (int) $limit;
 
         $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql);
+        return $this->db()->fetchAll($sql);
     }
 
     private function createProfileQueryBuilder($conditions)
@@ -174,5 +129,11 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             ->andWhere('mobile = :tel')
             ->andWhere('mobile <> :mobileNotEqual')
             ->andWhere('qq LIKE :qq');
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

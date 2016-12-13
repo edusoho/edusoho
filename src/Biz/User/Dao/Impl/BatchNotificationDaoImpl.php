@@ -1,35 +1,15 @@
 <?php
 
-namespace Topxia\Service\User\Dao\Impl;
+namespace Biz\User\Service\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Biz\User\Dao\BatchNotificationDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
+class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificationDao
 {
     protected $table = 'batch_notification';
 
-    public function getBatchNotification($id)
-    {
-        $that = $this;
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        });
-    }
-
-    public function addBatchNotification($batchNotification)
-    {
-        $affected = $this->getConnection()->insert($this->table, $batchNotification);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert batchNotification error.');
-        }
-        $this->clearCached();
-        return $this->getBatchNotification($this->getConnection()->lastInsertId());
-    }
-
-    public function searchBatchNotificationCount($conditions)
+    public function count($conditions)
     {
         if (isset($conditions['content'])) {
             if (empty($conditions['content'])) {
@@ -38,27 +18,24 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
                 $conditions['content'] = "%{$conditions['content']}%";
             }
         }
-
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        return parent::count($conditions);
     }
 
-    public function deleteBatchNotification($id)
+    public function delete($id)
     {
-        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = parent::delete($id);
         $this->clearCached();
         return $result;
     }
 
-    public function updateBatchNotification($id, $batchNotification)
+    public function update($id, $fields)
     {
-        $this->getConnection()->update($this->table, $batchNotification, array('id' => $id));
+        $bn = parent::update($id, $fields);
         $this->clearCached();
-        return $this->getBatchNotification($id);
+        return $bn;
     }
 
-    public function searchBatchNotifications($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         if (isset($conditions['content'])) {
@@ -67,36 +44,19 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
 
         if (empty($orderBy)) {
             $orderBy = array(
-                'createdTime',
-                'DESC'
+                'createdTime' => 'DESC'
             );
         }
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
-
-        $keys = $this->generateKeyWhenSearch($conditions, $orderBy, $start, $limit);
-
-        return $this->fetchCached($keys, $builder, function ($builder) {
-            return $builder->execute()->fetchAll() ?: array();
-        });
+        return parent::search($conditions, $orderBy, $start, $limit);
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    public function declares()
     {
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'batchnotification')
-            ->andWhere('fromId = :fromId')
-            ->andWhere('title = :title')
-            ->andWhere('targetType = :targetType')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('type = :type')
-            ->andWhere('createdTime > :createdTime')
-            ->andWhere('id > :id')
-            ->andWhere('content LIKE :content')
-            ->andWhere('published = :published');
+        return array(
+            'serializes' => array(
+                'content' => 'json'
+            )
+        );
     }
 }

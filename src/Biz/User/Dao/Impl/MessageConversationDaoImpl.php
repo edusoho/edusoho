@@ -2,68 +2,31 @@
 
 namespace Biz\User\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Biz\User\Dao\MessageConversationDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class MessageConversationDaoImpl extends BaseDao implements MessageConversationDao
+class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConversationDao
 {
     protected $table = 'message_conversation';
 
-    /**
-     * 表中的toId 表示的是发送者, fromId表示的是接受者,理解的立场是从系统发送角度出发，先给toId这创建conversation.
-     */
-    public function getConversation($id)
+    public function getByFromIdAndToId($fromId, $toId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function addConversation($conversation)
+    public function findByToId($toId, $start, $limit)
     {
-        $affected = $this->getConnection()->insert($this->table, $conversation);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert conversation error.');
-        }
-
-        $this->clearCached();
-
-        return $this->getConversation($this->getConnection()->lastInsertId());
+        return $this->search(array('toId' => $toId), array('latestMessageTime' => 'DESC'), $start, $limit);
     }
 
-    public function deleteConversation($id)
+    public function countByToId($toId)
     {
-        $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
-        return $result;
+        return $this->count(array('toId' => $toId));
     }
 
-    public function getConversationByFromIdAndToId($fromId, $toId)
+    public function declares()
     {
-        $that = $this;
-
-        return $this->fetchCached("fromId:{$fromId}:toId:{$toId}", $fromId, $toId, function ($fromId, $toId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE fromId = ? AND toId = ?";
-            return $that->getConnection()->fetchAssoc($sql, array($fromId, $toId));
-        });
-    }
-
-    public function updateConversation($id, $toUpdateConversation)
-    {
-        $this->getConnection()->update($this->table, $toUpdateConversation, array('id' => $id));
-        $this->clearCached();
-        return $this->getConversation($id);
-    }
-
-    public function findConversationsByToId($toId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY latestMessageTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($toId));
-    }
-
-    public function getConversationCountByToId($toId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  toId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($toId));
+        return array(
+        );
     }
 }

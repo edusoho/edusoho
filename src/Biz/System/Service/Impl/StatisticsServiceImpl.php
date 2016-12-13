@@ -4,55 +4,22 @@ namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\StatisticsService;
-use Biz\System\Dao\Impl\SessionDaoImpl;
-use Topxia\Common\Service\ServiceKernel;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
 {
     public function getOnlineCount($retentionTime)
     {
-        if ($this->isRedisOpened()) {
-            $currentTime = time();
-            $start       = $currentTime - 15 * 60;
-            return $this->getRedis()->zCount("session:online", $start, $currentTime);
-        } else {
-            return $this->getSessionDao()->getOnlineCount($retentionTime);
-        }
+        return $this->getSessionDao()->getOnlineCount($retentionTime);
     }
 
     public function getloginCount($retentionTime)
     {
-        if ($this->isRedisOpened()) {
-            $currentTime = time();
-            $start       = $currentTime - 15 * 60;
-            return $this->getRedis()->zCount("session:logined", $start, $currentTime);
-        } else {
-            return $this->getSessionDao()->getLoginCount($retentionTime);
-        }
+        return $this->getSessionDao()->getLoginCount($retentionTime);
     }
 
-    protected function isRedisOpened()
-    {
-        $redisPath = $this->getKernel()->getParameter('kernel.root_dir').'/data/redis.php';
-
-        if (file_exists($redisPath)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return SessionDaoImpl
-     */
     protected function getSessionDao()
     {
         return $this->createDao('System:SessionDao');
-    }
-
-    protected function getRedis($group = 'default')
-    {
-        return ServiceKernel::instance()->getRedis($group);
     }
 
     protected function getSettingService()

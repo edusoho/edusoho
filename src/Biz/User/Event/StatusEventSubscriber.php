@@ -3,9 +3,10 @@ namespace Biz\User\Event;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class StatusEventSubscriber implements EventSubscriberInterface
+class StatusEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -46,12 +47,12 @@ class StatusEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
+        return $this->getBiz()->service('User:StatusService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getThreadService()

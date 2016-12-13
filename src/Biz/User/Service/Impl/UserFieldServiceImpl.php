@@ -1,34 +1,34 @@
 <?php
 namespace Biz\User\Impl;
 
+use Biz\BaseService;
 use Biz\User\UserFieldService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 
 class UserFieldServiceImpl extends BaseService implements UserFieldService
 {
     public function getField($id)
     {
-        return $this->getUserFieldDao()->getField($id);
+        return $this->getUserFieldDao()->get($id);
     }
 
     public function addUserField($fields)
     {
         if (empty($fields['field_title'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段名称不能为空！'));
+            throw $this->createServiceException('字段名称不能为空！');
         }
 
         if (empty($fields['field_seq'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段排序不能为空！'));
+            throw $this->createServiceException('字段排序不能为空！');
         }
 
         if (!intval($fields['field_seq'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段排序只能为数字！'));
+            throw $this->createServiceException('字段排序只能为数字！');
         }
 
         $fieldName = $this->checkType($fields['field_type']);
         if ($fieldName == false) {
-            throw $this->createServiceException($this->getKernel()->trans('字段类型是错误的！'));
+            throw $this->createServiceException('字段类型是错误的！');
         }
 
         $field['fieldName'] = $fieldName;
@@ -40,12 +40,12 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
         $field['createdTime'] = time();
 
-        return $this->getUserFieldDao()->addField($field);
+        return $this->getUserFieldDao()->create($field);
     }
 
-    public function searchFieldCount($condition)
+    public function countFields($condition)
     {
-        return $this->getUserFieldDao()->searchFieldCount($condition);
+        return $this->getUserFieldDao()->count($condition);
     }
 
     public function getAllFieldsOrderBySeq()
@@ -87,27 +87,27 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         ));
 
         if (isset($fields['title']) && empty($fields['title'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段名称不能为空！'));
+            throw $this->createServiceException('字段名称不能为空！');
         }
 
         if (isset($fields['seq']) && empty($fields['seq'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段排序不能为空！'));
+            throw $this->createServiceException('字段排序不能为空！');
         }
 
         if (isset($fields['seq']) && !intval($fields['seq'])) {
-            throw $this->createServiceException($this->getKernel()->trans('字段排序只能为数字！'));
+            throw $this->createServiceException('字段排序只能为数字！');
         }
 
-        return $this->getUserFieldDao()->updateField($id, $fields);
+        return $this->getUserFieldDao()->update($id, $fields);
     }
 
     public function dropField($id)
     {
-        $field = $this->getUserFieldDao()->getField($id);
+        $field = $this->getUserFieldDao()->get($id);
 
         $this->getUserService()->dropFieldData($field['fieldName']);
 
-        $this->getUserFieldDao()->deleteField($id);
+        $this->getUserFieldDao()->delete($id);
     }
 
     protected function checkType($type)
@@ -115,7 +115,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         $fieldName = "";
         if ($type == "text") {
             for ($i = 1; $i < 11; $i++) {
-                $field = $this->getUserFieldDao()->getFieldByFieldName("textField".$i);
+                $field = $this->getUserFieldDao()->getByFieldName("textField".$i);
                 if (!$field) {
                     $fieldName = "textField".$i;
                     break;
@@ -124,7 +124,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
         if ($type == "int") {
             for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getFieldByFieldName("intField".$i);
+                $field = $this->getUserFieldDao()->getByFieldName("intField".$i);
                 if (!$field) {
                     $fieldName = "intField".$i;
                     break;
@@ -133,7 +133,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
         if ($type == "date") {
             for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getFieldByFieldName("dateField".$i);
+                $field = $this->getUserFieldDao()->getByFieldName("dateField".$i);
                 if (!$field) {
                     $fieldName = "dateField".$i;
                     break;
@@ -142,7 +142,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
         if ($type == "float") {
             for ($i = 1; $i < 6; $i++) {
-                $field = $this->getUserFieldDao()->getFieldByFieldName("floatField".$i);
+                $field = $this->getUserFieldDao()->getByFieldName("floatField".$i);
                 if (!$field) {
                     $fieldName = "floatField".$i;
                     break;
@@ -151,7 +151,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         }
         if ($type == "varchar") {
             for ($i = 1; $i < 11; $i++) {
-                $field = $this->getUserFieldDao()->getFieldByFieldName("varcharField".$i);
+                $field = $this->getUserFieldDao()->getByFieldName("varcharField".$i);
                 if (!$field) {
                     $fieldName = "varcharField".$i;
                     break;
@@ -166,11 +166,11 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function getUserFieldDao()
     {
-        return $this->createDao('User.UserFieldDao');
+        return $this->createDao('User:UserFieldDao');
     }
 }

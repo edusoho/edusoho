@@ -2,25 +2,16 @@
 
 namespace Biz\User\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Biz\User\Dao\UserFortuneLogDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserFortuneLogDaoImpl extends BaseDao implements UserFortuneLogDao
+class UserFortuneLogDaoImpl extends GeneralDaoImpl implements UserFortuneLogDao
 {
     protected $table = 'user_fortune_log';
 
-    public function addLog(array $log)
+    public function declares()
     {
-        $affected = $this->getConnection()->insert($this->table, $log);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert log error');
-        }
-        return $this->getLog($this->getConnection()->lastInsertId());
-    }
-
-    public function getLog($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        return array(
+        );
     }
 }

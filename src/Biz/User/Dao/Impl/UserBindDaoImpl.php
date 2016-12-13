@@ -3,59 +3,41 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserBindDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserBindDaoImpl extends BaseDao implements UserBindDao
+class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
 {
     protected $table = 'user_bind';
 
-    public function getBind($id)
+    public function getByFromId($fromId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        return $this->getByFields(array('fromId' => $fromId));
     }
 
-    public function getBindByFromId($fromId)
+    public function getByTypeAndFromId($type, $fromId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId)) ?: array();
+        return $this->getByFields(array('fromId' => $fromId, 'type' => $type));
     }
 
-    public function getBindByTypeAndFromId($type, $fromId)
+    public function getByToIdAndType($type, $toId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND fromId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($type, $fromId));
+        return $this->getByFields(array('toId' => $toId, 'type' => $type));
     }
 
-    public function getBindByToIdAndType($type, $toId)
+    public function getByToken($token)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND toId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($type, $toId));
+        return $this->getByFields(array('token' => $token));
     }
 
-    public function getBindByToken($token)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($token));
-    }
-
-    public function addBind($bind)
-    {
-        $affected = $this->getConnection()->insert($this->table, $bind);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert bind error.');
-        }
-        return $this->getBind($this->getConnection()->lastInsertId());
-    }
-
-    public function deleteBind($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function findBindsByToId($toId)
+    public function findByToId($toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql, array($toId));
+        return $this->db()->fetchAll($sql, array($toId));
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

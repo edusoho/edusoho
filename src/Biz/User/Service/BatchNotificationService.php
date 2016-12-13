@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface BatchNotificationService
 {
@@ -18,5 +18,5 @@ interface BatchNotificationService
 
     public function deleteBatchNotification($id);
 
-    public function updateBatchNotification($id, $batchNotification);
+    public function updateBatchNotification($id, $fields);
 }

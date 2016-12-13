@@ -3,33 +3,11 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\MessageDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class MessageDaoImpl extends BaseDao implements MessageDao
+class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
 {
     protected $table = 'message';
-
-    public function getMessage($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-    }
-
-    public function addMessage($message)
-    {
-        $affected = $this->getConnection()->insert($this->table, $message);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert message error.');
-        }
-
-        return $this->getMessage($this->getConnection()->lastInsertId());
-    }
-
-    public function deleteMessage($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
 
     protected function _createSearchQueryBuilder($conditions)
     {
@@ -59,7 +37,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
             ->andWhere('content LIKE :content');
     }
 
-    public function searchMessagesCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -67,7 +45,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMessages($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
 
@@ -80,24 +58,21 @@ class MessageDaoImpl extends BaseDao implements MessageDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function getMessageByFromIdAndToId($fromId, $toId)
+    public function getByFromIdAndToId($fromId, $toId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId, $toId));
+        return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function findMessagesByIds(array $ids)
+    public function findByIds(array $ids)
     {
         if (empty($ids)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        return $this->findInField('id', $ids);
     }
 
-    public function deleteMessagesByIds(array $ids)
+    public function deleteByIds(array $ids)
     {
         if (empty($ids)) {
             return array();
@@ -105,6 +80,12 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql   = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->executeUpdate($sql, $ids);
+        return $this->db()->executeUpdate($sql, $ids);
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

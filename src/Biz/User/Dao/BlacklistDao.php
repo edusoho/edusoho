@@ -4,14 +4,9 @@ namespace Biz\User\Dao;
 
 interface BlacklistDao
 {
-    public function getBlacklist($id);
+    public function getByUserIdAndBlackId($userId, $blackId);
 
-    public function getBlacklistByUserIdAndBlackId($userId, $blackId);
+    public function findByUserId($userId);
 
-    public function findBlacklistsByUserId($userId);
-
-    public function addBlacklist($blacklist);
-
-    public function deleteBlacklistByUserIdAndBlackId($userId, $blackId);
-
+    public function deleteByUserIdAndBlackId($userId, $blackId);
 }

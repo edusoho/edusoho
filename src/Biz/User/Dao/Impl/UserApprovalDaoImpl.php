@@ -2,51 +2,24 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserApprovalDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
+class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
 {
     protected $table = 'user_approval';
 
-    public function addApproval($approval)
-    {
-        $affected = $this->getConnection()->insert($this->table, $approval);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert user approval error.');
-        }
-        return $this->getApproval($this->getConnection()->lastInsertId());
-    }
-
-    public function getApproval($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-    }
-
-    public function updateApproval($id, $fields)
-    {
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getApproval($id);
-    }
-
-    public function getLastestApprovalByUserIdAndStatus($userId, $status)
+    public function getLastestByUserIdAndStatus($userId, $status)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($userId, $status));
     }
 
-    public function findApprovalsByUserIds($userIds)
+    public function findByUserIds($userIds)
     {
-        if (empty($userIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $userIds);
+        return $this->findInField('userId', array($userIds));
     }
 
-    public function searchapprovals($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createProfileQueryBuilder($conditions)
@@ -57,7 +30,7 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchApprovalsCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->createProfileQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -91,5 +64,11 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
             ->andWhere('createTime >=:startTime')
             ->andWhere('createTime <=:endTime')
             ->andWhere('idcard LIKE :idcard');
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

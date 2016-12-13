@@ -3,56 +3,36 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\InviteRecordDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class InviteRecordDaoImpl extends BaseDao implements InviteRecordDao
+class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
 {
     protected $table = 'invite_record';
 
-    private function getInviteRecord($id)
+    public function findByInviteUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        return $this->findInField('inviteUserId', array($userId));
     }
 
-    public function findRecordsByInviteUserId($userId)
+    public function getByInvitedUserId($invitedUserId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE inviteUserId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+        return $this->getByFields(array('invitedUserId' => $invitedUserId));
     }
 
-    public function getRecordByInvitedUserId($invitedUserId)
+    public function updateByInvitedUserId($invitedUserId, $fields)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE invitedUserId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($invitedUserId));
+        return $this->db()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
     }
 
-    public function addInviteRecord($record)
-    {
-        $affected = $this->getConnection()->insert($this->table, $record);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert record error.');
-        }
-
-        return $this->getInviteRecord($this->getConnection()->lastInsertId());
-    }
-
-    public function updateInviteRecord($invitedUserId, $fields)
-    {
-        return $this->getConnection()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
-    }
-
-    public function searchRecordCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchRecords($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -85,5 +65,11 @@ class InviteRecordDaoImpl extends BaseDao implements InviteRecordDao
             ->andWhere('inviteTime >= :startDateTime')
             ->andWhere('invitedUserId IN ( :invitedUserIds)')
             ->andWhere('inviteTime < :endDateTime');
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

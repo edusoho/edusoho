@@ -3,84 +3,56 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\FriendDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class FriendDaoImpl extends BaseDao implements FriendDao
+class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
 {
     protected $table = 'friend';
 
-    public function getFriend($id)
+    public function updateByFromIdAndToId($fromId, $toId, $fields)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->db()->update($this->table, $fields, array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function addFriend($friend)
+    public function getByFromIdAndToId($fromId, $toId)
     {
-        $affected = $this->getConnection()->insert($this->table, $friend);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert friend error.');
-        }
-
-        return $this->getFriend($this->getConnection()->lastInsertId());
+        return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function deleteFriend($id)
+    public function findByFromId($fromId, $start, $limit)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function updateFriendByFromIdAndToId($fromId, $toId, $fields)
-    {
-        $this->getConnection()->update($this->table, $fields, array('fromId' => $fromId, 'toId' => $toId));
-    }
-
-    public function getFriendByFromIdAndToId($fromId, $toId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId, $toId));
-    }
-
-    public function findFriendsByFromId($fromId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($fromId));
+        return $this->search(array('fromId' => $fromId), array('createdTime' => 'DESC'), $start, $limit);
     }
 
     public function findAllUserFollowingByFromId($fromId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC ";
-        return $this->getConnection()->fetchAll($sql, array($fromId));
+        return $this->db()->fetchAll($sql, array($fromId));
     }
 
     public function findAllUserFollowerByToId($toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC ";
-        return $this->getConnection()->fetchAll($sql, array($toId));
+        return $this->db()->fetchAll($sql, array($toId));
     }
 
     public function findFriendCountByFromId($fromId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($fromId));
+        return $this->db()->fetchColumn($sql, array($fromId));
     }
 
-    public function findFriendsByToId($toId, $start, $limit)
+    public function findByToId($toId, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($toId));
+        return $this->search(array('toId' => $toId), array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function findFriendCountByToId($toId)
+    public function countByToId($toId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE toId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($toId));
+        return $this->count(array('toId' => $toId));
     }
 
-    public function getFriendsByFromIdAndToIds($fromId, array $toIds)
+    public function findByFromIdAndToIds($fromId, array $toIds)
     {
         if (empty($toIds)) {
             return array();
@@ -90,19 +62,22 @@ class FriendDaoImpl extends BaseDao implements FriendDao
         $marks     = str_repeat('?,', count($toIds) - 1).'?';
         $parmaters = array_merge(array($fromId), $toIds);
         $sql       = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $parmaters);
+        return $this->db()->fetchAll($sql, $parmaters);
     }
 
-    public function findFriendsByUserId($userId, $start, $limit)
+    public function findByUserId($userId, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? and pair = 1 ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId));
+        return $this->search(array('fromId' => $userId, 'pair' => 1), array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function findFriendCountByUserId($userId)
+    public function countByUserId($userId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ? and pair = 1";
-        return $this->getConnection()->fetchColumn($sql, array($userId));
+        return $this->count(array('fromId' => $userId, 'pair' => 1));
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

@@ -3,56 +3,35 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\BlacklistDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class BlacklistDaoImpl extends BaseDao implements BlacklistDao
+class BlacklistDaoImpl extends GeneralDaoImpl implements BlacklistDao
 {
     protected $table = 'blacklist';
 
-    public function getBlacklist($id)
+    public function getByUserIdAndBlackId($userId, $blackId)
     {
-        $that = $this;
-
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        });
+        return $this->getByFields(array(
+            'userId'  => $userId,
+            'blackId' => $blackId
+        ));
     }
 
-    public function getBlacklistByUserIdAndBlackId($userId, $blackId)
+    public function findByUserId($userId)
     {
-        $that = $this;
-
-        return $this->fetchCached("userId:{$userId}:blackId:{$blackId}", $userId, $blackId, function ($userId, $blackId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND blackId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($userId, $blackId)) ?: null;
-        });
+        return $this->findInField('userId', array($userId));
     }
 
-    public function findBlacklistsByUserId($userId)
+    public function deleteByUserIdAndBlackId($userId, $blackId)
     {
-        $that = $this;
-
-        return $this->fetchCached("userId:{$userId}", $userId, function ($userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? ";
-            return $that->getConnection()->fetchAll($sql, array($userId)) ?: array();
-        });
-    }
-
-    public function addBlacklist($blacklist)
-    {
-        $affected = $this->getConnection()->insert($this->table, $blacklist);
-        $this->clearCached();
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert blacklist error.');
-        }
-        return $this->getBlacklist($this->getConnection()->lastInsertId());
-    }
-
-    public function deleteBlacklistByUserIdAndBlackId($userId, $blackId)
-    {
-        $result = $this->getConnection()->delete($this->table, array('userId' => $userId, 'blackId' => $blackId));
+        $result = $this->db()->delete($this->table, array('userId' => $userId, 'blackId' => $blackId));
         $this->clearCached();
         return $result;
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

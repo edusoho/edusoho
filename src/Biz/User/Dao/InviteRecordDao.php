@@ -3,15 +3,9 @@ namespace Biz\User\Dao;
 
 interface InviteRecordDao
 {
-    public function findRecordsByInviteUserId($userId);
+    public function findByInviteUserId($userId);
 
-    public function addInviteRecord($record);
+    public function getByInvitedUserId($invitedUserId);
 
-    public function getRecordByInvitedUserId($invitedUserId);
-
-    public function updateInviteRecord($invitedUserId, $fields);
-
-    public function searchRecordCount($conditions);
-
-    public function searchRecords($conditions, $orderBy, $start, $limit);
+    public function updateByInvitedUserId($invitedUserId, $fields);
 }

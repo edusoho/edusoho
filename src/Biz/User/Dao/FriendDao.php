@@ -4,31 +4,25 @@ namespace Biz\User\Dao;
 
 interface FriendDao
 {
-    public function addFriend($friend);
+    public function updateByFromIdAndToId($fromId, $toId, $fields);
 
-    public function deleteFriend($id);
+    public function getByFromIdAndToId($fromId, $toId);
 
-    public function updateFriendByFromIdAndToId($fromId, $toId, $fields);
+    public function findByFromIdAndToIds($fromId, array $toIds);
 
-    public function getFriendByFromIdAndToId($fromId, $toId);
-
-    public function getFriendsByFromIdAndToIds($fromId, array $toIds);
-
-    public function getFriend($id);
-
-    public function findFriendsByFromId($fromId, $start, $limit);
+    public function findByFromId($fromId, $start, $limit);
 
     public function findAllUserFollowingByFromId($fromId);
 
     public function findAllUserFollowerByToId($toId);
 
-    public function findFriendCountByFromId($fromId);
+    public function countByFromId($fromId);
 
-    public function findFriendsByToId($toId, $start, $limit);
+    public function findByToId($toId, $start, $limit);
 
-    public function findFriendCountByToId($toId);
+    public function countByToId($toId);
 
-    public function findFriendsByUserId($userId, $start, $limit);
+    public function findByUserId($userId, $start, $limit);
 
-    public function findFriendCountByUserId($userId);
+    public function countByUserId($userId);
 }

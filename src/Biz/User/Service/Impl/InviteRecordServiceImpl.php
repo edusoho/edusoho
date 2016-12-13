@@ -1,15 +1,15 @@
 <?php
 namespace Biz\User\Impl;
 
+use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\InviteRecordService;
-use Topxia\Service\Common\BaseService;
 
 class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 {
     public function findRecordsByInviteUserId($userId)
     {
-        return $this->getInviteRecordDao()->findRecordsByInviteUserId($userId);
+        return $this->getInviteRecordDao()->findByInviteUserId($userId);
     }
 
     public function createInviteRecord($inviteUserId, $invitedUserId)
@@ -19,34 +19,29 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             'invitedUserId' => $invitedUserId,
             'inviteTime'    => time()
         );
-        return $this->getInviteRecordDao()->addInviteRecord($record);
+        return $this->getInviteRecordDao()->create($record);
     }
 
     public function getRecordByInvitedUserId($invitedUserId)
     {
-        return $this->getInviteRecordDao()->getRecordByInvitedUserId($invitedUserId);
+        return $this->getInviteRecordDao()->getByInvitedUserId($invitedUserId);
     }
 
     public function addInviteRewardRecordToInvitedUser($invitedUserId, $fields)
     {
-        return $this->getInviteRecordDao()->updateInviteRecord($invitedUserId, $fields);
+        return $this->getInviteRecordDao()->updateByInvitedUserId($invitedUserId, $fields);
     }
 
-    public function addInviteRewardRecordToInviteUser($invitedUserId, $fields)
-    {
-        return $this->getInviteRecordDao()->updateInviteRecord($invitedUserId, $fields);
-    }
-
-    public function searchRecordCount($conditions)
+    public function count($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
-        return $this->getInviteRecordDao()->searchRecordCount($conditions);
+        return $this->getInviteRecordDao()->count($conditions);
     }
 
     public function searchRecords($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
-        return $this->getInviteRecordDao()->searchRecords($conditions, $orderBy, $start, $limit);
+        return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     private function _prepareConditions($conditions)
@@ -74,11 +69,11 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
     private function getInviteRecordDao()
     {
-        return $this->createDao('User.InviteRecordDao');
+        return $this->createDao('User:InviteRecordDao');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 }

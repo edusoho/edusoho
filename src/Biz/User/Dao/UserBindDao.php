@@ -4,20 +4,13 @@ namespace Biz\User\Dao;
 
 interface UserBindDao
 {
-    public function getBind($id);
+    public function getByFromId($fromId);
 
-    public function getBindByFromId($fromId);
+    public function getByTypeAndFromId($type, $fromId);
 
-    public function getBindByTypeAndFromId($type, $fromId);
+    public function getByToIdAndType($type, $toId);
 
-    public function getBindByToIdAndType($type, $toId);
+    public function getByToken($token);
 
-    public function getBindByToken($token);
-
-    public function addBind($bind);
-
-    public function deleteBind($id);
-
-    public function findBindsByToId($toId);
-
+    public function findByToId($toId);
 }

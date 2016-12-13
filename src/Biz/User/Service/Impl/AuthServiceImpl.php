@@ -1,9 +1,9 @@
 <?php
 namespace BizTestServiceProvider1\User\Impl;
 
+use Biz\BaseService;
 use Biz\User\AuthService;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\Common\BaseService;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -383,16 +383,16 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return $this->biz->service('System:LogService');
     }
 }

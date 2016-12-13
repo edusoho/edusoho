@@ -3,10 +3,8 @@ namespace Biz\User\Dao;
 
 interface UserActiveDao
 {
-    public function createActiveUser($userId);
+    public function getByUserId($userId);
 
-    public function getActiveUser($userId);
-
-    public function analysisActiveUser($startTime, $endTime);
+    public function analysis($startTime, $endTime);
 
 }

@@ -2,9 +2,9 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\StatusDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class StatusDaoImpl extends BaseDao implements StatusDao
+class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
 {
     protected $table = 'status';
 
@@ -12,34 +12,19 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         'properties' => 'json'
     );
 
-    public function getStatus($id)
-    {
-        $sql    = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $status = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $status ? $this->createSerializer()->unserialize($status, $this->serializeFields) : null;
-    }
-
-    public function searchStatusesCount($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    public function findStatusesByUserIds($userIds, $start, $limit)
+    public function findByUserIds($userIds, $start, $limit)
     {
         if (empty($userIds)) {
             return array();
         }
 
-        $marks    = str_repeat('?,', count($userIds) - 1).'?';
-        $sql      = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
-        $statuses = $this->getConnection()->fetchAll($sql, $userIds);
-        return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
+        //FIXME 这样写，没法通过declares 处理serialize
+        return $this->db()->fetchAll($sql, $userIds);
     }
 
-    public function findStatusesByUserIdsCount($userIds)
+    public function countByUserIds($userIds)
     {
         if (empty($userIds)) {
             return array();
@@ -48,7 +33,7 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql   = "SELECT COUNT(*) FROM {$this->table} WHERE userId IN ({$marks});";
 
-        $this->getConnection()->fetchColumn($sql, $userIds);
+        return $this->db()->fetchColumn($sql, $userIds);
     }
 
     public function searchStatuses($conditions, $orderBy, $start, $limit)
@@ -81,33 +66,9 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             ->andWhere('private = :private');
     }
 
-    public function addStatus($fields)
+    public function deleteByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
     {
-        $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);
-        $affected = $this->getConnection()->insert($this->table, $fields);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert status error.');
-        }
-
-        return $this->getStatus($this->getConnection()->lastInsertId());
-    }
-
-    public function updateStatus($id, $fields)
-    {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getStatus($id);
-    }
-
-    public function deleteStatus($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
-    {
-        return $this->getConnection()->delete($this->table, array(
+        return $this->db()->delete($this->table, array(
             'userId'     => $userId,
             'type'       => $type,
             'objectType' => $objectType,
@@ -115,9 +76,9 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         ));
     }
 
-    public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
+    public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
     {
-        return $this->getConnection()->delete($this->table, array(
+        return $this->db()->delete($this->table, array(
             'courseId'   => $courseId,
             'type'       => $type,
             'objectType' => $objectType,
@@ -125,9 +86,18 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         ));
     }
 
-    public function findStatusesByCourseId($courseId)
+    public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
+        return $this->db()->fetchAll($sql, array($courseId));
+    }
+
+    public function declares()
+    {
+        return array(
+            'serializes' => array(
+                'properties' => 'json'
+            )
+        );
     }
 }

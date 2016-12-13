@@ -3,14 +3,7 @@ namespace Biz\User\Dao;
 
 interface UserCommonAdminDao
 {
-    public function getCommonAdmin($id);
+    public function findByUserId($userId);
 
-    public function findCommonAdminByUserId($userId);
-
-    public function getCommonAdminByUserIdAndUrl($userId, $url);
-
-    public function addCommonAdmin($admin);
-
-    public function deleteCommonAdmin($id);
-
+    public function getByUserIdAndUrl($userId, $url);
 }

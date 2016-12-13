@@ -1,51 +1,37 @@
 <?php
 namespace Biz\User\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Biz\User\Dao\UserPayAgreementDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
+class UserPayAgreementDaoImpl extends GeneralDaoImpl implements UserPayAgreementDao
 {
     protected $table = 'user_pay_agreement';
 
-    public function getUserPayAgreement($id)
+    public function getByUserIdAndBankAuth($userId, $bankAuth)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->getByFields(array('userId' => $userId, 'bankAuth' => $bankAuth));
     }
 
-    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth)
+    public function getByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE  userId =? and bankAuth = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $bankAuth)) ?: null;
+        return $this->getByFields(array('userId' => $userId));
     }
 
-    public function getUserPayAgreementByUserId($userId)
+    public function updateByUserIdAndBankAuth($userId, $bankAuth, $fields)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId)) ?: null;
+        return $this->db()->update($this->table, $fields, array('userId' => $userId, 'bankAuth' => $bankAuth));
     }
 
-    public function addUserPayAgreement($field)
+    public function findByUserId($userId)
     {
-        $this->getConnection()->insert($this->table, $field);
-        return $this->getUserPayAgreement($this->getConnection()->lastInsertId());
+        return $this->findInField('userId', array($userId));
     }
 
-    public function updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields)
+    public function declares()
     {
-        return $this->getConnection()->update($this->table, $fields, array('userId' => $userId, 'bankAuth' => $bankAuth));
-    }
-
-    public function findUserPayAgreementsByUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
-    }
-
-    public function deleteUserPayAgreements($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return array(
+        );
     }
 
 }

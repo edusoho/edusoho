@@ -2,72 +2,48 @@
 
 namespace Biz\User\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Biz\User\Dao\MessageRelationDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class MessageRelationDaoImpl extends BaseDao implements MessageRelationDao
+class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDao
 {
     protected $table = 'message_relation';
 
-    public function addRelation($relation)
-    {
-        $affected = $this->getConnection()->insert($this->table, $relation);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert relation error.');
-        }
-        return $this->getRelation($this->getConnection()->lastInsertId());
-    }
-
-    public function deleteRelation($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function updateRelation($id, $toUpdateRelation)
-    {
-        $this->getConnection()->update($this->table, $toUpdateRelation, array('id' => $id));
-        return $this->getRelation($id);
-    }
-
     public function updateRelationIsReadByConversationId($conversationId, array $isRead)
     {
-        return $this->getConnection()->update($this->table, $isRead, array(
+        return $this->db()->update($this->table, $isRead, array(
             'conversationId' => $conversationId
         ));
     }
 
-    public function deleteConversationMessage($conversationId, $messageId)
+    public function deleteByConversationIdAndMessageId($conversationId, $messageId)
     {
-        return $this->getConnection()->delete($this->table, array('conversationId' => $conversationId, 'messageId' => $messageId));
+        return $this->db()->delete($this->table, array('conversationId' => $conversationId, 'messageId' => $messageId));
     }
 
-    public function deleteRelationByConversationId($conversationId)
+    public function deleteByConversationId($conversationId)
     {
-        return $this->getConnection()->delete($this->table, array('conversationId' => $conversationId));
+        return $this->db()->delete($this->table, array('conversationId' => $conversationId));
     }
 
-    public function getRelationCountByConversationId($conversationId)
+    public function countByConversationId($conversationId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  conversationId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($conversationId));
+        return $this->count(array('conversationId' => $conversationId));
     }
 
-    public function findRelationsByConversationId($conversationId, $start, $limit)
+    public function findByConversationId($conversationId, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE conversationId = ? ORDER BY messageId DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($conversationId));
+        return $this->search(array('conversationId' => $conversationId), array('messageId' => 'DESC'), $start, $limit);
     }
 
-    public function getRelation($id)
+    public function getByConversationIdAndMessageId($conversationId, $messageId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->getByFields(array('conversationId' => $conversationId, 'messageId' => $messageId));
     }
 
-    public function getRelationByConversationIdAndMessageId($conversationId, $messageId)
+    public function declares()
     {
-        $sql = "SELECT * FROM {$this->table} WHERE conversationId = ? AND messageId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($conversationId, $messageId));
+        return array(
+        );
     }
 }

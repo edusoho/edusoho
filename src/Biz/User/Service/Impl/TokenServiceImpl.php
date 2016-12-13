@@ -1,8 +1,8 @@
 <?php
 namespace Biz\User\Impl;
 
+use Biz\BaseService;
 use Biz\User\TokenService;
-use Topxia\Service\Common\BaseService;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
@@ -18,7 +18,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token['expiredTime']   = empty($args['duration']) ? 0 : time() + $args['duration'];
         $token['createdTime']   = time();
 
-        return $this->getTokenDao()->addToken($token);
+        return $this->getTokenDao()->create($token);
     }
 
     public function makeFakeTokenString($length = 32)
@@ -28,7 +28,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     public function verifyToken($type, $value)
     {
-        $token = $this->getTokenDao()->getTokenByToken($value);
+        $token = $this->getTokenDao()->getByToken($value);
 
         if (empty($token)) {
             return false;
@@ -53,39 +53,39 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     public function destoryToken($token)
     {
-        $token = $this->getTokenDao()->getTokenByToken($token);
+        $token = $this->getTokenDao()->getByToken($token);
 
         if (empty($token)) {
             return;
         }
 
-        $this->getTokenDao()->deleteToken($token['id']);
+        $this->getTokenDao()->delete($token['id']);
     }
 
     public function findTokensByUserIdAndType($userId, $type)
     {
-        return $this->getTokenDao()->findTokensByUserIdAndType($userId, $type);
+        return $this->getTokenDao()->findByUserIdAndType($userId, $type);
     }
 
     public function getTokenByType($type)
     {
-        return $this->getTokenDao()->getTokenByType($type);
+        return $this->getTokenDao()->getByType($type);
     }
 
     public function deleteExpiredTokens($limit)
     {
-        $this->getTokenDao()->deleteTokensByExpiredTime(time(), $limit);
+        $this->getTokenDao()->deleteByExpiredTime(time(), $limit);
     }
 
     protected function _gcToken($token)
     {
         if (($token['times'] > 0) && ($token['remainedTimes'] <= 1)) {
-            $this->getTokenDao()->deleteToken($token['id']);
+            $this->getTokenDao()->delete($token['id']);
             return;
         }
 
         if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time())) {
-            $this->getTokenDao()->deleteToken($token['id']);
+            $this->getTokenDao()->delete($token['id']);
             return;
         }
 
@@ -107,6 +107,6 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     protected function getTokenDao()
     {
-        return $this->createDao('User.TokenDao');
+        return $this->createDao('User:TokenDao');
     }
 }

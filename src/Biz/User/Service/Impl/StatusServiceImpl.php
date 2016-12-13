@@ -1,8 +1,8 @@
 <?php
 namespace Biz\User\Impl;
 
+use Biz\BaseService;
 use Biz\User\StatusService;
-use Topxia\Service\Common\BaseService;
 
 class StatusServiceImpl extends BaseService implements StatusService
 {

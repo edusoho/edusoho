@@ -2,10 +2,10 @@
 namespace Biz\User\Event;
 
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class UserEventSubscriber implements EventSubscriberInterface
+class UserEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -108,21 +108,21 @@ class UserEventSubscriber implements EventSubscriberInterface
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->createService('User.MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User.NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 }

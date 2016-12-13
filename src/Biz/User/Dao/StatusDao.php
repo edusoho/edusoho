@@ -4,23 +4,11 @@ namespace Biz\User\Dao;
 
 interface StatusDao
 {
-    public function getStatus($id);
+    public function findByUserIds($userIds, $start, $limit);
 
-    public function findStatusesByUserIds($userIds, $start, $limit);
+    public function countByUserIds($userIds);
 
-    public function findStatusesByUserIdsCount($userIds);
+    public function deleteByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId);
 
-    public function searchStatusesCount($conditions);
-
-    public function searchStatuses($conditions, $sort, $start, $limit);
-
-    public function addStatus($status);
-
-    public function updateStatus($id, $fields);
-
-    public function deleteStatus($id);
-
-    public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId);
-
-    public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId);
+    public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId);
 }

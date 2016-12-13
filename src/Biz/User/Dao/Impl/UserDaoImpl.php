@@ -3,121 +3,49 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserDaoImpl extends BaseDao implements UserDao
+class UserDaoImpl extends GeneralDaoImpl implements UserDao
 {
     protected $table = 'user';
 
-    public function getUser($id, $lock = false)
+    public function getByEmail($email)
     {
-        if ($lock) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-
-            if ($lock) {
-                $sql .= " FOR UPDATE";
-            }
-
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        $that = $this;
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        );
+        return $this->getByFields(array('email', $email));
     }
 
-    public function findUserByEmail($email)
+    public function getByNickname($nickname)
     {
-        $that = $this;
-
-        return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
-            $sql    = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
-            $result = $that->getConnection()->fetchAssoc($sql, array($email));
-            return $result ?: array();
-        });
+        return $this->getByFields(array('nickname', $nickname));
     }
 
-    public function findUserByNickname($nickname)
-    {
-        if (empty($nickname)) {
-            return array();
-        }
-
-        $that = $this;
-
-        return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
-            $sql    = "SELECT * FROM {$that->getTable()} WHERE nickname = ? LIMIT 1";
-            $result = $that->getConnection()->fetchAssoc($sql, array($nickname));
-            return $result ?: array();
-        });
-    }
-
-    public function getCountByMobileNotEmpty()
+    public function countByMobileNotEmpty()
     {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != ''";
-        return $this->getConnection()->fetchColumn($sql, array(), 0);
+        return $this->db()->fetchColumn($sql, array(), 0);
     }
 
-    public function findUserByVerifiedMobile($mobile)
+    public function getByVerifiedMobile($mobile)
     {
-        $that = $this;
-
-        return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE verifiedMobile = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($mobile));
-        }
-
-        );
+        return $this->getByFields(array('verifiedMobile', $mobile));
     }
 
-    public function findUsersByNicknames(array $nicknames)
+    public function findByNicknames(array $nicknames)
     {
-        if (empty($nicknames)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($nicknames) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE nickname IN ({$marks});";
-
-        return $this->getConnection()->fetchAll($sql, $nicknames);
+        return $this->findInField('nickname', $nicknames);
     }
 
-    public function findUsersByIds(array $ids)
+    public function findByIds(array $ids)
     {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-
-        $that = $this;
-        $keys = implode(',', $ids);
-        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
-
-            return $that->getConnection()->fetchAll($sql, $ids);
-        }
-
-        );
+        return $this->findInField('id', $ids);
     }
 
-    public function getUserByInviteCode($inviteCode)
+    public function getByInviteCode($inviteCode)
     {
-        $that = $this;
-
-        return $this->fetchCached("inviteCode:{$inviteCode}", $inviteCode, function ($inviteCode) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE inviteCode = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($inviteCode)) ?: null;
-        }
-
-        );
+        return $this->getByFields(array('inviteCode', $inviteCode));
     }
 
-    public function searchUsers($conditions, $orderBys, $start, $limit)
+    public function search($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createUserQueryBuilder($conditions)
@@ -132,7 +60,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchUserCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->createUserQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -248,48 +176,6 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder;
     }
 
-    public function addUser($user)
-    {
-        $user['createdTime'] = time();
-        $user['updatedTime'] = $user['createdTime'];
-        $affected            = $this->getConnection()->insert($this->table, $user);
-        $this->clearCached();
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert user error.');
-        }
-
-        return $this->getUser($this->getConnection()->lastInsertId());
-    }
-
-    public function updateUser($id, $fields)
-    {
-        // if (empty(array_diff(array_keys($fields), array(
-        //     'loginIp',
-        //     'loginTime',
-        //     'updatedTime',
-        //     'loginSessionId',
-        //     'lockDeadline',
-        //     'consecutivePasswordErrorTimes',
-        //     'lastPasswordFailTime')))) {
-
-        //     $fields['updatedTime'] = time();
-        //     $user = $this->getUser($id);
-        //     if($fields['updatedTime'] - $user['updatedTime'] > 1800) {
-        //         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        //         $this->clearCached();
-        //     }
-        //     return $user;
-
-        // } else {
-        $fields['updatedTime'] = time();
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-
-        $this->clearCached();
-        return $this->getUser($id);
-        // }
-    }
-
     public function waveCounterById($id, $name, $number)
     {
         $names = array('newMessageNum', 'newNotificationNum');
@@ -300,7 +186,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = {$name} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        $result      = $this->getConnection()->executeQuery($sql, array($number, $id));
+        $result      = $this->db()->executeQuery($sql, array($number, $id));
         $this->clearCached();
         return $result;
     }
@@ -315,44 +201,36 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        $result      = $this->getConnection()->executeQuery($sql, array($id));
+        $result      = $this->db()->executeQuery($sql, array($id));
         $this->clearCached();
         return $result;
     }
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $that = $this;
-
-        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
-            $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-            return $that->getConnection()->fetchAll($sql, array($startTime, $endTime));
-        }
-
-        );
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $that->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisUserSumByTime($endTime)
     {
-        $that = $this;
-
-        return $this->fetchCached("endTime:{$endTime}:date:count", $endTime, function ($endTime) use ($that) {
-            $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-            return $that->getConnection()->fetchAll($sql, array($endTime));
-        }
-
-        );
+        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
+        return $that->db()->fetchAll($sql, array($endTime));
     }
 
-    public function findUsersCountByLessThanCreatedTime($endTime)
+    public function countByLessThanCreatedTime($endTime)
     {
-        $that = $this;
+        $sql = "SELECT count(id) as count FROM `{$that->getTable()}` WHERE  `createdTime`<=?  ";
+        return $that->db()->fetchColumn($sql, array($endTime));
+    }
 
-        return $this->fetchCached("endTime:{$endTime}:count", $endTime, function ($endTime) use ($that) {
-            $sql = "SELECT count(id) as count FROM `{$that->getTable()}` WHERE  `createdTime`<=?  ";
-            return $that->getConnection()->fetchColumn($sql, array($endTime));
-        }
-
+    public function declares()
+    {
+        return array(
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime'
+            )
         );
     }
 }

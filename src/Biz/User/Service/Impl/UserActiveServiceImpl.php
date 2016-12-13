@@ -23,12 +23,12 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
         $activeUserLog['userId']     = $userId;
         $activeUserLog['activeTime'] = date('Ymd', time());
 
-        $this->getActiveUserDao()->createActiveUser($activeUserLog);
+        $this->getActiveUserDao()->create($activeUserLog);
     }
 
     public function getActiveUser($userId)
     {
-        return $this->getActiveUserDao()->getActiveUser($userId);
+        return $this->getActiveUserDao()->getByUserId($userId);
     }
 
     public function isActiveUser($userId = null)
@@ -37,13 +37,13 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
             $user   = $this->getCurrentUser();
             $userId = $user->getId();
         }
-        $activeUser = $this->getActiveUser($userId);
+        $activeUser = $this->getByUserId($userId);
         return !empty($activeUser);
     }
 
     public function analysisActiveUser($startTime, $endTime)
     {
-        return $this->getActiveUserDao()->analysisActiveUser($startTime, $endTime);
+        return $this->getActiveUserDao()->analysis($startTime, $endTime);
     }
 
     public function writeToFile($path, $activeUser)
@@ -68,6 +68,6 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
      */
     public function getActiveUserDao()
     {
-        return $this->createDao('User.UserActiveDao');
+        return $this->createDao('User:UserActiveDao');
     }
 }

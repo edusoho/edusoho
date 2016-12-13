@@ -4,19 +4,9 @@ namespace Biz\User\Dao;
 
 interface MessageDao
 {
-    public function addMessage($message);
+    public function getByFromIdAndToId($fromId, $toId);
 
-    public function deleteMessage($id);
+    public function findByIds(array $ids);
 
-    public function getMessageByFromIdAndToId($fromId, $toId);
-
-    public function getMessage($id);
-
-    public function findMessagesByIds(array $ids);
-
-    public function deleteMessagesByIds(array $ids);
-
-    public function searchMessagesCount($conditions);
-
-    public function searchMessages($conditions, $orderBy, $start, $limit);
+    public function deleteByIds(array $ids);
 }

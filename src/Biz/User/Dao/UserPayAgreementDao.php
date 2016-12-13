@@ -4,18 +4,11 @@ namespace Biz\User\Dao;
 
 interface UserPayAgreementDao
 {
-    public function getUserPayAgreement($id);
+    public function getByUserIdAndBankAuth($userId, $bankAuth);
 
-    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);
+    public function getByUserId($userId);
 
-    public function getUserPayAgreementByUserId($userId);
+    public function updateByUserIdAndBankAuth($userId, $bankAuth, $fields);
 
-    public function addUserPayAgreement($field);
-
-    public function updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields);
-
-    public function findUserPayAgreementsByUserId($userId);
-
-    public function deleteUserPayAgreements($id);
-
+    public function findByUserId($userId);
 }

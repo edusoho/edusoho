@@ -2,109 +2,53 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\TokenDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class TokenDaoImpl extends BaseDao implements TokenDao
+class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 {
     protected $table = 'user_token';
 
     public $serializeFields = array(
-        'data' => 'phpserialize'
+        'data' => 'phpserialize' //FIXME 目前DaoProxy中未支持该类型
     );
 
-    public function getToken($id)
+    public function get($id)
     {
-        $that = $this;
-
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql   = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            $token = $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
-        });
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $token = $this->db()->fetchAssoc($sql, array($id)) ?: null;
+        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function getTokenByToken($token)
+    public function getByToken($token)
     {
-        $that = $this;
-
-        return $this->fetchCached("token:{$token}", $token, function ($token) use ($that) {
-            $sql   = "SELECT * FROM {$that->getTable()} WHERE token = ? LIMIT 1";
-            $token = $that->getConnection()->fetchAssoc($sql, array($token));
-            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
-        });
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE token = ? LIMIT 1";
+        $token = $this->db()->fetchAssoc($sql, array($token));
+        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function addToken(array $token)
+    public function create(array $token)
     {
-        $token    = $this->createSerializer()->serialize($token, $this->serializeFields);
-        $affected = $this->getConnection()->insert($this->table, $token);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert token error.');
-        }
-
-        $token = $this->getToken($this->getConnection()->lastInsertId());
-
-        $this->incrVersions(array(
-            "{$this->table}:version:userId:{$token['userId']}",
-            "{$this->table}:version:type:{$token['type']}"
-        ));
-
-        return $token;
+        $token = $this->createSerializer()->serialize($token, $this->serializeFields);
+        return $this->create($this->table, $token);
     }
 
-    protected function flushCache($token)
+    public function findByUserIdAndType($userId, $type)
     {
-        $this->incrVersions(array(
-            "{$this->table}:version:userId:{$token['userId']}",
-            "{$this->table}:version:type:{$token['type']}"
-        ));
-
-        $this->deleteCache(array(
-            "id:{$token['id']}",
-            "token:{$token['token']}"
-        ));
-    }
-
-    public function findTokensByUserIdAndType($userId, $type)
-    {
-        $that = $this;
-
-        $versionKey = "{$this->table}:version:userId:{$userId}";
-        $version    = $this->getCacheVersion($versionKey);
-
-        return $this->fetchCached("userId:{$userId}:version:{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? and type = ?";
-            return $that->getConnection()->fetchAll($sql, array($userId, $type)) ?: null;
-        });
+        $sql = "SELECT * FROM {$this->getTable()} WHERE userId = ? and type = ?";
+        return $this->db()->fetchAll($sql, array($userId, $type)) ?: null;
     }
 
     public function getTokenByType($type)
     {
-        $that = $this;
-
-        $versionKey = "{$this->table}:version:type:{$type}";
-        $version    = $this->getCacheVersion($versionKey);
-
-        return $this->fetchCached("type:{$type}:version:{$version}", $type, function ($type) use ($that) {
-            $sql   = "SELECT * FROM {$that->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
-            $token = $that->getConnection()->fetchAssoc($sql, array($type, time())) ?: null;
-            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
-        });
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
+        $token = $this->db()->fetchAssoc($sql, array($type, time())) ?: null;
+        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function deleteToken($id)
-    {
-        $token  = $this->getToken($id);
-        $result = $this->getConnection()->delete($this->table, array('id' => $id));
-
-        $this->flushCache($token);
-        return $result;
-    }
-
-    public function deleteTokensByExpiredTime($expiredTime, $limit)
+    public function deleteByExpiredTime($expiredTime, $limit)
     {
         $sql    = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
-        $result = $this->getConnection()->executeQuery($sql, array($expiredTime));
+        $result = $this->db()->executeQuery($sql, array($expiredTime));
         $this->clearCached();
         return $result;
     }
@@ -112,17 +56,17 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     public function waveRemainedTimes($id, $diff)
     {
         $sql    = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
-        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $result = $this->db()->executeQuery($sql, array($diff, $id));
 
         $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $token = $this->db()->fetchAssoc($sql, array($id)) ?: null;
 
         $this->flushCache($token);
 
         return $result;
     }
 
-    public function searchTokenCount($conditions)
+    public function count($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -136,5 +80,11 @@ class TokenDaoImpl extends BaseDao implements TokenDao
             ->andWhere('type = :type');
 
         return $builder;
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

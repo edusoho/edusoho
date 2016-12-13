@@ -1,14 +1,14 @@
 <?php
 namespace Biz\User\Impl;
 
+use Biz\BaseService;
 use Biz\User\UserCommonAdminService;
-use Topxia\Service\Common\BaseService;
 
 class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminService
 {
     public function getCommonAdmin($id)
     {
-        return $this->getCommonAdminDao()->getCommonAdmin($id);
+        return $this->getCommonAdminDao()->get($id);
     }
 
     public function findCommonAdminByUserId($userId)
@@ -17,7 +17,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
             return null;
         }
 
-        $admins = $this->getCommonAdminDao()->findCommonAdminByUserId($userId);
+        $admins = $this->getCommonAdminDao()->findByUserId($userId);
 
         return $admins;
     }
@@ -28,7 +28,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
             return null;
         }
 
-        $admin = $this->getCommonAdminDao()->getCommonAdminByUserIdAndUrl($userId, $url);
+        $admin = $this->getCommonAdminDao()->getByUserIdAndUrl($userId, $url);
 
         return $admin;
     }
@@ -36,20 +36,20 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
     public function addCommonAdmin($admin)
     {
         if (!isset($admin['userId']) || empty($admin['userId'])) {
-            throw $this->createServiceException($this->getKernel()->trans('userId不能为空！'));
+            throw $this->createServiceException('userId不能为空！');
         }
 
         if (!isset($admin['title']) || empty($admin['title'])) {
-            throw $this->createServiceException($this->getKernel()->trans('名称不能为空！'));
+            throw $this->createServiceException('名称不能为空！');
         }
 
         if (!isset($admin['url']) || empty($admin['url'])) {
-            throw $this->createServiceException($this->getKernel()->trans('url不能为空！'));
+            throw $this->createServiceException('url不能为空！');
         }
 
         $admin['createdTime'] = time();
 
-        $admin = $this->getCommonAdminDao()->addCommonAdmin($admin);
+        $admin = $this->getCommonAdminDao()->create($admin);
 
         return $admin;
     }
@@ -61,12 +61,12 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
         $admin = $this->getCommonAdmin($id);
 
         if ($user['id'] == $admin['userId']) {
-            $this->getCommonAdminDao()->deleteCommonAdmin($id);
+            $this->getCommonAdminDao()->delete($id);
         }
     }
 
     protected function getCommonAdminDao()
     {
-        return $this->createDao('User.UserCommonAdminDao');
+        return $this->createDao('User:UserCommonAdminDao');
     }
 }

@@ -2,34 +2,18 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserFieldDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UserFieldDaoImpl extends BaseDao implements UserFieldDao
+class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
 {
     protected $table = "user_field";
 
-    public function addField($field)
+    public function getByFieldName($fieldName)
     {
-        $affected = $this->getConnection()->insert($this->table, $field);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert user_field error.');
-        }
-        return $this->getField($this->getConnection()->lastInsertId());
+        return $this->getByFields(array('fieldName' => $fieldName));
     }
 
-    public function getField($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-    }
-
-    public function getFieldByFieldName($fieldName)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE fieldName = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($fieldName)) ?: null;
-    }
-
-    public function searchFieldCount($condition)
+    public function count($condition)
     {
         $builder = $this->_createSearchQueryBuilder($condition)
             ->select('count(id)');
@@ -48,17 +32,6 @@ class UserFieldDaoImpl extends BaseDao implements UserFieldDao
         return $this->getConnection()->fetchAll($sql) ?: array();
     }
 
-    public function updateField($id, $fields)
-    {
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getField($id);
-    }
-
-    public function deleteField($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
     protected function _createSearchQueryBuilder($condition)
     {
         if (isset($condition['fieldName'])) {
@@ -71,5 +44,11 @@ class UserFieldDaoImpl extends BaseDao implements UserFieldDao
             ->andWhere('fieldName like :fieldName');
 
         return $builder;
+    }
+
+    public function declares()
+    {
+        return array(
+        );
     }
 }

@@ -2,7 +2,7 @@
 namespace Biz\User\Impl;
 
 use Biz\User\NotificationService;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 
 class NotificationServiceImpl extends BaseService implements NotificationService
 {
@@ -14,7 +14,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $notification['content']     = is_array($content) ? $content : array('message' => $content);
         $notification['createdTime'] = time();
         $notification['isRead']      = 0;
-        $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
+        $this->getNotificationDao()->create(NotificationSerialize::serialize($notification));
         $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
         return true;
     }
@@ -22,25 +22,25 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     public function searchNotifications($conditions, $orderBy, $start, $limit)
     {
         return NotificationSerialize::unserializes(
-            $this->getNotificationDao()->searchNotifications($conditions, $orderBy, $start, $limit)
+            $this->getNotificationDao()->search($conditions, $orderBy, $start, $limit)
         );
     }
 
-    public function searchNotificationCount($conditions)
+    public function countNotifications($conditions)
     {
-        return $this->getNotificationDao()->searchNotificationCount($conditions);
+        return $this->getNotificationDao()->count($conditions);
     }
 
     public function findUserNotifications($userId, $start, $limit)
     {
         return NotificationSerialize::unserializes(
-            $this->getNotificationDao()->findNotificationsByUserId($userId, $start, $limit)
+            $this->getNotificationDao()->findByUserId($userId, $start, $limit)
         );
     }
 
-    public function getUserNotificationCount($userId)
+    public function countNotifications($userId)
     {
-        return $this->getNotificationDao()->getNotificationCountByUserId($userId);
+        return $this->getNotificationDao()->countByUserId($userId);
     }
 
     public function clearUserNewNotificationCounter($userId)
@@ -50,12 +50,12 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function getNotificationDao()
     {
-        return $this->createDao('User.NotificationDao');
+        return $this->createDao('User:NotificationDao');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 }
 

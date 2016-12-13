@@ -2,43 +2,24 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UpgradeNoticeDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class UpgradeNoticeDaoImpl extends BaseDao implements UpgradeNoticeDao
+class UpgradeNoticeDaoImpl extends GeneralDaoImpl implements UpgradeNoticeDao
 {
     protected $table = 'upgrade_notice';
 
-    public function getNotice($id)
+    public function getByUserIdAndVersionAndCode($userId, $version, $code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->getByFields(array(
+            'userId'  => $userId,
+            'version' => $version,
+            'code'    => $code
+        ));
     }
 
-    public function getNoticeByUserIdAndVersionAndCode($userId, $version, $code)
+    public function declares()
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and version = ? and code = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $version, $code)) ?: null;
-    }
-
-    public function addNotice($fields)
-    {
-        $affected = $this->getConnection()->insert($this->table, $fields);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert upgrade notice error.');
-        }
-
-        return $this->getNotice($this->getConnection()->lastInsertId());
-    }
-
-    public function updateNotice($id, $fields)
-    {
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getNotice($id);
-    }
-
-    public function deleteStatus($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return array(
+        );
     }
 }

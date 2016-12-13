@@ -4,29 +4,19 @@ namespace Biz\User\Dao;
 
 interface UserDao
 {
-    public function getUser($id, $lock = false);
+    public function getByEmail($email);
 
-    public function findUserByEmail($email);
+    public function getByNickname($nickname);
 
-    public function findUserByNickname($nickname);
+    public function countByMobileNotEmpty();
 
-    public function getCountByMobileNotEmpty();
+    public function getByVerifiedMobile($mobile);
 
-    public function findUserByVerifiedMobile($mobile);
+    public function findByNicknames(array $nicknames);
 
-    public function findUsersByNicknames(array $nicknames);
+    public function findByIds(array $ids);
 
-    public function findUsersByIds(array $ids);
-
-    public function getUserByInviteCode($code); //
-
-    public function searchUsers($conditions, $orderBy, $start, $limit);
-
-    public function searchUserCount($conditions);
-
-    public function addUser($user);
-
-    public function updateUser($id, $fields);
+    public function getByInviteCode($code); //
 
     public function waveCounterById($id, $name, $number);
 
@@ -36,6 +26,6 @@ interface UserDao
 
     public function analysisUserSumByTime($endTime);
 
-    public function findUsersCountByLessThanCreatedTime($endTime);
+    public function countByLessThanCreatedTime($endTime);
 
 }
