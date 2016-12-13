@@ -425,14 +425,17 @@ class ClassroomManageController extends BaseController
                 'role' => 'auditor'
             );
         }
+        $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
+        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount:$classroomMemberCount;
+        if ($classroomMemberCount < ($start + $limit + 1)) {
+            $limit = $classroomMemberCount - $start;
+        }
         $classroomMembers = $this->getClassroomService()->searchMembers(
             $condition,
             array('createdTime', 'DESC'),
             $start,
             $limit
         );
-        $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
-        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount:$classroomMemberCount;
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 

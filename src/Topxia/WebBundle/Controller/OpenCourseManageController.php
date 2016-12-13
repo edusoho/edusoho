@@ -362,9 +362,12 @@ class OpenCourseManageController extends BaseController
             $conditions['isNotified'] = 1;
         }
 
-        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $courseMemberCount = $this->getOpenCourseService()->searchMemberCount($conditions);
         $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = "微博";
@@ -453,7 +456,7 @@ class OpenCourseManageController extends BaseController
         $fileName = sprintf("open-course-%s-students-(%s).csv", $id, date('Y-n-d'));
         return ExportHelp::exportCsv($request, $fileName);
     }
-    
+
     public function lessonTimeCheckAction(Request $request, $courseId)
     {
         $data = $request->query->all();

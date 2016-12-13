@@ -197,11 +197,13 @@ class CourseStudentManageController extends BaseController
             'role' => 'student'
         );
 
-        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $courseMemberCount = $this->getCourseService()->searchMemberCount($condition);
 
         $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
-
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
