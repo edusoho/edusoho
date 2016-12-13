@@ -356,14 +356,10 @@ class OpenCourseManageController extends BaseController
             $magic['export_allow_count'] = 10000;   
         }
 
-        $limit = $magic['export_limit'];
-
+        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
-
         $conditions = array('courseId' => $course['id'], 'role' => 'student');
-
         $userType = $request->query->get('userType', '');
         if ($userType == 'login') {
             $conditions['userIdGT'] = 0;
@@ -441,7 +437,7 @@ class OpenCourseManageController extends BaseController
         };
         $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
-        if (($start + $limit * 2) >= $courseMemberCount) {
+        if (($start + $limit) >= $courseMemberCount) {
             $status = 'export';
         } else {
             $status = 'getData';
@@ -464,7 +460,7 @@ class OpenCourseManageController extends BaseController
 
     public function studentsExportAction(Request $request, $id)
     {
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $file = $request->query->get('fileName');
         $str = file_get_contents($file);
         if (!empty($file)) {
             FileToolkit::remove($file);

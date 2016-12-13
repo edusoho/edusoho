@@ -50,7 +50,7 @@ define(function(require, exports, module) {
                 if (response.status === 'getData') {
                     exportStudents(response.start, response.fileName);
                 } else {
-                    location.href=$('#export-students-btn').data('url')+'?fileName='+response.fileName;
+                    location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
                 }
             });
         });
@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             if (response.status === 'getData') {
                 exportStudents(response.start, response.fileName);
             } else {
-                location.href=$('#export-students-btn').data('url')+'?fileName='+response.fileName;
+                location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
             }
         });
     }

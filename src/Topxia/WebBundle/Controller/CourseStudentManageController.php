@@ -185,7 +185,7 @@ class CourseStudentManageController extends BaseController
             $magic['export_allow_count'] = 10000;   
         }
 
-        $limit = $magic['export_limit'];
+        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -274,7 +274,7 @@ class CourseStudentManageController extends BaseController
 
         $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
-        if (($start + $limit * 2) >= $courseMemberCount) {
+        if (($start + $limit) >= $courseMemberCount) {
             $status = 'export';
         } else {
             $status = 'getData';
@@ -298,7 +298,7 @@ class CourseStudentManageController extends BaseController
 
     public function exportCsvAction(Request $request, $id)
     {
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $file = $request->query->get('fileName');
         $str = file_get_contents($file);
         if (!empty($file)) {
             FileToolkit::remove($file);

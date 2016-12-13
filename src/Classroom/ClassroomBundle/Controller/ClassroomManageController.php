@@ -415,7 +415,7 @@ class ClassroomManageController extends BaseController
             $magic['export_allow_count'] = 10000;   
         }
 
-        $limit = $magic['export_limit'];
+        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
 
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
@@ -502,9 +502,9 @@ class ClassroomManageController extends BaseController
             $students[] = $member;
         }
 
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($role));
 
-        if (($start + $limit * 2) >= $classroomMemberCount) {
+        if (($start + $limit) >= $classroomMemberCount) {
             $status = 'export';
         } else {
             $status = 'getData';
@@ -527,7 +527,7 @@ class ClassroomManageController extends BaseController
 
     public function exportCsvAction(Request $request, $id)
     {
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $file = $request->query->get('fileName');
 
         $str = file_get_contents($file);
         if (!empty($file)) {
@@ -549,11 +549,11 @@ class ClassroomManageController extends BaseController
         return $response;
     }
 
-    private function genereateExportCsvFileName()
+    private function genereateExportCsvFileName($role)
     {
         $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
         $user     = $this->getCurrentUser();
-        return $rootPath."/export_content_classroom_students".$user['id'].time().".txt";
+        return $rootPath."/export_content_classroom_".$role."_students".$user['id'].time().".txt";
     }
 
     public function serviceAction(Request $request, $id)
