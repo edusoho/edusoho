@@ -226,7 +226,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
         if (isset($conditions['email'])) {
-            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['email']);
+            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
 
