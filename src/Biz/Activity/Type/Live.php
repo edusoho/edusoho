@@ -9,7 +9,6 @@ class Live extends Activity
     protected function registerListeners()
     {
         return array(
-            'live.finish' => 'Biz\\LiveActivity\\Listener\\LiveFinishListener'
         );
     }
 
