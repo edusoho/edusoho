@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Taxonomy\Impl;
+namespace Biz\Taxonomy\Service\Impl;
 
 
 use Biz\BaseService;
@@ -8,7 +8,7 @@ use Biz\Taxonomy\Dao\TagDao;
 use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
-use Biz\Taxonomy\TagService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
 
 class TagServiceImpl extends  BaseService implements  TagService

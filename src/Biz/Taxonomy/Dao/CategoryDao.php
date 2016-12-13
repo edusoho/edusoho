@@ -13,7 +13,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CategoryDao extends GeneralDaoInterface
 {
-    public function findByCode($code);
+    public function getByCode($code);
 
     public function findByGroupIdAndParentId($groupId, $parentId);
 

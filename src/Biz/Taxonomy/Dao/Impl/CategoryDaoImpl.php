@@ -18,17 +18,12 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 
     public function declares()
     {
-        return array(
-            'conditions' => array(
-                'courseId = :courseId'
-            )
-        );
+        return array();
     }
 
-    public function findByCode($code)
+    public function getByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE code = ? LIMIT 1";
-        return $this->db()->fetchAssoc($sql, array($code));
+        return $this->getByFields(array('code' => $code));
     }
 
     public function findByGroupId($groupId)
@@ -89,8 +84,8 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 
     protected function filterStartLimit(&$start, &$limit)
     {
-        $start = (int) $start;
-        $limit = (int) $limit;
+        $start = (int)$start;
+        $limit = (int)$limit;
     }
 
 }

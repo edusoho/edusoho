@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Taxonomy;
+namespace Biz\Taxonomy\Service;
 
 
 interface CategoryService
