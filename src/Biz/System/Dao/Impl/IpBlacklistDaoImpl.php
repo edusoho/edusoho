@@ -3,69 +3,34 @@
 namespace Biz\System\Dao\Impl;
 
 use Biz\System\Dao\IpBlacklistDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-// use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-
-class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
+class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
 {
     protected $table = 'ip_blacklist';
 
-    public function getIp($id)
+    public function getByIpAndType($ip, $type)
     {
-        $that = $this;
-
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id));
-        });
+        return $this->getByFields(array('ip' => $ip, 'type' => $type));
     }
 
-    public function getIpByIpAndType($ip, $type)
+    public function findByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
     {
-        $that = $this;
-
-        return $this->fetchCached("ip:{$ip}:type:{$type}", $ip, $type, function ($ip, $type) use ($that) {
-            $sql    = "SELECT * FROM {$that->getTable()} WHERE ip = ? AND type =? LIMIT 1";
-            $result = $that->getConnection()->fetchAssoc($sql, array($ip, $type));
-            return $result ? $result : array();
-        });
-    }
-
-    public function findIpsByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
-    {
-        $that = $this;
-
-        return $this->fetchCached("type:{$type}:time:{$time}:start:{$start}:limit:{$limit}", $type, $time, $start, $limit, function ($type, $time, $start, $limit) use ($that) {
-            $this->filterStartLimit($start, $limit);
-            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
-            return $that->getConnection()->fetchAssoc($sql, array($ip));
-        });
-    }
-
-    public function addIp($fields)
-    {
-        $affected = $this->getConnection()->insert($this->table, $fields);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert fields error.');
-        }
-        $this->clearCached();
-        return $this->getIp($this->getConnection()->lastInsertId());
+        $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
+        return $that->db()->fetchAll($sql, array($type, $time));
     }
 
     public function increaseIpCounter($id, $counter)
     {
-        $counter = (int) $counter;
-        $sql     = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
-        $result  = $this->getConnection()->executeQuery($sql, array($counter, $id));
-        $this->clearCached();
-        return $result;
+        return $this->wave(array($id), array('counter' => 1));
+        // $counter = (int) $counter;
+        // $sql     = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
+        // $result  = $this->getConnection()->executeQuery($sql, array($counter, $id));
+        // $this->clearCached();
+        // return $result;
     }
 
-    public function deleteIp($id)
+    public function declares()
     {
-        $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
-        return $result;
     }
 }

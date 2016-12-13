@@ -4,10 +4,9 @@ namespace Biz\System\Dao;
 
 interface SettingDao
 {
-    public function findAllSettings();
+    public function findAll();
 
-    public function addSetting($setting);
+    public function deleteByName($name);
 
-    public function deleteSettingByName($name);
-
+    public function deleteByNamespaceAndName($namespace, $name);
 }

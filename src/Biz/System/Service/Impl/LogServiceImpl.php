@@ -1,11 +1,11 @@
 <?php
 
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\LogService;
 use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\Logger;
+use Biz\System\Service\LogService;
 
 class LogServiceImpl extends BaseService implements LogService
 {
@@ -24,24 +24,24 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->addLog('error', $module, $action, $message, $data);
     }
 
-    public function searchLogs($conditions, $sort, $start, $limit)
+    public function search($conditions, $order, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        switch ($sort) {
+        switch ($order) {
             case 'created':
-                $sort = array('createdTime', 'DESC');
+                $order = array('createdTime' => 'DESC');
                 break;
             case 'createdByAsc':
-                $sort = array('createdTime', 'ASC');
+                $order = array('createdTime' => 'ASC');
                 break;
 
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createServiceException('参数order不正确。');
                 break;
         }
 
-        $logs = $this->getLogDao()->searchLogs($conditions, $sort, $start, $limit);
+        $logs = $this->getLogDao()->search($conditions, $order, $start, $limit);
 
         foreach ($logs as &$log) {
             $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
@@ -51,15 +51,15 @@ class LogServiceImpl extends BaseService implements LogService
         return $logs;
     }
 
-    public function searchLogCount($conditions)
+    public function count($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
-        return $this->getLogDao()->searchLogCount($conditions);
+        return $this->getLogDao()->count($conditions);
     }
 
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
-        return $this->getLogDao()->addLog(array(
+        return $this->getLogDao()->create(array(
             'module'      => Logger::getModule($module),
             'action'      => $action,
             'message'     => $message,
@@ -69,6 +69,43 @@ class LogServiceImpl extends BaseService implements LogService
             'createdTime' => time(),
             'level'       => $level
         ));
+    }
+
+    public function analysisLoginNumByTime($startTime, $endTime)
+    {
+        return $this->getLogDao()->analysisLoginNumByTime($startTime, $endTime);
+    }
+
+    public function analysisLoginDataByTime($startTime, $endTime)
+    {
+        return $this->getLogDao()->analysisLoginDataByTime($startTime, $endTime);
+    }
+
+    public function getLogModuleDicts()
+    {
+        $moduleDicts = Logger::getLogModuleDict();
+        $modules     = $this->getLogModules();
+
+        $dealModuleDicts = array();
+        foreach ($modules as $module) {
+            if (in_array($module, array_keys($moduleDicts))) {
+                $dealModuleDicts[$module] = $moduleDicts[$module];
+            }
+        }
+        return $dealModuleDicts;
+    }
+
+    public function findLogActionDictsyModule($module)
+    {
+        $systemActions = Logger::systemModuleConfig();
+        $pluginActions = Logger::pluginModuleConfig();
+
+        $actions = array_merge($systemActions, $pluginActions);
+
+        if (isset($actions[$module])) {
+            return $actions[$module];
+        }
+        return array();
     }
 
     protected function getLogDao()
@@ -105,30 +142,6 @@ class LogServiceImpl extends BaseService implements LogService
         return $conditions;
     }
 
-    public function analysisLoginNumByTime($startTime, $endTime)
-    {
-        return $this->getLogDao()->analysisLoginNumByTime($startTime, $endTime);
-    }
-
-    public function analysisLoginDataByTime($startTime, $endTime)
-    {
-        return $this->getLogDao()->analysisLoginDataByTime($startTime, $endTime);
-    }
-
-    public function getLogModuleDicts()
-    {
-        $moduleDicts = Logger::getLogModuleDict();
-        $modules     = $this->getLogModules();
-
-        $dealModuleDicts = array();
-        foreach ($modules as $module) {
-            if (in_array($module, array_keys($moduleDicts))) {
-                $dealModuleDicts[$module] = $moduleDicts[$module];
-            }
-        }
-        return $dealModuleDicts;
-    }
-
     private function getLogModules()
     {
         $systemModules = array_keys(Logger::systemModuleConfig());
@@ -153,18 +166,5 @@ class LogServiceImpl extends BaseService implements LogService
         $modules = array_merge($systemModules, $pluginModules);
 
         return $modules;
-    }
-
-    public function findLogActionDictsyModule($module)
-    {
-        $systemActions = Logger::systemModuleConfig();
-        $pluginActions = Logger::pluginModuleConfig();
-
-        $actions = array_merge($systemActions, $pluginActions);
-
-        if (isset($actions[$module])) {
-            return $actions[$module];
-        }
-        return array();
     }
 }

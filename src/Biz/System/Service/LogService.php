@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\System;
+namespace Biz\System\Service;
 
 interface LogService
 {
@@ -43,7 +43,7 @@ interface LogService
      * @param  integer $limit          返回最多行数
      * @return array   多维数组
      */
-    public function searchLogs($conditions, $sort, $start, $limit);
+    public function search($conditions, $sort, $start, $limit);
 
     /**
      * 根据指定搜索条件返回该条数。
@@ -56,7 +56,7 @@ interface LogService
      * @param  array      $conditions 搜索条件，
      * @return interger
      */
-    public function searchLogCount($conditions);
+    public function count($conditions);
 
     public function analysisLoginNumByTime($startTime, $endTime);
 

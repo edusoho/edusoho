@@ -1,10 +1,10 @@
 <?php
 
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\SessionService;
 use Topxia\Common\ArrayToolkit;
+use Biz\System\Service\SessionService;
 
 class SessionServiceImpl extends BaseService implements SessionService
 {
@@ -20,14 +20,14 @@ class SessionServiceImpl extends BaseService implements SessionService
 
     public function clearByUserId($userId)
     {
-        return $this->getSessionDao()->deleteSessionByUserId($userId);
+        return $this->getSessionDao()->deleteByUserId($userId);
     }
 
     public function deleteInvalidSession($sessionTime, $limit)
     {
-        $sessions = $this->getSessionDao()->findSessionsBySessionTime($sessionTime, $limit);
+        $sessions = $this->getSessionDao()->findBySessionTime($sessionTime, $limit);
         $ids      = ArrayToolKit::column($sessions, "session_id");
-        return $this->getSessionDao()->deleteSessionsByIds($ids);
+        return $this->getSessionDao()->deleteByIds($ids);
     }
 
     protected function getSessionDao()

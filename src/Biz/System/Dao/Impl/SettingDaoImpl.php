@@ -3,59 +3,29 @@
 namespace Biz\System\Dao\Impl;
 
 use Biz\System\Dao\SettingDao;
-use Topxia\Service\Common\BaseDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class SettingDaoImpl extends BaseDao implements SettingDao
+class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
 {
     protected $table = 'setting';
 
-    public function getSetting($id)
+    public function findAll()
     {
-        $that = $this;
-
-        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id));
-        }
-
-        );
+        $sql = "SELECT * FROM {$this->table}";
+        return $this->db()->fetchAll($sql, array());
     }
 
-    public function addSetting($setting)
+    public function deleteByName($name)
     {
-        $affected = $this->getConnection()->insert($this->table, $setting);
-        $this->clearCached();
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert setting error.');
-        }
-
-        return $this->getSetting($this->getConnection()->lastInsertId());
-    }
-
-    public function findAllSettings()
-    {
-        $that = $this;
-
-        return $this->fetchCached("all", function () use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()}";
-            return $that->getConnection()->fetchAll($sql, array());
-        }
-
-        );
-    }
-
-    public function deleteSettingByName($name)
-    {
-        $result = $this->getConnection()->delete($this->table, array('name' => $name));
-        $this->clearCached();
-        return $result;
+        return $this->db()->delete($this->table, array('name' => $name));
     }
 
     public function deleteByNamespaceAndName($namespace, $name)
     {
-        $result = $this->getConnection()->delete($this->table, array('namespace' => $namespace, 'name' => $name));
-        $this->clearCached();
-        return $result;
+        return $this->db()->delete($this->table, array('namespace' => $namespace, 'name' => $name));
+    }
+
+    public function declares()
+    {
     }
 }

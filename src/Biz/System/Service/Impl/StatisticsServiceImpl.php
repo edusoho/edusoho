@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\StatisticsService;

@@ -3,19 +3,15 @@ namespace Biz\System\Dao;
 
 interface SessionDao
 {
-    public function get($id);
+    public function getByUserId($userId);
 
-    public function getSessionByUserId($userId);
-
-    public function delete($id);
-
-    public function deleteSessionByUserId($userId);
+    public function deleteByUserId($userId);
 
     public function getOnlineCount($retentionTime);
 
     public function getLoginCount($retentionTime);
 
-    public function deleteSessionsByIds($ids);
+    public function deleteByIds($ids);
 
-    public function findSessionsBySessionTime($sessionTime, $limit);
+    public function findBySessionTime($sessionTime, $limit);
 }

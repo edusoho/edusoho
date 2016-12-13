@@ -9,7 +9,7 @@ class CacheDaoImpl extends GeneralDaoImpl implements CacheDao
 {
     protected $table = 'cache';
 
-    protected function getByName($name)
+    public function getByName($name)
     {
         return $this->getByFields(array('name' => $name));
     }
@@ -40,5 +40,9 @@ class CacheDaoImpl extends GeneralDaoImpl implements CacheDao
         $sql    = "DELETE FROM {$this->table}";
         $result = $this->db()->executeUpdate($sql, array());
         return $result;
+    }
+
+    public function declares()
+    {
     }
 }

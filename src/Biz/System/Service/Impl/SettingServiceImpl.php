@@ -1,8 +1,8 @@
 <?php
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\SettingService;
+use Biz\System\Service\SettingService;
 
 class SettingServiceImpl extends BaseService implements SettingService
 {
@@ -13,12 +13,12 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function set($name, $value)
     {
-        $this->getSettingDao()->deleteSettingByName($name);
+        $this->getSettingDao()->deleteByName($name);
         $setting = array(
             'name'  => $name,
             'value' => serialize($value)
         );
-        $this->getSettingDao()->addSetting($setting);
+        $this->getSettingDao()->create($setting);
         $this->clearCache();
     }
 
@@ -28,7 +28,7 @@ class SettingServiceImpl extends BaseService implements SettingService
             $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
 
             if (is_null($this->cached)) {
-                $settings = $this->getSettingDao()->findAllSettings();
+                $settings = $this->getSettingDao()->findAll();
                 foreach ($settings as $setting) {
                     $this->cached[$setting['namespace'].'-'.$setting['name']] = $setting['value'];
                 }
@@ -54,7 +54,7 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function delete($name)
     {
-        $this->getSettingDao()->deleteSettingByName($name);
+        $this->getSettingDao()->deleteByName($name);
         $this->clearCache();
     }
 
@@ -66,7 +66,7 @@ class SettingServiceImpl extends BaseService implements SettingService
             'name'      => $name,
             'value'     => serialize($value)
         );
-        $this->getSettingDao()->addSetting($setting);
+        $this->getSettingDao()->create($setting);
         $this->clearCache();
     }
 

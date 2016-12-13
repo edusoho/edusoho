@@ -1,8 +1,8 @@
 <?php
-namespace Biz\System\Impl;
+namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\IpBlacklistService;
+use Biz\System\Service\IpBlacklistService;
 
 class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 {
@@ -11,7 +11,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
         $setting = $this->getSettingService()->get('login_bind', array());
         $setting = array_merge(array('temporary_lock_minutes' => 20), $setting);
 
-        $existIp = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
+        $existIp = $this->getIpBlacklistDao()->getByIpAndType($ip, 'failed');
         if (empty($existIp)) {
             $ip = array(
                 'ip'          => $ip,
@@ -20,13 +20,13 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
                 'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
                 'createdTime' => time()
             );
-            $ip = $this->getIpBlacklistDao()->addIp($ip);
+            $ip = $this->getIpBlacklistDao()->create($ip);
 
             return $ip['counter'];
         }
 
         if ($this->isIpExpired($existIp)) {
-            $this->getIpBlacklistDao()->deleteIp($existIp['id']);
+            $this->getIpBlacklistDao()->delete($existIp['id']);
 
             $ip = array(
                 'ip'          => $ip,
@@ -35,7 +35,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
                 'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
                 'createdTime' => time()
             );
-            $ip = $this->getIpBlacklistDao()->addIp($ip);
+            $ip = $this->getIpBlacklistDao()->create($ip);
 
             return $ip['counter'];
         }
@@ -47,13 +47,13 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function getIpFailedCount($ip)
     {
-        $ip = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
+        $ip = $this->getIpBlacklistDao()->getByIpAndType($ip, 'failed');
         if (empty($ip)) {
             return 0;
         }
 
         if ($this->isIpExpired($ip)) {
-            $this->getIpBlacklistDao()->deleteIp($ip['id']);
+            $this->getIpBlacklistDao()->delete($ip['id']);
             return 0;
         }
 
@@ -62,12 +62,12 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function clearFailedIp($ip)
     {
-        $ip = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
+        $ip = $this->getIpBlacklistDao()->getByIpAndType($ip, 'failed');
         if (empty($ip)) {
             return;
         }
 
-        $this->getIpBlacklistDao()->deleteIp($ip['id']);
+        $this->getIpBlacklistDao()->delete($ip['id']);
     }
 
     protected function isIpExpired($ip)

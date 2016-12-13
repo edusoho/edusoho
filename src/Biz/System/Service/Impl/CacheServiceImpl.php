@@ -2,7 +2,7 @@
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\CacheService;
+use Biz\System\Service\CacheService;
 
 class CacheServiceImpl extends BaseService implements CacheService
 {
