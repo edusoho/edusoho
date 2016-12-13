@@ -175,7 +175,7 @@ class CourseStudentManageController extends BaseController
 
     public function exportDatasAction(Request $request, $id)
     {
-        list($start, $limit, $exportAllowCount) = ExportHelp::getOnceExportConditions($request);
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -266,19 +266,16 @@ class CourseStudentManageController extends BaseController
             $students[] = $member;
         };
 
-        $content = implode("\r\n", $students);
+        $file = '';
         if ($start == 0) {
-            $content = $str.$content;
+            $file = ExportHelp::addFileTitle($request,'course_students', $str);
         }
 
-        $file = ExportHelp::saveToTempFile($request, 'course_students', $content);
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
 
-        if (($start + $limit) >= $courseMemberCount) {
-            $status = 'export';
-        } else {
-            $status = 'getData';
-        }
-
+        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+        
         return $this->createJsonResponse(
             array(
                 'status' => $status,

@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ExportHelp
 {
-    public static function getOnceExportConditions($request)
+    public static function getMagicExportSetting($request)
     {
         $magic = self::getMagic();
         $start = $request->query->get('start', 0);
@@ -24,9 +24,28 @@ class ExportHelp
         return array($start, $limit, $magic['export_allow_count']);
     }
 
-    public static function saveToTempFile($request, $contentName, $content)
+    public static function addFileTitle($request, $contentName, $content)
     {
         $file = $request->query->get('fileName', self::genereateExportCsvFileName($contentName));
+        file_put_contents($file, $content."\r\n", FILE_APPEND);
+
+        return $file;
+    }
+
+    public static function getNextMethod($count, $sumCount)
+    {
+        if ($count >= $sumCount) {
+            return 'export';
+        }
+
+        return 'getData';
+    }
+
+    public static function saveToTempFile($request, $content, $file)
+    {
+        if (empty($file)) {
+            $file = $request->query->get('fileName');
+        }
         
         file_put_contents($file, $content."\r\n", FILE_APPEND);
 

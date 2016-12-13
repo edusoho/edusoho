@@ -405,7 +405,7 @@ class ClassroomManageController extends BaseController
 
     public function exportDatasAction(Request $request, $id, $role)
     {
-        list($start, $limit, $exportAllowCount) = ExportHelp::getOnceExportConditions($request);
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
@@ -495,18 +495,15 @@ class ClassroomManageController extends BaseController
             $students[] = $member;
         }
 
-        $content = implode("\r\n", $students);
+        $file = '';
         if ($start == 0) {
-            $content = $str.$content;
+            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $str);
         }
 
-        $file = ExportHelp::saveToTempFile($request, 'classroom_'.$role.'_students', $content);
-        
-        if (($start + $limit) >= $classroomMemberCount) {
-            $status = 'export';
-        } else {
-            $status = 'getData';
-        }
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
+
         return $this->createJsonResponse(
             array(
                 'status' => $status,
