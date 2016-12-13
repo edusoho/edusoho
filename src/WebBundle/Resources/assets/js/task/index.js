@@ -52,6 +52,7 @@ class TaskShow extends Emitter {
           && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
           this.ui.learnedWeakPrompt();
           this.ui.learned();
+          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
         }
       })
     }, timeStep * minute);
