@@ -26,6 +26,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         $this->biz = $biz;
     }
 
+    public function getBiz()
+    {
+        return $this->biz;
+    }
+
     public function getQuestionTypes()
     {
         return array(
@@ -197,24 +202,24 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerActivityTypes($container)
     {
-        $that                            = $this;
-        $container['activity_type.text'] = function () use ($that) {
-            return new Text($that->biz);
+        $that                                = $this;
+        $container['activity_type.text']     = function () use ($that) {
+            return new Text($that->getBiz());
         };
-        $container['activity_type.video'] = function () use ($that) {
-            return new Video($that->biz);
+        $container['activity_type.video']    = function () use ($that) {
+            return new Video($that->getBiz());
         };
-        $container['activity_type.audio'] = function () use ($that) {
-            return new Audio($that->biz);
+        $container['activity_type.audio']    = function () use ($that) {
+            return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
-            return new Download($that->biz);
+            return new Download($that->getBiz());
         };
         $container['activity_type.live'] = function () use ($that) {
-            return new Live($that->biz);
+            return new Live($that->getBiz());
         };
         $container['activity_type.discuss'] = function () use ($that) {
-            return new Discuss($that->biz);
+            return new Discuss($that->getBiz());
         };
     }
 
