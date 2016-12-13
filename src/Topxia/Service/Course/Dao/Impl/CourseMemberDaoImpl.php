@@ -37,7 +37,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->incrVersions(array(
             "{$this->table}:version:userId:{$courseMember['userId']}",
-            "{$this->table}:version:courseId:{$courseMember['courseId']}"
+            "{$this->table}:version:courseId:{$courseMember['courseId']}",
+            "{$this->table}:search"
         ));
 
         $this->deleteCache(array(
