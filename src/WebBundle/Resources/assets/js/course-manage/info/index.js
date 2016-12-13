@@ -14,9 +14,27 @@ import sortList from 'common/sortable';
 
 //模拟数据，每个数据可能是对象，也可能是字符串；
 let values = [
-  {teacherName: 'xxx',hidden: true},
-  {teacherName: 'yyy', hidden: true, gender: 11}
+  {label: 'aaa', value: 'aaa', },
 ];
+
+values = [
+  'aaa'
+]
+
+
+
+
+
+//模拟数据，每个数据可能是对象，也可能是字符串；
+// values = [
+//   {teacherName: 'xxx'},
+//   {teacherName: 'yyy'}
+// ];
+
+
+
+
+// values = [];
 
 function renderMultiGroupComponent(elementId){
   ReactDOM.render( <MultiGroup datas = {values}  valueName="teacherName"  checkedName='hidden' outputDataElement={elementId}    enableSearch ={false}  enableChecked/>,
