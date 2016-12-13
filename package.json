@@ -19,6 +19,8 @@
     "chunk-manifest-webpack-plugin": "^0.1.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.1",
+    "es-extract-text-webpack-plugin": "^1.0.0",
+    "es-webpack-engine": "^2.1.1",
     "eslint": "^3.3.0",
     "eslint-config-airbnb-base": "^5.0.1",
     "eslint-loader": "^1.5.0",
@@ -27,6 +29,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "fs": "^0.0.1-security",
+    "optimize-moduleid-and-chunkid-plugin": "^1.0.0",
     "glob": "^7.0.5",
     "imports-loader": "^0.6.5",
     "json-loader": "^0.5.4",
@@ -48,7 +51,7 @@
     "bootstrap-daterangepicker": "2.1.24",
     "bootstrap-notify": "3.1.3",
     "echarts": "3.3.1",
-    "es-ckeditor": "1.0.0",
+    "es-ckeditor": "latest",
     "es-webpack-engine": "1.1.2",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
@@ -62,8 +65,8 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development babel-node ./app/Resources/assets/config/webpack.dev.js",
-    "compile": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/assets/config/webpack.js",
+    "dev": "NODE_ENV=development babel-node ./app/Resources/webpack/webpack.dev.js",
+    "compile": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "lint": "eslint src"
   }

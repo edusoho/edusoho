@@ -61,3 +61,4 @@ web/assets/img/default/video.png
 *.codekit
 web/php-performance.php
 chunk-manifest.json
+.npminstall.done
