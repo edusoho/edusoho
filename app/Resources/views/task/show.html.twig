@@ -37,14 +37,14 @@
       <div class="dashboard-footer ">
         <div class="state-opration "> 
 
-            {% if taskResult.status != 'finish' %}
-            <a class="btn btn-gray text-sm js-learn-prompt open" href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a> 
-            {% endif %}
+            
+            <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}" href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”' ><i class="es-icon es-icon-help mrs text-md"></i>任务完成条件</a> 
+            
 
             <a class="btn text-sm js-learning-prompt" href="javascript:;" data-container=".js-learning-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”'><i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{task.title}}任务已完成</a>
 
-            {% if taskResult.status == 'finish' %}
-            <a class="btn text-sm js-learned-prompt " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content=''>
+            
+            <a class="btn text-sm js-learned-prompt {% if taskResult.status == 'finish' %}open{% endif %}  " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content=''>
               <div class="task-state-modal task-state-modal-xs">
                 <div class="title">
                   <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
@@ -66,7 +66,7 @@
               
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
             </a>
-            {% endif %}
+            
         </div>
 
         <a type="button" 

@@ -48,9 +48,11 @@ class TaskShow extends Emitter {
         taskId: this.taskId
       }).then(response => {
         this.trigger('doing', timeStep);
-        if(response.result.status == 'finish') {
+        if(response.result.status == 'finish'
+          && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
           this.ui.learnedWeakPrompt();
           this.ui.learned();
+          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
         }
       })
     }, timeStep * minute);
@@ -58,18 +60,20 @@ class TaskShow extends Emitter {
     this.trigger('doing', timeStep);
 
     this.element.on('click', '#learn-btn', event => {
-      console.log(event);
       $.post($('#learn-btn').data('url'), response => {
           $('#modal').modal('show');
           $('#modal').html(response);
+          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
           this.ui.learned();
       })
     });
 
     this.eventEmitter.receive('finish', response => {
-      if(response.result.status == 'finish') {
+      if(response.result.status == 'finish' 
+        && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
         this.ui.learnedWeakPrompt();
         this.ui.learned();
+        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       }
     });
 

@@ -5,7 +5,6 @@ namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\DocActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
@@ -87,12 +86,19 @@ class Doc extends Activity
         return $this->getDocActivityDao()->get($targetId);
     }
 
-    /**
-     * @return DocActivityDao
-     */
     protected function getDocActivityDao()
     {
         return $this->getBiz()->dao('Activity:DocActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
     
 }
