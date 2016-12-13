@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -175,17 +175,8 @@ class CourseStudentManageController extends BaseController
 
     public function exportDatasAction(Request $request, $id)
     {
-        $magic = $this->setting('magic');
-        $start = $request->query->get('start', 0);
-        if (empty($magic['export_limit'])) {
-            $magic['export_limit'] = 1000;
-        }
+        list($start, $limit, $exportAllowCount) = ExportHelp::getOnceExportConditions($request);
 
-        if (empty($magic['export_allow_count'])) {
-            $magic['export_allow_count'] = 10000;   
-        }
-
-        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -207,8 +198,9 @@ class CourseStudentManageController extends BaseController
         );
 
         $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
-        $courseMemberCount = $this->getCourseService()->searchCourseCount($condition);
-        $courseMemberCount = ($courseMemberCount>$magic['export_allow_count']) ? $magic['export_allow_count']:$courseMemberCount;
+        $courseMemberCount = $this->getCourseService()->searchMemberCount($condition);
+
+        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -272,7 +264,12 @@ class CourseStudentManageController extends BaseController
             $students[] = $member;
         };
 
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $content = implode("\r\n", $students);
+        if ($start == 0) {
+            $content = $str.$content;
+        }
+
+        $file = ExportHelp::saveToTempFile($request, 'course_students', $content);
 
         if (($start + $limit) >= $courseMemberCount) {
             $status = 'export';
@@ -280,12 +277,6 @@ class CourseStudentManageController extends BaseController
             $status = 'getData';
         }
 
-        $content = implode("\r\n", $students);
-        if ($start == 0) {
-            $content = $str.$content;
-        }
-
-        file_put_contents($file, $content."\r\n", FILE_APPEND);
         return $this->createJsonResponse(
             array(
                 'status' => $status,
@@ -293,37 +284,12 @@ class CourseStudentManageController extends BaseController
                 'start' => $start+$limit
             )
         );
-        
     }
 
     public function exportCsvAction(Request $request, $id)
     {
-        $file = $request->query->get('fileName');
-        $str = file_get_contents($file);
-        if (!empty($file)) {
-            FileToolkit::remove($file);
-        }
-
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
-
-        $userId = $this->getCurrentUser()->id;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
-    }
-
-    private function genereateExportCsvFileName()
-    {
-        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
-        $user     = $this->getCurrentUser();
-        return $rootPath."/export_content_course_students".$user['id'].time().".txt";
+        $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function remarkAction(Request $request, $courseId, $userId)

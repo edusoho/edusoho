@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -346,17 +346,8 @@ class OpenCourseManageController extends BaseController
 
     public function studentsExportDatasAction(Request $request, $id)
     {
-        $magic = $this->setting('magic');
-        $start = $request->query->get('start', 0);
-        if (empty($magic['export_limit'])) {
-            $magic['export_limit'] = 1000;
-        }
+        list($start, $limit, $exportAllowCount) = ExportHelp::getOnceExportConditions($request);
 
-        if (empty($magic['export_allow_count'])) {
-            $magic['export_allow_count'] = 10000;   
-        }
-
-        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
         $conditions = array('courseId' => $course['id'], 'role' => 'student');
@@ -373,7 +364,7 @@ class OpenCourseManageController extends BaseController
 
         $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $courseMemberCount = $this->getOpenCourseService()->searchMemberCount($conditions);
-        $courseMemberCount = ($courseMemberCount>$magic['export_allow_count']) ? $magic['export_allow_count']:$courseMemberCount;
+        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = "微博";
@@ -435,7 +426,12 @@ class OpenCourseManageController extends BaseController
 
             $students[] = $member;
         };
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $content = implode("\r\n", $students);
+        if ($start == 0) {
+            $content = $str.$content;
+        }
+
+        $file = ExportHelp::saveToTempFile($request, 'open-course-students', $content);
 
         if (($start + $limit) >= $courseMemberCount) {
             $status = 'export';
@@ -443,12 +439,6 @@ class OpenCourseManageController extends BaseController
             $status = 'getData';
         }
 
-        $content = implode("\r\n", $students);
-        if ($start == 0) {
-            $content = $str.$content;
-        }
-
-        file_put_contents($file, $content."\r\n", FILE_APPEND);
         return $this->createJsonResponse(
             array(
                 'status' => $status,
@@ -460,32 +450,10 @@ class OpenCourseManageController extends BaseController
 
     public function studentsExportAction(Request $request, $id)
     {
-        $file = $request->query->get('fileName');
-        $str = file_get_contents($file);
-        if (!empty($file)) {
-            FileToolkit::remove($file);
-        }
-
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("open-course-%s-students-(%s).csv", $id, date('Y-n-d'));
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        $fileName = sprintf("open-course-%s-students-(%s).csv", $id, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
-
-    private function genereateExportCsvFileName()
-    {
-        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
-        $user     = $this->getCurrentUser();
-        return $rootPath."/export_content_course_students".$user['id'].time().".txt";
-    }
-
+    
     public function lessonTimeCheckAction(Request $request, $courseId)
     {
         $data = $request->query->all();
