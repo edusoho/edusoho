@@ -22,6 +22,6 @@
 {% block footer %}
   <a class="btn btn-info mrm">分享</a>
   {% if nextTask|default(false) %}
-  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:task.id})}}">下一任务</a>
+  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">下一任务</a>
   {% endif %}
 {% endblock %}
