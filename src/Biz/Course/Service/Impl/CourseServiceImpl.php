@@ -555,6 +555,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    }
 
     protected function hasCourseManagerRole($courseId = 0)
     {

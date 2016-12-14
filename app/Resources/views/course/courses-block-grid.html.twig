@@ -9,7 +9,7 @@
 <ul class="course-grids">
   {% for course in courses %}
     <li class="course-grid">
-      <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+      <a href="{{ path('course_set_show', {id:course.courseSet.id}) }}" class="grid-body">
         <img src="{{ filepath(course.courseSet.cover.large, 'course.png') }}"  class="img-responsive thumb">
           <span class="course-label">
             {% if course.status == 'draft' %}

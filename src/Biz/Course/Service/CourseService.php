@@ -56,4 +56,6 @@ interface CourseService
 
     public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+
 }

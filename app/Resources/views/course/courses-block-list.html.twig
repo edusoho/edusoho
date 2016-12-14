@@ -4,7 +4,7 @@
       <div class="col-lg-3 col-md-4 col-xs-6">
         <div class="course-item">
           <div class="course-img">
-            <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+            <a href="{{ path('course_set_show', {id:course.courseSet.id}) }}" target="_blank">
               {% if course.discountId > 0 %}
                 {% if course.discount == 0 %}
                   <!-- 限免 -->
