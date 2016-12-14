@@ -11,12 +11,11 @@ class CrmAddFields extends Migration
     {
         $biz = $this->getContainer();
         $db  = $biz['db'];
-        $db->exec("ALTER TABLE `classroom` ADD `updatedTime`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间'; ");
+        $db->exec("ALTER TABLE `classroom` ADD `updatedTime`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间' AFTER `createdTime`;");
+        $db->exec("UPDATE `classroom` set `updatedTime`= createdTime WHERE updatedTime = 0 ; ");
 
         $db->exec("ALTER TABLE  `orders` ADD  `updatedTime` INT(10) NOT NULL AFTER  `createdTime`; ");
-
         $db->exec("UPDATE `orders` SET `updatedTime` = (select if(max(createdTime),max(createdTime),0) from `order_log` where order_log.orderId = orders.id);");
-
         $db->exec("UPDATE `orders` set `updatedTime`= createdTime WHERE updatedTime = 0 ;");       
 
         $db->exec(" ALTER TABLE `course_member` ADD `lastLearnTime` INT(10) COMMENT '最后学习时间';");
