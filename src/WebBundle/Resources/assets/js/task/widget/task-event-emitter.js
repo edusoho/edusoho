@@ -16,9 +16,10 @@ export default class TaskEventEmitter {
     this.receiveMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
 
     this.receiveMessenger.listen(message => {
-      let {event, data} = JSON.parse(message);
-      console.log("event, data",event, data);
+      let { event, data } = JSON.parse(message);
+      console.log("event, data", event, data);
       let listeners = this.eventMap.receives[event];
+
       $.post(this.element.data('eventUrl'), {eventName: event, data: data})
         .done(response => {
           if (typeof listeners !== 'undefined') {
@@ -28,7 +29,7 @@ export default class TaskEventEmitter {
           this.receiveMessenger.send(JSON.stringify(response));
         })
         .fail((error) => {
-          this.receiveMessenger.send(JSON.stringify({event: event, error: error}));
+          this.receiveMessenger.send(JSON.stringify({ event: event, error: error }));
         })
     });
 
@@ -41,13 +42,13 @@ export default class TaskEventEmitter {
   emit(event, data) {
     return new Promise((resolve, reject) => {
       $.post(this.eventUrl, {eventName: event, data: data})
-          .done((response) => {
-            this.emitMessenger.send(JSON.stringify({event: response.event, data: response.data}));
-            resolve(response);
-          })
-          .fail((error) => {
-            reject(error);
-          });
+      .done((response) => {
+        this.emitMessenger.send(JSON.stringify({event: response.event, data: response.data}));
+        resolve(response);
+      })
+      .fail((error) => {
+        reject(error);
+      });
     });
   }
 

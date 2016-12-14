@@ -1,5 +1,5 @@
 import FileChooser from '../../file-chooser/file-choose';
-import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
 let $mediaId = $('[name="mediaId"]');
 
 showChooserType($mediaId);
@@ -17,7 +17,7 @@ function _inItStep2form() {
     },
     messages: {
       mediaId: {
-        required:'请上传或选择%display%'
+        required: '请上传或选择%display%'
       }
     }
   });
@@ -51,7 +51,7 @@ let onConditionTimeType = () => {
 
 let $select = $('#condition-select');
 
-if($select.children('option:selected').val() === 'time') {
+if ($select.children('option:selected').val() === 'time') {
   onConditionTimeType();
 }
 

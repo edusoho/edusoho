@@ -1,5 +1,5 @@
 import FileChooser from '../../file-chooser/file-choose';
-import {chooserUiOpen,chooserUiClose,showChooserType} from '../widget/chooser-ui.js';
+import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
 let $mediaId = $('[name="mediaId"]');
 
 showChooserType($mediaId);
@@ -9,18 +9,18 @@ function inItStep2form() {
   var $step2_form = $("#step2-form");
   var validator = $step2_form.data('validator');
   validator = $step2_form.validate({
-      rules: {
-        title:{
-            required: true,
-            maxlength: 50,
-        },
-        mediaId: 'required',
+    rules: {
+      title: {
+        required: true,
+        maxlength: 50,
       },
-      messages: {
-        mediaId: {
-          required:'请上传或选择%display%'
-        }
+      mediaId: 'required',
+    },
+    messages: {
+      mediaId: {
+        required: '请上传或选择%display%'
       }
+    }
   });
 }
 
@@ -31,8 +31,8 @@ let onConditionTimeType = () => {
     rules: {
       finishDetail: {
         required: true,
-        digits:true,
-        max:300,
+        digits: true,
+        max: 300,
       },
     },
     messages: {
@@ -48,7 +48,7 @@ let onConditionTimeType = () => {
 
 let $select = $('#condition-select');
 
-if($select.children('option:selected').val() === 'time'){
+if ($select.children('option:selected').val() === 'time') {
   onConditionTimeType();
 }
 
@@ -62,9 +62,9 @@ fileChooser.on('select', (file) => {
 $select.on('change', event => {
   let conditionsType = $(event.currentTarget).children('option:selected').val();
   let $conditionsDetail = $("#condition-group");
-  if(conditionsType !== 'time'){
+  if (conditionsType !== 'time') {
     $conditionsDetail.addClass('hidden');
-  }else {
+  } else {
     onConditionTimeType();
   }
 });

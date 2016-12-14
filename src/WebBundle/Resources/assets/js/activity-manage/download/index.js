@@ -1,7 +1,7 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
-import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
-jQuery.validator.addMethod("url", function (value, element) {
+import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
+jQuery.validator.addMethod("url", function(value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
 
@@ -29,7 +29,7 @@ function _inItStep2form() {
   $form.data('validator', validator);
 }
 
-$('#step2-form').on('click', '.js-btn-delete', function () {
+$('#step2-form').on('click', '.js-btn-delete', function() {
   let $parent = $(this).parents('li');
   let mediaId = $parent.data('id');
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());

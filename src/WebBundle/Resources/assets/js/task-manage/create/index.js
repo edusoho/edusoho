@@ -81,7 +81,7 @@ class Editor {
       .done((html) => {
         this.$element.modal('hide');
 
-        let chapterId = postData.find(function (input) {
+        let chapterId = postData.find(function(input) {
           return input.name == 'chapterId';
         })
 
@@ -89,7 +89,7 @@ class Editor {
         let $parent = $('#' + chapterId.value);
 
         if ($parent.length) {
-          $parent.nextAll().each(function () {
+          $parent.nextAll().each(function() {
             if ($(this).hasClass('task-manage-chapter')) {
               $(this).before(html);
               add = 1;
@@ -111,7 +111,7 @@ class Editor {
         }
 
         let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
+        $.post($('#sortable-list').data('sortUrl'), { ids: data }, (response) => {
           if (response) {
             document.location.reload();
           }
@@ -224,8 +224,8 @@ class Editor {
     if (!this.loaded) {
       return;
     }
-    (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');
-    (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active') : this.$iframe_body.find(".js-step3-view").removeClass('active');
+    (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active'): this.$iframe_body.find(".js-step2-view").removeClass('active');
+    (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active'): this.$iframe_body.find(".js-step3-view").removeClass('active');
   }
 
   _renderStep(step) {
@@ -234,8 +234,8 @@ class Editor {
   }
 
   _renderContent(step) {
-    (step === 1 ) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
-    (step !== 1 ) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
+    (step === 1) ? this.$task_manage_type.removeClass('hidden'): this.$task_manage_type.addClass('hidden');
+    (step !== 1) ? this.$task_manage_content.removeClass('hidden'): this.$task_manage_content.addClass('hidden');
   }
 
   _renderNext(show) {

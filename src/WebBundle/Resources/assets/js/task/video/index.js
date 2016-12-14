@@ -1,9 +1,9 @@
 /**
  * Created by Simon on 08/11/2016.
  */
-import  swfobject from 'es-swfobject';
-import  EsMessenger from '../../../common/messenger';
-import  ActivityEmitter from '../../activity/activity-emitter';
+import swfobject from 'es-swfobject';
+import EsMessenger from '../../../common/messenger';
+import ActivityEmitter from '../../activity/activity-emitter';
 class VideoPlay {
   constructor() {
     this.player = {};
@@ -39,22 +39,22 @@ class VideoPlay {
       this._onFinishLearnTask(msg);
     });
 
-    messenger.on("playing", (msg)=> {
+    messenger.on("playing", (msg) => {
       this.player.playing = true;
     });
 
-    messenger.on("paused", (msg)=> {
+    messenger.on("paused", (msg) => {
       this.player.playing = false;
     });
 
-    messenger.on("timechange", (msg)=> {
+    messenger.on("timechange", (msg) => {
       this.player.currentTime = msg.currentTime;
     })
   }
 
   _onFinishLearnTask(msg) {
     let emitter = new ActivityEmitter();
-    emitter.emit('finish', {data: msg}).then(() => {
+    emitter.emit('finish', { data: msg }).then(() => {
       console.log('vidoe.finish');
     }).catch((error) => {
       console.error(error);

@@ -4,7 +4,7 @@ import TaskEventEmitter from "./widget/task-event-emitter";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode}) {
+  constructor({ element, courseId, taskId, mode }) {
     super();
     this.element = $(element);
     this.courseId = courseId;
@@ -40,7 +40,6 @@ class TaskShow extends Emitter {
     let minute = 60 * 1000;
     let timeStep = 2; // 分钟
     this.delay('doing', (timeStep) => {
-
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
       this.eventEmitter.emit('doing', {
         timeStep: timeStep,
@@ -56,15 +55,13 @@ class TaskShow extends Emitter {
         }
       })
     }, timeStep * minute);
-
     this.trigger('doing', timeStep);
-
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
-          $('#modal').modal('show');
-          $('#modal').html(response);
-          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-          this.ui.learned();
+        $('#modal').modal('show');
+        $('#modal').html(response);
+        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+        this.ui.learned();
       })
     });
 
@@ -84,19 +81,17 @@ class TaskShow extends Emitter {
       element: this.element.find('#dashboard-sidebar'),
       url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
     });
-
     this.sidebar
-        .on('popup', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px,
-          }, time);
-        })
-        .on('fold', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px,
-          }, time)
-        })
-
+    .on('popup', (px, time) => {
+      this.element.find('#dashboard-content').animate({
+        right: px,
+      }, time);
+    })
+    .on('fold', (px, time) => {
+      this.element.find('#dashboard-content').animate({
+        right: px,
+      }, time)
+    })
   }
 }
 
@@ -106,7 +101,3 @@ new TaskShow({
   taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
   mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });
-
-
-
-

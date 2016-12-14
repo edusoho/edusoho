@@ -5,21 +5,20 @@ export default class TaskSidebar extends Emitter{
     super();
     this.url = url;
     this.element = $(element);
-
     this.init();
   }
 
   init() {
     this.fetchPlugins()
-        .then((plugins) => {
-          this.plugins = plugins;
-          this.renderToolbar();
-          this.renderPane();
-          this.bindEvent();
-        })
-        .fail(error => {
-          console.log(error);
-        })
+    .then((plugins) => {
+      this.plugins = plugins;
+      this.renderToolbar();
+      this.renderPane();
+      this.bindEvent();
+    })
+    .fail(error => {
+      console.log(error);
+    })
   }
 
   fetchPlugins() {
@@ -34,8 +33,7 @@ export default class TaskSidebar extends Emitter{
           return html += `<li data-plugin="${plugin.code}" data-url="${plugin.url}"><a href="#"><div class="mbs es-icon ${plugin.icon}"></div>${plugin.name}</a></li>`;
         }, '')}
       </ul>
-    </div>
-`;
+    </div>`;
     this.element.html(html);
   }
 
@@ -48,7 +46,6 @@ export default class TaskSidebar extends Emitter{
   }
 
   bindEvent(){
-
     this.element.find('#dashboard-toolbar-nav').on('click', 'li', (event) => {
       let $btn = $(event.currentTarget);
       let pluginCode = $btn.data('plugin');
