@@ -43,7 +43,7 @@
               {% if setting('storage.upload_mode') == "cloud" %}
                 <span class="value value-success"><i class="dot"></i>已开启</span>
               {% else %}
-                <a href="{{ path('admin_setting_cloud_video') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
             </li>
             <li>
@@ -51,7 +51,7 @@
               {% if setting('storage.upload_mode') == "cloud" %}
                 <span class="value value-success"><i class="dot"></i>已开启</span>
               {% else %}
-                <a href="{{ path('admin_setting_cloud_video') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>未开启</a>
               {% endif %}
             </li>
             <li>

@@ -1,14 +1,12 @@
-// 配置文件
-
-/* 默认值,可在options中重写
+// webpack配置文件
+/* 默认值,可在config中重写，但一般不推荐修改
   let defaultOptions = {
     commonsChunkFilename: 'common',
     entryMainname: 'main',
     entryFileName: 'index',
 
     libsName: 'libs',
-
-    pluginsName: 'plugins',  //可以是数组,指定监听具体的插件，如 ['plugins/CrmPlugin','plugins/VipPlugin']
+    
     pluginAssetsDir: 'Resources/static-src',
 
     appName: 'app',
@@ -29,14 +27,10 @@
     imgName: 'img',
 
     onlyCopys: [],
-
-    devtool: 'cheap-module-eval-source-map', // 可设置为 'source-map'，方便错误排查 
-
-    openModule: ['lib','app','admin','plugin','copy'], // 可以选择监听哪几种资源文件
   }
 */
 
-const options = {
+const config = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -71,4 +65,4 @@ const options = {
   ],
 }
 
-export default options;
+export default config;

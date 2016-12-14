@@ -1,11 +1,56 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 
-{% set menu = 'admin_edu_cloud_sms_setting' %} 
+{% set menu = 'admin_edu_cloud_sms_overview' %} 
 
 {% set script_controller = 'educloud/sms-setting' %}
 
 {% block main %}
+  
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云短信</div>
+    <div class="color-gray notice-desc">尚未购买云短信，不能启用，<a href="">立即购买</a> 或 <a href="">了解详情</a>。</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+  </div>
+</div>
+
+{% include 'TopxiaAdminBundle:EduCloud:part/side-bar.html.twig'  %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    基本信息 
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      短信余额：
+      <span class="h3 text-primary plm prs">12345</span>条
+      <span class="color-gray">（信用额度剩余: 300条）</span>
+      <a href="" class="btn btn-sm btn-primary">购买</a>
+      <div class="text-danger pts">
+        您的短信余额剩余300条，请尽快续购，以免影响正常使用。
+      </div>
+    </div>
+    <div class="pll pbm">
+      今日发送：
+      <span class="color-gray phm text-md">1700 条</span>
+      <a href="">发送记录</a>｜<a href="">发送明细</a> 
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    短信发送趋势
+    <span class="text-muted">（最近1个月）</span>
+    <a class="pull-right" href="">更多&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="smsSendChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
 
   {% if is_trial() %}
     <div class="row form-group">
@@ -20,7 +65,7 @@
         </p>
 
         <p style="text-align:center;font-size:16px">
-          {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}0571-86819929 {{'或'|trans}}
+          {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}4008041114 {{'或'|trans}}
           <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
             <a id="BizQQWPA"  href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。
           </span>
@@ -35,10 +80,10 @@
   {% else %}
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
-      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
+      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}4008041114。</div>
     {% endif %}
     {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
-      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}0571-86819929。</div>
+      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}4008041114。</div>
     {% endif %}
     <div class="eduyun-main">
       {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
@@ -773,4 +818,241 @@
     </div>
   {% endif %}
 
+  <!-- 设置 -->
+<div class="page-heading">
+  云短信开关
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">启用云短信：</label>
+    <div class="controls col-md-9 radios">
+      <label>
+        <input type="radio" name="cloud_sms_switch" value="1"> 开启
+      </label>
+      <label>
+        <input type="radio" name="cloud_sms_switch" value="0" checked="checked"> 关闭
+      </label>
+      <div class="help-block">
+        教学资讯，极速送达，尽在掌握。<a href="">点击这里</a>了解详情。
+      </div>
+    </div>
+  </div>
+</form>
+<div class="page-heading">
+  基本设置
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">短信签名：</label>
+    <div class="controls col-md-9 radios">
+      红木头学院<a href="" class="plm">去设置</a>
+      <div class="help-block">
+        签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
+      </div>
+    </div>
+  </div>
+</form>
+<div class="page-heading">
+  预警设置
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">单日短信发送阈值：</label>
+    <div class="controls col-md-9 radios">
+      50000条<a href="" class="plm">去设置</a>
+      <div class="help-block">
+        单日短信发送量超过此阈值时，发送通知。
+      </div>
+    </div>
+  </div>
+</form>
+<div class="page-heading">
+  模板设置
+</div>
+<form class="form-horizontal" method="post" id="sms-form" novalidate="">
+  <div class="table-responsive sms-table"> 
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>短信类型</th>
+          <th width="12%">应用场景</th>
+          <th>内容示例</th>
+          <th>发送方式</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>验证类</td>
+          <td>手机绑定</td>
+          <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_bind" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>登录密码重置</td>
+          <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_forget_password" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>支付密码重置</td>
+          <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_forget_pay_password" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>验证类</td>
+          <td>使用网站余额支付</td>
+          <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+          <td>自动单发</td>
+          <td><input type="hidden" name="sms_user_pay" value="on">默认开启</td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新班级发布</td>
+          <td>同学们，《ES网校管理学习班》现已开始报名！http://t.cn/RtHEoCs。</td>
+          <td>手动群发</td>
+          <td>
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="on"
+                  {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}
+                checked="checked"
+                  {% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_classroom_publish" value="off"
+                  {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
+                checked="checked"
+                  {% endif %}> {{ '关闭'|trans }}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课程发布</td>
+          <td>同学们，《如何使用EduSoho？》现已开始报名！ http://t.cn/RtH8W6c。</td>
+          <td>手动群发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课时发布通知（普通课程）</td>
+          <td>您的《如何使用EduSoho？》－《如何进入管理后台》已发布！http://t.cn/RtHRhF4。</td>
+          <td>自动群发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>新课时发布通知（直播）</td>
+          <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+          <td>自动群发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>直播开播前通知（提前1天）</td>
+          <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+          <td>自动群发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>直播开播前通知（提前1小时）</td>
+          <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+          <td>自动群发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>作业完成批阅</td>
+          <td>您的《如何使用EduSoho？》-《如何进入管理后台》的作业已被老师批阅，快来看看吧！。</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>通知类</td>
+          <td>试卷完成批阅</td>
+          <td>《您的《如何使用EduSoho？》-试卷：《阔知大学期末模拟考试》已被老师批阅，快来看看吧！</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>课程购买回执</td>
+          <td>你已成功购买课程《XXX课程》，支付￥20.00。</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>班级购买回执</td>
+          <td>你已成功购买班级《XXX班级》，支付￥20.00。</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>会员购买回执</td>
+          <td>你已成功购买会员《XXX会员》，支付￥20.00。</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>回执类</td>
+          <td>虚拟币充值回执</td>
+          <td>你已成功购买学币100枚，支付￥20.00。</td>
+          <td>自动单发</td>
+          <td>
+            <label style="margin-bottom:0">
+              <input type="checkbox"> 开启
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</form>
 {% endblock %}

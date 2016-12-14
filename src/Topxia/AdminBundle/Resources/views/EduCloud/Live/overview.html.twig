@@ -1,0 +1,59 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_edulive_overview' %}
+{% set script_controller = 'setting/cloud-live' %}
+{% set script_arguments = {chartData: chartData}  %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif account.status|default() == 'none' %}
+    <div class="alert alert-warning" role="alert">{{'
+    您的云直播服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<!-- 概览 -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="{{ path('admin_cloud_live_upgrade') }}" target="_blank">升级</a>｜
+    {% if account.renewInfo.status == true %} 
+      <span class="text-muted">已续费</span>
+      <span class="text-danger pts">
+        {{account.renewInfo.message|default('')}}
+      </span>
+    {% else %}
+      <a href="{{ path('admin_cloud_live_renew') }}" target="_blank">续费</a>
+    {% endif %}
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      教室容量：
+      <span class="h3 text-primary plm prs">{{ account.capacity }}</span>人
+    </div>
+    <div class="pll pbm">
+      服务期限：
+      <span class="color-gray plm">{{account.effective|date("Y-m-d")}} ~ {{ account.expire|date("Y-m-d") }}</span>
+      <div class="text-danger pts">
+        {{account.message}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    直播峰值趋势
+    <span class="text-muted">（最近1个月）</span>
+    <a class="pull-right" href="{{path('admin_cloud_live_more')}}" target="_blank">更多&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="liveTopChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+{% endblock %}
