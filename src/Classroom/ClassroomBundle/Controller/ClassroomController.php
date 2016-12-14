@@ -8,7 +8,6 @@ use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomController extends BaseController
@@ -1097,15 +1096,5 @@ class ClassroomController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function dispatchEvent($eventName, $event)
-    {
-        return $this->getDispatcher()->dispatch($eventName, $event);
-    }
-
-    protected function getDispatcher()
-    {
-        return ServiceKernel::dispatcher();
     }
 }
