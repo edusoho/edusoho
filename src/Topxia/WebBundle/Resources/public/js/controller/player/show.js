@@ -41,7 +41,7 @@ define(function(require, exports, module) {
                 var item = {
                     label: subtitlesData[i].name,
                     src: subtitlesData[i].url,
-                    default: ("default" in subtitlesData[i]) ? subtitlesData[i].default : false
+                    'default': ("default" in subtitlesData[i]) ? subtitlesData[i]['default'] : false
                 }
                 subtitles.push(item);
             }
@@ -49,10 +49,10 @@ define(function(require, exports, module) {
 
         // set first item to default if no default
         for (var i in subtitles) {
-            if (subtitles[i].default) {
+            if (subtitles[i]['default']) {
                 return;
             }
-            subtitles[0].default = true;
+            subtitles[0]['default'] = true;
         }
 
         var html = "";
