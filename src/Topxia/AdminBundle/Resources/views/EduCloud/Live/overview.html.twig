@@ -21,22 +21,14 @@
 <!-- 概览 -->
 <div class="panel panel-default">
   <div class="panel-heading">
-<<<<<<< HEAD
-    <a href="">升级</a>｜
-=======
     <a href="{{ path('admin_cloud_live_upgrade') }}" target="_blank">升级</a>｜
->>>>>>> develop
     {% if account.renewInfo.status == true %} 
       <span class="text-muted">已续费</span>
       <span class="text-danger pts">
         {{account.renewInfo.message|default('')}}
       </span>
     {% else %}
-<<<<<<< HEAD
-      <a href="">续费</a>
-=======
       <a href="{{ path('admin_cloud_live_renew') }}" target="_blank">续费</a>
->>>>>>> develop
     {% endif %}
   </div>
   <div class="panel-body">
