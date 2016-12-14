@@ -5,13 +5,11 @@ namespace AppBundle\Controller\Course;
 
 
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 
 class MyCourseController extends BaseController
 {
-
     public function learningAction(Request $request)
     {
         $currentUser = $this->getUser();
