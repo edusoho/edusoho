@@ -32,7 +32,7 @@ interface TaskService
 
     public function finishTask($taskId);
 
-    public function canFinish($taskId);
+    public function isFinished($taskId);
 
     public function tryTakeTask($taskId);
 

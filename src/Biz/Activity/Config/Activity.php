@@ -34,7 +34,7 @@ abstract class Activity
     {
     }
 
-    public function canFinish($id)
+    public function isFinished($id)
     {
         return true;
     }
@@ -52,39 +52,12 @@ abstract class Activity
     }
 
     /**
-     * Activity 创建、编辑、进行时指定的Controller配置
-     *
-     * 如：
-     * ExampleActivity
-     * array(
-     *    'create' => 'ExampleBundle:Example:create',
-     *    'edit' => 'ExampleBundle:Example:edit',
-     *    'create' => 'ExampleBundle:Example:create'
-     * )
-     *
-     * @return array<String, String>
-     */
-    abstract public function registerActions();
-
-    /**
-     * @param  $action
-     * @return String
-     */
-    final public function getAction($action)
-    {
-        $map = $this->registerActions();
-        return $map[$action];
-    }
-
-    /**
      * @return mixed
      */
     abstract protected function registerListeners();
 
-    abstract public function getMetas();
-
     /**
-     * @param  string     $eventName
+     * @param  string $eventName
      * @return Listener
      */
     final public function getListener($eventName)
@@ -108,12 +81,12 @@ abstract class Activity
         return new NotFoundException($message);
     }
 
-    protected function createAccessDeniedException($message = '') 
+    protected function createAccessDeniedException($message = '')
     {
         return new AccessDeniedException($message);
     }
 
-    protected function createInvalidArgumentException($message = '') 
+    protected function createInvalidArgumentException($message = '')
     {
         return new InvalidArgumentException($message);
     }

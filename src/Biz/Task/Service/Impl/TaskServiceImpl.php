@@ -166,7 +166,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
 
-        if (!$this->canFinish($taskId)) {
+        if (!$this->isFinished($taskId)) {
             throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
         }
 
@@ -192,12 +192,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $taskResult;
     }
 
-    public function canFinish($taskId)
+    public function isFinished($taskId)
     {
         $task   = $this->getTask($taskId);
         $course = $this->getCourseService()->getCourse($task['courseId']);
         // TODO
-        return $course && $this->getActivityService()->canFinishActivity($task['activityId']);
+        return true;
+        return $course[''] && $this->getActivityService()->isFinished($task['activityId']);
     }
 
     public function tryTakeTask($taskId)

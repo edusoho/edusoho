@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
+{%  set modal_class ="modal-message task-state-modal modal-sm"%}
+
+{% block title %}
+  <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>完成任务
+{% endblock %}
+
+{% block body %}
+  <div class="content">
+    <div class="content-title">
+      恭喜完成
+      <span class="font-blod mlm">《 {{task.title}} 》</span>
+    </div>
+    <div class="progress progress-radius progress-md content-progress">
+      <div class="progress-bar progress-bar-left progress-bar-success "  role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%">{{finishedRate}}%</div>
+      <span class="mrl">100%</span>
+    </div>
+    <span class="text-success">已完成了整个课程的{{finishedRate}}%，加油吧！</span>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <a class="btn btn-info mrm">分享</a>
+  {% if nextTask|default(false) %}
+  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">下一任务</a>
+  {% endif %}
+{% endblock %}

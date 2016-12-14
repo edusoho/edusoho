@@ -31,7 +31,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 'title'    => $field['title'],
                 'type'     => 'lesson'
             );
-            $task    = $this->biz['db']->transactional(function () use ($field, $chapter, $that) {
+            $task = $this->biz['db']->transactional(function () use ($field, $chapter, $that) {
                 $chapter             = $that->getCourseService()->createChapter($chapter);
                 $field['categoryId'] = $chapter['id'];
                 $task                = $that->baseCreateTask($field);
@@ -78,12 +78,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTasksRenderPage()
     {
-        return 'WebBundle:CourseManage/FreeMode:tasks.html.twig';
+        return 'course-manage/free-mode/tasks.html.twig';
     }
 
     public function getTaskItemRenderPage()
     {
-        return 'WebBundle:TaskManage:list-item.html.twig';
+        return 'task-manage/list-item.html.twig';
     }
 
     /**
