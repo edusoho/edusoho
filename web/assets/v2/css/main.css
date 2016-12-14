@@ -9404,14 +9404,11 @@ textarea {
 .course-detail-section .course-detail-header {
   position: relative;
   min-height: 50px;
-  margin-top: 15px;
+  line-height: 50px;
   margin-bottom: 20px;
 }
-.course-detail-section .course-detail-header .course-detail-title h1 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  color: #313131;
-  float: left;
+.course-detail-section .before {
+  line-height: 25px;
 }
 .course-detail-section .course-detail-img {
   position: relative;
@@ -9541,12 +9538,12 @@ textarea {
   margin: 0px;
 }
 .course-detail-section .course-font {
-  padding-left: 13px;
-  margin-top: 15px;
+  font-size: 24px;
 }
 .course-detail-section .course-head-icon {
-  float: left;
-  margin-top: 3px;
+  font-size: 14px;
+  display: inline-block;
+  line-height: 20px;
 }
 .course-detail-section .task-list-font {
   padding: 18px 16px;
@@ -9703,6 +9700,29 @@ textarea {
   line-height: 1;
   font-weight: bold;
   color: #46c37b;
+}
+.swiper-wrapper .alert-close {
+  float: right;
+}
+.panel-bottom {
+  border-bottom: 1px solid #f5f5f5;
+}
+.panel-bottom :last-child {
+  border-bottom: none;
+}
+.panel-body button {
+  border: none;
+}
+.panel-body .media-icon {
+  width: 28px;
+  height: 32px;
+  position: relative;
+}
+.panel-body .media-logo {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  color: #fff;
 }
 .belongs-class .media-left img {
   width: 100px;
