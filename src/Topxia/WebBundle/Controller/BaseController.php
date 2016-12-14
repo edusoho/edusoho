@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -301,6 +302,11 @@ abstract class BaseController extends Controller
 
     protected function dispatchEvent($eventName, $event)
     {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
         return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }
 }

@@ -4,7 +4,6 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -753,22 +752,6 @@ class CourseController extends CourseBaseController
         }
 
         return true;
-    }
-
-
-    public function getDispatcher()
-    {
-        return ServiceKernel::dispatcher();
-    }
-
-    protected function dispatchEvent($eventName, $subject)
-    {
-        if ($subject instanceof ServiceEvent) {
-            $event = $subject;
-        } else {
-            $event = new ServiceEvent($subject);
-        }
-        return $this->getDispatcher()->dispatch($eventName, $event);
     }
     
     protected function getTagIdsByCourse($course)
