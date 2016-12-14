@@ -2729,7 +2729,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson       = $this->getLessonDao()->getLesson($lessonId);
 
         $client     = new EdusohoLiveClient();
-        $replayList = $client->createReplayList($lesson['mediaId'], $this->getKernel()->trans('录播回放'), $lesson['liveProvider']);
+        $replayList = $client->createReplayList($lesson['mediaId'], '课时回放-'.$lesson['title'], $lesson['liveProvider']);
 
         if (isset($replayList['error'])) {
             return $replayList;
@@ -2741,15 +2741,18 @@ class CourseServiceImpl extends BaseService implements CourseService
             $replayList = json_decode($replayList['data'], true);
         }
 
+        $index = 1;
         foreach ($replayList as $key => $replay) {
             $fields                = array();
             $fields['courseId']    = $courseId;
             $fields['lessonId']    = $lessonId;
-            $fields['title']       = $replay['subject'];
+            $fields['title']       = '录播回放'.$index;
             $fields['replayId']    = $replay['id'];
+            $fields['globalId']    = empty($replay['resourceNo']) ? '':$replay['resourceNo'];
             $fields['userId']      = $this->getCurrentUser()->id;
             $fields['createdTime'] = time();
-            $courseLessonReplay    = $this->addCourseLessonReplay($fields);
+            $this->addCourseLessonReplay($fields);
+            $index++;
         }
 
         $fields = array(
