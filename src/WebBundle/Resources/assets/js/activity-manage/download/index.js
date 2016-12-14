@@ -108,21 +108,23 @@ function addFile(addlist) {
   if (media.link) {
     item_tpl = `
     <li class="download-item " data-id="${media.link}">
-        <a href="${ media.link }" target="_blank">${ media.name }</a>
-        <a class="btn btn-xs js-btn-delete"  title="{{'删除'|trans}}" data-url="">&times;</a>
+        <a class="gray-primary" href="${ media.link }" target="_blank">${ media.name }</a>
+        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  title="{{'删除'|trans}}" data-url=""><i class="es-icon es-icon-cuowu"></i></a>
         <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
     </li>
   `;
   } else {
     item_tpl = `
     <li class="download-item " data-id="${media.id}">
-      <a href="${ media.id }">${ media.name }</a>
-      <a class="btn btn-xs js-btn-delete" title="{{'删除'|trans}}" data-url="">&times;</a>
+      <a class="gray-primary" href="${ media.id }">${ media.name }</a>
+      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;" title="{{'删除'|trans}}" data-url=""><i class="es-icon es-icon-cuowu"></i></a>
     </li>
   `;
   }
   $("#material-list").append(item_tpl);
-  $("#step2-form").data('validator').form();
+  if($('.jq-validate-error:visible').length>0) {
+    $("#step2-form").data('validator').form();
+  }
 }
 
 _inItStep2form();
@@ -142,72 +144,3 @@ const fileSelect = file => {
 const fileChooser = new FileChooser();
 
 fileChooser.on('select', fileSelect);
-
-// setTimeout(function () {
-//     open();
-
-// }, 500)
-// function open() {
-//     var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-//     $('[data-role=placeholder]').empty();
-//     $('.file-chooser-bar').addClass('hidden');
-//     $('.file-chooser-main').removeClass('hidden');
-//     $parentiframe.height($parentiframe.contents().find('body').height());
-// }
-// $('#step2-form').on('click', '.js-download-material-add', function () {
-//     if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
-//         let data = {
-//             source: 'link',
-//             id: $("#link").val(),
-//             name: $("#link").val(),
-//             link: $("#link").val(),
-//             size: 0
-//         };
-//         $("#media").val(JSON.stringify(data));
-//     }
-
-//     let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-
-//     let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-
-//     if (isEmpty(media)) {
-//         console.log('add file last');
-//         alert('add file first')
-//         return;
-//     }
-
-//     if (!isEmpty(items) && items[media.id]) {
-//         console.log('ok');
-//         notify('success', '选择重复');
-//         $("#media").val(null);
-//         return;
-//     }
-
-//     items[media.id] = media;
-//     $("#materials").val(JSON.stringify(items));
-
-//     $("#media").val(null);
-//     $('#link').val(null);
-
-//     let item_tpl = '';
-//     if (media.link) {
-//         item_tpl = `
-//         <li class="list-group-item clearfix" data-id="${media.link}">
-//           <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
-//             <a href="${ media.link }" target="_blank">${ media.name }</a>
-//             <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{'网络链接资料'|trans}}"></span>
-//         </li>
-//     `;
-//     } else {
-//         item_tpl = `
-//         <li class="list-group-item clearfix" data-id="${media.id}">
-//           <button class="close js-btn-delete" type="button" title="{{'删除'|trans}}" data-url="">&times;</button>
-//             <a href="${ media.id }">${ media.name }</a>
-//         </li>
-//     `;
-//     }
-//     $(".js-empty-list").addClass('hidden');
-//     $("#material-list").append(item_tpl);
-//     open();
-
-// });

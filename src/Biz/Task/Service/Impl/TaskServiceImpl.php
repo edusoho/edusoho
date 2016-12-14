@@ -166,7 +166,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->tryTakeTask($taskId);
 
-        if(!$this->canFinish($task)) {
+        if (!$this->isFinished($taskId)) {
             throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
         }
 
@@ -188,16 +188,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         $update['updatedTime']  = time();
         $update['status']       = 'finish';
         $update['finishedTime'] = time();
-        $taskResult = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+        $taskResult             = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
         return $taskResult;
     }
 
-    public function canFinish($taskId)
+    public function isFinished($taskId)
     {
-        $task = $this->getTask($taskId);
+        $task   = $this->getTask($taskId);
         $course = $this->getCourseService()->getCourse($task['courseId']);
         // TODO
-        return $course && $this->getActivityService()->canFinishActivity($task['activityId']);
+        return true;
+        return $course[''] && $this->getActivityService()->isFinished($task['activityId']);
     }
 
     public function tryTakeTask($taskId)
@@ -240,7 +241,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task                  = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -263,6 +264,22 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->getTaskDao()->findByChapterId($chapterId);
     }
+
+    public function findTasksFetchActivityByChapterId($chapterId)
+    {
+        $tasks = $this->findTasksByChapterId($chapterId);
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = ArrayToolkit::index($activities, 'id');
+
+        array_walk($tasks, function (&$task) use ($activities) {
+            $activity         = $activities[$task['activityId']];
+            $task['activity'] = $activity;
+        });
+        return $tasks;
+    }
+
 
     public function trigger($id, $eventName, $data = array())
     {

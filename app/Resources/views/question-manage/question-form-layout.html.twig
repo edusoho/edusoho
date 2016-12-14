@@ -1,4 +1,4 @@
-{% extends 'WebBundle:CourseSetManage:layout.html.twig' %}
+{% extends 'course-set-manage/layout.html.twig' %}
 
 {% block title %}
   {% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} - {{ parent() }}

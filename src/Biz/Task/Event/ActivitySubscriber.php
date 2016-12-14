@@ -23,7 +23,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         }
         $taskId = $event->getArgument('taskId');
 
-        if(!empty($taskId) && $this->getTaskService()->canFinish($taskId)) {
+        if(!empty($taskId) && $this->getTaskService()->isFinished($taskId)) {
             $this->getTaskService()->finishTaskResult($taskId);
         }
     }
