@@ -795,9 +795,9 @@ class EduCloudController extends BaseController
         }
 
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if (!$cloud_search_settting['search_enabled']) {
+        if (!$cloud_search_settting['search_enabled'] || $cloud_search_settting['status'] != 'closed') {
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
-        }
+        }        
         return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig');
     }
 
