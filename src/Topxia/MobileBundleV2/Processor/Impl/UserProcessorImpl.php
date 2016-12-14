@@ -663,10 +663,23 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
 
+    private function decryptPassword($encryptPassword,$key)
+    {
+        require_once("xxtea.php");
+       return  xxtea_decrypt($encryptPassword, $key);
+    }
     public function login()
     {
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
+         //新的方式 加密过的密码通过password传递
+        if (empty($password)) {
+            $password = $this->getParam('password');
+            $password = $this->decryptPassword($password,$this->request->getHost());
+        }
+        var_dump($this->request->getHost());
+        var_dump($password);
+        exit();
         $user     = $this->loadUserByUsername($this->request, $username);
         if (empty($user)) {
             return $this->createErrorResponse('username_error', '用户帐号不存在');
