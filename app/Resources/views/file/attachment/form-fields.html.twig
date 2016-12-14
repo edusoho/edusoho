@@ -34,7 +34,7 @@
     <input class="{{ids_class}}" 
       value="{{ attachments|array_column('fileId')|join(',') }}" 
       name="{% if useType|default(false)%} attachment[{{fileType}}][fileIds] {% else %} attachment[fileIds]{% endif %}" 
-      type="hidden">
+      type="hidden" data-role="fileId">
 
     <input class="js-file-target-type" 
       value="{{ targetType }}" 

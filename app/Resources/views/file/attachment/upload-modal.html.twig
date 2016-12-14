@@ -8,7 +8,7 @@
 
 {% block body %}
 
-  {% set single_file_size = setting('cloud_attachment.fileSize') %}
+  {% set single_file_size = setting('cloud_attachment.fileSize',0) %}
   <input type="hidden" name="media" id="media">
   <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
     <span data-role="placeholder">{{ file.filename|default(null) }}</span>
@@ -18,59 +18,13 @@
     </div>
   </div>
 
-  <div class="row">
-    {% include 'WebBundle:FileChooser/Parts:upload-file.html.twig' with {targetType:'attachment',courseId:0} %}
+  <div class="row" id="chooser-upload-panel">
+    {% include 'file/attachment/upload-file.html.twig' %}
+
+    <input type="hidden" data-role="metas" data-ids-class="{{idsClass}}" data-list-class="{{listClass}}" data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024  }}" data-url=""/>
   </div>
 
-  {#<div class="hidden">
-    {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
-  </div>
-  <div class="balloon-uploader" id="batch-uploader"
-       data-init-url="{{ path('uploader_init', {token:token}) }}"
-       data-finish-url="{{ path('uploader_finished', {token:token}) }}"
-       data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
-       data-accept="{{ uploader_accept('attachment')|json_encode }}"
-       data-process="{{ uploader_process(targetType) }}"
-       data-ids-class="{{idsClass}}"
-       data-list-class="{{listClass}}"
-       data-file-single-size-limit="{{ setting('cloud_attachment.fileSize',0) == 0  ? 2048 * 1024 * 1024 : setting('cloud_attachment.fileSize')*1024*1024  }}"
-  >
-    <div class="balloon-uploader-heading">上传文件</div>
-    <div class="balloon-uploader-body">
-      <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
-      <div class="balloon-filelist">
-        <div class="balloon-filelist-heading">
-          <div class="file-name">文件名</div>
-          <div class="file-size">大小</div>
-          <div class="file-status">状态</div>
-        </div>
-        <ul>
-        </ul>
-      </div>
-    </div>
-    <div class="balloon-uploader-footer">
-      <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
-      <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>
-    </div>
-  </div>
 
-  {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
-    <div class="alert alert-info">
-      <ul>
-        <li>支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过<strong>{{setting('cloud_attachment.fileSize')}}MB</strong>。</li>
-        <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-      </ul>
-    </div>
-  {% else %}
-    <div class="alert alert-info">
-      <ul>
-        <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2{{setting('cloud_attachment.fileSize')}}MB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-        <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-      </ul>
-    </div>
-  {% endif %}
-#}
-  <script>app.load('topxiawebbundle/controller/attachment/upload-modal')</script>
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>

@@ -109,7 +109,7 @@
             <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
             <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
             <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
-            <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='1'> <!--FIXME 临时赋值 -->
+            <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='{{ course.courseSetId }}'> <!--FIXME 临时赋值 -->
             <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           </li>
         </ul>

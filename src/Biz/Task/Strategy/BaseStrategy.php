@@ -2,16 +2,15 @@
 
 namespace Biz\Task\Strategy;
 
-
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Dao\TaskDao;
+use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
-use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Context\Biz;
+use Biz\Activity\Service\ActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Topxia\Common\ArrayToolkit;
 
 class BaseStrategy
 {
@@ -102,7 +101,6 @@ class BaseStrategy
         return $items;
     }
 
-
     protected function invalidTask($task)
     {
         if (!ArrayToolkit::requireds($task, array(
@@ -155,5 +153,4 @@ class BaseStrategy
     {
         return $this->biz->service('Activity:ActivityService');
     }
-
 }

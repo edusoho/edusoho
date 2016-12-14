@@ -22,7 +22,8 @@ class AttachmentController extends BaseController
             'token'      => $query['token'],
             'idsClass'   => $query['idsClass'],
             'listClass'  => $query['listClass'],
-            'targetType' => $params['targetType']
+            'targetType' => $params['targetType'],
+            'targetId'   => $params['targetId']
         ));
     }
 
@@ -53,7 +54,7 @@ class AttachmentController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
@@ -79,7 +80,7 @@ class AttachmentController extends BaseController
 
     public function downloadAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
@@ -104,7 +105,7 @@ class AttachmentController extends BaseController
     {
         $file       = $this->getUploadFileService()->getFile($fileId);
         $attachment = array('file' => $file);
-        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
+        return $this->render('file/attachment/file-item.html.twig', array(
             'attachment' => $attachment
         ));
     }

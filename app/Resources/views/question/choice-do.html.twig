@@ -1,11 +1,11 @@
-<div class="testpaper-question testpaper-question-choice {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-choice  js-testpaper-question {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
 
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
 	<div class="testpaper-question-body">
     {% include 'question/part/question-stem.html.twig' %}
 
-		<ul class="testpaper-question-choices">
+		<ul class="testpaper-question-choices js-testpaper-question-list">
 			{% for key, choice in question.metas.choices %}
 			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in question.answer)) ? 'testpaper-question-choice-right' : '' %}
 			  {% set choiceIndex = (65+key)|chr %}
@@ -24,14 +24,17 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，
-				{% if question.testResult.status == 'right' %}
+				{% if question.testResult.status|default('noAnswer') == 'right' %}
 					{{'回答正确'|trans}}
-				{% elseif question.testResult.status == 'partRight' %}
-					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>
-					{{'。回答部分正确。得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
-				{% elseif question.testResult.status == 'wrong' %}
-					{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。{{'回答错误'|trans}}
-				{% elseif question.testResult.status == 'noAnswer' %}
+				{% elseif question.testResult.status|default('noAnswer') == 'partRight' %}
+					{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>
+					{{'。回答部分正确。'|trans}}
+					{% if showScore|default(1) %}
+						{{'得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
+					{% endif %}
+				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
+				{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'你答错了'|trans}}
+				{% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
 				  {{'你未答题'|trans}}
 				{% endif %}
 		  </div>
@@ -45,12 +48,12 @@
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 
-		  <div class="testpaper-question-choice-inputs">
+		  <div class="testpaper-question-choice-inputs js-testpaper-question-label">
 				{% for key, choice in question.metas.choices %}
 					{% set choiceIndex = (65+key)|chr %}
 
 					<label class="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
-						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ question.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="{{ question.type }}" name="{{ question.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
 						{{ choiceIndex }}
 					</label>
 				{% endfor %}

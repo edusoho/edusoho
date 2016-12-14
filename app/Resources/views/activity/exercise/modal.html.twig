@@ -1,0 +1,65 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do css(['web.css']) %}
+{% do script(['web/activity-manage/exercise/index.js'], 300) %}
+
+{% block activity_content %}
+  <form id="#step2-form" class="form-horizontal lesson-form" method="post">
+
+    <div class="form-group">
+      <label for="questionCount" class="col-xs-2 control-label">{{'题目个数'|trans}}</label>
+      <div class="col-xs-8 controls">
+        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ activity.itemCount|default(0) }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-2 control-label">{{'题目来源'|trans}}</label>
+      <div class="col-xs-8 controls radios">
+        {{ radios('range', {'lesson':'当前课时的题目'|trans, 'course':'整个课程的题目'|trans}, activity.metas['range']|default('course') ) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-2 control-label"><label>{{'难度'|trans}}</label></div>
+      <div class="col-xs-8 controls">
+        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty">
+          {{ select_options(dict('difficulty'), activity.metas.difficulty|default(''),'不限'|trans) }}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-2 control-label">{{'题型范围'|trans}}</label>
+
+      <div class="col-xs-9 controls">
+        {% set range = activity.metas.questionTypes|default(null) %}
+        {% for questionType,name in questionTypes %}
+          <label class="checkbox-inline">
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %}checked=checked{% endif %}>{{ name }}
+          </label>
+        {% endfor %}
+        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_set_manage_question_check',{id:courseSetId}) }}" />
+      </div>
+    </div>
+
+    <p class="help-block">{{'提示：练习为随机出题，只需填写题目个数和题目类型即可。'|trans}}</p>
+
+  </form>
+
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="condition-select">{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="condition-select" name="finishCondition">
+        {{ select_options({'submit':'提交练习'|trans}, activity.finishCondition['type']|default('score')) }}
+      </select>
+      <input type="hidden" name="mediaType" value="exercise" />
+    </div>
+  </div>
+  
+  
+{% endblock %}

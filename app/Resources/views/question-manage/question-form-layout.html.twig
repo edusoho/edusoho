@@ -1,4 +1,4 @@
-{% extends 'course-set-manage/layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
 
 {% block title %}
   {% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} - {{ parent() }}
@@ -10,6 +10,7 @@
 {% block main %}
 
 {% set parentQuestion = parentQuestion|default(null) %}
+{% set questionTypesDict = getQuestionTypes() %}
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading clearfix">
@@ -20,10 +21,10 @@
     <ol class="breadcrumb">
       <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'题目管理'|trans}}</a></li>
       {% if parentQuestion %}
-        <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId: parentQuestion.id}) }}">{{ dict_text('questionType', parentQuestion.type) }}</a></li>
+        <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId: parentQuestion.id}) }}">{{ questionTypesDict[parentQuestion.type] }}</a></li>
       {% endif %}
       <li>{% if question|default(null) %}{{'编辑题目'|trans}}{% else %}{{'添加题目'|trans}}{% endif %} </li>
-      <li class="active">{{ dict_text('questionType',type) }}</li>
+      <li class="active">{{ questionTypesDict[type] }}</li>
     </ol>
 
     <div id="question-creator-widget">

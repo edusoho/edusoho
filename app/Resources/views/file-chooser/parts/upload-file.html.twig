@@ -9,7 +9,7 @@
   data-process="{{ uploader_process(targetType) }}">
   </div>
 
-  {% if mediaType == 'video' and setting('storage.upload_mode', 'local') != 'local' %}
+  {% if mediaType|default(null) == 'video' and setting('storage.upload_mode', 'local') != 'local' %}
     <div class="uploader-bottom">
       <div class="row">
         <div class="col-xs-8">

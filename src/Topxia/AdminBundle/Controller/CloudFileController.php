@@ -46,7 +46,7 @@ class CloudFileController extends BaseController
         //云资源只显示resType为normal的，但是resType被各种瞎使用
         //因为这边代码混乱，我也不想去重构了
         $conditions['resourceType'] = 'normal';
-        $results    = $this->getCloudFileService()->search(
+        $results                    = $this->getCloudFileService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
             20

@@ -5,6 +5,7 @@ const sortList = (options) => {
     element: '#sortable-list',
     distance: 20,
     itemSelector: "li.drag",
+    isAjax:true
     // success: (response) => {},
   }
 
@@ -15,14 +16,17 @@ const sortList = (options) => {
     onDrop: function (item, container, _super) {
       _super(item, container);
 
-      let data = $list.sortable("serialize").get();
+      if (settings.isAjax) {
+        let data = $list.sortable("serialize").get();
 
-      //排序URL
-      $.post($list.data('sortUrl'), {ids: data}, (response) => {
+        //排序URL
+        $.post($list.data('sortUrl'), {ids: data}, (response) => {
 
-        settings.success ? settings.success(response) : document.location.reload();
-        
-      });
+          settings.success ? settings.success(response) : document.location.reload();
+          
+        });
+      }
+      
     },
 
     serialize: function(parent, children, isContainer) {
