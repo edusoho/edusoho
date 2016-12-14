@@ -11,26 +11,6 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function findStudentsByCourseId($courseId);
 
     /**
-     * @deprecated
-     */
-    public function getMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
-
-    /**
-     * @deprecated
-     */
-    public function getMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
-
-    /**
-     * @deprecated
-     */
-    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
-
-    /**
-     * @deprecated
-     */
-    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
-
-    /**
      * 用来替代各种命名复杂的关联表的列表查询
      *
      * @param $conditions
@@ -47,5 +27,7 @@ interface CourseMemberDao extends GeneralDaoInterface
      * @return mixed
      */
     public function countMemberFetchCourse($conditions);
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
 }
