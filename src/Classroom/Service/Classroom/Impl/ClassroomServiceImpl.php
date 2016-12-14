@@ -1429,18 +1429,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array();
         $conditions['courseIds'] = $courseIds;
         $conditions['userId'] = $userId;
-        $count = $this->getCourseService()->searchMemberCount($conditions);
-
-        $members = $this->getCourseService()->searchMembers(
-            $conditions,
-            array('updatedTime','DESC'),
-            0,
-            $count
+        $conditions = array(
+            'userId'   => $userId,
+            'courseIds' => $courseIds,
+            'status'   => 'finished'
         );
-
-        $totalLearnNum = array_sum(ArrayToolkit::column($members, 'isLearned'));
+        $userLearnCount = $this->getCourseService()->searchLearnCount($conditions);
+        
         $fields['lastLearnTime'] = time();
-        $fields['learnedNum'] = $totalLearnNum;
+        $fields['learnedNum'] = $userLearnCount;
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
         return $this->updateMember($classroomMember['id'], $fields);       
