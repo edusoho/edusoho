@@ -510,7 +510,7 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
         }
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
         if ($isEmailWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
@@ -544,7 +544,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status'])) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
@@ -582,12 +582,12 @@ class EduCloudController extends BaseController
             $status = $request->request->all();
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
 
             if (isset($status['email-close'])) {
                 $emailStatus['status'] = 'disable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
