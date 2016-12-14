@@ -55,12 +55,6 @@
                 <div>
                    <a href="{{path('content_course_rule')}}" target="_blank">【查看课程细则】</a>
                 </div>
-              {% else %}
-                <div class="alert alert-info">
-                  <p>1.免费课程：即价格设置为“0”的课程，必须要登录才能加入学习。</p>
-                  <p>2.免费课时：即勾选了课时标题旁【免费课时】的课时，课时标题前，有“免费”标签。</p>
-                </div>
-                  
               {% endif %}
 
             </div>
@@ -92,14 +86,16 @@
           </div>
         {% endif %}
 
-        {% if setting('storage.upload_mode') == 'cloud' and course.type == 'normal' %}
-        <div class="form-group">
-            <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
-            <div class="col-md-8 controls radios">
-              {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
-              <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
-            </div>
-        </div>
+        {% if setting('storage.upload_mode') == 'cloud' %}
+        {% if course.type == 'normal' %}
+          <div class="form-group">
+              <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
+              <div class="col-md-8 controls radios">
+                {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
+                <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
+              </div>
+          </div>
+        {% endif %}
 
         <div class="form-group {% if course.tryLookable|default(0) !=1 %}hide{% endif %}" id = "tryLookTimeGroup">
             <label class="col-md-2 control-label">{{'试看时长'|trans}}</label>
