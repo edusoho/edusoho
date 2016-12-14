@@ -80,8 +80,8 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development babel-node ./app/Resources/assets/config/webpack/server.dev.js",
-    "compile": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/assets/config/webpack/webpack.config",
+    "dev": "NODE_ENV=development babel-node ./app/Resources/webpack/webpack.dev.js",
+    "compile": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "lint": "eslint src",
     "clean": "npm prune"

@@ -42,6 +42,9 @@ define(function(require, exports, module) {
     }
 
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
+        if (jqxhr.responseText === 'LoginLimit') {
+            location.href = '/login';
+        }
         var json = jQuery.parseJSON(jqxhr.responseText);
         error = json.error;
         if (!error) {

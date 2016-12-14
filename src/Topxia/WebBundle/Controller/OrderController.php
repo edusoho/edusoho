@@ -308,6 +308,11 @@ class OrderController extends BaseController
         return $couponInfo;
     }
 
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

@@ -8,6 +8,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 define('RUNTIME_ENV', 'API');
 define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '/../app');
@@ -44,9 +45,17 @@ $biz = new \Codeages\Biz\Framework\Context\Biz(array(
 
 $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
 $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
+$biz->register(new \Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
 $biz['subscribers'] = new \ArrayObject();
 $biz->boot();
 
 $serviceKernel = ServiceKernel::create($parameters['environment'], true);
+$request = Request::createFromGlobals();
+$serviceKernel->setEnvVariable(array(
+    'host'          => $request->getHttpHost(),
+    'schemeAndHost' => $request->getSchemeAndHttpHost(),
+    'basePath'      => $request->getBasePath(),
+    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
+));
 $serviceKernel->setParameterBag(new ParameterBag($parameters));
 $serviceKernel->setBiz($biz);

@@ -11,8 +11,9 @@ const notify = (level, message) => {
       from: 'top',
       align: 'center'
     },
-    offset: 0,
+    offset: 20,
     z_index: 1051,
+    timer: 1000,
   });
 }
 

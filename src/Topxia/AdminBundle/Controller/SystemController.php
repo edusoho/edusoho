@@ -4,7 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 

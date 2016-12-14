@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     (function($) {
-
         $.fn.WaterMark = function(options) {
             var settings = $.extend({
                 'duringTime': 5 * 60 * 1000,
@@ -183,7 +182,6 @@ define(function(require, exports, module) {
             var self = this;
             docPlayer = $(this.element).attr("id");
             self.init(this.element);
-
         },
 
         init: function ($thiz) {
@@ -207,7 +205,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function($thiz) {
             self=this;
             $("html").attr('dir','ltr');
-            var jsPath = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'+self.attrs.pdfFileUrl.value;
+            var jsPath = 'http://opencdn.edusoho.net/pdf.js/v7/viewer.html#'+self.attrs.pdfFileUrl.value;
             if(app.lessonCopyEnabled==0){
                 jsPath = jsPath+'#false';
             }

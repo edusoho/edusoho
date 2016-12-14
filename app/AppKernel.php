@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 
+
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
@@ -138,6 +139,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $biz->register($provider);
         }
 
+        $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $biz->boot();
     }
 

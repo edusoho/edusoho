@@ -36,13 +36,37 @@ class LessonReplay extends BaseResource
         }
 
         $user = $this->getCurrentUser();
+        $response = array(
+            'url' => '',
+            'extra' => array(
+                'provider' => '',
+                'lessonId' => $lesson['id'],
+
+            ),
+            'device' => $device
+        );
         try {
-            $res = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+            // play es replay
+            if ($lesson['liveProvider'] == 5) {
+                //获取globalid
+                $globalId = $visableReplays[0]['globalId'];
+                $options = array(
+                    'fromApi' => true,
+                    'times' => 2,
+                    'line' => $request->query->get('line', ''),
+                    'format' => $request->query->get('format', '')
+                );
+                $response['url'] = $this->getMediaService()->getVideoPlayUrl($globalId, $options);
+                $response['extra']['provider'] = 'longinus';
+            } else {
+                $response = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", array('replayId' => $visableReplays[0]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device));
+            }
+            
         } catch (Exception $e) {
             return $this->error('503', '获取回放失败！');
         }
 
-        return $res;
+        return $response;
     }
 
     public function filter($res)
@@ -53,6 +77,11 @@ class LessonReplay extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getMediaService()
+    {
+        return $this->getServiceKernel()->createService('Media.MediaService');
     }
 
     protected function sendRequest($method, $url, $headers = array(), $params = array())
