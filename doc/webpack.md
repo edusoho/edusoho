@@ -34,6 +34,7 @@ npm start port:3038 #改变端口
 
 ```
 # 会生成实体文件，本项目会生成到web/static-dist/
+
 npm run compile
 npm run compile:debug  #不压缩
 ```

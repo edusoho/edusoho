@@ -205,6 +205,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
                 ->andWhere('userId NOT IN ( :excludeUserIds )')
                 ->andWhere("lessonId = :lessonId")
                 ->andWhere("courseId = :courseId")
+                ->andWhere("courseId IN ( :courseIds)")
                 ->andWhere("finishedTime >= :startTime")
                 ->andWhere("finishedTime <= :endTime");
         }

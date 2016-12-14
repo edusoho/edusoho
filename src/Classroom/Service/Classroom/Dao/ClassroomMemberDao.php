@@ -12,7 +12,7 @@ interface ClassroomMemberDao
 
     public function searchMemberCount($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBys, $start, $limit);
 
     public function getMemberByClassroomIdAndUserId($classroomId, $userId);
 
