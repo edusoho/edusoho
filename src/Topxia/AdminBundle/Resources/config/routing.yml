@@ -1021,6 +1021,39 @@ admin_cloud_video:
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_video_detail:
+    path: /cloud/video/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoDetail }
+
+admin_cloud_video_switch:
+    path:  /cloud/video/switch
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoSwitch }
+
+admin_cloud_show:
+    path:  /cloud/{type}/show
+    defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
+
+admin_cloud_email_buy:
+    path:  /cloud/{type}/buy/show
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailBuy }
+
+admin_cloud_sms_sign:
+    path:  /cloud/sms/sign
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSign }
+
+admin_cloud_email_account:
+    path:  /cloud/email/count
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailAccount }
+
+admin_cloud_email_list:
+    path:  /cloud/email/list
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailList }
+
+admin_cloud_search:
+    path:  /cloud/search
+    defaults: { _controller: TopxiaAdminBundle:Cloud:search }
+    permissions: [admin_my_cloud_overview]
+
 admin_cloud_doc:
     path:  /cloud/doc
     defaults: { _controller: TopxiaAdminBundle:Cloud:doc }

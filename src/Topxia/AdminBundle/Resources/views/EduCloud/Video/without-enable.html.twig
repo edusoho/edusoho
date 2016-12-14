@@ -1,0 +1,25 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_video_overview' %}
+{% block tabs %}{% endblock %}
+
+{% block main %}
+
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云视频</div>
+    <form class="form-horizontal" role="form" method="post" action="{{ path('admin_cloud_video_switch') }}">
+    <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud">立即启用</button>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  </div>
+  <div class="edu-cloud-video-intro">
+    <p>1.{{'专注教育——提供视频随堂练习、视频字幕、视频弹幕等多项针对在线教育的视频教学手段，让视频教学更有乐趣。' |trans }}</p>
+    <p>2.{{'稳定安全——提供视频水印、视频指纹等多项安全措施，防止视频盗录，有效阻止视频盗播和恶意下载。稳定可靠的视频云存储服务，保障数据安全，防止物理丢失。' |trans }}</p>
+    <p>3.{{'高性价比——针对在线教育的视频动态转码技术，以及浏览器缓存播放、移动端离线播放等多项功能，大大压缩视频流量成本。' |trans }}</p>
+    <p>4.{{ '优质视听体验——采用CDN（内容分发网络）技术，200多个国内外优质节点，保障高清流畅的视听体验。多种清晰度自由切换，不同的网络环境都能流畅观看。多终端全平台完美支持，随时随地观看精彩视频。'|trans }}</p>
+    <p>5.{{ '单价￥1.5/GB，购买云视频包享受更多优惠，立即'|trans }} <a href="{{path('admin_cloud_video')}}" target="_blank"> 了解详情</a>。</p>
+  </div>
+</div>
+{% endblock %}

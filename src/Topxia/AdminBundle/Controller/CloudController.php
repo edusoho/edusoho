@@ -39,7 +39,22 @@ class CloudController extends BaseController
 
     public function smsAccountAction(Request $request)
     {
-        return $this->redirectUrl('service_sms_accout');
+        return $this->redirectUrl('service_sms_count');
+    }
+
+    public function emailAccountAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_count');
+    }
+
+    public function emailListAction(Request $request)
+    {
+        return $this->redirectUrl('service_email_list');
+    }
+
+    public function smsSignAction(Request $request)
+    {
+        return $this->redirectUrl('service_sms_sign');
     }
 
     public function videoAccountAction(Request $request)
@@ -51,6 +66,17 @@ class CloudController extends BaseController
     {
         $params = array('type' => $type);
         return $this->redirectUrl('edu_cloud_buy', $params);
+    }
+
+    public function emailBuyAction(Request $request, $type)
+    {
+        $params = array('type' => $type);
+        return $this->redirectUrl('edu_cloud_buy_custom', $params);
+    }
+
+    public function videoDetailAction()
+    {
+        return $this->redirectUrl('service_storage_chart');
     }
 
     public function tlpAction(Request $request)
