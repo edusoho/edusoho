@@ -52,9 +52,9 @@ interface CourseService
 
     public function setMemberNoteNumber($courseId, $userId, $num);
 
-    public function findUserLeaningCourseCount($userId, $filters = array());
+    public function countLeaningCourseByUserId($userId, $filters = array());
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
+    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 

@@ -508,7 +508,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    public function findUserLeaningCourseCount($userId, $filters = array())
+    public function countLeaningCourseByUserId($userId, $filters = array())
     {
         $conditions = array(
             'userId'    => $userId,
@@ -523,7 +523,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->count($conditions);
     }
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array('type' => ''))
+    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array('type' => ''))
     {
         $conditions = array(
             'userId'    => $userId,
