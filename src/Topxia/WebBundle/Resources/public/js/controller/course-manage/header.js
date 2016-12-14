@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             if (!confirm(Translator.trans('您真的要发布该课程吗？'))) {
                 return ;
             }
-            $.post($('.course-publish-btn').data('url'), function(response) {
+            $.post($(this).data('url'), function(response) {
                 if (!response['result']) {
                     Notify.danger(response['message']);
                 } else {
