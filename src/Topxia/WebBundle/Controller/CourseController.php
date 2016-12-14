@@ -213,7 +213,7 @@ class CourseController extends CourseBaseController
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
         if ('normal' == $course['type']){
-            $this->dispatchEvent('course.browse',
+            $this->dispatchEvent('course.view',
                 new ServiceEvent($course, array('userId' => $user['id'])));
         }
         $allTags = $this->getTagService()->findTagsByOwner(array(
