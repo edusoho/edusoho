@@ -103,7 +103,7 @@ class CourseManageController extends BaseController
     public function studentNumCheckAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
-        if (!empty($course) && empty($course['maxStudentNum']) && $course['type'] == 'live') {
+        if (!empty($course) && $course['type'] == 'live' && empty($course['maxStudentNum'])) {
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!'));            
         } else {
             $response = array('success' => true, 'message' => $this->getServiceKernel()->trans(''));            

@@ -86,16 +86,14 @@
           </div>
         {% endif %}
 
-        {% if setting('storage.upload_mode') == 'cloud' %}
-        {% if course.type == 'normal' %}
-          <div class="form-group">
-              <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
-              <div class="col-md-8 controls radios">
-                {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
-                <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
-              </div>
-          </div>
-        {% endif %}
+        {% if setting('storage.upload_mode') == 'cloud' and course.type == 'normal' %}
+        <div class="form-group">
+            <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
+            <div class="col-md-8 controls radios">
+              {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
+              <div class="help-block">{{'开启后，此课程的所有'|trans}}<a href="http://open.edusoho.com/show/cloud/video">云视频</a>{{'课时都支持试看。'|trans}}</div>
+            </div>
+        </div>
 
         <div class="form-group {% if course.tryLookable|default(0) !=1 %}hide{% endif %}" id = "tryLookTimeGroup">
             <label class="col-md-2 control-label">{{'试看时长'|trans}}</label>
