@@ -67,6 +67,20 @@ class FileToolkit
         return $errors;
     }
 
+    public static function isAllowedUploadFile($file)
+    {
+        if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($finfo, $file);
+            
+            $fileMimeType = $file->getClientMimeType();
+
+            return $mimeType == $fileMimeType;
+        }
+
+        return true;
+    } 
+
     public static function isImageFile(File $file)
     {
         $ext = static::getFileExtension($file);

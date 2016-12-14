@@ -30,6 +30,9 @@ class UploadFileController extends BaseController
         $targetId   = $request->query->get('targetId');
 
         $originalFile = $this->get('request')->files->get('file');
+        if (!FileToolkit::isAllowedUploadFile($originalFile)) {
+            throw new \RuntimeException($this->getServiceKernel()->trans('上传文件非法。'));
+        }
 
         $this->getUploadFileService()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
