@@ -67,7 +67,11 @@ $resources = array(
     'OpenCourse/Lessons',
     'IM/MePush',
     'IM/Member',
-    'IM/MemberSync'
+    'IM/MemberSync',
+    'Emails',
+    'User/Password',
+    'SmsCodes',
+    'User/VerifiedMobile'
 );
 
 foreach ($resources as $res) {

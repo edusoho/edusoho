@@ -336,7 +336,12 @@ define(function(require, exports, module) {
         /**
          * 视频字幕
          */
-        var subtitleDialog = null;
+        var subtitleDialog = {
+            renderHTML: function() {
+            },
+            destroy: function() {
+            }
+        };
         if ($('.js-subtitle-list').length > 0) {
             subtitleDialog = new SubtitleDialog({
                 element: '.js-subtitle-list'
@@ -344,10 +349,7 @@ define(function(require, exports, module) {
         }
 
         //显示字幕编辑组件
-        if (choosedMedia && 'id' in choosedMedia && choosedMedia.id > 0) {
-            subtitleDialog.media = choosedMedia;
-            subtitleDialog.renderHTML();
-        }
+        subtitleDialog.renderHTML(choosedMedia);
 
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
@@ -355,8 +357,7 @@ define(function(require, exports, module) {
 
             updateDuration(item.length);
             fillTitle(item.name);
-            subtitleDialog.media = item;
-            subtitleDialog.renderHTML();
+            subtitleDialog.renderHTML(item);
         });
 
         audioChooser.on('change', function(item) {
@@ -398,9 +399,7 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            if (subtitleDialog) {
-                subtitleDialog.destroy();
-            }
+            subtitleDialog.destroy();
 
             _.each(choosers, function (chooser) {
                  chooser.destroy();

@@ -538,70 +538,39 @@ admin:
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
             children:
                 admin_my_cloud:
-                    name: 概览
+                    name: 账户概览
                     children:
                         admin_my_cloud_overview:
-                            name: 教育云概览
+                            name: 账户概览
                             disable: true
                 admin_cloud_video_setting:
-                    name: 云视频
-                    router_name: admin_cloud_video_overview
-                    visable: (cloudStatus())
+                    name: 云视频设置
+                    router_name: admin_setting_cloud_video
                     children:
-                        admin_cloud_video_overview:
-                            name: 概览
-                            disable: true
-                        admin_cloud_setting_video:
-                            name: 设置
-                            disable: true
-                admin_cloud_edulive_setting:
-                    name: 云直播
-                    visable: (cloudStatus())
-                    router_name: admin_cloud_edulive_overview
-                    children:
-                        admin_cloud_edulive_overview:
-                            name: 概览
-                            disable: true
-                        admin_setting_cloud_edulive:
-                            name: 设置
+                        admin_setting_cloud_video:
+                            name: 云视频设置
                             disable: true
                 admin_edu_cloud_sms:
-                    name: 云短信
-                    visable: (cloudStatus())
+                    name: 云短信设置
                     children:
-                        admin_edu_cloud_sms_overview:
-                            name: 概览
+                        admin_edu_cloud_sms_setting:
+                            name: 云短信设置
                             router_name: admin_edu_cloud_sms
                             disable: true
-                        admin_edu_cloud_setting_sms:
-                            name: 设置
-                            disable: true
-                admin_edu_cloud_email:
-                    name: 云邮件
-                    visable: (cloudStatus())
-                    children:
-                        admin_edu_cloud_email_overview:
-                            name: 概览
-                            router_name: admin_edu_cloud_email
-                            disable: true
-                        admin_edu_cloud_email_setting:
-                            name: 设置
-                            disable: true
+                # admin_edu_cloud_email:
+                #     name: 云邮件设置
+                #     children:
+                #         admin_edu_cloud_email_seeting:
+                #             name: 云邮件设置
+                #             router_name: admin_edu_cloud_email
                 admin_edu_cloud_search_setting:
-                    name: 云搜索
-                    visable: (cloudStatus())
-                    router_name: admin_edu_cloud_search
+                    name: 云搜索设置
                     children:
-                        admin_edu_cloud_search_overview:
-                            name: 概览
-                            router_name: admin_edu_cloud_search
-                            disable: true
-                        admin_edu_cloud_setting_search:
-                            name: 设置
+                        admin_edu_cloud_search:
+                            name: 云搜索
                             disable: true
                 admin_app_im:
                     name: 即时聊天设置
-                    visable: (cloudStatus())
                     children:
                         admin_app_im_setting:
                             name: 即时聊天设置
@@ -609,7 +578,6 @@ admin:
                             disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
-                    visable: (cloudStatus())
                     children:
                         admin_edu_cloud_attachment:
                             name: 云附件设置
@@ -640,7 +608,6 @@ admin:
                             disable: true
                 admin_cloud_attachment_manage:
                     name: 云附件
-                    visable: (cloudStatus())
                     children:
                         admin_cloud_attachment:
                             name: 云附件
@@ -723,10 +690,10 @@ admin:
                             name: 课程
                             disable: true
                             router_name: admin_setting_course_setting
-                        # admin_setting_live_course:
-                        #     name: 直播
-                        #     disable: true
-                        #     router_name: admin_setting_live_course_setting
+                        admin_setting_live_course:
+                            name: 直播
+                            disable: true
+                            router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: 题库
                             disable: true
