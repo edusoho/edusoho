@@ -1,8 +1,0 @@
-parameters:
-    topxia_services:
-        'Crm.VipLevelService' : 'CRM\DataProvider\VipLevel\Service\Impl\VipLevelServiceImpl'
-        'Crm.ProductService' : 'CRM\DataProvider\Product\Service\Impl\ProductServiceImpl'
-
-    topxia_daos:
-        'Crm.VipLevelDao' : 'CRM\DataProvider\VipLevel\Service\Dao\Impl\VipLevelDaoImpl'
-        'Crm.ProductDao' : 'CRM\DataProvider\Product\Service\Dao\Impl\ProductDaoImpl'
