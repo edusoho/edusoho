@@ -9,7 +9,7 @@ class TagUtil
 {
     public static function buildTags($ownerType, $ownerId)
     {
-        $res['tags'] = $this->getTagService()->findTagsByOwner(array(
+        $res['tags'] = self::getTagService()->findTagsByOwner(array(
             'ownerType' => $ownerType,
             'ownerId'   => $ownerId
         ));
@@ -17,8 +17,13 @@ class TagUtil
         return implode(',', ArrayToolkit::column($res['tags'], 'name'));
     }
 
-    protected function getTagService()
+    protected static function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return self::getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected static function getServiceKernel()
+    {
+        return ServiceKernel::instance();   
     }
 }
