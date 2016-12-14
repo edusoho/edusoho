@@ -276,7 +276,7 @@ class ClassroomController extends BaseController
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
 
-        $this->dispatchEvent('classroom.browse',
+        $this->dispatchEvent('classroom.view',
             new ServiceEvent($classroom, array('userId' =>$user['id']))
         );
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
