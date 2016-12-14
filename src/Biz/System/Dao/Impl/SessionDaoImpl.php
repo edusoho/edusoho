@@ -16,7 +16,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function deleteByUserId($userId)
     {
-        return $this->db()->delete($this->table(), array('sess_user_id' => $id));
+        return $this->db()->delete($this->table(), array('sess_user_id' => $userId));
     }
 
     public function getOnlineCount($retentionTime)

@@ -3,7 +3,7 @@ namespace Biz\User\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Biz\User\InviteRecordService;
+use Biz\User\Service\InviteRecordService;
 
 class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 {
@@ -32,7 +32,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->updateByInvitedUserId($invitedUserId, $fields);
     }
 
-    public function count($conditions)
+    public function countRecords($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
         return $this->getInviteRecordDao()->count($conditions);

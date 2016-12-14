@@ -87,7 +87,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
                     'batchId'     => $batchNotification['id'],
                     'createdTime' => $batchNotification['sendedTime']
                 );
-                $notification = $this->getNotificationDao()->create(BatchNotificationSerialize::serialize($notification));
+                $this->getNotificationDao()->create($notification);
                 $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
             }
         }

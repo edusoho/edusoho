@@ -19,9 +19,14 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
         return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function findByFromId($fromId, $start, $limit)
+    public function searchByFromId($fromId, $start, $limit)
     {
         return $this->search(array('fromId' => $fromId), array('createdTime' => 'DESC'), $start, $limit);
+    }
+
+    public function countByFromId($fromId)
+    {
+        return $this->count(array('fromId' => $fromId));
     }
 
     public function findAllUserFollowingByFromId($fromId)
@@ -42,7 +47,7 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
         return $this->db()->fetchColumn($sql, array($fromId));
     }
 
-    public function findByToId($toId, $start, $limit)
+    public function searchByToId($toId, $start, $limit)
     {
         return $this->search(array('toId' => $toId), array('createdTime' => 'DESC'), $start, $limit);
     }
@@ -65,7 +70,7 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
         return $this->db()->fetchAll($sql, $parmaters);
     }
 
-    public function findByUserId($userId, $start, $limit)
+    public function searchByUserId($userId, $start, $limit)
     {
         return $this->search(array('fromId' => $userId, 'pair' => 1), array('createdTime' => 'DESC'), $start, $limit);
     }

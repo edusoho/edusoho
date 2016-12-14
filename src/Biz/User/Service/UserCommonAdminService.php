@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface UserCommonAdminService
 {

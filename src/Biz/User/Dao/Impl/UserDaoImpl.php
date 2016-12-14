@@ -208,20 +208,20 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-        return $that->db()->fetchAll($sql, array($startTime, $endTime));
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisUserSumByTime($endTime)
     {
         $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $that->db()->fetchAll($sql, array($endTime));
+        return $this->db()->fetchAll($sql, array($endTime));
     }
 
     public function countByLessThanCreatedTime($endTime)
     {
-        $sql = "SELECT count(id) as count FROM `{$that->getTable()}` WHERE  `createdTime`<=?  ";
-        return $that->db()->fetchColumn($sql, array($endTime));
+        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE  `createdTime`<=?  ";
+        return $this->db()->fetchColumn($sql, array($endTime));
     }
 
     public function declares()

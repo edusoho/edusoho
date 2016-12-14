@@ -192,7 +192,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
             define(strtoupper($key), $value);
         }
 
-        require_once __DIR__.'/../../../../../vendor_user/uc_client/client.php';
+        require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
     }
 
     protected function convertApiResult($result)

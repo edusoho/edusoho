@@ -21,20 +21,6 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
         return parent::count($conditions);
     }
 
-    public function delete($id)
-    {
-        $result = parent::delete($id);
-        $this->clearCached();
-        return $result;
-    }
-
-    public function update($id, $fields)
-    {
-        $bn = parent::update($id, $fields);
-        $this->clearCached();
-        return $bn;
-    }
-
     public function search($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

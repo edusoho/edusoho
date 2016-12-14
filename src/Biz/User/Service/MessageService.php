@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface MessageService
 {
@@ -94,7 +94,7 @@ interface MessageService
      * @return integer 搜索出的私信数目
      */
 
-    public function searchMessagesCount($conditions);
+    public function countMessages($conditions);
 
     /**
      * 搜索特定状态下的私信

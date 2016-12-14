@@ -11,7 +11,7 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
 
     public function findByUserId($userId, $start, $limit)
     {
-        return $this->findInField(array('userId' => $userId), array('createdTime' => 'DESC'), $start, $limit);
+        return $this->search(array('userId' => $userId), array('createdTime' => 'DESC'), $start, $limit);
     }
 
     public function countByUserId($userId)
@@ -22,6 +22,9 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
     public function declares()
     {
         return array(
+            'serializes' => array(
+                'content' => 'json'
+            )
         );
     }
 }

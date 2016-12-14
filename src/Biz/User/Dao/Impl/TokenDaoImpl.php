@@ -12,7 +12,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         'data' => 'phpserialize' //FIXME 目前DaoProxy中未支持该类型
     );
 
-    public function get($id)
+    public function get($id, $lock = false)
     {
         $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
         $token = $this->db()->fetchAssoc($sql, array($id)) ?: null;
@@ -26,10 +26,10 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function create(array $token)
+    public function create($token)
     {
         $token = $this->createSerializer()->serialize($token, $this->serializeFields);
-        return $this->create($this->table, $token);
+        return parent::create($token);
     }
 
     public function findByUserIdAndType($userId, $type)
@@ -38,7 +38,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $this->db()->fetchAll($sql, array($userId, $type)) ?: null;
     }
 
-    public function getTokenByType($type)
+    public function getByType($type)
     {
         $sql   = "SELECT * FROM {$this->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
         $token = $this->db()->fetchAssoc($sql, array($type, time())) ?: null;

@@ -3,7 +3,7 @@
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\StatisticsService;
+use Biz\System\Service\StatisticsService;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
 {

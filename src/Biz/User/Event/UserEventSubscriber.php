@@ -50,18 +50,11 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     private function sendRegisterMessage($user)
     {
-        $senderUser = array();
-        $auth       = $this->getSettingService()->get('auth', array());
+        $auth = $this->getSettingService()->get('auth', array());
 
-        if (empty($auth['welcome_enabled'])) {
-            return;
-        }
-
-        if ($auth['welcome_enabled'] != 'opened') {
-            return;
-        }
-
-        if (empty($auth['welcome_sender'])) {
+        if (empty($auth['welcome_enabled'])
+        || $auth['welcome_enabled'] != 'opened'
+        || empty($auth['welcome_sender'])) {
             return;
         }
 
@@ -74,7 +67,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $welcomeBody = $this->getWelcomeBody($user);
 
         if (empty($welcomeBody)) {
-            return true;
+            return;
         }
 
 // TODO
@@ -98,6 +91,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
 
         $auth = $this->getSettingService()->get('auth', array());
+        $welcomeBody = '';
         if (!empty($auth) && isset($auth['welcome_body'])) {
             $welcomeBody = $auth['welcome_body'];
         }

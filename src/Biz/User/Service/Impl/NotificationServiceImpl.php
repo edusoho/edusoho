@@ -1,7 +1,7 @@
 <?php
 namespace Biz\User\Impl;
 
-use Biz\User\NotificationService;
+use Biz\User\Service\NotificationService;
 use Biz\BaseService;
 
 class NotificationServiceImpl extends BaseService implements NotificationService
@@ -14,16 +14,14 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $notification['content']     = is_array($content) ? $content : array('message' => $content);
         $notification['createdTime'] = time();
         $notification['isRead']      = 0;
-        $this->getNotificationDao()->create(NotificationSerialize::serialize($notification));
+        $this->getNotificationDao()->create($notification);
         $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
         return true;
     }
 
     public function searchNotifications($conditions, $orderBy, $start, $limit)
     {
-        return NotificationSerialize::unserializes(
-            $this->getNotificationDao()->search($conditions, $orderBy, $start, $limit)
-        );
+        return $this->getNotificationDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countNotifications($conditions)
@@ -31,14 +29,12 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->getNotificationDao()->count($conditions);
     }
 
-    public function findUserNotifications($userId, $start, $limit)
+    public function searchNotificationsByUserId($userId, $start, $limit)
     {
-        return NotificationSerialize::unserializes(
-            $this->getNotificationDao()->findByUserId($userId, $start, $limit)
-        );
+        return $this->getNotificationDao()->searchByUserId($userId, $start, $limit);
     }
 
-    public function countNotifications($userId)
+    public function countNotificationsByUserId($userId)
     {
         return $this->getNotificationDao()->countByUserId($userId);
     }
@@ -59,27 +55,3 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     }
 }
 
-class NotificationSerialize
-{
-    public static function serialize(array $notification)
-    {
-        $notification['content'] = json_encode($notification['content']);
-        return $notification;
-    }
-
-    public static function unserialize(array $notification = null)
-    {
-        if (empty($notification)) {
-            return null;
-        }
-        $notification['content'] = json_decode($notification['content'], true);
-        return $notification;
-    }
-
-    public static function unserializes(array $notifications)
-    {
-        return array_map(function ($notification) {
-            return NotificationSerialize::unserialize($notification);
-        }, $notifications);
-    }
-}

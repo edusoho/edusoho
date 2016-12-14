@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface UserFieldService
 {
@@ -8,7 +8,7 @@ interface UserFieldService
 
     public function addUserField($field);
 
-    public function searchFieldCount($condition);
+    public function countFields($condition);
 
     public function getAllFieldsOrderBySeq();
 

@@ -16,8 +16,8 @@ class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
 
     public function findByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
     {
-        $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
-        return $that->db()->fetchAll($sql, array($type, $time));
+        $sql = "SELECT * FROM {$this->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
+        return $this->db()->fetchAll($sql, array($type, $time));
     }
 
     public function increaseIpCounter($id, $counter)

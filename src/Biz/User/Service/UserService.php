@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface UserService
 {
@@ -14,7 +14,7 @@ interface UserService
 
     public function getUserByVerifiedMobile($mobile);
 
-    public function getUserCountByMobileNotEmpty();
+    public function countUsersByMobileNotEmpty();
 
     public function countUserHasMobile($isVerified = false);
 
@@ -30,7 +30,7 @@ interface UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit);
 
-    public function searchUserCount(array $conditions);
+    public function countUsers(array $conditions);
 
     public function setEmailVerified($userId);
 
@@ -62,7 +62,7 @@ interface UserService
 
     public function verifyPayPassword($id, $payPassword);
 
-    public function getUserSecureQuestionsByUserId($userId);
+    public function findUserSecureQuestionsByUserId($userId);
 
     public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers);
 
@@ -117,11 +117,11 @@ interface UserService
 
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
 
-    public function searchUserProfileCount(array $conditions);
+    public function countUserProfiles(array $conditions);
 
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit);
 
-    public function searchApprovalsCount(array $conditions);
+    public function countApprovals(array $conditions);
 
     public function changeUserRoles($id, array $roles);
 
@@ -138,7 +138,7 @@ interface UserService
     /**
      * @deprecated move to TokenService
      */
-    public function searchTokenCount($conditions);
+    public function countTokens($conditions);
 
     /**
      * @deprecated move to TokenService
@@ -199,22 +199,22 @@ interface UserService
 
     public function isFollowed($fromId, $toId);
 
-    public function findUserFollowing($userId, $start, $limit);
+    public function findUserFollowings($userId, $start, $limit);
 
-    public function findAllUserFollowing($userId);
+    public function findAllUserFollowings($userId);
 
-    public function findUserFollowingCount($userId);
+    public function countUserFollowings($userId);
 
     public function findUserFollowers($userId, $start, $limit);
 
-    public function findUserFollowerCount($userId);
+    public function countUserFollowers($userId);
 
     //当前用户关注的人们
-    public function findAllUserFollower($userId);
+    public function findAllUserFollowers($userId);
 
     public function findFriends($userId, $start, $limit);
 
-    public function findFriendCount($userId);
+    public function countFriends($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表
@@ -241,7 +241,7 @@ interface UserService
 
     public function analysisUserSumByTime($endTime);
 
-    public function findUsersCountByLessThanCreatedTime($endTime);
+    public function countUsersByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 

@@ -10,7 +10,7 @@ interface BatchNotificationService
 
     public function getBatchNotification($id);
 
-    public function searchBatchNotificationsCount($conditions);
+    public function countBatchNotifications($conditions);
 
     public function searchBatchNotifications($conditions, $sort, $start, $limit);
 

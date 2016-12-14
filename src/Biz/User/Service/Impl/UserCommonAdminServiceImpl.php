@@ -2,7 +2,7 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\UserCommonAdminService;
+use Biz\User\Service\UserCommonAdminService;
 
 class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminService
 {

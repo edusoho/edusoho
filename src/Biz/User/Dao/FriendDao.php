@@ -10,7 +10,7 @@ interface FriendDao
 
     public function findByFromIdAndToIds($fromId, array $toIds);
 
-    public function findByFromId($fromId, $start, $limit);
+    public function searchByFromId($fromId, $start, $limit);
 
     public function findAllUserFollowingByFromId($fromId);
 
@@ -18,11 +18,11 @@ interface FriendDao
 
     public function countByFromId($fromId);
 
-    public function findByToId($toId, $start, $limit);
+    public function searchByToId($toId, $start, $limit);
 
     public function countByToId($toId);
 
-    public function findByUserId($userId, $start, $limit);
+    public function searchByUserId($userId, $start, $limit);
 
     public function countByUserId($userId);
 }

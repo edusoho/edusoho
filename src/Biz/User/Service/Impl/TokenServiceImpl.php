@@ -2,7 +2,7 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\TokenService;
+use Biz\User\Service\TokenService;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {

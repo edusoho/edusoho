@@ -2,8 +2,8 @@
 
 namespace Biz\User\Impl;
 
-use Biz\User\UserActiveService;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
+use Biz\User\Service\UserActiveService;
 use Biz\User\Dao\Impl\UserActiveDaoImpl;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -13,7 +13,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
     {
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isLogin()) {
-            return false;
+            return array();
         }
         if (empty($userId)) {
             $userId = $currentUser->getId();
@@ -23,7 +23,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
         $activeUserLog['userId']     = $userId;
         $activeUserLog['activeTime'] = date('Ymd', time());
 
-        $this->getActiveUserDao()->create($activeUserLog);
+        return $this->getActiveUserDao()->create($activeUserLog);
     }
 
     public function getActiveUser($userId)

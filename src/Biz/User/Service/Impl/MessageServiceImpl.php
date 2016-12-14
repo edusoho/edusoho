@@ -2,12 +2,12 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\MessageService;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\MessageService;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {
-    public function count($conditions)
+    public function countMessages($conditions)
     {
         return $this->getMessageDao()->count($conditions);
     }
@@ -49,7 +49,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation     = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->get($conversationId);
 
-        if ($relation['isRead'] == self::RELATION_ISREAD_OFF) {
+        if ($relation['isRead'] == MessageServiceImpl::RELATION_ISREAD_OFF) {
             $this->safelyUpdateConversationMessageNum($conversation);
             $this->safelyUpdateConversationunreadNum($conversation);
         } else {
@@ -186,7 +186,7 @@ class MessageServiceImpl extends BaseService implements MessageService
             'messageId'      => $message['id'],
             'isRead'         => 0
         );
-        $relation = $this->getRelationDao()->create($relation);
+        $this->getRelationDao()->create($relation);
     }
 
     protected function prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime)
@@ -218,7 +218,7 @@ class MessageServiceImpl extends BaseService implements MessageService
             'messageId'      => $message['id'],
             'isRead'         => 0
         );
-        $relation = $this->getRelationDao()->create($relation);
+        $this->getRelationDao()->create($relation);
     }
 
     protected function safelyUpdateConversationMessageNum($conversation)
@@ -250,7 +250,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 return -1;
             } elseif ($a['createdTime'] == $b['createdTime']) {
                 return 0;
-            } elseif ($a['createdTime'] < $b['createdTime']) {
+            } else {
                 return 1;
             }
         });

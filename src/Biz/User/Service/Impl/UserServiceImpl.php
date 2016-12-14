@@ -2,10 +2,10 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\UserService;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Biz\User\Service\UserService;
 use Biz\User\Dao\Impl\UserDaoImpl;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceEvent;
@@ -74,7 +74,7 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
-    public function countUserByMobileNotEmpty()
+    public function countUsersByMobileNotEmpty()
     {
         return $this->getUserDao()->countByMobileNotEmpty();
     }
@@ -209,7 +209,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
         if (empty($user) || ($user['orgCode'] == $orgCode)) {
-            return;
+            return array();
         }
 
         if (empty($orgCode)) {
@@ -235,7 +235,7 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = $this->fillOrgId(array('orgCode' => $orgCode));
 
         foreach ($userIds as $userId) {
-            $user = $this->getUserDao()->update($userId, $fields);
+            $this->getUserDao()->update($userId, $fields);
         }
     }
 
@@ -773,8 +773,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw new RuntimeException('该帐号，已经设置过帐号信息，不能再设置');
         }
 
-        $user = $this->getUserDao()->update($userId, array('setup' => 1));
-        return $this->getUser($userId);
+        return $this->getUserDao()->update($userId, array('setup' => 1));
     }
 
     public function updateUserProfile($id, $fields)
@@ -1283,14 +1282,14 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::column($friends, 'toId');
     }
 
-    public function findUserFollowing($userId, $start, $limit)
+    public function findUserFollowings($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->findByFromId($userId, $start, $limit);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
 
-    public function findAllUserFollowing($userId)
+    public function findAllUserFollowings($userId)
     {
         $friends = $this->getFriendDao()->findAllUserFollowingByFromId($userId);
         $ids     = ArrayToolkit::column($friends, 'toId');
@@ -1309,7 +1308,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->findUsersByIds($ids);
     }
 
-    public function findAllUserFollower($userId)
+    public function findAllUserFollowers($userId)
     {
         $friends = $this->getFriendDao()->findAllUserFollowerByToId($userId);
         $ids     = ArrayToolkit::column($friends, 'fromId');
@@ -1554,11 +1553,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->dropFieldData($fieldName);
     }
 
-    protected function getUserApprovalDao()
-    {
-        return $this->createDao("User:UserApprovalDao");
-    }
-
     public function rememberLoginSessionId($id, $sessionId)
     {
         $user = $this->getUser($id);
@@ -1702,6 +1696,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserPayAgreements($id)
     {
         return $this->getUserPayAgreementDao()->delete($id);
+    }
+
+    protected function getUserApprovalDao()
+    {
+        return $this->createDao("User:UserApprovalDao");
     }
 
     protected function getFriendDao()

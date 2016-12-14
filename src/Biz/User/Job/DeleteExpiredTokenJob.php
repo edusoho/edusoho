@@ -9,7 +9,7 @@ class DeleteExpiredTokenJob implements Job
     public function execute($params)
     {
         $limit  = 10000;
-        $number = $this->getTokenService()->deleteExpiredTokens($limit);
+        $this->getTokenService()->deleteExpiredTokens($limit);
     }
 
     protected function getTokenService()

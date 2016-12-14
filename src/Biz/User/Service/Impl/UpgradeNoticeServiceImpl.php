@@ -2,7 +2,7 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\UpgradeNoticeService;
+use Biz\User\Service\UpgradeNoticeService;
 
 class UpgradeNoticeServiceImpl extends BaseService implements UpgradeNoticeService
 {

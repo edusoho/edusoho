@@ -2,7 +2,7 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\StatusService;
+use Biz\User\Service\StatusService;
 
 class StatusServiceImpl extends BaseService implements StatusService
 {
@@ -12,7 +12,7 @@ class StatusServiceImpl extends BaseService implements StatusService
             $user = $this->getCurrentUser();
 
             if ($user['id'] == 0) {
-                return;
+                return array();
             }
 
             $status['userId'] = $user['id'];
@@ -32,6 +32,7 @@ class StatusServiceImpl extends BaseService implements StatusService
         if (!empty($status['userId']) && !empty($status['type']) && !empty($status['objectType']) && !empty($status['objectId'])) {
             return $this->getStatusDao()->deleteStatusesByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
         }
+        return array();
     }
 
     public function searchStatuses($conditions, $sort, $start, $limit)

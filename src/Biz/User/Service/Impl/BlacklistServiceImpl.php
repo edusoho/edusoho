@@ -2,8 +2,8 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\BlacklistService;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\BlacklistService;
 
 class BlacklistServiceImpl extends BaseService implements BlacklistService
 {

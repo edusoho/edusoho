@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User;
+namespace Biz\User\Service;
 
 interface InviteRecordService
 {
@@ -11,9 +11,7 @@ interface InviteRecordService
 
     public function addInviteRewardRecordToInvitedUser($invitedUserId, $fields);
 
-    public function addInviteRewardRecordToInviteUser($invitedUserId, $fields);
-
-    public function searchRecordCount($conditions);
+    public function countRecords($conditions);
 
     public function searchRecords($conditions, $orderBy, $start, $limit);
 }

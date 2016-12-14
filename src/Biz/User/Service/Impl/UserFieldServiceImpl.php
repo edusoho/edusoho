@@ -2,8 +2,8 @@
 namespace Biz\User\Impl;
 
 use Biz\BaseService;
-use Biz\User\UserFieldService;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserFieldService;
 
 class UserFieldServiceImpl extends BaseService implements UserFieldService
 {

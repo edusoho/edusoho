@@ -11,12 +11,12 @@ class UserCommonAdminDaoImpl extends GeneralDaoImpl implements UserCommonAdminDa
 
     public function findByUserId($userId)
     {
-        return $this->findInField(array('userId' => $userId));
+        return $this->findInField('userId', array($userId));
     }
 
     public function getByUserIdAndUrl($userId, $url)
     {
-        return $this->findInField(array('userId' => $userId, 'url' => $url));
+        return $this->getByFields(array('userId' => $userId, 'url' => $url));
     }
 
     public function declares()

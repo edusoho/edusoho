@@ -1,9 +1,10 @@
 <?php
-namespace BizTestServiceProvider1\User\Impl;
+namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Biz\User\AuthService;
+use Biz\User\Service\AuthService;
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -62,6 +63,8 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return true;
             }
         }
+
+        return true;
     }
 
     protected function protectiveRule($type, $ip)
@@ -378,7 +381,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getSensitiveService()
     {
-        return $this->createService('SensitiveWord:Sensitive.SensitiveService');
+        return $this->getKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function getUserService()
@@ -394,5 +397,10 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
