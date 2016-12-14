@@ -1,18 +1,18 @@
 <?php
 namespace Topxia\Service\OpenCourse\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class OpenCourseThreadEventProcessor
 {
-    public function onPostCreate(ServiceEvent $event)
+    public function onPostCreate(Event $event)
     {
         $post = $event->getSubject();
         $this->getOpenCourseService()->waveCourse($post['targetId'], 'postNum', +1);
     }
 
-    public function onPostDelete(ServiceEvent $event)
+    public function onPostDelete(Event $event)
     {
         $post = $event->getSubject();
         $this->getOpenCourseService()->waveCourse($post['targetId'], 'postNum', 0 - $event->getArgument('deleted'));

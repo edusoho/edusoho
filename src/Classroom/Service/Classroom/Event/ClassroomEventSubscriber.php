@@ -1,8 +1,8 @@
 <?php
 namespace Classroom\Service\Classroom\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
@@ -20,7 +20,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onClassroomDelete(ServiceEvent $event)
+    public function onClassroomDelete(Event $event)
     {
         $classroom = $event->getSubject();
 
@@ -28,7 +28,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->delete();
     }
 
-    public function onClassroomUpdate(ServiceEvent $event)
+    public function onClassroomUpdate(Event $event)
     {
         $fields = $event->getSubject();
 
@@ -40,7 +40,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->update();
     }
 
-    public function onClassroomJoin(ServiceEvent $event)
+    public function onClassroomJoin(Event $event)
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
@@ -58,7 +58,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onClassroomGuest(ServiceEvent $event)
+    public function onClassroomGuest(Event $event)
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
@@ -76,7 +76,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onReviewCreate(ServiceEvent $event)
+    public function onReviewCreate(Event $event)
     {
         $review = $event->getSubject();
 

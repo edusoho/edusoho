@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Content\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 
@@ -16,7 +16,7 @@ class ContentEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onContentDelete(ServiceEvent $event)
+    public function onContentDelete(Event $event)
     {
         $contentId = $event->getSubject();
 
@@ -24,7 +24,7 @@ class ContentEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->delete();
     }
 
-    public function onContentCreate(ServiceEvent $event)
+    public function onContentCreate(Event $event)
     {
         $fields = $event->getSubject();
 
@@ -36,7 +36,7 @@ class ContentEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->create();
     }
 
-    public function onContentUpdate(ServiceEvent $event)
+    public function onContentUpdate(Event $event)
     {
         $fields = $event->getSubject();
 

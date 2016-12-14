@@ -103,6 +103,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
+    protected function mockBiz($alias, $className, $params = array())
+    {
+        $mockObj = Mockery::mock($className);
+
+        foreach ($params as $param) {
+            $mockObj->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+        }
+
+        $biz = $this->getBiz();
+        $biz['@' . $alias] = $mockObj;
+    }
+
     protected function setPool($object)
     {
         $reflectionObject = new \ReflectionObject($this->getServiceKernel());

@@ -6,10 +6,10 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\File\UploadFileService;
 
 class PptController extends BaseController implements ActivityActionInterface
 {
@@ -94,7 +94,7 @@ class PptController extends BaseController implements ActivityActionInterface
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**

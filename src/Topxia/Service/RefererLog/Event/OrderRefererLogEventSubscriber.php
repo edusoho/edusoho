@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\RefererLog\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +16,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onOrderCreated(ServiceEvent $event)
+    public function onOrderCreated(Event $event)
     {
         global $kernel;
 
@@ -39,7 +40,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
     }
 
-    public function onOrderPaid(ServiceEvent $event)
+    public function onOrderPaid(Event $event)
     {
         $order = $event->getSubject();
 

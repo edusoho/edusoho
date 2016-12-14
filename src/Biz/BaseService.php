@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -55,6 +56,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $this->biz['db']->rollback();
     }
 
+    /**
+     * @return Logger
+     */
     protected function getLogger()
     {
         return $this->biz['logger'];

@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Sms\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -24,7 +25,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onTestpaperReviewed(ServiceEvent $event)
+    public function onTestpaperReviewed(Event $event)
     {
         $parameters = array();
         $smsType    = 'sms_testpaper_check';
@@ -49,7 +50,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onOrderPaySuccess(ServiceEvent $event)
+    public function onOrderPaySuccess(Event $event)
     {
         $order      = $event->getSubject();
         $targetType = $event->getArgument('targetType');
@@ -73,7 +74,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonPublish(ServiceEvent $event)
+    public function onCourseLessonPublish(Event $event)
     {
         $lesson = $event->getSubject();
 
@@ -99,7 +100,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUnpublish(ServiceEvent $event)
+    public function onCourseLessonUnpublish(Event $event)
     {
         $lesson = $event->getSubject();
         $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
@@ -109,7 +110,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUpdate(ServiceEvent $event)
+    public function onCourseLessonUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -128,7 +129,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonDelete(ServiceEvent $event)
+    public function onCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -139,7 +140,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLiveOpenCourseLessonCreate(ServiceEvent $event)
+    public function onLiveOpenCourseLessonCreate(Event $event)
     {
         $lesson = $event->getSubject();
 
@@ -150,7 +151,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLiveOpenCourseLessonUpdate(ServiceEvent $event)
+    public function onLiveOpenCourseLessonUpdate(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
