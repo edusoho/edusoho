@@ -107,14 +107,13 @@ a:hover {
 .notice-panel .notice-btn {
   margin-bottom: 50px;
 }
-<<<<<<< HEAD
-.notice-panel .edu-cloud-search-intro {
+.notice-panel .edu-cloud-search-intro p{
   padding:0px 175px 0px 175px;
 }
 .notice-panel .edu-cloud-search-title {
   padding:0px 180px 0px 180px;
 }
-.notice-panel .edu-cloud-video-intro {
+.notice-panel .edu-cloud-video-intro p{
   padding:0px 160px 0px 160px;
 }
 .notice-panel .edu-cloud-search-intro p{
@@ -123,8 +122,6 @@ a:hover {
 .notice-panel .edu-cloud-video-intro p{
   text-align: left;
 }
-=======
->>>>>>> develop
 .search-part-table {
   margin-bottom: 0;
 }
