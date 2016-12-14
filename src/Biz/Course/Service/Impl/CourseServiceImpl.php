@@ -459,7 +459,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
-        $chapter  = $this->getChapterDao()->get($chapterId);
+        $chapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
@@ -510,19 +510,31 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserLeaningCourseCount($userId, $filters = array())
     {
-        if (isset($filters["type"])) {
-            return $this->getMemberDao()->getMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 0);
-        }
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 0
 
-        return $this->getMemberDao()->getMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            return $this->getMemberDao()->countMemberFetchCourse($conditions);
+        }
+        return $this->getMemberDao()->count($conditions);
     }
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array())
+    public function findUserLeaningCourses($userId, $start, $limit, $filters = array('type' => ''))
     {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 0
+        );
         if (isset($filters["type"])) {
-            $members = $this->getMemberDao()->findMembersByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
+            $conditions['type'] = $filters["type"];
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime', 'DESC'), $start, $limit);
         } else {
-            $members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
