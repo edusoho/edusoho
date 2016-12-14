@@ -17,6 +17,7 @@ class Version20160922173101 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `classroom` ADD `updatedTime`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间'; ");
+        $this->addSql("UPDATE `classroom` set `updatedTime`= createdTime WHERE updatedTime = 0 ; ");
     }
 
     /**
