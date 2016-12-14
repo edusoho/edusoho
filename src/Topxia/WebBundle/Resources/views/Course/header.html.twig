@@ -48,7 +48,7 @@
     </div>
 
     {% if course.status != 'published' %}
-      <div class="btn-group course-num-check-btn" data-url="{{ path('course_student_num_check', {id:course.id}) }}">
+      <div class="btn-group course-num-check-btn">
         <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_manage_publish', {id:course.id}) }}">{{'发布课程'|trans}}</button>
       </div>
     {% endif %}

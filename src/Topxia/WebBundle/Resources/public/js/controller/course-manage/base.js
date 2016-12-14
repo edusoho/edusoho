@@ -97,7 +97,7 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name=maxStudentNum]',
             required: true,
-            rule: 'unsigned_integer',
+            rule: 'positive_integer',
             onItemValidated: function (error, message, elem) {
                 if (error) {
                     $(elem).parent().siblings('.js-course-rule').find('p').html('');

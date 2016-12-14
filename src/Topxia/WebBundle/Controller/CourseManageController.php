@@ -100,17 +100,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function studentNumCheckAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-        if (!empty($course) && $course['type'] == 'live' && empty($course['maxStudentNum'])) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!'));            
-        } else {
-            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans(''));            
-        }
-        return $this->createJsonResponse($response);
-    }
-
     public function detailAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -548,6 +537,12 @@ class CourseManageController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->getCourse($id);
+        if ($course['type'] == 'live' && empty($course['maxStudentNum'])) {
+            $response = array('result' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!')); 
+            return $this->createJsonResponse($response);
+        }
+        
         $this->getCourseService()->publishCourse($id);
         return $this->createJsonResponse(array('result' => true));
     }
