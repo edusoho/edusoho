@@ -41,9 +41,11 @@ function updateItemSeq(data,datas) {
 export default class MultiInput extends Component {
   constructor(props) {
     super(props);
+   console.log(this.props);
   }
 
   componentWillMount() {
+    console.log(this.props);
     this.state = {
       dataSourceUi: [],
       list: [],
@@ -52,12 +54,14 @@ export default class MultiInput extends Component {
     this.props.dataSource.map((item,index)=>{
       initItem(this.state.dataSourceUi,item,index+1);
     })
+
     this.getOutputSets();
     this.state.list = this.getList();
   }
 
   getList() {
-    return (<List dataSourceUi = {this.state.dataSourceUi} removeItem={(itemId)=>this.removeItem(itemId)} sortItem={(event=>this.sortItem(event))}></List>);
+    console.log(this.props.addable);
+    return (<List sortable={this.props.sortable} listClassName={this.props.listClassName} dataSourceUi = {this.state.dataSourceUi} removeItem={(itemId)=>this.removeItem(itemId)} sortItem={(event=>this.sortItem(event))} ></List>);
   }
 
   sortItem(datas) {
@@ -100,27 +104,41 @@ export default class MultiInput extends Component {
   }
 
   render (){
-    const { sortable,enableChecked,searchable, outputDataElement} = this.props;
-    let  outputDataElementId = outputDataElement + '-' + (Math.random() + "").substr(2);
+    const { searchable, addable, outputDataElement} = this.props;
+    console.log(searchable);
+    console.log(this.props);
     return (
       <div className="multi-group">
         {this.state.list}
-        <InputGroup searchable = { searchable } addItem={(value)=>this.addItem(value)}  onSearch={(data)=>this.onSearch(data)}  />
-        <input type='hidden' id={outputDataElementId} name={outputDataElement} value={JSON.stringify(this.state.outputSets)} />
+        <InputGroup searchable = { searchable } addable = { addable } addItem={(value)=>this.addItem(value)}  onSearch={(data)=>this.onSearch(data)}  />
+        <input type='hidden' name={outputDataElement} value={JSON.stringify(this.state.outputSets)} />
       </div>
     );
   }
 }
 
 MultiInput.propTypes = {
-  dataSource: React.PropTypes.array,
+  multiInputClassName: React.PropTypes.string,
+  listClassName: React.PropTypes.string,
+  dataSource: React.PropTypes.array.isRequired,
+  sortable: React.PropTypes.bool, 
+  addable:React.PropTypes.bool,
+  searchable: React.PropTypes.shape({
+    enable: React.PropTypes.bool,
+    url: React.PropTypes.string,
+  }),
 };
 
 MultiInput.defaultProps = {
-  className: 'multi-group',
+  multiInputClassName:'multi-group',
+  listClassName:'',
   dataSource: [],//必须是数组
-  sortable: true,//必须是bool
-  searchable: false,//必须是bool
+  sortable: true,
+  addable: true,
+  searchable: {
+    enable: false,
+    url: '',
+  },//必须是bool
   outputDataElement:'hidden-input',//必须是string,
 };
 // <List dataSourceUi = {this.state.dataSourceUi} removeItem={(id)=>this.removeItem(id)} sortItem={(event=>this.sortItem(event))}></List>

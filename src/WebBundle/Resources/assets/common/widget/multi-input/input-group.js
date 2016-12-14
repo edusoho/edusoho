@@ -12,7 +12,10 @@ export default class InputGroup extends Component {
       resultful: false,
       searchResult:[],
     }
-    this.searchable = this.props.searchable;
+    this.searchable = this.props.searchable.enable;
+    this.addable = this.props.addable;
+    this.searchableUrl = this.props.searchable.url;
+    console.log(this.props);
   }
 
   selectChange(event) {
@@ -41,11 +44,13 @@ export default class InputGroup extends Component {
 
     if(this.searchable && value.length > 0 && this.state.searched) {
       console.log('seach start..');
-      send('/course/274/manage/teachersMatch?q='+value,searchResult=>{
+      send(this.searchableUrl+value,searchResult=>{
+        console.log({'seach url':this.searchableUrl+value});
+
         if(this.state.itemName.length>0) {
           console.log({'searchResult':searchResult});
           this.setState({
-            searchResult:[{id: "1526", nickname: "wuli", avatar: "/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",isVisible:1}],
+            searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
             resultful:true,
           });
           console.log({'searchResult':this.state.searchResult});
@@ -70,10 +75,8 @@ export default class InputGroup extends Component {
     return (
       <div className="input-group">
         <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus = {event=>this.onFocus(event)}  />
-        { 
-          this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event)=>this.selectChange(event)} resultful={this.state.resultful}/>
-        }
-        <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span>
+        { this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event)=>this.selectChange(event)} resultful={this.state.resultful}/> }
+        { this.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span> }
       </div>
     );
   }

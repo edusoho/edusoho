@@ -1,40 +1,35 @@
 import React, { Component } from 'react';
+import sortList from 'common/sortable';
 
 export default class List extends Component {
   constructor(props) {
     super(props);
+    this.listId = Math.random().toString().replace('.','');
   }
 
   componentDidMount(){
-    //paixu de duix ian gyou wenti 
-    let sortable = this.props.sortable;
-    let $list = $('.sortable-list').sortable(Object.assign({}, {
-      element: '.sortable-list',
-      distance: 20,
-      delay: 100,
-      itemSelector: "li",
-      onDrop: (item, container, _super) =>{
-        _super(item, container);
-        var data = $list.sortable("serialize").get();
+    if(this.props.sortable) {
+      sortList({
+        element:`#${this.listId}`,
+        itemSelector: "li",
+        ajax: false,
+      },(data) =>{
         this.props.sortItem(data);
-        console.log(data);
-      },
-      serialize: function(parent, children, isContainer) {
-        return isContainer ? children : parent.attr('id');
-      }
-    }));
-  };
+      });
+      console.log($(`#${this.listId}`));
+    }
+  }
 
   render() {
     const { dataSourceUi } = this.props;
     return (
-      <ul className="list-group teacher-list-group sortable-list mb0">
+      <ul id={this.listId} className={`${this.props.listClassName} sortable-list list-group mb0`}>
       {
         dataSourceUi.map( (item,i) => {
           return (
             <li className="list-group-item mbs" id={item.itemId} key={item.itemId} data-seq={item.seq}>
-              <img src ={item.img}/> 
-              {item.label}
+              <img src ={item.avatar}/> 
+              {item.nickname}
               <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
               <a className="pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
                 <i className = "es-icon es-icon-close01"></i>

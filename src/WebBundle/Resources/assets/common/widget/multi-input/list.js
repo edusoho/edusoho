@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
+import sortList from 'common/sortable';
 
 export default class List extends Component {
   constructor(props) {
     super(props);
+    this.listId = Math.random().toString().replace('.','');
   }
 
   componentDidMount(){
-    //paixu de duix ian gyou wenti 
-    let sortable = this.props.sortable;
-    let $list = $('.sortable-list').sortable(Object.assign({}, {
-      element: '.sortable-list',
-      distance: 20,
-      delay: 100,
-      itemSelector: "li",
-      onDrop: (item, container, _super) =>{
-        _super(item, container);
-        var data = $list.sortable("serialize").get();
+    if(this.props.sortable) {
+      sortList({
+        element:`#${this.listId}`,
+        itemSelector: "li",
+        ajax: false,
+      },(data) =>{
         this.props.sortItem(data);
-      },
-      serialize: function(parent, children, isContainer) {
-        return isContainer ? children : parent.attr('id');
-      }
-    }));
-  };
+      });
+    }
+  }
 
   render() {
     const { dataSourceUi } =  this.props;
     return (
-      <ul className="list-group teacher-list-group sortable-list mb0">
+      <ul id={this.listId} className={`${this.props.listClassName} sortable-list list-group mb0`}>
       {
         dataSourceUi.map( (item,i) => {
           return (

@@ -6,8 +6,7 @@ import sortList from 'common/sortable';
 
 function renderMultiGroupComponent(elementId,name){
   let datas = $('#'+elementId).data('init-value');
-  console.log(datas);
-  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name} />,
+  ReactDOM.render( <MultiInput dataSource= {datas} outputDataElement={name} />,
     document.getElementById(elementId)
   );
 }

@@ -21,7 +21,7 @@ $('#courseset-submit').click(function(evt) {
 function renderMultiGroupComponent(elementId,name){
   let datas = $('#'+elementId).data('init-value');
   console.log(datas);
-  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name} />,
+  ReactDOM.render( <MultiInput dataSource= {datas}  outputDataElement={name}  sortable={true}/>,
     document.getElementById(elementId)
   );
 }

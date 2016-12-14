@@ -1,11 +1,12 @@
 import 'jquery-sortable';
 
-const sortList = (options) => {
+const sortList = (options,callback = (data)=>{} ) => {
   let defaultOptions = {
     element: '#sortable-list',
     distance: 20,
     itemSelector: "li.drag",
     // success: (response) => {},
+    ajax: true,
   }
 
   let settings = Object.assign({}, defaultOptions, options);
@@ -16,15 +17,16 @@ const sortList = (options) => {
       _super(item, container);
 
       let data = $list.sortable("serialize").get();
-      console.log(data);
 
-      //排序URL
-      return;
-      $.post($list.data('sortUrl'), {ids: data}, (response) => {
+      callback(data);
 
-        settings.success ? settings.success(response) : document.location.reload();
+      if(settings.ajax) {
+        $.post($list.data('sortUrl'), {ids: data}, (response) => {
+
+          settings.success ? settings.success(response) : document.location.reload();
         
-      });
+        });
+      }
     },
 
     serialize: function(parent, children, isContainer) {
