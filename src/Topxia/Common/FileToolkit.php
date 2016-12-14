@@ -69,6 +69,10 @@ class FileToolkit
 
     public static function isAllowedUploadFile($file)
     {
+        if (!empty(static::validateFileExtension($file))) {
+            return false;
+        }
+
         if (function_exists('finfo_open')) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($finfo, $file);
