@@ -17,7 +17,6 @@ class LiveroomController extends BaseController
         $user['avatar'] = $avatar;
 
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$id}/tickets", $user);
-        $this->getWebExtension()->getFpath('');
         return $this->render("TopxiaWebBundle:Liveroom:entry.html.twig", array(
             'roomId' => $id,
             'ticket' => $ticket
