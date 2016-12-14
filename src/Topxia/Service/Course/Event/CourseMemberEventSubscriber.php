@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -18,7 +19,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCourseUpdate(ServiceEvent $event)
+    public function onCourseUpdate(Event $event)
     {
         $context      = $event->getSubject();
         $sourceCourse = $context['sourceCourse'];
@@ -41,7 +42,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonCreate(ServiceEvent $event)
+    public function onCourseLessonCreate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -59,7 +60,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonDelete(ServiceEvent $event)
+    public function onCourseLessonDelete(Event $event)
     {
         $context  = $event->getSubject();
         $lesson   = $context['lesson'];
@@ -81,7 +82,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLessonFinish(ServiceEvent $event)
+    public function onLessonFinish(Event $event)
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');

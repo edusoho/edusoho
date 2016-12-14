@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -76,9 +77,12 @@ class VideoController extends BaseController implements ActivityActionInterface
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
 }

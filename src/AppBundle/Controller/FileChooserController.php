@@ -7,18 +7,18 @@
 
 namespace AppBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\MediaParser\ParserProxy;
+
 /**
  * Class MediaProccessController
- * @package WebBundle\Controller
+ * @package AppBundle\Controller
  * 用来处理活动中文件选取(上传，从资料库选择，从课程文件选择，导入网络文件)逻辑
  */
-use Topxia\Service\File\UploadFileService;
-
 class FileChooserController extends BaseController
 {
 
@@ -38,7 +38,7 @@ class FileChooserController extends BaseController
         );
         $files      = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -89,7 +89,7 @@ class FileChooserController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -151,7 +151,7 @@ class FileChooserController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     protected function getUserService()

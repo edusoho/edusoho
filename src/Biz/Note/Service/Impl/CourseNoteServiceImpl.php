@@ -6,11 +6,11 @@ namespace Biz\Note\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
+use Biz\Log\Service\LogService;
 use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Dao\CourseNoteLikeDao;
 use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -100,7 +100,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $note = $this->getNote($id);
 
         if (empty($note)) {
-            throw $this->createServiceException(sprintf('笔记%s不存在，删除失败', $id));
+            throw $this->createNotFoundException(sprintf('笔记%s不存在，删除失败', $id));
         }
 
         $currentUser = $this->getCurrentUser();
@@ -280,8 +280,11 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->biz->dao('Note:CourseNoteLikeDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System.LogService');
+        return $this->biz->service('Log:LogService');
     }
 }

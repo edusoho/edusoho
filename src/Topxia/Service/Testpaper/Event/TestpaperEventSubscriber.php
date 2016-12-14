@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Testpaper\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
@@ -23,7 +24,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onTestpaperFinish(ServiceEvent $event)
+    public function onTestpaperFinish(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperResult = $event->getArgument('testpaperResult');
@@ -31,7 +32,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $this->sendStatus($testpaper, $testpaperResult, 'finished_testpaper');
     }
 
-    public function onTestpaperCreate(ServiceEvent $event)
+    public function onTestpaperCreate(Event $event)
     {
         $context         = $event->getSubject();
         $testpaper       = $context['testpaper'];
@@ -50,7 +51,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperUpdate(ServiceEvent $event)
+    public function onTestpaperUpdate(Event $event)
     {
         $context   = $event->getSubject();
         $testpaper = $context['testpaper'];
@@ -76,7 +77,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperPublish(ServiceEvent $event)
+    public function onTestpaperPublish(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperTarget = explode('-', $testpaper['target']);
@@ -99,7 +100,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperClose(ServiceEvent $event)
+    public function onTestpaperClose(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperTarget = explode('-', $testpaper['target']);
@@ -122,7 +123,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperDelete(ServiceEvent $event)
+    public function onTestpaperDelete(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperId     = $testpaper['id'];
@@ -146,7 +147,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperItemUpdate(ServiceEvent $event)
+    public function onTestpaperItemUpdate(Event $event)
     {
         $context         = $event->getSubject();
         $argument        = $context['argument'];
@@ -171,7 +172,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onTestpaperReviewed(ServiceEvent $event)
+    public function onTestpaperReviewed(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperResult = $event->getArgument('testpaperResult');

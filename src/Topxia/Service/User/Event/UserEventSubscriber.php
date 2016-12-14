@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\User\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -16,13 +17,13 @@ class UserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onUserRegistered(ServiceEvent $event)
+    public function onUserRegistered(Event $event)
     {
         $user = $event->getSubject();
         $this->sendRegisterMessage($user);
     }
 
-    public function onUserFollowed(ServiceEvent $event)
+    public function onUserFollowed(Event $event)
     {
         $friend = $event->getSubject();
         $user   = $this->getUserService()->getUser($friend['fromId']);
@@ -35,7 +36,7 @@ class UserEventSubscriber implements EventSubscriberInterface
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
     }
 
-    public function onUserUnfollowed(ServiceEvent $event)
+    public function onUserUnfollowed(Event $event)
     {
         $friend = $event->getSubject();
         $user   = $this->getUserService()->getUser($friend['fromId']);

@@ -126,7 +126,9 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         $biz                            = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
-
+        $biz['env'] = array(
+            'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()
+        );
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());

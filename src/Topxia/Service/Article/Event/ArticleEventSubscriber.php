@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Article\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -20,7 +21,7 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onArticleDelete(ServiceEvent $event)
+    public function onArticleDelete(Event $event)
     {
         $article = $event->getSubject();
 
@@ -28,19 +29,19 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->delete();
     }
 
-    public function onArticleLike(ServiceEvent $event)
+    public function onArticleLike(Event $event)
     {
         $article = $event->getSubject();
         $this->getArticleService()->count($article['id'], 'upsNum', +1);
     }
 
-    public function onArticleCancelLike(ServiceEvent $event)
+    public function onArticleCancelLike(Event $event)
     {
         $article = $event->getSubject();
         $this->getArticleService()->count($article['id'], 'upsNum', -1);
     }
 
-    public function onPostCreate(ServiceEvent $event)
+    public function onPostCreate(Event $event)
     {
         $post = $event->getSubject();
         if ($post['parentId'] == 0) {
@@ -48,7 +49,7 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onPostDelete(ServiceEvent $event)
+    public function onPostDelete(Event $event)
     {
         $post = $event->getSubject();
         if ($post['parentId'] == 0) {

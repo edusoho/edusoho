@@ -12,6 +12,9 @@ parameters:
         cache_directory: "%kernel.cache_dir%"
         log_directory: "%kernel.logs_dir%"
         plugin.directory: "%kernel.root_dir%/../plugins"
+        cloud_convertor: "%cloud_convertor%"
+        topxia.upload.public_url_path: "%topxia.upload.public_url_path%"
+        topxia.disk.local_directory: "%topxia.disk.local_directory%"
         plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
 
 services:
