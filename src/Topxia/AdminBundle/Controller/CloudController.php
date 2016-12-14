@@ -88,11 +88,6 @@ class CloudController extends BaseController
         return $this->redirectUrl('service_email_count');
     }
 
-    public function emailListAction(Request $request)
-    {
-        return $this->redirectUrl('service_email_list');
-    }
-
     public function smsSignAction(Request $request)
     {
         return $this->redirectUrl('service_sms_sign');
@@ -118,11 +113,6 @@ class CloudController extends BaseController
     {
         $params = array('type' => $type);
         return $this->redirectUrl('edu_cloud_buy_custom', $params);
-    }
-
-    public function videoDetailAction()
-    {
-        return $this->redirectUrl('service_storage_chart');
     }
 
     public function tlpAction(Request $request)
