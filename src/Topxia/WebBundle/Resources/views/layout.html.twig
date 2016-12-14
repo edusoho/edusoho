@@ -78,10 +78,11 @@
       {% endif %}
     {% endif %}
   {% endblock %}
+{% endblock %}
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
-{% endblock %}
+
 
 {% if script() is not empty or use_webapck_loader|default(false) == true %}
   {# webpack #}

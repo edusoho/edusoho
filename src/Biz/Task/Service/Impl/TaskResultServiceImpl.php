@@ -5,7 +5,6 @@ namespace Biz\Task\Service\Impl;
 
 
 use Biz\BaseService;
-use Biz\Task\Dao\TaskResultDao;
 use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 
@@ -70,7 +69,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $user = $this->getCurrentUser();
 
         if(!$user->isLogin()){
-            throw $this->createAccessDeniedException('无权访问');
+            throw $this->createAccessDeniedException('unlogin');
         }
 
         $conditions = array(
@@ -83,9 +82,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    /**
-     * @return TaskResultDao
-     */
+    public function countTaskResult($conditions)
+    {
+        return $this->getTaskResultDao()->count($conditions);
+    }
+
     protected function getTaskResultDao()
     {
         return $this->createDao('Task:TaskResultDao');

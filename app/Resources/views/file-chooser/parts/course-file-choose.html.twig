@@ -1,0 +1,5 @@
+<div class="course-file-browser " data-role="course-file-browser"
+     data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:'course'}) }}">
+       
+</div>
+<input type="hidden" name="type" value="{{ fileType|default('') }}">

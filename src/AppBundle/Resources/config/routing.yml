@@ -26,14 +26,240 @@ course_set_manage_question_preview:
     defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
-  path: /course_set/{id}/manage/question/picker
-  defaults: { _controller: AppBundle:Question/Manage:questionPicker }
+    path: /course_set/{id}/manage/question/picker
+    defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
-  defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
-
+    path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
+    defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
 
 course_set_manage_question_check:
-  path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:Question/Manage:check }
+    path: /course_set/{id}/manage/question/check
+    defaults: { _controller: AppBundle:Question/Manage:check }
+
+#activity
+course_activity_trigger:
+    path: /course/{courseId}/activity/{activityId}/trigger
+    defaults: { _controller: AppBundle:Activity/Activity:trigger }
+    methods: [POST]
+
+course_activity_download:
+    path: /course/{courseId}/activiy/{activityId}/download
+    defaults: { _controller: AppBundle:Activity/Download:downloadFile }
+
+#task
+course_task_show:
+    path:  /course/{courseId}/task/{id}/show
+    defaults: { _controller: AppBundle:Task:show }
+
+course_task_activity_show:
+    path:  /course/{courseId}/task/{id}/activity_show
+    defaults: { _controller: AppBundle:Task:taskActivity }
+
+course_task_trigger:
+    path:  /course/{courseId}/task/{id}/trigger
+    defaults: { _controller: AppBundle:Task:trigger }
+
+course_task_finish:
+    path:  /course/{courseId}/task/{id}/finish
+    defaults: { _controller: AppBundle:Task:finish }
+
+course_manage_task_create:
+    path:  /course/{courseId}/task
+    defaults: { _controller: AppBundle:TaskManage:create}
+
+course_manage_task_publish:
+    path:  /course/{courseId}/task/{id}/publish
+    defaults: { _controller: AppBundle:TaskManage:publish }
+
+course_manage_task_unpublish:
+    path:  /course/{courseId}/task/{id}/unpublish
+    defaults: { _controller: AppBundle:TaskManage:unPublish }
+
+course_manage_task_fields:
+    path:  /course/{courseId}/task_fields/{mode}
+    defaults: { _controller: AppBundle:TaskManage:taskFields }
+
+course_manage_task_update:
+    path:  /course/{courseId}/task/{id}/update
+    defaults: { _controller: AppBundle:TaskManage:update }
+
+course_manage_task_delete:
+    path:  /course/{courseId}/task/{taskId}/delete
+    defaults: { _controller: AppBundle:TaskManage:delete }
+
+task_live_entry:
+    path: /course/{courseId}/activity/{activityId}/live_entry
+    defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+
+task_liveroom_ticket:
+    path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
+    defaults: {_controller:  AppBundle:Liveroom:ticket}
+
+task_live_trigger:
+    path: /course/{courseId}/activity/{activityId}/live_trigger
+    defaults: {_controller:  AppBundle:Activity/Live:trigger}
+
+#task_plugin
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/save
+  defaults: { _controller: AppBundle:Note:saveNote}
+
+course_task_show_plugins:
+  path: /course/{courseId}/task/{taskId}/show/plugins
+  defaults: { _controller: AppBundle:Task:taskPlugins }
+
+course_task_show_plugin_task_list:
+  path: /course/{courseId}/task/{taskId}/plugin/task_list
+  defaults: { _controller: AppBundle:TaskPlugin:taskList }
+
+course_task_plugin_note:
+  path: /course/{courseId}/task/{taskId}/plugin/note
+  defaults: { _controller: AppBundle:TaskPlugin:note }
+
+#course_chapter
+course_manage_chapter_create:
+    path:  /course/{id}/manage/chapter/create
+    defaults: { _controller: AppBundle:CourseChapterManage:create }
+
+course_manage_chapter_edit:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: AppBundle:CourseChapterManage:edit }
+
+course_manage_chapter_delete:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: AppBundle:CourseChapterManage:delete }
+    methods: [POST]
+
+#course
+course_set_manage_courses:
+  path: /course_set/{courseSetId}/manage/courses
+  defaults: {_controller: AppBundle:CourseManage:list}
+
+course_set_manage_course_create:
+  path: /course_set/{courseSetId}/manage/course/create
+  defaults: {_controller: AppBundle:CourseManage:create}
+
+course_set_manage_course_info:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/info
+  defaults: {_controller: AppBundle:CourseManage:info}
+
+course_set_manage_course_tasks:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
+  defaults: {_controller: AppBundle:CourseManage:tasks}
+
+course_set_manage_course_marketing:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
+  defaults: {_controller: AppBundle:CourseManage:marketing}
+
+course_set_manage_course_teachers:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/teachers
+  defaults: {_controller: AppBundle:CourseManage:teachers}
+
+course_set_manage_course_students:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students
+  defaults: {_controller: AppBundle:CourseManage:students}
+
+course_set_manage_course_quit_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
+  defaults: {_controller: AppBundle:CourseManage:studentQuitRecords}
+
+course_set_manage_course_students_add:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
+  defaults: {_controller: AppBundle:CourseManage:createCourseStudent}
+
+course_set_manage_course_students_remove:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
+  defaults: {_controller: AppBundle:CourseManage:removeCourseStudent}
+  methods: [POST]
+
+course_set_manage_course_students_check:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
+  defaults: {_controller: AppBundle:CourseManage:checkStudent}
+
+course_set_manage_course_close:
+  path: /course_set/{courseSetId}/course/{courseId}/close
+  defaults: {_controller: AppBundle:CourseManage:close}
+  methods: [POST]
+
+course_set_manage_course_delete:
+  path: /course_set/{courseSetId}/course/{courseId}/delete
+  defaults: {_controller: AppBundle:CourseManage:delete}
+  methods: [POST]
+
+course_set_manage_course_publish:
+  path: /course_set/{courseSetId}/course/{courseId}/publish
+  defaults: {_controller: AppBundle:CourseManage:publish}
+  methods: [POST]
+
+course_manage_items_sort:
+  path:  /course/{courseId}/manage/items/sort
+  defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
+  methods: ['POST']
+
+#course_set
+course_set_manage_create:
+  path: /course_set/create
+  defaults: {_controller: AppBundle:CourseSetManage:create}
+
+course_set_show:
+  path: /course_set/{id}
+  defaults: {_controller: AppBundle:CourseSet:show}
+
+course_set_preview:
+  path: /course_set/{id}/preview
+  defaults: {_controller: AppBundle:CourseSet:preview}
+
+course_set_manage:
+  path: /course_set/{id}/manage
+  defaults: {_controller: AppBundle:CourseSetManage:index}
+
+course_set_manage_base:
+  path: /course_set/{id}/manage/base
+  defaults: {_controller: AppBundle:CourseSetManage:base}
+
+course_set_manage_detail:
+  path: /course_set/{id}/manage/detail
+  defaults: {_controller: AppBundle:CourseSetManage:detail}
+
+course_set_manage_cover:
+  path: /course_set/{id}/manage/cover
+  defaults: {_controller: AppBundle:CourseSetManage:cover}
+
+course_set_manage_cover_crop:
+  path: /course_set/{id}/manage/cover_crop
+  defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
+
+#file chooser
+media_materiallib_choose:
+    path: /media/materiallib/choose
+    defaults: { _controller: AppBundle:FileChooser:materialChoose }
+
+media_materiallib_contacts:
+    path: /media/materiallib/contacts
+    defaults: { _controller: AppBundle:FileChooser:findMySharingContacts }
+
+media_course_file_choose:
+    path: /media/coursefile/{courseId}/choose
+    defaults: { _controller: AppBundle:FileChooser:courseFileChoose }
+
+media_video_import:
+    path: /media/course/{courseId}/import
+    defaults: { _controller: AppBundle:FileChooser:import }
+
+#Uploader
+uploader_auth_v2:
+    path:  /uploader/v2/auth
+    defaults: { _controller: AppBundle:Uploader:auth }
+    methods: [GET]
+
+uploader_init_v2:
+    path:  /uploader/v2/init
+    defaults: { _controller: AppBundle:Uploader:init }
+    methods: [GET]
+
+uploader_finished_v2:
+    path:  /uploader/v2/finished
+    defaults: { _controller: AppBundle:Uploader:finished }
+    methods: [GET]
+
