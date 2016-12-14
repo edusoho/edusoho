@@ -744,7 +744,10 @@ class EduCloudController extends BaseController
         }
 
         //是否接入教育云
-        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+        if (empty($overview['user']['level']) || 
+            (!(isset($overview['service']['storage'])) &&
+             !(isset($overview['service']['live'])) && 
+             !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
         } elseif (empty($overview['user']['licenseDomains'])) {
             $data['status'] = 'unbinded';
@@ -762,8 +765,8 @@ class EduCloudController extends BaseController
             ));
         } else {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
-            'data' => $data
-        ));
+            'data' => $data));
+        }
     }
 
     public function searchReapplyAction(Request $request)
