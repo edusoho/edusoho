@@ -479,6 +479,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $localFile = $this->getUploadFileDao()->getFileByHashId($cloudFile['hashId']);
         
         if (!$localFile) {
+            $fields['usedCount'] = 1;
             $this->getUploadFileDao()->addFile($fields);
         }
 
