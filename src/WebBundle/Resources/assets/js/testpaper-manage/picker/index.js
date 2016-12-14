@@ -12,7 +12,7 @@ class Picker{
     this.currentType = this.$typeNav.find('.active').children().data('type');
     this._initEvent();
     this._initSortList();
-    this.questions = {};
+    this.questions = [];
   }
 
   _init() {
@@ -178,11 +178,12 @@ class Picker{
 
             let questionId = $(this).closest('tr').data('id');
 
+            question['id'] = questionId;
             question['score'] = score;
             question['missScore'] = parseFloat($(this).data('miss-score'));
             question['type'] = type;
-
-            self.questions[questionId] = question;
+            
+            self.questions.push(question);
         });
     });
 

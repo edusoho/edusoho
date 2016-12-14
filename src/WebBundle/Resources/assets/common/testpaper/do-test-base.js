@@ -20,7 +20,7 @@ class DoTestBase
     }*/
     
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
-    this.$container.on('click','[data-role="paper-submit"]',event=>this._btnSubmit(event));
+    this.$container.on('click','[data-role="test-suspend"],[data-role="paper-submit"]',event=>this._btnSubmit(event));
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));

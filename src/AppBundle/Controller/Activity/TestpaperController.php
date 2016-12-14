@@ -76,9 +76,9 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     protected function findCourseTestpapers($courseId)
     {
         $conditions = array(
-            'courseId' => $courseId,
-            'status'   => 'open',
-            'type'     => 'testpaper'
+            'courseSetId' => $courseId,
+            'status'      => 'open',
+            'type'        => 'testpaper'
         );
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(

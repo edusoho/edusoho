@@ -14,8 +14,8 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = array(
-            'courseId' => $courseSet['id'],
-            'type'     => 'testpaper'
+            'courseSetId' => $courseSet['id'],
+            'type'        => 'testpaper'
         );
 
         $paginator = new Paginator(
@@ -51,6 +51,7 @@ class ManageController extends BaseController
             $fields                = $request->request->all();
             $fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
             $fields['courseSetId'] = $courseSet['id'];
+            $fields['courseId']    = 0;
             $fields['pattern']     = 'questionType';
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');

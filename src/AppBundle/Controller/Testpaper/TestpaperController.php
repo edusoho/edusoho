@@ -195,12 +195,12 @@ class TestpaperController extends BaseController
         return $questionTypes;
     }
 
-    public function testSuspendAction(Request $request, $id)
+    public function testSuspendAction(Request $request, $resultId)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$testpaperResult) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
+            throw $this->createResourceNotFoundException('testpaperResult', $resultId);
         }
 
         $user = $this->getUser();
@@ -213,9 +213,9 @@ class TestpaperController extends BaseController
             $answers  = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
 
-            $results = $this->getTestpaperService()->submitAnswers($testpaperResults['id'], $answers);
+            $results = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers);
 
-            $this->getTestpaperService()->updateTestpaperResult($testpaperResults['id'], array('usedTime' => $usedTime));
+            $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array('usedTime' => $usedTime));
 
             return $this->createJsonResponse(true);
         }

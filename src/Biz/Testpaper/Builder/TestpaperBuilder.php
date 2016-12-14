@@ -24,7 +24,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $testpaperPattern = $this->getTestpaperService()->getTestpaperPattern($testpaper['pattern']);
 
-        $testpaper['metas']['courseId'] = $testpaper['courseId'];
+        $testpaper['metas']['courseId'] = $testpaper['courseSetId'];
 
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 

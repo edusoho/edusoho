@@ -16,7 +16,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseId = ? AND lessonId = ? AND type = ? ORDER BY endTime DESC ";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseSetId = ? AND lessonId = ? AND type = ? ORDER BY endTime DESC ";
         return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type));
     }
 

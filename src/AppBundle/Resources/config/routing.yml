@@ -347,9 +347,9 @@ testpaper_finish:
   defaults: { _controller: AppBundle:Testpaper/Testpaper:finishTest }
 
 testpaper_do_suspend:
-    path: /testpaper/result/{resultId}/suspend
-    defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
-
+  path: /testpaper/result/{resultId}/suspend
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
+  methods: [POST]
 
 #homework
 course_manage_homework:

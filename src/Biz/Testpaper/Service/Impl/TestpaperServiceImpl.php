@@ -528,6 +528,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function updateTestpaperItems($testpaperId, $fields)
     {
         $newItems = $fields['questions'];
+        $newItems = ArrayToolkit::index($newItems, 'id');
+
         if (!$newItems) {
             return false;
         }
@@ -566,13 +568,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $index = 1;
-        foreach ($questions as $key => $question) {
+        foreach ($newItems as $questionId => $item) {
+            $question = !empty($questions[$questionId]) ? $questions[$questionId] : array();
+            if (!$question) {
+                continue;
+            }
+
             $filter['seq']          = $index++;
             $filter['questionId']   = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId']       = $testpaperId;
-            $filter['score']        = $newItems[$question['id']]['score'];
-            $filter['missScore']    = empty($newItems[$question['id']]['missScore']) ? 0 : $newItems[$question['id']]['missScore'];
+            $filter['score']        = $item['score'];
+            $filter['missScore']    = empty($item['missScore']) ? 0 : $item['missScore'];
             $filter['parentId']     = $question['parentId'];
             $items[]                = $this->createItem($filter);
         }
@@ -663,6 +670,33 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function canLookTestpaper($resultId)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $paperResult = $this->getTestpaperResult($resultId);
+
+        if (!$paperResult) {
+            throw $this->createNotFoundException($this->getKernel()->trans('试卷结果不存在!'));
+        }
+
+        $paper = $this->getTestpaperDao()->getTestpaper($paperResult['testId']);
+
+        if (!$paper) {
+            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
+        }
+
+        if ($paperResult['status'] == 'doing' && ($paperResult['userId'] != $user['id'])) {
+            throw $this->createNotFoundException('无权查看此试卷');
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getTestpaperBuilder($type)
