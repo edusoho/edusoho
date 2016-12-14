@@ -34,31 +34,23 @@
         }
       }
     }
-    
   }
-}
-
-.nav-pills.nav-pills-course {
-  >li {
-    position: relative;
-    margin-left: 0;
-    margin-right: 10px;
-    >a {
-      padding: 5px 15px;
-      border: 2px solid @gray-light;
-      color: @gray-dark;
-      .border-radius(0);
-      font-size: 12px;
-    }
-    &:hover,
-    &.active {
+  &.nav-pills-transparent {
+    >li {
       >a {
-        border-color: @brand-primary;
         background-color: transparent;
-        color: @brand-primary
+        border: 2px solid @gray-light;
+        color: @gray-dark;
+        .border-radius(0);
       }
-    }
-    &.active {
+      &:hover,
+      &.active {
+        >a {
+          border-color: @brand-primary;
+          background-color: transparent;
+          color: @brand-primary
+        }
+      }
     }
   }
 }

@@ -1,10 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
-
+{% do css(['web.css']) %}
 {% block top_content %}
 {% endblock %}
 
 {% block content %}
-
+<!-- 加入前 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li>
@@ -12,13 +12,13 @@
     </li>
     <li class="active">sdfdsf</li>
   </ol>
-  <div class="es-section course-detail-section before clearfix">
+  <div class="es-section course-detail-section clearfix">
     <div class="course-detail-header">
       <span class="tags">
         <span class="tag-serialing"></span>
       </span>
-      <div class="course-detail-title">
-        <h1>
+      <div class="course-detail-title before">
+        <span class="course-font">
           sdfdsf
           <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
             <span class="qrcode-popover">
@@ -26,41 +26,104 @@
               扫二维码继续学习二维码时效为半小时
             </span>
           </span>
-        </h1>
+        </span>
         <div class="gray-dark">sdfsdf</div>
       </div>
+      <ul class="course-operation clearfix ">
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs  " href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
     </div>
     <div class="course-detail-img">
       <a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover"> <i class="es-icon es-icon-playcircleoutline"></i>
       </a>
       <img class="img-responsive" src="/assets/img/default/courseSet.png" alt="sdfdsf ">
       <div class="course-detail-remask">
-        <span class="gray-color mrl">
-          <i class="es-icon es-icon-people mrm"></i>
-          122222 人
+        <span class="gray-color mlm">
+          <i class="es-icon es-icon-people"></i>
+          122222 人加入学习
         </span>
-
-        <div class="score pull-right">显示评分</div>
+        <div class="score pull-right mrm">
+          <span class="es-icon es-icon-star font-xm"></span>
+          <span class="es-icon es-icon-star font-xm"></span>
+          <span class="es-icon es-icon-star font-xm"></span>
+          <span class="es-icon es-icon-starhalf font-xm"></span>
+          <span class="es-icon es-icon-starhalf font-xm"></span>
+          显示评分
+        </div>
       </div>
     </div>
     <div class="course-detail-info">
       <div class="course-detail-item">
         <span class="course-detail-title">价格</span>
-        <span class="text-blod gray-darker">¥</span>
-        <span class="discount-price">75</span>
-        ¥
-        <span class="original-price">118</span>
+        <!-- 折扣价 -->
+        <span class="discount-price">¥<span class="price">75</span></span>
+        <!-- 原价 -->
+        <span class="original-price">¥<span class="price">118</span></span>
+        <span class="tag-discount"><span class="discount-font">8折</span></span>
+      </div>
+      <div class="course-detail-item">
+        <span class="course-detail-title">活动</span>
+        <span class="color-warning ">
+        <span class="course-detail-activity">双十二活动</span>
+        <i class="es-icon es-icon-alarmon mrm"></i>
+        22 时 53 分 44.12 秒</span>    
       </div>
       <div class="course-detail-content">
         <div class="course-detail-item">
           <span class="course-detail-title">教学计划</span>
           <div class="course-detail-nav">
-            <ul class="nav nav-pills nav-pills-course">
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent">
               <li>
                 <a href="javascript:;">默认教学计划</a>
               </li>
+              <li>
+                <a href="javascript:;">9月提高班</a>
+              </li>
+              <li>
+                <a href="javascript:;">6月提高班(已加入)</a>
+              </li>              
             </ul>
           </div>
+        </div>
+        <div class="course-detail-item">
+          <span class="course-detail-title">承诺服务</span>
+          <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+          <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+          <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+          <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+          <span class="lump-sm color-lump course-detail-font" data-placement="top" data-toggle="popover" title="title" data-content="content. ">疑</span>
+          <span class="lump-sm color-lump course-detail-font" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
         </div>
         <div class="course-detail-item">
           <span class="course-detail-title">学习方式</span>
@@ -70,73 +133,159 @@
       </div>
     </div>
     <div class="course-detail-bottom">
-      <a class="btn btn-default btn-lg mrm">会员</a>
+      <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mrs"></i>会员</a>
       <a class="btn btn-primary btn-lg">购买课程</a>
     </div>
-    <ul class="course-operation clearfix ">
-      <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-        <a class="btn btn-default btn-xs " href="javascript:;">
-          <i class="es-icon es-icon-bookmark"></i>
-        </a>
-      </li>
-      <li id="favorite-btn" data-url="/course/2/favorite">
-        <a class="btn btn-default btn-xs  " href="javascript:;">
-          <i class="es-icon es-icon-bookmarkoutline"></i>
-        </a>
-      </li>
-      <li class="es-share top">
-        <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
-          <i class="es-icon es-icon-share"></i>
-        </a>
-        <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
-          <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
-            <i class="es-icon es-icon-weixin"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
-            <i class="es-icon es-icon-weibo"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
-            <i class="es-icon es-icon-qq"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
-            <i class="es-icon es-icon-qzone"></i>
-          </a>
-        </div>
-      </li>
-      <li>
-        <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
-          <i class="es-icon es-icon-setting"></i>
-        </a>
-      </li>
-    </ul>
   </div>
 </div>
 
 <div class="container">
+  <div class="course-detail row">
+    <div class="col-lg-9 col-md-8 course-detail-main">
+      <div class="alert alert-warning" role="alert">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <a href="" class="alert-link">
+              课程公告：下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。
+              <i class="es-icon es-icon-close01 alert-close"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <section class="es-section">
+        <div class="nav-btn-tab">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="">课程概览</a>
+            </li>
+            <li role="presentation">
+              <a href="">课程目录</a>
+            </li>
+            <li role="presentation">
+              <a href="">评论</a>
+            </li>
+            <li role="presentation">
+              <a href="">笔记</a>
+            </li>
+            <li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>
+          </ul>
+        </div>
+        <div class="course-detail-content">
+          <div class="es-piece">
+            <div class="piece-header">课程介绍</div>
+            <div class="piece-body p-lg clearfix">
+              <p>Google Analytics是一个运行在Google主机上的免费网站分析工具，她可以告诉你访问者是如何找到并使用你的网站，</p>
+              <p>到并使用你的网站，这样，你就可以：</p>
+              <p>对网站的设计和内容作出更明智的决定。</p>
+              <p>改进网站使更多的访问者转化为客户。</p>
+              <p>追踪你的关键字，Banner广告，EDM，及其他营销活动的效果。</p>
+              <p>追踪数据，诸如收益，平均订单价值和电子商务转化率。</p>
+            </div>
+          <div class="es-piece">
+            <div class="piece-header">课程目标</div>
+            <div class="piece-body">
+              <ul class="piece-body-list">
+                <li><i class="es-icon es-icon-dot mrm"></i>学习使用Google Analytics追踪网校数据</li>
+                <li><i class="es-icon es-icon-dot mrm"></i>学习分析网校数据，改进网校内容</li>
+              </ul>
+            </div>
+        </div>
+        <div class="es-piece">
+            <div class="piece-header">适合人群</div>
+            <div class="piece-body">
+              <ul class="piece-body-list">
+                <li><i class="es-icon es-icon-dot mrm"></i>网校运营人员</li>
+                <li><i class="es-icon es-icon-dot mrm"></i>网校开发人员</li>
+              </ul>
+            </div>
+        </div>
+      </section>
+    </div>
+    <div class="col-lg-3 col-md-4 course-sidebar">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">课程特色</h3>
+        </div>
+        <div class="panel-body row panel-bottom">
+          <div class="col-md-6">
+            <div class="media-left">
+              <button class="media-icon bg-primary"></button>
+                <i class="es-icon es-icon-videocam media-logo"></i>
+            </div>
+            <div class="media-body">含直播(3)</div>
+          </div>
+          <div class="col-md-6">
+            <div class="media-left">
+              <button class="media-icon bg-primary"></button>
+                <i class="es-icon es-icon-mylibraray media-logo"></i>
+            </div>
+            <div class="media-body">含作业(8)</div>
+          </div>
+        </div>
+        <div class="panel-body row panel-bottom">
+          <div class="col-md-6">
+            <div class="media-left">
+              <button class="media-icon bg-primary"></button>
+                <i class="es-icon es-icon-videocam media-logo"></i>
+            </div>
+            <div class="media-body">含考试(5)</div>
+          </div>
+          <div class="col-md-6">
+            <div class="media-left">
+              <button class="media-icon bg-primary"></button>
+                <i class="es-icon es-icon-filedown media-logo"></i>
+            </div>
+            <div class="media-body">含资料(3)</div>
+          </div>
+        </div>
+        <div class="panel-body row panel-bottom">
+          <div class="col-md-6">
+            <div class="media-left">
+              <button class="media-icon bg-primary"></button>
+                <i class="es-icon es-icon-forum media-logo"></i>
+            </div>
+            <div class="media-body">含讨论(2)</div>
+          </div>
+        </div>
+        </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">推荐班级</h3>
+        </div>
+        <div class="panel-body row panel-bottom">
+          <div class="col-md-6">
+            <div class="media-left">
+            </div>
+            <div class="media-body">
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 加入后：自由式学习 -->
+{# <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="/">首页</a></li>
     <li class="active">sdfdsf </li>
   </ol>
-  <div class="es-section course-detail-section after clearfix">
+  <div class="es-section course-detail-section clearfix">
     <div class="course-detail-header">
-      <span class="tags">
-        <span class="tag-serialing"></span>
-      </span>
       <div class="course-detail-title">
-        <h1>
-          sdfdsf
-          <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
-            <span class="qrcode-popover">
-              <img src="" alt="">  
-              扫二维码继续学习
-          二维码时效为半小时
-            </span>
-          </span>
-        </h1>
-        <div class="gray-dark">sdfsdf</div>
+        <span class="course-font">数据结构PHP开发入门课程  暑期班A</span>
       </div>
-    </div>
-    <ul class="course-operation clearfix ">
+      <ul class="course-operation clearfix ">
+      <li class="mrl">
+        <i class="es-icon es-icon-people"></i>
+        2035 人
+      </li>
       <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
         <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
         </a>
@@ -174,6 +323,8 @@
         </a>
       </li>
     </ul>
+    </div>
+    
     <section class="course-freelearn-section">
       <div class="row">
         <div class="col-sm-3">
@@ -217,79 +368,69 @@
       </div>
     </section>
   </div>
-</div>
+</div> #}
 
-<div class="container">
+<!-- 加入后：任务式学习 -->
+{# <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li>
       <a href="/">首页</a>
     </li>
     <li class="active">sdfdsf</li>
   </ol>
-
-  <div class="es-section course-detail-section after clearfix">
+  <div class="es-section course-detail-section clearfix">
     <div class="course-detail-header">
-      <span class="tags">
-        <span class="tag-serialing"></span>
-      </span>
       <div class="course-detail-title">
-        <h1>
-          sdfdsf
-          <span class="es-qrcode top" data-url="/course/2/qrcode"> <i class="es-icon es-icon-qrcode"></i>
-            <span class="qrcode-popover">
-              <img src="" alt="">
-              扫二维码继续学习
-          二维码时效为半小时
-            </span>
-          </span>
-        </h1>
-        <div class="gray-dark">sdfsdf</div>
+        <span class="course-font">数据结构PHP开发入门课程  暑期班A
+        </span>
+         <span class="course-head-icon mll">
+            <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+            <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+            <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+            <span class="lump-sm color-lump course-detail-font bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+        </span>
       </div>
+      <ul class="course-operation clearfix ">
+        <li class="mrl">
+          <i class="es-icon es-icon-people"></i>
+          2035 人
+        </li>
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs  " href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
     </div>
-
-    <ul class="course-operation clearfix ">
-      <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-        <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
-        </a>
-      </li>
-      <li id="favorite-btn" data-url="/course/2/favorite">
-        <a class="btn btn-default btn-xs  " href="javascript:;">
-          <i class="es-icon es-icon-bookmarkoutline"></i>
-        </a>
-      </li>
-
-      <li class="es-share top">
-        <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
-          <i class="es-icon es-icon-share"></i>
-        </a>
-
-        <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
-
-          <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
-            <i class="es-icon es-icon-weixin"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
-            <i class="es-icon es-icon-weibo"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
-            <i class="es-icon es-icon-qq"></i>
-          </a>
-          <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
-            <i class="es-icon es-icon-qzone"></i>
-          </a>
-
-        </div>
-
-      </li>
-
-      <li>
-        <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
-          <i class="es-icon es-icon-setting"></i>
-        </a>
-      </li>
-
-    </ul>
-
     <section class="row course-orderlearn-section">
       <div class="col-sm-5">
         <span class="progress-img">
@@ -301,23 +442,37 @@
             </div>
           </div>
         </span>
-        <ul class="progress-info">
+        <ul class="progress-info mbl">
           <li>
+            <i class="es-icon es-icon-dot color-primary"></i>
             已完成
             <span class="color-primary">3</span>
             ／45个任务
           </li>
-          <li>计划完成5个任务，落后计划5%</li>
-          <li>学习有效期</li>
-          <li>2015-08-09 ~ 2025-23-23</li>
+          <li>
+            <i class="es-icon es-icon-dot color-warning"></i>
+            计划完成5个任务，落后计划5%</li>
+          <li class="learn-time time-margin">学习有效期</li>
+          <li class="time-margin">2015-08-09 ~ 2025-23-23</li>
         </ul>
       </div>
       <div class="col-sm-7">
-        <div class="task-list"></div>
+        <div class="task-list">
+          <div class="task-list-font">
+            <i class="es-icon es-icon-undone color-primary task-icon"></i>集合的定义和使用
+          </div>
+          <div class="task-list-font">
+                <i class="es-icon es-icon-doing color-primary task-icon"></i>集合的定义和使用单行单列选框工具
+          </div>
+          <div class="task-list-font">
+                <i class="es-icon es-icon-lock task-icon"></i>
+                集合的定义和使用
+          </div> 
+        </div>      
       </div>
     </section>
   </div>
-</div>
+</div> #}
 
 {% endblock %}
 
