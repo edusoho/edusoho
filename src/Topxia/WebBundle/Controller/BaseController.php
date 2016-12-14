@@ -298,4 +298,9 @@ abstract class BaseController extends Controller
         parent::setContainer($container);
         $this->biz = $this->container->get('biz');
     }
+
+    protected function dispatchEvent($eventName, $event)
+    {
+        return ServiceKernel::dispatcher()->dispatch($eventName, $event);
+    }
 }

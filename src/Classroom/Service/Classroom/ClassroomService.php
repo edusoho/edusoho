@@ -158,4 +158,6 @@ interface ClassroomService
     public function getClassroomMembersByCourseId($courseId, $userId);
 
     public function findUserJoinedClassroomIds($userId);
+
+    public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
 }

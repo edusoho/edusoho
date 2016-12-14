@@ -1414,9 +1414,36 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
     }
+
     public function updateMember($id, $member)
     {
         return $this->getClassroomMemberDao()->updateMember($id, $member);
+    }
+
+    public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)
+    {
+        $classroomCourses = $this->findCoursesByClassroomId($classroomId);
+
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
+
+        $conditions = array();
+        $conditions['courseIds'] = $courseIds;
+        $conditions['userId'] = $userId;
+        $count = $this->getCourseService()->searchMemberCount($conditions);
+
+        $members = $this->getCourseService()->searchMembers(
+            $conditions,
+            array('updatedTime','DESC'),
+            0,
+            $count
+        );
+
+        $totalLearnNum = array_sum(ArrayToolkit::column($members, 'isLearned'));
+        $fields['lastLearnTime'] = time();
+        $fields['learnedNum'] = $totalLearnNum;
+
+        $classroomMember = $this->getClassroomMember($classroomId, $userId);
+        return $this->updateMember($classroomMember['id'], $fields);       
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
