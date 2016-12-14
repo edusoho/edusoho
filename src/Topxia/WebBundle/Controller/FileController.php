@@ -22,7 +22,7 @@ class FileController extends BaseController
         $file = $request->files->get('file');
 
         if ($type == 'image') {
-            if ((!FileToolkit::isAllowedUploadFile($file)) || (!FileToolkit::isImageFile($file))) {
+            if ((!FileToolkit::isImageFile($file)) || (!FileToolkit::isAllowedUploadFile($file))) {
                 throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是图片文件，请重新上传。'));
             }
         } else {
