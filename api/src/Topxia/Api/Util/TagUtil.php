@@ -14,7 +14,7 @@ class TagUtil
             'ownerId'   => $ownerId
         ));
 
-        return implode(',', ArrayToolkit::column($res['tags'], 'name'));
+        return ArrayToolkit::column($res['tags'], 'name');
     }
 
     protected static function getTagService()
