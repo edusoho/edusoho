@@ -17,7 +17,7 @@ class VipMemberEventSubscriber implements EventSubscriberInterface
 	public function onOperateVipMember(ServiceEvent $event)
 	{
 		$vipMember = $event->getSubject();
-		$this->getUserService()->updateUserUpdatedTime($vipMember['userId'], array());
+		$this->getUserService()->updateUserUpdatedTime($vipMember['userId']);
 	}
 
     private function getUserService()
