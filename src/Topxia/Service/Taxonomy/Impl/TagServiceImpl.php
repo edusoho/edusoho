@@ -87,7 +87,7 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->findTagsByIds($tagIds);
     }
 
-    public function findTagIdsfindByOwnerTypeAndOwnerIds($ownerType, array $ids)
+    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
     {
         $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
         $tagIds = ArrayToolkit::group($tagOwnerRelations, 'ownerId');
