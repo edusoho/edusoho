@@ -107,6 +107,7 @@ a:hover {
 .notice-panel .notice-btn {
   margin-bottom: 50px;
 }
+<<<<<<< HEAD
 .notice-panel .edu-cloud-search-intro {
   padding:0px 175px 0px 175px;
 }
@@ -122,6 +123,8 @@ a:hover {
 .notice-panel .edu-cloud-video-intro p{
   text-align: left;
 }
+=======
+>>>>>>> develop
 .search-part-table {
   margin-bottom: 0;
 }

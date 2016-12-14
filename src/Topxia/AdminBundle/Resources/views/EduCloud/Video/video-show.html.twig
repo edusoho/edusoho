@@ -2,8 +2,13 @@
   <div class="panel-heading">
     <a href="{{path('admin_cloud_video_upgrade')}}" target="_blank">升级</a>｜
     {% if video.renewVideo.status == true %} 
+<<<<<<< HEAD
       <span class="text-success">已续费</span>
       <span class="text-info pts">
+=======
+      <span class="text-muted">已续费</span>
+      <span class="text-danger pts">
+>>>>>>> develop
         {{video.renewVideo.message|default('')}}
       </span>
     {% else %}

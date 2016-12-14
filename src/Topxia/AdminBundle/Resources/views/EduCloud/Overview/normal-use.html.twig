@@ -6,7 +6,11 @@
       <div class="edu-user clearfix">
         <div class="user-part pull-left">
           <a href="{{path('admin_cloud_access')}}" target="_blank"><img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}></a>
+<<<<<<< HEAD
           <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name | default('') }}</span></a></div>
+=======
+          <div class="user-name text-md pts">Hi,<a href="{{path('admin_cloud_access')}}" target="_blank"><span class="text-primary">{{ isBinded.name| default('') }}</span></a></div>
+>>>>>>> develop
         </div>
         <div class="user-part pull-left">
           <div class="ptm">余额</div>
@@ -29,18 +33,26 @@
               <div class="panel-title">已开通服务</div>
             </div>
             <div class="panel-body">
+<<<<<<< HEAD
+=======
+            {% if 'video' in paidService %}
+>>>>>>> develop
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
                   <i class="es-icon es-icon-playcircleoutline"></i>
                   云视频
                 </a>
               </div>
+<<<<<<< HEAD
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
                 <i class="es-icon es-icon-search"></i>
                 云搜索
               </a>
             </div>
+=======
+            {% endif %}
+>>>>>>> develop
             {% if 'live' in paidService %}
               <div class="col-md-4">
                 <a href="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
@@ -96,7 +108,11 @@
           {% endif %}
           {% if 'live' in unPaidService %}
             <div class="col-md-4">
+<<<<<<< HEAD
               <a href="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
+=======
+              <a hhref="{{path('admin_cloud_service_overview',{type:'live'})}}" target="_blank" class="my-products-item">
+>>>>>>> develop
                 <i class="es-icon es-icon-zhibokecheng"></i>
                 云直播
               </a>
@@ -110,6 +126,17 @@
               </a>
             </div>
           {% endif %}
+<<<<<<< HEAD
+=======
+          {% if 'search' in unPaidService %}
+            <div class="col-md-4">
+              <a href="{{path('admin_cloud_service_overview',{type:'search'})}}" target="_blank" class="my-products-item">
+                <i class="es-icon es-icon-search"></i>
+                云搜索
+              </a>
+            </div>
+          {% endif %}
+>>>>>>> develop
           {% if 'email' in unPaidService %}
             <div class="col-md-4">
               <a href="{{path('admin_cloud_service_overview',{type:'email'})}}" target="_blank" class="my-products-item">
@@ -131,6 +158,7 @@
         <div class="panel-body">
           <ul class="update-list">
             {% for item in overview.updateDoc.items %}
+<<<<<<< HEAD
               <li class="pvs">
                 <a href="{{ 'http://open.edusoho.com'~item.url }}" class="text-overflow link-gray" target="_blank">
                   <i class="es-icon es-icon-dot text-primary"></i>
@@ -142,6 +170,15 @@
                   {% endif %}
                 </a>
               </li>
+=======
+            <li class="pvs">
+              <a href="{{ 'http://open.edusoho.com' ~ item.url }}" class="text-overflow link-gray" target="_blank">
+                <i class="es-icon es-icon-dot text-primary"></i>
+                <span class="text-muted mrm">{{ item.createdTime |date('m-d') }}</span>
+                {{ item.name | slice(0,10) }}...
+              </a>
+            </li>
+>>>>>>> develop
             {% endfor %}
           </ul>
         </div>

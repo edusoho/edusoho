@@ -9,7 +9,11 @@
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.name == '' %}
     <div class="alert alert-warning" role="alert">{{'
+<<<<<<< HEAD
     尚未设置短信签名，不能发送签信，'|trans}}<a href="{{ path('admin_cloud_sms_sign') }}" target="_blank">立即设置</a></div>
+=======
+    尚未设置短信签名，不能发送签信，'|trans}}<a href="#">立即设置</a></div>
+>>>>>>> develop
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.status == 'stoped' %}
     <div class="alert alert-warning" role="alert">{{'
@@ -37,7 +41,11 @@
           </button>
       </div>
       <div class="help-block">
+<<<<<<< HEAD
         教学资讯，极速送达，尽在掌握。<a href="{{path('admin_cloud_show', {type:'sms'})}}" target="_blank">点击这里</a>了解详情。
+=======
+        教学资讯，极速送达，尽在掌握。<a href="{{ path('admin_cloud_show',{'type': 'sms'}) }}" target="_blank">点击这里</a>了解详情。
+>>>>>>> develop
       </div>
     </div>
   </div>
@@ -50,7 +58,11 @@
   <div class="form-group">
     <label for="" class="col-sm-3 control-label">短信签名：</label>
     <div class="controls col-md-9 radios">
+<<<<<<< HEAD
       {{smsInfo.name}}<a href="{{ path('admin_cloud_sms_sign') }}" class="plm" target="_blank">去设置</a>
+=======
+      {{smsInfo.name}}<a href="" class="plm">去设置</a>
+>>>>>>> develop
       <div class="help-block">
         签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
       </div>

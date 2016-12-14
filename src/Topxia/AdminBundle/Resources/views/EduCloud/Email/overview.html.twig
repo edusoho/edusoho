@@ -26,7 +26,11 @@
     <div class="pll pbl">
       邮件余额：
       <span class="h3 text-primary plm prs">{{account.remainCount}}</span>条
+<<<<<<< HEAD
       <a href="{{path('admin_cloud_buy', {type:'email'})}}" class="btn btn-sm btn-primary">购买</a>
+=======
+      <a href="{{path('admin_cloud_buy', {type:'email'})}}" class="btn btn-sm btn-primary" target="_blank">购买</a>
+>>>>>>> develop
       <div class="text-danger pts">
       {{account.message}}
       </div>
@@ -34,7 +38,11 @@
     <div class="pll pbm">
       今日发送：
       <span class="color-gray phm text-md">{{account.todayUsed}}条</span>
+<<<<<<< HEAD
       <a href="{{ path('admin_cloud_email_account') }}" target="_blank">发送记录</a>
+=======
+      <a href="{{ path('admin_cloud_email_list') }}" target="_blank">发送记录</a>
+>>>>>>> develop
     </div>
   </div>
 </div>
@@ -44,7 +52,11 @@
   <div class="panel-heading">
     邮件发送趋势
     <span class="text-muted">（最近1个月）</span>
+<<<<<<< HEAD
     <a class="pull-right" href="{{ path('admin_cloud_email_list') }}" target="_blank">更多&ensp;></a>
+=======
+    <a class="pull-right" href="{{ path('admin_cloud_email_count') }}" target="_blank">更多&ensp;></a>
+>>>>>>> develop
   </div>
   <div class="panel-body">
     <div id="emailSendChart" style="width: 100%;height:400px;"></div>

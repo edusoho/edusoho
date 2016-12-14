@@ -15,6 +15,8 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
             new \Twig_SimpleFunction('datas_count', array($this, 'getDatasCount'), $options),
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
+            new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
+            new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
         );
     }
 
@@ -42,6 +44,11 @@ class DataExtension extends \Twig_Extension
         return $this->{$method}($conditions);
     }
 
+    public function getOldSmsUserStatus()
+    {
+        return $this->getEduCloudService()->getOldSmsUserStatus();
+    }
+
     /**
      * @deprecated  即将废弃，不要再使用
      *
@@ -51,6 +58,11 @@ class DataExtension extends \Twig_Extension
         $service = $this->createService($name);
         $reflectionClass = new \ReflectionClass($service);
         return $reflectionClass->getMethod($method)->invokeArgs($service, $arguments);
+    }
+
+    public function getCloudStatus()
+    {
+        return $this->getEduCloudService()->isHiddenCloud();
     }
 
     public function getName ()
@@ -87,6 +99,11 @@ class DataExtension extends \Twig_Extension
     private function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    private function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
     }
 
     private function getUserService()
