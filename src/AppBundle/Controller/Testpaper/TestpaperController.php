@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Controller\Testpaper;
 
-use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
@@ -10,54 +9,6 @@ use Topxia\Common\Exception\AccessDeniedException;
 
 class TestpaperController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        $user = $this->getUser();
-
-        $paginator = new Paginator(
-            $request,
-            $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']),
-            10
-        );
-
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $testpapersIds     = ArrayToolkit::column($testpaperResults, 'testId');
-        $testpapersTargets = ArrayToolkit::column($testpaperResults, 'target');
-        $testpapers        = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
-        $testpapers        = ArrayToolkit::index($testpapers, 'id');
-
-        $targets   = ArrayToolkit::column($testpapers, 'target');
-        $courseIds = array_map(function ($target) {
-            $course = explode('/', $target);
-            $course = explode('-', $course[0]);
-            return $course[1];
-        }, $targets);
-        $lessonIds = array_map(function ($target) {
-            $lesson = explode('/', $target);
-            $lesson = explode('-', $lesson[1]);
-            return $lesson[1];
-        }, $testpapersTargets);
-
-        foreach ($testpaperResults as $ke => &$value) {
-            $value['lessonId'] = $lessonIds[$ke];
-        }
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
-            'myQuizActive'       => 'active',
-            'user'               => $user,
-            'myTestpaperResults' => $testpaperResults,
-            'myTestpapers'       => $testpapers,
-            'courses'            => $courses,
-            'paginator'          => $paginator
-        ));
-    }
-
     public function doTestpaperAction(Request $request, $testId, $lessonId)
     {
         $user = $this->getUser();
@@ -156,22 +107,24 @@ class TestpaperController extends BaseController
 
         $total = $this->makeTestpaperTotal($testpaper, $questions);
 
-        //$favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
+        $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
+
         return $this->render('testpaper/result.html.twig', array(
             'questions'     => $questions,
             'accuracy'      => $accuracy,
             'paper'         => $testpaper,
             'paperResult'   => $testpaperResult,
-            //'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
+            'favorites'     => ArrayToolkit::column($favorites, 'questionId'),
             'total'         => $total,
             'student'       => $student,
             'source'        => $request->query->get('source', 'course'),
             'attachments'   => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'limitedTime'   => 0
         ));
     }
 
@@ -366,7 +319,7 @@ class TestpaperController extends BaseController
 
     protected function getTestpaperActivityService()
     {
-        return $this->createService('TestpaperActivity:TestpaperActivityService');
+        return $this->createService('Activity:TestpaperActivityService');
     }
 
     protected function getCourseService()

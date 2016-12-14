@@ -68,14 +68,14 @@ class DoTestBase
     let $inputParents = $(event.delegateTarget);
 
     $inputParents.find('label').each(function(){
-      $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
+      $(this).find('input').prop("checked") ? $(this).addClass('lump-primary-light') : $(this).removeClass('lump-primary-light');
     });
     let $choices = $inputParents.find('label.active');
     this._renderBtnIndex($choices.find('input').attr('name'),$choices.length);
   }
 
   _renderBtnIndex(id,num) {
-    num > 0 ? $showLight.addClass('active') : $showLight.removeClass('active');
+    num > 0 ? $showLight.addClass('lump-primary-light') : $showLight.removeClass('lump-primary-light');
   }
 
   _showEssayInputEditor(event) {

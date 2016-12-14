@@ -33,7 +33,8 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
             'courseId = :courseId',
             'courseId IN (:courseIds)',
             'status = :status',
-            'type = :type'
+            'type = :type',
+            'id IN (:ids)'
         );
 
         $declares['serializes'] = array(

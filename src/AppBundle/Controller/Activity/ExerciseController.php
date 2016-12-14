@@ -97,6 +97,6 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
     protected function getTestpaperActivityService()
     {
-        return $this->createService('TestpaperActivity:TestpaperActivityService');
+        return $this->createService('Activity:TestpaperActivityService');
     }
 }

@@ -94,6 +94,6 @@ class TestpaperActivity extends Activity
 
     protected function getTestpaperActivityService()
     {
-        return $this->getBiz()->service('TestpaperActivity:TestpaperActivityService');
+        return $this->getBiz()->service('Activity:TestpaperActivityService');
     }
 }

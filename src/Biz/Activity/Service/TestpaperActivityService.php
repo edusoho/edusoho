@@ -5,6 +5,8 @@ interface TestpaperActivityService
 {
     public function getActivity($id);
 
+    public function findActivitiesByIds($ids);
+
     public function createActivity($fields);
 
     public function updateActivity($id, $fields);

@@ -11,6 +11,11 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
         return $this->getTestpaperActivityDao()->get($id);
     }
 
+    public function findActivitiesByIds($ids)
+    {
+        return $this->getTestpaperActivityDao()->findActivitiesByIds($ids);
+    }
+
     public function createActivity($fields)
     {
         return $this->getTestpaperActivityDao()->create($fields);
@@ -28,6 +33,6 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
 
     protected function getTestpaperActivityDao()
     {
-        return $this->createDao('TestpaperActivity:TestpaperActivityDao');
+        return $this->createDao('Activity:TestpaperActivityDao');
     }
 }

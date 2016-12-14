@@ -48,10 +48,10 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($request->getMethod() == 'POST') {
-            $fields             = $request->request->all();
-            $fields['ranges']   = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
-            $fields['courseId'] = $courseSet['id'];
-            $fields['pattern']  = 'questionType';
+            $fields                = $request->request->all();
+            $fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
+            $fields['courseSetId'] = $courseSet['id'];
+            $fields['pattern']     = 'questionType';
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
 
@@ -79,14 +79,12 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $courseId, $type)
+    public function checkListAction(Request $request, $courseId, $type, $testpaperIds = array())
     {
-        $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
-
         $conditions = array(
-            'status'   => 'open',
-            'courseId' => $course['id'],
-            'type'     => $type
+            'status' => 'open',
+            'type'   => $type,
+            'ids'    => $testpaperIds
         );
 
         $paginator = new Paginator(
@@ -107,22 +105,18 @@ class ManageController extends BaseController
         }
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
-            'course'     => $course,
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'paginator'  => $paginator
         ));
     }
 
-    public function checkAction(Request $request, $resultId)
+    public function checkAction(Request $request, $resultId, $targetId, $source = 'course')
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!$result) {
             throw $this->createResourceNotFoundException('testpaperResult', $resultId);
         }
-
-        $source   = $request->query->get('source', 'course');
-        $targetId = $request->query->get('targetId', 0);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {
@@ -134,13 +128,13 @@ class ManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $formData    = $request->request->all();
-            $paperResult = $this->getTestpaperService()->checkFinish($result['id'], $formData);
+            $formData = $request->request->all();
+            $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            $this->createJsonResponse(true);
+            return $this->createJsonResponse(true);
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($result['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $result['id']);
 
         $essayQuestions = $this->getCheckedEssayQuestions($questions);
 
@@ -182,6 +176,7 @@ class ManageController extends BaseController
         if ($status != 'all') {
             $conditions['status'] = $status;
         }
+        $conditions['type'] = $testpaper['type'];
 
         if (!empty($keyword)) {
             $searchUser           = $this->getUserService()->getUserByNickname($keyword);
@@ -394,9 +389,7 @@ class ManageController extends BaseController
             'paperResult'   => array(),
             'total'         => $total,
             'attachments'   => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'showTypeBar'   => 1,
-            'showHeader'    => 1
+            'questionTypes' => $this->getCheckedQuestionType($testpaper)
         ));
     }
 

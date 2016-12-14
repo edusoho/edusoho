@@ -8,7 +8,7 @@ class Picker{
     this.$typeNav = $typeNav;
     this.$form = $form;
     this.$modal = $('#testpaper-confirm-modal');
-    //this.emitter = new Emitter();
+    
     this.currentType = this.$typeNav.find('.active').children().data('type');
     this._initEvent();
     this._initSortList();
@@ -16,8 +16,6 @@ class Picker{
   }
 
   _init() {
-    /*this.emitter.on('question_picked',function(){
-    });*/
 
   }
 
@@ -161,14 +159,16 @@ class Picker{
 
     this.$typeNav.find('li').each(function() {
         let type = $(this).find('a').data('type'),
-            name = $(this).find('a').data('name'),
-            question = {};
+            name = $(this).find('a').data('name');
+            
 
         stats[type] = {name:name, count:0, score:0, missScore:0};
 
         self.$form.find('#testpaper-items-'+type).find('[name="scores[]"]').each(function() {
             let itemType = $(this).closest('tr').data('type');
             let score = itemType == 'material' ? 0 : parseFloat($(this).val());
+            let question = {};
+
             if (itemType != 'material') {
               stats[type]['count'] ++;
             }
@@ -177,6 +177,7 @@ class Picker{
             stats[type]['missScore'] = parseFloat($(this).data('miss-score'));
 
             let questionId = $(this).closest('tr').data('id');
+
             question['score'] = score;
             question['missScore'] = parseFloat($(this).data('miss-score'));
             question['type'] = type;
@@ -197,7 +198,7 @@ class Picker{
   }
 
   _submitSave(event) {
-    console.log(this.questions);
+    
     $.post(this.$form.attr('action'),{questions:this.questions},function(result){
       if (result.goto) {
         window.location.href = result.goto;

@@ -149,12 +149,13 @@ class CheckTest
 
   _submit(event) {
 
+    let $target = $(event.currentTarget);
     let teacherSay = this.$dialog.find('textarea').val();
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
-    $.post($(this).data('post-url'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
-      //window.location.href = $('#testpaper-teacherSay-btn').data('goto');
-      //window.location.reload();
+    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
+      //window.location.href = $target.data('goto');
+      window.location.reload();
     })
   }
 
@@ -170,4 +171,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.container'));
+new CheckTest($('.testpaper-activity-show'));

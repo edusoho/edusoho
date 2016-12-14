@@ -1,5 +1,6 @@
 {% extends 'testpaper/testpaper-layout.html.twig' %}
-{#{% do load_script('quiz-question/testpaper-result') %}#}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/perfect-scrollbar.js','web/testpaper/result/index.js']) %}
 
 {% block paper_result_bar %}
   {% include 'testpaper/part/paper-result-objective.html.twig' %}
@@ -8,7 +9,7 @@
 {% set questionTypeDict = getQuestionTypes() %}
 
 {% block paper_warning %}
-  {% if app.user.id == paperResult.userId %}
+  {% if app.user and app.user.id == paperResult.userId %}
     {% if paperResult.status == 'reviewing' %}
       <div class="alert alert-warning">{{'老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
     {% elseif paperResult.status == 'finished' %}
@@ -57,7 +58,9 @@
         {% if target|default(null) and target.doTimes|default('0') %}
           <span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
         {% endif %}
-        <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if paper.limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+        {% if paperResult|default(null) %}
+          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if paper.limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+        {% endif %}
       </div>
       <div class="panel-body">
         {% for type in questionTypes|default([]) %}

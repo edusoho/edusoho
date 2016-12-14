@@ -27,7 +27,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $testpaper['metas']['courseId'] = $testpaper['courseId'];
 
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
-        var_dump($result);exit;
+
         if ($result['status'] != 'ok') {
             throw new \RuntimeException("Build testpaper #{$result['id']} items error.");
         }

@@ -8,10 +8,16 @@ class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivi
 {
     protected $table = 'testpaper_activity';
 
+    public function findActivitiesByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         $declares['conditions'] = array(
-            'id = :id'
+            'id = :id',
+            'ids IN (:ids)'
         );
 
         $declares['serializes'] = array(

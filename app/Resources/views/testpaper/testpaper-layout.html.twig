@@ -4,11 +4,12 @@
 
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','web/testpaper/do-test/index.js']) %}
-
-{% block header %}{% if showHeader|default(1) %}{{ parent() }}{% endif %}{% endblock %}
-
 {% block body %}
+
+  {% block header %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+
   <div class="testpaper-activity-show">
     <div class="container">
       
@@ -134,9 +135,12 @@
     </div>
   </div>
 
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
 {% endblock %}
 
 
 
-{% block footer %}{% if showHeader|default(1) %}{{ parent() }}{% endif %}{% endblock %}
+
 

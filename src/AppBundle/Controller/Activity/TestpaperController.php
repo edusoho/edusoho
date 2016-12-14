@@ -27,7 +27,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
             ));
         }
 
-        return $this->forward('WebBundle:Testpaper:doTestpaper', array(
+        return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', array(
             'testId'   => $testpaperActivity['mediaId'],
             'lessonId' => $activity['id']
         ));
@@ -111,6 +111,6 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
     protected function getTestpaperActivityService()
     {
-        return $this->createService('TestpaperActivity:TestpaperActivityService');
+        return $this->createService('Activity:TestpaperActivityService');
     }
 }

@@ -1,11 +1,12 @@
-{% extends 'WebBundle:Testpaper:testpaper-layout.html.twig' %}
+{% extends 'testpaper/testpaper-layout.html.twig' %}
 
 {% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','web/testpaper-manage/check/index.js']) %}
 
 {% set role = 'teacher' %}
+{% set showHeader = 1 %}
 
 {% block paper_result_bar %}
-  {% include 'WebBundle:Testpaper/Part:paper-result-objective.html.twig' %}
+  {% include 'testpaper/part/paper-result-objective.html.twig' %}
 {% endblock %}
 
 {% block paper_warning %}
@@ -44,7 +45,7 @@
 
 {% endblock %}
 
-{% block testpaperCheckedDialog %}
+{% block testpaper_checked_dialog %}
   <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
     <div class="modal-dialog modal-dialog-small">
       <div class="modal-content">
@@ -88,7 +89,7 @@
             {% set postUrl = path('classroom_manage_testpaper_check', {classroomId:targetId,resultId:paperResult.id}) %}
             {% set gotUrl = path('classroom_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% else %}
-            {% set postUrl = path('course_manage_testpaper_check', {courseId:targetId,resultId:paperResult.id}) %}
+            {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
             {% set gotUrl = path('course_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% endif %}
           <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>

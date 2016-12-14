@@ -562,7 +562,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function createItems($newItems, $questions, $testpaperId)
     {
         if (!$questions) {
-            return false;
+            return array();
         }
 
         $index = 1;
@@ -575,12 +575,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['missScore']    = empty($newItems[$question['id']]['missScore']) ? 0 : $newItems[$question['id']]['missScore'];
             $filter['parentId']     = $question['parentId'];
             $items[]                = $this->createItem($filter);
-
-            if ($question['type'] == 'material' && $question['subCount'] > 0) {
-                $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-                return $this->createItems($newItems, $questionSubs, $testpaperId);
-            }
         }
+
+        return $items;
     }
 
     protected function updateTestpaperByItems($testpaperId, $fields)
