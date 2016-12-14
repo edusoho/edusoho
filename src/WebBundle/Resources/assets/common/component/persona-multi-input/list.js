@@ -27,7 +27,7 @@ export default class List extends Component {
       name = 'list-group';
     }
     return (
-      <ul id={this.listId} className={`${name}  ${this.props.listClassName} sortable-list list-group mb0`}>
+      <ul id={this.listId} className={`sortable-list ${name} ${this.props.listClassName}`}>
       {
         dataSourceUi.map( (item,i) => {
           return (
