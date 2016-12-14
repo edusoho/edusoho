@@ -185,8 +185,8 @@ define(function(require, exports, module) {
         ],
         [
             'unsigned_integer',
-            /^([1-9]\d*|0)$/,
-            '{{display}}必须为非负整数'
+            /^[1-9]\d*$/,
+            '{{display}}必须为正整数'
         ],
         [
             'arithmetic_number',
