@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User\Impl;
+namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
@@ -11,7 +11,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token                  = array();
         $token['type']          = $type;
         $token['token']         = $this->_makeTokenValue(32);
-        $token['data']          = !isset($args['data']) ? null : $args['data'];
+        $token['data']          = !isset($args['data']) ? '' : $args['data'];
         $token['times']         = empty($args['times']) ? 0 : intval($args['times']);
         $token['remainedTimes'] = $token['times'];
         $token['userId']        = empty($args['userId']) ? 0 : $args['userId'];

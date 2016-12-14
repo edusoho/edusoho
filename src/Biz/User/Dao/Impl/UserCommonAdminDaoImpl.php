@@ -22,6 +22,7 @@ class UserCommonAdminDaoImpl extends GeneralDaoImpl implements UserCommonAdminDa
     public function declares()
     {
         return array(
+            // 'conditions' => array('userId')
         );
     }
 }

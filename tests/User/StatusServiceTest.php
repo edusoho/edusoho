@@ -9,12 +9,12 @@ class StatusServiceTest extends BaseTestCase
     {
         $status = array('courseId' => 1, 'type' => 'course', 'objectType' => 'course', 'message' => 'sss', 'properties' => 'sss');
         $this->getStatusService()->publishStatus($status);
-        $count = $this->getStatusService()->searchStatusesCount(array('courseId' => 1));
+        $count = $this->getStatusService()->countStatuses(array('courseId' => 1));
         $this->assertEquals(1, $count);
     }
 
     protected function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return $this->getBiz()->service('User:StatusService');
     }
 }

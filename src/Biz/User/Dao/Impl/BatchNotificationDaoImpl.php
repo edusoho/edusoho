@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User\Service\Dao\Impl;
+namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\BatchNotificationDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -23,7 +23,6 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
 
     public function search($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
@@ -42,7 +41,8 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
         return array(
             'serializes' => array(
                 'content' => 'json'
-            )
+            ),
+            'orderbys'   => array('createdTime')
         );
     }
 }

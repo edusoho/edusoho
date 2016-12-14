@@ -12,7 +12,7 @@ interface MessageRelationDao
 
     public function deleteByConversationIdAndMessageId($conversationId, $messageId);
 
-    public function findByConversationId($conversationId, $start, $limit);
+    public function searchByConversationId($conversationId, $start, $limit);
 
     public function getByConversationIdAndMessageId($conversationId, $messageId);
 }

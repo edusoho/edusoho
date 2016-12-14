@@ -11,7 +11,7 @@ class NotificationServiceTest extends BaseTestCase
         $user = $this->createUser();
         $this->getNotificationService()->notify($user['id'], "default", "content");
 
-        $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
+        $notificationsNum = $notifications = $this->getNotificationService()->countNotificationsByUserId($user['id']);
         $this->assertEquals(1, $notificationsNum);
     }
 
@@ -21,10 +21,10 @@ class NotificationServiceTest extends BaseTestCase
         $this->getNotificationService()->notify($user['id'], "default", "content");
         $this->getNotificationService()->notify($user['id'], "default", "content");
 
-        $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
+        $notificationsNum = $notifications = $this->getNotificationService()->countNotificationsByUserId($user['id']);
         $this->assertEquals(2, $notificationsNum);
 
-        $notifications = $this->getNotificationService()->findUserNotifications($user['id'], 0, 30);
+        $notifications = $this->getNotificationService()->searchNotificationsByUserId($user['id'], 0, 30);
 
         $this->assertEquals($user['id'], $notifications[0]['userId']);
         $this->assertEquals("default", $notifications[0]['type']);
@@ -48,12 +48,12 @@ class NotificationServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 
 }

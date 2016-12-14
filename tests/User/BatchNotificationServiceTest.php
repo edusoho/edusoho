@@ -26,9 +26,9 @@ class BatchNotificationServiceTest extends BaseTestCase
         $notification2 = $this->getBatchNotificationService()->getBatchNotification(2);
 
         $conditions = array('fromId' => 1);
-        $num        = $this->getBatchNotificationService()->searchBatchNotificationsCount($conditions);
+        $num        = $this->getBatchNotificationService()->countBatchNotifications($conditions);
 
-        $notifications = $this->getBatchNotificationService()->searchBatchNotifications($conditions, array('createdTime', 'ASC'), 0, 9999);
+        $notifications = $this->getBatchNotificationService()->searchBatchNotifications($conditions, array('createdTime' => 'ASC'), 0, 9999);
 
         $user   = $this->createUser();
         $result = $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
@@ -51,11 +51,11 @@ class BatchNotificationServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.BatchNotificationService');
+        return $this->getBiz()->service('User:BatchNotificationService');
     }
 }

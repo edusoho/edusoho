@@ -64,7 +64,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
         }
 
-        return true;
+        return false;
     }
 
     protected function protectiveRule($type, $ip)
@@ -371,7 +371,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 throw new \InvalidArgumentException();
             }
 
-            $class = substr(__NAMESPACE__, 0, -5)."\\AuthProvider\\".ucfirst($partner)."AuthProvider";
+            $class = substr(__NAMESPACE__, 0, -13)."\\AuthProvider\\".ucfirst($partner)."AuthProvider";
 
             $this->partner = new $class();
         }

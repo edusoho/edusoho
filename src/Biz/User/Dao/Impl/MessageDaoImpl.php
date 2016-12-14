@@ -86,6 +86,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
     public function declares()
     {
         return array(
+            'orderbys' => array()
         );
     }
 }

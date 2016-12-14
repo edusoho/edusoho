@@ -4,6 +4,7 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Topxia\Service\Common\DynamicQueryBuilder;
 
 class UserDaoImpl extends GeneralDaoImpl implements UserDao
 {
@@ -11,12 +12,12 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function getByEmail($email)
     {
-        return $this->getByFields(array('email', $email));
+        return $this->getByFields(array('email' => $email));
     }
 
     public function getByNickname($nickname)
     {
-        return $this->getByFields(array('nickname', $nickname));
+        return $this->getByFields(array('nickname' => $nickname));
     }
 
     public function countByMobileNotEmpty()
@@ -27,7 +28,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function getByVerifiedMobile($mobile)
     {
-        return $this->getByFields(array('verifiedMobile', $mobile));
+        return $this->getByFields(array('verifiedMobile' => $mobile));
     }
 
     public function findByNicknames(array $nicknames)
@@ -42,20 +43,19 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function getByInviteCode($inviteCode)
     {
-        return $this->getByFields(array('inviteCode', $inviteCode));
+        return $this->getByFields(array('inviteCode' => $inviteCode));
     }
 
     public function search($conditions, $orderBys, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $builder = $this->createUserQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
-            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
-        };
+        foreach ($orderBys as $field => $direction) {
+            $builder->addOrderBy($field, $direction);
+        }
 
         return $builder->execute()->fetchAll() ?: array();
     }
@@ -100,15 +100,14 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
-        }
-
-        if (isset($conditions['keywordUserType'])) {
-            $conditions['type'] = "%{$conditions['keywordUserType']}%";
-            unset($conditions['keywordUserType']);
-        }
-
-        if (isset($conditions['nickname'])) {
-            $conditions['nickname'] = "%{$conditions['nickname']}%";
+        } else {
+            if (isset($conditions['keywordUserType'])) {
+                $conditions['type'] = "%{$conditions['keywordUserType']}%";
+                unset($conditions['keywordUserType']);
+            }
+            if (isset($conditions['nickname'])) {
+                $conditions['nickname'] = "%{$conditions['nickname']}%";
+            }
         }
 
         if (!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate') {
@@ -138,8 +137,8 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
         $conditions['verifiedMobileNull'] = "";
 
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'user')
+        $builder = new DynamicQueryBuilder($this->db(), $conditions);
+        $builder->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')
@@ -187,7 +186,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = {$name} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
         $result      = $this->db()->executeQuery($sql, array($number, $id));
-        $this->clearCached();
         return $result;
     }
 
@@ -202,13 +200,12 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
         $result      = $this->db()->executeQuery($sql, array($id));
-        $this->clearCached();
         return $result;
     }
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
@@ -220,7 +217,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function countByLessThanCreatedTime($endTime)
     {
-        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE  `createdTime`<=?  ";
+        $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
         return $this->db()->fetchColumn($sql, array($endTime));
     }
 
@@ -230,6 +227,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'
+            ),
+            'conditions' => array(
+                'nickname = :nickname',
+                'email = :email',
+                'mobile = :mobile'
             )
         );
     }

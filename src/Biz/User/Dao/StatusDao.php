@@ -4,7 +4,7 @@ namespace Biz\User\Dao;
 
 interface StatusDao
 {
-    public function findByUserIds($userIds, $start, $limit);
+    public function searchByUserIds($userIds, $start, $limit);
 
     public function countByUserIds($userIds);
 

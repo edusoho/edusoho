@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User\Impl;
+namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\UserCommonAdminService;
@@ -14,7 +14,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
     public function findCommonAdminByUserId($userId)
     {
         if (!$userId) {
-            return null;
+            return array();
         }
 
         $admins = $this->getCommonAdminDao()->findByUserId($userId);

@@ -35,7 +35,7 @@ interface MessageService
      * @param  integer $conversationId               会话ID
      * @return integer 特定会话的私信条数
      */
-    public function getConversationMessageCount($conversationId);
+    public function countConversationMessages($conversationId);
 
     /**
      * 获取用户的会话条数
@@ -43,7 +43,7 @@ interface MessageService
      * @param  integer $userId                       用户ID
      * @return integer 特定用户的会话条数
      */
-    public function getUserConversationCount($userId);
+    public function countUserConversations($userId);
 
     /**
      * 获取指定用户的若干个会话

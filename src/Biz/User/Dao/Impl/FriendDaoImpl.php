@@ -83,6 +83,7 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
     public function declares()
     {
         return array(
+            'orderbys' => array('createdTime')
         );
     }
 }

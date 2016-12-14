@@ -57,7 +57,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorEmail()
     {
@@ -70,7 +70,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testRegisterWithRegistedNickname()
     {
@@ -90,7 +90,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testRegisterWithRegistedEmail()
     {
@@ -110,7 +110,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorNickname1()
     {
@@ -122,7 +122,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorNickname2()
     {
@@ -236,6 +236,9 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUsers);
     }
 
+/**
+ * @group tmp
+ */
     public function testSearchUsers()
     {
         $user1 = $this->createUser('user1');
@@ -244,8 +247,8 @@ class UserServiceTest extends BaseTestCase
         $conditions = array(
             'nickname' => 'user1'
         );
-        $orderBy = array('createdTime', 'ASC');
-        $result  = $this->getUserService()->SearchUsers($conditions, $orderBy, 0, 20);
+        $orderBy = array('createdTime' => 'ASC');
+        $result  = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -278,31 +281,31 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user1'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user1'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_USER'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_USER'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('loginIp' => ''), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('loginIp' => ''), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user1@user1.com'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user2@user2.com'), array('createdTime' => 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithOneParamterAndResultEqualsEmpty()
     {
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user1'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user1'), array('createdTime' => 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_USER'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_USER'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('loginIp' => ''), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('loginIp' => ''), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname' => 'user'), array('createdTime' => 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email' => 'user1@user1.com'), array('createdTime' => 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithMultiParamter()
@@ -314,16 +317,15 @@ class UserServiceTest extends BaseTestCase
             'nickname' => 'user1',
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
-            'nickname' => 'user',
             'email'    => 'user1@user1.com'
-        ), array('createdTime', 'DESC'), 0, 10);
+        ), array('createdTime' => 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
             'nickname' => 'user',
             'email'    => 'user1@user1.com'
-        ), array('createdTime', 'DESC'), 0, 10);
+        ), array('createdTime' => 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
@@ -335,28 +337,30 @@ class UserServiceTest extends BaseTestCase
             'nickname' => 'user1',
             'roles'    => 'ROLE_USER',
             'loginIp'  => '',
-            'nickname' => 'user',
             'email'    => 'user2@user2.com'
-        ), array('createdTime', 'DESC'), 0, 10);
+        ), array('createdTime' => 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname' => 'user2',
             'roles'    => 'ROLE_ADMIN',
             'loginIp'  => '',
-            'nickname' => 'user',
             'email'    => 'user1@user1.com'
-        ), array('createdTime', 'DESC'), 0, 10);
+        ), array('createdTime' => 'DESC'), 0, 10);
     }
 
+/**
+ * @group tmp
+ */
     public function testSearchUserCount()
     {
         $user1          = $this->createUser('user1');
         $user2          = $this->createUser('user2');
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'nickname', 'keyword' => 'user1'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'nickname', 'keyword' => 'user1'));
         $this->assertEquals(1, $foundUserCount);
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'roles', 'keyword' => '|ROLE_USER|'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'roles', 'keyword' => '|ROLE_USER|'));
         $this->assertEquals(3, $foundUserCount);
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'email', 'keyword' => 'user1@user1.com'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'email', 'keyword' => 'user1@user1.com'));
+        $this->assertEquals(1, $foundUserCount);
     }
 
     public function testSearchUserCountWithZeroResult()
@@ -364,17 +368,17 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
 
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'nickname', 'keyword' => 'not_exist_nickname'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'nickname', 'keyword' => 'not_exist_nickname'));
         $this->assertEquals(0, $foundUserCount);
 
         $currentUser = $this->getCurrentUser();
         $this->getUserService()->changeUserRoles($currentUser['id'], array('ROLE_USER'));
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'roles', 'keyword' => '|ROLE_ADMIN|'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'roles', 'keyword' => '|ROLE_ADMIN|'));
         $this->assertEquals(0, $foundUserCount);
 
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'email', 'keyword' => 'not_exist_email@user.com'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'email', 'keyword' => 'not_exist_email@user.com'));
         $this->assertEquals(0, $foundUserCount);
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'loginIp', 'keyword' => '192.168.0.1'));
+        $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'loginIp', 'keyword' => '192.168.0.1'));
         $this->assertEquals(0, $foundUserCount);
     }
 
@@ -420,7 +424,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeNicknameTwo()
     {
@@ -434,7 +438,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeNicknameThree()
     {
@@ -462,7 +466,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeEmailWithErrorEmailFormat1()
     {
@@ -476,7 +480,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeEmailWithErrorEmailFormat2()
     {
@@ -490,7 +494,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeEmailWithExistEmail()
     {
@@ -522,7 +526,7 @@ class UserServiceTest extends BaseTestCase
             'password' => 'test_password',
             'email'    => 'test_email@email.com'
         );
-        $this->getUserService()->register($userInfo);
+        $user   = $this->getUserService()->register($userInfo);
         $result = $this->getUserService()->isEmailAvaliable('test@user.com');
         $this->assertTrue($result);
         $result = $this->getUserService()->isEmailAvaliable('test_email@email.com');
@@ -672,7 +676,7 @@ class UserServiceTest extends BaseTestCase
             'securityAnswer3'   => 'answer-3'
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
+        $result = $this->getUserService()->findUserSecureQuestionsByUserId($registeredUser['id']);
         $this->assertEquals(3, count($result));
     }
 
@@ -694,7 +698,7 @@ class UserServiceTest extends BaseTestCase
             'securityAnswer3'   => 'answer-3'
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
+        $result = $this->getUserService()->findUserSecureQuestionsByUserId($registeredUser['id']);
         $this->assertEquals(3, count($result));
     }
 
@@ -758,7 +762,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testParseRegistrationForth()
     {
@@ -778,7 +782,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testParseRegistrationSixth()
     {
@@ -789,7 +793,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testParseRegistrationSeventh()
     {
@@ -958,7 +962,7 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findUserFollowing($user1['id'], 0, 20);
+        $result = $this->getUserService()->findUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -969,7 +973,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findAllUserFollowing($user1['id'], 0, 20);
+        $result = $this->getUserService()->findAllUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -980,7 +984,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findAllUserFollowing($user1['id'], 0, 20);
+        $result = $this->getUserService()->findAllUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -1002,7 +1006,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user2['id'], $user3['id']);
-        $result = $this->getUserService()->findAllUserFollower($user3['id'], 0, 20);
+        $result = $this->getUserService()->findAllUserFollowers($user3['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -1013,7 +1017,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user3['id'], $user1['id']);
-        $result = $this->getUserService()->findUserFollowerCount($user1['id'], 0, 20);
+        $result = $this->getUserService()->countUserFollowers($user1['id'], 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -1404,7 +1408,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorGender()
     {
@@ -1419,7 +1423,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorBirthday()
     {
@@ -1434,7 +1438,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorMobile()
     {
@@ -1449,7 +1453,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorQQ()
     {
@@ -1523,7 +1527,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      *
      */
     public function testChangeUserRolesWithIllegalRoles()
@@ -1634,7 +1638,7 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser   = $this->getUserService()->register($userInfo);
         $emailVerifyToken = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
-        $result           = $this->getUserService()->searchTokenCount(array('type' => 'email-verify'));
+        $result           = $this->getUserService()->countTokens(array('type' => 'email-verify'));
         $this->assertEquals('1', $result);
     }
 
@@ -1818,7 +1822,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testWaveUserCounterTwice()
     {
@@ -1927,7 +1931,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
     {
@@ -2039,7 +2043,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testGetUserBindByTypeAndUserIdThird()
     {
@@ -2071,7 +2075,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
     {
@@ -2140,7 +2144,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  @group tmp
      */
     public function testUnBindUserByTypeAndToIdOne()
     {
@@ -2156,7 +2160,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($result);
         $this->getUserService()->unBindUserByTypeAndToId('qq', $registeredUser['id']);
         $result = $this->getUserService()->getUserBindByTypeAndUserId('qq', $registeredUser['id']);
-        $this->assertFalse($result);
+        $this->assertEmpty($result);
     }
 
     /**
@@ -2172,7 +2176,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUnBindUserByTypeAndToIdThird()
     {
@@ -2273,7 +2277,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException \Topxia\Common\Exception\UnexpectedValueException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
     {
@@ -2410,12 +2414,12 @@ class UserServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getFileService()

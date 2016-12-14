@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User\Impl;
+namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
@@ -12,9 +12,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->count($conditions);
     }
 
-    public function searchMessages($conditions, $sort, $start, $limit)
+    public function searchMessages($conditions, $order, $start, $limit)
     {
-        return $this->getMessageDao()->search($conditions, $sort, $start, $limit);
+        return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
     public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
@@ -72,12 +72,12 @@ class MessageServiceImpl extends BaseService implements MessageService
             $message      = $this->getMessageDao()->get($id);
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['fromId'], $message['toId']);
             if (!empty($conversation)) {
-                $this->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
             }
 
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['toId'], $message['fromId']);
             if (!empty($conversation)) {
-                $this->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
             }
 
             $this->getMessageDao()->delete($id);
@@ -90,19 +90,19 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getConversationDao()->findByToId($userId, $start, $limit);
     }
 
-    public function getUserConversationCount($userId)
+    public function countUserConversations($userId)
     {
         return $this->getConversationDao()->countByToId($userId);
     }
 
-    public function getConversationMessageCount($conversationId)
+    public function countConversationMessages($conversationId)
     {
         return $this->getRelationDao()->countByConversationId($conversationId);
     }
 
     public function deleteConversation($conversationId)
     {
-        $this->getRelationDao()->delete($conversationId);
+        $this->getRelationDao()->deleteByConversationId($conversationId);
         return $this->getConversationDao()->delete($conversationId);
     }
 
@@ -119,9 +119,9 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     public function findConversationMessages($conversationId, $start, $limit)
     {
-        $relations   = $this->getRelationDao()->findByConversationId($conversationId, $start, $limit);
+        $relations   = $this->getRelationDao()->searchByConversationId($conversationId, $start, $limit);
         $messages    = $this->getMessageDao()->findByIds(ArrayToolkit::column($relations, 'messageId'));
-        $createUsers = $this->getUserService()->findByIds(ArrayToolkit::column($messages, 'fromId'));
+        $createUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
 
         foreach ($messages as &$message) {
             foreach ($createUsers as $createUser) {

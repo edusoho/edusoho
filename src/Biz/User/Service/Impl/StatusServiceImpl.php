@@ -1,5 +1,5 @@
 <?php
-namespace Biz\User\Impl;
+namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\StatusService;
@@ -24,7 +24,7 @@ class StatusServiceImpl extends BaseService implements StatusService
             $this->deleteOldStatus($status);
         }
 
-        return $this->getStatusDao()->addStatus($status);
+        return $this->getStatusDao()->create($status);
     }
 
     protected function deleteOldStatus($status)
@@ -40,18 +40,18 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->searchStatuses($conditions, $sort, $start, $limit);
     }
 
-    public function searchStatusesCount($conditions)
+    public function countStatuses($conditions)
     {
-        return $this->getStatusDao()->searchStatusesCount($conditions);
+        return $this->getStatusDao()->count($conditions);
     }
 
-    public function findStatusesByUserIds($userIds, $start, $limit)
+    public function searchStatusesByUserIds($userIds, $start, $limit)
     {
         return $this->getStatusDao()->findStatusesByUserIds($userIds, $start, $limit);
     }
 
     protected function getStatusDao()
     {
-        return $this->createDao('User.StatusDao');
+        return $this->createDao('User:StatusDao');
     }
 }

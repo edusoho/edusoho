@@ -9,7 +9,7 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
 {
     protected $table = 'notification';
 
-    public function findByUserId($userId, $start, $limit)
+    public function searchByUserId($userId, $start, $limit)
     {
         return $this->search(array('userId' => $userId), array('createdTime' => 'DESC'), $start, $limit);
     }
@@ -24,6 +24,12 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
         return array(
             'serializes' => array(
                 'content' => 'json'
+            ),
+            'conditions' => array(
+                'userId = :userId'
+            ),
+            'orderbys'   => array(
+                'createdTime'
             )
         );
     }

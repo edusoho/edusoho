@@ -11,12 +11,12 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
     public function getLastestByUserIdAndStatus($userId, $status)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $status));
+        return $this->db()->fetchAssoc($sql, array($userId, $status));
     }
 
     public function findByUserIds($userIds)
     {
-        return $this->findInField('userId', array($userIds));
+        return $this->findInField('userId', $userIds);
     }
 
     public function search($conditions, $orderBy, $start, $limit)

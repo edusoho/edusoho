@@ -77,7 +77,7 @@ class UserCommonAdminServiceTest extends BaseTestCase
     public function testDeleteCommonAdmin()
     {
         $field = array(
-            'url'    => "http://www.esdev.com:81/",
+            'url'    => "http://www.esdev.com/",
             'title'  => "ceshi",
             'userId' => 1
         );
@@ -87,7 +87,7 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $this->getUserCommonAdminService()->deleteCommonAdmin($returnField['id']);
         $getCommon = $this->getUserCommonAdminService()->findCommonAdminByUserId($field['userId']);
 
-        $this->assertNull($getCommon);
+        $this->assertEmpty($getCommon);
     }
 
     protected function createUser()
@@ -101,11 +101,11 @@ class UserCommonAdminServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getUserCommonAdminService()
     {
-        return $this->getServiceKernel()->createService('User.UserCommonAdminService');
+        return $this->getBiz()->service('User:UserCommonAdminService');
     }
 }

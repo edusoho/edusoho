@@ -10,7 +10,7 @@ class TokenServiceTest extends BaseTestCase
         $token = $this->getTokenService()->makeToken('test_token');
 
         $this->assertGreaterThan(0, strlen($token['token']));
-        $this->assertNull($token['data']);
+        $this->assertEmpty($token['data']);
         $this->assertEquals(0, $token['times']);
         $this->assertEquals(0, $token['remainedTimes']);
         $this->assertEquals(0, $token['expiredTime']);
@@ -52,7 +52,7 @@ class TokenServiceTest extends BaseTestCase
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
 }

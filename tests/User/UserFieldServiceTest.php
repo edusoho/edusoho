@@ -26,7 +26,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddUserFieldWithErrorType()
     {
@@ -42,7 +42,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddUserFieldWithEmptyTitle()
     {
@@ -58,7 +58,7 @@ class UserFieldServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddUserFieldWithErrorSeq()
     {
@@ -85,7 +85,7 @@ class UserFieldServiceTest extends BaseTestCase
         $returnField = $this->getUserFieldService()->addUserField($field);
         $returnField = $this->getUserFieldService()->addUserField($field);
 
-        $count = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'textField', 'enabled' => 1));
+        $count = $this->getUserFieldService()->countFields(array('fieldName' => 'textField', 'enabled' => 1));
 
         $this->assertEquals(2, $count);
 
@@ -131,6 +131,6 @@ class UserFieldServiceTest extends BaseTestCase
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return $this->getBiz()->service('User:UserFieldService');
     }
 }

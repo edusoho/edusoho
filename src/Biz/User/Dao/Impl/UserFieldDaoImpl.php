@@ -23,13 +23,13 @@ class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
     public function getAllFieldsOrderBySeq()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY seq";
-        return $this->getConnection()->fetchAll($sql) ?: array();
+        return $this->db()->fetchAll($sql) ?: array();
     }
 
     public function getAllFieldsOrderBySeqAndEnabled()
     {
         $sql = "SELECT * FROM {$this->table} where enabled=1 ORDER BY seq";
-        return $this->getConnection()->fetchAll($sql) ?: array();
+        return $this->db()->fetchAll($sql) ?: array();
     }
 
     protected function _createSearchQueryBuilder($condition)
@@ -38,10 +38,10 @@ class UserFieldDaoImpl extends GeneralDaoImpl implements UserFieldDao
             $condition['fieldName'] = "%".$condition['fieldName']."%";
         }
 
-        $builder = $this->createDynamicQueryBuilder($condition)
+        $builder = $this->_createQueryBuilder($condition)
             ->from($this->table, $this->table)
             ->andWhere('enabled = :enabled')
-            ->andWhere('fieldName like :fieldName');
+            ->andWhere('fieldName like :fieldName'); // FIXME 不用带百分号？还不如直接用等号
 
         return $builder;
     }

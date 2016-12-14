@@ -1,8 +1,8 @@
 <?php
-namespace Biz\User\Impl;
+namespace Biz\User\Service\Impl;
 
-use Biz\User\Service\NotificationService;
 use Biz\BaseService;
+use Biz\User\Service\NotificationService;
 
 class NotificationServiceImpl extends BaseService implements NotificationService
 {
@@ -54,4 +54,3 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return $this->biz->service('User:UserService');
     }
 }
-

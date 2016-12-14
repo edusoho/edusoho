@@ -12,7 +12,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
         'properties' => 'json'
     );
 
-    public function findByUserIds($userIds, $start, $limit)
+    public function searchByUserIds($userIds, $start, $limit)
     {
         if (empty($userIds)) {
             return array();
@@ -97,7 +97,8 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
         return array(
             'serializes' => array(
                 'properties' => 'json'
-            )
+            ),
+            'orderbys'   => array('createdTime')
         );
     }
 }

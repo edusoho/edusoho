@@ -31,7 +31,7 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
         return $this->count(array('conversationId' => $conversationId));
     }
 
-    public function findByConversationId($conversationId, $start, $limit)
+    public function searchByConversationId($conversationId, $start, $limit)
     {
         return $this->search(array('conversationId' => $conversationId), array('messageId' => 'DESC'), $start, $limit);
     }
@@ -44,6 +44,8 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
     public function declares()
     {
         return array(
+            'orderbys'   => array('messageId'),
+            'conditions' => array('conversationId = :conversationId')
         );
     }
 }

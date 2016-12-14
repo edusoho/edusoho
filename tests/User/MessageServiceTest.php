@@ -7,9 +7,6 @@ use Topxia\Service\Common\BaseTestCase;
 
 class MessageServiceTest extends BaseTestCase
 {
-    /**
-     * @group current
-     */
     public function testDeleteMessagesByAdmin()
     {
         /*create*/
@@ -108,6 +105,9 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($updatedConversation['latestMessageContent'], "3testSendMessage3");
     }
 
+    /**
+     * @group current
+     */
     public function testDeleteMessageBySenderUser()
     {
         $sender   = $this->createSender();
@@ -118,10 +118,9 @@ class MessageServiceTest extends BaseTestCase
         }
         $conversationToSender = $this->getMessageService()->
             getConversationByFromIdAndToId($receiver['id'], $sender['id']);
-        $messagesCount          = $this->getMessageService()->getConversationMessageCount($conversationToSender['id']);
+        $messagesCount          = $this->getMessageService()->countConversationMessages($conversationToSender['id']);
         $messagesOfConversation = $this->getMessageService()->findConversationMessages($conversationToSender['id'], 0, $messagesCount);
         $updatedConversation    = $this->getMessageService()->getConversation($conversationToSender['id']);
-
         /* test conversation */
         foreach ($messagesOfConversation as $messageOfConversation) {
             $this->getMessageService()->deleteConversationMessage($conversationToSender['id'], $messageOfConversation['id']);
@@ -136,7 +135,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($updatedConversation['unreadNum'], 0);
 
         /* test relation count*/
-        $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationToSender['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToSender['id']);
         $this->assertEquals($messagesCount, 0);
     }
 
@@ -150,7 +149,7 @@ class MessageServiceTest extends BaseTestCase
         }
         $conversationToReceiver = $this->getMessageService()->
             getConversationByFromIdAndToId($sender['id'], $receiver['id']);
-        $messagesCount          = $this->getMessageService()->getConversationMessageCount($conversationToReceiver['id']);
+        $messagesCount          = $this->getMessageService()->countConversationMessages($conversationToReceiver['id']);
         $messagesOfConversation = $this->getMessageService()->findConversationMessages($conversationToReceiver['id'], 0, $messagesCount);
         $updatedConversation    = $this->getMessageService()->getConversation($conversationToReceiver['id']);
 
@@ -167,7 +166,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($updatedConversation['unreadNum'], 0);
 
         /* test relation count*/
-        $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationToReceiver['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToReceiver['id']);
         $this->assertEquals($messagesCount, 0);
     }
 
@@ -183,10 +182,10 @@ class MessageServiceTest extends BaseTestCase
         $conversationToSender = $this->getMessageService()->
             getConversationByFromIdAndToId($receiver['id'], $sender['id']);
         $this->getMessageService()->deleteConversation($conversationToSender['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToSender['id']);
+        $this->assertEmpty($messagesCount);
         $conversationToSender = $this->getMessageService()->getConversation($conversationToSender['id']);
         $this->assertEmpty($conversationToSender);
-        $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationToSender['id']);
-        $this->assertEmpty($messagesCount);
 
         /* for receiver */
         $conversationToReceiver = $this->getMessageService()->
@@ -194,7 +193,7 @@ class MessageServiceTest extends BaseTestCase
         $this->getMessageService()->deleteConversation($conversationToReceiver['id']);
         $conversationToReceiver = $this->getMessageService()->getConversation($conversationToReceiver['id']);
         $this->assertEmpty($conversationToReceiver);
-        $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationToReceiver['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToReceiver['id']);
         $this->assertEmpty($messagesCount);
     }
 
@@ -218,11 +217,11 @@ class MessageServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return $this->getServiceKernel()->createService('User.MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
 }
