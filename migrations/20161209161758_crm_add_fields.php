@@ -15,7 +15,7 @@ class CrmAddFields extends Migration
         $db->exec("UPDATE `classroom` set `updatedTime`= createdTime WHERE updatedTime = 0 ; ");
 
         $db->exec("ALTER TABLE  `orders` ADD  `updatedTime` INT(10) NOT NULL AFTER  `createdTime`; ");
-        $db->exec("UPDATE `orders` SET `updatedTime` = (select if(max(createdTime),max(createdTime),0) from `order_log` where order_log.orderId = orders.id);");
+
         $db->exec("UPDATE `orders` set `updatedTime`= createdTime WHERE updatedTime = 0 ;");       
 
         $db->exec(" ALTER TABLE `course_member` ADD `lastLearnTime` INT(10) COMMENT '最后学习时间';");
