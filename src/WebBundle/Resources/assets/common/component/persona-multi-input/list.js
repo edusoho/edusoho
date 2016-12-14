@@ -22,12 +22,16 @@ export default class List extends Component {
 
   render() {
     const { dataSourceUi } = this.props;
+    let name = '';
+    if( dataSourceUi.length > 0 ) {
+      name = 'list-group';
+    }
     return (
-      <ul id={this.listId} className={`${this.props.listClassName} sortable-list list-group mb0`}>
+      <ul id={this.listId} className={`${name}  ${this.props.listClassName} sortable-list list-group mb0`}>
       {
         dataSourceUi.map( (item,i) => {
           return (
-            <li className="list-group-item mbs" id={item.itemId} key={item.itemId} data-seq={item.seq}>
+            <li className="list-group-item" id={item.itemId} key={item.itemId} data-seq={item.seq}>
               <img src ={item.avatar}/> 
               {item.nickname}
               <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>

@@ -26,7 +26,7 @@ function updateChecked(dataSourceUi,id) {
   })
 }
 
-export default class TeacherMultiInput extends MultiInput {
+export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
     this.searchResult = null;

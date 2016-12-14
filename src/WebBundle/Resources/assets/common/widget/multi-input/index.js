@@ -131,7 +131,7 @@ MultiInput.propTypes = {
 
 MultiInput.defaultProps = {
   multiInputClassName:'multi-group',
-  listClassName:'',
+  listClassName:'li',
   dataSource: [],//必须是数组
   sortable: true,
   addable: true,
