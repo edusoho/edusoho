@@ -25,7 +25,7 @@
       <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'立即启用'|trans}}
         </a>
     {% elseif not setting('cloud_search.search_enabled') %}
-      <a type="submit" href="{{ path('admin_edu_cloud_search_open') }}" class="btn btn-primary btn-lg notice-btn">{{'立即启用'|trans}}</a>
+      <a href="{{ path('admin_edu_cloud_search_open') }}" class="btn btn-primary btn-lg notice-btn">{{'立即启用'|trans}}</a>
     {% else %}
       <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'立即启用'|trans}}
         </a>
