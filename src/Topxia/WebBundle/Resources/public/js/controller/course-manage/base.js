@@ -108,7 +108,6 @@ define(function (require, exports, module) {
                 var capacity = parseInt($(elem).data('liveCapacity'));
                 if (current > capacity) {
                     message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', {capacity: capacity});
-                    console.log($(elem).parent().siblings('.js-course-rule p'));
                     $(elem).parent().siblings('.js-course-rule').find('p').html(message);
                 } else {
                     $(elem).parent().siblings('.js-course-rule').find('p').html('');

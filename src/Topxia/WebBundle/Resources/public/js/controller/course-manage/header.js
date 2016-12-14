@@ -11,14 +11,19 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            $.post($(this).data('url'), function(response) {
-                if (!response['result']) {
+            $.get($('.course-num-check-btn').data('url'), function(response) {
+                if (!response['success']) {
                     Notify.danger(response['message']);
-                } else {
-                    window.location.reload();
+                    return ;
                 }
+                $.post($('.course-publish-btn').data('url'), function(response) {
+                    if (!response['result']) {
+                        Notify.danger(response['message']);
+                    } else {
+                        window.location.reload();
+                    }
+                });
             });
-
         });
         $('.js-exit-course').on('click', function(){
             var self = $(this);

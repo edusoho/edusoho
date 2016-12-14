@@ -685,6 +685,10 @@ course_manage_base:
     path:  /course/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:CourseManage:base }
 
+course_student_num_check:
+    path:  /course/{id}/student/num/check
+    defaults: { _controller: TopxiaWebBundle:CourseManage:studentNumCheck }
+
 course_manage_detail:
     path:  /course/{id}/manage/detail
     defaults: { _controller: TopxiaWebBundle:CourseManage:detail }
