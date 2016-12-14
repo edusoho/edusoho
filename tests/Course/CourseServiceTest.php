@@ -149,11 +149,6 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
-//        $user        = $this->createUser();
-//        $currentUser = new CurrentUser();
-//        $currentUser->fromArray($user);
-        //    $this->getServiceKernel()->setCurrentUser($currentUser);
-
         $course1       = array(
             'title'       => 'test course 1',
             'courseSetId' => 1,
@@ -210,8 +205,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn1  = $this->getCourseService()->tryTakeCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryTakeCourse($createCourse2['id']);
         $result     = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'], $user['id']);
-        // print_r($result);
-      //  $this->assertCount(1, $result);
+        //  $this->assertCount(1, $result);
     }
 
     private function createNormalUser()

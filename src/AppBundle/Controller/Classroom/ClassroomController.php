@@ -16,20 +16,15 @@ class ClassroomController extends BaseController
         $user       = $this->getUser();
         $progresses = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role'   => 'student',
-            'roles'   => array('student','student'),
+        $members = $this->getClassroomService()->searchMembers(array(
+            'roles'   => array('student', 'auditor'),
             'userId' => $user->id
         ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role'   => 'auditor',
-            'userId' => $user->id
-        ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'classroomId');
 
-        $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
@@ -39,9 +34,7 @@ class ClassroomController extends BaseController
 
             $classrooms[$key]['coursesCount'] = $coursesCount;
 
-            $classroomId = array($classroom['id']);
-            $member      = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomId);
-            $time        = time() - $member[$classroom['id']]['createdTime'];
+            $time        = time() - $members[$classroom['id']]['createdTime'];
             $day         = intval($time / (3600 * 24));
 
             $classrooms[$key]['day'] = $day;
@@ -49,7 +42,6 @@ class ClassroomController extends BaseController
             $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
         }
 
-        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
         return $this->render("my-classroom/classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members'    => $members,
