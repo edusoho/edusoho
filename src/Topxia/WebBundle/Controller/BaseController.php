@@ -300,7 +300,7 @@ abstract class BaseController extends Controller
         $this->biz = $this->container->get('biz');
     }
 
-    protected function dispatchEvent($eventName, $event)
+    protected function dispatchEvent($eventName, $subject)
     {
         if ($subject instanceof ServiceEvent) {
             $event = $subject;
