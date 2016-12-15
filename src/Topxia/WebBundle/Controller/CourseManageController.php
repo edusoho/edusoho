@@ -537,7 +537,7 @@ class CourseManageController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
         if ($course['type'] == 'live' && empty($course['maxStudentNum'])) {
             $response = array('result' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!')); 
             return $this->createJsonResponse($response);
