@@ -63,7 +63,12 @@
   <div class="form-group">
     <label for="" class="col-sm-3 control-label">单日短信发送阈值：</label>
     <div class="controls col-md-9 radios">
-      {{isBinded.smsThreshold}}<a href="{{path('admin_cloud_sms_setting')}}" target="_blank" class="plm">去设置</a>
+      {% if isBinded.smsThreshold is defined and isBinded.smsThreshold != 0 %}
+        {{ isBinded.smsThreshold }}
+      {% else %}
+        {{ '未设置'| trans }}
+      {% endif %}
+      <a href="{{path('admin_cloud_sms_setting')}}" target="_blank" class="plm">去设置</a>
       <div class="help-block">
         单日短信发送量超过此阈值时，发送通知。
       </div>
