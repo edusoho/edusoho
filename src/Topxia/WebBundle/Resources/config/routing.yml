@@ -1443,6 +1443,7 @@ my_live_courses_learning:
     path: /my/livecourses/learing
     defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
 
+#rm
 my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: TopxiaWebBundle:MyCourse:learning }

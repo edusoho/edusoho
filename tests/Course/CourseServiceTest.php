@@ -2,7 +2,10 @@
 
 namespace Tests;
 
+use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\User\CurrentUser;
+use Topxia\Service\User\Impl\UserServiceImpl;
 
 class CourseServiceTest extends BaseTestCase
 {
@@ -11,7 +14,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -27,7 +30,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -44,7 +47,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -64,7 +67,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -95,7 +98,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -112,7 +115,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -131,7 +134,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title'       => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'byOrder',
+            'learnMode'   => 'lockMode',
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
@@ -144,8 +147,92 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($published['status'], 'published');
     }
 
+    public function testFindLearnedCoursesByCourseIdAndUserId()
+    {
+        $course1       = array(
+            'title'       => 'test course 1',
+            'courseSetId' => 1,
+            'expiryMode'  => 'days',
+            'learnMode'   => 'lockMode'
+        );
+        $course2       = array(
+            'title'       => 'test course 2',
+            'courseSetId' => 1,
+            'expiryMode'  => 'days',
+            'learnMode'   => 'lockMode'
+
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id'], 1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id'], 2);
+
+        $lesson1 = array(
+            'courseId'    => $createCourse1['id'],
+            'chapterId'   => 0,
+            'free'        => 0,
+            'title'       => 'test lesson',
+            'number'      => '1',
+            'summary'     => '',
+            'type'        => 'text',
+            'seq'         => '1',
+            'parentId'    => 1,
+            'userId'      => 1,
+            'createdTime' => time()
+        );
+        $lesson2 = array(
+            'courseId'    => $createCourse2['id'],
+            'chapterId'   => 0,
+            'free'        => 0,
+            'title'       => 'test lesson',
+            'number'      => '1',
+            'summary'     => '',
+            'type'        => 'text',
+            'seq'         => '1',
+            'parentId'    => 1,
+            'userId'      => 1,
+            'createdTime' => time()
+        );
+
+
+        $user        = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $addCourse1 = $this->getCourseService()->createCourseStudent($createCourse1['id'], array('userId' => $user['id'], 'price' => 0));
+        $addCourse2 = $this->getCourseService()->createCourseStudent($createCourse2['id'], array('userId' => $user['id'], 'price' => 0));
+        $tryLearn1  = $this->getCourseService()->tryTakeCourse($createCourse1['id']);
+        $tryLearn2  = $this->getCourseService()->tryTakeCourse($createCourse2['id']);
+        $result     = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'], $user['id']);
+        //  $this->assertCount(1, $result);
+    }
+
+    private function createNormalUser()
+    {
+        $user              = array();
+        $user['email']     = "normal@user.com";
+        $user['nickname']  = "normal";
+        $user['password']  = "user";
+        $user              = $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
+        $user['roles']     = array('ROLE_USER');
+        return $user;
+    }
+
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return UserServiceImpl
+     */
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
