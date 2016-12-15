@@ -6,14 +6,8 @@
 	{% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
 {% endif %}
 
-
-
-<link href="{{ asset('static-dist/libs/vendor.css', 'webpack') }}" rel="stylesheet" />
-
-
-
-{#{% if maincolor == 'default' %}
-	<link href="{{ asset('static-dist/libs/vendor.css', 'webpack') }}" rel="stylesheet" />
+{% if maincolor == 'default' %}
+	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
 {% else %}
 	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
@@ -39,4 +33,4 @@
 
 {% if app.request.getLocale() == 'ug_CN' %}
 	<link href="{{ asset('assets/rtl/css/rtl.css') }}" rel="stylesheet" />
-{% endif %}#}
+{% endif %}
