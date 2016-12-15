@@ -86,7 +86,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 }
 
 // 字体颜色变化，一般用于a标签
-.link-darker {
+.link-dark {
   color: @gray-darker !important;
   .es-transition;
   &:hover {
@@ -94,8 +94,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     .es-transition;
   }
 }
-
-.link-dark {
+.link-light {
   color: @gray-dark !important;
   .es-transition;
   &:hover {
@@ -103,8 +102,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     .es-transition;
   }
 }
-
-.link-gray {
+.link-lighter {
   color: @gray !important;
   .es-transition;
   &:hover {
@@ -112,34 +110,14 @@ a.btn.disabled, fieldset[disabled] a.btn {
     .es-transition;
   }
 }
-
-
-.link-light {
-  color: @gray-light !important;
+.link-primary {
+  color: @brand-primary;
   .es-transition;
   &:hover {
-    color: @brand-primary !important;
+    color: @brand-primary;
     .es-transition;
   }
 }
-.link-lighter {
-  color: @gray-lighter !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-.link-medium {
-  color: @gray-medium !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
 .link-white {
   color: #fff !important;
   .es-transition;

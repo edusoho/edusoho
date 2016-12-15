@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MultiInput from '../../widget/multi-input';
+import MultiInput from '../multi-input';
 import List from './list';
 
 function initItem(dataSourceUi,data,index,props) {
@@ -80,34 +80,16 @@ export default class PersonaMultiInput extends MultiInput {
   }
 }
 
-// @TODO,能自动继承父组件的默认参数，并且新增自己的默认参数
-MultiInput.propTypes = {
-  multiInputClassName: React.PropTypes.string,
-  listClassName: React.PropTypes.string,
-  dataSource: React.PropTypes.array.isRequired,
-  sortable: React.PropTypes.bool, 
-  addable:React.PropTypes.bool,
-  searchable: React.PropTypes.shape({
-    enable: React.PropTypes.bool,
-    url: React.PropTypes.string,
-  }),
+PersonaMultiInput.propTypes = {
+  ...MultiInput.propTypes,
   id:React.PropTypes.string,
   nickname:React.PropTypes.string,
   avatar: React.PropTypes.string,
   isVisible:React.PropTypes.string,
 };
 
-MultiInput.defaultProps = {
-  multiInputClassName:'multi-group',
-  listClassName:'',
-  dataSource: [],//必须是数组
-  sortable: true,
-  addable: true,
-  searchable: {
-    enable: false,
-    url: '',
-  },//必须是bool
-  outputDataElement:'hidden-input',//必须是string,
+PersonaMultiInput.defaultProps = {
+  ...MultiInput.defaultProps,
   id: 'id',
   nickname:'nickname',
   avatar: 'avatar',

@@ -1,13 +1,36 @@
 .task-list {
   list-style: none;
   padding: 0;
-  >.task-item {
+  .task-item {
     position: relative;
     padding: 12px 0 12px 30px;
     line-height: 1;
     cursor: pointer;
     color: @gray;
-    >a {
+    .border-radius(4px);
+    &:hover,
+    &.active{
+      .title,
+      .left-menu{
+        color: @brand-primary
+      }
+    }
+    &.task-title {
+      color: @gray;
+      cursor: default;
+      .title {
+        color: @gray;
+        cursor: default;
+      }
+      &:hover {
+        >a,
+        .left-menu
+         {
+          color:@gray;
+        }
+      }
+    }
+    .title {
       display: inline-block;
       max-width: 280px;
       color: @gray;
@@ -22,29 +45,34 @@
       top:14px;
       right: 0;
     }
+  }
+}
+
+.task-list.task-list-detail {
+  .task-item {
+    background-color: #f8f8f8;
+    margin-bottom: 15px;
+    padding: 16px 0 16px 40px;
+    padding-left: 40px;
+    color: @gray;
     &:hover,
     &.active{
-      >a,
-      .left-menu
-       {
-        color: @brand-primary
-      }
-    }
-    &.task-title {
-      color: @gray;
-      cursor: default;
-      >a {
+      .title,
+      .left-menu{
         color: @gray;
-        cursor: default;
-      }
-      &:hover {
-        >a,
-        .left-menu
-         {
-          color:@gray;
-        }
       }
     }
+  }
+  .left-menu {
+    left: 15px;
+    top: 16px;
+  }
+  .right-menu {
+    right: 10px;
+    top: 15px;
+  }
+  .btn-learn {
+    margin-top: -6px;
   }
 }
 
