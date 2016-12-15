@@ -21,7 +21,9 @@
     <label for="" class="col-sm-3 control-label">启用云搜索：</label>
     <div class="controls col-md-9 radios">
       <div>
+        {% if searchInitStatus == 'init' %}
         <span class="text-success">{{ '已启用'|trans }}</span>
+        {% endif %}
         <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
         {% if searchInitStatus == 'notInit' %}
           <span class="text-info">正创建索引，预计需要 1 ~ 3 天，请耐心等待...</span>
