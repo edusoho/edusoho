@@ -102,7 +102,15 @@
         <tr>
           <td>验证类</td>
           <td>手机绑定</td>
-          <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
           <td>单个用户</td>
           <td>自动单发</td>
           <td><input type="hidden" name="sms_bind" value="on">默认开启</td>
@@ -110,7 +118,16 @@
         <tr>
           <td>验证类</td>
           <td>登录密码重置</td>
-          <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
+          </td>
           <td>单个用户</td>
           <td>自动单发</td>
           <td><input type="hidden" name="sms_forget_password" value="on">默认开启</td>
@@ -118,7 +135,15 @@
         <tr>
           <td>验证类</td>
           <td>支付密码重置</td>
-          <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+          <td>
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
           <td>单个用户</td>
           <td>自动单发</td>
           <td><input type="hidden" name="sms_forget_pay_password" value="on">默认开启</td>
@@ -127,7 +152,13 @@
           <td>验证类</td>
           <td>使用网站余额支付</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
             {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
             {{ setting('cloud_sms.sms_school_name')|default('') }}
           </td>
@@ -148,7 +179,13 @@
           <td>通知类</td>
           <td>新班级发布</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
             {{ '同学们，%classrommName%：《班级名称》现已开始报名！%smsSchoolName% 链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans),'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
           <td>所有用户</td>
@@ -168,7 +205,14 @@
           <td>通知类</td>
           <td>新课程发布</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
           </td>
           <td>所有用户</td>
           <td>手动群发</td>
@@ -189,7 +233,14 @@
           <td>通知类</td>
           <td>新课时发布通知（普通课程）</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -208,7 +259,14 @@
           <td>通知类</td>
           <td>新课时发布通知（直播）</td>
           <td>
-            <span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -227,7 +285,14 @@
           <td>通知类</td>
           <td>直播开播前通知（提前1天）</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -246,7 +311,14 @@
           <td>通知类</td>
           <td>直播开播前通知（提前1小时）</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -265,7 +337,14 @@
           <td>通知类</td>
           <td>作业完成批阅</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%'|trans({'%smsScoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}        </td>
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%'|trans({'%smsScoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}        </td>
           <td>单个用户</td>
           <td>自动单发</td>
           <td class="radios">
@@ -287,7 +366,14 @@
           <td>通知类</td>
           <td>试卷完成批阅</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
@@ -306,7 +392,14 @@
           <td>回执类</td>
           <td>课程购买回执</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
@@ -325,7 +418,14 @@
           <td>回执类</td>
           <td>班级购买回执</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')})  }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')})  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
@@ -334,7 +434,14 @@
           <td>回执类</td>
           <td>会员购买回执</td>
           <td>
-            【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
@@ -343,7 +450,14 @@
           <td>回执类</td>
           <td>虚拟币充值回执</td>
           <td>
-            <span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+            【<span id="js-sms-school-name">
+              {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
+                {{ smsInfo.usedSmsSign.name }}
+              {% else %}
+                {{smsInfo.name | default('')}}
+              {% endif %}
+            </span>】
+            {{ '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
