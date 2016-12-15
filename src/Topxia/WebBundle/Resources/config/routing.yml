@@ -1663,6 +1663,10 @@ content_page_show:
     path: /page/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:pageShow }
 
+content_course_rule:
+    path: /courserule
+    defaults: {_controller: TopxiaWebBundle:CourseManage:courseRule }
+
 content_page_list:
     path: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
