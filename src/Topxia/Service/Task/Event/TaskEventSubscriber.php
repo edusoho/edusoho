@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Task\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +21,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onLessonFinished(ServiceEvent $event)
+    public function onLessonFinished(Event $event)
     {
         $lesson = $event->getSubject();
 
@@ -29,7 +30,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onFinished(ServiceEvent $event)
+    public function onFinished(Event $event)
     {
         $targetObject = $event->getSubject();
         $taskType     = $event->getArgument('taskType');
@@ -37,7 +38,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         $this->_finishTask($taskType, $targetObject);
     }
 
-    public function onHomeworkFinished(ServiceEvent $event)
+    public function onHomeworkFinished(Event $event)
     {
         $homework = $event->getSubject();
 
@@ -49,7 +50,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onHomeworkCheck(ServiceEvent $event)
+    public function onHomeworkCheck(Event $event)
     {
         $homeworkResult = $event->getSubject();
         $targetObject   = array('id' => $homeworkResult['homeworkId'], 'type' => 'homework', 'passedStatus' => $homeworkResult['passedStatus'], 'userId' => $homeworkResult['userId']);
@@ -57,7 +58,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         $this->_finishTask('studyplan', $targetObject);
     }
 
-    public function onTestPaperFinished(ServiceEvent $event)
+    public function onTestPaperFinished(Event $event)
     {
         $testpaper       = $event->getSubject();
         $testpaperResult = $event->getArgument('testpaperResult');

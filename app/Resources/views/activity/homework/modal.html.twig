@@ -1,6 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do css(['web.css']) %}
-{% do script(['libs/es-ckeditor/ckeditor.js','web/activity-manage/homework/index.js'], 300) %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','app/js/activity-manage/homework/index.js'], 300) %}
 
 {% block activity_content %}
   <form id="step2-form" class="form-horizontal homework-activity-form" method="post">

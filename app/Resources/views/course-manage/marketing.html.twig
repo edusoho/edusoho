@@ -3,7 +3,7 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'marketing' %}
-{% do script(['libs/jquery-validation.js','web/course-manage/marketing/index.js']) %}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/marketing/index.js']) %}
 
 {% block course %}
 <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
@@ -94,7 +94,7 @@
   {# <div class="form-group">
     <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
     <div class="col-sm-8">
-      TODO ....
+      <div id="course-services" data-field-name="services" data-init-value="{{course.services|default(['24小时作业批改', '24小时阅卷点评', '提问必答', '一对一在线答疑'])|json_encode()}}"></div>
     </div>
   </div> #}
   <div class="form-group">

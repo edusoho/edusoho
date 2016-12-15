@@ -3434,7 +3434,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3454,7 +3454,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -6679,22 +6679,16 @@ textarea {
 .nav-pills.nav-pills-gray > li.active > a {
   background: #46c37b;
 }
-.nav-pills.nav-pills-course > li {
-  position: relative;
-  margin-left: 0;
-  margin-right: 10px;
-}
-.nav-pills.nav-pills-course > li > a {
-  padding: 5px 15px;
+.nav-pills.nav-pills-transparent > li > a {
+  background-color: transparent;
   border: 2px solid #e1e1e1;
   color: #616161;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  font-size: 12px;
 }
-.nav-pills.nav-pills-course > li:hover > a,
-.nav-pills.nav-pills-course > li.active > a {
+.nav-pills.nav-pills-transparent > li:hover > a,
+.nav-pills.nav-pills-transparent > li.active > a {
   border-color: #46c37b;
   background-color: transparent;
   color: #46c37b;
@@ -9488,12 +9482,11 @@ textarea {
 .course-detail-section .course-detail-header {
   position: relative;
   min-height: 50px;
+  line-height: 50px;
   margin-bottom: 20px;
 }
-.course-detail-section .course-detail-header .course-detail-title h1 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  color: #313131;
+.course-detail-section .before {
+  line-height: 25px;
 }
 .course-detail-section .course-detail-img {
   position: relative;
@@ -9545,10 +9538,12 @@ textarea {
   right: 0;
   bottom: 0;
   color: #fff;
+  opacity: .8;
 }
 .course-detail-section .course-detail-info {
   padding-left: 60px;
   margin-left: 480px;
+  margin-bottom: 50px;
   color: #919191;
 }
 .course-detail-section .course-detail-info .course-detail-content {
@@ -9565,7 +9560,7 @@ textarea {
 .course-detail-section .course-detail-info .course-detail-nav {
   position: absolute;
   top: -5px;
-  left: 70px;
+  left: 74px;
   right: 0;
 }
 .course-detail-section .course-detail-info .course-detail-title {
@@ -9578,7 +9573,6 @@ textarea {
   font-size: 24px;
   color: #313131;
   font-weight: bold;
-  margin-right: 20px;
 }
 .course-detail-section .course-detail-info .original-price {
   position: relative;
@@ -9593,6 +9587,50 @@ textarea {
   height: 1px;
   background-color: #919191;
 }
+.course-detail-section .course-detail-info .tag-discount {
+  background: url("../../img/tag_discount.png") no-repeat;
+  background-image: -webkit-image-set(url("../../img/tag_discount.png") 1x, url("../../img/tag_discount.png") 2x);
+  display: inline-block;
+  width: 62px;
+  margin-left: 11px;
+  height: 24px;
+  color: #fff;
+  line-height: 24px;
+}
+.course-detail-section .course-detail-info .tag-discount .discount-font {
+  margin-left: 25px;
+}
+.course-detail-section .course-detail-activity {
+  font-weight: bold;
+  margin-right: 27px;
+}
+.course-detail-section .course-detail-font {
+  text-align: center;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.course-detail-section .font-xm {
+  font-size: 14px;
+  color: #fff;
+  opacity: .8;
+  margin: 0px;
+}
+.course-detail-section .course-font {
+  font-size: 24px;
+}
+.course-detail-section .course-head-icon {
+  font-size: 14px;
+  display: inline-block;
+  line-height: 20px;
+}
+.course-detail-section .task-list-font {
+  padding: 18px 16px;
+  background-color: #fafafa;
+  margin-bottom: 15px;
+}
+.course-detail-section .task-icon {
+  margin-right: 16px;
+}
 .course-detail-section .course-detail-bottom {
   position: absolute;
   right: 15px;
@@ -9602,7 +9640,7 @@ textarea {
   position: absolute;
   list-style-type: none;
   right: 15px;
-  top: 15px;
+  top: 0px;
 }
 .course-detail-section .course-operation > li {
   float: left;
@@ -9670,7 +9708,7 @@ textarea {
 }
 .course-freelearn-section {
   background-color: #fafafa;
-  margin: 65px -15px 20px;
+  margin: 65px -15px 40px;
   padding: 38px 15px;
 }
 .course-freelearn-section .course-learn-list {
@@ -9681,15 +9719,26 @@ textarea {
   width: 33.33%;
 }
 .course-orderlearn-section {
-  padding: 40px 0;
+  padding: 20px 0;
 }
 .course-orderlearn-section .progress-img {
   position: absolute;
-  margin-top: 20px;
+  margin-top: 80px;
 }
 .course-orderlearn-section .progress-info {
   list-style: none;
   margin-left: 190px;
+  margin-top: 30px;
+}
+.course-orderlearn-section .progress-info > li {
+  margin-bottom: 10px;
+}
+.course-orderlearn-section .progress-info .learn-time {
+  margin-top: 35px;
+  margin-bottom: 12px;
+}
+.course-orderlearn-section .progress-info .time-margin {
+  margin-left: 22px;
 }
 .course-progress {
   position: absolute;
@@ -9729,6 +9778,29 @@ textarea {
   line-height: 1;
   font-weight: bold;
   color: #46c37b;
+}
+.swiper-wrapper .alert-close {
+  float: right;
+}
+.panel-bottom {
+  border-bottom: 1px solid #f5f5f5;
+}
+.panel-bottom :last-child {
+  border-bottom: none;
+}
+.panel-body button {
+  border: none;
+}
+.panel-body .media-icon {
+  width: 28px;
+  height: 32px;
+  position: relative;
+}
+.panel-body .media-logo {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  color: #fff;
 }
 .belongs-class .media-left img {
   width: 100px;
@@ -11099,7 +11171,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -15527,4 +15599,7 @@ textarea {
 html {
   height: 100%;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/x8

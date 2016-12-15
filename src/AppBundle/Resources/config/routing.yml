@@ -158,6 +158,28 @@ course_manage_items_sort:
   defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
   methods: ['POST']
 
+#my_course
+my_courses_learning:
+    path: /my/courses/learning
+    defaults: { _controller: AppBundle:My/Course:learning }
+
+my_classrooms:
+    path: /my/classrooms
+    defaults: { _controller: AppBundle:My/Classroom:classroom }
+
+my_classroom_discussions:
+    path: /my/classroom/discussions
+    defaults: { _controller: AppBundle:My/Classroom:classroomDiscussions }
+
+my_questions:
+    path: /my/questions
+    defaults: { _controller: AppBundle:My/Thread:questions }
+
+my_discussions:
+    path: /my/discussions
+    defaults: { _controller: AppBundle:My/Thread:discussions }
+
+
 #course_set
 course_set_manage_create:
   path: /course_set/create

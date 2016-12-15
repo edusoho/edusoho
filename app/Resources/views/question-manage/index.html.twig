@@ -6,7 +6,7 @@
 {% set parentId = parentQuestion.id|default(0) %}
 
 {% set side_nav = 'question' %}
-{% do script(['app/question-manage/index.js',]) %}
+{% do script(['app/js/question-manage/index.js',]) %}
 
 {% block main %}
 

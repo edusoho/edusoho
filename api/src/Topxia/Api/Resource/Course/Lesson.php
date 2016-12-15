@@ -126,7 +126,7 @@ class Lesson extends BaseResource
         // $swfUri = $url['url'];
 
         $lesson['content'] = array(
-            'previewUrl' => 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'.$pdfUri,
+            'previewUrl' => 'http://opencdn.edusoho.net/pdf.js/v7/viewer.html#'.$pdfUri,
             'resource'   => $pdfUri
         );
 

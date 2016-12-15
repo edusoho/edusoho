@@ -2,7 +2,7 @@
 
 {% block title %}{{ '课程封面'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'cover' %}
-{% do script(['web/courseset-manage/cover-crop/index.js']) %}
+{% do script(['app/js/courseset-manage/cover-crop/index.js']) %}
 {% set token = upload_token('tmp', 'image') %}
 {% block main %}
 

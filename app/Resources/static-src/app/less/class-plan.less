@@ -1,0 +1,539 @@
+// 班级管理中的学习计划
+.study-plan-form {
+  color: @gray;
+  .plan-item {
+    position: relative;
+    // padding-left: 50px;
+    margin-bottom: 20px;
+     &:before {
+      position: absolute;
+      left: 15px;
+      width: 1px;
+      height: 100%;
+      background-color: @brand-primary; 
+    }
+    .num {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      .border-radius(50%);
+      color: @brand-primary;
+      border: 1px solid @brand-primary;
+    }
+    .action-delete {
+      margin-left: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .phase-name-box {
+    background: none;
+    border: none;
+    &:focus {
+      background: @brand-primary - #222;
+    }
+  }
+  .checkbox {
+    padding-left: 70px;
+  }
+  .form-group {
+    // padding-left: 50px;
+  }
+  .inline-block {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+}
+
+.course-bar {
+  // border: 1px solid @gray-light;
+  border: 1px solid @bg-new-color;
+  background-color: #fff;
+  color: @gray;
+  padding: 5px 15px;
+  font-size: 12px;
+  // .es-box-shadow;
+  .bar-metas {
+    &:hover {
+      cursor: pointer;
+      color: @brand-danger;
+    }
+  }
+  + .course-bar {
+    margin-top: 15px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.active {
+    border-color: #f3d6ba;
+    background-color: #fffceb;
+    color: #e28327;
+  }
+  &.shift {
+    // .box-shadow(none);
+    // border: 1px dashed @gray-light;
+    border: 1px dashed @bg-new-color;
+    background-color: #fafafa;
+  }
+}
+
+// 课程列表
+.panel-fixed {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+  z-index: 2;
+  .panel-heading {
+    position: relative;
+  }
+  .pack-up {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    margin-right: 0 !important;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      cursor: pointer;
+      .es-transition;
+    }
+  }
+}
+
+.course-list-show {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+  display: none;
+  z-index: 2;
+  .btn-more {
+    padding: 10px 5px;
+    color: #fff;
+    background-color: @brand-primary;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+// 班级详情tab
+.study-plan-info {
+  margin-top: 30px;
+  color: #fff;
+  text-align: center;
+  background-color: @brand-primary;
+  .plan-info-item {
+    font-size: 24px;
+    padding: 10px;
+    margin: 20px auto;
+    &:nth-child(1),
+    &:nth-child(2) {
+      border-right: 1px solid #52db9c;
+    }
+  }
+  .open-plan {
+    margin: 20px auto;
+    padding: 5px 10px;
+    @media (max-width: @screen-sm-max) {
+      padding: 5px 0;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+    }
+  }
+}
+
+.study-inplan-info {
+  .inplan-content {
+    position: relative;
+    z-index: 1;
+    margin: 0 5px;
+    background-color: #fff;
+    // .es-box-shadow;
+    padding: 30px 260px 10px 50px;
+    .border-bottom-left-radius();
+    .border-bottom-right-radius();
+    color: @gray-darker;
+    overflow: hidden;
+    &:hover .mask {
+      .opacity(1);
+      .es-transition;
+      >p {
+        margin-top: 0;
+        .es-transition;
+      }
+    }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 50px;
+      .border-bottom-left-radius();
+      .border-bottom-right-radius();
+      background: #333;
+      background: rgba(0, 0, 0, 0.6);
+      text-align: center;
+      color: #fff;
+      .opacity(0);
+      .es-transition;
+      p {
+        margin-top: 100px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        .es-transition;
+      }
+    }
+    .study-num {
+      color: @brand-primary;
+      font-size: 18px;
+      margin: 0 5px;
+    }
+    .total-num {
+      color: @gray;
+      margin: 0 5px;
+    }
+    .inplan-data {
+      position: absolute;
+      top: -6px;
+      left: 0;
+    }
+    .inplan-data-item {
+      position: relative;
+      padding-left: 120px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    .progress {
+      background-color: @gray-lighter;
+      .box-shadow(none);
+      .border-radius(10px);
+    }
+  }
+  .es-chart {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
+    }
+  }
+}
+
+.es-chart {
+  text-align: center;
+  .border-radius(50%);
+  &.done {
+    background-color: #46c37b;
+    color: #fff;
+    .percent span {
+      color: #fff;
+    }
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .percent {
+    display: inline-block;
+    span {
+      font-size: 30px;
+      color: @brand-primary;
+    }
+  }
+}
+
+.study-plan-list {
+  .plan-item {
+    position: relative;
+    padding-left: 40px;
+    &:after {
+      position: absolute;
+      content: '';
+      left: 9px;
+      top: 41px;
+      bottom: -41px;
+      width: 2px;
+      background-color: @gray-light;
+    }
+    &.done {
+      .plan-number {
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+        color: #fff;
+      }
+      &:after {
+        background-color: @brand-primary;
+      }
+    }
+    &.doing {
+      .plan-number {
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+    &.plan-goal {
+      &:after {
+        display: none;
+      }
+      >ul {
+        padding-left: 0;
+        margin-bottom: 0;
+        >li {
+          list-style-type: none;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+  .plan-title {
+    padding-top: 25px;
+    padding-bottom: 20px;
+    font-size: 16px;
+    color: @gray-darker;
+    small {
+      margin-left: 20px;
+      color: @gray;
+      font-size: 12px;
+    }
+  }
+  .plan-body {
+    padding-left: 0;
+    margin-bottom: 0;
+    >li {
+      position: relative;
+      position: relative;
+      padding-bottom: 20px;
+      list-style-type: none;
+      &:last-child {
+        border-bottom: 1px solid @gray-lighter;
+      }
+      &:after {
+        position: absolute;
+        content: '';
+        left: -31px;
+        top: -31px;
+        bottom: 31px;
+        width: 2px;
+        z-index: 2;
+        background-color: @gray-light;
+      }
+      &.done,
+      &.doing {
+        .icon-plan-state {
+          background-color: @brand-primary;
+          border-color: @brand-primary;
+        }
+        &:after {
+          background-color: @brand-primary;
+        }
+      }
+      &.open .plan-period-list {
+        display: block;
+      }
+      >div {
+        padding: 3px 5px;
+        &:hover {
+          cursor: pointer;
+          background-color: @bg-color;
+        }
+      }
+      .icon-plan-state {
+        position: absolute;
+        top: 8px;
+        left: -35px;
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        z-index: 3;
+        border: 2px solid @gray-light;
+        .border-radius(50%);
+      }
+      .icon-arrow {
+        position: absolute;
+        right: 0;
+        top: 4px;
+      }
+    }
+  }
+  .plan-number {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+    border: 2px solid @gray-light;
+    background-color: #fff;
+    .border-radius(50%);
+    color: @gray-light;
+    z-index: 3;
+    text-align: center;
+    &.big {
+      top: 21px;
+      left: -5px;
+      width: 30px;
+      height: 30px;
+      line-height: 26px;
+      >i {
+        font-size: 20px;
+      }
+    }
+  }
+  .plan-period-list {
+    display: none;
+    padding-left: 0;
+    padding-top: 5px;
+    list-style-type: none;
+    >li {
+      position: relative;
+      padding: 8px 0 8px 50px;
+      font-size: 12px;
+      line-height: 18px;
+      >.es-icon {
+        position: absolute;
+        top: 10px;
+        right: 0;
+        display: inline-block;
+      }
+      a {
+        display: block;
+        padding: 3px 5px;
+        &:hover {
+          background-color: @bg-color;
+        }
+      }
+    }
+    .period-type {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 40px;
+      padding: 3px 8px;
+      text-align: center;
+      background-color: @gray-light;
+      color: #fff;
+      &.done {
+        background-color: @brand-primary;
+      }
+    }
+  }
+}
+
+.todo-list {
+  font-size: 12px;
+  margin-bottom: 20px;
+  &.active {
+    .todo-list-header {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+    li.done {
+      .tag {
+        background-color: @brand-primary;
+      }
+      >a {
+        color: @brand-primary;
+      }
+    }
+  }
+  .todo-list-header {
+    position: relative;
+    background: @gray-lighter;
+    line-height: 30px;
+    padding: 0 20px;
+    .border-radius(20px);
+  }
+  ul {
+    padding-left: 0;
+    li {
+      position: relative;
+      list-style-type: none;
+      padding: 20px 0 0 60px;
+      .tag {
+        position: absolute;
+        top: 18px;
+        left: 10px;
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        width: 35px;
+        background: @gray-light;
+        color: #fff;
+      }
+      >a {
+        .text-overflow;
+      }
+    }
+  }
+}
+
+.plan-modal-form {
+  .study-num {
+    position: relative;
+    display: inline-block;
+    background: @brand-primary;
+    padding: 10px 20px;
+    color: #fff;
+    &:after {
+      left: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(255, 255, 255, 0);
+      border-left-color: @brand-primary;
+      border-width: 20px;
+      margin-top: -20px;
+    }
+  }
+}
+
+.inplan-modal-step {
+  .plan-circle {
+    margin: 20px auto;
+    width: 120px;
+    height: 120px;
+    padding: 30px 20px;
+    text-align: center;
+    .border-radius(50%);
+    border: 2px solid @brand-primary;
+    color: @brand-primary;
+    font-size: 16px;
+    &.plan-circle-o {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+    span {
+      font-size: 24px;
+    }
+  }
+  .well {
+    position: relative;
+  }
+  .es-chart {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
+    }
+  }
+}

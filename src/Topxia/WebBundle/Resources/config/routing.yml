@@ -787,6 +787,10 @@ course_manage_student_export_csv:
     path:  /course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
 
+course_manage_student_export_datas:
+    path:  /course/{id}/manage/student/export/datas
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportDatas }
+
 course_manage_student_remove:
     path:  /course/{courseId}/manage/student/{userId}/remove
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
@@ -1350,6 +1354,10 @@ password_reset_update:
     path:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+raw_password_update:
+    pattern: /raw/password/update
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:changeRawPassword }
+
 password_reset_check_mobile:
     path:  /password/reset/check/mobile
     defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
@@ -1435,6 +1443,7 @@ my_live_courses_learning:
     path: /my/livecourses/learing
     defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
 
+#rm
 my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: TopxiaWebBundle:MyCourse:learning }
@@ -1446,11 +1455,11 @@ my_courses_learned:
 my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-
+#rm
 my_questions:
     path: /my/questions
     defaults: { _controller: TopxiaWebBundle:MyThread:questions }
-
+#rm
 my_discussions:
     path: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
@@ -2303,6 +2312,10 @@ open_course_manage_replay_title_update:
 open_course_manage_student_export_csv:
     path:  /open/course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
+
+open_course_manage_student_export_datas:
+    path:  /open/course/{id}/manage/student/export/datas
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExportDatas }
 
 open_course_manage_material:
     path:  /open/course/{courseId}/manage/lesson/{lessonId}/material

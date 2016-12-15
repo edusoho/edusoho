@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% do script(['libs/jquery-validation.js', 'web/course-chapter-manage/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/course-chapter-manage/index.js']) %}
 
 {% set chapter = chapter|default(null) %}
 

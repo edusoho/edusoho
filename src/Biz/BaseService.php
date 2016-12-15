@@ -2,7 +2,8 @@
 
 namespace Biz;
 
-use Codeages\Biz\Framework\Event\Event;
+use Monolog\Logger;
+use Topxia\Service\Common\ServiceEvent;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -32,10 +33,10 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof Event) {
+        if ($subject instanceof ServiceEvent) {
             $event = $subject;
         } else {
-            $event = new Event($subject);
+            $event = new ServiceEvent($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
@@ -56,6 +57,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $this->biz['db']->rollback();
     }
 
+    /**
+     * @return Logger
+     */
     protected function getLogger()
     {
         return $this->biz['logger'];

@@ -1,7 +1,0 @@
-{% for path in css() %}
-  {% if path starts with 'http://' %}
-    <link href="{{ path }}" rel="stylesheet" />
-  {% else %}
-    <link href="{{ asset('build/' ~ path, 'webpack') }}" rel="stylesheet" />
-  {% endif %}
-{% endfor %}

@@ -1,25 +1,25 @@
 <?php
 namespace Classroom\Service\Classroom\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomThreadEventProcessor
 {
-    public function onThreadCreate(ServiceEvent $event)
+    public function onThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'threadNum', +1);
     }
 
-    public function onThreadDelete(ServiceEvent $event)
+    public function onThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'threadNum', -1);
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'postNum', 0 - $thread['postNum']);
     }
 
-    public function onPostCreate(ServiceEvent $event)
+    public function onPostCreate(Event $event)
     {
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', +1);
@@ -32,7 +32,7 @@ class ClassroomThreadEventProcessor
         }
     }
 
-    public function onPostDelete(ServiceEvent $event)
+    public function onPostDelete(Event $event)
     {
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', 0 - $event->getArgument('deleted'));

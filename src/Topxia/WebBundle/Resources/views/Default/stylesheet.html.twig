@@ -7,14 +7,14 @@
 {% endif %}
 
 {% if maincolor == 'default' %}
-	<link href="{{ asset('build/libs/vendor.css', 'webpack') }}" rel="stylesheet" />
+	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
 {% else %}
 	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
 
 <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
-{#<link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />#}
-{#<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />#}
+<link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
 
 {% if maincolor == 'default' %}
 	<link href="{{ asset('assets/v2/css/main.css') }}" rel="stylesheet" />

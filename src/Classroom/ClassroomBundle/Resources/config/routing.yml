@@ -86,8 +86,12 @@ classroom_manage_student_check:
     path:  /classroom/{id}/manage/student_check
     defaults: { _controller: ClassroomBundle:ClassroomManage:checkStudent }
 
+classroom_manage_student_export_datas:
+    path:  /classroom/{id}/manage/student/export/{role}/datas
+    defaults: { _controller: ClassroomBundle:ClassroomManage:exportDatas }
+
 classroom_manage_student_export_csv:
-    path:  /classroom/{id}/manage/student/export/{role}
+    path:  /classroom/{id}/manage/student/export
     defaults: { _controller: ClassroomBundle:ClassroomManage:exportCsv }
 
 classroom_manage_student_import:
@@ -233,6 +237,7 @@ my_teaching_classroom_threads:
     path: /my/teaching/classroom/threads/{type}
     defaults: { _controller: ClassroomBundle:Classroom:classroomThreads }
 
+#rm
 my_classroom_discussions:
     path: /my/classroom/discussions
     defaults: { _controller: ClassroomBundle:Classroom:classroomDiscussions }

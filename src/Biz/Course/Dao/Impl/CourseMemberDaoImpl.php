@@ -3,6 +3,7 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMemberDao;
+use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
@@ -21,13 +22,78 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($courseId));
     }
 
+    public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
+        if (!empty($orderBy)) {
+            $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
+        }
+        if ($start and $limit) {
+            $builder = $builder->setFirstResult($start)->setMaxResults($limit);
+        }
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function countMemberFetchCourse($conditions)
+    {
+        return $this->_buildQueryBuilder($conditions)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
+    }
+
+    protected function _buildQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+            return true;
+        });
+
+        $builder = new DynamicQueryBuilder($this->db(), $conditions);
+        $builder->from($this->table(), 'm')
+            ->join('m', 'c2_course', 'c', ' m.courseId = c.id ')
+            ->andWhere('m.isLearned = :isLearned')
+            ->andWhere('m.userId = :userId')
+            ->andWhere('m.role = :role')
+            ->andWhere('m.courseId = :courseId')
+            ->andWhere('m.joinedType =:joinedType')
+            ->andWhere('m.noteNum > :noteNumGreaterThan')
+            ->andWhere('c.type = :type')
+            ->andWhere('c.parentId = parentId');
+        return $builder;
+    }
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+        return $this->db()->fetchAll($sql, array($courseId, $userId));
+    }
+
+    protected function filterStartLimit(&$start, &$limit)
+    {
+        $start = (int)$start;
+        $limit = (int)$limit;
+
+    }
+
     public function declares()
     {
         return array(
             'timestamps' => array('createdTime'),
+            'orderbys'   => array('createdTime'),
             'conditions' => array(
+                'userId = :userId',
                 'courseId = :courseId',
-                'role = :role'
+                'isLearned = :isLearned',
+                'joinedType = :joinedType',
+                'role = :role',
+                'classroomId = :classroomId',
+                'noteNum > :noteNumGreaterThan',
+                'createdTime >= :startTimeGreaterThan',
+                'createdTime < :startTimeLessThan',
+                'courseId IN (:courseIds)',
+                'userId IN (:userIds)',
+                'learnedNum >= :learnedNumGreaterThan',
+                'learnedNum < :learnedNumLessThan',
             )
         );
     }

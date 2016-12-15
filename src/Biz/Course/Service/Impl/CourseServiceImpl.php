@@ -3,7 +3,10 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
@@ -15,6 +18,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getCourse($id)
     {
         return $this->getCourseDao()->get($id);
+    }
+
+    public function findCoursesByIds($ids)
+    {
+        return $this->getCourseDao()->findCoursesByIds($ids);
     }
 
     public function findCoursesByCourseSetId($courseSetId)
@@ -94,12 +102,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields = $this->validateExpiryMode($fields);
         }
 
+        if (isset($fields['goals'])) {
+            $fields['goals'] = json_decode($fields['goals'], true);
+        }
+        if (isset($fields['audiences'])) {
+            $fields['audiences'] = json_decode($fields['audiences'], true);
+        }
+
         return $this->getCourseDao()->update($id, $fields);
     }
 
     public function updateCourseMarketing($id, $fields)
     {
-        $course = $this->tryManageCourse($id);
+        $this->tryManageCourse($id);
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
             'price',
@@ -121,8 +136,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
-        if ($fields['price']) {
+        if (isset($fields['price'])) {
             $fields['price'] = round(floatval($fields['price']) * 100, 0);
+        }
+
+        if (isset($fields['services'])) {
+            $fields['services'] = json_decode($fields['services'], true);
         }
 
         return $this->getCourseDao()->update($id, $fields);
@@ -173,7 +192,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function publishCourse($id, $userId)
     {
-        $course = $this->tryManageCourse($id);
+        $this->tryManageCourse($id);
         $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
@@ -335,7 +354,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int) $num,
+            'noteNum'            => (int)$num,
             'noteLastUpdateTime' => time()
         ));
 
@@ -386,7 +405,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
         //            return true;
         //        }
-
+        
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
@@ -450,9 +469,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateChapter($courseId, $chapterId, $fields)
     {
-        $argument = $fields;
-        $course   = $this->tryManageCourse($courseId);
-        $chapter  = $this->getChapterDao()->get($chapterId);
+        $this->tryManageCourse($courseId);
+        $chapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($chapter) || $chapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
@@ -501,6 +519,58 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
+    public function countLeaningCourseByUserId($userId, $filters = array())
+    {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 0
+
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            return $this->getMemberDao()->countMemberFetchCourse($conditions);
+        }
+        return $this->getMemberDao()->count($conditions);
+    }
+
+    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array('type' => ''))
+    {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 0
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime', 'DESC'), $start, $limit);
+        } else {
+            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
+        }
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 0;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[]            = $course;
+        }
+
+        return $sortedCourses;
+    }
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    }
+
     protected function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -515,6 +585,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
@@ -528,11 +601,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:CourseMemberDao');
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getChapterDao()
     {
         return $this->createDao('Course:CourseChapterDao');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');

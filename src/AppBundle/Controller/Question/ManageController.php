@@ -124,7 +124,6 @@ class ManageController extends BaseController
     public function deleteAction(Request $request, $courseSetId, $questionId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
         $this->getQuestionService()->delete($questionId);
 
         return $this->createJsonResponse(true);

@@ -113,6 +113,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'audiences'
         ));
 
+        if (isset($fields['goals'])) {
+            $fields['goals'] = json_decode($fields['goals'], true);
+        }
+        if (isset($fields['audiences'])) {
+            $fields['audiences'] = json_decode($fields['audiences'], true);
+        }
+
         return $this->getCourseSetDao()->update($courseSet['id'], $fields);
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Question\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -17,7 +18,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onQuestionCreate(ServiceEvent $event)
+    public function onQuestionCreate(Event $event)
     {
         $context  = $event->getSubject();
         $question = $context['question'];
@@ -61,7 +62,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onQuestionUpdate(ServiceEvent $event)
+    public function onQuestionUpdate(Event $event)
     {
         $context                 = $event->getSubject();
         $question                = $context['question'];
@@ -109,7 +110,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onQuestionDelete(ServiceEvent $event)
+    public function onQuestionDelete(Event $event)
     {
         $question             = $event->getSubject();
         $questionTarget       = explode('/', $question['target']);
