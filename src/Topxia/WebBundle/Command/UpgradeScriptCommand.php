@@ -93,6 +93,6 @@ class UpgradeScriptCommand extends BaseCommand
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

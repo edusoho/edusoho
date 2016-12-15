@@ -3,6 +3,7 @@ namespace Topxia\Service\Content\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\NavigationService;
 
 class NavigationServiceImpl extends BaseService implements NavigationService
@@ -252,7 +253,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getSettingService()

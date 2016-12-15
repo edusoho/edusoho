@@ -2,6 +2,7 @@
 namespace Topxia\Service\Content\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\ContentService;
 use Topxia\Service\Content\Type\ContentTypeFactory;
 use Topxia\Common\ArrayToolkit;
@@ -162,7 +163,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
 }

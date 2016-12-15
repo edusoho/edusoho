@@ -4,6 +4,7 @@ namespace Topxia\Service\Taxonomy\Impl;
 use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\CategoryService;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
@@ -437,7 +438,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getSettingService()

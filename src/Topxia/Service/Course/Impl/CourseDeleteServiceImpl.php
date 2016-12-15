@@ -2,6 +2,7 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseDeleteService;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -478,12 +479,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCrontabService()

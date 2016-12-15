@@ -4,6 +4,7 @@ namespace Topxia\Service\CloudPlatform\Impl;
 
 use Permission\Service\Role\Impl\RoleServiceImpl;
 use Topxia\Service\CloudPlatform\UpgradeLock;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\System;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\PluginUtil;
@@ -879,7 +880,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     /**

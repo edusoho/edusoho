@@ -3,6 +3,7 @@ namespace Topxia\Service\Coupon\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Coupon\CouponService;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -324,7 +325,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     private function getNotificationService()

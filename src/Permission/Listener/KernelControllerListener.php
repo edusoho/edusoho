@@ -23,7 +23,6 @@ class KernelControllerListener
         }
 
         $request     = $event->getRequest();
-        $route       = $request->attributes->get('_route');
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $requestPath = $request->getPathInfo();
 

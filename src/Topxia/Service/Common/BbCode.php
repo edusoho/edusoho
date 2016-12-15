@@ -56,6 +56,6 @@ class BbCode extends BaseService
 
 	protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

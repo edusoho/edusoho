@@ -447,7 +447,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getSettingService()

@@ -226,7 +226,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getCourseService()
