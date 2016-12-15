@@ -2,6 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -86,7 +87,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function batchUpdate($index)
     {
         $batchUpdates = array(
-            0 => 'updateScheme',
             1 => 'updateClassroomUpdateTime',
             2 => 'updateOrdersUpdateTimeFromLog',
             3 => 'updateOrdersUpdateTime',
@@ -95,13 +95,28 @@ class EduSohoUpgrade extends AbstractUpdater
             6 => 'updateClassroomMemberLastLearnedNum',
             7 => 'updateCourseMemberUpdatedTime',
             8 => 'updateClassroomMemberUpdatedTime',
-            9 => 'updateOrdersStatus',
         );
-        $method = $batchUpdates[$index];
-        $this->$method();
-        if ($index < 9) {
+        if ($index == 0) {
+            $this->updateScheme();
+
             return array(
-                'index' => ++$index,
+                'index' => '1-1',
+                'message' => '正在升级数据...',
+                'progress' => 0
+            );
+        }
+        $step = preg_replace('/\-\w+$/', '', $index);
+        $page = preg_replace('/^\w+\-/', '', $index);
+
+        $method = $batchUpdates[$step];
+        $page = $this->$method($page);
+
+        if ($page == 1) {
+            $step ++;
+        }
+        if ($step < 8) {
+            return array(
+                'index' => $step.'-'.$page,
                 'message' => '正在升级数据...',
                 'progress' => 0
             );
@@ -113,13 +128,32 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $connection->exec("UPDATE `classroom` set `updatedTime`= createdTime WHERE updatedTime = 0 ; ");
+
+        return 1;
     }
 
-    protected function updateOrdersUpdateTimeFromLog()
+    protected function updateOrdersUpdateTimeFromLog($page = 1)
     {
         $connection = $this->getConnection();
 
-        $connection->exec("UPDATE `orders` SET `updatedTime` = (select ifnull(max(createdTime),0) from `order_log` where order_log.orderId = orders.id);");
+        $count = $connection->fetchColumn("select count(*) from orders;");
+        $pageNum = 1000;
+        $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
+
+        if ($page <= $pages) {
+            $start = ($page-1) * $pageNum;
+
+            $ids = $connection->fetchAll("select id from orders order by id limit {$start},{$pageNum}");
+            if (!empty($ids)) {
+                $ids = ArrayToolkit::column($ids, 'id');
+                $ids = implode(',', $ids);
+                $connection->exec("UPDATE `orders` SET `updatedTime` = (select ifnull(max(createdTime),0) from `order_log` where order_log.orderId = orders.id) where id in ({$ids});");
+            }
+            if ($page < $pages) {
+                return ++$page;
+            }
+        }
+        return 1;
     }
 
     protected function updateOrdersUpdateTime()
@@ -127,27 +161,86 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $connection->exec("UPDATE `orders` set `updatedTime`= createdTime WHERE updatedTime = 0 ;");
+
+        return 1;
     }
 
-    protected function updateCourseMemberLastLearnTime()
+    protected function updateCourseMemberLastLearnTime($page = 1)
     {
         $connection = $this->getConnection();
 
-        $connection->exec(" UPDATE `course_member` SET `lastLearnTime` = (SELECT ifnull(max(startTime),0) FROM `course_lesson_learn` WHERE course_member.courseId = course_lesson_learn.courseId AND course_member.userId = course_lesson_learn.userId);");
+        $count = $connection->fetchColumn("select count(*) from course_member;");
+        $pageNum = 1000;
+        $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
+
+        if ($page <= $pages) {
+            $start = ($page-1) * $pageNum;
+
+            $ids = $connection->fetchAll("select id from course_member order by id limit {$start},{$pageNum}");
+            if (!empty($ids)) {
+                $ids = ArrayToolkit::column($ids, 'id');
+                $ids = implode(',', $ids);
+                $connection->exec(" UPDATE `course_member` SET `lastLearnTime` = (SELECT ifnull(max(startTime),0) FROM `course_lesson_learn` WHERE course_member.courseId = course_lesson_learn.courseId AND course_member.userId = course_lesson_learn.userId) where id in ({$ids});");
+            }
+            if ($page < $pages) {
+                return ++$page;
+            }
+        }
+
+        return 1;
     }
 
-    protected function updateClassroomMemberLastLearnTime()
+    protected function updateClassroomMemberLastLearnTime($page = 1)
     {
         $connection = $this->getConnection();
 
-        $connection->exec(" UPDATE `classroom_member` SET `lastLearnTime` = (SELECT ifnull(max(lastLearnTime),0) FROM `course_member` WHERE classroom_member.classroomId = course_member.classroomId AND classroom_member.userId = course_member.userId AND course_member.joinedType = 'classroom');");
+        $count = $connection->fetchColumn("select count(*) from course_member where joinedType = 'classroom';");
+        $pageNum = 1000;
+        $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
+
+        if ($page <= $pages) {
+            $start = ($page-1) * $pageNum;
+
+            $ids = $connection->fetchAll("select id from course_member where joinedType = 'classroom' order by id limit {$start},{$pageNum}");
+
+            if (!empty($ids)) {
+                $ids = ArrayToolkit::column($ids, 'id');
+                $ids = implode(',', $ids);
+                $connection->exec(" UPDATE `classroom_member` SET `lastLearnTime` = (SELECT ifnull(max(lastLearnTime),0) FROM `course_member` WHERE classroom_member.classroomId = course_member.classroomId AND classroom_member.userId = course_member.userId AND course_member.joinedType = 'classroom') where id in ({$ids});");
+            }
+            if ($page < $pages) {
+                return ++$page;
+            }
+        }
+
+        return 1;
     }
 
-    protected function updateClassroomMemberLastLearnedNum()
+    protected function updateClassroomMemberLastLearnedNum($page = 1)
     {
         $connection = $this->getConnection();
 
-        $connection->exec(" UPDATE `classroom_member` SET `learnedNum` = (SELECT ifnull(sum(learnedNum),0) FROM `course_member` WHERE classroom_member.classroomId = course_member.classroomId AND classroom_member.userId = course_member.userId AND course_member.joinedType = 'classroom');");
+        $count = $connection->fetchColumn("select count(*) from course_member where joinedType = 'classroom';");
+        $pageNum = 1000;
+        $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
+
+        if ($page <= $pages) {
+            $start = ($page-1) * $pageNum;
+
+            $ids = $connection->fetchAll("select id from course_member where joinedType = 'classroom' order by id limit {$start},{$pageNum}");
+
+            if (!empty($ids)) {
+                $ids = ArrayToolkit::column($ids, 'id');
+                $ids = implode(',', $ids);
+                $connection->exec(" UPDATE `classroom_member` SET `learnedNum` = (SELECT ifnull(sum(learnedNum),0) FROM `course_member` WHERE classroom_member.classroomId = course_member.classroomId AND classroom_member.userId = course_member.userId AND course_member.joinedType = 'classroom') where id in ({$ids});");
+            }
+
+            if ($page < $pages) {
+                return ++$page;
+            }
+        }
+
+        return 1;
     }
 
     protected function updateCourseMemberUpdatedTime()
@@ -155,6 +248,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $connection->exec("UPDATE `course_member` SET `updatedTime` = `createdTime`");
+
+        return 1;
     }
 
     protected function updateClassroomMemberUpdatedTime()
@@ -162,13 +257,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $connection->exec("UPDATE  `classroom_member` SET `updatedTime` = `createdTime`");
-    }
 
-    protected function updateOrdersStatus()
-    {
-        $connection = $this->getConnection();
-
-        $connection->exec("UPDATE `orders` SET status='paid' WHERE id IN ( SELECT id FROM ( SELECT r.orderId id FROM `orders` o INNER JOIN `order_refund` r on o.id=r.orderId WHERE o.status='cancelled' and r.status='success') A)");
+        return 1;
     }
 
     protected function isFieldExist($table, $filedName)
