@@ -9,7 +9,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
 {
     protected $table = 'message';
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
             if ($v === 0) {
@@ -25,7 +25,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
-        return $this->createDynamicQueryBuilder($conditions)
+        return $this->_getQueryBuilder($conditions)
             ->from($this->table, 'message')
             ->andWhere('fromId = :fromId')
             ->andWhere('toId = :toId')
@@ -39,7 +39,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
 
     public function count($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
@@ -49,7 +49,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
     {
         $this->filterStartLimit($start, $limit);
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)

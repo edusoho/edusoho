@@ -4,7 +4,6 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\Common\DynamicQueryBuilder;
 
 class UserDaoImpl extends GeneralDaoImpl implements UserDao
 {
@@ -48,7 +47,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function search($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->createUserQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -62,12 +61,12 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function count($conditions)
     {
-        $builder = $this->createUserQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    protected function createUserQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
             if ($v === 0) {
@@ -137,8 +136,8 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
         $conditions['verifiedMobileNull'] = "";
 
-        $builder = new DynamicQueryBuilder($this->db(), $conditions);
-        $builder->from($this->table, 'user')
+        $builder = $this->_getQueryBuilder($conditions)
+            ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')

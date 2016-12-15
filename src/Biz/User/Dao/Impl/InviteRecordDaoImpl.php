@@ -31,17 +31,17 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
-    }
+    // public function search($conditions, $orderBy, $start, $limit)
+    // {
+    //     $builder = $this->_createSearchQueryBuilder($conditions)
+    //         ->select('*')
+    //         ->orderBy($orderBy[0], $orderBy[1])
+    //         ->setFirstResult($start)
+    //         ->setMaxResults($limit);
+    //     return $builder->execute()->fetchAll() ?: array();
+    // }
 
-    private function _createSearchQueryBuilder($conditions)
+    private function _createQueryBuilder($conditions)
     {
         $tmpConditions = array();
 
@@ -55,7 +55,7 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
 
         $conditions = array_merge($conditions, $tmpConditions);
 
-        return $this->createDynamicQueryBuilder($conditions)
+        return $this->_getQueryBuilder($conditions)
             ->from($this->table, 'invite_record')
             ->andWhere('inviteUserId = :inviteUserId')
             ->andWhere('invitedUserId = :invitedUserId')

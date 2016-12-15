@@ -22,7 +22,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
     public function search($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $builder = $this->createProfileQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
@@ -32,12 +32,12 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
 
     public function count($conditions)
     {
-        $builder = $this->createProfileQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createProfileQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
             if ($v === 0) {
@@ -58,7 +58,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        return $this->_getQueryBuilder($conditions)
             ->from($this->table, 'user_approval')
             ->andWhere('truename LIKE :truename')
             ->andWhere('createTime >=:startTime')

@@ -25,7 +25,6 @@ class BlacklistDaoImpl extends GeneralDaoImpl implements BlacklistDao
     public function deleteByUserIdAndBlackId($userId, $blackId)
     {
         $result = $this->db()->delete($this->table, array('userId' => $userId, 'blackId' => $blackId));
-        $this->clearCached();
         return $result;
     }
 

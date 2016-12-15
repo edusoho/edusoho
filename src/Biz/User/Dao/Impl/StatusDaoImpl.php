@@ -41,7 +41,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
         $this->filterStartLimit($start, $limit);
         $this->checkOrderBy($orderBy, array('createdTime'));
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)
@@ -52,9 +52,9 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
-        return $this->createDynamicQueryBuilder($conditions)
+        return $this->_getQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('courseId = :courseId')
             ->andWhere('courseId IN ( :courseIds )')

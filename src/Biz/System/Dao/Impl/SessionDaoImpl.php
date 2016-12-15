@@ -46,7 +46,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql   = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
 
-        return $this->getConnection()->executeUpdate($sql, $ids);
+        return $this->db()->executeUpdate($sql, $ids);
     }
 
     public function declares()

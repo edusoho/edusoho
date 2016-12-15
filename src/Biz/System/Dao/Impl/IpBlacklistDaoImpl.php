@@ -23,11 +23,6 @@ class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
     public function increaseIpCounter($id, $counter)
     {
         return $this->wave(array($id), array('counter' => 1));
-        // $counter = (int) $counter;
-        // $sql     = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
-        // $result  = $this->getConnection()->executeQuery($sql, array($counter, $id));
-        // $this->clearCached();
-        // return $result;
     }
 
     public function declares()

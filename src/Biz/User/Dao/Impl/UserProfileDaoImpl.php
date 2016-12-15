@@ -65,7 +65,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 
     public function search($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->createProfileQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
@@ -75,7 +75,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 
     public function count($conditions)
     {
-        $builder = $this->createProfileQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
@@ -89,7 +89,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
         return $this->db()->fetchAll($sql);
     }
 
-    private function createProfileQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
             if ($v === 0) {
@@ -121,7 +121,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        return $this->_getQueryBuilder($conditions)
             ->from($this->table, 'user_profile')
             ->andWhere('mobile LIKE :mobile')
             ->andWhere('truename LIKE :truename')
