@@ -1,14 +1,14 @@
 <?php
 
 
-namespace AppBundle\Controller\Course;
+namespace AppBundle\Controller\My;
 
 
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 
-class MyCourseController extends BaseController
+class CourseController extends BaseController
 {
     public function learningAction(Request $request)
     {
@@ -25,7 +25,7 @@ class MyCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my-course/learning.html.twig', array(
+        return $this->render('my/course/learning.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator
         ));

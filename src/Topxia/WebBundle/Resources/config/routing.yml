@@ -1447,7 +1447,7 @@ my_courses_learned:
 my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-
+#rm
 my_questions:
     path: /my/questions
     defaults: { _controller: TopxiaWebBundle:MyThread:questions }
