@@ -6,7 +6,7 @@ let loadAnimation = (fn,$element) => {
     l = fn.length;
   return (x) => { 
     arr.push(x);
-    $loding.hide().nextAll().show(); 
+    // $loding.hide().nextAll().show(); 
     return arr.length < l ? arguments.callee : fn.apply(null,arr);
   }
 }

@@ -86,7 +86,8 @@
 
 {% if script() is not empty or use_webapck_loader|default(false) == true %}
   {# webpack #}
-  {% do script(['libs/vendor.js'], 1000) %}
+  
+  {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
   {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
 {% else %}
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
