@@ -1,15 +1,14 @@
 <?php
 
 
-namespace Biz\DocActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\DocActivity\Dao\DocActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
-class DocActivity extends Activity
+class Doc extends Activity
 {
     public function getMetas()
     {
@@ -22,9 +21,9 @@ class DocActivity extends Activity
     public function registerActions()
     {
         return array(
-            'create' => 'WebBundle:DocActivity:create',
-            'edit'   => 'WebBundle:DocActivity:edit',
-            'show'   => 'WebBundle:DocActivity:show'
+            'create' => 'AppBundle:Doc:create',
+            'edit'   => 'AppBundle:Doc:edit',
+            'show'   => 'AppBundle:Doc:show'
         );
     }
 
@@ -49,6 +48,22 @@ class DocActivity extends Activity
         return $doc;
     }
 
+    public function isFinished($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $doc = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if($doc['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return $result > $doc['finishDetail'];
+        }
+
+        if($doc['finishType'] == 'click') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'doc.finish');
+            return !empty($result);
+        }
+        return false;
+    }
+
     public function update($targetId, $fields)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
@@ -71,12 +86,19 @@ class DocActivity extends Activity
         return $this->getDocActivityDao()->get($targetId);
     }
 
-    /**
-     * @return DocActivityDao
-     */
     protected function getDocActivityDao()
     {
-        return $this->getBiz()->dao('DocActivity:DocActivityDao');
+        return $this->getBiz()->dao('Activity:DocActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
     
 }

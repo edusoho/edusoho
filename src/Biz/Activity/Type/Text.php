@@ -4,7 +4,6 @@ namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\TextActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
@@ -31,9 +30,14 @@ class Text extends Activity
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
-    public function canFinish($id)
+    public function isFinished($activityId)
     {
-        return true;
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
+        return !empty($result) 
+                && $textActivity['finishType'] == 'time' 
+                && $result > $textActivity['finishDetail'];
     }
 
     public function delete($targetId)
@@ -52,18 +56,19 @@ class Text extends Activity
         return $this->getTextActivityDao()->create($text);
     }
 
-    /**
-     * @return TextActivityDao
-     */
     protected function getTextActivityDao()
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
     }
 
-    protected function getListeners()
+    protected function getActivityLearnLogService()
     {
-        // TODO: Implement getListeners() method.
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
 
 }

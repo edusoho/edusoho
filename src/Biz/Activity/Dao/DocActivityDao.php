@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Biz\DocActivity\Dao;
+namespace Biz\Activity\Dao;
 
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

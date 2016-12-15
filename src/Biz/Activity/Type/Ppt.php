@@ -1,21 +1,20 @@
 <?php
 
 
-namespace Biz\PptActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\PptActivity\Dao\PptActivityDao;
 use Topxia\Common\ArrayToolkit;
 
-class PptActivity extends Activity
+class Ppt extends Activity
 {
     public function registerActions()
     {
         return array(
-            'edit'   => 'WebBundle:PptActivity:edit',
-            'show'   => 'WebBundle:PptActivity:show',
-            'create' => 'WebBundle:PptActivity:create'
+            'edit'   => 'AppBundle:Ppt:edit',
+            'show'   => 'AppBundle:Ppt:show',
+            'create' => 'AppBundle:Ppt:create'
         );
     }
 
@@ -30,6 +29,23 @@ class PptActivity extends Activity
             'name' => 'PPT',
             'icon' => 'es-icon es-icon-pptclass'
         );
+    }
+
+    public function isFinished($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
+        
+        if($ppt['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return !empty($result) && $result > $ppt['finishDetail'];
+        }
+
+        if($ppt['finishType'] == 'end') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
+            return !empty($result);
+        }
+        return false;
     }
 
     public function create($fields)
@@ -70,12 +86,19 @@ class PptActivity extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
-    /**
-     * @return PptActivityDao
-     */
     protected function getPptActivityDao()
     {
-        return $this->getBiz()->dao('PptActivity:PptActivityDao');
+        return $this->getBiz()->dao('Activity:PptActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 
 }

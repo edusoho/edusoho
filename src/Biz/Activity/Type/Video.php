@@ -2,14 +2,12 @@
 
 namespace Biz\Activity\Type;
 
-
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\VideoActivityDao;
 use Topxia\Service\Common\ServiceKernel;
 
 class Video extends Activity
 {
-    protected function getListeners()
+    protected function registerListeners()
     {
         return array(
             'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
@@ -45,6 +43,17 @@ class Video extends Activity
         return $videoActivity;
     }
 
+    /**
+     * TODO观看后完成
+     */
+    public function isFinished($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        return !empty($result) 
+                && $result > $activity['length'];
+    }
+
     public function get($id)
     {
         $videoActivity         = $this->getVideoActivityDao()->get($id);
@@ -57,19 +66,23 @@ class Video extends Activity
         return $this->getVideoActivityDao()->delete($id);
     }
 
-    /**
-     * @return VideoActivityDao
-     */
     protected function getVideoActivityDao()
     {
         return $this->getBiz()->dao('Activity:VideoActivityDao');
     }
 
-    /**
-     * @return UploadFileService
-     */
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 }

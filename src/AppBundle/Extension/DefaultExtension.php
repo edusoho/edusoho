@@ -2,10 +2,13 @@
 namespace AppBundle\Extension;
 
 use Pimple\Container;
+use Biz\Activity\Type\Doc;
+use Biz\Activity\Type\Ppt;
 use Biz\Activity\Type\Live;
 use Biz\Activity\Type\Text;
 use Biz\Question\Type\Fill;
 use Biz\Activity\Type\Audio;
+use Biz\Activity\Type\Flash;
 use Biz\Activity\Type\Video;
 use Biz\Question\Type\Essay;
 use Biz\Question\Type\Choice;
@@ -28,6 +31,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function __construct($biz)
     {
         $this->biz = $biz;
+    }
+
+    public function getBiz()
+    {
+        return $this->biz;
     }
 
     public function getQuestionTypes()
@@ -189,6 +197,40 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'   => 'AppBundle:Activity/Discuss:show'
                 )
             ),
+
+            'flash'     => array(
+                'meta'    => array(
+                    'name' => 'Flash',
+                    'icon' => 'es-icon es-icon-flashclass'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Flash:create',
+                    'edit'   => 'AppBundle:Activity/Flash:edit',
+                    'show'   => 'AppBundle:Activity/Flash:show'
+                )
+            ),
+            'doc'       => array(
+                'meta'    => array(
+                    'name' => '文档',
+                    'icon' => 'es-icon es-icon-docclass'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Doc:create',
+                    'edit'   => 'AppBundle:Activity/Doc:edit',
+                    'show'   => 'AppBundle:Activity/Doc:show'
+                )
+            ),
+            'ppt'       => array(
+                'meta'    => array(
+                    'name' => 'Ppt',
+                    'icon' => 'es-icon es-icon-pptclass'
+                ),
+                'actions' => array(
+                    'create' => 'AppBundle:Activity/Ppt:create',
+                    'edit'   => 'AppBundle:Activity/Ppt:edit',
+                    'show'   => 'AppBundle:Activity/Ppt:show'
+                )
+            ),
             'testpaper' => array(
                 'meta'    => array(
                     'name' => '考试',
@@ -236,22 +278,34 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         $that                            = $this;
         $container['activity_type.text'] = function () use ($that) {
-            return new Text($that->biz);
+            return new Text($that->getBiz());
         };
         $container['activity_type.video'] = function () use ($that) {
-            return new Video($that->biz);
+            return new Video($that->getBiz());
         };
         $container['activity_type.audio'] = function () use ($that) {
-            return new Audio($that->biz);
+            return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
-            return new Download($that->biz);
+            return new Download($that->getBiz());
         };
         $container['activity_type.live'] = function () use ($that) {
-            return new Live($that->biz);
+            return new Live($that->getBiz());
         };
         $container['activity_type.discuss'] = function () use ($that) {
-            return new Discuss($that->biz);
+            return new Discuss($that->getBiz());
+        };
+
+        $container['activity_type.flash'] = function () use ($that) {
+            return new Flash($that->getBiz());
+        };
+
+        $container['activity_type.doc'] = function () use ($that) {
+            return new Doc($that->getBiz());
+        };
+
+        $container['activity_type.ppt'] = function () use ($that) {
+            return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
             return new Testpaper($that->biz);

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Biz\DocActivity\Dao\Impl;
+namespace Biz\Activity\Dao\Impl;
 
 
-use Biz\DocActivity\Dao\DocActivityDao;
+use Biz\Activity\Dao\DocActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class DocActivityDaoImpl extends GeneralDaoImpl implements DocActivityDao

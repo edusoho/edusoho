@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Biz\FlashActivity\Dao;
+namespace Biz\Activity\Dao;
 
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

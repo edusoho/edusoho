@@ -1,15 +1,14 @@
 <?php
 
 
-namespace Biz\FlashActivity;
+namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\FlashActivity\Dao\FlashActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 
-class FlashActivity extends Activity
+class Flash extends Activity
 {
     public function getMetas()
     {
@@ -22,10 +21,26 @@ class FlashActivity extends Activity
     public function registerActions()
     {
         return array(
-            'create' => 'WebBundle:FlashActivity:create',
-            'edit'   => 'WebBundle:FlashActivity:edit',
-            'show'   => 'WebBundle:FlashActivity:show'
+            'create' => 'AppBundle:Flash:create',
+            'edit'   => 'AppBundle:Flash:edit',
+            'show'   => 'AppBundle:Flash:show'
         );
+    }
+
+    public function isFinished($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if($flash['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return $result > $flash['finishDetail'];
+        }
+
+        if($flash['finishType'] == 'click') {
+            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'flash.finish');
+            return !empty($result);
+        }
+        return false;
     }
 
     protected function registerListeners()
@@ -69,12 +84,19 @@ class FlashActivity extends Activity
         return $this->getFlashActivityDao()->get($targetId);
     }
 
-    /**
-     * @return FlashActivityDao
-     */
     protected function getFlashActivityDao()
     {
-        return $this->getBiz()->dao('FlashActivity:FlashActivityDao');
+        return $this->getBiz()->dao('Activity:FlashActivityDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
     
 }

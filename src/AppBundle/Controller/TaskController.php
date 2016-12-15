@@ -1,9 +1,6 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
-use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -12,19 +9,16 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
-        $course  = $this->getCourseService()->getCourse($task['courseId']);
-        $tasks   = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if (empty($activity)) {
+            throw $this->createNotFoundException("activity not found");
+        }
 
         if ($this->getCourseService()->isCourseStudent($courseId, $this->getUser()->getId())) {
             $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
         } else {
             $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
-        }
-
-        if (empty($activity)) {
-            throw $this->createNotFoundException("activity not found");
         }
 
         $this->getActivityService()->trigger($activity['id'], 'start', array(
@@ -33,10 +27,9 @@ class TaskController extends BaseController
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         return $this->render('task/show.html.twig', array(
-            'course'     => $course,
+            'course'     => $this->getCourseService()->getCourse($task['courseId']),
             'task'       => $task,
             'taskResult' => $taskResult,
-            'tasks'      => $tasks,
             'activity'   => $activity,
             'preview'    => $preview,
             'backUrl'    => $backUrl
@@ -113,10 +106,24 @@ class TaskController extends BaseController
         $result   = $this->getTaskService()->finishTask($id);
         $task     = $this->getTaskService()->getTask($id);
         $nextTask = $this->getTaskService()->getNextTask($id);
+        $course   = $this->getCourseService()->getCourse($task['courseId']);
+        $user = $this->getUser();
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'userId' => $user['id'],
+            'status' => 'finish'
+        );
+
+        $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
+
+        $finishedRate = empty($course['taskCount'])? 0 : intval($finishedCount/$course['taskCount']*100);
+
         return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
             'task'     => $task,
-            'nextTask' => $nextTask
+            'nextTask' => $nextTask,
+            'course'   => $course,
+            'finishedRate' => $finishedRate
         ));
     }
 
@@ -144,17 +151,11 @@ class TaskController extends BaseController
         return $task;
     }
 
-    /**
-     * @return CourseService
-     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
-    /**
-     * @return TaskService
-     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
@@ -165,9 +166,6 @@ class TaskController extends BaseController
         return $this->createService('Task:TaskResultService');
     }
 
-    /**
-     * @return ActivityService
-     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');

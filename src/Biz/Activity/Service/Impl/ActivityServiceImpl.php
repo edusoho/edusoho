@@ -149,11 +149,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->delete($id);
     }
 
-    public function canFinishActivity($id)
+    public function isFinished($id)
     {
         $activity       = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
-        return $activityConfig->canFinish($id);
+        return $activityConfig->isFinished($id);
     }
 
     protected function filterFields($fields)
