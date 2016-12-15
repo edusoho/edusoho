@@ -103,6 +103,17 @@ class EduCloudController extends BaseController
                 }
             }
         }
+        //暂时去掉email
+        foreach ($paidService as $key => $value) {
+            if ($value == 'email') {
+                unset($paidService[$key]);
+            }
+        }
+        foreach ($unPaidService as $key => $value) {
+            if ($value == 'email') {
+                unset($unPaidService[$key]);
+            }
+        }
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
