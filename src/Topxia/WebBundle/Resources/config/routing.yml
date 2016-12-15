@@ -1451,14 +1451,6 @@ my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
 #rm
-my_questions:
-    path: /my/questions
-    defaults: { _controller: TopxiaWebBundle:MyThread:questions }
-#rm
-my_discussions:
-    path: /my/discussions
-    defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
-#rm
 my_notebooks:
     path: /my/notebooks
     defaults: { _controller: TopxiaWebBundle:MyNotebook:index }
