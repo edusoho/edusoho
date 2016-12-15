@@ -751,6 +751,35 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals($file['usedCount']+1, $updateFile['usedCount']);
     }
 
+    public function testSyncToLocalFromCloud()
+    {
+        $cloudFile = array(
+            'globalId' => '507868be3524496eb80c8df7c4ceeeda',
+            'hashId' => 'courselesson-21/20161123082458-2r6306vs6l2c0884',
+            'filename' => '06.如何修改中差评.mp4',
+            'ext' => 'mp4',
+            'fileSize' => '10507724',
+            'etag' => 'courselesson-21/20161123082458-2r6306vs6l2c0884',
+            'length' => '494',
+            'description' => '',
+            'status' => 'ok',
+            'convertHash' => '',
+            'convertStatus' => 'success',
+            'targetId' => 1,
+            'targetType' => 'replay',
+            'metas' => '',
+            'metas2' => '',
+            'type' => 'video',
+            'storage' => 'cloud',
+            'createdUserId' => 1,
+            'updatedUserId' => 1
+        );
+
+        $result = $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);
+
+        $this->assertTrue($result);
+    }
+
     protected function createUser($user)
     {
         $userInfo             = array();

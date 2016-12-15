@@ -1,0 +1,424 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_setting_video' %}
+{% set script_controller = 'setting/cloud' %}
+{#{% block tabs %}{% endblock %}#}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif video.status|default() == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{'
+    您的云视频服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  <style>
+    .webuploader-container {
+      position: relative;
+    }
+
+    .webuploader-element-invisible {
+      position: absolute !important;
+      clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+      clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    .webuploader-pick {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #fff;
+      padding: 5px 10px;
+      color: #333;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+    }
+
+    .webuploader-pick-hover {
+      background: #e6e6e6;
+      border-color: #adadad;
+    }
+
+    .webuploader-pick-disable {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .balloon-uploader {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .balloon-uploader-heading {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      display: none;
+    }
+
+    .balloon-uploader-footer {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-top: 1px solid #ddd;
+      text-align: right;
+    }
+
+    .balloon-filelist {
+      width: 100%;
+    }
+
+    .balloon-filelist-heading {
+      padding: 8px 10px;
+      position: relative;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .balloon-uploader-body {
+      position: relative;
+
+    }
+
+    .balloon-filelist .file-name,
+    .balloon-filelist .file-size,
+    .balloon-filelist .file-status,
+    .balloon-filelist .file-manage {
+      display: inline-block;
+    }
+
+    .balloon-filelist .file-name {
+      width:40%
+    }
+
+    .balloon-filelist .file-size {
+      width: 20%;
+    }
+
+    .balloon-filelist .file-status {
+      width: 18%;
+    }
+
+    .balloon-filelist .file-manage {
+      width: 20%;
+      z-index: 9999;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .balloon-filelist ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
+    .balloon-filelist ul li {
+      position: relative;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .balloon-dnd {
+      visibility: hidden;
+    }
+
+    .balloon-uploader-none .balloon-uploader-footer,
+    .balloon-uploader-none .balloon-uploader-body {
+      visibility: hidden;
+    }
+
+    .balloon-uploader-none .balloon-dnd {
+      visibility: visible;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .balloon-nofile {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      line-height: 100px;
+      text-align: center;
+      color: #999;
+    }
+
+    .balloon-uploader .file-pick-btn {
+      display: inline-block;
+    }
+
+    .balloon-uploader .start-upload-btn {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #5bc0de;
+      padding: 5px 10px;
+      color: #fff;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #46b8da;
+      overflow: hidden;
+    }
+
+    .balloon-uploader .start-upload-btn:hover {
+      background: #31b0d5;
+      border-color: #269abc;
+    }
+
+    .balloon-filelist .file-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .balloon-filelist .file-progress-bar {
+      background: rgb(219, 242, 215);
+      background: rgba(59, 181, 33, 0.18);
+      float: left;
+      height: 100%;
+    }
+
+  </style>
+{{ web_macro.flash_messages() }}
+  <div class="page-heading">
+    云视频开关
+  </div>
+  <form class="form-horizontal" method="post" action="{{ path('admin_cloud_video_switch') }}">
+    <div class="row form-group">
+      <label for="" class="col-sm-3 control-label">启用云视频：</label>
+      <div class="controls col-md-9 radios">
+        <div>
+          <span class="text-success">{{ '已启用'|trans }}</span>
+          <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
+        </div>
+        <div class="help-block">
+          云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。点击<a href="{{ path('admin_cloud_show',{'type': 'video'}) }}" target="_blank">这里</a>了解详情。
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <div class="page-heading">
+    基本设置
+  </div>
+<form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+  <div class="row form-group">
+    <label for="" class="col-sm-3 control-label">视频转码画质：</label>
+    <div class="controls col-sm-9 radios">
+      {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="support_mobile">{{ '手机浏览器MP4视频:'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('support_mobile', {'1':'开启', '0':'关闭'}, storageSetting.support_mobile) }}
+      <div class="help-block">
+        {{ 'MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；'|trans }}<br/>
+        {{ '开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；'|trans }}<br/>
+        <span style="color: red">{{ '注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。'|trans }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <label for="" class="col-sm-3 control-label">视频转码音质：</label>
+    <div class="controls col-sm-9 radios">
+      {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality) }}
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="enable_playback_rates">倍速播放：</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enable_playback_rates', {'1':'开启', '0':'关闭'}, storageSetting.enable_playback_rates) }}
+      <div class="text-muted mts">
+        开启后，云视频课时支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
+      </div>
+    </div>
+  </div>
+  <div class="upload-mode">
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '云视频片头'|trans }}</label>
+    </div>
+
+    <div class="controls col-md-8 radios">
+      {{ radios('video_header', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.video_header|default(0)) }}
+    </div>
+  </div>
+  <div class="row form-group" id="upload-panel"
+       data-params-url="{{ path('admin_uploadfile_head_leader_params', {storage:storageSetting.upload_mode}) }}"
+       data-hls-encrypted="1"
+  >
+    <div class="col-md-3">
+    </div>
+    <div class="controls col-md-8">
+
+
+      <div class="head-leader-edit"
+          {% if not headLeader|default(null) %}
+            style="display:none;"
+          {% endif %}
+      >
+        <span data-role="placeholder">{{ headLeader.filename|default('') }}</span>
+        <button class="btn btn-link btn-sm edit-btn" type="button"><i
+              class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+        {% if headLeader.convertStatus|default(null) != 'success' %}
+          <div class="alert alert-warning" data-role="waiting-tip">
+            {{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
+          </div>
+        {% endif %}
+
+      </div>
+
+      <div class="file-chooser-main"
+          {% if headLeader|default(null) %}
+            style="display:none;"
+          {% endif %}
+      >
+        {% set token = uploader_token('headLeader', 0, 'private') %}
+        <div id="balloon-uploader"
+             data-init-url="{{ path('uploader_init', {token:token}) }}"
+             data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+             data-upload-auth-url="{{ path('uploader_auth', {token:token}) }}"
+             data-accept="{{ uploader_accept('attachment', 'video')|json_encode }}"
+             data-process="{{ uploader_process('headLeader') }}">
+        </div>
+
+        <div class="alert alert-info">
+          <ul>
+            <li>{{ '支持'|trans }}<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv,
+                m4v</strong>{{ '格式的视频文件上传，文件大小不能超过'|trans }}<strong>10 MB</strong>。
+            </li>
+            <li>{{ '支持'|trans }}<strong>{{ '断点续传'|trans }}</strong>{{ '（仅支持HTML5浏览器）。'|trans }}</li>
+            <li>{{ '视频将上传到'|trans }}
+              <strong>{{ '云视频服务器'|trans }}</strong>{{ '，上传后会对视频进行格式转换，转换过程需要一定的时间。'|trans }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-heading">
+    安全设置
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '视频水印：'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios " data-content="123">
+      {# {{ radios('video_watermark', {'0':'关闭', '1':'开启播放器水印', '2':'开启内嵌水印'}, storageSetting.video_watermark) }} #}
+
+      <label>
+        <input type="radio" name="video_watermark" value="0"
+               {% if storageSetting.video_watermark == 0 %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+      </label>
+      <label class="video-watermark-property-tips" data-content="
+  {{ '播放时水印将会覆盖在视频上，可随时更换；'|trans }}
+  {{ '已经通过系统使用了内嵌水印的视频，将不会显示播放器水印。'|trans }}
+  ">
+        <input type="radio" name="video_watermark" value="1"
+               {% if storageSetting.video_watermark == 1 %}checked="checked"{% endif %}> {{ '开启播放器水印'|trans }}
+      </label>
+      <label class="video-watermark-property-tips" data-content="
+  {{ '能够更好的保护视频版权；'|trans }}
+  {{ '上传时将水印嵌入视频编码中，不可删改；'|trans }}
+  {{ '未嵌入水印的视频在播放时将会显示播放器水印。'|trans }}
+  ">
+        <input type="radio" name="video_watermark" value="2"
+               {% if storageSetting.video_watermark == 2 %}checked="checked"{% endif %}> {{ '开启内嵌水印'|trans }}
+      </label>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '播放器水印图片：'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+
+      <button class="btn btn-primary" id="cloud-video-watermark-upload" type="button"
+              data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">{{ '点击上传'|trans }}</button>
+      <button class="btn btn-primary" id="cloud-video-watermark-remove" type="button"
+              data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}"
+              {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>{{ '删除'|trans }}</button>
+      <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img
+          src="{{ filepath(storageSetting.video_watermark_image) }}">{% endif %}</div>
+
+      <div class="text-muted mts">{{ '支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸150×50。'|trans }}</div>
+      <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '视频内嵌水印图片：'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+
+      <button class="btn btn-primary" id="cloud-video-embed-watermark-upload" type="button"
+              data-url="{{ path('admin_setting_cloud_video_embed_watermark_upload') }}">{{ '点击上传'|trans }}</button>
+      <button class="btn btn-primary" id="cloud-video-embed-watermark-remove" type="button"
+              data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}"
+              {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>{{ '删除'|trans }}</button>
+      <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img  src="{{ filepath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
+
+      <div class="text-muted mts">{{ '支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。'|trans }}</div>
+      <input type="hidden" name="video_embed_watermark_image"
+             value="{{ storageSetting.video_embed_watermark_image }}">
+    </div>
+  </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ '云视频指纹:'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+            {{ radios('video_fingerprint', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.video_fingerprint) }}
+            <div
+                class="help-block">{{ '开启后，将在视频播放中随机时间、随机位置显示当前网站域名及'|trans }}{% if setting('default.user_name') %}{{ '%user_name%的用户名'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}{% endif %}
+              。
+            </div>
+          </div>
+        </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>云视频指纹显示时长：</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small"
+             name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> 秒
+      <div class="text-muted mts">建议时长在0.5 - 1.5秒之间</div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" id="cloud-video-form-btn" class="btn btn-primary"
+              data-submiting-text="{{ '正在提交'|trans }}">{{ '确认保存'|trans }}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}

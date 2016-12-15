@@ -43,6 +43,11 @@ interface UploadFileService
 
     public function syncFile($file);
 
+    /**
+     * [syncToLocaFromCloud 同步云文件到本地，比如气球云的直播回放，在本地生成云资源]
+     */
+    public function syncToLocalFromCloud($cloudFile);
+
     public function getFileByHashId($hashId);
 
     public function getFileByConvertHash($hash);
