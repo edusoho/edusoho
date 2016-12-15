@@ -233,6 +233,7 @@ my_teaching_classroom_threads:
     path: /my/teaching/classroom/threads/{type}
     defaults: { _controller: ClassroomBundle:Classroom:classroomThreads }
 
+#rm
 my_classroom_discussions:
     path: /my/classroom/discussions
     defaults: { _controller: ClassroomBundle:Classroom:classroomDiscussions }

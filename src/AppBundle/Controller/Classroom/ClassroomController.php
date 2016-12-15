@@ -7,6 +7,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomController extends BaseController
 {
@@ -17,7 +18,7 @@ class ClassroomController extends BaseController
         $progresses = array();
 
         $members = $this->getClassroomService()->searchMembers(array(
-            'roles'   => array('student', 'auditor'),
+            'roles'  => array('student', 'auditor'),
             'userId' => $user->id
         ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
@@ -34,8 +35,8 @@ class ClassroomController extends BaseController
 
             $classrooms[$key]['coursesCount'] = $coursesCount;
 
-            $time        = time() - $members[$classroom['id']]['createdTime'];
-            $day         = intval($time / (3600 * 24));
+            $time = time() - $members[$classroom['id']]['createdTime'];
+            $day  = intval($time / (3600 * 24));
 
             $classrooms[$key]['day'] = $day;
 
@@ -48,6 +49,7 @@ class ClassroomController extends BaseController
             'progresses' => $progresses
         ));
     }
+
 
     private function calculateUserLearnProgress($classroom, $userId)
     {
@@ -88,8 +90,19 @@ class ClassroomController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
-    protected  function getCourseService(){
+    protected function getCourseService()
+    {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User:UserService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
 }

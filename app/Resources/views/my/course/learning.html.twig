@@ -1,4 +1,4 @@
-{% extends 'my-course/layout.html.twig' %}
+{% extends 'my/course/layout.html.twig' %}
 
 {% block title %}{{'学习中'|trans}} - {{ parent() }}{% endblock %}
 
@@ -8,7 +8,7 @@
 	<div class="panel panel-default panel-col">
 	  <div class="panel-heading">{{'我的课程'|trans}}</div>
 	  <div class="panel-body">
-  		  	 {% include 'my-course/nav-pill.html.twig' %}
+  		  	 {% include 'my/course/nav-pill.html.twig' %}
 	  	 {% if courses %}
 		     {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
 				{{ web_macro.paginator(paginator) }}

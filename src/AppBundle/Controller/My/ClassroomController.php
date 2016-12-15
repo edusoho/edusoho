@@ -6,7 +6,11 @@ namespace AppBundle\Controller\My;
 
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Thread\Service\ThreadService;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomController extends BaseController
 {
@@ -17,7 +21,7 @@ class ClassroomController extends BaseController
         $progresses = array();
 
         $members = $this->getClassroomService()->searchMembers(array(
-            'roles'   => array('student', 'auditor'),
+            'roles'  => array('student', 'auditor'),
             'userId' => $user->id
         ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
@@ -34,8 +38,8 @@ class ClassroomController extends BaseController
 
             $classrooms[$key]['coursesCount'] = $coursesCount;
 
-            $time        = time() - $members[$classroom['id']]['createdTime'];
-            $day         = intval($time / (3600 * 24));
+            $time = time() - $members[$classroom['id']]['createdTime'];
+            $day  = intval($time / (3600 * 24));
 
             $classrooms[$key]['day'] = $day;
 
@@ -80,6 +84,40 @@ class ClassroomController extends BaseController
     }
 
 
+    public function classroomDiscussionsAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $conditions = array(
+            'userId'     => $user['id'],
+            'type'       => 'discussion',
+            'targetType' => 'classroom'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->countThread($conditions),
+            20
+        );
+        $threads   = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
+        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
+
+        return $this->render('my/Classroom/discussions.html.twig', array(
+            'threadType' => 'classroom',
+            'paginator'  => $paginator,
+            'threads'    => $threads,
+            'users'      => $users,
+            'classrooms' => $classrooms
+        ));
+    }
+
     /**
      * @return ClassroomService
      */
@@ -88,8 +126,22 @@ class ClassroomController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
-    protected  function getCourseService(){
+    protected function getCourseService()
+    {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Thread:ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 
 }
