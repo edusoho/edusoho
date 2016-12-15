@@ -5,7 +5,7 @@
 {% set active = 'tasks' %}
 
 {% block course %}
-{% do script(['libs/jquery-sortable.js','web/course-manage/index.js']) %}
+{% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
 <div class="task-list-header clearfix">
   任务总数：<span class="color-warning space">{{tasks|length}}</span> 日均约需完成：<span class="color-warning">2.5</span> 个任务
   <div class="pull-right">

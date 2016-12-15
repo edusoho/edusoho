@@ -3,7 +3,7 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'marketing' %}
-{% do script(['libs/jquery-validation.js','web/course-manage/marketing/index.js']) %}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/marketing/index.js']) %}
 
 {% block course %}
 <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
