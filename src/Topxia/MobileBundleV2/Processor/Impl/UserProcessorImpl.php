@@ -462,6 +462,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function regist()
     {
+        /*
+         * @_password: 不加密的密码字段
+         * @password:经过加密的密码字段
+         */
         $email       = $this->getParam('email');
         $password    = $this->getParam('_password');
         $nickname    = $this->getParam('nickname');
@@ -671,6 +675,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function login()
     {
+        /*
+         * @_password:没加密的密码字段
+         * @password:经过加密的密码字段
+         */
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
 
