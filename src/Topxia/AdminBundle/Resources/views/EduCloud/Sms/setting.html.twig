@@ -86,6 +86,7 @@
         <th>短信类型</th>
         <th width="12%">应用场景</th>
         <th>内容示例</th>
+        <th>发送对象</th>
         <th>发送方式</th>
         <th>操作</th>
       </tr>
@@ -94,28 +95,36 @@
       <tr>
         <td>验证类</td>
         <td>手机绑定</td>
-        <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+        <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td><input type="hidden" name="sms_bind" value="on">默认开启</td>
       </tr>
       <tr>
         <td>验证类</td>
         <td>登录密码重置</td>
-        <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+        <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td><input type="hidden" name="sms_forget_password" value="on">默认开启</td>
       </tr>
       <tr>
         <td>验证类</td>
         <td>支付密码重置</td>
-        <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+        <td>【{{ '网校通知'|trans }}</span>】{{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td><input type="hidden" name="sms_forget_pay_password" value="on">默认开启</td>
       </tr>
       <tr>
         <td>验证类</td>
         <td>使用网站余额支付</td>
-        <td>您的验证码是：XXXXXX(请勿泄露)，此验证码30分钟内有效。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】
+          {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
+          {{ setting('cloud_sms.sms_school_name')|default('') }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td>
           <label>
@@ -131,7 +140,11 @@
       <tr>
         <td>通知类</td>
         <td>新班级发布</td>
-        <td>同学们，《ES网校管理学习班》现已开始报名！http://t.cn/RtHEoCs。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】
+          {{ '同学们，%classrommName%：《班级名称》现已开始报名！%smsSchoolName% 链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans),'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+        </td>
+        <td>所有用户</td>
         <td>手动群发</td>
         <td>
           <label>
@@ -147,7 +160,10 @@
       <tr>
         <td>通知类</td>
         <td>新课程发布</td>
-        <td>同学们，《如何使用EduSoho？》现已开始报名！ http://t.cn/RtH8W6c。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+        </td>
+        <td>所有用户</td>
         <td>手动群发</td>
         <td>
           <label>
@@ -165,7 +181,10 @@
       <tr>
         <td>通知类</td>
         <td>新课时发布通知（普通课程）</td>
-        <td>您的《如何使用EduSoho？》－《如何进入管理后台》已发布！http://t.cn/RtHRhF4。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
+        </td>
+        <td>课程用户</td>
         <td>自动群发</td>
         <td>
           <label>
@@ -181,7 +200,10 @@
       <tr>
         <td>通知类</td>
         <td>新课时发布通知（直播）</td>
-        <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+        <td>
+          <span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+        </td>
+        <td>课程用户</td>
         <td>自动群发</td>
         <td>
           <label>
@@ -197,7 +219,10 @@
       <tr>
         <td>通知类</td>
         <td>直播开播前通知（提前1天）</td>
-        <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+        </td>
+        <td>课程用户</td>
         <td>自动群发</td>
         <td>
           <label>
@@ -213,7 +238,10 @@
       <tr>
         <td>通知类</td>
         <td>直播开播前通知（提前1小时）</td>
-        <td>《如何使用EduSoho？》－《如何进入管理后台》将在2016-08-28开播！http://t.cn/RtHRhF4。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
+        </td>
+        <td>课程用户</td>
         <td>自动群发</td>
         <td>
           <label>
@@ -229,7 +257,9 @@
       <tr>
         <td>通知类</td>
         <td>作业完成批阅</td>
-        <td>您的《如何使用EduSoho？》-《如何进入管理后台》的作业已被老师批阅，快来看看吧！。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%'|trans({'%smsScoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td class="radios">
           {% if (is_plugin_installed('Homework')) %}
@@ -249,7 +279,10 @@
       <tr>
         <td>通知类</td>
         <td>试卷完成批阅</td>
-        <td>《您的《如何使用EduSoho？》-试卷：《阔知大学期末模拟考试》已被老师批阅，快来看看吧！</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td>
           <label>
@@ -265,7 +298,10 @@
       <tr>
         <td>回执类</td>
         <td>课程购买回执</td>
-        <td>你已成功购买课程《XXX课程》，支付￥20.00。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
         <td rowspan="4" style="vertical-align:middle;">
           <label>
@@ -281,19 +317,28 @@
       <tr>
         <td>回执类</td>
         <td>班级购买回执</td>
-        <td>你已成功购买班级《XXX班级》，支付￥20.00。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')})  }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
       </tr>
       <tr>
         <td>回执类</td>
         <td>会员购买回执</td>
-        <td>你已成功购买会员《XXX会员》，支付￥20.00。</td>
+        <td>
+          【<span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
       </tr>
       <tr>
         <td>回执类</td>
         <td>虚拟币充值回执</td>
-        <td>你已成功购买学币100枚，支付￥20.00。</td>
+        <td>
+          <span id="js-sms-school-name">{{ '网校通知'|trans }}</span>】{{ '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
+        </td>
+        <td>单个用户</td>
         <td>自动单发</td>
       </tr>
     </tbody>
