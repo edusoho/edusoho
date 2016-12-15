@@ -818,6 +818,12 @@ class AppServiceImpl extends BaseService implements AppService
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
+            $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
+            if (!empty($meta['protocol'])) {
+                $newApp['protocol'] = $meta['protocol'];
+            } else {
+                $newApp['protocol'] = 2;
+            }
         }
 
         $app = $this->getAppDao()->getAppByCode($package['product']['code']);
