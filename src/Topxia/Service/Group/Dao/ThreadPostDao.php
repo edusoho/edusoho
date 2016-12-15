@@ -5,8 +5,6 @@ interface ThreadPostDao
 {
 	public function getPost($id);
 
-    public function searchPostsThreadIds($conditions,$orderBy,$start,$limit);
-
     public function searchPostsThreadIdsCount($conditions);
 
 	public function searchPosts($conditions,$orderBy,$start,$limit);

@@ -79,25 +79,6 @@ class GroupDaoImpl extends BaseDao implements GroupDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function getGroupsByIds($ids)
-    {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-
-        $that = $this;
-        $keys = implode(',', $ids);
-        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
-
-            return $that->getConnection()->fetchAll($sql, $ids);
-        }
-
-        );
-    }
-
     public function getGroupByTitle($title)
     {
         $that = $this;

@@ -19,24 +19,11 @@ class GroupServiceImpl extends BaseService implements GroupService {
           return $this->getGroupDao()->getGroup($id);
     }
 
-    public function getGroupsByIds($ids)
-    {
-        $groups=$this->getGroupDao()->getGroupsByIds($ids);
-        return ArrayToolkit::index($groups, 'id');
-    }
-
     public function searchGroups($conditions, $orderBy, $start, $limit)
     {
 
         $conditions = $this->prepareGroupConditions($conditions);
         return $this->getGroupDao()->searchGroups($conditions,$orderBy,$start,$limit);
-    }
-
-    public function searchMembersCount($conditions)
-    {
-         $count= $this->getGroupMemberDao()->searchMembersCount($conditions);
-         return $count;
-
     }
 
     public function updateGroup($id,$fields)
@@ -201,11 +188,6 @@ class GroupServiceImpl extends BaseService implements GroupService {
     public function findGroupByTitle($title)
     {
         return $this->getGroupDao()->getGroupByTitle($title);
-    }
-
-    public function searchMembers($conditions, $orderBy, $start, $limit)
-    {   
-        return $this->getGroupMemberDao()->searchMembers($conditions,$orderBy,$start,$limit);
     }
 
     public function searchGroupsCount($conditions)

@@ -222,6 +222,22 @@ my_notebooks:
     path: /my/notebooks
     defaults: { _controller: AppBundle:My/Notebook:index }
 
+my_group_member_center:
+    path:  /my/group
+    defaults: { _controller: AppBundle:My/Group:memberCenter }
+
+my_group_member_join:
+    path:  /my/group/join
+    defaults: { _controller: AppBundle:My/Group:memberJoin}
+my_group_member_threads:
+    path:  /my/group/threads
+    defaults: { _controller: AppBundle:My/Group:memberThreads}
+my_group_member_posts:
+    path:  /my/group/posts
+    defaults: { _controller: AppBundle:My/Group:memberPosts}
+my_group_thread_collecting:
+    path:  /my/group/collecting
+    defaults: { _controller: AppBundle:My/Group:collecting }
 
 #course_set
 course_set_manage_create:

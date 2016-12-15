@@ -11,11 +11,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     private $serializeFields = array(
         'tagIds' => 'json'
     );
-    public function getThread($id)
-    {
-        $sql = "SELECT * from {$this->table} where id=? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-    }
+
 
     public function getThreadsByIds($ids)
     {
@@ -44,12 +40,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getThread($this->getConnection()->lastInsertId());
     }
 
-    public function searchThreadsCount($conditions)
-    {
-        $builder = $this->_createThreadSearchBuilder($conditions)
-                        ->select('count(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
+
 
     public function waveThread($id, $field, $diff)
     {
@@ -75,21 +66,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function deleteThread($id)
     {
         $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function searchThreads($conditions, $orderBys, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createThreadSearchBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
-
-        foreach ($orderBys as $orderBy) {
-            $builder->addOrderBy($orderBy[0], $orderBy[1]);
-        }
-
-        return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function _createThreadSearchBuilder($conditions)
