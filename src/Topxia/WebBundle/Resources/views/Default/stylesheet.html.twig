@@ -7,7 +7,8 @@
 {% endif %}
 
 {% if maincolor == 'default' %}
-	<link href="{{ asset('build/libs/vendor.css', 'webpack') }}" rel="stylesheet" />
+	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+	<link href="{{ asset('static-dist/app.css', 'webpack') }}" rel="stylesheet" />
 {% else %}
 	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}

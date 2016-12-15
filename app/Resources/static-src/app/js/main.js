@@ -1,1 +1,1 @@
-console.log('app');
+import '../less/main.less';
