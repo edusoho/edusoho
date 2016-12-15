@@ -447,7 +447,7 @@ class BuildUpgradePackageCommand extends BaseCommand
             while (!feof($file)) {
                 $line   = fgets($file);
                 $opFile = trim(substr($line, 1));
-                if (preg_match('/^\w+.*\/migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
+                if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
                     $askSqlUpgrade = true;
                     $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
                 }
