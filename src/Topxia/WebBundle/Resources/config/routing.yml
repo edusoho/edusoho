@@ -168,35 +168,35 @@ file_img_crop:
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
-attachment_upload:
-    path: /attachment/upload
-    defaults: { _controller: TopxiaWebBundle:Attachment:upload }
-    methods: [GET]
+# attachment_upload:
+#     path: /attachment/upload
+#     defaults: { _controller: TopxiaWebBundle:Attachment:upload }
+#     methods: [GET]
 
 attachment_list:
     path: /attachments/{targetType}/{targetId}
     defaults: { _controller: TopxiaWebBundle:Attachment:list }
     methods: [GET]
 
-attachment_item_show:
-    path: /attachment/file/{fileId}/show
-    defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
-    methods: [GET]
+# attachment_item_show:
+#     path: /attachment/file/{fileId}/show
+#     defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
+#     methods: [GET]
 
-attachment_preview:
-    path: /attachment/{id}/preview
-    defaults: { _controller: TopxiaWebBundle:Attachment:preview }
-    methods: [GET]
+# attachment_preview:
+#     path: /attachment/{id}/preview
+#     defaults: { _controller: TopxiaWebBundle:Attachment:preview }
+#     methods: [GET]
 
-attachment_download:
-    path: /attachment/{id}/download
-    defaults: { _controller: TopxiaWebBundle:Attachment:download }
-    methods: [GET]
+# attachment_download:
+#     path: /attachment/{id}/download
+#     defaults: { _controller: TopxiaWebBundle:Attachment:download }
+#     methods: [GET]
 
-attachment_delete:
-    path: /attachment/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:Attachment:delete }
-    methods: [POST]
+# attachment_delete:
+#     path: /attachment/{id}/delete
+#     defaults: { _controller: TopxiaWebBundle:Attachment:delete }
+#     methods: [POST]
 
 
 attachment_form_fields:

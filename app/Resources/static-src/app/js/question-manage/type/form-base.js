@@ -1,4 +1,4 @@
-
+import AttachmentActions from '../attachment/attachment-actions';
 
 class QuestionFormBase {
   constructor($form){
@@ -9,6 +9,8 @@ class QuestionFormBase {
     this.titleEditorToolBarName = 'Minimal';
 
     this._init();
+
+    this.attachmentActions = new AttachmentActions($form);
   }
 
   _init() {
