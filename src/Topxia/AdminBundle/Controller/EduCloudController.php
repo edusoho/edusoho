@@ -797,8 +797,23 @@ class EduCloudController extends BaseController
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
         if (!$cloud_search_settting['search_enabled']) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
-        }        
-        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig');
+        }
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloud_search_setting == 'waiting') {
+            $api         = CloudAPIFactory::create('root');
+            $search_account = $api->get("/me/search_account");
+
+            if ($search_account['isInit'] == 'yes') {
+                    $searchInitStatus = 'init';
+            } else {
+                $searchInitStatus = 'notInit';
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig', array(
+            'searchInitStatus' => isset($searchInitStatus) ? $searchInitStatus : ''
+        ));
     }
 
     public function searchOverviewAction(Request $request)
