@@ -218,6 +218,10 @@ my_discussions:
     path: /my/discussions
     defaults: { _controller: AppBundle:My/Thread:discussions }
 
+my_notebooks:
+    path: /my/notebooks
+    defaults: { _controller: AppBundle:My/Notebook:index }
+
 
 #course_set
 course_set_manage_create:

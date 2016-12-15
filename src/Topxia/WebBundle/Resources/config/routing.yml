@@ -1463,7 +1463,7 @@ my_questions:
 my_discussions:
     path: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
-
+#rm
 my_notebooks:
     path: /my/notebooks
     defaults: { _controller: TopxiaWebBundle:MyNotebook:index }

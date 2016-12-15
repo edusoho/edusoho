@@ -58,4 +58,8 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
+    public function countMembers($conditions);
+
+    public function searchMembers($conditions, $orderBy, $start, $limit);
+
 }
