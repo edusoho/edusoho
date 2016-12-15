@@ -467,14 +467,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
          * @password:经过加密的密码字段
          */
         $email       = $this->getParam('email');
-        $password    = $this->getParam('_password');
+        $password    = $this->getParam('password');
         $nickname    = $this->getParam('nickname');
         $phoneNumber = $this->getParam('phone');
         $smsCode     = $this->getParam('smsCode');
         $registeredWay = $this->getParam('registeredWay');
 
         if (empty($password)) {
-            $password = $this->getParam('password');
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
@@ -683,7 +682,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $password = $this->getParam('_password');
 
         if (empty($password)) {
-            $password = $this->getParam('password');
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
