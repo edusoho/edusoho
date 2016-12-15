@@ -45,31 +45,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->createSerializer()->unserializes($threads, $this->serializeFields);
     }
 
-    public function searchThreads($conditions, $orderBys, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->createThreadSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        foreach ($orderBys as $orderBy) {
-            $builder->addOrderBy($orderBy[0], $orderBy[1]);
-        }
-
-        $threads = $builder->execute()->fetchAll() ?: array();
-
-        return $this->createSerializer()->unserializes($threads, $this->serializeFields);
-    }
-
-    public function searchThreadCount($conditions)
-    {
-        $builder = $this->createThreadSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
     protected function createThreadSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

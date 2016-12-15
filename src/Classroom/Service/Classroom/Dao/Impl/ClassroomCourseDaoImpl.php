@@ -149,18 +149,6 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         );
     }
 
-    public function findActiveCoursesByClassroomId($classroomId)
-    {
-        $that = $this;
-
-        return $this->fetchCached("classroomId:{$classroomId}:disabled:0", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
-            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
-        }
-
-        );
-    }
-
     public function findCoursesByCoursesIds($courseIds)
     {
         if (empty($courseIds)) {
