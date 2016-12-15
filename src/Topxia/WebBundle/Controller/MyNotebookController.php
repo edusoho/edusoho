@@ -7,32 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MyNotebookController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId'             => $user['id'],
-            'noteNumGreaterThan' => 0.1
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCourseService()->searchMemberCount($conditions),
-            10
-        );
-
-        $courseMembers = $this->getCourseService()->searchMember($conditions, $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
-
-        return $this->render('TopxiaWebBundle:MyNotebook:index.html.twig', array(
-            'courseMembers' => $courseMembers,
-            'paginator'     => $paginator,
-            'courses'       => $courses
-        ));
-    }
-
     public function showAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();

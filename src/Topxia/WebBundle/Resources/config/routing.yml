@@ -1450,10 +1450,6 @@ my_courses_learned:
 my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-#rm
-my_notebooks:
-    path: /my/notebooks
-    defaults: { _controller: TopxiaWebBundle:MyNotebook:index }
 
 my_notebook_show:
     path: /my/notebook/{courseId}
