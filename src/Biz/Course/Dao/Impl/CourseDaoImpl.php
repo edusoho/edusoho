@@ -19,6 +19,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->getByFields(array('courseSetId' => $courseSetId, 'isDefault' => 1));
     }
 
+    public function findCoursesByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return array(

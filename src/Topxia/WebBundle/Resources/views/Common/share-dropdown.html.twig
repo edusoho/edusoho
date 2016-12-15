@@ -8,7 +8,7 @@
   {% set id = course.id%}
 {% elseif type == 'classroom' %}
   {% set title = classroom.title %}
-  {% set summary = classroom.summary|plain_text(50) %}
+  {% set summary = classroom.description|plain_text(50) %}
   {% set message = setting('default.classroomShareContent')|replace({'{{':'「%','}}':'%」'})|default('我正在学习「%classroom%」，收获巨大哦，一起来学习吧！')|trans({'%classroom%':classroom.title}) %}
   {% set url = url('classroom_show', {id:classroom.id}) %}
   {% set picture = filepath(classroom.largePicture, 'classroom.png') %}

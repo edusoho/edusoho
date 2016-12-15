@@ -1,0 +1,59 @@
+{% set type = type|default('discussion') %}
+
+<ul class="media-list">
+  {% for thread in threads %}
+   {% if courses %}
+    {% set course = courses[thread.courseId]|default(null) %}
+    <li class="media">
+        <div class="media-body">
+          {% if thread.postNum > 0 %}
+            <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+          {% endif %}
+          <div class="mbm">
+            {% if thread.type == 'question' %}
+              <span class="label label-info" title="{{'问答帖'|trans}}">{{'问'|trans}}</span>
+            {% endif  %}
+
+            <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+            {% if thread.lessonId %}
+              <span class="label" title="课时{{ thread.lessonId }}">L{{ thread.lessonId }}</span>
+            {% endif %}
+
+            {% if thread.isElite %}
+              <span class="label label-warning" title="{{'精华帖'|trans}}">{{'精'|trans}}</span>
+            {% endif %}
+
+          </div>
+          <div class="text-muted text-normal">
+            {% if course %}
+              <span>{{'发表于'|trans}}<a href="{{ path('course_show', {id:course.id}) }}" class="link-muted">{{ course.title }}</a></span>
+            {% else %}
+              <span>{{'课程已删除'|trans}}</span>
+            {% endif %}
+            <span class="bullet">•</span>
+            {% if thread.postNum > 0 %}
+              {% set poster = users[thread.latestPostUserId] %}
+              <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-muted') }}</span>
+              ,
+              <span>{{ thread.latestPostTime|smart_time }}</span>
+              <span class="bullet">•</span>
+            {% endif %}
+            <span>{{ thread.hitNum }}{{'浏览'|trans}}</span>
+          </div>
+        </div>
+      </li>
+    {% else %}
+      {% if type == 'question' %}
+        <li class="empty">{{'你还没提过问题'|trans}}</li>
+      {% else %}
+        <li class="empty">{{'你还没发表过话题'|trans}}</li>
+      {% endif %}
+
+    {% endif %}
+
+  {% endfor %}
+
+</ul>
+
+{{ web_macro.paginator(paginator) }}
