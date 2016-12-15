@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
 {% set modal_class= "modal-lg" %}
 
-{% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','web/task-manage/create/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','app/js/task-manage/create/index.js']) %}
 
 {% block title %}
   {% if task|default(false) %}

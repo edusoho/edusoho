@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/course-manage/index"],[function(e,n){"use strict"}]);

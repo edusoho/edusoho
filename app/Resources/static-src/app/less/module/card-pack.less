@@ -1,0 +1,126 @@
+
+//卡包优惠劵
+.card-pack-list {
+  .card-pack-item  {
+    margin: 0 auto 30px auto;
+  }
+}
+
+.card-pack-item {
+  position: relative;
+  width: 254px;
+  height: 172px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  h4 {
+    position: absolute;
+    font-size: 18px;
+    left: 18px;
+  }
+  p {
+    margin-bottom: 0;
+  }
+  .title {
+    .text-overflow;
+  }
+  .price {
+    margin-bottom: 18px;
+    margin-top: 10px;
+    strong {  
+      font-size: 30px;
+      font-weight: normal;
+    }
+    a {
+      color: #fff;
+      padding-left: 8px;
+    }
+  }
+  .stamp {
+    position: absolute;
+    display: inline-block;
+    width: 132px;
+    height: 132px;
+    bottom: 8px;
+    left: 15px;
+    &.stamp-outdate {
+      background: url('@{img-src}card.png') no-repeat 0 -349px;
+    }
+    &.stamp-cancel {
+      background: url('@{img-src}card.png') no-repeat -410px -351px;
+    }
+  }
+  &.coupon-item {
+    background: url('@{img-src}card.png') no-repeat;
+    &.useless {
+      background: url('@{img-src}card.png') no-repeat 0 -174px;
+    }
+    .title {
+      padding-top: 38px;
+    }
+    .stamp-used {
+      background: url('@{img-src}card.png') no-repeat -140px -349px;
+    }
+  }
+
+  &.card-item {
+    background: url('@{img-src}card.png') no-repeat -260px 0;
+    &.useless {
+      background: url('@{img-src}card.png') no-repeat -260px -174px;
+    }
+    .title {
+      padding-top: 58px;
+    }
+    .stamp-used {
+      background: url('@{img-src}card.png') no-repeat -275px -351px;
+    }
+  }
+}
+
+
+// 卡包modal框
+.modal-card-pack {
+  &.modal-logined {
+    .modal-content:after {
+      position: absolute;
+      width: 96px;
+      height: 97px;
+      top: 105px;
+      right: 90px;
+      content: '';
+      background: url('@{img-src}card_user.png') center center no-repeat;
+      @media(max-width:@screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+  .modal-content {
+    position: relative;
+    background: url('@{img-src}card_bg.png') #feba37 center center no-repeat;
+    .border-radius(20px);
+  }
+  .modal-body {
+    padding: 30px;
+    @media(max-width:@screen-xs-max) {
+      padding: 15px;
+    }
+    .modal-info {
+      text-align: center;
+      color: #fff;
+      font-size: 22px;
+      margin-bottom: 30px;
+      @media(max-width:@screen-xs-max) {
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
+    }
+    .modal-action {
+      margin-top: 30px;
+      text-align: center;
+      @media(max-width:@screen-xs-max) {
+        margin-top: 20px;
+      }
+    }
+  }
+}

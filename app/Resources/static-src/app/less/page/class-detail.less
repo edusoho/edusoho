@@ -1,0 +1,815 @@
+.class-bg-layer {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 100%;
+  background-color: #fff;
+  .border-radius;
+  .es-box-shadow;
+  z-index: -1;
+  @media (max-width: @screen-xs-max) {
+    top: 2px;
+    left: 2px;
+  }
+}
+
+// 班级头部
+.class-header {
+  // background: url("@{img-src}class_bg.jpg");
+  // background-size: 100% 100%;
+  // background-attachment: fixed;
+  // background-color: @gray-lighter;
+  // padding: 20px 0 30px 0;
+  // padding-bottom: 25px;
+  // .breadcrumb {
+  //   margin: 12px auto;
+  //   padding: 8px 0;
+  //   background: none;
+  // }
+  .class-bg-layer {
+    top: 8px;
+  }
+  .class-header-mian {
+    position: relative;
+  }
+  .class-header-bg {
+    background-color: #fff;
+    .border-radius;
+    .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
+  }
+  .class-img {
+    float: left;
+    img {
+      .img-responsive;
+      width: 100%;
+      .border-top-left-radius();
+      @media (min-width: @screen-sm-min) {
+        .border-bottom-left-radius();
+      }
+      @media (max-width: @screen-xs-max) {
+        .border-top-right-radius();
+      }
+    }
+  }
+  .class-info {
+    float: left;
+    >.title {
+      margin-top: 15px;
+      // margin: 30px 30px 20px 30px;
+      @media (max-width: @screen-md-max) {
+        font-size: 20px;
+      }
+      // @media (min-width: @screen-sm-min) {
+      //   .text-overflow;
+      // }
+    }
+    >.metas {
+      min-height: 40px;
+      margin-bottom: 20px;
+      color: @gray;
+      @media (max-width: @screen-md-max) {
+        min-height: 30px;
+        margin-bottom: 8px;
+        // padding-left: 20px;
+      }
+      @media (max-width: @screen-sm-max) {
+        margin-bottom: 10px;
+      }
+    }
+    .price {
+      span {
+        font-size: 24px;
+        color: @gray-darker;
+        @media (max-width: @screen-md-max) {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+  .class-serve {
+    position: relative;
+    height: 70px;
+    border: 1px dashed @gray-lighter;
+    .serve-frame {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      padding: 5px;
+      font-size: 12px;
+      line-height: 15px;
+      text-align: center;
+      background-color: @gray-lighter;
+    }
+    >ul {
+      padding: 25px 10px 25px 40px;
+      // @media (max-width: @screen-md-max) {
+      //   padding: 25px 5px 25px 35px;
+      // }
+    }
+  }
+  .class-data {
+    list-style-type: none;
+    padding: 11px 0;
+    margin-bottom: 0;
+    background-color: @bg-color;
+    >li {
+      float: left;
+      margin: 10px 0;
+      color: @gray;
+      text-align: center;
+      line-height: 30px;
+      border-left: 1px solid @gray-lighter;
+      @media (max-width: @screen-md-max) {
+        padding: 8px 0;
+        line-height: 25px;
+      }
+      @media (max-width: @screen-md-max) {
+        padding: 5px 0;
+        line-height: 20px;
+      }
+      &:first-child {
+        border: none;
+      }
+      p {
+        margin-bottom: 0;
+      }
+      i {
+        font-size: 26px;
+      }
+      .dropdown-toggle {
+        color:@gray;
+        &:hover {
+          color: @brand-primary;
+        } 
+      }
+    }
+  }
+  // .price {
+  //   position: absolute;
+  //   width: 205px;
+  //   height: 82px;
+  //   line-height: 77px;
+  //   top: 60px;
+  //   right: -22px;
+  //   text-align: center;
+  //   color: #fff;
+  //   font-size: 12px;
+  //   overflow: hidden;
+  //   background: url("@{img-src}price_bg.png");
+  //   span {
+  //     font-size: 22px;
+  //   }
+  //   @media (max-width: @screen-md-max) {
+  //     top: 50px;
+  //     width: 150px;
+  //     height: 60px;
+  //     line-height: 55px;
+  //     background-size: 150px 60px;
+  //     span {
+  //       font-size: 18px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-sm-max) {
+  //     right: -18px;
+  //     width: 135px;
+  //     height: 54px;
+  //     line-height: 50px;
+  //     background-size: 135px 54px;
+  //     span {
+  //       font-size: 16px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-xs-max) {
+  //     right: -12px;
+  //   }
+  // }
+  .setting {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0 3px;
+    + .setting {
+      right: 35px;
+    }
+  }
+  &.before {
+    .class-img {
+      position: relative;
+      width: 50%;
+      @media (max-width: @screen-sm-max) {
+        width: 40%;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+      .label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+      }
+    }
+    .class-info {
+      width: 50%;
+      @media (max-width: @screen-sm-max) {
+        width: 60%;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+      >.title {
+        margin: 20px;
+        @media (max-width: @screen-md-max) {
+          margin: 20px 20px 15px 20px;
+        }
+      }
+      >.metas {
+        min-height: 60px;
+        padding-left: 20px;
+        @media (max-width: @screen-md-max) {
+          min-height: 50px;
+          padding-left: 20px;
+        }
+        // @media (max-width: @screen-sm-max) {
+        //   margin-bottom: 10px;
+        // }
+      }
+    }
+    .bottom-metas {
+      padding: 20px;
+      @media (max-width: @screen-md-max) {
+        padding: 10px;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 0 10px;
+      }
+      // @media (max-width: @screen-sm-max) {
+      //   padding: 5px 10px 5px 10px;
+      // }
+      .btn-buy {
+        float: right;
+        width: 50%;
+        line-height: 70px;
+        text-align: right;
+        @media (max-width: @screen-sm-max) {
+          width: 100%;
+          height: 60px;
+          line-height: 60px;
+        }
+        .btn-link {
+          color: @gray;
+          &:hover {
+            color: @brand-primary;
+            text-decoration: none;
+          }
+        }
+        .btn-lg {
+          padding: 13px 40px;
+          font-size: 14px;
+          @media (max-width: @screen-md-max) {
+            padding: 10px 25px;
+          }
+        }
+      }
+    }
+    .class-serve {
+      float: left;
+      width: 50%;
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+    .class-data {
+      > li {
+        width: 33.33%;
+      }
+      &.active {
+        >li {
+          width: 25%;
+        }
+      }
+    }
+  }
+  &.after {
+    .class-img {
+      width: 300px;
+      @media (max-width: @screen-sm-max) {
+        width: 240px;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+    .class-info {
+      width: 410px;
+      padding: 0 20px;
+      @media (max-width: @screen-md-max) {
+        width: 340px;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+      .price span {
+        font-size: 16px;
+      }
+    }
+    .class-operation {
+      float: left;
+      width: 430px;
+      background-color: @gray-lighter;
+      .border-top-right-radius();
+      .border-bottom-right-radius();
+      @media (max-width: @screen-md-max) {
+        width: 300px;
+      }
+      @media (max-width: @screen-sm-max) {
+        width: 140px;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+    .class-serve {
+      display: inline-block;
+    }
+    .class-data {
+      .border-top-right-radius();
+      margin-bottom: 0;
+      @media (max-width: @screen-md-max) {
+        padding: 19px 0;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 0;
+      }
+      @media (max-width: @screen-xs-max) {
+        border-bootom-left-radius: 4px;
+        border-bootom-right-radius: 4px;
+      }
+      >li {
+        width: 33.33%;
+        padding: 48px 0;
+        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+          width: 100%;
+          border: none;
+          padding: 0;
+          margin: 4px 0;
+        }
+        @media (max-width: @screen-xs-max) {
+          padding: 10px 0;
+        }
+        >a {
+          display: block;
+          color: @gray;
+          .es-transition;
+          &:hover {
+            color: @brand-primary;
+            .es-transition;
+          }
+        }
+      }
+      &.two-col > li {
+        width: 50%;
+        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+          width: 100%;
+          margin: 17px 0;
+        }
+      }
+    }
+    
+  }
+  &.after.auditor {
+    .class-data {
+      padding: 0;
+      @media (max-width: @screen-md-max) {
+        padding: 10px 0;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 0;
+      }
+      >li {
+        padding: 10px 0;
+        @media (max-width: @screen-sm-max) {
+          padding: 0;
+        }
+        @media (max-width: @screen-xs-max) {
+          padding: 20px 0;
+        }
+      }
+      border-bottom: 1px solid @gray-lighter;
+    }
+    .class-auditor {
+      padding: 18px 40px;
+      line-height: 30px;
+      color: @gray;
+      background-color: @bg-color;
+      @media (max-width: @screen-md-max) {
+        padding: 18px 20px;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 10px 0 0 0;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 10px 20px;
+      }
+    }
+    // .price {
+    //   top: 125px;
+    //   right: -19px;
+    //   height: 60px;
+    //   width: 150px;
+    //   line-height: 60px;
+    //   background-size: 150px 60px;
+    //   span {
+    //     font-size: 20px;
+    //   }
+    //   @media (max-width: @screen-md-max) {
+    //     top: 145px;
+    //     right: -18px;
+    //     width: 135px;
+    //     height: 54px;
+    //     line-height: 54px;
+    //     background-size: 135px 54px; 
+    //     span {
+    //       font-size: 18px;
+    //     }
+    //   }
+    //   @media (max-width: @screen-xs-max) {
+    //     top: 30px;
+    //   }
+    // }
+  }
+}
+
+
+// 班级主体、课程主体－－－－－－－－－－－－－－－－－－－－
+.class-course-list {
+  .course-item {
+    margin-top: 30px;
+    background-color: #fff;
+    border: 1px solid @gray-light;
+    .border-radius;
+    .media {
+      position: relative;
+      background-color: @gray-lighter;
+      padding: 10px;
+      .media-left {
+        padding-right: 35px;
+        img {
+          width: 160px;
+          height: auto;
+        }
+        @media (max-width: @screen-xs-max) {
+          display: block;
+          padding-right: 0;
+          img {
+            width: 100%;
+          }
+        }
+      }
+      .title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        >a {
+          color: @gray-darker;
+        }
+      }
+      .price {
+        position: absolute;
+        top: 35px;
+        right: 80px;
+        span {
+          font-size: 24px;
+          color: @gray-darker;
+        }
+        @media (max-width: @screen-md-max) {
+          right: 60px;
+          span {
+            font-size: 20px;
+          }
+        }
+      }
+      .course-show {
+        position: absolute;
+        top: 40px;
+        right: 30px;
+        .es-transition;
+        @media (max-width: @screen-md-max) {
+          right: 20px;
+        }
+        @media (max-width: @screen-xs-max) {
+          top: auto;
+          bottom: 30px;
+        }
+        i {
+          font-size: 24px;
+        }
+        &:hover {
+          cursor: pointer;
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    } 
+  }
+}
+
+// 课时列表
+.period-list {
+  margin-top: 20px;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
+  >li {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+  }
+  .chapter,
+  .section {
+    background-color: @gray-lighter;
+    color: @gray;
+  }
+  .chapter {
+    position: relative;
+    &:hover {
+      cursor: pointer;  
+    }
+    .es-icon-toc {
+      position: absolute;
+      top: 11px;
+      left: 15px;
+    }
+    .period-show {
+      position: absolute;
+      top: 8px;
+      right: 15px;
+    }
+    .title {
+      padding: 0 30px;
+      .text-overflow;
+    }
+  }
+  .section {
+    padding-left: 45px;
+    .text-overflow;
+  }
+  .period {
+    position: relative;
+    padding: 10px 100px 10px 45px;
+    &:hover,
+    &.item-active {
+      background-color: #f2fae3;
+    }
+    &.disable {
+      background: none;
+    }
+    >a {
+      color: @gray;
+      display: block;
+      .text-overflow;
+    }
+    .es-icon-undone,
+    .es-icon-doing,
+    .es-icon-done1 {
+      position: absolute;
+      top: 11px;
+      left: 15px;
+    }
+    .title {
+      color: @gray-dark;
+    }
+    .date {
+      position: absolute;
+      top: 11px;
+      right: 50px;
+    }
+    .course-type {
+      position: absolute;
+      top: 11px;
+      right: 15px;
+      line-height: 20px;
+      i {
+        font-size: 20px;
+      }
+      small {
+        margin-top: -3px;
+      }
+    }
+    .period-state {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: @gray;
+    }
+  }
+}
+
+// 班级tab内容
+.class-detail-content {
+  min-height: 300px;
+  .class-about {
+    p {
+      line-height: 30px;
+      margin-bottom: 30px;
+      // text-indent: 2em;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.topic-detail {
+  .topic-header {
+    position: relative;
+    margin-bottom: 30px;
+    .media-body {
+      padding-right: 100px;
+    }
+    .title {
+      font-size: 16px;
+      margin-bottom: 10px;
+      >a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .metas {
+      color: @gray;
+      >a {
+        color: @gray-dark;
+        margin-right: 5px;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+      span {
+        margin-left: 5px;
+      }
+    }
+    .media-data {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      text-align: center;
+      color: @gray;
+      span {
+        padding: 0 10px;
+        display: inline-block;
+        + span {
+          border-left: 1px solid @gray-light;
+        }
+      }
+
+    }
+  }
+  .topic-body {
+    position: relative;
+    background-color: @gray-lighter;
+    padding: 15px;
+    margin-bottom: 30px;
+    border: 1px solid @gray-light;
+    .border-radius;
+    .media-left {
+      padding-right: 30px;
+      @media (max-width: @screen-md-max) {
+        padding-right: 20px;
+      }
+      @media (max-width: @screen-xs-max) {
+        display: block;
+        padding-right: 0;
+        margin-bottom: 20px;
+      }
+      img {
+        width: 200px;
+        height: auto;
+        @media (max-width: @screen-xs-max) {
+          width: 100%;
+        }
+      }
+    }
+    .media-body {
+      padding-right: 180px;
+      @media (max-width: @screen-xs-max) {
+        padding-right: 0;
+      }
+      p {
+        color: @gray;
+        margin-bottom: 18px;
+        text-indent: 0;
+        @media (max-width: @screen-md-max) {
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .metas {
+      position: absolute;
+      top: 50%;
+      margin-top: -20px;
+      right: 20px;
+      @media (max-width: @screen-md-max) {
+        right: 10px;
+      }
+      @media (max-width: @screen-xs-max) {
+        position: relative;
+        margin-top: 10px;
+      }
+      .btn {
+        margin-left: 10px;
+      }
+    }
+  }
+  .topic-num {
+    .num-list {
+      height: 50px;
+      overflow: hidden;
+      .es-transition;
+      a {
+        display: inline-block;
+        margin: 5px 3px;
+      }
+      &.active {
+        height: 100%;
+        .es-transition;
+      }
+    }
+    .num-more {
+      padding-top: 20px;
+      text-align: center;
+      i {
+        font-size: 24px;
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          cursor: pointer;
+          .es-transition;
+        }
+      }
+    }
+  }
+  .topic-action {
+    padding-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
+    text-align: right;
+    a {
+      margin: 0 10px;
+      @media (max-width: @screen-xs-max) {
+        margin: 0;
+      }
+    }
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+.comment-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+// 签到
+.class-signin {
+  position: relative;
+  padding: 0;
+  color: @gray;
+  .panel-body {
+    padding: 23px 15px;
+  }
+  i {
+    font-size: 24px;
+    margin: 0 10px 0 0;
+  }
+  .date {
+    font-size: 22px;
+  }
+  .btn-signin {
+    position: absolute;
+    padding: 20px 10px;
+    min-width: 110px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 16px;
+    top: 0;
+    bottom: 0;
+    // right: -15px;
+    right: 0;
+    color: #fff;
+    background-color: @brand-primary;
+    .border-top-right-radius();
+    .border-bottom-right-radius();
+    &.after {
+      // padding: 8px 15px;
+      line-height: 20px;
+    }
+  }
+}

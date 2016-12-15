@@ -1,0 +1,36 @@
+.table > thead > tr > th, 
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+  padding: 10px 15px;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #f6f6f6;
+}
+
+
+.table-striped .sort-handle{
+  padding: 5px;
+  cursor: pointer;
+  color: #ccc;
+  display: inline-block;
+  font-size:18px;
+  &:hover{
+    color:#999;
+  }
+}
+
+
+.table.table-middle > tbody > tr > td {
+ vertical-align: middle;
+}
+
+
+.table.table-col-nobordered {
+  > tbody > tr > td {
+    border-top: none;
+  }
+}
