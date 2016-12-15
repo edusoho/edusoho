@@ -7,6 +7,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Topxia\Api\Util\TagUtil;
 
 class MobileBaseController extends BaseController
 {
@@ -281,7 +282,9 @@ class MobileBaseController extends BaseController
             }
 
             unset($course['teacherIds']);
-            unset($course['tags']);
+            
+            $course['tags'] = TagUtil::buildTags('course', $course['id']);
+
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
             return $course;

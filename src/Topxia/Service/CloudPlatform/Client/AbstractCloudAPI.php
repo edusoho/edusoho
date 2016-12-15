@@ -84,9 +84,10 @@ class AbstractCloudAPI
 
     protected function _request($method, $uri, $params, $headers)
     {
-        $requestId = substr(md5(uniqid('', true)), -16);
+		$requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.self::VERSION.$uri;
+
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
