@@ -13,6 +13,9 @@ class SubtitleServiceTest extends BaseTestCase
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($subtitle['mediaId']);
         $this->assertEquals(2, count($subtitles));
+
+        $biz = $this->getBiz();
+        unset($biz['@File:UploadFileService']);
     }
 
     public function testGetSubtitle()
@@ -21,6 +24,9 @@ class SubtitleServiceTest extends BaseTestCase
         $subtitle = $this->createSubtitle();
         $subtitleGetted = $this->getSubtitleService()->getSubtitle($subtitle['id']);
         $this->assertEquals($subtitle['id'], $subtitleGetted['id']);
+
+        $biz = $this->getBiz();
+        unset($biz['@File:UploadFileService']);
     }
 
     public function testDeleteSubtitle()
@@ -29,6 +35,9 @@ class SubtitleServiceTest extends BaseTestCase
         $subtitle = $this->createSubtitle();
         $result = $this->getSubtitleService()->deleteSubtitle($subtitle['id']);
         $this->assertEquals(true, $result);
+
+        $biz = $this->getBiz();
+        unset($biz['@File:UploadFileService']);
     }
 
     protected function mockUploadFileService()
@@ -47,7 +56,7 @@ class SubtitleServiceTest extends BaseTestCase
         $fakeDownloadFile = array(
             'url' => 'www.edusoho.com'
         );
-        $this->mock('File.UploadFileService', array(
+        $this->mockBiz('File:UploadFileService', 'UploadFileService',array(
             array('functionName' => 'getFile', 'runTimes' => 1, 'returnValue' => $fakeFile),
             array('functionName' => 'deleteFile', 'runTimes' => 1, 'returnValue' => true),
             array('functionName' => 'getDownloadMetas', 'runTimes' => 1, 'returnValue' => $fakeDownloadFile),

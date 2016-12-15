@@ -21,6 +21,4 @@ interface ClassroomDao
     public function findClassroomsByLikeTitle($title);
 
     public function deleteClassroom($id);
-
-    public function findClassroomsByIds(array $ids);
 }

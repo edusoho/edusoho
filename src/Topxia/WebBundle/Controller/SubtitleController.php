@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Common\ServiceKernel;
 
 class SubtitleController extends BaseController
 {
@@ -100,7 +101,7 @@ class SubtitleController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getSubtitleService()

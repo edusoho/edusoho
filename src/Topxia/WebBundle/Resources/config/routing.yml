@@ -1443,11 +1443,6 @@ my_live_courses_learning:
     path: /my/livecourses/learing
     defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
 
-#rm
-my_courses_learning:
-    path: /my/courses/learning
-    defaults: { _controller: TopxiaWebBundle:MyCourse:learning }
-
 my_courses_learned:
     path: /my/courses/learned
     defaults: { _controller: TopxiaWebBundle:MyCourse:learned }
@@ -1455,18 +1450,6 @@ my_courses_learned:
 my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-#rm
-my_questions:
-    path: /my/questions
-    defaults: { _controller: TopxiaWebBundle:MyThread:questions }
-#rm
-my_discussions:
-    path: /my/discussions
-    defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
-
-my_notebooks:
-    path: /my/notebooks
-    defaults: { _controller: TopxiaWebBundle:MyNotebook:index }
 
 my_notebook_show:
     path: /my/notebook/{courseId}
@@ -1774,21 +1757,6 @@ group_add:
     path:  /group/add
     defaults: { _controller: TopxiaWebBundle:Group:addGroup }
 
-group_member_center:
-    path:  /my/group
-    defaults: { _controller: TopxiaWebBundle:Group:memberCenter }
-group_member_join:
-    path:  /my/group/join
-    defaults: { _controller: TopxiaWebBundle:Group:memberJoin}
-group_member_threads:
-    path:  /my/group/threads
-    defaults: { _controller: TopxiaWebBundle:Group:memberThreads}
-group_member_posts:
-    path:  /my/group/posts
-    defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
-group_thread_collecting:
-    path:  /my/group/collecting
-    defaults: { _controller: TopxiaWebBundle:Group:collecting }
 group_show:
     path:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }

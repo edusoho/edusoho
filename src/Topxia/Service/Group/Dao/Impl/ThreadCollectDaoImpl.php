@@ -62,15 +62,4 @@ class ThreadCollectDaoImpl extends BaseDao implements ThreadCollectDao
         return $builder;
     }
 
-    public function searchThreadCollects($conditions,$orderBy,$start,$limit)
-    {
-        $builder=$this->_createThreadCollectSearchBuilder($conditions)
-        ->select('distinct threadId')
-        ->setFirstResult($start)
-        ->setMaxResults($limit)
-        ->orderBy($orderBy[0],$orderBy[1]);
-
-        return $builder->execute()->fetchAll() ? : array(); 
-    }
-
 }

@@ -584,7 +584,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCloudFileService()

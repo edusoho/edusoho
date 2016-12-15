@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Classroom\Service\Classroom\ClassroomService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -402,20 +403,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
-    {
-        $members = $this->getClassroomMemberDao()->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
-        return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'classroomId');
-    }
-
     public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
     {
         return $this->getClassroomMemberDao()->findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
-    }
-
-    public function findClassroomsByIds(array $ids)
-    {
-        return ArrayToolkit::index($this->getClassroomDao()->findClassroomsByIds($ids), 'id');
     }
 
     public function searchMemberCount($conditions)
@@ -423,13 +413,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->searchMemberCount($conditions);
-    }
-
-    public function searchMembers($conditions, $orderBy, $start, $limit)
-    {
-        $conditions = $this->_prepareClassroomConditions($conditions);
-        $members    = $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
-        return !$members ? array() : MemberSerialize::unserializes($members);
     }
 
     public function findMemberUserIdsByClassroomId($classroomId)
@@ -720,27 +703,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($classroomCourses as $key => $classroomCourse) {
             $sordtedCourses[$key] = $courses[$classroomCourse["courseId"]];
-        }
-
-        return $sordtedCourses;
-    }
-
-    public function findActiveCoursesByClassroomId($classroomId)
-    {
-        $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds        = ArrayToolkit::column($classroomCourses, 'courseId');
-
-        if (empty($courseIds)) {
-            return array();
-        }
-
-        $courses        = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses        = ArrayToolkit::index($courses, 'id');
-        $sordtedCourses = array();
-
-        foreach ($classroomCourses as $key => $classroomCourse) {
-            $sordtedCourses[$key]                        = $courses[$classroomCourse['courseId']];
-            $sordtedCourses[$key]['classroom_course_id'] = $classroomCourse['id'];
         }
 
         return $sordtedCourses;
@@ -1449,7 +1411,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getClassroomDao()

@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\NoteService;
 
 class NoteServiceImpl extends BaseService implements NoteService
@@ -245,7 +246,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getNoteLikeDao()

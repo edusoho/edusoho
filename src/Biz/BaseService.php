@@ -4,6 +4,8 @@ namespace Biz;
 
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -67,7 +69,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function createAccessDeniedException($message = '')
     {
-        // $this->getLogger()->error($message, $context);
         return new AccessDeniedException($message);
     }
 
@@ -84,5 +85,42 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function createServiceException($message = '')
     {
         return new ServiceException($message);
+    }
+
+    protected function fillOrgId($fields)
+    {
+        $magic = $this->biz->service('System:SettingService')->get('magic');
+
+        if (isset($magic['enable_org']) && $magic['enable_org']) {
+            if (!empty($fields['orgCode'])) {
+                $org = ServiceKernel::instance()->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                if (empty($org)) {
+                    throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
+                }
+                $fields['orgId']   = $org['id'];
+                $fields['orgCode'] = $org['orgCode'];
+            } else {
+                unset($fields['orgCode']);
+            }
+        } else {
+            unset($fields['orgCode']);
+        }
+        return $fields;
+    }
+
+    protected function purifyHtml($html, $trusted = false)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
+        );
+
+        $factory  = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($trusted);
+
+        return $purifier->purify($html);
     }
 }

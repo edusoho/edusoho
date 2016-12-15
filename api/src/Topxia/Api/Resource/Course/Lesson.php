@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource\Course;
 
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -313,7 +314,7 @@ class Lesson extends BaseResource
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getTestpaperService()

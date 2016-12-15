@@ -5,6 +5,7 @@ namespace Topxia\Service\CloudFile\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudFile\CloudFileService;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
@@ -269,12 +270,12 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getUploadFileTagService()
     {
-        return $this->createService('File.UploadFileTagService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
     }
 
     protected function getCourseService()

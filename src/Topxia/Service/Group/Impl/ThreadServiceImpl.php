@@ -5,15 +5,11 @@ namespace Topxia\Service\Group\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Group\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
-    public function getThread($id)
-    {
-        return $this->getThreadDao()->getThread($id);
-    }
-
     public function isCollected($userId, $threadId)
     {
         $thread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
@@ -79,10 +75,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadCollectDao()->deleteThreadCollectByUserIdAndThreadId($userId, $threadId);
     }
 
-    public function searchThreadCollectCount($conditions)
-    {
-        return $this->getThreadCollectDao()->searchThreadCollectCount($conditions);
-    }
+
 
     public function searchThreadsCount($conditions)
     {
@@ -90,20 +83,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $count;
     }
 
-    public function searchPostsThreadIds($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getThreadPostDao()->searchPostsThreadIds($conditions, $orderBy, $start, $limit);
-    }
 
-    public function searchThreadCollects($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getThreadCollectDao()->searchThreadCollects($conditions, $orderBy, $start, $limit);
-    }
 
-    public function searchPostsThreadIdsCount($conditions)
-    {
-        return $this->getThreadPostDao()->searchPostsThreadIdsCount($conditions);
-    }
+
 
     public function getTradeByUserIdAndGoodsId($userId, $goodsId)
     {
@@ -359,11 +341,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getLogService()->info('group', 'open_thread', "开启话题 {$thread['title']}({$thread['id']})");
     }
 
-    public function searchThreads($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getThreadDao()->searchThreads($conditions, $orderBy, $start, $limit);
-    }
-
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
         if (empty($threadContent['content'])) {
@@ -539,6 +516,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

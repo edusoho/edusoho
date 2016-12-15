@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Classroom\Service\Classroom\ClassroomReviewService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {
@@ -160,6 +161,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     private function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

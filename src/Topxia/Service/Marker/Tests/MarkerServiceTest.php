@@ -3,6 +3,7 @@
 namespace Topxia\Service\Marker\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class MarkerServiceTest extends BaseTestCase
 {
@@ -181,7 +182,7 @@ class MarkerServiceTest extends BaseTestCase
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getQuestionService()

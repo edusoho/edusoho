@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
@@ -586,12 +587,12 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getUploadFileTagService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileTagService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
     }
 
     protected function getUploadFileShareHistoryService()

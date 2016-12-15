@@ -203,7 +203,8 @@ class ServiceKernel
 
     public function setCurrentUser($currentUser)
     {
-        $this->currentUser = $currentUser;
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
         return $this;
     }
 
@@ -212,11 +213,12 @@ class ServiceKernel
      */
     public function getCurrentUser()
     {
-        if (is_null($this->currentUser)) {
+        $biz = $this->getBiz();
+        if (!isset($biz['user'])) {
             throw new \RuntimeException('The `CurrentUser` of ServiceKernel is not setted!');
         }
 
-        return $this->currentUser;
+        return $biz['user'];
     }
 
     public function setEnvVariable(array $env)
@@ -250,7 +252,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
-            $this->pool[$name] = new  $class();
+            $this->pool[$name] = new $class();
         }
 
         return $this->pool[$name];

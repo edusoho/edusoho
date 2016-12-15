@@ -12,8 +12,6 @@ interface ClassroomService
 
     public function waveClassroom($id, $field, $diff);
 
-    public function findClassroomsByIds(array $ids);
-
     public function findAssistants($classroomId);
 
     public function findTeachers($classroomId);
@@ -100,7 +98,6 @@ interface ClassroomService
 
     public function searchMemberCount($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function findMemberUserIdsByClassroomId($classroomId);
 
@@ -134,10 +131,6 @@ interface ClassroomService
     public function findClassroomCourse($classroomId, $courseId);
 
     public function findCoursesByClassroomId($classroomId);
-
-    public function findActiveCoursesByClassroomId($classroomId);
-
-    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
 
     public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
 

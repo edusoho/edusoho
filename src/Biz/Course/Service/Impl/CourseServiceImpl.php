@@ -7,6 +7,7 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
@@ -405,7 +406,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
         //            return true;
         //        }
-        
+
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
@@ -566,6 +567,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    public function searchMembers($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countMembers($conditions)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        return $this->getMemberDao()->count($conditions);
+    }
+
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
@@ -579,6 +592,86 @@ class CourseServiceImpl extends BaseService implements CourseService
         //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;
     }
+
+    protected function _prepareCourseConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
+        if (isset($conditions['date'])) {
+            $dates = array(
+                'yesterday'  => array(
+                    strtotime('yesterday'),
+                    strtotime('today')
+                ),
+                'today'      => array(
+                    strtotime('today'),
+                    strtotime('tomorrow')
+                ),
+                'this_week'  => array(
+                    strtotime('Monday this week'),
+                    strtotime('Monday next week')
+                ),
+                'last_week'  => array(
+                    strtotime('Monday last week'),
+                    strtotime('Monday this week')
+                ),
+                'next_week'  => array(
+                    strtotime('Monday next week'),
+                    strtotime('Monday next week', strtotime('Monday next week'))
+                ),
+                'this_month' => array(
+                    strtotime('first day of this month midnight'),
+                    strtotime('first day of next month midnight')
+                ),
+                'last_month' => array(
+                    strtotime('first day of last month midnight'),
+                    strtotime('first day of this month midnight')
+                ),
+                'next_month' => array(
+                    strtotime('first day of next month midnight'),
+                    strtotime('first day of next month midnight', strtotime('first day of next month midnight'))
+                )
+            );
+
+            if (array_key_exists($conditions['date'], $dates)) {
+                $conditions['startTimeGreaterThan'] = $dates[$conditions['date']][0];
+                $conditions['startTimeLessThan']    = $dates[$conditions['date']][1];
+                unset($conditions['date']);
+            }
+        }
+
+        if (isset($conditions['creator']) && !empty($conditions['creator'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['creator']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['creator']);
+        }
+
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
+
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+
+            unset($conditions['categoryId']);
+        }
+
+        if (isset($conditions['nickname'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['nickname']);
+        }
+
+        return $conditions;
+    }
+
 
     protected function createCourseStrategy($course)
     {
@@ -620,5 +713,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->biz->service('Taxonomy:CategoryService');
     }
 }

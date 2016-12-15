@@ -106,7 +106,7 @@ class Emails extends BaseResource
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->getServiceKernel()->getBiz()->service('Log:LogService');
     }
 
     protected function getTokenService()

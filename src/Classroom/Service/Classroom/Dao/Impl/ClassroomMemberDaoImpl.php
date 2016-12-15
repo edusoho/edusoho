@@ -112,17 +112,6 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
-    }
-
     public function getMemberByClassroomIdAndUserId($classroomId, $userId)
     {
         $that = $this;

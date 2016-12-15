@@ -3,6 +3,7 @@
 namespace Topxia\Service\Group\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Group\GroupService;
 use Topxia\Common\ArrayToolkit;
 use Imagine\Gd\Imagine;
@@ -19,24 +20,11 @@ class GroupServiceImpl extends BaseService implements GroupService {
           return $this->getGroupDao()->getGroup($id);
     }
 
-    public function getGroupsByIds($ids)
-    {
-        $groups=$this->getGroupDao()->getGroupsByIds($ids);
-        return ArrayToolkit::index($groups, 'id');
-    }
-
     public function searchGroups($conditions, $orderBy, $start, $limit)
     {
 
         $conditions = $this->prepareGroupConditions($conditions);
         return $this->getGroupDao()->searchGroups($conditions,$orderBy,$start,$limit);
-    }
-
-    public function searchMembersCount($conditions)
-    {
-         $count= $this->getGroupMemberDao()->searchMembersCount($conditions);
-         return $count;
-
     }
 
     public function updateGroup($id,$fields)
@@ -203,11 +191,6 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $this->getGroupDao()->getGroupByTitle($title);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
-    {   
-        return $this->getGroupMemberDao()->searchMembers($conditions,$orderBy,$start,$limit);
-    }
-
     public function searchGroupsCount($conditions)
     {
          $conditions = $this->prepareGroupConditions($conditions);
@@ -299,7 +282,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     protected function getLogService() 
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getGroupDao() 

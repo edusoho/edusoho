@@ -2,6 +2,7 @@
 namespace Topxia\Service\Sms\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -226,6 +227,6 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

@@ -1,15 +1,21 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\AccessDeniedException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class KernelRequestListener
 {
-    public function __construct($container)
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -53,10 +59,9 @@ class KernelRequestListener
 
             $request->request->remove('_csrf_token');
 
-            $expectedToken = $this->container->get('form.csrf_provider')->generateCsrfToken('site');
+            $expectedToken = $this->container->get('security.csrf.token_manager')->getToken('site');
             if ($token != $expectedToken) {
-// @todo 需要区分ajax的response
-
+                // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token  = $request->request->get('token');
                     $result = ServiceKernel::instance()->createService('CloudPlatform.AppService')->repairProblem($token);

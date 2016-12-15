@@ -6,8 +6,6 @@ interface GroupService
 {
     public function getGroup($id);
 
-    public function getGroupsByIds($ids);
-
     public function searchGroups($conditions,$orderBy,$start,$limit);
 
     public function searchGroupsCount($condtions);
@@ -29,10 +27,6 @@ interface GroupService
     public function findGroupsByUserId($userId);
 
     public function findGroupByTitle($title);
-
-    public function searchMembers($conditions, $orderBy, $start, $limit);
-
-    public function searchMembersCount($conditions);
 
     public function isOwner($id,$userId);
 

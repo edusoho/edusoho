@@ -1320,7 +1320,7 @@ class CourseServiceTest extends BaseTestCase
             'length' => 100,
             'fileSize' => 1024
         );
-        $this->mock('File.UploadFileService', array(
+        $this->mockBiz('File:UploadFileService', 'UploadFileService', array(
             array('functionName' => 'getFile', 'runTimes' => 2, 'returnValue' => $fakeFile),
             array('functionName' => 'waveUploadFile', 'runTimes' => 1, 'returnValue' => array())
         ));
@@ -1330,6 +1330,9 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($fakeFile['id'], $lesson['mediaId']);
         $this->assertEquals($fakeFile['filename'], $lesson['title']);
         $this->assertEquals($fakeFile['length'], $lesson['length']);
+
+        $biz = $this->getBiz();
+        unset($biz['@UploadFileService']);
     }
     /**
      * @expectedException Topxia\Service\Common\ServiceException

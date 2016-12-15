@@ -6,6 +6,7 @@ use Topxia\Common\JsonToolkit;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Service\Common\ServiceKernel;
 
 class DeveloperSettingController extends BaseController
 {
@@ -174,6 +175,6 @@ class DeveloperSettingController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

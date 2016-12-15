@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\Dao\Impl\ThreadPostDaoImpl;
 use Topxia\Service\Course\Dao\ThreadDao;
 use Topxia\Service\Course\ThreadService;
@@ -50,19 +51,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->findEliteThreadsByType($type, $status, $start, $limit);
     }
 
+    //
     public function searchThreads($conditions, $sort, $start, $limit)
     {
         $orderBys   = $this->filterSort($sort);
         $conditions = $this->prepareThreadSearchConditions($conditions);
 
         return $this->getThreadDao()->searchThreads($conditions, $orderBys, $start, $limit);
-    }
-
-    public function searchThreadCount($conditions)
-    {
-        $conditions = $this->prepareThreadSearchConditions($conditions);
-
-        return $this->getThreadDao()->searchThreadCount($conditions);
     }
 
     public function searchThreadCountInCourseIds($conditions)
@@ -529,6 +524,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }
