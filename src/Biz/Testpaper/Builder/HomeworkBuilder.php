@@ -3,6 +3,7 @@ namespace Biz\Testpaper\Builder;
 
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
+use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -63,7 +64,17 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
         $formatQuestions = array();
         foreach ($items as $questionId => $item) {
-            $question = empty($questions[$questionId]) ? array('isDeleted' => true) : $questions[$questionId];
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            if (empty($question)) {
+                $question = array(
+                    'id'        => $item['questionId'],
+                    'isDeleted' => true,
+                    'stem'      => $this->getServiceKernel()->trans('此题已删除'),
+                    'score'     => 0,
+                    'answer'    => '',
+                    'type'      => $item['questionType']
+                );
+            }
 
             if (!empty($itemResults[$questionId])) {
                 $question['testResult'] = $itemResults[$questionId];
@@ -278,5 +289,10 @@ class HomeworkBuilder implements TestpaperBuilderInterface
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

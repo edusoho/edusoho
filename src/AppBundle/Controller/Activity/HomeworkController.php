@@ -27,7 +27,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
             ));
         }
 
-        return $this->forward('WebBundle:Homework:startDo', array(
+        return $this->forward('AppBundle:Homework:startDo', array(
             'lessonId'   => $activity['id'],
             'homeworkId' => $activity['mediaId']
         ));

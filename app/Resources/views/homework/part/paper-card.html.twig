@@ -19,7 +19,7 @@
     {% if paperResult.status|default(null) != 'finished' %}
 		<div class="panel-footer text-right">
 			{% if paperResult.status|default(null) == 'reviewing' %}
-        <a class="btn btn-success" data-toggle="modal" data-target="#modal" data-url"" id="homework-check-show-btn" data-return-url="">{{'完成批改'|trans}}</a>
+        <a class="btn btn-success" data-toggle="modal" data-target="#modal" data-url"" data-role="check-submit" data-return-url="">{{'完成批改'|trans}}</a>
       {% elseif paperResult.status|default(null) == 'doing' %}
         <a class="btn btn-default" id="homework-next-do" data-url="" data-return-url="">{{'下次再做'|trans}}</a>
       	<a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</a>

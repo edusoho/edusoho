@@ -101,16 +101,19 @@ class CheckTest
 
   _initValidate(event) {
     this.validator = this.$form.validate();
-    $('*[data-score]').each(function(index){
-      $(this).rules('add',{
-        required:true,
-        score:true,
-        min:0,
-        messages: {    
-          required: "请输入分数",    
-        } 
+
+    if ($('*[data-score]:visible').length > 0) {
+      $('*[data-score]:visible').each(function(index){
+        $(this).rules('add',{
+          required:true,
+          score:true,
+          min:0,
+          messages: {    
+            required: "请输入分数",    
+          } 
+        })
       })
-    })
+    }
 
   }
 
@@ -124,7 +127,7 @@ class CheckTest
     let $target = $(event.currentTarget);
     let scoreTotal = 0;
 
-    if (this.validator.form()) {
+    if (this.validator == undefined || this.validator.form()) {
       let content = {};
       let self = this;
       $('*[data-score]').each(function(){
@@ -154,8 +157,7 @@ class CheckTest
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
-      //window.location.href = $target.data('goto');
-      window.location.reload();
+      window.location.href = $target.data('goto');
     })
   }
 

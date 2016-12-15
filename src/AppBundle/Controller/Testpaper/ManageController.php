@@ -80,7 +80,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $courseId, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $type, $testpaperIds = array())
     {
         $conditions = array(
             'status' => 'open',
@@ -107,7 +107,8 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
-            'paginator'  => $paginator
+            'paginator'  => $paginator,
+            'targetId'   => $targetId
         ));
     }
 

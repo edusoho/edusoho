@@ -682,7 +682,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException($this->getKernel()->trans('试卷结果不存在!'));
         }
 
-        $paper = $this->getTestpaperDao()->getTestpaper($paperResult['testId']);
+        $paper = $this->getTestpaper($paperResult['testId']);
 
         if (!$paper) {
             throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
@@ -695,8 +695,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if ($user->isAdmin()) {
             return true;
         }
+        //dosomething
 
-        return false;
+        return true;
     }
 
     public function getTestpaperBuilder($type)

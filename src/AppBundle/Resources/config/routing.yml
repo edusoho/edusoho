@@ -366,7 +366,11 @@ course_set_manage_homework_question_picked:
 
 course_manage_homework_check_list:
   path: /course/{id}/manage/homework/check
-  defaults: { _controller: AppBundle:CourseTestpaperManage:homeworkCheckList }
+  defaults: { _controller: AppBundle:CourseHomeworkManage:checkList }
+
+course_manage_homework_check:
+  path: /course/{id}/manage/homework/{resultId}/check
+  defaults: { _controller: AppBundle:CourseHomeworkManage:check }
 
 
 homework_start_do:

@@ -17,7 +17,7 @@
 						<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0]|bbCode2Html|raw }}</div>
 					</div>
 
-					{% include 'question/part/show-teacher-comment.html.twig' with {showScore:1} %}
+					{% include 'question/part/show-teacher-comment.html.twig' with {showScore:showScore|default(1)} %}
 				</div>
 			</div>
 

@@ -25,7 +25,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
             ));
         }
 
-        return $this->forward('WebBundle:Exercise:startDo', array(
+        return $this->forward('AppBundle:Exercise:startDo', array(
             'lessonId'   => $activity['id'],
             'exerciseId' => $activity['mediaId']
         ));

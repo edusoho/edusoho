@@ -64,23 +64,75 @@ class HomeworkManageController extends BaseController
         ));
     }
 
-    private function getQuestionRanges($course, $includeCourse = false)
+    public function checkAction(Request $request, $resultId, $targetId, $source = 'course')
     {
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-        $ranges  = array();
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        if ($includeCourse == true) {
-            $ranges["course-{$course['id']}"] = '本课程';
+        if (!$result) {
+            throw $this->createResourceNotFoundException('homeworkResult', $resultId);
         }
 
-        foreach ($lessons as $lesson) {
-            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        $homework = $this->getTestpaperService()->getTestpaper($result['testId']);
+        if (!$homework) {
+            throw $this->createResourceNotFoundException('homework', $result['id']);
         }
+
+        if ($result['status'] != 'reviewing') {
+            return $this->redirect($this->generateUrl('homework_start_do', array('homeworkId' => $homework['id'], 'lessonId' => $result['lessonId'])));
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $this->getTestpaperService()->checkFinish($result['id'], $formData);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
+
+        $essayQuestions = $this->getCheckedEssayQuestions($questions);
+
+        $student = $this->getUserService()->getUser($result['userId']);
+
+        return $this->render('homework/manage/teacher-check.html.twig', array(
+            'paper'         => $homework,
+            'paperResult'   => $result,
+            'questions'     => $essayQuestions,
+            'student'       => $student,
+            'questionTypes' => array('essay', 'material'),
+            'source'        => $source,
+            'targetId'      => $targetId,
+            'isTeacher'     => true,
+            'total'         => array()
+        ));
+    }
+
+    protected function getCheckedEssayQuestions($questions)
+    {
+        $essayQuestions = array();
+
+        foreach ($questions as $question) {
+            if ($question['type'] == 'essay' && !$question['parentId']) {
+                $essayQuestions[$question['id']] = $question;
+            } elseif ($question['type'] == 'material') {
+                $types = ArrayToolkit::column($question['subs'], 'type');
+                if (in_array('essay', $types)) {
+                    $essayQuestions[$question['id']] = $question;
+                }
+            }
+        }
+
+        return $essayQuestions;
+    }
+
+    protected function getQuestionRanges($course, $includeCourse = false)
+    {
+        $ranges = array('本课程');
 
         return $ranges;
     }
 
-    private function sortType($types)
+    protected function sortType($types)
     {
         $newTypes = array('single_choice', 'choice', 'uncertain_choice', 'fill', 'determine', 'essay', 'material');
 
@@ -111,7 +163,12 @@ class HomeworkManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     protected function getServiceKernel()

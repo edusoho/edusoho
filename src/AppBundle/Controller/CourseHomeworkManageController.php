@@ -5,7 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseTestpaperManageController extends BaseController
+class CourseHomeworkManageController extends BaseController
 {
     public function checkAction(Request $request, $id, $resultId)
     {
@@ -13,7 +13,7 @@ class CourseTestpaperManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $course = $this->getCourseService()->tryManageCourse($course['id']);
 
-        return $this->forward('AppBundle:Testpaper/Manage:check', array(
+        return $this->forward('AppBundle:HomeworkManage:check', array(
             'request'  => $request,
             'resultId' => $resultId,
             'source'   => 'course',
@@ -29,40 +29,13 @@ class CourseTestpaperManageController extends BaseController
         $user      = $this->getUser();
         $isTeacher = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'testpaper');
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'homework');
 
-        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
-
-        return $this->render('course-manage/testpaper-check/check-list.html.twig', array(
-            'courseSet'    => $courseSet,
-            'course'       => $course,
-            'isTeacher'    => $isTeacher,
-            'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId')
-        ));
-    }
-
-    public function resultListAction(Request $request, $id, $testpaperId)
-    {
-        $course    = $this->getCourseService()->getCourse($id);
-        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $user      = $this->getUser();
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (!$testpaper) {
-            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
-        }
-
-        $isTeacher = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
-
-        return $this->render('course-manage/testpaper-check/result-list.html.twig', array(
-            'course'    => $course,
-            'courseSet' => $courseSet,
-            'testpaper' => $testpaper,
-            'isTeacher' => $isTeacher
+        return $this->render('course-manage/homework-check/check-list.html.twig', array(
+            'courseSet'   => $courseSet,
+            'course'      => $course,
+            'isTeacher'   => $isTeacher,
+            'homeworkIds' => ArrayToolkit::column($activities, 'mediaId')
         ));
     }
 
