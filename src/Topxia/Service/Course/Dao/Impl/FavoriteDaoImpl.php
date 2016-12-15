@@ -67,9 +67,12 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -79,7 +82,9 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
             ->from($this->table, 'course_favorite')
             ->andWhere('courseId = :courseId')
             ->andWhere('userId = :userId')
-            ->andWhere('type = :type');
+            ->andWhere('type = :type')
+            ->andWhere('createdTime >= :createdTime_GE')
+            ->andWhere('courseId NOT IN ( :excludeCourseIds )');
         return $builder;
     }
 }

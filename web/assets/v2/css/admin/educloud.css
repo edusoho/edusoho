@@ -1,0 +1,212 @@
+.link-gray {
+  color: #666666 !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-gray:hover {
+  color: #428bca !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.color-gray {
+  color: #666666 !important;
+}
+a,
+a:hover {
+  text-decoration: none;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-heading {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #dddddd;
+  background-color: #fafafa;
+  margin-bottom: 10px;
+}
+.edu-user {
+  border: 1px solid #dddddd;
+  margin-bottom: 20px;
+}
+.edu-user .user-part {
+  text-align: center;
+  width: 33.3%;
+  margin: 28px 0;
+  border-right: 1px solid #dddddd;
+  height: 100px;
+}
+.edu-user .user-part:last-child {
+  border-right: 0;
+}
+.edu-user .user-part .img-circle {
+  width: 64px;
+  height: 64px;
+  margin-top: 5px;
+}
+.edu-user .user-part .money {
+  font-size: 22px;
+  color: #DD4646;
+  padding: 5px 0;
+}
+.edu-combo .my-products-item {
+  display: block;
+  padding: 6px 0;
+  margin-bottom: 15px;
+  text-align: center;
+  background-color: #f1f1f1;
+  color: #666666;
+  border-radius: 2px;
+  font-weight: normal;
+  text-decoration: none;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.edu-combo .my-products-item i {
+  font-size: 20px;
+}
+.edu-combo .my-products-item:hover {
+  color: #fff;
+  text-decoration: none;
+  background-color: #428BCA;
+}
+.update-list {
+  padding-left: 0;
+}
+.buy-cloud-video {
+  padding: 30px 0 30px 200px;
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+}
+.buy-cloud-video .buy-section {
+  padding-top: 10px;
+  padding-left: 45px;
+}
+.buy-cloud-video .buy-section a {
+  text-decoration: underline;
+  font-size: 18px;
+}
+.notice-panel {
+  text-align: center;
+}
+.notice-panel i {
+  font-size: 80px;
+}
+.notice-panel .notice-desc {
+  margin-bottom: 40px;
+}
+.notice-panel .notice-btn {
+  margin-bottom: 50px;
+}
+.notice-panel .edu-cloud-search-intro p{
+  padding:0px 175px 0px 175px;
+}
+.notice-panel .edu-cloud-search-title {
+  padding:0px 180px 0px 180px;
+}
+.notice-panel .edu-cloud-video-intro p{
+  padding:0px 160px 0px 160px;
+}
+.notice-panel .edu-cloud-search-intro p{
+  text-align: left;
+}
+.notice-panel .edu-cloud-video-intro p{
+  text-align: left;
+}
+.search-part-table {
+  margin-bottom: 0;
+}
+.search-part-table tbody > tr {
+  border-bottom: 1px dashed #dddddd;
+}
+.search-part-table tbody > tr:last-child {
+  border-bottom: 0px;
+}
+.search-part-table tbody > tr > td {
+  padding: 10px;
+  border-top: 0;
+}
+.search-part-table tbody > tr > td .part-num {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+.search-part-table tbody > tr > td .num-red {
+  color: #fff;
+  background-color: #e30918;
+}
+.search-part-table tbody > tr > td .part-name {
+  width: 190px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-part-table tbody > tr > td .part-total {
+  text-align: right;
+}
+.sms-table {
+  color: #666666;
+}
+.sms-table tbody > tr > td:nth-child(3) {
+  color: #999999;
+}
+.head-leader-edit .file-name {
+  display: inline-block;
+  padding: 10px;
+  margin-top: 10px;
+  color: #666666;
+  border: 1px solid #dddddd;
+  background-color: #fafafa;
+}
+.cloud-progress {
+  border-radius: 10px;
+  height: 16px;
+}
+.cloud-progress .progress-bar {
+  border-radius: 10px;
+}
+.cloud-banner-top {
+  position: relative;
+}
+.cloud-banner-top .access-btn {
+  display: inline-block;
+  position: absolute;
+  right: 264px;
+  bottom: 70px;
+  padding: 12px 50px;
+  color: #fff;
+  border: 1px solid #fff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.cloud-banner-top .access-btn:hover {
+  background-color: #428af0;
+}
+.cloud-banner.banner-bg-blue {
+  padding-left: 80px;
+  background-color: #F6F9FF;
+}
+.cloud-banner.banner-bg-gray {
+  padding-right: 100px;
+  background-color: #F5F5F5;
+}
+.cloud-banner .title {
+  padding-top: 100px;
+  font-size: 26px;
+  font-weight: bold;
+}
+.cloud-banner .subtitle {
+  font-size: 26px;
+}

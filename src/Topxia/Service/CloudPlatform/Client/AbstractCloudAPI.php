@@ -84,9 +84,10 @@ class AbstractCloudAPI
 
     protected function _request($method, $uri, $params, $headers)
     {
-        $requestId = substr(md5(uniqid('', true)), -16);
+		$requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.self::VERSION.$uri;
+
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
@@ -168,7 +169,7 @@ class AbstractCloudAPI
 
         $result = json_decode($body, true);
 
-        if (empty($result)) {
+        if (is_null($result)) {
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
         }

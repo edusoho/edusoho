@@ -32,7 +32,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $to      = implode(',', $mobiles);
         try {
             $api    = CloudAPIFactory::create('leaf');
-            $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
+            $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
         }

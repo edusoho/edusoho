@@ -1,0 +1,30 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_sms_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="row form-group">
+  <div class="help-block">
+    </br></br>
+    <script>
+      var _hmt = _hmt || [];
+    </script>
+    <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+    <p style="text-align: center;font-size:16px">
+      {{'短信发送服务由EduSoho教育云提供'|trans}} <a href="http://open.edusoho.com/educloud"  target="_blank">{{'了解详情'|trans}}</a>
+    </p>
+
+    <p style="text-align:center;font-size:16px">
+      {{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：'|trans}}4008041114 {{'或'|trans}}
+      <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
+        <a id="BizQQWPA"  href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。
+      </span>
+    </p>
+
+    <script type="text/javascript">
+      BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+    </script>
+    </br></br>
+  </div>
+</div>
+{% endblock %}

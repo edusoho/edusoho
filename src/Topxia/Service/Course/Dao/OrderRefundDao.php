@@ -17,4 +17,6 @@ interface OrderRefundDao
 	public function addRefund($refund);
 
 	public function updateRefund($id, $refund);
+
+    public function findRefundByOrderId($orderId);
 }

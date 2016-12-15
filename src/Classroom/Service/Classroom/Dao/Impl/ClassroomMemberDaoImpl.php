@@ -27,6 +27,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function addMember($member)
     {
+        $member['createdTime'] = time();
+        $member['updatedTime'] = $member['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $member);
         $this->clearCached();
 
@@ -63,6 +65,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function updateMember($id, $member)
     {
+        $member['updatedTime'] = time();
         $this->getConnection()->update($this->table, $member, array('id' => $id));
         $this->clearCached();
         return $this->getMember($id);
@@ -112,14 +115,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
+            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        };
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -231,7 +238,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('userId IN ( :userIds)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime >= :createdTime_GE')
-            ->andWhere('createdTime < :startTimeLessThan');
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }

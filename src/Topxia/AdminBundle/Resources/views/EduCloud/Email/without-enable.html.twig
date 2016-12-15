@@ -1,0 +1,21 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_email_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云邮件</div>
+    {% if overview.isBuy == false %}
+      <div class="color-gray notice-desc">尚未购买云邮件，不能启用，<a href="{{path('admin_cloud_email_buy', {type:'email'})}}" target="_blank">立即购买</a> 或 <a href="{{path('admin_cloud_show', {type:'email'})}}" target="_blank">了解详情</a>。</div>
+    {% endif %}
+      <div class="color-gray notice-desc">注：目前云邮件仅为CRM模块提供服务</div>
+    <form class="form-horizontal" role="form" method="post" action="{{ path('admin_edu_cloud_email_switch') }}">
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %} name="email-open">立即启用</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+{% endblock %}
