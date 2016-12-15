@@ -3,7 +3,7 @@
 {% set menu = 'admin_edu_cloud_sms_overview' %} 
 {% set script_controller = 'educloud/sms-overview' %}
 {% set script_arguments = {chartData: chartData}  %}
-{% block page_message %}
+{% block page_flash_message %}
   {{ web_macro.flash_messages() }}
 {% endblock %}
 {% block page_title %}
