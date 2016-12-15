@@ -52,16 +52,14 @@ isCoursePublished: course.status,
           <div class="form-group">
             <label class="col-md-2 control-label"
                    for="maxStudentNum-field">课程人数</label>
-            <div class="col-md-8 controls">
+            <div class="col-md-10 controls">
               <input type="text" id="maxStudentNum-field" name="maxStudentNum"
                      class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(20) }}"
                      data-live-capacity-url="{{ path('live_capacity',{id:course.id}) }}"> {{ '人'|trans }}
-              <div class="help-block">
-                <p>1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。</p>
-                <p>2.课程人数≠购买的直播人数，每场直播参与的最大人数≤购买的直播人数。</p>
-                <p>3.若课程人数＞购买的直播人数，可能会出现部分用户无法进入直播教室的情况。</p>
-                <p>4.若直播有回放视频，未参与直播过程的用户，只要加入课程，也可观看回放。</p>
-              </div>
+            </div>
+            <div class="col-md-offset-2 col-md-10 js-course-rule">
+              <p class="alert-warning"></p>
+              <a href="{{path('content_course_rule')}}" target="_blank">【查看直播课程细则】</a>
             </div>
           </div>
 

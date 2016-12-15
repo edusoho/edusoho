@@ -125,7 +125,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $this->incrVersions(array(
             "{$this->table}:version:userId:{$learn['userId']}",
             "{$this->table}:version:lessonId:{$learn['lessonId']}",
-            "{$this->table}:version:analysisLessonFinishedDataByTime"
+            "{$this->table}:version:analysisLessonFinishedDataByTime",
+            "{$this->table}:search"
         ));
 
         $this->deleteCache(array(
@@ -204,6 +205,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
                 ->andWhere('userId NOT IN ( :excludeUserIds )')
                 ->andWhere("lessonId = :lessonId")
                 ->andWhere("courseId = :courseId")
+                ->andWhere("courseId IN ( :courseIds)")
                 ->andWhere("finishedTime >= :startTime")
                 ->andWhere("finishedTime <= :endTime");
         }

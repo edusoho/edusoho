@@ -96,9 +96,11 @@ define(function (require, exports, module) {
 
         validator.addItem({
             element: '[name=maxStudentNum]',
-            rule: 'unsigned_integer',
+            required: true,
+            rule: 'positive_integer',
             onItemValidated: function (error, message, elem) {
                 if (error) {
+                    $(elem).parent().siblings('.js-course-rule').find('p').html('');
                     return;
                 }
 
@@ -106,12 +108,9 @@ define(function (require, exports, module) {
                 var capacity = parseInt($(elem).data('liveCapacity'));
                 if (current > capacity) {
                     message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', {capacity: capacity});
-                    if ($(elem).parent().find('.alert-warning').length > 0) {
-                        $(elem).parent().find('.alert-warning').html(message).show();
-                    } else {
-                        $(elem).parent().find('.alert-warning').hide();
-                    }
+                    $(elem).parent().siblings('.js-course-rule').find('p').html(message);
                 } else {
+                    $(elem).parent().siblings('.js-course-rule').find('p').html('');
                     validator.removeItem('[name=expiryDay]');
                 }
             }
