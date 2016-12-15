@@ -14,5 +14,5 @@ interface TokenDao
 
     public function getByType($type);
 
-    public function deleteByExpiredTime($expiredTime, $limit);
+    public function deleteTopsByExpiredTime($expiredTime, $limit);
 }

@@ -74,7 +74,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     public function deleteExpiredTokens($limit)
     {
-        $this->getTokenDao()->deleteByExpiredTime(time(), $limit);
+        $this->getTokenDao()->deleteTopsByExpiredTime(time(), $limit);
     }
 
     protected function _gcToken($token)

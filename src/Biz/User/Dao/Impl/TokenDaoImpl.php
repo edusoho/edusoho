@@ -48,7 +48,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function deleteByExpiredTime($expiredTime, $limit)
+    public function deleteTopsByExpiredTime($expiredTime, $limit)
     {
         $sql    = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
         $result = $this->db()->executeQuery($sql, array($expiredTime));
