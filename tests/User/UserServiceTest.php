@@ -962,7 +962,7 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findUserFollowings($user1['id'], 0, 20);
+        $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -973,7 +973,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findAllUserFollowings($user1['id'], 0, 20);
+        $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -984,7 +984,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user1['id'], $user2['id']);
-        $result = $this->getUserService()->findAllUserFollowings($user1['id'], 0, 20);
+        $result = $this->getUserService()->searchUserFollowings($user1['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -995,7 +995,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user2['id'], $user3['id']);
-        $result = $this->getUserService()->findUserFollowers($user3['id'], 0, 20);
+        $result = $this->getUserService()->searchUserFollowers($user3['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 
@@ -1006,7 +1006,7 @@ class UserServiceTest extends BaseTestCase
         $user3 = $this->createUser('user3');
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user2['id'], $user3['id']);
-        $result = $this->getUserService()->findAllUserFollowers($user3['id'], 0, 20);
+        $result = $this->getUserService()->searchUserFollowers($user3['id'], 0, 20);
         $this->assertEquals(2, count($result));
     }
 

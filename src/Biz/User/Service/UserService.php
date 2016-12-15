@@ -201,13 +201,13 @@ interface UserService
 
     public function isFollowed($fromId, $toId);
 
-    public function findUserFollowings($userId, $start, $limit);
+    public function searchUserFollowings($userId, $start, $limit);
 
-    public function findAllUserFollowings($userId);
+    public function findUserFollowings($userId);
 
     public function countUserFollowings($userId);
 
-    public function findUserFollowers($userId, $start, $limit);
+    public function searchUserFollowers($userId, $start, $limit);
 
     public function countUserFollowers($userId);
 

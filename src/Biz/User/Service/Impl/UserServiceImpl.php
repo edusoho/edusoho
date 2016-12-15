@@ -1278,16 +1278,16 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::column($friends, 'toId');
     }
 
-    public function findUserFollowings($userId, $start, $limit)
+    public function searchUserFollowings($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
 
-    public function findAllUserFollowings($userId)
+    public function findUserFollowings($userId)
     {
-        $friends = $this->getFriendDao()->findUserFollowingsByFromId($userId);
+        $friends = $this->getFriendDao()->findFollowingsByFromId($userId);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
@@ -1297,7 +1297,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getFriendDao()->countByFromId($userId);
     }
 
-    public function findUserFollowers($userId, $start, $limit)
+    public function searchUserFollowers($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByToId($userId, $start, $limit);
         $ids     = ArrayToolkit::column($friends, 'fromId');
@@ -1313,7 +1313,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function countUserFollowers($userId)
     {
-        return $this->getFriendDao()->countByToId($userId);
+        return $this->getFriendDao()->count(array('toId' => $userId));
     }
 
     public function findFriends($userId, $start, $limit)

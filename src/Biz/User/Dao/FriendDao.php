@@ -12,9 +12,9 @@ interface FriendDao
 
     public function searchByFromId($fromId, $start, $limit);
 
-    public function findUserFollowingsByFromId($fromId);
+    public function findFollowingsByFromId($fromId);
 
-    public function findUserFollowersByToId($toId);
+    public function findFollowersByToId($toId);
 
     public function searchByToId($toId, $start, $limit);
 
