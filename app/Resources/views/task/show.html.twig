@@ -1,10 +1,9 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
 
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
 {% set bodyClass = "" %}
-{% do css(['app/css/main.css']) %}
 {% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
 {% block body %}
