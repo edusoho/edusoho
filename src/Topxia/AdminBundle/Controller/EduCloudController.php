@@ -402,6 +402,10 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
             $smsInfo = $api->get('/me/sms_account');
+            if (!$smsInfo['name']) {
+                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            }
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
@@ -444,6 +448,10 @@ class EduCloudController extends BaseController
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
             }
             $smsInfo   = $api->get('/me/sms_account');
+            if (!$smsInfo['name']) {
+                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            }
             $isBinded = $this->getAppService()->getBinded();
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
                 'isBinded' => $isBinded,

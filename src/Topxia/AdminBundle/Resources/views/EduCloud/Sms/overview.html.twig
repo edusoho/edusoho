@@ -3,7 +3,9 @@
 {% set menu = 'admin_edu_cloud_sms_overview' %} 
 {% set script_controller = 'educloud/sms-overview' %}
 {% set script_arguments = {chartData: chartData}  %}
-
+{% block page_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
     <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>

@@ -105,7 +105,9 @@
 
           <div class="col-md-10">
             <div class="page-header clearfix">
+              {% block page_message %}
 
+              {% endblock %}
               <h1 class="pull-left">
                 {% block page_title %}
                   {{ currentMenu.code|parent_permission.name|trans }}

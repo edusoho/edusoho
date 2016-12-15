@@ -2,7 +2,9 @@
 
 {% set menu = 'admin_edu_cloud_setting_sms' %} 
 {% set script_controller = 'educloud/sms-setting' %}
-
+{% block page_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
     <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
@@ -21,7 +23,6 @@
 
 {% block main %}
   <!-- 设置 -->
-{{ web_macro.flash_messages() }}
 <div class="page-heading">
   云短信开关
 </div>
@@ -49,7 +50,7 @@
   <div class="form-group">
     <label for="" class="col-sm-3 control-label">短信签名：</label>
     <div class="controls col-md-9 radios">
-      {{smsInfo.name}}<a href="{{ path('admin_cloud_sms_sign') }}" class="plm" target="_blank">去设置</a>
+      {{smsInfo.name | default('')}}<a href="{{ path('admin_cloud_sms_sign') }}" class="plm" target="_blank">去设置</a>
       <div class="help-block">
         签名显示在短信内容的最前面，显示这条短信来自哪家公司/产品/网站。
       </div>
