@@ -39,7 +39,7 @@ class Emails extends BaseResource
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $data['rawPassword'] = array(
             'salt'     => $salt,
-            'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
+            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
         );
 
         $tokenType = 'email_password_reset';
@@ -51,7 +51,7 @@ class Emails extends BaseResource
                 'userId' => $user['id'],
                 'rawPassword' => array(
                     'salt'     => $salt,
-                    'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
+                    'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
                 )
             )
         ));

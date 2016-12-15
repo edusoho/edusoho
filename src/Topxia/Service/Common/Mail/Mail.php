@@ -32,7 +32,7 @@ abstract class Mail
         return $this;
     }
 
-    protected function setting($name, $default)
+    protected function setting($name, $default = '')
     {
         
         $names = explode('.', $name);
