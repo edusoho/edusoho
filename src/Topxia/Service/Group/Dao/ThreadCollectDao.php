@@ -12,8 +12,6 @@ interface ThreadCollectDao
 
     public function getThreadCollect($id);
 
-    public function searchThreadCollectCount($conditions);
-
     public function searchThreadCollects($conditions,$orderBy,$start,$limit);
 
 }
