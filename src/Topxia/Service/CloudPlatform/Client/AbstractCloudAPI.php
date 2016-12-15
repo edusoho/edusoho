@@ -168,7 +168,7 @@ class AbstractCloudAPI
 
         $result = json_decode($body, true);
 
-        if (empty($result)) {
+        if (is_null($result)) {
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
         }

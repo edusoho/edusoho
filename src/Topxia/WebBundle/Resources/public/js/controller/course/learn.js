@@ -454,7 +454,7 @@ define(function(require, exports, module) {
                                     $.each(lesson.replays, function(i, n) {
                                         //ES直播，直接播放云资源，TODO(后期需要和其他直播供应商一致的行为)
                                         if (lesson.liveProvider == 5) {
-                                            //路由要重构,写死很恶心
+                                            //路由要重构
                                             var playerUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/play_es_live_replay';
                                             $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ playerUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
                                         } else {

@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\OpenCourse\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,7 +24,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCourseDelete(ServiceEvent $event)
+    public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
 
@@ -31,7 +32,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->delete();
     }
 
-    public function onCourseUpdate(ServiceEvent $event)
+    public function onCourseUpdate(Event $event)
     {
         $fields = $event->getSubject();
 
@@ -43,7 +44,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->update();
     }
 
-    public function onLessonCreate(ServiceEvent $event)
+    public function onLessonCreate(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -62,7 +63,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
-    public function onLessonDelete(ServiceEvent $event)
+    public function onLessonDelete(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -71,7 +72,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
-    public function onMemberCreate(ServiceEvent $event)
+    public function onMemberCreate(Event $event)
     {
         $context = $event->getSubject();
         $fields  = $context['argument'];
@@ -82,7 +83,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
     }
 
-    public function onMaterialCreate(ServiceEvent $event)
+    public function onMaterialCreate(Event $event)
     {
         $context  = $event->getSubject();
         $material = $context['material'];
@@ -92,7 +93,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialUpdate(ServiceEvent $event)
+    public function onMaterialUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -110,7 +111,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialDelete(ServiceEvent $event)
+    public function onMaterialDelete(Event $event)
     {
         $material = $event->getSubject();
 

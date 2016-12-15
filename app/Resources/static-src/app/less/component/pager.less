@@ -1,0 +1,22 @@
+.pager >li {
+  >a {
+    color: @gray-dark;
+    background-color: @gray-lighter;
+    border-color: darken(@gray-lighter,10%);
+    &:hover,
+    &:focus,
+    &.active {
+      background-color: darken(@gray-lighter,5%);
+    }
+  }
+}
+
+.pager .disabled>a, 
+.pager .disabled>a:hover, 
+.pager .disabled>a:focus, 
+.pager .disabled>span {
+  background-color: lighten(@gray-lighter, 2%);
+  border-color: @gray-lighter;
+  color: lighten(@gray-dark, 40%);
+}
+

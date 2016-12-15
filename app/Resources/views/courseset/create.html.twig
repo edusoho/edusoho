@@ -1,8 +1,8 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{ '创建课程'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js','web/courseset/create/index.js']) %}
+{% do script(['libs/jquery-validation.js','app/js/courseset/create/index.js']) %}
 
 {% block content %}
   <div class="row">

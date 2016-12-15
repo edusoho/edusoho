@@ -3,7 +3,6 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Type\Audio\Dao\AudioActivityDao;
 use Topxia\Service\Common\ServiceKernel;
 
 class Audio extends Activity
@@ -36,12 +35,15 @@ class Audio extends Activity
         return $audioActivity;
     }
 
+    /**
+     * TODO观看后完成
+     */
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result) 
-                && $result > $activity['length'];
+        return !empty($result)
+            && $result > $activity['length'];
     }
 
     /**
@@ -62,25 +64,26 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    protected function getListeners()
+    protected function registerListeners()
     {
-        return array(
-            'audio.start'  => 'Biz\\AudioActivity\\Listener\\AudioStartListener',
-            'audio.finish' => 'Biz\\AudioActivity\\Listener\\AudioFinishListener'
-        );
+        return array();
     }
 
-    /**
-     * @return AudioActivityDao
-     */
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao("Activity:AudioActivityDao");
     }
 
-    /**
-     * @return UploadFileService
-     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
+    }
+
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');

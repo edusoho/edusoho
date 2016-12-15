@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 
 class Download extends Activity
 {
-
     protected function registerListeners()
     {
         // TODO: Implement registerListeners() method.
@@ -80,6 +79,12 @@ class Download extends Activity
         return $this->getDownloadActivityDao()->delete($id);
     }
 
+    public function isFinished($activityId)
+    {
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'download.download');
+        return !empty($result);
+    }
+
     protected function getListeners()
     {
         // TODO: Implement getListeners() method.
@@ -126,6 +131,11 @@ class Download extends Activity
     public function getDownloadFileDao()
     {
         return $this->getBiz()->dao('Activity:DownloadFileDao');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
     protected function getConnection()

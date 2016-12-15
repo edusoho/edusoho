@@ -388,7 +388,6 @@ class CourseController extends CourseBaseController
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
         return $this->createJsonResponse(true);
@@ -437,7 +436,7 @@ class CourseController extends CourseBaseController
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
+        
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
         $isLimit = $this->setting('magic.lesson_watch_limit');

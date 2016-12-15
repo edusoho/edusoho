@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -402,7 +403,38 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportCsvAction(Request $request, $id, $role)
+    public function exportDatasAction(Request $request, $id, $role)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $classroomMemberCount) = $this->getExportContent($id, $role, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
+    public function exportCsvAction(Request $request, $id)
+    {
+        $role = $request->query->get('role');
+        $fileName = sprintf("classroom-%s-%s-(%s).csv", $id, $role, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
@@ -412,10 +444,27 @@ class ClassroomManageController extends BaseController
         $userinfoFields = array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin');
 
         if ($role == 'student') {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'student'
+            );
         } else {
-            $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
+            $condition = array(
+                'classroomId' => $classroom['id'],
+                'role' => 'auditor'
+            );
         }
+        $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
+        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount:$classroomMemberCount;
+        if ($classroomMemberCount < ($start + $limit + 1)) {
+            $limit = $classroomMemberCount - $start;
+        }
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            $condition,
+            array('createdTime', 'DESC'),
+            $start,
+            $limit
+        );
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -449,8 +498,6 @@ class ClassroomManageController extends BaseController
             $str .= ",".$value;
         }
 
-        $str .= "\r\n";
-
         $students = array();
 
         foreach ($classroomMembers as $classroomMember) {
@@ -474,21 +521,7 @@ class ClassroomManageController extends BaseController
 
             $students[] = $member;
         }
-
-        $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf("classroom-%s-students-(%s).csv", $classroom['id'], date('Y-n-d'));
-
-        // $userId = $this->getCurrentUser()->id;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return array($str, $students, $classroomMemberCount);
     }
 
     public function serviceAction(Request $request, $id)

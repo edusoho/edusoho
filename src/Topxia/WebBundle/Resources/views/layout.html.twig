@@ -30,19 +30,21 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
-    {# webpack #}
-    {% include 'TopxiaWebBundle::css_loader.html.twig' %}
   {% endblock %}
+
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
+
   {% block head_scripts %}{% endblock %}
+
 </head>
-<body class="es-main-green {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
   <div class="es-wrap">
+
     {% block header %}
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
@@ -78,19 +80,13 @@
       {% endif %}
     {% endif %}
   {% endblock %}
-{% endblock %}
+
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
+{% endblock %}
 
-
-{% if script() is not empty or use_webapck_loader|default(false) == true %}
-  {# webpack #}
-  {% do script(['libs/vendor.js', 'web.js'], 1000) %}
-  {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
-{% else %}
-  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-{% endif %}
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
 </body>
 </html>

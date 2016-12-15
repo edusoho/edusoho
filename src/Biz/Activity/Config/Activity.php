@@ -52,38 +52,9 @@ abstract class Activity
     }
 
     /**
-     * Activity 创建、编辑、进行时指定的Controller配置
-     *
-     * 如：
-     * ExampleActivity
-     * array(
-     *    'create' => 'ExampleBundle:Example:create',
-     *    'edit' => 'ExampleBundle:Example:edit',
-     *    'create' => 'ExampleBundle:Example:create'
-     * )
-     *
-     * @return array<String, String>
-     */
-    //abstract public function registerActions();
-
-    /**
-     * @param  $action
-     * @return String
-     */
-    final public function getAction($action)
-    {
-        $map = $this->registerActions();
-        return $map[$action];
-    }
-
-    /**
      * @return mixed
      */
-    //abstract protected function registerListeners();
-
-    abstract protected function getListeners();
-
-    // abstract public function getMetas();
+    abstract protected function registerListeners();
 
     /**
      * @param  string $eventName

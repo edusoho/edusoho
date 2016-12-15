@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Monolog\Logger;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\HTMLPurifierFactory;
@@ -57,6 +58,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $this->biz['db']->rollback();
     }
 
+    /**
+     * @return Logger
+     */
     protected function getLogger()
     {
         return $this->biz['logger'];

@@ -4,7 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
-use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

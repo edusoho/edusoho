@@ -1,1 +1,0 @@
-webpackJsonp(["web/course-manage/student/index"],["1fc0bf586ff4aec32375"]);

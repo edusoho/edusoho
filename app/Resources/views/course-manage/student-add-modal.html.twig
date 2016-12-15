@@ -1,8 +1,8 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 {% set modal_class= "modal-lg" %}
 {# {% set modalSize = 'large' %} #}
 
-{% do script(['libs/jquery-validation.js', 'web/course-manage/students/add/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/course-manage/students/add/index.js']) %}
 
 {% block title %}
   {{'添加'|trans}}

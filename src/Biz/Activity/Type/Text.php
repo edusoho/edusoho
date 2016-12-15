@@ -4,7 +4,6 @@ namespace Biz\Activity\Type;
 
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\TextActivityDao;
 use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
@@ -57,9 +56,6 @@ class Text extends Activity
         return $this->getTextActivityDao()->create($text);
     }
 
-    /**
-     * @return TextActivityDao
-     */
     protected function getTextActivityDao()
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
@@ -74,11 +70,5 @@ class Text extends Activity
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
-
-    protected function getListeners()
-    {
-        // TODO: Implement getListeners() method.
-    }
-
 
 }

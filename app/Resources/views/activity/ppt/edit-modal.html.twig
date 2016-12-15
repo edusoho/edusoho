@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/activity-manage/ppt/index.js']) %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/activity-manage/ppt/index.js']) %}
 {% set mediaType = 'ppt' %}
 {% block activity_content %}
   <div class="form-group">
@@ -8,7 +8,7 @@
     </div>
     <div class="col-sm-10">
 
-      {% include 'WebBundle:FileChooser:file-choose.html.twig' with {
+      {% include 'file-chooser/file-choose.html.twig' with {
       mediaType: 'ppt',
       fileType:'ppt',
       file: ppt.media|default(null)

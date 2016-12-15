@@ -3,11 +3,11 @@
 namespace AppBundle\Controller;
 
 
+use Biz\File\Service\UploadFileService;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\File\UploadFileService;
 use Topxia\Service\Util\CloudClientFactory;
 
 class PlayerController extends BaseController
@@ -164,7 +164,7 @@ class PlayerController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**

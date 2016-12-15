@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Card\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -16,7 +16,7 @@ class EventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCouponUsed(ServiceEvent $event)
+    public function onCouponUsed(Event $event)
     {
         $coupon = $event->getSubject();
         $card   = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
@@ -29,7 +29,7 @@ class EventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onOrderPaid(ServiceEvent $event)
+    public function onOrderPaid(Event $event)
     {
         $order         = $event->getSubject();
         $inviteSetting = $this->getSettingService()->get('invite', array());
@@ -49,7 +49,7 @@ class EventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserRegister(ServiceEvent $event)
+    public function onUserRegister(Event $event)
     {
         $userIds      = $event->getSubject();
         $userId       = $userIds['userId'];

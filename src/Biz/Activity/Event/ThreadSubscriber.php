@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\LiveActivity\Event;
+namespace Biz\Activity\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
