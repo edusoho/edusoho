@@ -4,7 +4,7 @@ namespace Biz\System\Service;
 
 interface StatisticsService
 {
-    public function getOnlineCount($retentionTime);
+    public function countOnline($retentionTime);
 
-    public function getloginCount($retentionTime);
+    public function countLogin($retentionTime);
 }

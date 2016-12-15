@@ -24,23 +24,6 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $this->db()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
     }
 
-    public function count($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    // public function search($conditions, $orderBy, $start, $limit)
-    // {
-    //     $builder = $this->_createSearchQueryBuilder($conditions)
-    //         ->select('*')
-    //         ->orderBy($orderBy[0], $orderBy[1])
-    //         ->setFirstResult($start)
-    //         ->setMaxResults($limit);
-    //     return $builder->execute()->fetchAll() ?: array();
-    // }
-
     private function _createQueryBuilder($conditions)
     {
         $tmpConditions = array();

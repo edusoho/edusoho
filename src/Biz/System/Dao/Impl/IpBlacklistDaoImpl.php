@@ -14,18 +14,13 @@ class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
         return $this->getByFields(array('ip' => $ip, 'type' => $type));
     }
 
-    public function findByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
-    {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
-        return $this->db()->fetchAll($sql, array($type, $time));
-    }
-
-    public function increaseIpCounter($id, $counter)
-    {
-        return $this->wave(array($id), array('counter' => 1));
-    }
-
     public function declares()
     {
+        return array(
+            'conditions' => array(
+                'ip = :ip',
+                'type = :type'
+            )
+        );
     }
 }

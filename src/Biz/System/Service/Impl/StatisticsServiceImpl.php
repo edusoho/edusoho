@@ -7,14 +7,14 @@ use Biz\System\Service\StatisticsService;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
 {
-    public function getOnlineCount($retentionTime)
+    public function countOnline($retentionTime)
     {
-        return $this->getSessionDao()->getOnlineCount($retentionTime);
+        return $this->getSessionDao()->countOnline($retentionTime);
     }
 
-    public function getloginCount($retentionTime)
+    public function countLogin($retentionTime)
     {
-        return $this->getSessionDao()->getLoginCount($retentionTime);
+        return $this->getSessionDao()->countLogin($retentionTime);
     }
 
     protected function getSessionDao()

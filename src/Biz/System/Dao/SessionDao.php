@@ -7,11 +7,11 @@ interface SessionDao
 
     public function deleteByUserId($userId);
 
-    public function getOnlineCount($retentionTime);
+    public function countOnline($retentionTime);
 
-    public function getLoginCount($retentionTime);
+    public function countLogin($retentionTime);
 
     public function deleteByIds($ids);
 
-    public function findBySessionTime($sessionTime, $limit);
+    public function searchBySessionTime($sessionTime, $limit);
 }

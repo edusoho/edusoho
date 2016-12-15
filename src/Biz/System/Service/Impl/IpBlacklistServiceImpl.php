@@ -40,7 +40,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
             return $ip['counter'];
         }
 
-        $this->getIpBlacklistDao()->increaseIpCounter($existIp['id'], 1);
+        $this->getIpBlacklistDao()->wave(array($existIp['id']), array('counter' => 1));
 
         return $existIp['counter'] + 1;
     }

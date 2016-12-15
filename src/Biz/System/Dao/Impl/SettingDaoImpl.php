@@ -27,5 +27,11 @@ class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
 
     public function declares()
     {
+        return array(
+            'conditions' => array(
+                'name = :name',
+                'namespace = :namespace'
+            )
+        );
     }
 }

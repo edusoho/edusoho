@@ -19,19 +19,19 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         return $this->db()->delete($this->table(), array('sess_user_id' => $userId));
     }
 
-    public function getOnlineCount($retentionTime)
+    public function countOnline($retentionTime)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= (unix_timestamp(now()) - ?);";
         return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
     }
 
-    public function getLoginCount($retentionTime)
+    public function countLogin($retentionTime)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= (unix_timestamp(now())-?) AND `sess_user_id` > 0";
         return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
     }
 
-    public function findBySessionTime($sessionTime, $limit)
+    public function searchBySessionTime($sessionTime, $limit)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
         return $this->db()->fetchAll($sql, array($sessionTime));

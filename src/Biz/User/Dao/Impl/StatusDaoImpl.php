@@ -8,33 +8,30 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
 {
     protected $table = 'status';
 
-    private $serializeFields = array(
-        'properties' => 'json'
-    );
+// //  去掉
+    //     public function searchByUserIds($userIds, $start, $limit)
+    //     {
+    //         if (empty($userIds)) {
+    //             return array();
+    //         }
 
-    public function searchByUserIds($userIds, $start, $limit)
-    {
-        if (empty($userIds)) {
-            return array();
-        }
+//         $marks = str_repeat('?,', count($userIds) - 1).'?';
+    //         $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
+    //         //FIXME 这样写，没法通过declares 处理serialize
+    //         return $this->db()->fetchAll($sql, $userIds);
+    //     }
 
-        $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
-        //FIXME 这样写，没法通过declares 处理serialize
-        return $this->db()->fetchAll($sql, $userIds);
-    }
+    // public function countByUserIds($userIds)
+    // {
+    //     if (empty($userIds)) {
+    //         return array();
+    //     }
 
-    public function countByUserIds($userIds)
-    {
-        if (empty($userIds)) {
-            return array();
-        }
+    //     $marks = str_repeat('?,', count($userIds) - 1).'?';
+    //     $sql   = "SELECT COUNT(*) FROM {$this->table} WHERE userId IN ({$marks});";
 
-        $marks = str_repeat('?,', count($userIds) - 1).'?';
-        $sql   = "SELECT COUNT(*) FROM {$this->table} WHERE userId IN ({$marks});";
-
-        return $this->db()->fetchColumn($sql, $userIds);
-    }
+    //     return $this->db()->fetchColumn($sql, $userIds);
+    // }
 
     public function searchStatuses($conditions, $orderBy, $start, $limit)
     {
@@ -47,9 +44,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
             ->setMaxResults($limit)
             ->orderBy($orderBy[0], $orderBy[1]);
 
-        $statuses = $builder->execute()->fetchAll() ?: array();
-
-        return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function _createQueryBuilder($conditions)
@@ -63,6 +58,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
             ->andWhere('objectType = :objectType')
             ->andWhere('objectId = :objectId')
             ->andWhere('userId = :userId')
+            ->andWhere('userId IN ( :userIds )')
             ->andWhere('private = :private');
     }
 
