@@ -23,9 +23,9 @@
 
 {% block main %}
   {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
-    {% set sms_school_name = smsInfo.usedSmsSign.name %}
+    {% set sms_sign_school_name = smsInfo.usedSmsSign.name %}
   {% else %}
-    {% set sms_school_name = smsInfo.name | default('') %}
+    {% set sms_sign_school_name = smsInfo.name | default('') %}
   {% endif %}
 <div class="page-heading">
   云短信开关
@@ -104,7 +104,7 @@
           <td>手机绑定</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
           <td>单个用户</td>
@@ -116,7 +116,7 @@
           <td>登录密码重置</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
           </td>
@@ -129,7 +129,7 @@
           <td>支付密码重置</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}</td>
           <td>单个用户</td>
@@ -141,7 +141,7 @@
           <td>使用网站余额支付</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans }}
             {{ setting('cloud_sms.sms_school_name')|default('') }}
@@ -164,7 +164,7 @@
           <td>新班级发布</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '同学们，%classrommName%：《班级名称》现已开始报名！%smsSchoolName% 链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans),'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
@@ -186,7 +186,7 @@
           <td>新课程发布</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '同学们，课程：《课程名称》现已开始报名！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
           </td>
@@ -210,7 +210,7 @@
           <td>新课时发布通知（普通课程）</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}
           </td>
@@ -232,7 +232,7 @@
           <td>新课时发布通知（直播）</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
@@ -254,7 +254,7 @@
           <td>直播开播前通知（提前1天）</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
@@ -276,7 +276,7 @@
           <td>直播开播前通知（提前1小时）</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') }) }}
           </td>
@@ -298,7 +298,7 @@
           <td>作业完成批阅</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%'|trans({'%smsScoolName%': setting('cloud_sms.sms_school_name')|default('')}) }}        </td>
           <td>单个用户</td>
@@ -323,7 +323,7 @@
           <td>试卷完成批阅</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
@@ -345,7 +345,7 @@
           <td>课程购买回执</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
@@ -367,7 +367,7 @@
           <td>班级购买回执</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('')})  }}
           </td>
@@ -379,7 +379,7 @@
           <td>会员购买回执</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
@@ -391,7 +391,7 @@
           <td>虚拟币充值回执</td>
           <td>
             【<span id="js-sms-school-name">
-              {{ sms_school_name }}
+              {{ sms_sign_school_name }}
             </span>】
             {{ '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%'|trans({'%smsSchoolName%': setting('cloud_sms.sms_school_name')|default('') })  }}
           </td>
