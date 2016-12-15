@@ -399,7 +399,7 @@ class EduCloudController extends BaseController
 
         $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
         try {
-            $api  = CloudAPIFactory::create('root');
+            $api  = CloudAPIFactory::create('leaf');
             $overview  = $api->get("/me/sms/overview");
             $smsInfo = $api->get('/me/sms_account');
         } catch (\RuntimeException $e) {
