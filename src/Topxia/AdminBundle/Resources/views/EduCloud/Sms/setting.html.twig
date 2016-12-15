@@ -165,7 +165,7 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '同学们,《班级名称》现已开始报名！'~sms_sign_school_name ~'链接地址' }}
+            {{ '同学们，%classrommName%：《班级名称》现已开始报名！%sms_sign_school_name% 链接地址'|trans({'%classrommName%': setting('classroom.name')|default('班级'|trans),'%sms_sign_school_name%': setting('sms_sign_school_name')|default('') }) }}
           </td>
           <td>所有用户</td>
           <td>手动群发</td>
