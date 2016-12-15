@@ -18,7 +18,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
-    public function countThread($conditions)
+    public function countThreads($conditions)
     {
         $conditions = $this->prepareThreadSearchConditions($conditions);
 
@@ -57,9 +57,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function prepareThreadSearchConditions($conditions)
     {
-//        if (empty($conditions['type'])) {
-//            unset($conditions['type']);
-//        }
 
         if (empty($conditions['keyword'])) {
             unset($conditions['keyword']);
@@ -75,10 +72,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
-
-//        if (empty($conditions['author'])) {
-//            unset($conditions['author']);
-//        }
 
         if (isset($conditions['author'])) {
             $author               = $this->getUserService()->getUserByNickname($conditions['author']);

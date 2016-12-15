@@ -26,18 +26,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function prepareThreadSearchConditions($conditions)
     {
-//        if (empty($conditions['type'])) {
-//            unset($conditions['type']);
-//        }
-
         if (empty($conditions['keyword'])) {
             unset($conditions['keyword']);
             unset($conditions['keywordType']);
         }
 
-//        if (empty($conditions['threadType'])) {
-//            unset($conditions['threadType']);
-//        }
 
         if (isset($conditions['threadType'])) {
             $conditions[$conditions['threadType']] = 1;
@@ -53,10 +46,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
-
-//        if (empty($conditions['author'])) {
-//            unset($conditions['author']);
-//        }
 
         if (isset($conditions['author'])) {
             $author               = $this->getUserService()->getUserByNickname($conditions['author']);
@@ -74,19 +63,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         switch ($sort) {
             case 'created':
-                $orderBys = array('isStick'=> 'DESC','createdTime'=> 'DESC');
+                $orderBys = array('isStick' => 'DESC', 'createdTime' => 'DESC');
                 break;
             case 'posted':
-                $orderBys = array('isStick'=> 'DESC','latestPostTime'=> 'DESC');
+                $orderBys = array('isStick' => 'DESC', 'latestPostTime' => 'DESC');
                 break;
             case 'createdNotStick':
-                $orderBys = array('createdTime'=> 'DESC');
+                $orderBys = array('createdTime' => 'DESC');
                 break;
             case 'postedNotStick':
-                $orderBys = array('latestPostTime'=> 'DESC');
+                $orderBys = array('latestPostTime' => 'DESC');
                 break;
             case 'popular':
-                $orderBys = array('hitNum'=> 'DESC');
+                $orderBys = array('hitNum' => 'DESC');
                 break;
             default:
                 throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
