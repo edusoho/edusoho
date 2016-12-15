@@ -78,7 +78,7 @@ class UserProvider implements UserProviderInterface
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrgService()
