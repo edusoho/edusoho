@@ -470,11 +470,9 @@ class LiveCourseController extends BaseController
     public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        $replay = $this->getCourseService()->getCourseLessonReplay($courseLessonReplayId);
 
-        $globalId = empty($result['resourceNo']) ? 0 : $result['resourceNo'];
-
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $globalId));
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
     }
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)

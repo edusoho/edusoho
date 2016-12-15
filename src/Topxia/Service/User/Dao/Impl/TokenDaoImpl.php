@@ -56,7 +56,8 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     {
         $this->incrVersions(array(
             "{$this->table}:version:userId:{$token['userId']}",
-            "{$this->table}:version:type:{$token['type']}"
+            "{$this->table}:version:type:{$token['type']}",
+            "{$this->table}:search"
         ));
 
         $this->deleteCache(array(

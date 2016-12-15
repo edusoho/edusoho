@@ -10,7 +10,7 @@
             "{{ path ~ '?' ~ asset_version('')}}",
           {% endif %}
         {% else %}
-          "{{ asset('build/' ~ path, 'webpack') }}",
+          "{{ asset('static-dist/' ~ path, 'webpack') }}",
         {% endif %}
       {% endfor %}
     ];

@@ -3,7 +3,7 @@
 {% block title %}{{ '教学计划列表'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
 
-{% do script(['web/course-manage/index.js']) %}
+{% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
 <!-- 当前课程的教学计划列表 -->

@@ -418,7 +418,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
-            'status'   => ($refund['status'] == 'success') ? 'cancelled' : 'refunding',
+            'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id']
         ));
 

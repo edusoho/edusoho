@@ -1,6 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/activity-manage/audio/index.js']) %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/activity-manage/audio/index.js']) %}
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('audio') %}
   {% set fileType = 'audio' %}

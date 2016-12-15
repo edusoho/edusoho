@@ -2,7 +2,7 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'info' %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','web/course-manage/info/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/info/index.js']) %}
 
 {% block course %}
   <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
