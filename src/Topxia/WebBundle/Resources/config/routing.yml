@@ -1443,6 +1443,7 @@ my_live_courses_learning:
     path: /my/livecourses/learing
     defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
 
+#rm
 my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: TopxiaWebBundle:MyCourse:learning }
@@ -1454,11 +1455,11 @@ my_courses_learned:
 my_courses_favorited:
     path: /my/courses/favorited
     defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-
+#rm
 my_questions:
     path: /my/questions
     defaults: { _controller: TopxiaWebBundle:MyThread:questions }
-
+#rm
 my_discussions:
     path: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }

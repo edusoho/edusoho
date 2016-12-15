@@ -9,4 +9,7 @@ interface CourseDao extends GeneralDaoInterface
     public function findCoursesByCourseSetId($courseSetId);
 
     public function getDefaultCourseByCourseSetId($courseSetId);
+
+    public function findCoursesByIds($ids);
+
 }
