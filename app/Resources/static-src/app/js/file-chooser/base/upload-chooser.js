@@ -6,13 +6,7 @@ export default class UploaderChooser extends Chooser {
     this.element = $(element);
     this._sdk = undefined;
     this._initSdk()
-      ._bindEvent();
-  }
-
-  reopen() {
-    this.destroy();
-    this._initSdk();
-    this._bindEvent();
+        ._bindEvent();
   }
 
   _initSdk() {
@@ -33,9 +27,6 @@ export default class UploaderChooser extends Chooser {
   }
 
   _bindEvent() {
-
-    $('.js-choose-trigger').on('click', this.reopen.bind(this));
-
     this.element.on('change', '.js-upload-params', (event) => {
       let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
         prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
@@ -76,15 +67,5 @@ export default class UploaderChooser extends Chooser {
 
     placeFileName(file.name);
     placeMediaAttr(file);
-    this.destroy();
-  }
-
-  destroy() {
-    // this._close();
-    if (this._sdk === undefined) {
-      return;
-    }
-    this._sdk.destroy();
-    this._sdk = undefined;
   }
 }
