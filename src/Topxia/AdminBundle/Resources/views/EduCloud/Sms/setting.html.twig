@@ -22,7 +22,6 @@
 {% endblock %}
 
 {% block main %}
-  <!-- 设置 -->
   {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success'  %}
     {% set sms_school_name = smsInfo.usedSmsSign.name %}
   {% else %}
