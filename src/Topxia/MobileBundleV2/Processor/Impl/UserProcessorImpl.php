@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Topxia\Common\EncryptionToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
@@ -462,11 +463,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function regist()
     {
         $email       = $this->getParam('email');
-        $password    = $this->getParam('password');
+        $password    = $this->getParam('_password');
         $nickname    = $this->getParam('nickname');
         $phoneNumber = $this->getParam('phone');
         $smsCode     = $this->getParam('smsCode');
         $registeredWay = $this->getParam('registeredWay');
+
+        if (empty($password)) {
+            $password = $this->getParam('password');
+            $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
+        }
 
         if (empty($registeredWay) || !in_array(strtolower($registeredWay), array('ios', 'android'))) {
             $registeredWay = $this->guessDeviceFromUserAgent($this->request->headers->get("user-agent"));
@@ -663,23 +669,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
 
-    private function decryptPassword($encryptPassword,$key)
-    {
-        require_once("xxtea.php");
-       return  xxtea_decrypt($encryptPassword, $key);
-    }
     public function login()
     {
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
-         //新的方式 加密过的密码通过password传递
+
         if (empty($password)) {
             $password = $this->getParam('password');
-            $password = $this->decryptPassword($password,$this->request->getHost());
+            $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
-        var_dump($this->request->getHost());
-        var_dump($password);
-        exit();
+
         $user     = $this->loadUserByUsername($this->request, $username);
         if (empty($user)) {
             return $this->createErrorResponse('username_error', '用户帐号不存在');
