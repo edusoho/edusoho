@@ -15,27 +15,6 @@ class MyCourseController extends BaseController
         }
     }
 
-    public function learningAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-        $paginator   = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->findUserLeaningCourseCount($currentUser['id']),
-            12
-        );
-
-        $courses = $this->getCourseService()->findUserLeaningCourses(
-            $currentUser['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render('TopxiaWebBundle:MyCourse:learning.html.twig', array(
-            'courses'   => $courses,
-            'paginator' => $paginator
-        ));
-    }
-
     public function learnedAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
