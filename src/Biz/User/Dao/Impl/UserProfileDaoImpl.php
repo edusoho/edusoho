@@ -4,7 +4,7 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserProfileDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Service\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 {
@@ -63,48 +63,14 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
         return $result;
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
-    {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
-    }
-
-    public function count($conditions)
-    {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
-
     public function findDistinctMobileProfiles($start, $limit)
     {
-        // $start = (int) $start;
-        // $limit = (int) $limit;
-
         $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
         return $this->db()->fetchAll($sql);
     }
 
     protected function _createQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
-
-            if (empty($v)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        );
-
         if (isset($conditions['mobile'])) {
             $conditions['mobile'] = "%{$conditions['mobile']}%";
         }
@@ -121,20 +87,22 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return $this->_getQueryBuilder($conditions)
-            ->from($this->table, 'user_profile')
-            ->andWhere('mobile LIKE :mobile')
-            ->andWhere('truename LIKE :truename')
-            ->andWhere('idcard LIKE :idcard')
-            ->andWhere('id IN (:ids)')
-            ->andWhere('mobile = :tel')
-            ->andWhere('mobile <> :mobileNotEqual')
-            ->andWhere('qq LIKE :qq');
+        return parent::_createQueryBuilder($conditions);
     }
 
     public function declares()
     {
         return array(
+            'orderbys'   => array('id'),
+            'conditions' => array(
+                'mobile LIKE :mobile',
+                'truename LIKE :truename',
+                'idcard LIKE :idcard',
+                'id IN (:ids)',
+                'mobile = :tel',
+                'mobile <> :mobileNotEqual',
+                'qq LIKE :qq'
+            )
         );
     }
 }

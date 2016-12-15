@@ -1287,7 +1287,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findAllUserFollowings($userId)
     {
-        $friends = $this->getFriendDao()->findAllUserFollowingByFromId($userId);
+        $friends = $this->getFriendDao()->findUserFollowingsByFromId($userId);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
@@ -1306,7 +1306,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findAllUserFollowers($userId)
     {
-        $friends = $this->getFriendDao()->findAllUserFollowerByToId($userId);
+        $friends = $this->getFriendDao()->findUserFollowersByToId($userId);
         $ids     = ArrayToolkit::column($friends, 'fromId');
         return $this->findUsersByIds($ids);
     }

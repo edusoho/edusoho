@@ -4,13 +4,15 @@ namespace Biz\User\Dao;
 
 interface TokenDao
 {
+    public function get($id, $lock = false);
+
     public function getByToken($token);
 
-    public function waveRemainedTimes($id, $diff);
-
-    public function deleteByExpiredTime($expiredTime, $limit);
+    public function create($token);
 
     public function findByUserIdAndType($userId, $type);
 
     public function getByType($type);
+
+    public function deleteByExpiredTime($expiredTime, $limit);
 }

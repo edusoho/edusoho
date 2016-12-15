@@ -57,7 +57,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         $this->getRelationDao()->deleteByConversationIdAndMessageId($conversationId, $messageId);
-        $relationCount = $this->getRelationDao()->countByConversationId($conversationId);
+        $relationCount = $this->getRelationDao()->count(array('conversationId' => $conversationId));
         if ($relationCount == 0) {
             $this->getConversationDao()->delete($conversationId);
         }
@@ -87,17 +87,17 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     public function findUserConversations($userId, $start, $limit)
     {
-        return $this->getConversationDao()->findByToId($userId, $start, $limit);
+        return $this->getConversationDao()->searchByToId($userId, $start, $limit);
     }
 
     public function countUserConversations($userId)
     {
-        return $this->getConversationDao()->countByToId($userId);
+        return $this->getConversationDao()->count(array('toId' => $userId));
     }
 
     public function countConversationMessages($conversationId)
     {
-        return $this->getRelationDao()->countByConversationId($conversationId);
+        return $this->getRelationDao()->count(array('conversationId' => $conversationId));
     }
 
     public function deleteConversation($conversationId)

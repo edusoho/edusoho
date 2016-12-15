@@ -10,9 +10,9 @@ interface UserFieldService
 
     public function countFields($condition);
 
-    public function getAllFieldsOrderBySeq();
+    public function getFieldsOrderBySeq();
 
-    public function getAllFieldsOrderBySeqAndEnabled();
+    public function getEnabledFieldsOrderBySeq();
 
     public function updateField($id, $fields);
 

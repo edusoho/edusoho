@@ -31,6 +31,10 @@ class UserPayAgreementDaoImpl extends GeneralDaoImpl implements UserPayAgreement
     public function declares()
     {
         return array(
+            'conditions' => array(
+                'userId = :userId',
+                'bankAuth = :bankAuth'
+            )
         );
     }
 

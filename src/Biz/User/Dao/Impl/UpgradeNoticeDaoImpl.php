@@ -20,6 +20,11 @@ class UpgradeNoticeDaoImpl extends GeneralDaoImpl implements UpgradeNoticeDao
     public function declares()
     {
         return array(
+            'conditions' => array(
+                'userId = :userId',
+                'version = :version',
+                'code = :code'
+            )
         );
     }
 }

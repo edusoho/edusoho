@@ -5,7 +5,6 @@ use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Service\InvalidArgumentException;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -15,11 +14,11 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
-            throw new InvalidArgumentException('用户名中含有敏感词！');
+            throw $this->createInvalidArgumentException('Your nickname contains sensitive word');
         }
 
         if ($this->registerLimitValidator($registration)) {
-            throw new InvalidArgumentException('由于您注册次数过多，请稍候尝试');
+            throw $this->createAccessDeniedException('Try again later please, as you have registered for too many times');
         }
 
         //FIXME 应该调用GeneralDaoImpl里的事务
@@ -193,7 +192,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function changePayPassword($userId, $userLoginPassword, $newPayPassword)
     {
         if (!$this->checkPassword($userId, $userLoginPassword)) {
-            throw new \InvalidArgumentException();
+            throw $this->createInvalidArgumentException('Invalid Password');
         }
 
         $this->getUserService()->changePayPassword($userId, $newPayPassword);
@@ -370,7 +369,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
 
             if (!in_array($partner, array('discuz', 'phpwind', 'default'))) {
-                throw new InvalidArgumentException('');
+                throw $this->createInvalidArgumentException('Invalid partner');
             }
 
             $class = substr(__NAMESPACE__, 0, -13)."\\AuthProvider\\".ucfirst($partner)."AuthProvider";

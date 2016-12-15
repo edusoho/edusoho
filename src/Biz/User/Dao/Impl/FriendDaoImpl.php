@@ -24,24 +24,19 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
         return $this->search(array('fromId' => $fromId), array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function countByFromId($fromId)
-    {
-        return $this->count(array('fromId' => $fromId));
-    }
-
-    public function findAllUserFollowingByFromId($fromId)
+    public function findUserFollowingsByFromId($fromId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC ";
         return $this->db()->fetchAll($sql, array($fromId));
     }
 
-    public function findAllUserFollowerByToId($toId)
+    public function findUserFollowersByToId($toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC ";
         return $this->db()->fetchAll($sql, array($toId));
     }
 
-    public function findFriendCountByFromId($fromId)
+    public function countByFromId($fromId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ?";
         return $this->db()->fetchColumn($sql, array($fromId));

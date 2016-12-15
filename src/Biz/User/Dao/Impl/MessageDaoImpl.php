@@ -9,54 +9,54 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
 {
     protected $table = 'message';
 
-    protected function _createQueryBuilder($conditions)
-    {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
+    // protected function _createQueryBuilder($conditions)
+    // {
+    //     $conditions = array_filter($conditions, function ($v) {
+    //         if ($v === 0) {
+    //             return true;
+    //         }
 
-            if (empty($v)) {
-                return false;
-            }
-            return true;
-        });
+    //         if (empty($v)) {
+    //             return false;
+    //         }
+    //         return true;
+    //     });
 
-        if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
-        }
-        return $this->_getQueryBuilder($conditions)
-            ->from($this->table, 'message')
-            ->andWhere('fromId = :fromId')
-            ->andWhere('toId = :toId')
-            ->andWhere('createdTime = :createdTime')
-            ->andWhere('createdTime >= :startDate')
-            ->andWhere('createdTime < :endDate')
-            ->andWhere('fromId IN (:fromIds)')
-            ->andWhere('toId IN (:toIds)')
-            ->andWhere('content LIKE :content');
-    }
+    //     if (isset($conditions['content'])) {
+    //         $conditions['content'] = "%{$conditions['content']}%";
+    //     }
+    //     return $this->_getQueryBuilder($conditions)
+    //         ->from($this->table, 'message')
+    //         ->andWhere('fromId = :fromId')
+    //         ->andWhere('toId = :toId')
+    //         ->andWhere('createdTime = :createdTime')
+    //         ->andWhere('createdTime >= :startDate')
+    //         ->andWhere('createdTime < :endDate')
+    //         ->andWhere('fromId IN (:fromIds)')
+    //         ->andWhere('toId IN (:toIds)')
+    //         ->andWhere('content LIKE :content');
+    // }
 
-    public function count($conditions)
-    {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('COUNT(id)');
+    // public function count($conditions)
+    // {
+    //     $builder = $this->_createQueryBuilder($conditions)
+    //         ->select('COUNT(id)');
 
-        return $builder->execute()->fetchColumn(0);
-    }
+    //     return $builder->execute()->fetchColumn(0);
+    // }
 
-    public function search($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
+    // public function search($conditions, $orderBy, $start, $limit)
+    // {
+    //     $this->filterStartLimit($start, $limit);
 
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy('createdTime', 'DESC');
+    //     $builder = $this->_createQueryBuilder($conditions)
+    //         ->select('*')
+    //         ->setFirstResult($start)
+    //         ->setMaxResults($limit)
+    //         ->orderBy('createdTime', 'DESC');
 
-        return $builder->execute()->fetchAll() ?: array();
-    }
+    //     return $builder->execute()->fetchAll() ?: array();
+    // }
 
     public function getByFromIdAndToId($fromId, $toId)
     {
@@ -65,10 +65,6 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
 
     public function findByIds(array $ids)
     {
-        if (empty($ids)) {
-            return array();
-        }
-
         return $this->findInField('id', $ids);
     }
 
@@ -86,7 +82,17 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
     public function declares()
     {
         return array(
-            'orderbys' => array()
+            'orderbys'   => array('createdTime'),
+            'conditions' => array(
+                'fromId = :fromId',
+                'toId = :toId',
+                'createdTime = :createdTime',
+                'createdTime >= :startDate',
+                'createdTime < :endDate',
+                'fromId IN (:fromIds)',
+                'toId IN (:toIds)',
+                'content LIKE %:content%'
+            )
         );
     }
 }

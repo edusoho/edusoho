@@ -38,6 +38,11 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
     public function declares()
     {
         return array(
+            'conditions' => array(
+                'fromId = :fromId',
+                'toId = :toId',
+                'type = :type'
+            )
         );
     }
 }

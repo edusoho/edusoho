@@ -9,12 +9,6 @@ class UserActiveDaoImpl extends GeneralDaoImpl implements UserActiveDao
 {
     protected $table = 'user_active_log';
 
-    public function create($activeUser)
-    {
-        $activeUser['createdTime'] = time();
-        return parent::create($activeUser);
-    }
-
     public function getByUserId($userId)
     {
         $startTime = strtotime(date('Y-m-d', time()));
@@ -32,6 +26,7 @@ class UserActiveDaoImpl extends GeneralDaoImpl implements UserActiveDao
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime')
         );
     }
 }

@@ -6,7 +6,7 @@ interface UserFieldDao
 {
     public function getByFieldName($fieldName);
 
-    public function getAllFieldsOrderBySeq();
+    public function getFieldsOrderBySeq();
 
-    public function getAllFieldsOrderBySeqAndEnabled();
+    public function getEnabledFieldsOrderBySeq();
 }

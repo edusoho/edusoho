@@ -14,19 +14,15 @@ class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConver
         return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
-    public function findByToId($toId, $start, $limit)
+    public function searchByToId($toId, $start, $limit)
     {
         return $this->search(array('toId' => $toId), array('latestMessageTime' => 'DESC'), $start, $limit);
-    }
-
-    public function countByToId($toId)
-    {
-        return $this->count(array('toId' => $toId));
     }
 
     public function declares()
     {
         return array(
+            'orderbys' => array('latestMessageTime')
         );
     }
 }

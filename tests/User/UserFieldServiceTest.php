@@ -103,7 +103,7 @@ class UserFieldServiceTest extends BaseTestCase
         $returnField = $this->getUserFieldService()->addUserField($field);
         $returnField = $this->getUserFieldService()->addUserField($field);
 
-        $fields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $this->assertEquals(true, is_array($fields));
 

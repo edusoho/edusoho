@@ -55,17 +55,6 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $result;
     }
 
-    public function waveRemainedTimes($id, $diff)
-    {
-        $sql    = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
-        $result = $this->db()->executeQuery($sql, array($diff, $id));
-
-        $sql   = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $token = $this->db()->fetchAssoc($sql, array($id)) ?: null;
-
-        return $result;
-    }
-
     public function declares()
     {
         return array(

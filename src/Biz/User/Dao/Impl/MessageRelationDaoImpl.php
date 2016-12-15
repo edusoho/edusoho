@@ -27,11 +27,6 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
         return $this->db()->delete($this->table, array('conversationId' => $conversationId));
     }
 
-    public function countByConversationId($conversationId)
-    {
-        return $this->count(array('conversationId' => $conversationId));
-    }
-
     public function searchByConversationId($conversationId, $start, $limit)
     {
         return $this->search(array('conversationId' => $conversationId), array('messageId' => 'DESC'), $start, $limit);

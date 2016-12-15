@@ -45,43 +45,51 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->getByFields(array('inviteCode' => $inviteCode));
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
+    public function waveCounterById($id, $name, $number)
     {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+        $names = array('newMessageNum', 'newNotificationNum');
 
-        foreach ($orderBys as $field => $direction) {
-            $builder->addOrderBy($field, $direction);
+        if (!in_array($name, $names)) {
+            return array();
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $this->wave(array($id), array($name => $number));
     }
 
-    public function count($conditions)
+    public function clearCounterById($id, $name)
     {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        $names = array('newMessageNum', 'newNotificationNum');
+
+        if (!in_array($name, $names)) {
+            return array();
+        }
+
+        $currentTime = time();
+        $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        return $this->db()->executeQuery($sql, array($id));
     }
+
+    public function analysisRegisterDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function analysisUserSumByTime($endTime)
+    {
+        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
+        return $this->db()->fetchAll($sql, array($endTime));
+    }
+
+    //replace: count(array('createdTime' => $endTime))
+    // public function countByLessThanCreatedTime($endTime)
+    // {
+    //     $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
+    //     return $this->db()->fetchColumn($sql, array($endTime));
+    // }
 
     protected function _createQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
-
-            if (empty($v)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        );
-
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
@@ -136,36 +144,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
         $conditions['verifiedMobileNull'] = "";
 
-        $builder = $this->_getQueryBuilder($conditions)
-            ->from($this->table, 'user')
-            ->andWhere('promoted = :promoted')
-            ->andWhere('roles LIKE :roles')
-            ->andWhere('roles = :role')
-            ->andWhere('UPPER(nickname) LIKE :nickname')
-            ->andWhere('id =: id')
-            ->andWhere('loginIp = :loginIp')
-            ->andWhere('createdIp = :createdIp')
-            ->andWhere('approvalStatus = :approvalStatus')
-            ->andWhere('UPPER(email) LIKE :email')
-            ->andWhere('level = :level')
-            ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime')
-            ->andWhere('updatedTime >= :updatedTime_GE')
-            ->andWhere('approvalTime >= :startApprovalTime')
-            ->andWhere('approvalTime <= :endApprovalTime')
-            ->andWhere('loginTime >= :loginStartTime')
-            ->andWhere('loginTime <= :loginEndTime')
-            ->andWhere('locked = :locked')
-            ->andWhere('level >= :greatLevel')
-            ->andWhere('UPPER(verifiedMobile) LIKE :verifiedMobile')
-            ->andWhere('type LIKE :type')
-            ->andWhere('id IN ( :userIds)')
-            ->andWhere('inviteCode = :inviteCode')
-            ->andWhere('inviteCode != :NoInviteCode')
-            ->andWhere('id NOT IN ( :excludeIds )')
-            ->andWhere('orgCode LIKE :likeOrgCode')
-            ->andWhere('orgCode = :orgCode')
-        ;
+        $builder = parent::_createQueryBuilder($conditions);
 
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
@@ -174,63 +153,43 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $builder;
     }
 
-    public function waveCounterById($id, $name, $number)
-    {
-        $names = array('newMessageNum', 'newNotificationNum');
-
-        if (!in_array($name, $names)) {
-            return array();
-        }
-
-        $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$name} = {$name} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        $result      = $this->db()->executeQuery($sql, array($number, $id));
-        return $result;
-    }
-
-    public function clearCounterById($id, $name)
-    {
-        $names = array('newMessageNum', 'newNotificationNum');
-
-        if (!in_array($name, $names)) {
-            return array();
-        }
-
-        $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        $result      = $this->db()->executeQuery($sql, array($id));
-        return $result;
-    }
-
-    public function analysisRegisterDataByTime($startTime, $endTime)
-    {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->db()->fetchAll($sql, array($startTime, $endTime));
-    }
-
-    public function analysisUserSumByTime($endTime)
-    {
-        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $this->db()->fetchAll($sql, array($endTime));
-    }
-
-    public function countByLessThanCreatedTime($endTime)
-    {
-        $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
-        return $this->db()->fetchColumn($sql, array($endTime));
-    }
-
     public function declares()
     {
         return array(
+            'orderbys'   => array('createdTime', 'promotedTime'),
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'
             ),
             'conditions' => array(
-                'nickname = :nickname',
-                'email = :email',
-                'mobile = :mobile'
+                'mobile = :mobile',
+                'promoted = :promoted',
+                'roles LIKE :roles',
+                'roles = :role',
+                'UPPER(nickname) LIKE :nickname',
+                'id =: id',
+                'loginIp = :loginIp',
+                'createdIp = :createdIp',
+                'approvalStatus = :approvalStatus',
+                'UPPER(email) LIKE :email',
+                'level = :level',
+                'createdTime >= :startTime',
+                'createdTime <= :endTime',
+                'updatedTime >= :updatedTime_GE',
+                'approvalTime >= :startApprovalTime',
+                'approvalTime <= :endApprovalTime',
+                'loginTime >= :loginStartTime',
+                'loginTime <= :loginEndTime',
+                'locked = :locked',
+                'level >= :greatLevel',
+                'UPPER(verifiedMobile) LIKE :verifiedMobile',
+                'type LIKE :type',
+                'id IN ( :userIds)',
+                'inviteCode = :inviteCode',
+                'inviteCode != :NoInviteCode',
+                'id NOT IN ( :excludeIds )',
+                'orgCode LIKE :likeOrgCode',
+                'orgCode = :orgCode'
             )
         );
     }

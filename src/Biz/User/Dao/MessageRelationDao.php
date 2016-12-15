@@ -8,8 +8,6 @@ interface MessageRelationDao
 
     public function deleteByConversationId($conversationId);
 
-    public function countByConversationId($conversationId);
-
     public function deleteByConversationIdAndMessageId($conversationId, $messageId);
 
     public function searchByConversationId($conversationId, $start, $limit);

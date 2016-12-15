@@ -6,8 +6,5 @@ interface MessageConversationDao
 {
     public function getByFromIdAndToId($fromId, $toId);
 
-    public function findByToId($toId, $start, $limit);
-
-    public function countByToId($toId);
-
+    public function searchByToId($toId, $start, $limit);
 }

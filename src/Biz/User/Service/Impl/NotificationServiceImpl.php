@@ -36,7 +36,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function countNotificationsByUserId($userId)
     {
-        return $this->getNotificationDao()->countByUserId($userId);
+        return $this->getNotificationDao()->count(array('userId' => $userId));
     }
 
     public function clearUserNewNotificationCounter($userId)

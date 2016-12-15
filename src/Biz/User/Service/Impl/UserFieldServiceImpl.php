@@ -48,14 +48,14 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         return $this->getUserFieldDao()->count($condition);
     }
 
-    public function getAllFieldsOrderBySeq()
+    public function getFieldsOrderBySeq()
     {
-        return $this->getUserFieldDao()->getAllFieldsOrderBySeq();
+        return $this->getUserFieldDao()->getFieldsOrderBySeq();
     }
 
-    public function getAllFieldsOrderBySeqAndEnabled()
+    public function getEnabledFieldsOrderBySeq()
     {
-        $fields = $this->getUserFieldDao()->getAllFieldsOrderBySeqAndEnabled();
+        $fields = $this->getUserFieldDao()->getEnabledFieldsOrderBySeq();
 
         for ($i = 0; $i < count($fields); $i++) {
             if (strstr($fields[$i]['fieldName'], "textField")) {

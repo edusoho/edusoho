@@ -18,6 +18,10 @@ class UserSecureQuestionDaoImpl extends GeneralDaoImpl implements UserSecureQues
     public function declares()
     {
         return array(
+            'orderbys'   => array('createdTime'),
+            'conditions' => array(
+                'userId = :userId'
+            )
         );
     }
 }

@@ -16,7 +16,7 @@ interface UserDao
 
     public function findByIds(array $ids);
 
-    public function getByInviteCode($code); //
+    public function getByInviteCode($code);
 
     public function waveCounterById($id, $name, $number);
 
@@ -25,7 +25,4 @@ interface UserDao
     public function analysisRegisterDataByTime($startTime, $endTime);
 
     public function analysisUserSumByTime($endTime);
-
-    public function countByLessThanCreatedTime($endTime);
-
 }

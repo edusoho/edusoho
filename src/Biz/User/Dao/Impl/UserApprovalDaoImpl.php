@@ -19,37 +19,8 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
         return $this->findInField('userId', $userIds);
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
-    }
-
-    public function count($conditions)
-    {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
-
     protected function _createQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
-
-            if (empty($v)) {
-                return false;
-            }
-            return true;
-        });
-
         if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
             $conditions['truename'] = "%{$conditions['keyword']}%";
         }
@@ -58,17 +29,18 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
             $conditions['idcard'] = "%{$conditions['keyword']}%";
         }
 
-        return $this->_getQueryBuilder($conditions)
-            ->from($this->table, 'user_approval')
-            ->andWhere('truename LIKE :truename')
-            ->andWhere('createTime >=:startTime')
-            ->andWhere('createTime <=:endTime')
-            ->andWhere('idcard LIKE :idcard');
+        return parent::_createQueryBuilder($conditions);
     }
 
     public function declares()
     {
         return array(
+            'conditions' => array(
+                'truename LIKE :truename',
+                'createTime >=:startTime',
+                'createTime <=:endTime',
+                'idcard LIKE :idcard'
+            )
         );
     }
 }

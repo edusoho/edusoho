@@ -14,11 +14,6 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
         return $this->search(array('userId' => $userId), array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function countByUserId($userId)
-    {
-        return $this->count(array('userId' => $userId));
-    }
-
     public function declares()
     {
         return array(
