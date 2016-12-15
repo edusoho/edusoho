@@ -5,6 +5,7 @@ use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Service\InvalidArgumentException;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -14,13 +15,14 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
-            throw $this->createServiceException('用户名中含有敏感词！');
+            throw new InvalidArgumentException('用户名中含有敏感词！');
         }
 
         if ($this->registerLimitValidator($registration)) {
-            throw $this->createServiceException('由于您注册次数过多，请稍候尝试');
+            throw new InvalidArgumentException('由于您注册次数过多，请稍候尝试');
         }
 
+        //FIXME 应该调用GeneralDaoImpl里的事务
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
@@ -368,7 +370,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
 
             if (!in_array($partner, array('discuz', 'phpwind', 'default'))) {
-                throw new \InvalidArgumentException();
+                throw new InvalidArgumentException('');
             }
 
             $class = substr(__NAMESPACE__, 0, -13)."\\AuthProvider\\".ucfirst($partner)."AuthProvider";

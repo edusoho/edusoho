@@ -36,15 +36,15 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
     public function addCommonAdmin($admin)
     {
         if (!isset($admin['userId']) || empty($admin['userId'])) {
-            throw $this->createServiceException('userId不能为空！');
+            throw $this->createInvalidArgumentException('userId Required');
         }
 
         if (!isset($admin['title']) || empty($admin['title'])) {
-            throw $this->createServiceException('名称不能为空！');
+            throw $this->createInvalidArgumentException('title Required');
         }
 
         if (!isset($admin['url']) || empty($admin['url'])) {
-            throw $this->createServiceException('url不能为空！');
+            throw $this->createInvalidArgumentException('url Required');
         }
 
         $admin['createdTime'] = time();

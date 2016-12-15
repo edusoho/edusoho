@@ -15,20 +15,20 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
     public function addUserField($fields)
     {
         if (empty($fields['field_title'])) {
-            throw $this->createServiceException('字段名称不能为空！');
+            throw $this->createInvalidArgumentException('field_title Required');
         }
 
         if (empty($fields['field_seq'])) {
-            throw $this->createServiceException('字段排序不能为空！');
+            throw $this->createInvalidArgumentException('field_seq Required');
         }
 
         if (!intval($fields['field_seq'])) {
-            throw $this->createServiceException('字段排序只能为数字！');
+            throw $this->createInvalidArgumentException('field_seq Invalid');
         }
 
         $fieldName = $this->checkType($fields['field_type']);
         if ($fieldName == false) {
-            throw $this->createServiceException('字段类型是错误的！');
+            throw $this->createInvalidArgumentException('field_type Invalid');
         }
 
         $field['fieldName'] = $fieldName;
@@ -87,15 +87,15 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         ));
 
         if (isset($fields['title']) && empty($fields['title'])) {
-            throw $this->createServiceException('字段名称不能为空！');
+            throw $this->createInvalidArgumentException('title Required');
         }
 
         if (isset($fields['seq']) && empty($fields['seq'])) {
-            throw $this->createServiceException('字段排序不能为空！');
+            throw $this->createInvalidArgumentException('seq Required');
         }
 
         if (isset($fields['seq']) && !intval($fields['seq'])) {
-            throw $this->createServiceException('字段排序只能为数字！');
+            throw $this->createInvalidArgumentException('seq Invalid');
         }
 
         return $this->getUserFieldDao()->update($id, $fields);

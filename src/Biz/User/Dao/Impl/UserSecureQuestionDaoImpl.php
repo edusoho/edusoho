@@ -15,15 +15,6 @@ class UserSecureQuestionDaoImpl extends GeneralDaoImpl implements UserSecureQues
         return $this->db()->fetchAll($sql, array($userId)) ?: null;
     }
 
-    // public function addOneUserSecureQuestion($filedsWithUserIdAndQuestionNumAndQuestionAndHashedAnswerAndAnswerSalt)
-    // {
-    //     $affected = $this->db()->insert($this->table, $filedsWithUserIdAndQuestionNumAndQuestionAndHashedAnswerAndAnswerSalt);
-    //     if ($affected <= 0) {
-    //         throw $this->createDaoException('Insert user_secure_question error.');
-    //     }
-    //     return true;
-    // }
-
     public function declares()
     {
         return array(

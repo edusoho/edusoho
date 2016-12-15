@@ -4,6 +4,7 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserProfileDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Service\InvalidArgumentException;
 
 class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
 {
@@ -54,7 +55,7 @@ class UserProfileDaoImpl extends GeneralDaoImpl implements UserProfileDao
             'varcharField10');
 
         if (!in_array($fieldName, $fieldNames)) {
-            throw $this->createDaoException('fieldName error');
+            throw new InvalidArgumentException('Invalid Arguments');
         }
 
         $sql    = "UPDATE {$this->table} set {$fieldName} =null ";

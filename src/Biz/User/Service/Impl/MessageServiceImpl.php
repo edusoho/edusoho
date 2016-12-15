@@ -20,15 +20,15 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {
         if (empty($fromId) || empty($toId)) {
-            throw $this->createServiceException('发件人或收件人未注册!');
+            throw $this->createNotFoundException('Sender or Receiver Not Found');
         }
 
         if ($fromId == $toId) {
-            throw $this->createServiceException('抱歉,不允许给自己发送私信!');
+            throw $this->createAccessDeniedException('You\'re not allowed to send message to yourself');
         }
 
         if (empty($content)) {
-            throw $this->createServiceException('抱歉,不能发送空内容!');
+            throw $this->createInvalidArgumentException('Message is Empty');
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
@@ -66,7 +66,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function deleteMessagesByIds(array $ids = null)
     {
         if (empty($ids)) {
-            throw $this->createServiceException("Please select message item !");
+            throw $this->createInvalidArgumentException("Invalid Argument");
         }
         foreach ($ids as $id) {
             $message      = $this->getMessageDao()->get($id);
@@ -110,7 +110,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     {
         $conversation = $this->getConversationDao()->get($conversationId);
         if (empty($conversation)) {
-            throw $this->createServiceException(sprintf('私信会话#%conversationId%不存在。', array('%conversationId%' => $conversationId)));
+            throw $this->createNotFoundException("Conversation#{$conversationId} Not Found");
         }
         $updatedConversation = $this->getConversationDao()->update($conversation['id'], array('unreadNum' => 0));
         $this->getRelationDao()->updateRelationIsReadByConversationId($conversationId, array('isRead' => 1));
