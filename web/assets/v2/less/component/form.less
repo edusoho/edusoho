@@ -1,6 +1,11 @@
-@form-group-margin-bottom: 30px;
-@form-group-margin-bottom-min: 15px;
-@form-error-message-height:20px;
+.control-text {
+  display: inline-block;
+  min-height: 34px;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+}
 
 .radios,
 .checkboxs {
@@ -22,9 +27,29 @@ textarea {
   color: @brand-primary;
 }
 
+.form-horizontal {
+  .form-group {
+    margin-bottom: 30px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
+  }
+  .form-control {
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
 .form-control {
   color: @gray-dark;
+  // -webkit-appearance: none;
+  // -moz-appearance: none;
+  // .box-shadow(none);
   border-color: @gray-light;
+  // &:focus {
+  //   .box-shadow(none);
+  // }
   &.form-control-lg {
     height: 40px;
   }
@@ -40,65 +65,4 @@ textarea {
   &:-ms-input-placeholder { 
     color: @gray;
   }
-}
-
-.form-horizontal {
-  .form-group {
-    margin-bottom: @form-group-margin-bottom;
-    @media (max-width: @screen-xs-max) {
-      margin-bottom: @form-group-margin-bottom-min;
-    }
-  }
-  .form-control {
-    @media (max-width: @screen-xs-max) {
-      margin-bottom: 10px;
-    }
-  }
-}
-
-
-.form-control-150 {
-  width: 150px;
-}
-
-
-
-//validation style
-
-.has-error.form-group {
-  margin-bottom: @form-group-margin-bottom - @form-error-message-height;
-  @media (max-width: @screen-xs-max) {
-    margin-bottom: @form-group-margin-bottom-min - @form-error-message-height;
-  }
-}
-
-.has-error .help-block,
-.has-error .control-label, 
-.has-error .radio, 
-.has-error .checkbox,
-.has-error .radio-inline,
-.has-error .checkbox-inline, 
-.has-error.radio label, 
-.has-error.checkbox label, 
-.has-error.radio-inline label, 
-.has-error.checkbox-inline label {
-  color: @brand-danger;
-}
-
-.has-error .form-control {
-  border-color: @gray-light;
-  &:focus {
-    border-color: @gray-light;
-  }
-}
-
-.form-control-error {
-  border-color: @brand-danger !important;
-}
-
-.form-error-message {
-  height: @form-error-message-height ;
-  line-height: @form-error-message-height ;
-  margin-bottom: 0;
-  color: @brand-danger;
 }
