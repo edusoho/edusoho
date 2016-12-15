@@ -113,7 +113,7 @@ class MessageServiceImpl extends BaseService implements MessageService
             throw $this->createNotFoundException("Conversation#{$conversationId} Not Found");
         }
         $updatedConversation = $this->getConversationDao()->update($conversation['id'], array('unreadNum' => 0));
-        $this->getRelationDao()->updateRelationIsReadByConversationId($conversationId, array('isRead' => 1));
+        $this->getRelationDao()->updateByConversationId($conversationId, array('isRead' => 1));
         return $updatedConversation;
     }
 

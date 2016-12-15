@@ -9,10 +9,9 @@ class MessageRelationDaoImpl extends GeneralDaoImpl implements MessageRelationDa
 {
     protected $table = 'message_relation';
 
-    //这种函数名应该是在service层出现，重构掉
-    public function updateRelationIsReadByConversationId($conversationId, array $isRead)
+    public function updateByConversationId($conversationId, array $fields)
     {
-        return $this->db()->update($this->table, $isRead, array(
+        return $this->db()->update($this->table, $fields, array(
             'conversationId' => $conversationId
         ));
     }

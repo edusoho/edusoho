@@ -4,7 +4,7 @@ namespace Biz\User\Dao;
 
 interface MessageRelationDao
 {
-    public function updateRelationIsReadByConversationId($conversationId, array $isRead);
+    public function updateByConversationId($conversationId, array $isRead);
 
     public function deleteByConversationId($conversationId);
 
