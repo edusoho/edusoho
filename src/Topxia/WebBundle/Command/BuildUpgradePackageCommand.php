@@ -355,12 +355,12 @@ class BuildUpgradePackageCommand extends BaseCommand
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
 
         $submoduleDiffs = array_map(function ($submodule) use ($rootDir){
-            $lastCommitHash = exec("git ls-tree {$this->fromVersion} {$submodule} | awk '{print $3}'");
+            $lastCommitHash = exec("git ls-tree v{$this->fromVersion} {$submodule} | awk '{print $3}'");
             if(empty($lastCommitHash)){
                 $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
             }
 
-            $currentCommitHash = exec("git ls-tree {$this->version} {$submodule} | awk '{print $3}'");
+            $currentCommitHash = exec("git ls-tree v{$this->version} {$submodule} | awk '{print $3}'");
 
             $submoduleDir = $rootDir . $submodule;
             chdir($submoduleDir);
