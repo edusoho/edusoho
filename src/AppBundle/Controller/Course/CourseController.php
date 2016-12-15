@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 
 
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -51,7 +52,7 @@ class CourseController extends BaseController
     }
 
     /**
-     * @return CourseSetService
+     * @return CourseService
      */
     protected function getCourseSetService()
     {
