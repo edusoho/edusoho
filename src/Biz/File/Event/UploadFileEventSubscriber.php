@@ -1,29 +1,29 @@
 <?php
 namespace Biz\File\Event;
 
-use Biz\File\Service\UploadFileService;
+use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class UploadFileEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'question.create' => 'onQuestionCreate',
-            'question.update' => 'onQuestionUpdate',
-            'question.delete' => 'onQuestionDelete',
+            'question.create'           => 'onQuestionCreate',
+            'question.update'           => 'onQuestionUpdate',
+            'question.delete'           => 'onQuestionDelete',
 
-            'course.delete'          => 'onCourseDelete',
+            'course.delete'             => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete'   => 'onCourseLessonDelete',
-            'course.material.create' => 'onMaterialCreate',
-            'course.material.update' => 'onMaterialUpdate',
-            'course.material.delete' => 'onMaterialDelete',
+            'course.lesson.delete'      => 'onCourseLessonDelete',
+            'course.material.create'    => 'onMaterialCreate',
+            'course.material.update'    => 'onMaterialUpdate',
+            'course.material.delete'    => 'onMaterialDelete',
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
             'open.course.delete'        => 'onOpenCourseDelete',
@@ -41,11 +41,11 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onQuestionCreate(Event $event)
     {
         $question = $event->getSubject();
-        $argument = $event->getArgument('argument');
 
-        if (empty($argument['attachment'])) {
+        if (!$event->hasArgument('argument')) {
             return;
         }
+        $argument = $event->getArgument('argument');
 
         $attachment = $argument['attachment'];
 
@@ -56,6 +56,9 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onQuestionUpdate(Event $event)
     {
         $question = $event->getSubject();
+        if (!$event->hasArgument('argument')) {
+            return;
+        }
         $argument = $event->getArgument('argument');
 
         if (empty($argument['fields']['attachment'])) {
@@ -158,8 +161,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onCourseLessonCreate(Event $event)
     {
-        $context  = $event->getSubject();
-        $lesson   = $context['lesson'];
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
 
         if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], 1);

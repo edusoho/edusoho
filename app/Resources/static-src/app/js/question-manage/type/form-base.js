@@ -1,4 +1,4 @@
-import AttachmentActions from '../attachment/attachment-actions';
+import AttachmentActions from '../../attachment/widget/attachment-actions';
 
 class QuestionFormBase {
   constructor($form){

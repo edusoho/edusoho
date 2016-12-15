@@ -127,7 +127,7 @@ class AttachmentController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     protected function getServiceKernel()

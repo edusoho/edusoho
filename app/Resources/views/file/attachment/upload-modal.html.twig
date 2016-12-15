@@ -1,10 +1,10 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout-webpack.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}上传文件{% endblock %}
 
-{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'web/attachment/index.js']) %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/attachment/index.js']) %}
 
 {% block body %}
 
