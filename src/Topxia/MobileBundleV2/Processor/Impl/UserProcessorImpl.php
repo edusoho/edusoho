@@ -469,7 +469,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $smsCode     = $this->getParam('smsCode');
         $registeredWay = $this->getParam('registeredWay');
 
-        if (empty($password)) {
+        if (!empty($password)) {
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
@@ -673,7 +673,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
 
-        if (empty($password)) {
+        if (!empty($password)) {
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
