@@ -7,6 +7,10 @@ interface UserService
 
     public function getSimpleUser($id);
 
+    public function countUsersByLessThanCreatedTime($endTime);
+
+    public function getUserProfile($id);
+
     public function getUserByNickname($nickname);
 
     //根据用户名/邮箱/手机号精确查找用户
@@ -31,6 +35,8 @@ interface UserService
     public function searchUsers(array $conditions, array $orderBy, $start, $limit);
 
     public function countUsers(array $conditions);
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
 
     public function setEmailVerified($userId);
 
@@ -112,10 +118,6 @@ interface UserService
     public function checkLoginForbidden($userId, $ip);
 
     public function updateUserProfile($id, $fields);
-
-    public function getUserProfile($id);
-
-    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
 
     public function countUserProfiles(array $conditions);
 
@@ -240,8 +242,6 @@ interface UserService
     public function analysisRegisterDataByTime($startTime, $endTime);
 
     public function analysisUserSumByTime($endTime);
-
-    public function countUsersByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 

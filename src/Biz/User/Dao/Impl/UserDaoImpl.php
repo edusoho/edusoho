@@ -180,7 +180,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         $names = array('newMessageNum', 'newNotificationNum');
 
         if (!in_array($name, $names)) {
-            throw $this->createDaoException('counter name error');
+            return array();
         }
 
         $currentTime = time();
@@ -194,7 +194,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         $names = array('newMessageNum', 'newNotificationNum');
 
         if (!in_array($name, $names)) {
-            throw $this->createDaoException('counter name error');
+            return array();
         }
 
         $currentTime = time();
