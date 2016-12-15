@@ -462,6 +462,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function regist()
     {
+        /*
+         * @password 老接口password字段
+         * @encrypt_password 新的加密过的password字段
+         */
         $email       = $this->getParam('email');
         $password    = $this->getParam('password');
         $nickname    = $this->getParam('nickname');
@@ -469,7 +473,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $smsCode     = $this->getParam('smsCode');
         $registeredWay = $this->getParam('registeredWay');
 
-        if (!empty($password)) {
+        if (empty($password)) {
+            $password    = $this->getParam('encrypt_password');
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
@@ -670,10 +675,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function login()
     {
+        /*
+        * @_password 老接口password字段
+        * @encrypt_password 新的加密过的password字段
+        */
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
 
-        if (!empty($password)) {
+        if (empty($password)) {
+            $password    = $this->getParam('encrypt_password');
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
