@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use MaterialLib\Service\BaseService;
 use Topxia\Service\Common\AccessDeniedException;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
+use Topxia\Service\Common\ServiceKernel;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
@@ -144,7 +145,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCloudFileService()
@@ -154,6 +155,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getUploadFileTagService()
     {
-        return $this->createService('File.UploadFileTagService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
     }
 }

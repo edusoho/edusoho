@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
@@ -537,7 +538,7 @@ class MobileBaseController extends BaseController
 
     public function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     public function getMemberDao()
@@ -572,7 +573,7 @@ class MobileBaseController extends BaseController
 
     public function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     public function getVipService()

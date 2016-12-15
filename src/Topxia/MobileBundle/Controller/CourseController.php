@@ -2,6 +2,7 @@
 
 namespace Topxia\MobileBundle\Controller;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -534,7 +535,7 @@ class CourseController extends MobileController
 
     private function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     private function getMemberDao()

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseThreadController extends CourseBaseController
 {
@@ -653,7 +654,7 @@ class CourseThreadController extends CourseBaseController
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function createPostForm($data = array())

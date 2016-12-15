@@ -634,7 +634,7 @@ class MoneyCardServiceImpl extends BaseService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getCashService()

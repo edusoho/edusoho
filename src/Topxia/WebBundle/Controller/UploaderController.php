@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -188,6 +189,6 @@ class UploaderController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

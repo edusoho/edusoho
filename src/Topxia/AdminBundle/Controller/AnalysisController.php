@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnalysisController extends BaseController
 {
@@ -1385,7 +1386,7 @@ class AnalysisController extends BaseController
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getCourseService()

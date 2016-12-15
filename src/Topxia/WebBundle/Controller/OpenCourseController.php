@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class OpenCourseController extends BaseOpenCourseController
 {
@@ -807,7 +808,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getTokenService()

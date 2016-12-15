@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Classroom\Service\Classroom\ClassroomService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -1449,7 +1450,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getClassroomDao()

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -792,7 +793,7 @@ class CourseController extends CourseBaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getAppService()

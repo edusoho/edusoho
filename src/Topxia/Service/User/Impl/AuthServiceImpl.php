@@ -2,6 +2,7 @@
 namespace Topxia\Service\User\Impl;
 
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\AuthService;
 use Topxia\Service\Common\BaseService;
 
@@ -393,6 +394,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

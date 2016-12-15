@@ -108,7 +108,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getUserService()

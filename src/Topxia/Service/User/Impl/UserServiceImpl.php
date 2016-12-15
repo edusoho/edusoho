@@ -1,10 +1,12 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
+use Biz\Log\Service\LogService;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\UserService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
@@ -1804,9 +1806,12 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createService('System.SettingService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getIpBlacklistService()

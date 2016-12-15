@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +54,7 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
+        ServiceKernel::instance()->getBiz()->service('Log:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
             return $this->downloadCloudFile($file);
@@ -400,7 +401,7 @@ class UploadFileController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCourseService()

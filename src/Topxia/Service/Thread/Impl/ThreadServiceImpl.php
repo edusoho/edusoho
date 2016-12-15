@@ -2,6 +2,7 @@
 namespace Topxia\Service\Thread\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\TextHelper;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
@@ -766,6 +767,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 }

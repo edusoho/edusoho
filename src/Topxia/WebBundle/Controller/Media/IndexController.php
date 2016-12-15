@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller\Media;
 
+use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class IndexController extends BaseController
@@ -19,8 +19,11 @@ class IndexController extends BaseController
         return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId, 'context' => $context));
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class QuestionMarkerController extends BaseController
 {
@@ -327,7 +328,7 @@ class QuestionMarkerController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getQuestionMarkerResultService()

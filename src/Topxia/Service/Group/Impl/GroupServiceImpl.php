@@ -3,6 +3,7 @@
 namespace Topxia\Service\Group\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Group\GroupService;
 use Topxia\Common\ArrayToolkit;
 use Imagine\Gd\Imagine;
@@ -299,7 +300,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     protected function getLogService() 
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getGroupDao() 

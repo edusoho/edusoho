@@ -10,7 +10,7 @@ class MaterialServiceTest extends BaseTestCase
         $course = $this->createCourse();
         $lesson = $this->createdCourseLesson($course['id']);
 
-        $name   = 'File.UploadFileService';
+        $name   = 'File:UploadFileService';
         $params = array(
             array(
                 'functionName' => 'getFile',
@@ -34,7 +34,7 @@ class MaterialServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mock($name, $params);
+        $this->mockBiz($name, 'UploadFileService',$params);
 
         $fields = array(
             'courseId' => $course['id'],
@@ -48,6 +48,9 @@ class MaterialServiceTest extends BaseTestCase
         $this->assertEquals(1, $material['fileId']);
         $this->assertEquals('coursematerial', $material['source']);
         $this->assertEquals('course', $material['type']);
+
+        $biz = $this->getBiz();
+        unset($biz['@' . $name]);
     }
 
     public function testAddMaterial()

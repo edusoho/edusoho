@@ -86,6 +86,6 @@ class Audio extends Activity
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

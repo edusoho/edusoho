@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudController extends BaseController
 {
@@ -172,7 +173,7 @@ class CloudController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
 }

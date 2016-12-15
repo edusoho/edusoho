@@ -3,6 +3,7 @@
 namespace Topxia\Service\OpenCourse\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\OpenCourse\OpenCourseDeleteService;
 
 class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDeleteService
@@ -133,12 +134,12 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getMaterialService()

@@ -2,9 +2,10 @@
 
 namespace Topxia\Api\Resource\OpenCourse;
 
+use Biz\File\Service\UploadFileService;
 use Topxia\Api\Resource\BaseResource;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\File\Impl\UploadFileServiceImpl;
 
 class Lesson extends BaseResource
 {
@@ -171,11 +172,11 @@ class Lesson extends BaseResource
     }
 
     /**
-     * @return UploadFileServiceImpl
+     * @return UploadFileService
      */
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getSettingService()

@@ -15,6 +15,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\Common\ServiceKernel;
 
 class EduCloudController extends BaseController
 {
@@ -1165,7 +1166,7 @@ class EduCloudController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     private function getWebExtension()

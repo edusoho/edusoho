@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\Impl\TokenServiceImpl;
 
 class BaseProcessor {
@@ -146,7 +147,7 @@ class BaseProcessor {
 
     protected function getUploadFileService()
     {
-        return $this->controller->getService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getUserService()
@@ -244,7 +245,7 @@ class BaseProcessor {
 
     protected function getLogService()
     {
-        return $this->controller->getService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
     }
 
     protected function getUserFieldService()

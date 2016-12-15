@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class LessonMaterialPluginController extends BaseController
 {
@@ -31,7 +32,7 @@ class LessonMaterialPluginController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCourseService()

@@ -42,7 +42,7 @@ class AjaxExceptionListener
 
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
         if (!$this->container->get('kernel')->isDebug()) {
-            $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
+            ServiceKernel::instance()->getBiz()->service('Log:LogService')->error('ajax', 'exception', $exception->getMessage());
         }
 
         if ($statusCode == 403) {
