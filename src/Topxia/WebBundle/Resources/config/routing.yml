@@ -168,36 +168,10 @@ file_img_crop:
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
-# attachment_upload:
-#     path: /attachment/upload
-#     defaults: { _controller: TopxiaWebBundle:Attachment:upload }
-#     methods: [GET]
-
 attachment_list:
     path: /attachments/{targetType}/{targetId}
     defaults: { _controller: TopxiaWebBundle:Attachment:list }
     methods: [GET]
-
-# attachment_item_show:
-#     path: /attachment/file/{fileId}/show
-#     defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
-#     methods: [GET]
-
-# attachment_preview:
-#     path: /attachment/{id}/preview
-#     defaults: { _controller: TopxiaWebBundle:Attachment:preview }
-#     methods: [GET]
-
-# attachment_download:
-#     path: /attachment/{id}/download
-#     defaults: { _controller: TopxiaWebBundle:Attachment:download }
-#     methods: [GET]
-
-# attachment_delete:
-#     path: /attachment/{id}/delete
-#     defaults: { _controller: TopxiaWebBundle:Attachment:delete }
-#     methods: [POST]
-
 
 attachment_form_fields:
     path: /attachment/{targetType}/{targetId}/formFields
@@ -902,32 +876,6 @@ question_file_url:
     path: /question_ajax/file_url
     defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
 
-# course_manage_question:
-#     path: /course/{courseId}/manage/question
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:index }
-
-# course_manage_question_create:
-#     path: /course/{courseId}/manage/question/create/{type}
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:create }
-
-# course_manage_question_update:
-#     path: /course/{courseId}/manage/question/{id}/update
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
-
-# course_manage_question_delete:
-#     path: /course/{courseId}/manage/question/delete/{id}
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
-#     methods: [POST]
-
-# course_manage_question_deletes:
-#     path: /course/{courseId}/manage/question/deletes
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
-#     methods: [POST]
-
-# course_manage_question_preview:
-#     path: /course/{courseId}/manage/question/{id}/preview
-#     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
-
 course_manage_upload_question_attachment:
     path:  /course/{id}/manage/upload/question/attachment/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
@@ -1010,51 +958,13 @@ course_manage_list_teacher_test_finished:
     path: /my/teacher/finished/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
 
-# course_manage_testpaper:
-#     path: /course/{courseId}/manage/testpaper
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
-
 course_manage_test_check:
     path: /course/check/{id}/{status}/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
 
-# course_manage_testpaper_create:
-#     path: /course/{courseId}/manage/testpaper/create
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
-
 course_manage_testpaper_build_check:
     path: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
-
-# course_manage_testpaper_update:
-#     path: /course/{courseId}/manage/testpaper/{id}/update
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
-
-# course_manage_testpaper_delete:
-#     path: /course/{courseId}/manage/testpaper/{testpaperId}/delete
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
-#     methods: [POST]
-
-# course_manage_testpaper_deletes:
-#     path: /course/{courseId}/manage/testpaper/deletes
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
-#     methods: [POST]
-
-# course_manage_testpaper_publish:
-#     path: /course/{courseId}/manage/testpaper/{id}/publish
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
-
-# course_manage_testpaper_close:
-#     path: /course/{courseId}/manage/testpaper/{id}/close
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
-
-# course_manage_testpaper_items:
-#     path: /course/{courseId}/manage/testpaper/{testpaperId}/items
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
-
-# course_manage_testpaper_items_get:
-#     path: /course/{courseId}/manage/testpaper/items_get
-#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
 
 course_manage_testpaper_items_reset:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
