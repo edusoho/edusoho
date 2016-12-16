@@ -473,7 +473,7 @@
       </section>
     </div>
     <div class="col-lg-3 col-md-4 course-sidebar">
-      <!-- 课程特色 -->
+      <!-- 课程特色: 加入前显示，加入后不显示 -->
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">课程特色</h3>
@@ -520,16 +520,57 @@
           </div>
         </div>
       </div>
+      <!-- 其他计划: 加入前不显示，加入后不显示-->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">其他计划</h3>
+        </div>
+        <div class="panel-body course-list">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="/course/2" target="_blank">
+                <img src="/assets/img/default/course.png" alt="xxx" class="img-responsive"></a>
+            </div>
+            <div class="course-info">
+              <div class="title">
+                <a class="link-dark" href="/course/2" target="_blank">xxx</a>
+              </div>
+              <div class="metas clearfix">
+                <span class="num"> <i class="es-icon es-icon-people"></i>
+                  0
+                </span>
+                <span class="comment"> <i class="es-icon es-icon-textsms"></i>
+                  0
+                </span>
+                <span class="course-price-widget">
+                  <span class="price">0.01元</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 推荐班级 -->
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">推荐班级</h3>
         </div>
-        <div class="panel-body text-center">
-          <a href="">
-            <img src="{{ asset('assets/v2/img/qr-es.jpg') }}"></a>
+        <div class="panel-body recommend-class-list">
+          <div class="class-item">
+            <div class="class-img-wrap">
+              <a class="class-img" href="/classroom/2">
+                <img src="/assets/img/default/course.png" alt="课程套餐" class="img-responsive"></a>
+              <div class="mask">
+
+                <a href="/classroom/2" class="btn btn-warning">继续学习</a>
+              </div>
+            </div>
+            <h3>
+              <a class="link-dark" href="/classroom/2">课程套餐</a>
+            </h3>
+            <div class="metas">共有5门课程</div>
+          </div>
         </div>
-        <div class="intro pbl">ES学习圈</div>
       </div>
       <!-- 授课教师 -->
       <div class="panel panel-default">
