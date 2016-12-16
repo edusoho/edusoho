@@ -144,6 +144,11 @@
           <li class="divider"></li>
         {% endif %}
 
+        <li><a href="{{ path('course_manage_homework_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="es-icon es-icon-mylibrarybooks prs"></span>{{'布置作业'|trans}}</a></li>
+        <li class="divider"></li>
+        <li><a href="{{ path('course_manage_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="es-icon es-icon-exam prs"></span>{{'新增练习'|trans}}</a></li>
+        <li class="divider"></li>
+
         {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
           {% if  file.storage|default(null) == 'cloud' %}
           <li class="mark-manage" style="display:none;">

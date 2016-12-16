@@ -1,3 +1,5 @@
+{% set questionTypesDict = getQuestionTypes() %}
+
 <tr data-type="{{ question.type }}">
   {% if not replace|default(null) %}
     <th><input type="checkbox" data-role="item-select" data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id,questionId:question.id }) }}"></th>
@@ -17,7 +19,7 @@
       {% endif %}
     </small>
   </td>
-  <td>{{ dict_text('questionType', question.type) }}</td>
+  <td>{{ questionTypesDict[question.type] }}</td>
   <td>{{ question.score }}</td>
   <td>
     <button data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview" data-role="preview-btn">{{'预览'|trans}}</button>

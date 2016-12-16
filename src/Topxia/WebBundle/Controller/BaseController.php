@@ -1,17 +1,18 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
+//use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 abstract class BaseController extends Controller

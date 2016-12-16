@@ -48,6 +48,8 @@ const config = {
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
+    "jquery-nstslider":['jquery-nstslider'],
+    'jquery-timer':['libs/js/jquery-timer.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -62,6 +64,7 @@ const config = {
     'respond.js/dest/respond.src.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
+    'jquery-nstslider/dist/jquery.nstSlider.js',
   ],
   onlyCopys: [
     {

@@ -1010,47 +1010,47 @@ course_manage_list_teacher_test_finished:
     path: /my/teacher/finished/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
 
-course_manage_testpaper:
-    path: /course/{courseId}/manage/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
+# course_manage_testpaper:
+#     path: /course/{courseId}/manage/testpaper
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
 
 course_manage_test_check:
     path: /course/check/{id}/{status}/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
 
-course_manage_testpaper_create:
-    path: /course/{courseId}/manage/testpaper/create
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
+# course_manage_testpaper_create:
+#     path: /course/{courseId}/manage/testpaper/create
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
 
 course_manage_testpaper_build_check:
     path: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
 
-course_manage_testpaper_update:
-    path: /course/{courseId}/manage/testpaper/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
+# course_manage_testpaper_update:
+#     path: /course/{courseId}/manage/testpaper/{id}/update
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
 
-course_manage_testpaper_delete:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
-    methods: [POST]
+# course_manage_testpaper_delete:
+#     path: /course/{courseId}/manage/testpaper/{testpaperId}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+#     methods: [POST]
 
-course_manage_testpaper_deletes:
-    path: /course/{courseId}/manage/testpaper/deletes
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
-    methods: [POST]
+# course_manage_testpaper_deletes:
+#     path: /course/{courseId}/manage/testpaper/deletes
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+#     methods: [POST]
 
-course_manage_testpaper_publish:
-    path: /course/{courseId}/manage/testpaper/{id}/publish
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
+# course_manage_testpaper_publish:
+#     path: /course/{courseId}/manage/testpaper/{id}/publish
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
 
-course_manage_testpaper_close:
-    path: /course/{courseId}/manage/testpaper/{id}/close
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
+# course_manage_testpaper_close:
+#     path: /course/{courseId}/manage/testpaper/{id}/close
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
 
-course_manage_testpaper_items:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/items
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
+# course_manage_testpaper_items:
+#     path: /course/{courseId}/manage/testpaper/{testpaperId}/items
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
 # course_manage_testpaper_items_get:
 #     path: /course/{courseId}/manage/testpaper/items_get

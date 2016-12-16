@@ -1,0 +1,24 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+
+{% block title %}{{'作业批阅'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'plan' %}
+{% set active = 'homework-check' %}
+
+{% block course %}
+
+<div class="panel panel-default panel-col">
+
+  <div class="panel-body">
+
+    {% if isTeacher is defined and not isTeacher %}
+      <span class="color-danger">{{'当前用户不是本课程教师，没有批改作业的权限。'|trans}}</span>
+    {% endif %}
+
+    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,type:'homework',testpaperIds:homeworkIds})) }}
+
+  </div>
+</div>
+
+{% endblock %}

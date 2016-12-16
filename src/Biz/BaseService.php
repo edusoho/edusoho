@@ -9,7 +9,6 @@ use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -28,9 +27,11 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz['user'];
     }
 
-    /**
-     * @return EventDispatcherInterface
-     */
+    protected function createService($alias)
+    {
+        return $this->biz->service($alias);
+    }
+
     protected function getDispatcher()
     {
         return $this->biz['dispatcher'];

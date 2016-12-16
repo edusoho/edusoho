@@ -241,7 +241,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
+        $task                  = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -279,7 +279,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         });
         return $tasks;
     }
-
 
     public function trigger($id, $eventName, $data = array())
     {

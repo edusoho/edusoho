@@ -23,6 +23,16 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
     }
 
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        $builder = $this->_createQueryBuilder($conditions)
+            ->select('count(id) as questionNum, type');
+
+        $builder->addGroupBy('type');
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     public function declares()
     {
         $declares['orderbys'] = array(
@@ -31,6 +41,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         );
 
         $declares['conditions'] = array(
+            'id IN ( :ids )',
             'parentId = :parentId',
             'difficulty = :difficulty',
             'type = :type',
@@ -39,7 +50,8 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
-            'lessonId = :lessonId'
+            'lessonId = :lessonId',
+            'lessonId IN ( :lessonIds)'
         );
 
         $declares['serializes'] = array(

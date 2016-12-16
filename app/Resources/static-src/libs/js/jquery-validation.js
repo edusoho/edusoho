@@ -1,3 +1,4 @@
+
 import 'jquery-validation';
 
 $.validator.setDefaults({
@@ -17,10 +18,12 @@ $.validator.setDefaults({
     $row.find('.help-block').show();
   },
   errorPlacement: function(error, element) {
-    if (element.parent().hasClass('input-group')) {
+    if (element.parent().hasClass('controls')) {
+      element.parent('.controls').append(error);
+    } else if (element.parent().hasClass('input-group')) {
       element.parent().after(error);
     } else if (element.parent().is('label')) {
-      element.parent().after(error);
+      element.parent().parent().append(error);
     } else {
       element.parent().append(error);
     }

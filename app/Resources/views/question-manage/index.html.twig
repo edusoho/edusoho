@@ -1,4 +1,4 @@
-{% extends 'course-set-manage/layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
 {% block title %}{{'题目管理'|trans}} - {{ parent() }}{% endblock %}
@@ -6,7 +6,7 @@
 {% set parentId = parentQuestion.id|default(0) %}
 
 {% set side_nav = 'question' %}
-{% do script(['app/question-manage/index.js',]) %}
+{% do script(['app/js/question-manage/index.js',]) %}
 
 {% block main %}
 
