@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomController extends BaseController
@@ -51,7 +52,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled') && $user['id']) {
+        if ($user['id'] && $this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
@@ -228,6 +229,9 @@ class ClassroomController extends BaseController
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
 
+        $this->dispatchEvent('classroom.view',
+            new ServiceEvent($classroom, array('userId' =>$user['id']))
+        );
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction'         => $introduction,
             'layout'               => $layout,

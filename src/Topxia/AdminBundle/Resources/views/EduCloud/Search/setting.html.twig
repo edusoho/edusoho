@@ -1,0 +1,55 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_setting_search' %}
+{% set script_controller = 'setting/search-setting' %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="page-heading">
+  云搜索开关
+</div>
+<form class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_search_close') }}">
+  <div class="row form-group">
+    <label for="" class="col-sm-3 control-label">启用云搜索：</label>
+    <div class="controls col-md-9 radios">
+      <div>
+        {% if searchInitStatus == 'init' %}
+        <span class="text-success">{{ '已启用'|trans }}</span>
+        {% endif %}
+        <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ '关闭'|trans }}</span></button>
+        {% if searchInitStatus == 'notInit' %}
+          <span class="text-info">正创建索引，预计需要 1 ~ 3 天，请耐心等待...</span>
+        {% endif %}
+      </div>
+      <div class="help-block">
+        多姿多彩的教学资源，一处搜齐。<a href="{{path('admin_cloud_search')}}" target="_blank">点击这里</a>了解详情。
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% if setting('developer.debug') %}
+<div class="page-heading">
+  基本设置
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label" style="padding-top:12px;">重建索引：</label>
+    <div class="controls col-md-9 radios">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-url="{{path('admin_edu_cloud_search_reapply')}}" data-target="#modal">重建索引</button>
+      <i class="es-icon es-icon-warning text-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li><li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li><li>3.请勿频繁使用重建索引功能</li>"></i>
+      <div class="color-gray ptm">用于重新构建云搜索的索引数据。</div>
+    </div>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

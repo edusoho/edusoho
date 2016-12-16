@@ -111,7 +111,7 @@ class EduCloudController extends BaseController
 
             try {
                 $api    = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
 
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => $this->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error']))));

@@ -35,13 +35,15 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
-
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum','updatedTime'));
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->addOrderBy($orderBy[0], $orderBy[1]);
+            ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };    
 
         $classrooms = $builder->execute()->fetchAll();
 
@@ -87,7 +89,9 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('orgCode = :orgCode')
-            ->andWhere('orgCode LIKE :likeOrgCode');
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('headTeacherId = :headTeacherId')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }
@@ -95,7 +99,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function addClassroom($classroom)
     {
         $classroom = $this->createSerializer()->serialize($classroom, $this->serializeFields);
-
+        $classroom['createdTime'] = time();
+        $classroom['updatedTime'] = $classroom['createdTime'];
         $affected = $this->getConnection()->insert($this->table, $classroom);
         $this->clearCached();
 
@@ -129,6 +134,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function updateClassroom($id, $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         $this->clearCached();
@@ -144,7 +150,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减', array('%field%' => $field, '%fields%' => implode(',', $fields)))));
         }
 
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $this->clearCached();
 

@@ -24,21 +24,25 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->addLog('error', $module, $action, $message, $data);
     }
 
-    public function search($conditions, $order, $start, $limit)
+    public function searchLogs($conditions, $sort, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        switch ($order) {
-            case 'created':
-                $order = array('createdTime' => 'DESC');
-                break;
-            case 'createdByAsc':
-                $order = array('createdTime' => 'ASC');
-                break;
+        if (is_array($sort)) {
+            $sort = $sort;
+        } else {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('createdTime' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('createdTime' => 'ASC');
+                    break;
 
-            default:
-                throw $this->createServiceException('参数order不正确。');
-                break;
+                default:
+                    throw $this->createServiceException('参数sort不正确。');
+                    break;
+            }
         }
 
         $logs = $this->getLogDao()->search($conditions, $order, $start, $limit);
@@ -51,7 +55,7 @@ class LogServiceImpl extends BaseService implements LogService
         return $logs;
     }
 
-    public function count($conditions)
+    public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
         return $this->getLogDao()->count($conditions);

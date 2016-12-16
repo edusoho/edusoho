@@ -1,10 +1,12 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
@@ -21,6 +23,7 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
+    protected $biz;
 
     protected function getCurrentUser()
     {
@@ -298,5 +301,21 @@ abstract class BaseController extends Controller
     protected function trans($text, $arguments = array(), $domain = null, $locale = null)
     {
         return $this->getServiceKernel()->trans($text, $arguments, $domain, $locale);
+    }
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->biz = $this->container->get('biz');
+    }
+
+    protected function dispatchEvent($eventName, $subject)
+    {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+        return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }
 }

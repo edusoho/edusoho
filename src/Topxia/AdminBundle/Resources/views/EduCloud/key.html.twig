@@ -14,7 +14,7 @@
         </script>
         <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
 
-        <p style = "text-align:center;font-size:16px">{{'当前版本为试用版,不能进行更多操作。如需购买授权版,请联系销售人员。'|trans}}{{'电话：'|trans}}0571-86819929 {{'或 '|trans}}
+        <p style = "text-align:center;font-size:16px">{{'当前版本为试用版,不能进行更多操作。如需购买授权版,请联系销售人员。'|trans}}{{'电话：'|trans}}4008041114 {{'或 '|trans}}
         <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
         </p>
         <script type="text/javascript">
@@ -75,7 +75,7 @@
           </p>
         </div>
       </div>
-      {% if setting("developer.debug")|default(0) or info.level == 'none' %}
+      {% if setting("developer.debug")|default(0) or info.level|default() == 'none' %}
       <div class="form-group">
         <div class="col-md-6 col-md-offset-3">
           <a href="{{ path('admin_setting_cloud_key_update') }}" class="btn btn-sm btn-default">{{'设置新的授权码'|trans}}</a>

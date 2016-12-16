@@ -41,6 +41,11 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function courseRuleAction()
+    {
+        return $this->render('TopxiaWebBundle:CourseManage:rule.html.twig');        
+    }
+
     public function baseAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -532,6 +537,12 @@ class CourseManageController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['type'] == 'live' && empty($course['maxStudentNum'])) {
+            $response = array('result' => false, 'message' => $this->getServiceKernel()->trans('请设置你的课程人数!')); 
+            return $this->createJsonResponse($response);
+        }
+        
         $this->getCourseService()->publishCourse($id);
         return $this->createJsonResponse(array('result' => true));
     }
