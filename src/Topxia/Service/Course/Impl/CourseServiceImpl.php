@@ -116,7 +116,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         } elseif ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
-            $orderBy = array('recommendedSeq', 'ASC');
+            $orderBy = array('recommendedSeq', 'ASC', 'recommendedTime', 'DESC');
         } elseif ($sort == 'createdTimeByAsc') {
             $orderBy = array('createdTime', 'ASC');
         } else {
@@ -2102,6 +2102,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->deleteMember($member['id']);
+		$this->dispatchEvent(
+			'learning.quit',
+			new ServiceEvent($course, array('userId' => $userId))
+		);
 
         $this->getCourseDao()->updateCourse($courseId, array(
             'studentNum' => $this->getCourseStudentCount($courseId)
@@ -3046,7 +3050,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getUploadFileService()

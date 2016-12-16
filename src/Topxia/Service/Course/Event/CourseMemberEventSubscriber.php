@@ -115,13 +115,25 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         }
 
         $memberFields['credit'] = $totalCredits;
+        $memberFields['lastLearnTime'] = time();
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+        if (!empty($classroom)) {
+            $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId($classroom['classroomId'], $learn['userId']);
+        }
     }
 
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

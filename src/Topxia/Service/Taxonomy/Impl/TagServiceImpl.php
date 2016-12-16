@@ -88,6 +88,16 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->findTagsByIds($tagIds);
     }
 
+    public function findTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids)
+    {
+        $tagOwnerRelations = $this->getTagOwnerDao()->findByOwnerTypeAndOwnerIds($ownerType, $ids);
+        $tagIds = ArrayToolkit::group($tagOwnerRelations, 'ownerId');
+        foreach ($tagIds as $key => $value) {
+            $tagIds[$key] = ArrayToolkit::column($value,'tagId');
+        }
+        return $tagIds;    
+    }
+
     public function findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, $ownerType)
     {
         return $this->getTagOwnerDao()->findByTagIdsAndOwnerType($tagIds, $ownerType);
@@ -355,7 +365,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

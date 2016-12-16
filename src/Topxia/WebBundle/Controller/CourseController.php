@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
@@ -212,6 +213,10 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        if ('normal' == $course['type']){
+            $this->dispatchEvent('course.view',
+                new ServiceEvent($course, array('userId' => $user['id'])));
+        }
         $allTags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'classroom',
             'ownerId'   => $id
@@ -748,7 +753,7 @@ class CourseController extends CourseBaseController
 
         return true;
     }
-
+    
     protected function getTagIdsByCourse($course)
     {
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));

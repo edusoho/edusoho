@@ -1,39 +1,55 @@
 <?php
 namespace Tests\System;
 
+use Biz\System\Service\LogService;
 use Topxia\Service\Common\BaseTestCase;
 
 class LogServiceTest extends BaseTestCase
 {
-    public function testInfo()
+    public function testInfoLog()
     {
-        $log = $this->getLogService()->info('coin', 'add', 'this is info message', array());
-        $this->assertNotNull($log);
+        $info = $this->getLogService()->info('test', 'test_info', 'test_message');
+        $this->assertArraySubset(array(
+            'action' => 'test_info',
+            'module' => 'test',
+            'message'=> 'test_message',
+            'level'  => 'info'
+        ), $info);
     }
 
-    public function testWarn()
+    public function testErrorLog()
     {
-        $log = $this->getLogService()->info('coin', 'add', 'this is warn message', array());
-        $this->assertNotNull($log);
+        $info = $this->getLogService()->error('test', 'test_error', 'test_message');
+        $this->assertArraySubset(array(
+            'action' => 'test_error',
+            'module' => 'test',
+            'message'=> 'test_message',
+            'level'  => 'error'
+        ), $info);
     }
 
-    public function testError()
+    public function testWarningLog()
     {
-        $log = $this->getLogService()->info('coin', 'add', 'this is error message', array());
-        $this->assertNotNull($log);
+        $info = $this->getLogService()->warning('test', 'test_warning', 'test_message');
+        $this->assertArraySubset(array(
+            'action' => 'test_warning',
+            'module' => 'test',
+            'message'=> 'test_message',
+            'level'  => 'warning'
+        ), $info);
     }
 
     public function testSearch()
     {
         $this->getLogService()->info('coin', 'add', 'this is info message', array());
-        $logs = $this->getLogService()->search(array(), 'created', 0, 100);
+        $logs = $this->getLogService()->searchLogs(array(), 'created', 0, 100);
         $this->assertTrue(sizeof($logs) > 1);
     }
 
     public function testCount()
     {
         $this->getLogService()->info('coin', 'add', 'this is info message', array());
-        $count = $this->getLogService()->count(array());
+        $count = $this->getLogService()->searchLogCount(array());
         $this->assertTrue($count > 0);
     }
 
@@ -61,6 +77,9 @@ class LogServiceTest extends BaseTestCase
         //TODO
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');

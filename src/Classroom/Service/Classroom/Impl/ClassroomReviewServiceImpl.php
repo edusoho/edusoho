@@ -161,6 +161,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     private function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

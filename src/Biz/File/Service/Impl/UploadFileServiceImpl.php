@@ -14,7 +14,7 @@ use Biz\File\Dao\UploadFileShareDao;
 use Biz\File\Dao\UploadFileTagDao;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\File\Service\FileImplementor;
-use Biz\Log\Service\LogService;
+use Biz\System\Service\LogService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -1262,7 +1262,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     protected function getLogService()
     {
-        return $this->biz->service('Log:LogService');
+        return $this->biz->service('System:LogService');
     }
 
     /**

@@ -43,7 +43,7 @@ interface LogService
      * @param  integer $limit          返回最多行数
      * @return array   多维数组
      */
-    public function search($conditions, $sort, $start, $limit);
+    public function searchLogs($conditions, $sort, $start, $limit);
 
     /**
      * 根据指定搜索条件返回该条数。
@@ -54,9 +54,9 @@ interface LogService
      *                      'endDateTime'=> 'xxxx-xx-xx xx:xx'
      *                 );
      * @param  array      $conditions 搜索条件，
-     * @return interger
+     * @return integer
      */
-    public function count($conditions);
+    public function searchLogCount($conditions);
 
     public function analysisLoginNumByTime($startTime, $endTime);
 

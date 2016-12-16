@@ -2,7 +2,9 @@
 
 namespace Biz\System\Dao;
 
-interface LogDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface LogDao extends GeneralDaoInterface
 {
     public function analysisLoginNumByTime($startTime, $endTime);
 

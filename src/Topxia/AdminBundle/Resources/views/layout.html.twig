@@ -4,6 +4,7 @@
 
 {% set menu = menu|default(null) %}
 {% set currentMenu = permission(menu) %}
+{% set cloudSmsInfo = isOldSmsUser()|default(false) %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -36,6 +37,7 @@
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/v2/css/admin/educloud.css') }}" rel="stylesheet" />
   <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
   {% endblock %}
 
@@ -47,6 +49,9 @@
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
+  {% if cloudSmsInfo %}
+    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余{{cloudSmsInfo.remainCount|default(0)}}条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a></strong></div></div>
+  {% endif %}
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -80,7 +85,7 @@
     </div>
   </div>
   
-  <div class="container">
+  <div class="container {% if cloudSmsInfo %}es-admin-container-down{% endif %}">
     
     {% set notifies = plugin_update_notify() %}
     {% if not notifies is empty %}
@@ -100,7 +105,9 @@
 
           <div class="col-md-10">
             <div class="page-header clearfix">
+              {% block page_flash_message %}
 
+              {% endblock %}
               <h1 class="pull-left">
                 {% block page_title %}
                   {{ currentMenu.code|parent_permission.name|trans }}
