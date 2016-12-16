@@ -33,7 +33,7 @@
 
     {# webpack #}
     {% for path in css() %}
-      <link href="{{ asset('build/' ~ path, 'webpack') }}" rel="stylesheet" />
+      <link href="{{ asset('build/' ~ path) }}" rel="stylesheet" />
     {% endfor %}
 
   {% endblock %}

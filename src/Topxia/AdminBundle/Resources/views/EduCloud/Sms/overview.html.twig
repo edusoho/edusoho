@@ -3,7 +3,9 @@
 {% set menu = 'admin_edu_cloud_sms_overview' %} 
 {% set script_controller = 'educloud/sms-overview' %}
 {% set script_arguments = {chartData: chartData}  %}
-
+{% block page_flash_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
     <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
@@ -46,7 +48,7 @@
 <div class="panel panel-default panel-chart">
   <div class="panel-heading">
     短信发送趋势
-    <span class="text-muted">（最近1个月）</span>
+    <span class="text-muted">（最近1个星期）</span>
     <a class="pull-right" href="{{path('admin_cloud_sms_statistics')}}" target="_blank">更多&ensp;></a>
   </div>
   <div class="panel-body">
