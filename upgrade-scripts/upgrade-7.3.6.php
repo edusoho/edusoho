@@ -88,13 +88,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function generateIndex($step, $page)
     {
-        return $step*10000 + $page;
+        return $step*1000000 + $page;
     }
 
     protected function getStepAndPage($index) 
     {
-        $step = intval($index/10000);
-        $page = $index%10000;
+        $step = intval($index/1000000);
+        $page = $index%1000000;
         return array($step, $page);
     }
 
