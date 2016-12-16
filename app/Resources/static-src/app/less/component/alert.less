@@ -131,6 +131,52 @@
   }
 }
 
+// 全站公告
+.alert-notice {
+  .border-radius(0);
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  color: @brand-primary;
+  .swiper-container {
+    position: relative;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-wrapper {
+    padding-right: 30px;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+  }
+  .close {
+    float: none;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    width: 30px;
+  }
+}
+
+// 站内公告
+.aside-notice {
+  padding: 0;
+  .swiper-container {
+    position: relative;
+    padding: 0 15px;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+  }
+}
+
+
 // 待删
 .set-email-alert {
   font-size: 12px;

@@ -141,6 +141,5 @@ MultiInput.defaultProps = {
   },//必须是bool
   outputDataElement:'hidden-input',//必须是string,
 };
-// <List dataSourceUi = {this.state.dataSourceUi} removeItem={(id)=>this.removeItem(id)} sortItem={(event=>this.sortItem(event))}></List>
 
 
