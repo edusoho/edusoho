@@ -55,10 +55,10 @@
 <div class="well" style="text-align:center;">
 
 {% if eduCloudStatus == 'closed' %}
-{{'尚未接入教育云，不能使用直播服务'|trans}}<a href="{{ path('admin_my_cloud_overview') }}"> {{'查看详情'|trans}} </a>
+{{'尚未接入教育云，不能使用直播服务'|trans}}<a href="{{ path('admin_my_cloud_overview') }}"> {{',查看详情'|trans}} </a>
 {% endif %}
 {% if eduCloudStatus == 'open' %}
-  {{'尚未启用云直播服务，不能创建直播课程'|trans}}<a href="{{ path('admin_setting_cloud_edulive') }}"> {{'立即启用'|trans}} </a>
+  {{'尚未启用云直播服务，不能创建直播课程'|trans}}<a href="{{ path('admin_setting_cloud_edulive') }}"> {{',立即启用'|trans}} </a>
 {% endif %}
 </div>
 {% endif %}
