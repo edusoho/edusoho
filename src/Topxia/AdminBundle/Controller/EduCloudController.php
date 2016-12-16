@@ -824,19 +824,30 @@ class EduCloudController extends BaseController
         }
 
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $searchInitStatus = $this->checkCloudSearchStatus($cloud_search_setting);
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig', array(
+            'searchInitStatus' => $searchInitStatus
+        ));
+    }
+
+    protected function checkCloudSearchStatus($cloud_search_setting )
+    {
         if ($cloud_search_setting['status'] == 'waiting') {
             $api         = CloudAPIFactory::create('root');
             $search_account = $api->get("/me/search_account");
             if ($search_account['isInit'] == 'yes') {
-                    $searchInitStatus = 'init';
+                $searchInitStatus = 'init';
             } else {
                 $searchInitStatus = 'notInit';
             }
         }
 
-        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig', array(
-            'searchInitStatus' => isset($searchInitStatus) ? $searchInitStatus : ''
-        ));
+        if ($cloud_search_setting['status'] == 'ok') {
+            $searchInitStatus = 'init';
+        }
+
+        return isset($searchInitStatus) ? $searchInitStatus : '';
     }
 
     public function searchOverviewAction(Request $request)
