@@ -7,24 +7,22 @@ interface UserService
 
     public function getSimpleUser($id);
 
-    public function countUsersByLessThanCreatedTime($endTime);
-
-    public function getUserProfile($id);
-
     public function getUserByNickname($nickname);
+
+    public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
     public function getUserByLoginField($keyword);
 
     public function getUserByVerifiedMobile($mobile);
 
-    public function countUsersByMobileNotEmpty();
+    public function getUserCountByMobileNotEmpty();
 
-    public function countUserHasMobile($isVerified = false);
+    public function countUserHasMobile($isVerified=false);
 
-    public function findUsersHasMobile($start, $limit, $isVerified = false);
+    public function findUsersHasMobile($start, $limit, $isVerified=false);
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false);
+    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false);
 
     public function getUserByEmail($email);
 
@@ -34,9 +32,7 @@ interface UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit);
 
-    public function countUsers(array $conditions);
-
-    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+    public function searchUserCount(array $conditions);
 
     public function setEmailVerified($userId);
 
@@ -68,7 +64,7 @@ interface UserService
 
     public function verifyPayPassword($id, $payPassword);
 
-    public function findUserSecureQuestionsByUserId($userId);
+    public function getUserSecureQuestionsByUserId($userId);
 
     public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers);
 
@@ -85,6 +81,14 @@ interface UserService
      * @param [string]  $password 新密码
      */
     public function changePassword($id, $password);
+
+    /**
+     * 变更原始密码
+     *
+     * @param [integer] $id       用户ID
+     * @param [string]  $rawPassword 新原始密码
+     */
+    public function changeRawPassword($id, $rawPassword);
 
     /**
      * 校验密码是否正确
@@ -119,11 +123,15 @@ interface UserService
 
     public function updateUserProfile($id, $fields);
 
-    public function countUserProfiles(array $conditions);
+    public function getUserProfile($id);
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchUserProfileCount(array $conditions);
 
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit);
 
-    public function countApprovals(array $conditions);
+    public function searchApprovalsCount(array $conditions);
 
     public function changeUserRoles($id, array $roles);
 
@@ -140,7 +148,7 @@ interface UserService
     /**
      * @deprecated move to TokenService
      */
-    public function countTokens($conditions);
+    public function searchTokenCount($conditions);
 
     /**
      * @deprecated move to TokenService
@@ -201,22 +209,22 @@ interface UserService
 
     public function isFollowed($fromId, $toId);
 
-    public function searchUserFollowings($userId, $start, $limit);
+    public function findUserFollowing($userId, $start, $limit);
 
-    public function findUserFollowings($userId);
+    public function findAllUserFollowing($userId);
 
-    public function countUserFollowings($userId);
+    public function findUserFollowingCount($userId);
 
-    public function searchUserFollowers($userId, $start, $limit);
+    public function findUserFollowers($userId, $start, $limit);
 
-    public function countUserFollowers($userId);
+    public function findUserFollowerCount($userId);
 
     //当前用户关注的人们
-    public function findAllUserFollowers($userId);
+    public function findAllUserFollower($userId);
 
     public function findFriends($userId, $start, $limit);
 
-    public function countFriends($userId);
+    public function findFriendCount($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表
@@ -242,6 +250,8 @@ interface UserService
     public function analysisRegisterDataByTime($startTime, $endTime);
 
     public function analysisUserSumByTime($endTime);
+
+    public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 

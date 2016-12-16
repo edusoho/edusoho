@@ -333,11 +333,6 @@ class HLSController extends BaseController
         return $beginning;
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
@@ -345,11 +340,11 @@ class HLSController extends BaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

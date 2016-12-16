@@ -6,13 +6,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class MobileController extends BaseController
 {    
     protected function createAPIClient()
     {
-        $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
+        $settings = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('storage', array());
         return new CloudAPI(array(
             'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
             'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],

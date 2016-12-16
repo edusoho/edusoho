@@ -98,11 +98,6 @@ class PluginUtil extends BaseService
         file_put_contents($pluginRouteFilePath, $config);
     }
 
-    private static function getSettingService()
-    {
-        return self::$kernel->createService('System.SettingService');
-    }
-
     private static function getAppService()
     {
         return self::$kernel->createService('CloudPlatform.AppService');

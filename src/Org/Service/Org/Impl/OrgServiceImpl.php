@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Org\Service\Org\Dao\Impl\OrgDaoImpl;
 use Org\Service\Org\OrgBatchUpdateFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -213,6 +214,11 @@ class OrgServiceImpl extends BaseService implements OrgService
     protected function getModuleService($module)
     {
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
+
+        if(is_array($moduleService) && $moduleService['protocol'] === 'biz'){
+            return ServiceKernel::instance()->getBiz()->service($moduleService['service']);
+        }
+
         return $this->createService($moduleService);
     }
 }

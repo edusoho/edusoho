@@ -634,7 +634,7 @@ class CourseThreadController extends CourseBaseController
 
     protected function getNotifiactionService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getVipService()
@@ -649,7 +649,7 @@ class CourseThreadController extends CourseBaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUploadFileService()

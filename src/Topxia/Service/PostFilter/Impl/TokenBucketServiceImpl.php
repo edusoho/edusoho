@@ -113,9 +113,4 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
     {
         return $this->createDao('PostFilter.RecentPostNumDao');
     }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
 }

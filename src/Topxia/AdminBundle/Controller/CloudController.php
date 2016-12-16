@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\System\Service\SettingService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -210,8 +212,11 @@ class CloudController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

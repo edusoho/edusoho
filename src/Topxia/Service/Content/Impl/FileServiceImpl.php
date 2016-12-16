@@ -2,10 +2,12 @@
 
 namespace Topxia\Service\Content\Impl;
 
+use Biz\System\Service\SettingService;
 use Imagine\Imagick\Imagine;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\FileService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -328,9 +330,12 @@ class FileServiceImpl extends BaseService implements FileService
         return array($parsed['path'], $naturalSize, $scaledSize);
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCourseService()

@@ -3,9 +3,7 @@
 namespace Topxia\Service\User\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\User\NotificationService;
-use Topxia\Service\User\UserService;
-use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class NotificationServiceTest extends BaseTestCase
 {
@@ -16,18 +14,18 @@ class NotificationServiceTest extends BaseTestCase
         $this->getNotificationService()->notify($user['id'], "default", "content");
 
         $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
-        $this->assertEquals(1,$notificationsNum);
+        $this->assertEquals(1, $notificationsNum);
     }
 
     public function testListUserNotifications()
     {
-        
+
         $user = $this->createUser();
         $this->getNotificationService()->notify($user['id'], "default", "content");
         $this->getNotificationService()->notify($user['id'], "default", "content");
 
         $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
-        $this->assertEquals(2,$notificationsNum);
+        $this->assertEquals(2, $notificationsNum);
 
         $notifications = $this->getNotificationService()->findUserNotifications($user['id'], 0, 30);
 
@@ -44,19 +42,21 @@ class NotificationServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user = array();
-        $user['email'] = "user@user.com";
+        $user             = array();
+        $user['email']    = "user@user.com";
         $user['nickname'] = "user";
-        $user['password']= "user";
+        $user['password'] = "user";
         return $this->getUserService()->register($user);
     }
 
-    protected function getUserService(){
-    return $this->getServiceKernel()->createService('User.UserService');
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
-    protected function getNotificationService(){
-    return $this->getServiceKernel()->createService('User.NotificationService');
+    protected function getNotificationService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
 }

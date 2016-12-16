@@ -81,6 +81,6 @@ class ExportHelp
 
     public static function getMagic()
     {
-        return ServiceKernel::instance()->createService('System.SettingService')->get('magic');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('magic');
     }
 }

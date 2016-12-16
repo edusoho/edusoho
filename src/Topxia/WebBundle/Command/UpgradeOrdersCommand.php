@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Topxia\System;
 use Topxia\Common\BlockToolkit;
 use Topxia\Component\Payment\Payment;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 
 use Symfony\Component\Finder\Finder;
@@ -99,6 +99,6 @@ class UpgradeOrdersCommand extends BaseCommand
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

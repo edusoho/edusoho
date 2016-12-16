@@ -124,6 +124,6 @@ class BatchNotificationController extends BaseController
     }
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.BatchNotificationService');
+        return $this->getServiceKernel()->getBiz()->service('User:BatchNotificationService');
     }
 }

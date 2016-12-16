@@ -4,6 +4,7 @@ namespace Topxia\Service\Cash\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Cash\CashOrdersService;
+use Topxia\Service\Common\ServiceKernel;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 {
@@ -227,7 +228,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCashService()

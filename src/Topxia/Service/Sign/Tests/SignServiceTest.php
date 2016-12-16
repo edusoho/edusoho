@@ -2,6 +2,7 @@
 namespace Topxia\Service\Sign\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class SignServiceTest extends BaseTestCase
 {
@@ -96,7 +97,7 @@ class SignServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSignService()

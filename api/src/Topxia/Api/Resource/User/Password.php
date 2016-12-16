@@ -4,11 +4,11 @@ namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\EncryptionToolkit;
 use Topxia\Common\SimpleValidator;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Api\Util\SmsUtil;
+use Topxia\Service\Common\ServiceKernel;
 
 class Password extends BaseResource
 {
@@ -76,11 +76,11 @@ class Password extends BaseResource
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

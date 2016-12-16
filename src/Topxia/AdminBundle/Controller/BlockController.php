@@ -2,6 +2,7 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
@@ -10,6 +11,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class BlockController extends BaseController
 {
@@ -359,8 +361,11 @@ class BlockController extends BaseController
         return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

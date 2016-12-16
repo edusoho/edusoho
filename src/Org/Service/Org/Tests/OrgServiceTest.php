@@ -2,8 +2,10 @@
 
 namespace Org\Service\Org\Tests;
 
+use Biz\System\Service\SettingService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 
 class OrgServiceTest extends BaseTestCase
@@ -130,8 +132,8 @@ class OrgServiceTest extends BaseTestCase
 
     public function testBatchUpdateOrg()
     {
-        $magic = $this->getServiceKernel()->createService('System.SettingService')->set('magic', array('enable_org' => 0));
-        $magic = $this->getServiceKernel()->createService('System.SettingService')->get('magic');
+        $magic = $this->getSettingService()->set('magic', array('enable_org' => 0));
+        $magic = $this->getSettingService()->get('magic');
 
         $org  = $this->mookOrg($name = "edusoho");
         $org1 = $this->mookOrg($name = "edusoho1");
@@ -156,8 +158,8 @@ class OrgServiceTest extends BaseTestCase
 
     public function testBatchUpdateOrgwithEnableOrg()
     {
-        $magic = $this->getServiceKernel()->createService('System.SettingService')->set('magic', array('enable_org' => 1));
-        $magic = $this->getServiceKernel()->createService('System.SettingService')->get('magic');
+        $magic = $this->getSettingService()->set('magic', array('enable_org' => 1));
+        $magic = $this->getSettingService()->get('magic');
 
         $org  = $this->mookOrg($name = "edusoho");
         $org1 = $this->mookOrg($name = "edusoho1");
@@ -221,6 +223,15 @@ class OrgServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+    }
+
 }

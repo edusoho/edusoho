@@ -1,8 +1,10 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudAttachmentController extends BaseController
 {
@@ -24,8 +26,11 @@ class CloudAttachmentController extends BaseController
         return $this->render('TopxiaAdminBundle:CloudAttachment:error.html.twig', array());
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

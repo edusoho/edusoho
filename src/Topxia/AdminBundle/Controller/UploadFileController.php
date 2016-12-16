@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -33,11 +35,17 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($params);
     }
 
+    /**
+     * @return SettingService
+     */
 	protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');

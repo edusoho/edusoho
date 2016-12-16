@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\LatestGroupThreadsDataTag;
 
 class LatestGroupThreadsDataTagTest extends BaseTestCase
@@ -66,7 +67,7 @@ class LatestGroupThreadsDataTagTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     private function getGroupService() 

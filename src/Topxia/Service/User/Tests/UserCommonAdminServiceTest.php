@@ -3,10 +3,11 @@
 namespace Topxia\Service\User\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\UserService;
 use Topxia\Service\User\UserCommonAdminService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 
 class UserCommonAdminServiceTest extends BaseTestCase
@@ -105,11 +106,11 @@ class UserCommonAdminServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getUserCommonAdminService()
     {
-        return $this->getServiceKernel()->createService('User.UserCommonAdminService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserCommonAdminService');
     }
 }

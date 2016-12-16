@@ -113,7 +113,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()
@@ -124,11 +124,6 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function getSignEncoder()

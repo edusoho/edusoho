@@ -2,6 +2,7 @@
 namespace Topxia\Service\Course\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\LocationService;
 use Topxia\Service\User\UserService;
 use Topxia\Common\ArrayToolkit;
@@ -15,7 +16,7 @@ class LocationServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()

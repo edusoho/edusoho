@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Question;
 
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
@@ -299,9 +300,12 @@ class ManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getCourseTaskService()

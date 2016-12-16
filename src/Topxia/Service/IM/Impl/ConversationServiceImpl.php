@@ -4,6 +4,7 @@ namespace Topxia\Service\IM\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\IM\ConversationService;
 use Topxia\Service\CloudPlatform\IMAPIFactory;
 
@@ -345,7 +346,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function createImApi()

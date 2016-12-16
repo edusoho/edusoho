@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Common\AppConnectionFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 

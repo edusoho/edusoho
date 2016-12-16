@@ -171,9 +171,4 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     {
         return $this->createDao('Theme.ThemeConfigDao');
     }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
 }

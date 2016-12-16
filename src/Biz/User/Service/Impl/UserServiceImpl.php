@@ -2,11 +2,17 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\System\Service\LogService;
+use Biz\User\Dao\FriendDao;
+use Biz\User\Dao\TokenDao;
+use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Dao\UserDao;
+use Biz\User\Dao\UserProfileDao;
+use Biz\User\Dao\UserSecureQuestionDao;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Biz\User\Service\UserService;
-use Biz\User\Dao\Impl\UserDaoImpl;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -21,6 +27,105 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUserDao()->get($id, $lock);
         return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserCountByMobileNotEmpty()
+    {
+        return $this->getUserDao()->getCountByMobileNotEmpty();
+    }
+
+    public function searchUserCount(array $conditions)
+    {
+        return $this->getUserDao()->count($conditions);
+    }
+
+    public function getUserSecureQuestionsByUserId($userId)
+    {
+        return $this->getUserSecureQuestionDao()->findByUserId($userId);
+    }
+
+    public function changeRawPassword($id, $rawPassword)
+    {
+        if (empty($rawPassword)) {
+            throw $this->createInvalidArgumentException('参数不正确，更改密码失败');
+        }
+
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            throw $this->createNotFoundException("user #{$id} not found");
+        }
+
+        $this->getUserDao()->update($id, $rawPassword);
+
+        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+
+        $this->getLogService()->info('user', 'password-changed', sprintf('用户%s(ID:%u)重置密码成功', $user['email'], $user['id']));
+
+        return true;
+    }
+
+    public function searchUserProfileCount(array $conditions)
+    {
+        return $this->getProfileDao()->count($conditions);
+    }
+
+    public function searchApprovalsCount(array $conditions)
+    {
+        return $this->getUserApprovalDao()->count($conditions);
+    }
+
+    public function searchTokenCount($conditions)
+    {
+        return $this->getUserTokenDao()->count($conditions);
+    }
+
+    public function findUserFollowing($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
+        $ids     = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findAllUserFollowing($userId)
+    {
+        $friends = $this->getFriendDao()->findFollowingsByFromId($userId);
+        $ids     = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findUserFollowingCount($userId)
+    {
+        return $this->getFriendDao()->countByFromId($userId);
+    }
+
+    public function findUserFollowers($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->searchByToId($userId, $start, $limit);
+        $ids     = ArrayToolkit::column($friends, 'fromId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findUserFollowerCount($userId)
+    {
+        return $this->getFriendDao()->countByFromId($userId);
+    }
+
+    public function findAllUserFollower($userId)
+    {
+        $friends = $this->getFriendDao()->findFollowersByToId($userId);
+        $ids     = ArrayToolkit::column($friends, 'fromId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findFriendCount($userId)
+    {
+        return $this->getFriendDao()->countByFromId($userId);
+    }
+
+    public function findUsersCountByLessThanCreatedTime($endTime)
+    {
+        return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
     }
 
     public function getSimpleUser($id)
@@ -291,6 +396,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($userId, $fields);
         return UserSerialize::unserialize($user);
+    }
+
+    public function updateUserUpdatedTime($id)
+    {
+        return $this->getUserDao()->updateUser($id, array());
     }
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
@@ -1318,14 +1428,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriends($userId, $start, $limit)
     {
-        $friends = $this->getFriendDao()->findByUserId($userId, $start, $limit);
+        $friends = $this->getFriendDao()->searchByUserId($userId, $start, $limit);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
 
     public function countFriends($userId)
     {
-        return $this->getFriendDao()->countByUserId($userId);
+        return $this->getFriendDao()->countByFromId($userId);
     }
 
     public function follow($fromId, $toId)
@@ -1694,11 +1804,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->delete($id);
     }
 
+    /**
+     * @return UserApprovalDao
+     */
     protected function getUserApprovalDao()
     {
         return $this->createDao("User:UserApprovalDao");
     }
 
+    /**
+     * @return FriendDao
+     */
     protected function getFriendDao()
     {
         return $this->createDao("User:FriendDao");
@@ -1710,18 +1826,24 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     /**
-     * @return UserDaoImpl
+     * @return UserDao
      */
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
     }
 
+    /**
+     * @return UserProfileDao
+     */
     protected function getProfileDao()
     {
         return $this->createDao('User:UserProfileDao');
     }
 
+    /**
+     * @return UserSecureQuestionDao
+     */
     protected function getUserSecureQuestionDao()
     {
         return $this->createDao('User:UserSecureQuestionDao');
@@ -1732,6 +1854,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('User:UserBindDao');
     }
 
+    /**
+     * @return TokenDao
+     */
     protected function getUserTokenDao()
     {
         return $this->createDao('User:TokenDao');
@@ -1772,6 +1897,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->biz->service('System:SettingService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');

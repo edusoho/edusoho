@@ -3035,7 +3035,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrderService()
@@ -3060,12 +3060,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getMessageService()
     {
-        return $this->createService('User.MessageService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     protected function getTagService()

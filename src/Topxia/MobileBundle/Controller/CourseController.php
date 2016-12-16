@@ -513,11 +513,6 @@ class CourseController extends MobileController
         return $html;
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -530,16 +525,11 @@ class CourseController extends MobileController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     private function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
-    }
-
-    private function getMemberDao()
-    {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
 }

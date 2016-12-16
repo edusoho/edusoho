@@ -6,6 +6,7 @@ use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Conversations extends BaseResource
 {
@@ -52,7 +53,7 @@ class Conversations extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getConversationService()

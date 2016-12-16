@@ -19,7 +19,7 @@ class IMAPIFactory
             return self::$client;
         }
 
-        $setting = ServiceKernel::instance()->createService('System.SettingService');
+        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
         $storage   = $setting->get('storage', array());
         $developer = $setting->get('developer', array());

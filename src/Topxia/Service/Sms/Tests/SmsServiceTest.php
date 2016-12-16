@@ -4,6 +4,7 @@ namespace Topxia\Service\Sms\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 // TODO
 
@@ -55,12 +56,12 @@ class SmsServiceTest extends BaseTestCase
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getSmsService()

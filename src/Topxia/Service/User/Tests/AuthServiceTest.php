@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Tests;
 
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 // TODO
 
@@ -350,12 +351,12 @@ class AuthServiceTest extends BaseTestCase
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()

@@ -3,6 +3,7 @@
 namespace Topxia\Service\User\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class UpgradeNoticeServiceTest extends BaseTestCase
 {
@@ -57,7 +58,7 @@ class UpgradeNoticeServiceTest extends BaseTestCase
 
     protected function getUpgradeNoticeService()
     {
-        return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
+        return ServiceKernel::instance()->getBiz()->service('User:UpgradeNoticeService');
     }
 
 }

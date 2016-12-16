@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -211,11 +213,17 @@ class ArticleController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');

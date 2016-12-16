@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class NotificationController extends BaseController
 {
@@ -47,18 +48,13 @@ class NotificationController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.BatchNotificationService');
+        return $this->getServiceKernel()->getBiz()->service('User:BatchNotificationService');
     }
 }

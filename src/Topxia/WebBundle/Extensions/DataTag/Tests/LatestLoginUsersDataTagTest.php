@@ -39,7 +39,7 @@ class LatestLoginUsersDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
 }

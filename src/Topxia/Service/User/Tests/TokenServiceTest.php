@@ -3,6 +3,7 @@ namespace Topxia\Service\User\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class TokenServiceTest extends BaseTestCase
 {   
@@ -54,7 +55,7 @@ class TokenServiceTest extends BaseTestCase
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
 }

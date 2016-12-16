@@ -3,6 +3,7 @@ namespace Topxia\Service\User\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class StatusServiceTest extends BaseTestCase
 {
@@ -16,6 +17,6 @@ class StatusServiceTest extends BaseTestCase
 
     protected function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 }   

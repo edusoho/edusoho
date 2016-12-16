@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface UserDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserDao extends GeneralDaoInterface
 {
     public function getByEmail($email);
 
@@ -11,6 +13,8 @@ interface UserDao
     public function countByMobileNotEmpty();
 
     public function getByVerifiedMobile($mobile);
+
+    public function countByLessThanCreatedTime($time);
 
     public function findByNicknames(array $nicknames);
 

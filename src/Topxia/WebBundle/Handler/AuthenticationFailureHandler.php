@@ -69,12 +69,12 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getServiceKernel()

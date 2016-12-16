@@ -85,7 +85,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrderService()
@@ -100,7 +100,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getNotificationService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getCourseService()

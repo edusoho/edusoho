@@ -123,9 +123,4 @@ class Member extends BaseResource
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
 }
