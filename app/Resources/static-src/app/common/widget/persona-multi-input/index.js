@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MultiInput from '../../widget/multi-input';
+import MultiInput from '../multi-input';
 import List from './list';
 
 function initItem(dataSourceUi,data,index,props) {
