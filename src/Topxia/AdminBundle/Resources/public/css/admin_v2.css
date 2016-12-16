@@ -680,6 +680,21 @@ fieldset #checkboxChoices {
 .user-center-copys-darken {
   color: #21607f;
 }
+.notice-panel .edu-cloud-search-intro p {
+  padding: 0px 175px 0px 175px;
+}
+.notice-panel .edu-cloud-search-title {
+  padding: 0px 180px 0px 180px;
+}
+.notice-panel .edu-cloud-video-intro p {
+  padding: 0px 160px 0px 160px;
+}
+.notice-panel .edu-cloud-search-intro p {
+  text-align: left;
+}
+.notice-panel .edu-cloud-video-intro p {
+  text-align: left;
+}
 .es-admin-container-down {
   margin-top: 52px;
 }

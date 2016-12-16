@@ -1065,6 +1065,22 @@ admin_cloud_show:
     path:  /cloud/{type}/show
     defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
 
+admin_cloud_email_buy:
+    path:  /cloud/{type}/buy/show
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailBuy }
+
+admin_cloud_sms_sign:
+    path:  /cloud/sms/sign
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsSign }
+
+admin_cloud_email_account:
+    path:  /cloud/email/count
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailAccount }
+
+admin_cloud_email_list:
+    path:  /cloud/email/list
+    defaults: { _controller: TopxiaAdminBundle:Cloud:emailList }
+
 admin_cloud_live_upgrade:
     path:  /cloud/live/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:liveUpgrade }
@@ -1903,15 +1919,15 @@ admin_edu_cloud_sms_no_message:
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms_overview]
 
-admin_edu_cloud_email:
-    path: /edu_cloud/email/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
-    permissions: [admin_edu_cloud_email_overview]
+#admin_edu_cloud_email:
+#    path: /edu_cloud/email/overview
+#    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailOverview }
+#    permissions: [admin_edu_cloud_email_overview]
 
-admin_edu_cloud_email_setting:
-    path: /edu_cloud/email/setting
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSetting }
-    permissions: [admin_edu_cloud_email_overview]
+#admin_edu_cloud_email_setting:
+#    path: /edu_cloud/email/setting
+#    defaults: { _controller: TopxiaAdminBundle:EduCloud:emailSetting }
+#    permissions: [admin_edu_cloud_email_overview]
 
 admin_edu_cloud_email_switch:
     path: /edu_cloud/email/switch

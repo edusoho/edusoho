@@ -25,11 +25,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.5'
-        packages:
-            webpack:
-                base_urls:
-                    - "%webpack_base_url%"
+        version: '7.3.6'
 
 # Twig Configuration
 twig:

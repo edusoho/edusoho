@@ -44,5 +44,5 @@
 <script src="{{ url('bazinga_jstranslation_js', {'domain': 'js'}) }}"></script>
 
 {% for path in script()  %}
-  <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
+  <script src="{{ asset('build/' ~ path) }}"></script>
 {% endfor %}
