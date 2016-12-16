@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4f9e49123347f7e81c6a21b45d41e45c",
-    "content-hash": "d0b470af0d2254622cd21741a21aa0ce",
+    "hash": "da24b763f85ae68826e228c7799151e6",
+    "content-hash": "09bef09b86190263ad0a69f425f9feb3",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -215,7 +215,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/69eb16e1bf90b80567d88aa88aab697ee292a5a6.zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/69eb16e1bf90b80567d88aa88aab697ee292a5a6",
                 "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6",
                 "shasum": ""
             },
@@ -250,7 +250,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-rate-limiter/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019.zip",
+                "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
                 "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
                 "shasum": ""
             },
@@ -281,7 +281,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/plugin-bundle/bd7915aa65a0663664441beea3278769c45b6785.zip",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/bd7915aa65a0663664441beea3278769c45b6785",
                 "reference": "bd7915aa65a0663664441beea3278769c45b6785",
                 "shasum": ""
             },
@@ -328,7 +328,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/rate-limiter/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120.zip",
+                "url": "https://api.github.com/repos/codeages/rate-limiter/zipball/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "reference": "5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "shasum": ""
             },
@@ -370,7 +370,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/rest-api-client/660aafdec2287a82bf208e17407ae62c0172e21c.zip",
+                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
                 "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
                 "shasum": ""
             },
@@ -1236,7 +1236,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
+                "url": "https://api.github.com/repos/endroid/EndroidQrCodeBundle/zipball/691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "shasum": ""
             },
@@ -1794,7 +1794,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
                 "reference": "c0125896dbb151380ab47e96c621741e79623beb",
                 "shasum": ""
             },
@@ -3184,7 +3184,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/2d449d345ec0f83f9479358c1d37111d0cf3df9a.zip",
+                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "shasum": ""
             },
@@ -3231,6 +3231,57 @@
                 "translation"
             ],
             "time": "2015-11-10 13:04:08"
+        },
+        {
+            "name": "xxtea/xxtea",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xxtea/xxtea-php.git",
+                "reference": "766edc74ae89454cdaab24ee297fb64a9482698c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xxtea/xxtea-php/zipball/766edc74ae89454cdaab24ee297fb64a9482698c",
+                "reference": "766edc74ae89454cdaab24ee297fb64a9482698c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "xxtea.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ma Bingyao",
+                    "email": "mabingyao@gmail.com",
+                    "homepage": "https://github.com/xxtea/xxtea-php",
+                    "role": "Developer"
+                }
+            ],
+            "description": "XXTEA is a fast and secure encryption algorithm. This is a XXTEA library for PHP.",
+            "homepage": "https://github.com/xxtea/xxtea-php",
+            "keywords": [
+                "crypt",
+                "cryptography",
+                "decrypt",
+                "encrypt",
+                "library",
+                "security",
+                "xxtea"
+            ],
+            "time": "2016-02-13 11:45:07"
         }
     ],
     "packages-dev": [

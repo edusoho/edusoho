@@ -54,7 +54,7 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        ServiceKernel::instance()->getBiz()->service('Log:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
+        ServiceKernel::instance()->getBiz()->service('System:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
             return $this->downloadCloudFile($file);

@@ -6,7 +6,7 @@ namespace Biz\Note\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
-use Biz\Log\Service\LogService;
+use Biz\System\Service\LogService;
 use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Dao\CourseNoteLikeDao;
 use Biz\Note\Service\CourseNoteService;
@@ -285,6 +285,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     protected function getLogService()
     {
-        return $this->biz->service('Log:LogService');
+        return $this->biz->service('System:LogService');
     }
 }

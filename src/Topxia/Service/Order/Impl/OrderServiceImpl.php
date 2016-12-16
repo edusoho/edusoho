@@ -97,7 +97,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order['status']      = 'created';
-        $order['createdTime'] = time();
 
         $order = $this->getOrderDao()->addOrder($order);
 
@@ -542,15 +541,19 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-        $orderBy = array();
 
-        if ($sort == 'early') {
-            $orderBy = array('createdTime', 'ASC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime', 'ASC');
+            } else {
+                $orderBy = array('createdTime', 'DESC');
+            }
+        }else{
+            $orderBy = $sort;
         }
-
+       
         $conditions = $this->_prepareSearchConditions($conditions);
+
         $orders     = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
@@ -600,6 +603,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (isset($conditions['amount'])) {
             $tmpConditions['amount'] = $conditions['amount'];
         }
+
+		if (isset($conditions['totalPrice_GT'])){
+			$tmpConditions['totalPrice_GT'] = $conditions['totalPrice_GT'];
+		}
+
+		if (isset($conditions['updatedTime_GE'])){
+			$tmpConditions['updatedTime_GE'] = $conditions['updatedTime_GE'];
+		}
 
         $conditions = array_filter($conditions);
         $conditions = array_merge($conditions, $tmpConditions);
@@ -692,9 +703,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
+    public function findRefundByOrderId($orderId)
+    {
+        return $this->getOrderRefundDao()->findRefundByOrderId($orderId);
+    }
+
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

@@ -223,7 +223,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getNotificationService()

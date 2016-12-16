@@ -122,7 +122,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->fillOrgId($classroom);
 
-        $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
@@ -556,7 +555,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => '|student|',
             'remark'      => empty($order['note']) ? '' : $order['note'],
-            'createdTime' => time()
         );
 
         if (empty($fields['remark'])) {
@@ -572,7 +570,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $member['role']    = array('student');
                 $member['orderId'] = $fields['orderId'];
-                $member['createdTime'] = time();
             }
 
             $member = MemberSerialize::serialize($member);
@@ -1380,6 +1377,34 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
     }
 
+    public function updateMember($id, $member)
+    {
+        return $this->getClassroomMemberDao()->updateMember($id, $member);
+    }
+
+    public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)
+    {
+        $classroomCourses = $this->findCoursesByClassroomId($classroomId);
+
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
+
+        $conditions = array();
+        $conditions['courseIds'] = $courseIds;
+        $conditions['userId'] = $userId;
+        $conditions = array(
+            'userId'   => $userId,
+            'courseIds' => $courseIds,
+            'status'   => 'finished'
+        );
+        $userLearnCount = $this->getCourseService()->searchLearnCount($conditions);
+        
+        $fields['lastLearnTime'] = time();
+        $fields['learnedNum'] = $userLearnCount;
+
+        $classroomMember = $this->getClassroomMember($classroomId, $userId);
+        return $this->updateMember($classroomMember['id'], $fields);       
+    }
+
     private function updateStudentNumAndAuditorNum($classroomId)
     {
         $fields = array(
@@ -1411,7 +1436,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getClassroomDao()

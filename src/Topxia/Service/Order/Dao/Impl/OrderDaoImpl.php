@@ -69,6 +69,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function addOrder($order)
     {
+        $order['createdTime'] = time();
+        $order['updatedTime'] = $order['createdTime'];        
         $order    = $this->createSerializer()->serialize($order, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $order);
 
@@ -81,6 +83,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function updateOrder($id, $fields)
     {
+        $fields['updatedTime'] = time();
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getOrder($id);
@@ -90,11 +93,14 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        $orders  = $builder->execute()->fetchAll() ?: array();
+                        ->select('*')
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+
+        $orders = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
@@ -164,7 +170,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime < :endTime')
             ->andWhere('createdTime < :createdTime_LT')
-            ->andWhere('title LIKE :title');
+            ->andWhere('title LIKE :title')
+            ->andWhere('targetType IN ( :targetTypes)')
+            ->andWhere('updatedTime >= :updatedTime_GE ')
+			->andWhere('userId IN ( :userIds)')
+			->andWhere('status IN ( :includeStatus)')
+			->andWhere('totalPrice > :totalPrice_GT');
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)

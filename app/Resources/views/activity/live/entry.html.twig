@@ -18,7 +18,7 @@
 <body>
   <div id="entry" data-url="{{ path('task_liveroom_ticket', {courseId: courseId, activityId: activityId, roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center text-success">{{'正在打开教室，请稍后'|trans}}...</div>
   {% do script(['libs/vendor.js', 'web.js', 'app/js/activity/live/index.js'], 1000) %}
-  {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
+  {% include 'script_boot.html.twig' %}
   {# 这里的js没有加载！！！！ #}
   {# {% do script(['app/js/activity/live/index.js']) %} #}
 </body>

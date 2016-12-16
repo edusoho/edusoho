@@ -192,6 +192,6 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

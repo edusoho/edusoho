@@ -3,6 +3,8 @@
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
+use Biz\System\Dao\LogDao;
+use Biz\User\Service\UserService;
 use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\Logger;
 use Biz\System\Service\LogService;
@@ -24,24 +26,25 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->addLog('error', $module, $action, $message, $data);
     }
 
-    public function search($conditions, $order, $start, $limit)
+    public function searchLogs($conditions, $sort, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        switch ($order) {
-            case 'created':
-                $order = array('createdTime' => 'DESC');
-                break;
-            case 'createdByAsc':
-                $order = array('createdTime' => 'ASC');
-                break;
-
-            default:
-                throw $this->createServiceException('参数order不正确。');
-                break;
+        if (!is_array($sort)) {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('createdTime' => 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('createdTime' => 'ASC');
+                    break;
+                default:
+                    throw $this->createServiceException('参数sort不正确。');
+                    break;
+            }
         }
 
-        $logs = $this->getLogDao()->search($conditions, $order, $start, $limit);
+        $logs = $this->getLogDao()->search($conditions, $sort, $start, $limit);
 
         foreach ($logs as &$log) {
             $log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
@@ -51,7 +54,7 @@ class LogServiceImpl extends BaseService implements LogService
         return $logs;
     }
 
-    public function count($conditions)
+    public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
         return $this->getLogDao()->count($conditions);
@@ -108,11 +111,17 @@ class LogServiceImpl extends BaseService implements LogService
         return array();
     }
 
+    /**
+     * @return LogDao
+     */
     protected function getLogDao()
     {
         return $this->createDao('System:LogDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');

@@ -33,7 +33,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $to      = implode(',', $mobiles);
         try {
             $api    = CloudAPIFactory::create('leaf');
-            $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
+            $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
             throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
         }
@@ -129,7 +129,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
             try {
                 $api    = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
                 if (isset($result['error'])) {
                     return array('error' => $this->getKernel()->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error'])));
                 }
@@ -227,6 +227,6 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }
