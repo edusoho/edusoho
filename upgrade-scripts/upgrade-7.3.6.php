@@ -6,6 +6,8 @@ use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private static $pageNum = 1000;
+
     public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
@@ -137,7 +139,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $count = $connection->fetchColumn("select count(*) from orders;");
-        $pageNum = 1000;
+        $pageNum = self::$pageNum;
         $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
         if ($page <= $pages) {
@@ -170,7 +172,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $count = $connection->fetchColumn("select count(*) from course_member;");
-        $pageNum = 1000;
+        $pageNum = self::$pageNum;
         $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
         if ($page <= $pages) {
@@ -195,7 +197,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $count = $connection->fetchColumn("select count(*) from course_member where joinedType = 'classroom';");
-        $pageNum = 1000;
+        $pageNum = self::$pageNum;
         $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
         if ($page <= $pages) {
@@ -221,7 +223,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $count = $connection->fetchColumn("select count(*) from course_member where joinedType = 'classroom';");
-        $pageNum = 1000;
+        $pageNum = self::$pageNum;
         $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
         if ($page <= $pages) {
