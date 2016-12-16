@@ -2,10 +2,11 @@
 
 namespace Biz;
 
+
+use Biz\User\CurrentUser;
+use Codeages\Biz\Framework\Event\Event;
 use Monolog\Logger;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -19,6 +20,9 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz->dao($alias);
     }
 
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];
@@ -34,10 +38,10 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
@@ -66,21 +70,41 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz['logger'];
     }
 
+    /**
+     * @param string $message
+     *
+     * @return AccessDeniedException
+     */
     protected function createAccessDeniedException($message = '')
     {
         return new AccessDeniedException($message);
     }
 
+    /**
+     * @param string $message
+     *
+     * @return InvalidArgumentException
+     */
     protected function createInvalidArgumentException($message = '')
     {
         return new InvalidArgumentException($message);
     }
 
+    /**
+     * @param string $message
+     *
+     * @return NotFoundException
+     */
     protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
     }
 
+    /**
+     * @param string $message
+     *
+     * @return ServiceException
+     */
     protected function createServiceException($message = '')
     {
         return new ServiceException($message);
@@ -94,7 +118,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             if (!empty($fields['orgCode'])) {
                 $org = ServiceKernel::instance()->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
-                    throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
+                    throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }
                 $fields['orgId']   = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];
@@ -105,21 +129,5 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             unset($fields['orgCode']);
         }
         return $fields;
-    }
-
-    protected function purifyHtml($html, $trusted = false)
-    {
-        if (empty($html)) {
-            return '';
-        }
-
-        $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
-        );
-
-        $factory  = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($trusted);
-
-        return $purifier->purify($html);
     }
 }

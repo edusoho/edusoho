@@ -13,6 +13,9 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
     public function declares()
     {
         return array(
+            'orderbys'   => array(
+                'createdTime'
+            ),
             'conditions' => array(
                 'module = :module',
                 'action = :action',

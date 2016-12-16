@@ -1,6 +1,7 @@
 <?php
 namespace Tests\System;
 
+use Biz\System\Service\LogService;
 use Topxia\Service\Common\BaseTestCase;
 
 class LogServiceTest extends BaseTestCase
@@ -41,14 +42,14 @@ class LogServiceTest extends BaseTestCase
     public function testSearch()
     {
         $this->getLogService()->info('coin', 'add', 'this is info message', array());
-        $logs = $this->getLogService()->search(array(), 'created', 0, 100);
+        $logs = $this->getLogService()->searchLogs(array(), 'created', 0, 100);
         $this->assertTrue(sizeof($logs) > 1);
     }
 
     public function testCount()
     {
         $this->getLogService()->info('coin', 'add', 'this is info message', array());
-        $count = $this->getLogService()->count(array());
+        $count = $this->getLogService()->searchLogCount(array());
         $this->assertTrue($count > 0);
     }
 
@@ -76,6 +77,9 @@ class LogServiceTest extends BaseTestCase
         //TODO
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
