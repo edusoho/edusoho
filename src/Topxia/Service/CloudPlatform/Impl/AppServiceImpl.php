@@ -665,12 +665,20 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
+        $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
+        $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
         }
 
         include_once $packageDir . '/Upgrade.php';
-        $upgrade = new \EduSohoUpgrade($this->getKernel());
+
+        if ($protocol == 3) {
+            $upgrade = new \EduSohoUpgrade($this->getKernel()->getBiz());
+        } else {
+            $upgrade = new \EduSohoUpgrade($this->getKernel());
+        }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
