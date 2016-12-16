@@ -416,16 +416,16 @@ course_manage_homework_check:
 
 
 homework_start_do:
-    pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
-    defaults: { _controller: AppBundle:Homework:startDo }
+  pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
+  defaults: { _controller: AppBundle:Homework:startDo }
 
 homework_show:
-    pattern: /homework/{resultId}/show
-    defaults: { _controller: AppBundle:Homework:doTest }
+  pattern: /homework/{resultId}/show
+  defaults: { _controller: AppBundle:Homework:doTest }
 
 homework_result_show:
-    pattern: /homework/result/{resultId}/show
-    defaults: { _controller: AppBundle:Homework:showResult }
+  pattern: /homework/result/{resultId}/show
+  defaults: { _controller: AppBundle:Homework:showResult }
 
 homework_finish:
   path: /homework/result/{resultId}/finish
@@ -439,16 +439,16 @@ course_manage_exercise_check:
   defaults: { _controller: AppBundle:ExerciseManage:buildCheck }
 
 exercise_start_do:
-    path: /lesson/{lessonId}/exercise/{exerciseId}/startDo
-    defaults: { _controller: AppBundle:Exercise:startDo }
+  path: /lesson/{lessonId}/exercise/{exerciseId}/startDo
+  defaults: { _controller: AppBundle:Exercise:startDo }
 
 exercise_show:
-    path: /exercise/{resultId}/show
-    defaults: { _controller: AppBundle:Exercise:doTest }
+  path: /exercise/{resultId}/show
+  defaults: { _controller: AppBundle:Exercise:doTest }
 
 exercise_result_show:
-    path: /exercise/result/{resultId}/show
-    defaults: { _controller: AppBundle:Exercise:showResult }
+  path: /exercise/result/{resultId}/show
+  defaults: { _controller: AppBundle:Exercise:showResult }
 
 exercise_finish:
   path: /exercise/result/{resultId}/finish
@@ -456,6 +456,31 @@ exercise_finish:
   methods: [POST]
 
 course_set_manage_question_check:
-    path: /course_set/{id}/manage/question/check
-    defaults: { _controller: AppBundle:Question/Manage:check }
+  path: /course_set/{id}/manage/question/check
+  defaults: { _controller: AppBundle:Question/Manage:check }
 
+#attachment
+attachment_upload:
+  path: /attachment/upload
+  defaults: { _controller: AppBundle:File/Attachment:upload }
+  methods: [GET]
+
+attachment_item_show:
+  path: /attachment/file/{fileId}/show
+  defaults: { _controller: AppBundle:File/Attachment:fileShow }
+  methods: [GET]
+
+attachment_delete:
+  path: /attachment/{id}/delete
+  defaults: { _controller: AppBundle:File/Attachment:delete }
+  methods: [POST]
+
+attachment_preview:
+  path: /attachment/{id}/preview
+  defaults: { _controller: AppBundle:File/Attachment:preview }
+  methods: [GET]
+
+attachment_download:
+  path: /attachment/{id}/download
+  defaults: { _controller: AppBundle:File/Attachment:download }
+  methods: [GET]

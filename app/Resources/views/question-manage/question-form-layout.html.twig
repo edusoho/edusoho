@@ -62,7 +62,7 @@
             {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
           </div>
         </div>
-        {{ render(controller('TopxiaWebBundle:Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
 
 
         {% block question_extra_fields %}{% endblock %}
