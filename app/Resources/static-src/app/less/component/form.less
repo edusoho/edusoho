@@ -2,6 +2,16 @@
 @form-group-margin-bottom-min: 15px;
 @form-error-message-height:20px;
 
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px @bg-color inset;
+}
+
+textarea {
+  resize: none;
+}
+
 .radios,
 .checkboxs {
   padding-top: 5px;
@@ -12,10 +22,6 @@
 .checkboxs label {
   font-weight: normal;
   padding: 0 20px 0 0px;
-}
-
-textarea {
-  resize: none;
 }
 
 .control-label span.required {
@@ -60,10 +66,6 @@ textarea {
 .form-control-150 {
   width: 150px;
 }
-
-
-
-//validation style
 
 .has-error.form-group {
   margin-bottom: @form-group-margin-bottom - @form-error-message-height;

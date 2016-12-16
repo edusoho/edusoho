@@ -7,10 +7,6 @@ import 'bootstrap-notify';
 import 'common/bootstrap-modal-hack';
 import 'common/script';
 
-console.log('app');
-
-
-
 $('[data-toggle="popover"]').popover({
   html:true,
 });

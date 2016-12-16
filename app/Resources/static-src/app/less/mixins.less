@@ -7,19 +7,17 @@
 @import "mixins/shake.less";                //css3效果-上下抖动
 @import "mixins/transup.less";              //css3效果-向上推动
 @import "mixins/spin.less";                 //css3效果-旋转
+
 @import "mixins/color.less";                //颜色
-@import "mixins/input.less";                //输入框
 @import "mixins/spacing.less";              //间距
 @import "mixins/text.less";                 //文字
+@import "mixins/link.less";                 //链接
+@import 'mixins/bg-color.less';             //bg颜色
 
 .es-icon {
   line-height: 1;
 }
 
-.p-lg {
-  line-height: 30px;
-  margin-bottom: 30px;
-}
 
 .label {
   .border-radius;
@@ -85,78 +83,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   padding: 20px 0;
 }
 
-// 字体颜色变化，一般用于a标签
-.link-darker {
-  color: @gray-darker !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
 
-.link-dark {
-  color: @gray-dark !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-.link-gray {
-  color: @gray !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-
-.link-light {
-  color: @gray-light !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-.link-lighter {
-  color: @gray-lighter !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-.link-medium {
-  color: @gray-medium !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-.link-white {
-  color: #fff !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
-
-.link-primary {
-  color: @brand-primary !important;
-  .es-transition;
-  &:hover {
-    color: @brand-primary !important;
-    .es-transition;
-  }
-}
 
 // 动画效果
 a.transition {
