@@ -86,6 +86,18 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
     }
 
+    protected function generateIndex($step, $page)
+    {
+        return $step*10000 + $page;
+    }
+
+    protected function getStepAndPage($index) 
+    {
+        $step = intval($index/10000);
+        $page = $index%10000;
+        return array($step, $page);
+    }
+
     protected function batchUpdate($index)
     {
         $batchUpdates = array(
@@ -102,13 +114,13 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->updateScheme();
 
             return array(
-                'index' => '1-1',
+                'index' => $this->generateIndex(1, 1),
                 'message' => '正在升级数据...',
                 'progress' => 0
             );
         }
-        $step = preg_replace('/\-\w+$/', '', $index);
-        $page = preg_replace('/^\w+\-/', '', $index);
+
+        list($step, $page) = $this->getStepAndPage($index);
 
         $method = $batchUpdates[$step];
         $page = $this->$method($page);
@@ -118,7 +130,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         if ($step < 8) {
             return array(
-                'index' => $step.'-'.$page,
+                'index' => $this->generateIndex($step, $page),
                 'message' => '正在升级数据...',
                 'progress' => 0
             );
