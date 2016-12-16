@@ -1436,7 +1436,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getClassroomDao()

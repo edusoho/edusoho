@@ -325,7 +325,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     private function getNotificationService()

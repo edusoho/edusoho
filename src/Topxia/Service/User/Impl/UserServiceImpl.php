@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Biz\Log\Service\LogService;
+use Biz\System\Service\LogService;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
@@ -1816,7 +1816,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getIpBlacklistService()

@@ -95,7 +95,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getNotificationService()

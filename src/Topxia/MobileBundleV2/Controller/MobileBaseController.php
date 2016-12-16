@@ -576,7 +576,7 @@ class MobileBaseController extends BaseController
 
     public function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Log:LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     public function getVipService()

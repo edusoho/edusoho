@@ -81,8 +81,7 @@
     "screenfull": "3.0.2",
     "select2": "3.5",
     "store": "1.3.20",
-    "video.js": "4.10.2"
-    "respond.js": "1.4.2",
+    "video.js": "4.10.2",
     "typeahead.js": "0.11.1"
   },
   "scripts": {
