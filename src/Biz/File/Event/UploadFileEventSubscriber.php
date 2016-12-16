@@ -88,6 +88,11 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         }
 
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
+
+        if (!$attachments) {
+            return true;
+        }
+
         foreach ($attachments as $attachment) {
             $this->getUploadFileService()->deleteUseFile($attachment['id']);
         }
