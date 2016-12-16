@@ -140,6 +140,7 @@ class LiveCourseController extends BaseController
         } else {
             $eduCloudStatus = 'closed';
         }
+
         return $eduCloudStatus;
     }
 
