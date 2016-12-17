@@ -1,5 +1,3 @@
-
-
 class QuestionFormBase {
   constructor($form){
     this.$form = $form;

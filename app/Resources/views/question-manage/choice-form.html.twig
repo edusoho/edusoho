@@ -10,10 +10,14 @@
        <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">{{'新增选项'|trans}}</button>
     </div>
   </div>
-
+  <div id="choices-group"></div>
   {% if question.metas.choices|default(null) %}
-    <script type="text/plain" data-role="choices-data">{{ question.metas.choices|json_encode|raw}}</script>
-    <script type="text/plain" data-role="answers-data">{{ question.answer|json_encode|raw}}</script>
+    <script type="text/plain" data-role="choices-data">
+      {{ question.metas.choices|json_encode|raw}}
+    </script>
+    <script type="text/plain" data-role="answers-data">
+      {{ question.answer|json_encode|raw}}
+    </script>
   {% endif %}
   <script type="text/x-handlebars-template" data-role="choice-template">
     {% verbatim %}
