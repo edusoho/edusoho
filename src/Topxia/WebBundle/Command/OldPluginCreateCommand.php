@@ -70,8 +70,9 @@ class OldPluginCreateCommand extends GeneratorCommand
         $errors = array();
         $this->getQuestionHelper()->getRunner($output, $errors);
         $pluginName = $name;
-        $dir        = $bundleObject->getTargetDirectory();
+        $dir        = $bundleObject->getTargetDirectory(). "/..";
 
+        var_dump($pluginName, $dir);
         //write jspn
         $filename = $dir."/plugin.json";
 
