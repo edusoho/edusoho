@@ -1,13 +1,15 @@
 <?php
-namespace Topxia\Service\Article\Event;
+namespace Biz\Article\Event;
 
+
+
+use Biz\Article\Service\ArticleService;
+use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Taxonomy\TagOwnerManager;
 
-class ArticleEventSubscriber implements EventSubscriberInterface
+class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
 
     public static function getSubscribedEvents()
@@ -57,8 +59,11 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
-        return ServiceKernel::instance()->createService('Article.ArticleService');
+        return $this->getBiz()->service('Article:ArticleService');
     }
 }

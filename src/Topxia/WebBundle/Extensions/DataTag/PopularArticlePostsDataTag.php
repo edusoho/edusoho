@@ -79,7 +79,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     private function getThreadService()
