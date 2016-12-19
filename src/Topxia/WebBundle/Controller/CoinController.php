@@ -474,7 +474,7 @@ class CoinController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
+        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
     }
 
     protected function getInviteRecordService()
