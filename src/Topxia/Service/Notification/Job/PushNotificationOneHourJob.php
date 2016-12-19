@@ -43,6 +43,6 @@ class PushNotificationOneHourJob implements Job
 
     protected function getCloudDataService()
     {
-        return ServiceKernel::instance()->createService('CloudData.CloudDataService');
+        return ServiceKernel::instance()->getBiz()->service('CloudData:CloudDataService');
     }
 }

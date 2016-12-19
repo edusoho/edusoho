@@ -585,6 +585,6 @@ class PayCenterController extends BaseController
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
     }
 }

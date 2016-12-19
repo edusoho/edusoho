@@ -67,7 +67,7 @@ $api->get('/followings', function (Request $request) {
 //获得当前用户虚拟币账户信息
 $api->get('/accounts', function () {
     $user = getCurrentUser();
-    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
+    $accounts = ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($user['id']);
 
     if (empty($accounts)) {
         throw new \Exception('accounts not found');

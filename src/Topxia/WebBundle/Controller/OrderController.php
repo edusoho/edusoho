@@ -320,7 +320,7 @@ class OrderController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getOrderService()

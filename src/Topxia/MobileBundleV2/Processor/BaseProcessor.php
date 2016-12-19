@@ -127,7 +127,7 @@ class BaseProcessor {
 
     protected function getCashAccountService()
     {
-        return $this->controller->getService('Cash.CashAccountService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getAppService()
@@ -137,7 +137,7 @@ class BaseProcessor {
 
     protected function getCashOrdersService()
     {
-        return $this->controller->getService('Cash.CashOrdersService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
