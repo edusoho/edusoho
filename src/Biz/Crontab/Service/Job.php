@@ -1,5 +1,5 @@
 <?php
-namespace Biz\Crontab\Service\Crontab;
+namespace Biz\Crontab\Service;
 
 interface Job
 {

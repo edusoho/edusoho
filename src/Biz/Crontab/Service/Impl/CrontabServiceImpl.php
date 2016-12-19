@@ -1,5 +1,5 @@
 <?php
-namespace Biz\Crontab\Service\Crontab\Impl;
+namespace Biz\Crontab\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
@@ -133,7 +133,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function deleteJobs($targetId, $targetType)
     {
-        $deleted = $this->getJobDao()->deleteByTargetTypeAndTargetId($targetId, $targetType);
+        $deleted = $this->getJobDao()->deleteByTargetTypeAndTargetId($targetType, $targetId);
         $this->refreshNextExecutedTime();
         return $deleted;
     }

@@ -2,14 +2,13 @@
 namespace Tests\Crontab;
 
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class CrontabServiceTest extends BaseTestCase
 {
     public function testCreateJob()
     {
         $newJob = $this->createJob();
-        $this->assertEquals('TestJob', $newJob['name']);
+        $this->assertEquals('EmptyJob', $newJob['name']);
     }
 
     public function testGetJob()
@@ -17,7 +16,7 @@ class CrontabServiceTest extends BaseTestCase
         $newJob = $this->createJob();
         $jobGet = $this->getCrontabService()->getJob($newJob['id']);
         $this->assertEquals('once', $jobGet['cycle']);
-        $this->assertEquals('TestJob', $jobGet['name']);
+        $this->assertEquals('EmptyJob', $jobGet['name']);
         $this->assertEquals('test', $jobGet['targetType']);
         $this->assertEquals('1', $jobGet['targetId']);
     }
@@ -111,16 +110,18 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testFindJobByTargetTypeAndTargetId()
     {
-        $newJob = $this->createJob();
-        $result = $this->getCrontabService()->findJobByTargetTypeAndTargetId($newJob['targetType'], $newJob['targetId']);
-        $this->assertEquals($newJob['targetId'], $result[0]['targetId']);
-        $this->assertEquals($newJob['targetType'], $result[0]['targetType']);
+        $newJob  = $this->createJob();
+        $results = $this->getCrontabService()->findJobByTargetTypeAndTargetId($newJob['targetType'], $newJob['targetId']);
+        $result  = $results[0];
+        $this->assertEquals($newJob['targetId'], $result['targetId']);
+        $this->assertEquals($newJob['targetType'], $result['targetType']);
     }
 
     public function testFindJobByNameAndTargetTypeAndTargetId()
     {
-        $newJob = $this->createJob();
-        $result = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId($newJob['name'], $newJob['targetType'], $newJob['targetId']);
+        $newJob  = $this->createJob();
+        $results = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId($newJob['name'], $newJob['targetType'], $newJob['targetId']);
+        $result  = $results[0];
         $this->assertEquals($newJob['targetId'], $result['targetId']);
         $this->assertEquals($newJob['targetType'], $result['targetType']);
         $this->assertEquals($newJob['name'], $result['name']);
@@ -140,28 +141,27 @@ class CrontabServiceTest extends BaseTestCase
     private function createJob($cycle = 'once')
     {
         $job = array(
-            'name'            => "TestJob",
+            'name'            => "EmptyJob",
             'cycle'           => $cycle,
             'nextExcutedTime' => time(), //方便执行的时候,可以处理当前的job
-            'jobClass'        => 'Topxia\\Service\\Crontab\\Tests\\TestJob',
+            'jobClass'        => 'Biz\\Crontab\\Service\\Impl\\EmptyJob',
             'targetType'      => 'test',
             'targetId'        => 1,
             'creatorId'       => 1,
             'createdTime'     => time(),
             'jobParams'       => ''
         );
-        $job = $this->getCrontabService()->createJob($job);
-        return $job;
+        return $this->getCrontabService()->createJob($job);
     }
 
     protected function getCrontabService()
     {
-        return $this->getServiceKernel()->createService('Crontab.CrontabService');
+        return $this->getBiz()->service('Crontab:CrontabService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
 }

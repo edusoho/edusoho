@@ -30,6 +30,10 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
             'serializes' => array(
                 'jobParams' > 'json'
             ),
+            'orderbys'   => array(
+                'createdTime',
+                'nextExcutedTime'
+            ),
             'conditions' => array(
                 "name LIKE :name",
                 "cycle = :cycle",
