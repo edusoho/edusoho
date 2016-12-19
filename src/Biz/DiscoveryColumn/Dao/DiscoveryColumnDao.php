@@ -1,18 +1,12 @@
 <?php
 
-namespace Topxia\Service\DiscoveryColumn\Dao;
+namespace Biz\DiscoveryColumn\Dao;
 
-interface DiscoveryColumnDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface DiscoveryColumnDao extends GeneralDaoInterface
 {
-	public function getDiscoveryColumn($id);
+    public function findByTitle($title);
 
-	public function updateDiscoveryColumn($id, $fields);
-
-	public function addDiscoveryColumn($CategoryShow);
-
-	public function deleteDiscoveryColumn($id);
-
-	public function findDiscoveryColumnByTitle($title);
-
-	public function getAllDiscoveryColumns();
+    public function findAllOrderBySeq();
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\DiscovieryColumn\Tests;
+namespace Tests\DiscovieryColumn;
 
 use Topxia\Service\Common\BaseTestCase;
 
@@ -42,15 +42,13 @@ class DiscoveryColumnServiceTest extends BaseTestCase
         //$id
         $id     = 2;
         $fields = array(
-            'id'          => $id,
-            'title'       => 'test',
-            'type'        => 'course',
-            'categoryid'  => '2',
-            'ordertype'   => 'new',
-            'showCount'   => '4',
-            'seq'         => '2',
-            'createdTime' => time(),
-            'updateTime'  => time()
+            'id'         => $id,
+            'title'      => 'test',
+            'type'       => 'course',
+            'categoryid' => '2',
+            'ordertype'  => 'new',
+            'showCount'  => '4',
+            'seq'        => '2'
         );
         $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
         $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
@@ -90,23 +88,19 @@ class DiscoveryColumnServiceTest extends BaseTestCase
 
     private function createDiscoveryColumn()
     {
-        $createdTime = time();
-        $updateTime  = time();
-        $fields      = array(
-            'title'       => 'test',
-            'type'        => 'course',
-            'categoryId'  => 2,
-            'orderType'   => 'new',
-            'showCount'   => 4,
-            'seq'         => 2,
-            'createdTime' => $createdTime,
-            'updateTime'  => $updateTime
+        $fields = array(
+            'title'      => 'test',
+            'type'       => 'course',
+            'categoryId' => 2,
+            'orderType'  => 'new',
+            'showCount'  => 4,
+            'seq'        => 2
         );
         return $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
     }
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
+        return $this->getBiz()->service('DiscoveryColumn:DiscoveryColumnService');
     }
 }

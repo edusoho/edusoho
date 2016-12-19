@@ -1,20 +1,20 @@
 <?php
 
-namespace Topxia\Service\DiscoveryColumn;
+namespace Biz\DiscoveryColumn\Service;
 
 interface DiscoveryColumnService
 {
-	public function getDiscoveryColumn($id);
+    public function getDiscoveryColumn($id);
 
-	public function updateDiscoveryColumn($id, $fields);
+    public function updateDiscoveryColumn($id, $fields);
 
-	public function addDiscoveryColumn($fields);
+    public function addDiscoveryColumn($fields);
 
-	public function deleteDiscoveryColumn($id);
-	
-	public function findDiscoveryColumnByTitle($title);
+    public function deleteDiscoveryColumn($id);
 
-	public function getAllDiscoveryColumns();
+    public function findDiscoveryColumnByTitle($title);
 
-	public function sortDiscoveryColumns(array $columnIds);
+    public function getAllDiscoveryColumns();
+
+    public function sortDiscoveryColumns(array $columnIds);
 }
