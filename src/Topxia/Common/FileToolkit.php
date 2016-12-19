@@ -62,15 +62,8 @@ class FileToolkit
         $regex  = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
             $errors[] = "只允许上传以下扩展名的文件：".$extensions;
-        }
 
-        return $errors;
-    }
-
-    public static function isAllowedUploadFile($file)
-    {
-        if (!empty(static::validateFileExtension($file))) {
-            return false;
+            return  $errors;
         }
 
         if (function_exists('finfo_open')) {
@@ -78,12 +71,15 @@ class FileToolkit
             $mimeType = finfo_file($finfo, $file);
             
             $fileMimeType = $file->getClientMimeType();
+            if ($mimeType != $fileMimeType) {
+                $errors[] = "请上传合法的文件。";
+            }
 
-            return $mimeType == $fileMimeType;
+            return $errors;
         }
 
-        return true;
-    } 
+        return $errors;
+    }
 
     public static function isImageFile(File $file)
     {
