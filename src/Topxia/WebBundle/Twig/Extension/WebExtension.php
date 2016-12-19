@@ -192,7 +192,7 @@ class WebExtension extends \Twig_Extension
         if (!(bool)$weixinmob_enabled) {
             return null;
         }
-        $jsApiTicket = ServiceKernel::instance()->createService('User.TokenService')->getTokenByType('jsapi.ticket');
+        $jsApiTicket = ServiceKernel::instance()->getBiz()->service('User:TokenService')->getTokenByType('jsapi.ticket');
 
         $key    = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
@@ -201,7 +201,7 @@ class WebExtension extends \Twig_Extension
             $weixinshare = new WeixinShare($config);
             $token       = $weixinshare->getJsApiTicket();
 
-            $jsApiTicket = ServiceKernel::instance()->createService('User.TokenService')->makeToken(
+            $jsApiTicket = ServiceKernel::instance()->getBiz()->service('User:TokenService')->makeToken(
                 'jsapi.ticket',
                 array('data' => $token, 'duration' => $token['expires_in'])
             );
@@ -369,7 +369,7 @@ class WebExtension extends \Twig_Extension
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     public function getAccount($userId)
@@ -396,11 +396,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $time;
-    }
-
-    private function getUserById($userId)
-    {
-        return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)
@@ -829,7 +824,7 @@ class WebExtension extends \Twig_Extension
             $publicUrlpath = 'assets/img/default/';
             $url           = $assets->getUrl($publicUrlpath.$size.$category);
 
-            $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default', array());
+            $defaultSetting = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('default', array());
 
             $key      = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
@@ -1039,7 +1034,7 @@ class WebExtension extends \Twig_Extension
 
         switch ($type) {
             case 'user':
-                return $kernel->createService('User.UserService')->getUser($id);
+                return ServiceKernel::instance()->getBiz()->service('User:UserService')->getUser($id);
             case 'category':
                 return $kernel->createService('Taxonomy.CategoryService')->getCategory($id);
             case 'course':
@@ -1238,7 +1233,7 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
 
-        $value = ServiceKernel::instance()->createService('System.SettingService')->get($name);
+        $value = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get($name);
 
         if (!isset($value)) {
             return $default;
@@ -1263,7 +1258,7 @@ class WebExtension extends \Twig_Extension
 
     public function getOrderPayment($order, $default = null)
     {
-        $coinSettings = ServiceKernel::instance()->createService('System.SettingService')->get('coin', array());
+        $coinSettings = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('coin', array());
 
         if (!isset($coinSettings['price_type'])) {
             $coinSettings['price_type'] = "RMB";

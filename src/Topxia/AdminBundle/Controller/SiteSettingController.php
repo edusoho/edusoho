@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 
 class SiteSettingController extends BaseController
@@ -199,17 +200,17 @@ class SiteSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getFileService()

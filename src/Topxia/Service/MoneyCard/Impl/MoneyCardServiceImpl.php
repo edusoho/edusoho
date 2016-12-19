@@ -644,16 +644,11 @@ class MoneyCardServiceImpl extends BaseService
 
     private function getTokenService()
     {
-        return $this->createService('User.TokenService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     private function getNotificationService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 }

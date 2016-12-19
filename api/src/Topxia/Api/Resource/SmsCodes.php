@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Api\Util\ImgCodeUtil;
+use Topxia\Service\Common\ServiceKernel;
 
 class SmsCodes extends BaseResource
 {
@@ -149,12 +150,12 @@ class SmsCodes extends BaseResource
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getSmsService()
@@ -164,6 +165,6 @@ class SmsCodes extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

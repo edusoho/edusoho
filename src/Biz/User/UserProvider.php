@@ -1,6 +1,7 @@
 <?php
 namespace Biz\User;
 
+use Biz\User\Service\UserService;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Handler\AuthenticationHelper;
@@ -68,7 +69,7 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class === 'Topxia\Service\User\CurrentUser';
+        return $class === 'Biz\User\CurrentUser';
     }
 
     protected function getRoleService()
@@ -76,9 +77,12 @@ class UserProvider implements UserProviderInterface
         return ServiceKernel::instance()->createService('Permission:Role.RoleService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->container->get('biz')->service('User:UserService');
     }
 
     protected function getOrgService()

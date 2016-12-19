@@ -158,6 +158,6 @@ class OrderRefundController extends BaseController
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 }

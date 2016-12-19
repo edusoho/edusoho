@@ -6,6 +6,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\BaseTestCase;
 
 class NoteServiceTest extends BaseTestCase
@@ -274,8 +275,11 @@ class NoteServiceTest extends BaseTestCase
         return $this->getBiz()->service('Task:TaskService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 }

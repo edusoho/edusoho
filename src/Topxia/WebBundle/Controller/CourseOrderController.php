@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -385,7 +386,7 @@ class CourseOrderController extends OrderController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getOrderService()
@@ -395,7 +396,7 @@ class CourseOrderController extends OrderController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getCashAccountService()
@@ -420,7 +421,7 @@ class CourseOrderController extends OrderController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     protected function getLevelService()

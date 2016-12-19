@@ -567,7 +567,7 @@ class MaterialLibController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getMaterialLibService()
@@ -577,7 +577,7 @@ class MaterialLibController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getTagService()
@@ -602,7 +602,7 @@ class MaterialLibController extends BaseController
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getCloudFileService()

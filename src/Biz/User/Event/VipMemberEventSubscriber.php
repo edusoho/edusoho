@@ -1,11 +1,12 @@
 <?php
-namespace Topxia\Service\User\Event;
+namespace Biz\User\Event;
 
-use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\UserService;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class VipMemberEventSubscriber implements EventSubscriberInterface
+class VipMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -20,8 +21,11 @@ class VipMemberEventSubscriber implements EventSubscriberInterface
 		$this->getUserService()->updateUserUpdatedTime($vipMember['userId']);
 	}
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 }

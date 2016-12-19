@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 {
@@ -73,7 +74,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     private function getArticleService()

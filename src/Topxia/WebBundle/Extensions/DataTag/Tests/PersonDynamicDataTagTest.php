@@ -54,12 +54,9 @@ class PersonDynamicDataTagTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
-    private function getStatusService() 
-    {
-        return $this->getServiceKernel()->createService('User.StatusService');
-    }
+
     public function getCourseService()
     {
     	return $this->getServiceKernel()->createService('Course.CourseService');

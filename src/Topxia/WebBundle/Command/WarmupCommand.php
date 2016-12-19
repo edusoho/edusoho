@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\StringInput;
@@ -26,7 +26,6 @@ class WarmupCommand extends BaseCommand
         $time = time();
         ServiceKernel::instance()->getConnection()->update('user', array('updatedTime' => $time), array(1=>1));
 
-        $this->getUserDao()->updateUser(1, array('updatedTime'=>$time));
         foreach ($users as $user) {
 			$this->getUserService()->getUser($user['id']);
 			$this->getUserService()->getUserByNickname($user['nickname']);
@@ -51,16 +50,11 @@ class WarmupCommand extends BaseCommand
 
     protected function getCacheService()
     {
-        return $this->getServiceKernel()->createService('System.CacheService');
+        return $this->getContainer()->get('biz')->createService('System:CacheService');
     }
 
     protected function getUserService()
     {
-    	return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getUserDao()
-    {
-        return ServiceKernel::instance()->createDao('User.UserDao');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

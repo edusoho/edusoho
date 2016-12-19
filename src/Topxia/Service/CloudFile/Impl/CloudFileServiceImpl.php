@@ -285,7 +285,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCloudFileImplementor()

@@ -316,11 +316,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
     public function getOrderInfoTemplate()
     {
         return "VipBundle:Vip:orderInfo";
@@ -339,12 +334,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     public function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getLevelService()

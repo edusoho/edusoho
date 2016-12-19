@@ -40,11 +40,11 @@ $api->post('/', function (Request $request) {
     $content = $request->request->get('content');
     $type = $request->request->get('type','text');
     $sender = getCurrentUser();
-    $receiver = ServiceKernel::instance()->createService('User.UserService')->getUserByNickname($nickname); 
+    $receiver = ServiceKernel::instance()->getBiz()->service('User:UserService')->getUserByNickname($nickname);
     if(empty($receiver)){
         throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
     }
-    $message = ServiceKernel::instance()->createService('User.MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
+    $message = ServiceKernel::instance()->getBiz()->service('User:MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
     return array(
         'success' => empty($message) ? 'flase' : 'true',
         'id' => empty($message) ? 0 : $message['id'],

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -1154,6 +1155,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     protected function getAuthService()
     {
-        return $this->controller->getService('User.AuthService');
+        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
     }
 }

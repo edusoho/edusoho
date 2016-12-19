@@ -1,8 +1,9 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseDeleteServiceTest extends BaseTestCase
 {
@@ -175,7 +176,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     protected function getAnnouncementService()
@@ -185,7 +186,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getReviewService()
@@ -290,7 +291,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getStatusDao()
     {
-        return $this->getServiceKernel()->createDao('User.StatusDao');
+        return $this->getServiceKernel()->getBiz()->dao('User:StatusDao');
     }
 
     protected function getCourseMemberDao()

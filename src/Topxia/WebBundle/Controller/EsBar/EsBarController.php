@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller\EsBar;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class EsBarController extends BaseController
@@ -184,7 +185,7 @@ class EsBarController extends BaseController
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getHomeworkService()

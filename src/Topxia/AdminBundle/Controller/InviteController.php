@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class InviteController extends BaseController
 {
@@ -206,7 +207,7 @@ class InviteController extends BaseController
 
     protected function getInviteRecordService()
     {
-        return $this->getServiceKernel()->createService('User.InviteRecordService');
+        return $this->getServiceKernel()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getOrderService()
@@ -216,7 +217,7 @@ class InviteController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCardService()

@@ -1,6 +1,6 @@
 services:
     topxia.user_provider:
-        class: Topxia\Service\User\UserProvider
+        class: Biz\User\UserProvider
         arguments:    ['@service_container']
 
     topxia.authentication.failure_handler:

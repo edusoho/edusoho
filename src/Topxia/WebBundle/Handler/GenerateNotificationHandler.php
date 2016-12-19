@@ -83,7 +83,7 @@ class GenerateNotificationHandler
 
     private function getNotificationService()
     {
-    	return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     private function getAppService()
@@ -93,7 +93,7 @@ class GenerateNotificationHandler
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getVipService()

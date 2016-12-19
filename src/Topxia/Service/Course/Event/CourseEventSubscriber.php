@@ -392,7 +392,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     protected function getNoteService()
@@ -427,6 +427,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 }

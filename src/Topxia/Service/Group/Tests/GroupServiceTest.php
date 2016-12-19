@@ -4,6 +4,7 @@ namespace Topxia\Service\Group\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class GroupServiceTest extends BaseTestCase
 {
@@ -407,8 +408,9 @@ class GroupServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
+
     protected function createUser(){
         $user = array();
         $user['email'] = "user@user.com";

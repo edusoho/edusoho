@@ -1,7 +1,8 @@
 <?php
 namespace Topxia\Service\Article\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceException;
 
@@ -416,11 +417,11 @@ class ArticleServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

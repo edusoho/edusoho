@@ -1,7 +1,9 @@
 <?php
 namespace Biz\User\Dao;
 
-interface UserApprovalDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserApprovalDao extends GeneralDaoInterface
 {
     function getLastestByUserIdAndStatus($userId, $status);
 

@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
 class LiveNotifyCommand extends BaseCommand
@@ -71,7 +71,7 @@ class LiveNotifyCommand extends BaseCommand
 	
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     private function getCourseService()
@@ -92,7 +92,7 @@ class LiveNotifyCommand extends BaseCommand
 
 	protected function getUserService()
 	{
-		return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
 	}
 
 }

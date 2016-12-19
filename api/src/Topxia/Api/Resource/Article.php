@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Article extends BaseResource
 {
@@ -36,6 +37,6 @@ class Article extends BaseResource
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

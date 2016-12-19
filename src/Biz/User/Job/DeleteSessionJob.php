@@ -15,7 +15,7 @@ class DeleteSessionJob implements Job
 
     protected function getSessionService()
     {
-        return $this->getServiceKernel()->createService('System.SessionService');
+        return $this->getServiceKernel()->getBiz()->service('System:SessionService');
     }
 
     protected function getServiceKernel()

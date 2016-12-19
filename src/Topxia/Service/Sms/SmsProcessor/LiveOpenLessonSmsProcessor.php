@@ -83,17 +83,12 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function getSignEncoder()

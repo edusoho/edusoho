@@ -796,14 +796,9 @@ class OpenCourseController extends BaseOpenCourseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUploadFileService()
@@ -813,7 +808,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getThreadService()
@@ -828,7 +823,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getOpenCourseRecommendedService()

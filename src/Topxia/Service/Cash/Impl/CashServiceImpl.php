@@ -4,6 +4,7 @@ namespace Topxia\Service\Cash\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EasyValidator;
 
 class CashServiceImpl extends BaseService implements CashService
@@ -190,7 +191,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     protected function getNotifiactionService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getFlowDao()
@@ -200,7 +201,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCashAccountService()

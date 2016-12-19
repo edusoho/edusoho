@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Form\MessageType;
 use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Request;
@@ -217,13 +218,8 @@ class MessageController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getMessageService()
     {
-        return $this->getServiceKernel()->createService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 }

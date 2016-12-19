@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Service\Common\ServiceKernel;
 
 class CommonAdminController extends BaseController
 {
@@ -78,6 +79,6 @@ class CommonAdminController extends BaseController
 
     protected function getUserCommonAdminService()
     {
-        return $this->getServiceKernel()->createService('User.UserCommonAdminService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserCommonAdminService');
     }
 }

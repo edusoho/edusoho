@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 class ServiceKernel
 {

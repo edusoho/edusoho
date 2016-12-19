@@ -181,11 +181,6 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getDiscountService()
     {
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');

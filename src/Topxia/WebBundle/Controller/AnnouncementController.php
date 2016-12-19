@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessorFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnnouncementController extends BaseController
 {
@@ -145,6 +146,6 @@ class AnnouncementController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

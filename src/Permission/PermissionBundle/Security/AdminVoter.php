@@ -5,7 +5,7 @@ namespace Permission\PermissionBundle\Security;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 class AdminVoter implements VoterInterface
 {

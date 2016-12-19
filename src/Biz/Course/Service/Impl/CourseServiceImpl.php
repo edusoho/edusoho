@@ -8,6 +8,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
@@ -710,9 +711,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:CourseDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     /**

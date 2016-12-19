@@ -79,7 +79,7 @@ class QuickpayUnbindAuthRequest extends Request
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     private function encrypt($data, $key)

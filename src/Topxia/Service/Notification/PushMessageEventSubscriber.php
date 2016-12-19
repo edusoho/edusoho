@@ -915,7 +915,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getTestpaperService()
@@ -935,7 +935,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getHomeworkService()

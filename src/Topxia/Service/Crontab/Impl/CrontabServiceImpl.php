@@ -122,7 +122,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->getJobDao()->updateJob($job['id'], array(
                 'executing'          => '0',
                 'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime'])
+                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)) . ' ' . $job['cycleTime'])
             ));
         }
     }
@@ -147,7 +147,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             'executing'       => 0,
             'nextExcutedTime' => time()
         );
-        $job = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
+        $job        = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
 
         if (!empty($job)) {
             $job = $job[0];
@@ -174,7 +174,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function getNextExcutedTime()
     {
-        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $filePath = __DIR__ . '/../../../../../app/data/crontab_config.yml';
         $yaml     = new Yaml();
 
         if (!file_exists($filePath)) {
@@ -192,7 +192,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function setNextExcutedTime($nextExcutedTime)
     {
-        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $filePath = __DIR__ . '/../../../../../app/data/crontab_config.yml';
         $yaml     = new Yaml();
         $content  = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
         $fh       = fopen($filePath, "w");
@@ -232,7 +232,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         if (empty($conditions['name'])) {
             unset($conditions['name']);
         } else {
-            $conditions['name'] = '%'.$conditions['name'].'%';
+            $conditions['name'] = '%' . $conditions['name'] . '%';
         }
 
         return $conditions;
@@ -248,8 +248,4 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
 }

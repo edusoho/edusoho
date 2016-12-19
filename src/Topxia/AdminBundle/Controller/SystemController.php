@@ -6,6 +6,7 @@ use Topxia\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
 class SystemController extends BaseController
@@ -187,6 +188,6 @@ class SystemController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

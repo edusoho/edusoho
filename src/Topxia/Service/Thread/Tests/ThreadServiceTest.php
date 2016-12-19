@@ -1,9 +1,10 @@
 <?php
 namespace Topxia\Service\Thread\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 //  use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceTest extends BaseTestCase
 {
@@ -981,12 +982,12 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getNotifiactionService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function createProtectThread()

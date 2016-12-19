@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceKernel;
 
 class MoneyController extends BaseController
 {
@@ -51,6 +52,6 @@ class MoneyController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }
