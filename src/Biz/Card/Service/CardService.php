@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Card;
+namespace Biz\Card\Service;
 
 interface CardService
 {

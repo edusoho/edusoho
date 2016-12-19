@@ -1,8 +1,10 @@
 <?php
-namespace Topxia\Service\Card\Tests;
+namespace Tests\Card;
 
+use Biz\Card\Service\CardService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class CardServiceTest extends BaseTestCase
 {
@@ -42,14 +44,14 @@ class CardServiceTest extends BaseTestCase
 
     }
 
-    public function testFindCardsByUserIdAndCardTypeTwice()
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testFindCardsByUserIdAndCardTypeEmptyCardType()
     {
-        $this->setExpectedException('Exception');
         $user  = $this->createUser();
         $card1 = $this->generateCard($user);
         $this->getCardService()->addCard($card1);
-        $card2 = $this->generateCard($user);
-        $this->getCardService()->addCard($card2);
         $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], '');
     }
 
@@ -63,7 +65,7 @@ class CardServiceTest extends BaseTestCase
         $conditions = array(
             'userId' => $user['id']
         );
-        $orderBy = array('createdTime', 'ASC');
+        $orderBy = array('createdTime' => 'ASC');
         $result  = $this->getCardService()->searchCards($conditions, $orderBy, 0, 20);
         $this->assertEquals(2, count($result));
     }
@@ -95,9 +97,12 @@ class CardServiceTest extends BaseTestCase
         $this->assertCount(2, $cardLists);
     }
 
+    /**
+     * @return CardService
+     */
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
+        return $this->getBiz()->service('Card:CardService');
     }
 
     protected function getCouponService()
@@ -105,14 +110,20 @@ class CardServiceTest extends BaseTestCase
         return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function generateCard($currentUser = null)
@@ -138,18 +149,6 @@ class CardServiceTest extends BaseTestCase
         $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         return $user;
 
-    }
-
-    private function createNormalUser()
-    {
-        $user              = array();
-        $user['email']     = "normal@user.com";
-        $user['nickname']  = "normal";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER');
-        return $user;
     }
 
 }

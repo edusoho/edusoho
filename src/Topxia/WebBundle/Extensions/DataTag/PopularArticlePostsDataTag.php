@@ -18,7 +18,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
     {
         $publishedActicles = $this->getArticleService()->searchArticles(
             array('status' => 'published'),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
         $targetIds = ArrayToolkit::column($publishedActicles, 'id');

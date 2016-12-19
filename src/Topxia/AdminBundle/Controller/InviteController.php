@@ -138,7 +138,7 @@ class InviteController extends BaseController
         $conditions['cardType'] = 'coupon';
         $cards                  = $this->getCardService()->searchCards(
             $conditions,
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             0,
             PHP_INT_MAX
         );
