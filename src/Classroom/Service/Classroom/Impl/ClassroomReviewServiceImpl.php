@@ -156,7 +156,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     private function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     private function getLogService()

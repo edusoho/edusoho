@@ -1007,11 +1007,6 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getGroupService()
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
@@ -1062,12 +1057,12 @@ class GroupThreadController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getNotifiactionService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function filterSort($sort)

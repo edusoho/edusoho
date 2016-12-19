@@ -4,6 +4,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -287,7 +288,7 @@ class GlobalFilePlayerController extends BaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getMaterialLibService()

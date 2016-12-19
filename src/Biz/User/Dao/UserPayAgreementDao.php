@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface UserPayAgreementDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface UserPayAgreementDao extends GeneralDaoInterface
 {
     public function getByUserIdAndBankAuth($userId, $bankAuth);
 

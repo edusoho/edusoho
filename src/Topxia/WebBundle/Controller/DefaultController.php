@@ -5,6 +5,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
@@ -205,7 +206,7 @@ class DefaultController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getNavigationService()
@@ -245,7 +246,7 @@ class DefaultController extends BaseController
 
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.BatchNotificationService');
+        return $this->getServiceKernel()->getBiz()->service('User:BatchNotificationService');
     }
 
     protected function getThemeService()
@@ -255,6 +256,6 @@ class DefaultController extends BaseController
 
     private function getBlacklistService()
     {
-        return $this->getServiceKernel()->createService('User.BlacklistService');
+        return $this->getServiceKernel()->getBiz()->service('User:BlacklistService');
     }
 }

@@ -4,6 +4,7 @@ namespace Topxia\Service\Cash\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashAccountService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class CashAccountServiceImpl extends BaseService implements CashAccountService
 {
@@ -199,7 +200,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function makeSn()
@@ -209,7 +210,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
     protected function getNotificationService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getAccountDao()

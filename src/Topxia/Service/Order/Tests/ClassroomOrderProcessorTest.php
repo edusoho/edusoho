@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Order\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
@@ -288,12 +288,12 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()

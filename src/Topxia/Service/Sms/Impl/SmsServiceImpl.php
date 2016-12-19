@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\Service\Sms\Impl;
 
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\User\UserService;
+use Biz\User\Service\UserService;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -217,12 +216,7 @@ class SmsServiceImpl extends BaseService implements SmsService
      */
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getLogService()

@@ -3,6 +3,7 @@ namespace SensitiveWord\Service\Sensitive\Impl;
 
 use Topxia\Service\Common\BaseService;
 use SensitiveWord\Service\Sensitive\SensitiveService;
+use Topxia\Service\Common\ServiceKernel;
 
 class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
@@ -318,7 +319,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getBanlogDao()

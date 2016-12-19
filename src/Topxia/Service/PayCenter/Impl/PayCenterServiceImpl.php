@@ -277,11 +277,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         return $this->createService('Cash.CashService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
-
     protected function getCouponService()
     {
         return $this->createService('Coupon.CouponService');

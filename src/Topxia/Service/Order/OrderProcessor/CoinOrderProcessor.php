@@ -94,9 +94,4 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return ServiceKernel::instance()->createService('Cash.CashOrdersService');
     }
 
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Biz\System\Service\SettingService;
 use Monolog\Logger;
 use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
@@ -97,7 +98,7 @@ abstract class BaseService
 
     protected function fillOrgId($fields)
     {
-        $magic = $this->createService('System.SettingService')->get('magic');
+        $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
@@ -162,7 +163,7 @@ abstract class BaseService
     public function setting($name, $default)
     {
         $names = explode('.', $name);
-        $setting = $this->createService('System.SettingService')->get($names[0]);
+        $setting = $this->getSettingService()->get($names[0]);
         if(empty($names[1])) {
             return empty($setting) ? $default : $setting;
         } 
@@ -178,5 +179,13 @@ abstract class BaseService
         }
 
         return $this->lock;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

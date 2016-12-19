@@ -302,12 +302,12 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getMessageService() 
     {
-        return $this->createService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     

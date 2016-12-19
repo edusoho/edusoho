@@ -2,6 +2,7 @@
 namespace Topxia\Service\Card\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class CardServiceTest extends BaseTestCase
 {
@@ -106,12 +107,12 @@ class CardServiceTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function generateCard($currentUser = null)

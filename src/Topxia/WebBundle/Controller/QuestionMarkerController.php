@@ -335,9 +335,4 @@ class QuestionMarkerController extends BaseController
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
     }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
 }

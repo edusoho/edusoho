@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\WebBundle\Extensions\DataTag\MemberRecentlyLearnedDataTag;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 
 class MemberRecentlyLearnedDataTagTest extends BaseTestCase
@@ -91,7 +91,7 @@ class MemberRecentlyLearnedDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
 }

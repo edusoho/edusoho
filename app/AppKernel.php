@@ -1,7 +1,7 @@
 <?php
 
 use Topxia\Common\ExtensionManager;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;

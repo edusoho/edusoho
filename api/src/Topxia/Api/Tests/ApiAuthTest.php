@@ -38,7 +38,7 @@ class ApiAuthTest extends BaseTestCase
 
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
 

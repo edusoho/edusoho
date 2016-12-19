@@ -2,6 +2,7 @@
 namespace Topxia\Service\Search\Adapter;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
 
 class CourseSearchAdapter extends AbstractSearchAdapter
@@ -77,7 +78,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()

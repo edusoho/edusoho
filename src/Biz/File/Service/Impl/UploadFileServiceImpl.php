@@ -15,6 +15,8 @@ use Biz\File\Dao\UploadFileTagDao;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\File\Service\FileImplementor;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -1236,9 +1238,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createDao('File:UploadFileCollectDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
 
@@ -1266,11 +1271,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     /**
-     * @TODO SettingService 迁移后再改动
+     * @return SettingService
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     /**

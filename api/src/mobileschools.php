@@ -22,7 +22,7 @@ $api = $app['controllers_factory'];
 */
 
 $api->get('/about', function () {
-    $mobile = ServiceKernel::instance()->createService('System.SettingService')->get('mobile', array());
+    $mobile = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('mobile', array());
     return array(
         'about' => isset($mobile['about']) ? $mobile['about'] : ''
     );

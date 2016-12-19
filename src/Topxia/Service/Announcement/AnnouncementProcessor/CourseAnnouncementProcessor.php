@@ -69,6 +69,6 @@ class CourseAnnouncementProcessor implements AnnouncementProcessor
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 }

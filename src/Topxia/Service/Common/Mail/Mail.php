@@ -70,7 +70,7 @@ abstract class Mail
 
     protected function getSettingService()
     {
-        return $this->getKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getKernel()

@@ -865,12 +865,12 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()

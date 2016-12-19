@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class MessageController extends BaseController
 {
@@ -104,12 +105,12 @@ class MessageController extends BaseController
 
     protected function getMessageService()
     {
-        return $this->getServiceKernel()->createService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()
@@ -119,6 +120,6 @@ class MessageController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

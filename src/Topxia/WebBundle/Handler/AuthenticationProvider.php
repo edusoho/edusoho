@@ -2,20 +2,22 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
 use Symfony\Component\Security\Core\Authentication\Provider\UserAuthenticationProvider;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
- * 此Class大部分代码来自DaoAuthenticationProvider 
+ * 此Class大部分代码来自DaoAuthenticationProvider
  */
 class AuthenticationProvider extends UserAuthenticationProvider
 {
@@ -36,7 +38,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         parent::__construct($userChecker, $providerKey, $hideUserNotFoundExceptions);
 
         $this->encoderFactory = $encoderFactory;
-        $this->userProvider = $userProvider;
+        $this->userProvider   = $userProvider;
     }
 
     /**
@@ -102,17 +104,17 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $user = $this->getUserService()->getUser($bind['toId']);
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
-                        $setting = $this->getSettingService()->get('user_partner', array());
+                        $setting     = $this->getSettingService()->get('user_partner', array());
                         $emailFilter = explode("\n", $setting['email_filter']);
                         if (in_array($partnerUser['email'], $emailFilter)) {
-                              $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
+                            $partnerUser['email'] = $partnerUser['id'] . '_dz_' . $this->getRandomString(5) . '@edusoho.net';
                         }
-                        $registration = array();
-                        $registration['nickname'] = $partnerUser['nickname'];
-                        $registration['email'] = $partnerUser['email'];
-                        $registration['password'] = $token->getCredentials();
+                        $registration              = array();
+                        $registration['nickname']  = $partnerUser['nickname'];
+                        $registration['email']     = $partnerUser['email'];
+                        $registration['password']  = $token->getCredentials();
                         $registration['createdIp'] = $partnerUser['createdIp'];
-                        $registration['token'] = array(
+                        $registration['token']     = array(
                             'userId' => $partnerUser['id'],
                         );
 
@@ -141,7 +143,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
     }
 
-    private function syncEmailAndPassword($user, $partnerUser, $token) 
+    private function syncEmailAndPassword($user, $partnerUser, $token)
     {
 
         try {
@@ -149,8 +151,8 @@ class AuthenticationProvider extends UserAuthenticationProvider
             if ($isEmaildChanged) {
                 $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
             }
-        } catch(\Exception $e) {
-            $this->getLogService()->error('user', 'sync_email', $this->getServiceKernel()->trans('同步用户(#%userId%)Email失败', array('%userId%' =>$user['id'] )));
+        } catch (\Exception $e) {
+            $this->getLogService()->error('user', 'sync_email', $this->getServiceKernel()->trans('同步用户(#%userId%)Email失败', array('%userId%' => $user['id'])));
         }
 
         try {
@@ -158,8 +160,8 @@ class AuthenticationProvider extends UserAuthenticationProvider
             if ($isPasswordChanged) {
                 $this->getUserService()->changePassword($user['id'], $token->getCredentials());
             }
-        } catch(\Exception $e) {
-            $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', array('%userId%' =>$user['id'] )));
+        } catch (\Exception $e) {
+            $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', array('%userId%' => $user['id'])));
         }
 
 
@@ -171,36 +173,46 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
     private function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     {
-        $s = '';
+        $s       = '';
         $cLength = strlen($chars);
 
         while (strlen($s) < $length) {
-            $s .= $chars[mt_rand(0, $cLength-1)];
+            $s .= $chars[mt_rand(0, $cLength - 1)];
         }
 
         return $s;
     }
 
+    /**
+     * @return SettingService
+     */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return LogService
+     */
     private function getLogService()
     {
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return AuthService
+     */
     private function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User.AuthService');
+        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
     }
-            protected function getServiceKernel()
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

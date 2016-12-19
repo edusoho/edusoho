@@ -654,7 +654,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getStatusDao()
     {
-        return $this->createDao('User.StatusDao');
+        return ServiceKernel::instance()->getBiz()->dao('User:StatusDao');
     }
 
     protected function getCourseMemberDao()

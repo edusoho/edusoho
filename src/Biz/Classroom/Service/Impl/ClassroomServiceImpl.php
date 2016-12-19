@@ -12,8 +12,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Taxonomy\Service\CategoryService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\UserService;
+use Biz\User\Service\UserService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -101,7 +100,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     /**
@@ -133,7 +132,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     /**

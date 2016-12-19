@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface TokenDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TokenDao extends GeneralDaoInterface
 {
     public function get($id, $lock = false);
 

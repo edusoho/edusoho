@@ -2,8 +2,9 @@
 
 namespace Classroom\Service\Classroom\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -1315,7 +1316,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     private function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     private function getCourseService()

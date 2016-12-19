@@ -443,7 +443,7 @@ class ThreadController extends BaseController
 
     protected function getNotifiactionService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getUploadFileService()

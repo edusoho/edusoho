@@ -1,8 +1,17 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+<<<<<<< HEAD
+use Biz\User\Service\UserService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Topxia\Common\ArrayToolkit;
+use Biz\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+=======
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
+>>>>>>> feature/x8-migrate
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,8 +33,6 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
-    protected $biz;
-
     protected function getCurrentUser()
     {
         return $this->getUserService()->getCurrentUser();
@@ -270,11 +277,11 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return UserServiceImpl
+     * @return UserService
      */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getLogService()

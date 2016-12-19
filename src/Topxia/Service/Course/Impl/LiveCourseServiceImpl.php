@@ -246,7 +246,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getLogService()
@@ -257,10 +257,5 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getLessonDao()
     {
         return $this->createDao('Course.LessonDao');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
     }
 }

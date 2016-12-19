@@ -2,6 +2,7 @@
 namespace Topxia\Service\Search\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Search\SearchService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Search\Adapter\SearchAdapterFactory;
@@ -108,14 +109,9 @@ class SearchServiceImpl extends BaseService implements SearchService
         return $conditions;
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
-
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getSignEncoder()

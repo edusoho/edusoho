@@ -1,10 +1,12 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends BaseController
 {
@@ -540,9 +542,12 @@ class CourseController extends BaseController
         ));
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function renderCourseTr($courseId, $request)

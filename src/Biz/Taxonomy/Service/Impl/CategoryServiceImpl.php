@@ -4,11 +4,13 @@ namespace Biz\Taxonomy\Service\Impl;
 
 
 use Biz\BaseService;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Dao\CategoryDao;
 use Biz\Taxonomy\Dao\CategoryGroupDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\TreeToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -57,7 +59,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $prepared;
         };
         $data       = $this->findCategories($groupId);
-        $categories = $prepare($this->findCategories($groupId));
+        $categories = $prepare($data);
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
@@ -98,7 +100,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function findAllCategoriesByParentId($parentId)
     {
-        return ArrayToolkit::index($this->getCategoryDao()->findAllByParentId($parentId, 'id'));
+        return ArrayToolkit::index($this->getCategoryDao()->findAllByParentId($parentId), 'id');
     }
 
     public function findGroupRootCategories($groupCode)
@@ -213,7 +215,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function findAllCategories()
     {
-        return $this->getCategoryDao()->findAllCategories();
+        return $this->getCategoryDao()->findAll();
     }
 
     public function isCategoryCodeAvailable($code, $exclude = null)
@@ -280,7 +282,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
+            throw $this->createNotFoundException("分类(#{$id})不存在，更新分类失败！");
         }
 
         $fields = ArrayToolkit::parts($fields, array('description', 'name', 'code', 'weight', 'parentId', 'icon'));
@@ -319,9 +321,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
     }
 
-    /**
-     * group
-     */
     public function getGroup($id)
     {
         return $this->getGroupDao()->get($id);
@@ -355,7 +354,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
-        static $leaf = false;
 
         if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
             foreach ($categories[$parentId] as $category) {
@@ -445,14 +443,20 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->createDao('Taxonomy:CategoryGroupDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->biz->service('System:LogService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
 }
