@@ -329,41 +329,33 @@ class ServiceKernel
             return $classMap[$name];
         }
 
-        if($type == 'service') {
-            $class = $this->getServiceClassName($name);
-            return $class;
-        }
+        return $this->getServiceClassName($type, $name);
 
-        if (strpos($name, ':') > 0) {
-            list($namespace, $name) = explode(':', $name, 2);
-            $namespace .= '\\Service';
-        } else {
-            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1);
-        }
-
-        list($module, $className) = explode('.', $name);
-
-        $type = strtolower($type);
-
-        if ($type == 'dao') {
-            return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
-        }
-
-        return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
     }
 
-    protected function getServiceClassName($name)
+    protected function getServiceClassName($type, $name)
     {
+        $type = strtolower($type);
         list($namespace, $name) = explode(':', $name, 2);
 
         if (strpos($name, '.') > 0) {
             $namespace .= '\\Service';
             list($module, $className) = explode('.', $name);
+            
+            if ($type == 'dao') {
+                return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
+            }
+
             return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
         } else {
             $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1).'\\'.$namespace;
         }
 
+
+        if ($type == 'dao') {
+            return $namespace.'\\Dao\\Impl\\'.$name.'Impl';
+        }
+            
         return $namespace.'\\Impl\\'.$name.'Impl';
     }
 
