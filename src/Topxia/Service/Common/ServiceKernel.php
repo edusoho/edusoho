@@ -252,7 +252,11 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
-            $this->pool[$name] = new $class();
+            if(class_exists($class)){
+                $this->pool[$name] = new $class();
+            } else {
+                $this->pool[$name] = $this->biz->service($name);
+            }
         }
 
         return $this->pool[$name];
@@ -325,6 +329,11 @@ class ServiceKernel
             return $classMap[$name];
         }
 
+        if($type == 'service') {
+            $class = $this->getServiceClassName($name);
+            return $class;
+        }
+
         if (strpos($name, ':') > 0) {
             list($namespace, $name) = explode(':', $name, 2);
             $namespace .= '\\Service';
@@ -341,6 +350,21 @@ class ServiceKernel
         }
 
         return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+    }
+
+    protected function getServiceClassName($name)
+    {
+        list($namespace, $name) = explode(':', $name, 2);
+
+        if (strpos($name, '.') > 0) {
+            $namespace .= '\\Service';
+            list($module, $className) = explode('.', $name);
+            return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+        } else {
+            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1).'\\'.$namespace;
+        }
+
+        return $namespace.'\\Impl\\'.$name.'Impl';
     }
 
     public function setBiz(Biz $biz)
