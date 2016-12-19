@@ -1417,17 +1417,17 @@ class EduCloudController extends BaseController
 
     protected function getSearchService()
     {
-        return $this->getServiceKernel()->createService('Search.SearchService');
+        return $this->getServiceKernel()->createService('Search:SearchService');
     }
 
     protected function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+        return $this->getServiceKernel()->createService('CloudPlatform:EduCloudService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()

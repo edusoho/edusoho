@@ -76,12 +76,12 @@ class LessonReplay extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getMediaService()
     {
-        return $this->getServiceKernel()->createService('Media.MediaService');
+        return $this->getServiceKernel()->createService('Media:MediaService');
     }
 
     protected function sendRequest($method, $url, $headers = array(), $params = array())

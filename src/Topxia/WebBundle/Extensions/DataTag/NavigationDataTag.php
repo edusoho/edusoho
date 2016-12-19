@@ -24,7 +24,7 @@ class NavigationDataTag extends BaseDataTag implements DataTag
 
 	protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content.NavigationService');
+        return $this->getServiceKernel()->createService('Content:NavigationService');
     }
 
 }

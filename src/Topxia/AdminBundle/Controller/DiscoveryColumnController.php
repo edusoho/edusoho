@@ -170,17 +170,17 @@ class DiscoveryColumnController extends BaseController
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
+        return $this->getServiceKernel()->createService('DiscoveryColumn:DiscoveryColumnService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getClassroomService()

@@ -376,12 +376,12 @@ class CourseOrderController extends OrderController
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 
     protected function getSettingService()
@@ -391,7 +391,7 @@ class CourseOrderController extends OrderController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getAuthService()
@@ -416,7 +416,7 @@ class CourseOrderController extends OrderController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:CouponService');
     }
 
     protected function getUserFieldService()
@@ -436,6 +436,6 @@ class CourseOrderController extends OrderController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:CourseMemberService');
     }
 }

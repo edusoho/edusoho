@@ -142,11 +142,11 @@ class QuestionEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getQuestionService()
     {
-        return ServiceKernel::instance()->createService('Question.QuestionService');
+        return ServiceKernel::instance()->createService('Question:QuestionService');
     }
 }

@@ -86,7 +86,7 @@ class ThemeServiceTest extends BaseTestCase
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->createService('Theme.ThemeService');
+        return $this->getServiceKernel()->createService('Theme:ThemeService');
     }
 
     protected function getThemeConfigDao()

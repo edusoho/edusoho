@@ -875,7 +875,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getLogService()

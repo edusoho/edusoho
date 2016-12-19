@@ -464,17 +464,17 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->createService('Testpaper.TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getLogService()
@@ -489,17 +489,17 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getConversationService()
     {
-        return $this->createService('IM.ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     protected function getCourseChapterDao()

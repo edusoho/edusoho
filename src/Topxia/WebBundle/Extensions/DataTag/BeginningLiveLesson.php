@@ -24,6 +24,6 @@ class BeginningLiveLessonDataTag extends BaseDataTag implements DataTag
 
     protected function getLiveCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.LiveCourseService');
+        return $this->getServiceKernel()->createService('Course:LiveCourseService');
     }
 }

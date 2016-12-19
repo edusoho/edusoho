@@ -574,12 +574,12 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
     }
 
     protected function getUploadFileService()
@@ -594,11 +594,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getCrontabJobService()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        return ServiceKernel::instance()->createService('Crontab:CrontabService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

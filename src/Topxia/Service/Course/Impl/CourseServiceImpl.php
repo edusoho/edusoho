@@ -3025,12 +3025,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getCategoryService()
     {
-        return $this->createService('Taxonomy.CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getUserService()
@@ -3040,7 +3040,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getOrderService()
     {
-        return $this->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getVipService()
@@ -3065,7 +3065,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getTagService()
     {
-        return $this->createService('Taxonomy.TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getNoteDao()
@@ -3075,12 +3075,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getCourseMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getDiscountService()
@@ -3090,7 +3090,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 }
 

@@ -893,19 +893,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getThreadService($type = '')
     {
         if ($type == 'course') {
-            return ServiceKernel::instance()->createService('Course.ThreadService');
+            return ServiceKernel::instance()->createService('Course:ThreadService');
         }
 
         if ($type == 'group') {
-            return ServiceKernel::instance()->createService('Group.ThreadService');
+            return ServiceKernel::instance()->createService('Group:ThreadService');
         }
 
-        return ServiceKernel::instance()->createService('Thread.ThreadService');
+        return ServiceKernel::instance()->createService('Thread:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
@@ -920,7 +920,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
     }
 
     protected function getCloudDataService()
@@ -930,7 +930,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getCrontabService()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        return ServiceKernel::instance()->createService('Crontab:CrontabService');
     }
 
     protected function getSettingService()
@@ -945,12 +945,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getGroupService()
     {
-        return ServiceKernel::instance()->createService('Group.GroupService');
+        return ServiceKernel::instance()->createService('Group:GroupService');
     }
 
     protected function getConversationService()
     {
-        return ServiceKernel::instance()->createService('IM.ConversationService');
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 
     protected function pushIM($from, $to, $body)

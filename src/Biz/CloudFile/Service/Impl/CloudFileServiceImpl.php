@@ -291,7 +291,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     /**
@@ -312,6 +312,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

@@ -79,11 +79,11 @@ class TaskEventSubscriber implements EventSubscriberInterface
 
     protected function getTaskService()
     {
-        return ServiceKernel::instance()->createService('Task.TaskService');
+        return ServiceKernel::instance()->createService('Task:TaskService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 }

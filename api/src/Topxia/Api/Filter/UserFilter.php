@@ -10,7 +10,7 @@ class UserFilter implements Filter
     //查看权限,附带内容可以写在这里
     public function filter(array &$data)
     {
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
         $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
         
         unset($data['password']);

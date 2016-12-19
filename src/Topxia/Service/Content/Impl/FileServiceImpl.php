@@ -340,7 +340,7 @@ class FileServiceImpl extends BaseService implements FileService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getFileDao()

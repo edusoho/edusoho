@@ -297,7 +297,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getUserService()

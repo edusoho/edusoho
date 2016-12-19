@@ -28,11 +28,11 @@ class UpdateRealTimeTestResultStatusJob implements Job
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
     }
 }

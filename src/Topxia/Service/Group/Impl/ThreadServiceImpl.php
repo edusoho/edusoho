@@ -491,12 +491,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getGroupService()
     {
-        return $this->createService('Group.GroupService');
+        return $this->createService('Group:GroupService');
     }
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getThreadPostDao()

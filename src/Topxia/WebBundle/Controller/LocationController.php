@@ -20,7 +20,7 @@ class LocationController extends BaseController
 
     protected function getLocationService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.LocationService');
+        return $this->getServiceKernel()->createService('Taxonomy:LocationService');
     }
 
 }

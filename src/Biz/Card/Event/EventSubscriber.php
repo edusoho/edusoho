@@ -88,7 +88,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon:CouponService');
     }
 
     /**

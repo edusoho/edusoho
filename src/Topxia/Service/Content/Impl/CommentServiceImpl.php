@@ -96,6 +96,6 @@ class CommentServiceImpl extends BaseService implements CommentService
 
 	protected function getCourseService()
     {
-    	return $this->createService('Course.CourseService');
+    	return $this->createService('Course:CourseService');
     }
 }

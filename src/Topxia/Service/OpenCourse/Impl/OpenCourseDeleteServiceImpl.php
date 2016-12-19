@@ -129,7 +129,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getOpenCourseService()
     {
-        return $this->createService('OpenCourse.OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getUploadFileService()
@@ -144,7 +144,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getOpenCourseDao()
@@ -169,6 +169,6 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 }

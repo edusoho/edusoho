@@ -26,6 +26,6 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getQuestionService()
     {
-        return $this->getKernel()->createService('Question.QuestionService');
+        return $this->getKernel()->createService('Question:QuestionService');
     }
 }

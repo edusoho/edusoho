@@ -158,7 +158,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
     protected function getCategoryService()
     {
-        return $this->createService('Taxonomy.CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getLogService()

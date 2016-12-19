@@ -507,22 +507,22 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getSmsService()
     {
-        return $this->createService('Sms.SmsService');
+        return $this->createService('Sms:SmsService');
     }
 
     protected function getAnnouncementService()

@@ -73,7 +73,7 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     public function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getUploadFileService()

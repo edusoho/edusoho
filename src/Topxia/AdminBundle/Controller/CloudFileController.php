@@ -192,7 +192,7 @@ class CloudFileController extends BaseController
 
     protected function getTagService()
     {
-        return $this->createService('Taxonomy.TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getCloudFileService()
@@ -212,6 +212,6 @@ class CloudFileController extends BaseController
 
     protected function getCourseMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 }

@@ -264,21 +264,21 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getOrderService()
     {
-        return $this->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getCashService()
     {
-        return $this->getKernel()->getBiz()->service('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon.CouponService');
+        return $this->createService('Coupon:CouponService');
     }
 }

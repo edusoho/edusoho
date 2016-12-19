@@ -187,7 +187,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getLogService()

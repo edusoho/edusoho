@@ -9,7 +9,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUserService()
@@ -19,7 +19,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getThreadService()
@@ -29,7 +29,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     protected function checkUserId(array $arguments)

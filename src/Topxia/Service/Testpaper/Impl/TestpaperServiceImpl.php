@@ -1026,12 +1026,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getQuestionService()
     {
-        return $this->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getMemberDao()

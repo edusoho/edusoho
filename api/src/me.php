@@ -111,8 +111,8 @@ $api->get('/coursethreads', function (Request $request) {
     $type = $request->query->get('type', '');
     $conditions = empty($type) ? array() : array('type' => $type);
     $conditions['userId'] = $user['id'];
-    $total = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreadCount($conditions);
-    $coursethreads = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreads($conditions, 'created', $start, $limit);
+    $total = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreadCount($conditions);
+    $coursethreads = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreads($conditions, 'created', $start, $limit);
 
     return array(
         'data'  => $coursethreads,

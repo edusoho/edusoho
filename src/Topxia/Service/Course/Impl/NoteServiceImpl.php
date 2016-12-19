@@ -236,7 +236,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getUserService()

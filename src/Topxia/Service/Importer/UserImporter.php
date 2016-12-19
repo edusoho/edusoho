@@ -447,7 +447,7 @@ class UserImporter extends Importer
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     private function validFields($userData, $row, $fieldCol)
@@ -782,7 +782,7 @@ class UserImporter extends Importer
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:CourseMemberService');
     }
 
     protected function getOrgService()
@@ -792,6 +792,6 @@ class UserImporter extends Importer
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 }

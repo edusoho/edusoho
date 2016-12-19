@@ -537,7 +537,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     /**

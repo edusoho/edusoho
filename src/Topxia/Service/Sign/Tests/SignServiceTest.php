@@ -102,6 +102,6 @@ class SignServiceTest extends BaseTestCase
 
     protected function getSignService()
     {
-        return $this->getServiceKernel()->createService('Sign.SignService');
+        return $this->getServiceKernel()->createService('Sign:SignService');
     }
 }

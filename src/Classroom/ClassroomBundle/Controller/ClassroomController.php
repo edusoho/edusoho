@@ -926,7 +926,7 @@ class ClassroomController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     private function getClassroomService()
@@ -936,12 +936,12 @@ class ClassroomController extends BaseController
 
     private function getSignService()
     {
-        return $this->getServiceKernel()->createService('Sign.SignService');
+        return $this->getServiceKernel()->createService('Sign:SignService');
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getSettingService()
@@ -976,7 +976,7 @@ class ClassroomController extends BaseController
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getTokenService()
@@ -996,7 +996,7 @@ class ClassroomController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getUserFieldService()
@@ -1006,7 +1006,7 @@ class ClassroomController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getClassroomPlanService()

@@ -12,9 +12,9 @@ class CourseProcessorFactory
         }
 
         if (in_array($type, array('normal', 'live', 'course'))) {
-            return ServiceKernel::instance()->createService('Course.CourseService');
+            return ServiceKernel::instance()->createService('Course:CourseService');
         } elseif (in_array($type, array('open', 'liveOpen', 'openCourse'))) {
-            return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+            return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
         }
     }
 }

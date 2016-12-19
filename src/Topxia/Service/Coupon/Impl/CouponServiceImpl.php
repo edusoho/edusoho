@@ -309,7 +309,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     private function getUserService()

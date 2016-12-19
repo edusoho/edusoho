@@ -124,6 +124,6 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

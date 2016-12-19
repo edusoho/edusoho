@@ -81,6 +81,6 @@ class ThreadEventSubscriber implements EventSubscriberInterface
 
     protected function getThreadService()
     {
-        return ServiceKernel::instance()->createService('Thread.ThreadService');
+        return ServiceKernel::instance()->createService('Thread:ThreadService');
     }
 }

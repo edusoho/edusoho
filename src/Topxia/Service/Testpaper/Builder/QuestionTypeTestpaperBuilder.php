@@ -183,7 +183,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
 
     protected function getQuestionService()
     {
-        return $this->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
 }

@@ -210,7 +210,7 @@ class MobileController extends BaseController
 
     protected function getMobileDeviceService()
     {
-        return $this->getServiceKernel()->createService('Util.MobileDeviceService');
+        return $this->getServiceKernel()->createService('Util:MobileDeviceService');
     }
 
     /**

@@ -137,7 +137,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
      */
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**

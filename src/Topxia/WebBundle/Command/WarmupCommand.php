@@ -39,11 +39,11 @@ class WarmupCommand extends BaseCommand
 
         $this->getCacheService()->get('settings');
 
-        $this->getServiceKernel()->createService('Content.NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
+        $this->getServiceKernel()->createService('Content:NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
 
-        $this->getServiceKernel()->createService('Theme.ThemeService')->getCurrentThemeConfig();
+        $this->getServiceKernel()->createService('Theme:ThemeService')->getCurrentThemeConfig();
 
-        $this->getServiceKernel()->createService('Content.BlockService')->getBlockByCode('jianmo:home_top_banner');
+        $this->getServiceKernel()->createService('Content:BlockService')->getBlockByCode('jianmo:home_top_banner');
 
         $this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->findClassroomByCourseId(1);
     }

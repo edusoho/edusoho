@@ -64,7 +64,7 @@ class KernelRequestListener
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token  = $request->request->get('token');
-                    $result = ServiceKernel::instance()->createService('CloudPlatform.AppService')->repairProblem($token);
+                    $result = ServiceKernel::instance()->createService('CloudPlatform:AppService')->repairProblem($token);
 
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {

@@ -156,7 +156,7 @@ class CrontabServiceTest extends BaseTestCase
 
     protected function getCrontabService()
     {
-        return $this->getServiceKernel()->createService('Crontab.CrontabService');
+        return $this->getServiceKernel()->createService('Crontab:CrontabService');
     }
 
     protected function getUserService()

@@ -140,7 +140,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getTagService()
     {
-        return $this->createService('Taxonomy.TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getUploadFileService()

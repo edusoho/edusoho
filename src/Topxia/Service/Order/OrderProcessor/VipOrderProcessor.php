@@ -334,12 +334,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     public function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getLevelService()
@@ -354,12 +354,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order.OrderService');
+        return ServiceKernel::instance()->createService('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
     }
 
     protected function getKernel()

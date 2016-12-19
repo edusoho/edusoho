@@ -63,6 +63,6 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
 
     public function getTokenBucketService()
     {
-        return ServiceKernel::instance()->createService('PostFilter.TokenBucketService');
+        return ServiceKernel::instance()->createService('PostFilter:TokenBucketService');
     }
 }

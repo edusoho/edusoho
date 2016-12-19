@@ -81,11 +81,11 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
     protected function getOrderRefererLogService()
     {
-        return ServiceKernel::instance()->createService('RefererLog.OrderRefererLogService');
+        return ServiceKernel::instance()->createService('RefererLog:OrderRefererLogService');
     }
 
     protected function getRefererLogService()
     {
-        return ServiceKernel::instance()->createService('RefererLog.RefererLogService');
+        return ServiceKernel::instance()->createService('RefererLog:RefererLogService');
     }
 }

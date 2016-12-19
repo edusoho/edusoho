@@ -593,7 +593,7 @@ class CourseThreadController extends CourseBaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getThreadSearchFilters($request)

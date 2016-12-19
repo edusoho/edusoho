@@ -162,7 +162,7 @@ class NoteController extends CourseBaseController
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     protected function getUserFieldService()

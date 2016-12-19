@@ -172,12 +172,12 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     protected function getQuestionMarkerService()
     {
-        return $this->createService('Marker.QuestionMarkerService');
+        return $this->createService('Marker:QuestionMarkerService');
     }
 
     protected function getQuestionMarkerResultService()
     {
-        return $this->createService('Marker.QuestionMarkerResultService');
+        return $this->createService('Marker:QuestionMarkerResultService');
     }
 
     protected function getUploadFileService()

@@ -20,7 +20,7 @@ class OpenCourseThreadEventProcessor
 
     private function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
     }
 
     private function getThreadService()

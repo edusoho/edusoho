@@ -743,16 +743,16 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon.CouponService');
+        return $this->createService('Coupon:CouponService');
     }
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
+        return ServiceKernel::instance()->createService('User:InviteRecordService');
     }
 
     protected function getPayCenterService()
     {
-        return $this->createService('PayCenter.PayCenterService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 }

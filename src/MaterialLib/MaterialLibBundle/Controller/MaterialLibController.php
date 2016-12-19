@@ -582,7 +582,7 @@ class MaterialLibController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getUploadFileService()
@@ -597,7 +597,7 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileShareHistoryService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileShareHistoryService');
+        return $this->getServiceKernel()->createService('File:UploadFileShareHistoryService');
     }
 
     protected function getNotificationService()
@@ -612,6 +612,6 @@ class MaterialLibController extends BaseController
 
     protected function getCourseMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 }

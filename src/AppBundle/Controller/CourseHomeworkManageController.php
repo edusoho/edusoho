@@ -51,7 +51,7 @@ class CourseHomeworkManageController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getActivityService()

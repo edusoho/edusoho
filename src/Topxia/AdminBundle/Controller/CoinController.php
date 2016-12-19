@@ -873,12 +873,12 @@ class CoinController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getLevelService()
@@ -913,6 +913,6 @@ class CoinController extends BaseController
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip.VipService');
+        return $this->getServiceKernel()->createService('Vip:VipService');
     }
 }

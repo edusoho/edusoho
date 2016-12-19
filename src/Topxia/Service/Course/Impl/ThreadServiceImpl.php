@@ -504,7 +504,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getSensitiveService()

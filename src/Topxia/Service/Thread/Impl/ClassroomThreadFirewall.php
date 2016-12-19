@@ -142,14 +142,14 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function isPluginInstalled($code)
     {
-        $app = ServiceKernel::instance()->createService('CloudPlatform.AppService')->getAppByCode($code);
+        $app = ServiceKernel::instance()->createService('CloudPlatform:AppService')->getAppByCode($code);
         return !empty($app);
         
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     public function getCurrentUser()

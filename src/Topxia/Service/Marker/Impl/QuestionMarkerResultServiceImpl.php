@@ -93,6 +93,6 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
 
     protected function getQuestionMarkerService()
     {
-        return $this->createService('Marker.QuestionMarkerService');
+        return $this->createService('Marker:QuestionMarkerService');
     }
 }

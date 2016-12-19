@@ -558,12 +558,12 @@ class OpenCourseManageController extends BaseController
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseRecommendedService');
     }
 
     protected function getTypeCourseService($type)
@@ -573,7 +573,7 @@ class OpenCourseManageController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getWebExtension()
@@ -593,17 +593,17 @@ class OpenCourseManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
     protected function getLiveCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.LiveCourseService');
+        return $this->getServiceKernel()->createService('Course:LiveCourseService');
     }
 
     protected function getUserFieldService()

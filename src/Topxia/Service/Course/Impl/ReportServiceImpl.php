@@ -252,16 +252,16 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     protected function getCourseNoteService()
     {
-        return $this->createService('Course.NoteService');
+        return $this->createService('Course:NoteService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getThreadService()
     {
-        return $this->createService('Course.ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 }

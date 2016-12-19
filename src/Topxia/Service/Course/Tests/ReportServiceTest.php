@@ -96,6 +96,6 @@ class ReportServiceTest extends BaseTestCase
 
     protected function getReportService()
     {
-        return $this->getServiceKernel()->createService('Course.ReportService');
+        return $this->getServiceKernel()->createService('Course:ReportService');
     }
 }
