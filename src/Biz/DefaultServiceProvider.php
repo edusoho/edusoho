@@ -9,6 +9,8 @@ use Biz\File\FireWall\FireWallFactory;
 use Biz\Testpaper\Builder\ExerciseBuilder;
 use Biz\Testpaper\Builder\HomeworkBuilder;
 use Biz\Testpaper\Builder\TestpaperBuilder;
+use Biz\Sms\SmsProcessor\LessonSmsProcessor;
+use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -30,6 +32,14 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['testpaper_builder.exercise'] = function ($biz) {
             return new ExerciseBuilder($biz);
+        };
+
+        $biz['sms_processor.lesson'] = function ($biz) {
+            return new LessonSmsProcessor($biz);
+        };
+
+        $biz['sms_processor.liveOpen'] = function ($biz) {
+            return new LiveOpenLessonSmsProcessor($biz);
         };
     }
 
