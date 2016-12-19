@@ -1,6 +1,8 @@
 <?php
 namespace Biz\User\Service;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 interface UserService
 {
     public function getUser($id, $lock = false);
@@ -16,7 +18,7 @@ interface UserService
 
     public function getUserByVerifiedMobile($mobile);
 
-    public function getUserCountByMobileNotEmpty();
+    public function countUsersByMobileNotEmpty();
 
     public function countUserHasMobile($isVerified=false);
 
@@ -239,7 +241,7 @@ interface UserService
 
     public function getLastestApprovalByUserIdAndStatus($userId, $status);
 
-    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
+    public function applyUserApproval($userId, $approval, UploadedFile $faceImg, UploadedFile $backImg, $directory);
 
     public function findUserApprovalsByUserIds($userIds);
 
@@ -251,7 +253,7 @@ interface UserService
 
     public function analysisUserSumByTime($endTime);
 
-    public function findUsersCountByLessThanCreatedTime($endTime);
+    public function countUsersByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 

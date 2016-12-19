@@ -2,24 +2,32 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\System\Service\IpBlacklistService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\User\Dao\FriendDao;
 use Biz\User\Dao\TokenDao;
 use Biz\User\Dao\UserApprovalDao;
+use Biz\User\Dao\UserBindDao;
 use Biz\User\Dao\UserDao;
+use Biz\User\Dao\UserPayAgreementDao;
 use Biz\User\Dao\UserProfileDao;
 use Biz\User\Dao\UserSecureQuestionDao;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Biz\User\Service\BlacklistService;
+use Biz\User\Service\InviteRecordService;
+use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
+use Permission\Service\Role\Impl\RoleServiceImpl;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Common\StringToolkit;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\File\File;
-use Permission\Service\Role\Impl\RoleServiceImpl;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -27,11 +35,6 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUserDao()->get($id, $lock);
         return !$user ? null : UserSerialize::unserialize($user);
-    }
-
-    public function getUserCountByMobileNotEmpty()
-    {
-        return $this->getUserDao()->getCountByMobileNotEmpty();
     }
 
     public function searchUserCount(array $conditions)
@@ -123,14 +126,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getFriendDao()->countByFromId($userId);
     }
 
-    public function findUsersCountByLessThanCreatedTime($endTime)
-    {
-        return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
-    }
-
     public function getSimpleUser($id)
     {
-        $user = $this->get($id);
+        $user = $this->getUser($id);
 
         $simple = array();
 
@@ -184,12 +182,12 @@ class UserServiceImpl extends BaseService implements UserService
     public function countUserHasMobile($needVerified = false)
     {
         if ($needVerified) {
-            $count = $this->count(array(
+            $count = $this->searchUserCount(array(
                 'locked'            => 0,
                 'hasVerifiedMobile' => true
             ));
         } else {
-            $count = $this->countUserByMobileNotEmpty();
+            $count = $this->countUsersByMobileNotEmpty();
         }
 
         return $count;
@@ -200,14 +198,14 @@ class UserServiceImpl extends BaseService implements UserService
         $conditions = array(
             'locked' => 0
         );
-        $orderBy = array('createdTime', 'ASC');
+        $orderBy    = array('createdTime' => 'ASC');
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
-            $users                           = $this->search($conditions, $orderBy, $start, $limit);
+            $users                           = $this->searchUsers($conditions, $orderBy, $start, $limit);
         } else {
             $profiles              = $this->getProfileDao()->findDistinctMobileProfiles($start, $limit);
             $conditions['userIds'] = ArrayToolkit::column($profiles, 'id');
-            $users                 = $this->search($conditions, $orderBy, 0, PHP_INT_MAX);
+            $users                 = $this->searchUsers($conditions, $orderBy, 0, PHP_INT_MAX);
             $profiles              = ArrayToolkit::index($profiles, 'id');
             $users                 = ArrayToolkit::index($users, 'id');
             $users                 = array_intersect_key($users, $profiles);
@@ -264,20 +262,10 @@ class UserServiceImpl extends BaseService implements UserService
         return $profiles;
     }
 
-    public function countUserProfiles(array $conditions)
-    {
-        return $this->getProfileDao()->count($conditions);
-    }
-
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
     {
         $approvals = $this->getUserApprovalDao()->search($conditions, $orderBy, $start, $limit);
         return $approvals;
-    }
-
-    public function countApprovals(array $conditions)
-    {
-        return $this->getUserApprovalDao()->count($conditions);
     }
 
     public function setEmailVerified($userId)
@@ -400,12 +388,12 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function updateUserUpdatedTime($id)
     {
-        return $this->getUserDao()->updateUser($id, array());
+        return $this->getUserDao()->update($id, array());
     }
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
-        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
+        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $userId . '_' . time() . '.jpg';
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
 
         $file = new File($filePath);
@@ -416,7 +404,7 @@ class UserServiceImpl extends BaseService implements UserService
             'medium' => array("120", "120"),
             'small'  => array("48", "48")
         );
-        $options = array_merge($options, array(
+        $options   = array_merge($options, array(
             'x'      => "0",
             'y'      => "0",
             'x2'     => "200",
@@ -581,11 +569,6 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
-    public function findUserSecureQuestionsByUserId($userId)
-    {
-        return $this->getUserSecureQuestionDao()->findByUserId($userId);
-    }
-
     public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers)
     {
         $encoder               = $this->getPasswordEncoder();
@@ -594,9 +577,9 @@ class UserServiceImpl extends BaseService implements UserService
         for ($questionNum = 1; $questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2); $questionNum++) {
             $fields = array('userId' => $userId);
 
-            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
+            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion' . $questionNum];
             $fields['securityAnswerSalt']   = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $fields['securityAnswer']       = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
+            $fields['securityAnswer']       = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer' . $questionNum], $fields['securityAnswerSalt']);
             $fields['createdTime']          = time();
 
             $userSecureQuestionDao->create($fields);
@@ -766,7 +749,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($inviteUser)) {
-            $this->getInviteRecordService()->create($inviteUser['id'], $user['id']);
+            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
             $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
 
             if (!empty($invitedCoupon)) {
@@ -806,14 +789,14 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['gender']   = empty($registration['gender']) ? 'secret' : $registration['gender'];
 
         for ($i = 1; $i <= 5; $i++) {
-            $profile['intField'.$i]   = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
-            $profile['dateField'.$i]  = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
-            $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
+            $profile['intField' . $i]   = empty($registration['intField' . $i]) ? null : $registration['intField' . $i];
+            $profile['dateField' . $i]  = empty($registration['dateField' . $i]) ? null : $registration['dateField' . $i];
+            $profile['floatField' . $i] = empty($registration['floatField' . $i]) ? null : $registration['floatField' . $i];
         }
 
         for ($i = 1; $i <= 10; $i++) {
-            $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? "" : $registration['varcharField'.$i];
-            $profile['textField'.$i]    = empty($registration['textField'.$i]) ? "" : $registration['textField'.$i];
+            $profile['varcharField' . $i] = empty($registration['varcharField' . $i]) ? "" : $registration['varcharField' . $i];
+            $profile['textField' . $i]    = empty($registration['textField' . $i]) ? "" : $registration['textField' . $i];
         }
 
         $this->getProfileDao()->create($profile);
@@ -830,7 +813,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateNickname($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; $i++) {
-            $registration['nickname'] = 'user'.substr($this->getRandomChar(), 0, 6);
+            $registration['nickname'] = 'user' . substr($this->getRandomChar(), 0, 6);
 
             if ($this->isNicknameAvaliable($registration['nickname'])) {
                 break;
@@ -843,7 +826,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateEmail($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; $i++) {
-            $registration['email'] = 'user_'.substr($this->getRandomChar(), 0, 9).'@edusoho.net';
+            $registration['email'] = 'user_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
 
             if ($this->isEmailAvaliable($registration['email'])) {
                 break;
@@ -855,18 +838,18 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function importUpdateEmail($users)
     {
-        $this->getUserDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             for ($i = 0; $i < count($users); $i++) {
-                $member = $this->getUserDao()->findUserByEmail($users[$i]["email"]);
+                $member = $this->getUserDao()->getByEmail($users[$i]["email"]);
                 $member = UserSerialize::unserialize($member);
                 $this->changePassword($member["id"], $users[$i]["password"]);
                 $this->updateUserProfile($member["id"], $users[$i]);
             }
 
-            $this->getUserDao()->getConnection()->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $this->getUserDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
@@ -981,7 +964,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about']);
+            $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
         }
 
         if (empty($fields['isWeiboPublic'])) {
@@ -1036,7 +1019,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
 
         $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
         return UserSerialize::unserialize($user);
     }
 
@@ -1044,11 +1027,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $token                = array();
         $token['type']        = $type;
-        $token['userId']      = $userId ? (int) $userId : 0;
+        $token['userId']      = $userId ? (int)$userId : 0;
         $token['token']       = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data']        = serialize($data);
         $token['times']       = empty($args['times']) ? 0 : intval($args['times']);
-        $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+        $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token                = $this->getUserTokenDao()->create($token);
         return $token['token'];
@@ -1236,9 +1219,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($user) {
-            $log = sprintf('用户(%s)，', $user['nickname']).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(%s)，', $user['nickname']) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         } else {
-            $log = sprintf('用户(IP: %s)，', $ip).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(IP: %s)，', $ip) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         }
 
         $this->getLogService()->info('user', 'login_fail', $log);
@@ -1366,7 +1349,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function waveUserCounter($userId, $name, $number)
     {
-        if (!ctype_digit((string) $number)) {
+        if (!ctype_digit((string)$number)) {
             throw $this->createInvalidArgumentException('Invalid Argument');
         }
 
@@ -1416,7 +1399,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findAllUserFollowers($userId)
     {
-        $friends = $this->getFriendDao()->findUserFollowersByToId($userId);
+        $friends = $this->getFriendDao()->findFollowersByToId($userId);
         $ids     = ArrayToolkit::column($friends, 'fromId');
         return $this->findUsersByIds($ids);
     }
@@ -1557,7 +1540,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserApprovalDao()->findByUserIds($userIds);
     }
 
-    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory)
+    public function applyUserApproval($userId, $approval, UploadedFile $faceImg, UploadedFile $backImg, $directory)
     {
         $user = $this->getUser($userId);
 
@@ -1565,8 +1548,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("User#{$userId} Not Found");
         }
 
-        $faceImgPath = 'userFaceImg'.$userId.time().'.'.$faceImg->getClientOriginalExtension();
-        $backImgPath = 'userbackImg'.$userId.time().'.'.$backImg->getClientOriginalExtension();
+        $faceImgPath = 'userFaceImg' . $userId . time() . '.' . $faceImg->getClientOriginalExtension();
+        $backImgPath = 'userbackImg' . $userId . time() . '.' . $backImg->getClientOriginalExtension();
         $faceImg     = $faceImg->move($directory, $faceImgPath);
         $backImg     = $backImg->move($directory, $backImgPath);
 
@@ -1601,8 +1584,9 @@ class UserServiceImpl extends BaseService implements UserService
         $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approving');
 
         $this->getProfileDao()->update($userId, array(
-            'truename' => $lastestApproval['truename'],
-            'idcard'   => $lastestApproval['idcard'])
+                'truename' => $lastestApproval['truename'],
+                'idcard'   => $lastestApproval['idcard']
+            )
         );
 
         $currentUser = $this->getCurrentUser();
@@ -1611,14 +1595,16 @@ class UserServiceImpl extends BaseService implements UserService
                 'userId'     => $user['id'],
                 'note'       => $note,
                 //'status' => 'approved',
-                'operatorId' => $currentUser['id'])
+                'operatorId' => $currentUser['id']
+            )
         );
 
         $this->getLogService()->info('user', 'approved', sprintf('用户%s实名认证成功，操作人:%s !', $user['nickname'], $currentUser['nickname']));
 
         $message = array(
             'note' => $note ? $note : '',
-            'type' => 'through');
+            'type' => 'through'
+        );
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
         return true;
     }
@@ -1643,13 +1629,15 @@ class UserServiceImpl extends BaseService implements UserService
                 'userId'     => $user['id'],
                 'note'       => $note,
                 'status'     => 'approve_fail',
-                'operatorId' => $currentUser['id'])
+                'operatorId' => $currentUser['id']
+            )
         );
 
         $this->getLogService()->info('user', 'approval_fail', sprintf('用户%s实名认证失败，操作人:%s !', $user['nickname'], $currentUser['nickname']));
         $message = array(
             'note' => $note ? $note : '',
-            'type' => 'reject');
+            'type' => 'reject'
+        );
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
         return true;
     }
@@ -1722,7 +1710,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function findUserIdsByInviteCode($inviteCode)
     {
         $inviteUser = $this->getUserDao()->getByInviteCode($inviteCode);
-        $record     = $this->getInviteRecordService()->findByInviteUserId($inviteUser['id']);
+        $record     = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUser['id']);
         $userIds    = ArrayToolkit::column($record, 'invitedUserId');
         return $userIds;
     }
@@ -1849,6 +1837,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('User:UserSecureQuestionDao');
     }
 
+    /**
+     * @return UserBindDao
+     */
     protected function getUserBindDao()
     {
         return $this->createDao('User:UserBindDao');
@@ -1877,6 +1868,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Coupon:CouponService');
     }
 
+    /**
+     * @return UserPayAgreementDao
+     */
     protected function getUserPayAgreementDao()
     {
         return $this->createDao('User:UserPayAgreementDao');
@@ -1887,11 +1881,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Content:FileService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->biz->service('User:NotificationService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
@@ -1905,6 +1905,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->biz->service('System:LogService');
     }
 
+    /**
+     * @return IpBlacklistService
+     */
     protected function getIpBlacklistService()
     {
         return $this->biz->service('System:IpBlacklistService');
@@ -1915,11 +1918,17 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
+    /**
+     * @return BlacklistService
+     */
     protected function getBlacklistService()
     {
         return $this->biz->service('User:BlacklistService');
     }
 
+    /**
+     * @return InviteRecordService
+     */
     protected function getInviteRecordService()
     {
         return $this->biz->service('User:InviteRecordService');
@@ -1947,8 +1956,9 @@ class UserServiceImpl extends BaseService implements UserService
 class UserSerialize
 {
     public static function
-    serialize(array $user) {
-        $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
+    serialize(array $user)
+    {
+        $user['roles'] = empty($user['roles']) ? '' : '|' . implode('|', $user['roles']) . '|';
         return $user;
     }
 
