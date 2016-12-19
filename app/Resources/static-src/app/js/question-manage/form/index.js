@@ -6,6 +6,13 @@ import Determine from '../type/question-determine';
 import Fill from '../type/question-fill';
 import Essay from '../type/question-essay';
 import Material from '../type/question-material';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import QuestionOptions from '../../../common/widget/question-options';
+
+ReactDOM.render( <QuestionOptions dataSource={[]}/>,
+  document.getElementById('question-options')
+);
 
 class QuestionCreator {
   constructor() {
@@ -13,8 +20,10 @@ class QuestionCreator {
   }
 
   static getCreator(type, $form) {
+    console.log(type);
     switch (type) {
       case 'single_choice':
+
         QuestionCreator = new SingleChoice($form);
         break;
       case 'uncertain_choice':
