@@ -54,7 +54,7 @@ define(function(require, exports, module) {
                     exportStudents(response.start, response.fileName);
                 } else {
                     $('#export-students-btn').button('reset');
-                    location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
+                    location.href = $('#export-students-btn').data('url')+'&fileName='+response.fileName;
                 }
             });
         });
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
                 exportStudents(response.start, response.fileName);
             } else {
                 $('#export-students-btn').button('reset');
-                location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
+                location.href = $('#export-students-btn').data('url')+'&fileName='+response.fileName;
             }
         });
     }
