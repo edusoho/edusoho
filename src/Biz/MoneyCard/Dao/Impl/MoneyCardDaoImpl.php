@@ -48,7 +48,7 @@ class MoneyCardDaoImpl extends BaseDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchMoneyCardsCount($conditions)
+    public function countMoneyCards($conditions)
     {
         $builder = $this->createMoneyCardQueryBuilder($conditions)
                         ->select('COUNT(id)');

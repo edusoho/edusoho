@@ -15,7 +15,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
 	}
 
 
-	public function searchBatchs($conditions, $orderBy, $start, $limit)
+	public function searchBatches($conditions, $orderBy, $start, $limit)
     {
         $this->checkOrderBy($orderBy, array('id','createdTime'));
 
@@ -29,7 +29,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function searchBatchsCount($conditions)
+    public function countBatches($conditions)
     {
         $builder = $this->createBatchQueryBuilder($conditions)
             ->select('COUNT(id)');

@@ -1,12 +1,13 @@
 <?php
 
-namespace Topxia\Service\MoneyCard\Impl;
+namespace Biz\MoneyCard\Service\Impl;
 
+use Biz\BaseService;
+use Biz\MoneyCard\Service\MoneyCardService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 
-class MoneyCardServiceImpl extends BaseService
+class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 {
     public function getMoneyCard($id, $lock = false)
     {
@@ -33,19 +34,19 @@ class MoneyCardServiceImpl extends BaseService
         return $this->getMoneyCardDao()->searchMoneyCards($conditions, $oderBy, $start, $limit);
     }
 
-    public function searchMoneyCardsCount(array $conditions)
+    public function countMoneyCards(array $conditions)
     {
-        return $this->getMoneyCardDao()->searchMoneyCardsCount($conditions);
+        return $this->getMoneyCardDao()->countMoneyCards($conditions);
     }
 
-    public function searchBatchs(array $conditions, array $oderBy, $start, $limit)
+    public function searchBatches(array $conditions, array $oderBy, $start, $limit)
     {
-        return $this->getMoneyCardBatchDao()->searchBatchs($conditions, $oderBy, $start, $limit);
+        return $this->getMoneyCardBatchDao()->searchBatches($conditions, $oderBy, $start, $limit);
     }
 
-    public function searchBatchsCount(array $conditions)
+    public function countBatches(array $conditions)
     {
-        return $this->getMoneyCardBatchDao()->searchBatchsCount($conditions);
+        return $this->getMoneyCardBatchDao()->countBatches($conditions);
     }
 
     public function createMoneyCard(array $moneyCardData)
@@ -62,19 +63,19 @@ class MoneyCardServiceImpl extends BaseService
         ));
 
         if (isset($batch['money'])) {
-            $batch['money'] = (int) $batch['money'];
+            $batch['money'] = (int)$batch['money'];
         }
 
         if (isset($batch['coin'])) {
-            $batch['coin'] = (int) $batch['coin'];
+            $batch['coin'] = (int)$batch['coin'];
         }
 
         if (isset($batch['cardLength'])) {
-            $batch['cardLength'] = (int) $batch['cardLength'];
+            $batch['cardLength'] = (int)$batch['cardLength'];
         }
 
         if (isset($batch['number'])) {
-            $batch['number'] = (int) $batch['number'];
+            $batch['number'] = (int)$batch['number'];
         }
 
         if (isset($batch['money']) && $batch['money'] <= 0) {
@@ -104,7 +105,7 @@ class MoneyCardServiceImpl extends BaseService
             throw $this->createServiceException($this->getKernel()->trans('卡号有重复，生成失败，请重新生成！'));
         }
 
-        $token = $this->getTokenService()->makeToken('money_card', array(
+        $token          = $this->getTokenService()->makeToken('money_card', array(
             'duration' => strtotime($batch['deadline']) + 24 * 60 * 60 - time()
         ));
         $batch['token'] = $token['token'];
@@ -358,7 +359,7 @@ class MoneyCardServiceImpl extends BaseService
         while (true) {
             $id = '';
 
-            for ($j = 0; $j < (int) $median - 3; ++$j) {
+            for ($j = 0; $j < (int)$median - 3; ++$j) {
                 $id .= mt_rand(0, 9);
             }
 
@@ -409,6 +410,7 @@ class MoneyCardServiceImpl extends BaseService
     }
 
     private $tmpPasswords = array();
+
     protected function makePassword($length)
     {
         while (true) {
@@ -466,7 +468,7 @@ class MoneyCardServiceImpl extends BaseService
 
             $moneyCard = $this->updateMoneyCard($id, $fields);
 
-            $batch = $this->getBatch((int) $moneyCard['batchId']);
+            $batch = $this->getBatch((int)$moneyCard['batchId']);
 
             $flow = array(
                 'userId'   => $fields['rechargeUserId'],
@@ -619,41 +621,41 @@ class MoneyCardServiceImpl extends BaseService
 
     protected function getMoneyCardDao()
     {
-        return $this->createDao('MoneyCard.MoneyCardDao');
+        return $this->createDao('MoneyCard:MoneyCardDao');
     }
 
     protected function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return $this->createService('Card:CardService');
     }
 
     protected function getMoneyCardBatchDao()
     {
-        return $this->createDao('MoneyCard.MoneyCardBatchDao');
+        return $this->createDao('MoneyCard:MoneyCardBatchDao');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getCashService()
     {
-        return $this->createService('Cash.CashService');
+        return $this->createService('Cash:CashService');
     }
 
     private function getTokenService()
     {
-        return $this->createService('User.TokenService');
+        return $this->createService('User:TokenService');
     }
 
     private function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return $this->createService('System:SettingService');
     }
 
     private function getNotificationService()
     {
-        return $this->createService('User.NotificationService');
+        return $this->createService('User:NotificationService');
     }
 }

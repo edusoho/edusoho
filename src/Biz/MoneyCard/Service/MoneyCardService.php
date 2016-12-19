@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\MoneyCard;
+namespace Biz\MoneyCard\Service;
 
 interface MoneyCardService
 {
@@ -27,11 +27,28 @@ interface MoneyCardService
 
 	public function searchMoneyCards (array $conditions, array $oderBy, $start, $limit);
 
-    public function searchMoneyCardsCount(array $conditions);
+    /**
+     * @param array $conditions
+     * @return mixed
+     * @deprecated  countMoneyCards
+     */
+    public function countMoneyCards(array $conditions);
 
-    public function searchBatchs(array $conditions, array $oderBy, $start, $limit);
+    /**
+     * @param array $conditions
+     * @param array $oderBy
+     * @param $start
+     * @param $limit
+     * @return mixed
+     * @deprecated  searchBatchs
+     */
+    public function searchBatches(array $conditions, array $oderBy, $start, $limit);
 
-    public function searchBatchsCount(array $conditions);
+    /**
+     * @param array $conditions
+     * @return mixed
+     */
+    public function countBatches(array $conditions);
 
     public function lockMoneyCard ($id);
 
