@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\CloudData;
+namespace Biz\CloudData\Service;
 
 interface CloudDataService
 {
