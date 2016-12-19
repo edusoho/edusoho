@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class NoteController extends BaseController
 {
-    public function saveNoteAction(Request $request, $courseId, $taskId)
+    public function createCourseNoteAction(Request $request, $courseId, $taskId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($request->isMethod('POST')) {
             $note           = $request->request->all();
             $note['status'] = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
-            $note           = $this->getNoteService()->saveNote($note);
+            $note           = $this->getNoteService()->createCourseNote($note);
             return $this->createJsonResponse($note);
         }
     }

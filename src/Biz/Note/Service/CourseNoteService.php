@@ -5,15 +5,15 @@ interface CourseNoteService
 {
     public function getNote($id);
 
-    public function getUserTaskNote($userId, $taskId);
+    public function findCourseNotesByUserIdAndTaskId($userId, $taskId);
 
-    public function findUserCourseNotes($userId, $courseId);
+    public function findCourseNotesByUserIdAndCourseId($userId, $courseId);
 
     public function searchNotes($conditions, $sort, $start, $limit);
 
-    public function searchNoteCount($conditions);
+    public function countCourseNotes($conditions);
 
-    public function saveNote(array $note);
+    public function createCourseNote(array $note);
 
     public function deleteNote($id);
 

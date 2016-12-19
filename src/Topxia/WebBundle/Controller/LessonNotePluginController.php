@@ -34,7 +34,7 @@ class LessonNotePluginController extends BaseController
             if ($form->isValid()) {
                 $note = $form->getData();
                 $note['status'] = $request->request->get('status') ? 1 : 0;
-                $this->getCourseNoteService()->saveNote($note);
+                $this->getCourseNoteService()->createCourseNote($note);
                 return $this->createJsonResponse(true);
             } else {
                 return $this->createJsonResponse(false);

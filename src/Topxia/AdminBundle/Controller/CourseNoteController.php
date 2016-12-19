@@ -29,7 +29,7 @@ class CourseNoteController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getNoteService()->searchNoteCount($conditions),
+            $this->getNoteService()->countCourseNotes($conditions),
             20
         );
         $notes = $this->getNoteService()->searchNotes(

@@ -19,7 +19,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $this->getNoteDao()->getNoteByUserIdAndLessonId($userId, $lessonId);
     }
 
-    public function findUserCourseNotes($userId, $courseId)
+    public function findCourseNotesByUserIdAndCourseId($userId, $courseId)
     {
         return $this->getNoteDao()->findNotesByUserIdAndCourseId($userId, $courseId);
     }
@@ -31,7 +31,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $this->getNoteDao()->searchNotes($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchNoteCount($conditions)
+    public function countCourseNotes($conditions)
     {
         $conditions = $this->prepareSearchNoteConditions($conditions);
 
@@ -68,7 +68,7 @@ class NoteServiceImpl extends BaseService implements NoteService
      *  3. 插入到数据库
      *  4. 更新其他相关的缓存字段
      */
-    public function saveNote(array $note)
+    public function createCourseNote(array $note)
     {
         if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
             throw $this->createServiceException($this->getKernel()->trans('缺少必要的字段，保存笔记失败'));

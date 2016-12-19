@@ -12,6 +12,7 @@ interface ClassroomService
 
     public function findActiveCoursesByClassroomId($classroomId);
 
+    // TODO refactor.
     public function findMembersByUserIdAndClassroomIds($userId, $classroomIds);
 
 }

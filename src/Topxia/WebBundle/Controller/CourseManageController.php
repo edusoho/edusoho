@@ -245,7 +245,7 @@ class CourseManageController extends BaseController
         $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $id));
         $learnTime = $course["studentNum"] == 0 ? 0 : intval($learnTime / $course["studentNum"]);
 
-        $noteCount = $this->getNoteService()->searchNoteCount(array('courseId' => $id));
+        $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $id));
 
         $questionCount = $this->getThreadService()->searchThreadCount(array('courseId' => $id, 'type' => 'question'));
 

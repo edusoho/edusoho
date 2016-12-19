@@ -63,7 +63,7 @@ class CourseDeleteServiceTest extends BaseTestCase
             'type'     => 'text'
         ));
 
-        $note = $this->getNoteService()->saveNote(array(
+        $note = $this->getNoteService()->createCourseNote(array(
             'content'  => 'note content',
             'lessonId' => $lesson['id'],
             'courseId' => $createCourse['id']
@@ -142,7 +142,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->assertEquals(0, $lessonViewCount);
         $favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $favoriteCount);
-        $noteCount = $this->getCourseNoteDao()->searchNoteCount(array('courseId' => $createCourse['id']));
+        $noteCount = $this->getCourseNoteDao()->countCourseNotes(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $noteCount);
         $threadCount = $this->getThreadDao()->searchThreadCount(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $threadCount);

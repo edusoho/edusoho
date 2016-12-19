@@ -18,7 +18,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         );
 
         $summary['studentNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'role' => 'student'));
-        $summary['noteNum'] = $this->getCourseNoteService()->searchNoteCount(array('courseId' => $courseId));
+        $summary['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
         $summary['askNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'discussion'));
         $summary['finishedNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'isLearned' => 1 , 'role' => 'student'));
@@ -108,7 +108,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         //笔记数
-        $result['noteNum'] = $this->getCourseNoteService()->searchNoteCount(array(
+        $result['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array(
             'courseId' => $courseId,
             'startTimeLessThan' => $startTimeLessThan
         ));

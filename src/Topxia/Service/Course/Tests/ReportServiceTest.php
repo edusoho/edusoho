@@ -27,7 +27,7 @@ class ReportServiceTest extends BaseTestCase
         ));
 
         $this->mock('Course.NoteService', array(
-            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 10)
+            array('functionName' => 'countCourseNotes', 'runTimes' => 1, 'returnValue' => 10)
         ));
 
         $summary = $this->getReportService()->summary(1);
@@ -64,7 +64,7 @@ class ReportServiceTest extends BaseTestCase
             array('createdTime' => strtotime(date('- 1 days'))),
         );
         $this->mock('Course.NoteService', array(
-            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 20),
+            array('functionName' => 'countCourseNotes', 'runTimes' => 1, 'returnValue' => 20),
             array('functionName' => 'searchNotes', 'runTimes' => 1, 'returnValue' => $fakeNotes)
         ));
 

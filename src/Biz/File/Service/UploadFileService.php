@@ -3,6 +3,7 @@ namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+// TODO refactor.
 interface UploadFileService
 {
     public function getFile($id);
