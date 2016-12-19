@@ -87,8 +87,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array($time));
     }
 
-
-
     //replace: count(array('createdTime' => $endTime))
     // public function countByLessThanCreatedTime($endTime)
     // {
@@ -164,7 +162,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'promotedTime'),
+            'orderbys'   => array('createdTime', 'promotedTime', 'promoted', 'promotedSeq'),
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'
