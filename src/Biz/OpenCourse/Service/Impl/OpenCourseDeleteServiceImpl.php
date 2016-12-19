@@ -80,7 +80,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteRecommend($course)
     {
-        $openCount = $this->getRecommendCourseDao()->searchRecommendCount(array('openCourseId' => $course['id']));
+        $openCount = $this->getRecommendCourseDao()->countRecommends(array('openCourseId' => $course['id']));
         $count     = 0;
 
         if ($openCount > 0) {

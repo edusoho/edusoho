@@ -311,7 +311,7 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $recommendNum = $this->getOpenCourseRecommendedService()->searchRecommendCount(array('openCourseId' => $id));
+        $recommendNum = $this->getOpenCourseRecommendedService()->countRecommends(array('openCourseId' => $id));
 
         $ids = $request->request->get('ids');
 

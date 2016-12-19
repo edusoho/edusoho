@@ -115,9 +115,9 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return true;
     }
 
-    public function searchRecommendCount($conditions)
+    public function countRecommends($conditions)
     {
-        return $this->getRecommendedCourseDao()->searchRecommendCount($conditions);
+        return $this->getRecommendedCourseDao()->countRecommends($conditions);
     }
 
     public function searchRecommends($conditions, $orderBy, $start, $limit)

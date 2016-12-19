@@ -81,7 +81,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         return $result;
     }
 
-    public function searchRecommendCount($conditions)
+    public function countRecommends($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -108,7 +108,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
             'openCourseId' => $courseId
         );
 
-        $count = $this->searchRecommendCount($conditions);
+        $count = $this->countRecommends($conditions);
         $max   = $count - $num - 1;
         if ($max < 0) {
             $max = 0;
