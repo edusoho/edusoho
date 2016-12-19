@@ -1744,7 +1744,7 @@ class UserServiceImpl extends BaseService implements UserService
             $mobiles                         = ArrayToolkit::column($users, 'verifiedMobile');
             return $mobiles;
         } else {
-            $profiles       = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id', 'ASC'), 0, PHP_INT_MAX);
+            $profiles       = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id' => 'ASC'), 0, PHP_INT_MAX);
             $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
 
             return array_unique($profileMobiles);

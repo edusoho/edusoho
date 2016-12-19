@@ -1,15 +1,21 @@
 <?php
-namespace Topxia\Service\Sms\SmsProcessor;
+namespace Biz\Sms\SmsProcessor;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
+class LiveOpenLessonSmsProcessor implements SmsProcessor
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->$biz = $biz;
+    }
+
     public function getUrls($targetId, $smsType)
     {
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
@@ -83,12 +89,17 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->biz->service('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return $this->biz->service('OpenCourse:OpenCourseService');
     }
 
     protected function getSignEncoder()

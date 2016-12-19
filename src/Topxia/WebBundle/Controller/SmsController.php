@@ -6,22 +6,21 @@ use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class SmsController extends BaseController
 {
     public function prepareAction(Request $request, $targetType, $id)
     {
-        $item                  = array();
-        $mobileNum             = 0;
-        $mobileNeedVerified    = false;
-        $url                   = '';
-        $smsType               = 'sms_'.$targetType.'_publish';
+        $item               = array();
+        $mobileNum          = 0;
+        $mobileNeedVerified = false;
+        $url                = '';
+        $smsType            = 'sms_'.$targetType.'_publish';
 
         if ($targetType == 'classroom') {
-            $item                  = $this->getClassroomService()->getClassroom($id);
+            $item      = $this->getClassroomService()->getClassroom($id);
             $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
-            $url                   = $this->generateUrl('classroom_show', array('id' => $id));
+            $url       = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
             $url  = $this->generateUrl('course_show', array('id' => $id));
@@ -50,13 +49,13 @@ class SmsController extends BaseController
 
     public function sendAction(Request $request, $targetType, $id)
     {
-        $smsType     = 'sms_'.$targetType.'_publish';
-        $index       = $request->query->get('index');
-        $onceSendNum = 100;
-        $url         = $request->query->get('url');
-        $count       = $request->query->get('count');
-        $parameters  = array();
-        $mobileNeedVerified    = false;
+        $smsType            = 'sms_'.$targetType.'_publish';
+        $index              = $request->query->get('index');
+        $onceSendNum        = 100;
+        $url                = $request->query->get('url');
+        $count              = $request->query->get('count');
+        $parameters         = array();
+        $mobileNeedVerified = false;
 
         if ($targetType == 'classroom') {
             $classroom                     = $this->getClassroomService()->getClassroom($id);
@@ -119,12 +118,12 @@ class SmsController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getSmsService()
     {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
+        return $this->getBiz()->service('Sms:SmsService');
     }
 
     protected function getCourseService()
@@ -135,5 +134,10 @@ class SmsController extends BaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->getServiceKernel()->getBiz();
     }
 }

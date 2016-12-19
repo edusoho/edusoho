@@ -1,19 +1,18 @@
 <?php
-namespace Topxia\Service\Sms\Job;
+namespace Biz\Sms\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 
-class SmsSendOneHourJob implements Job
+class SmsSendOneDayJob implements Job
 {
     public function execute($params)
     {
-        $smsType    = 'sms_live_play_one_hour';
+        $smsType    = 'sms_live_play_one_day';
         $dayIsOpen  = $this->getSmsService()->isOpen($smsType);
         $parameters = array();
-
         if ($dayIsOpen) {
             $targetType   = $params['targetType'];
             $targetId     = $params['targetId'];

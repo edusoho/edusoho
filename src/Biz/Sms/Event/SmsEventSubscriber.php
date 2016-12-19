@@ -1,15 +1,14 @@
 <?php
-namespace Topxia\Service\Sms\Event;
+namespace Biz\Sms\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SmsEventSubscriber implements EventSubscriberInterface
+class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -86,7 +85,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $processor    = SmsProcessorFactory::create('lesson');
+            $processor    = $this->getSmsService()->getProcessor('lesson');
             $return       = $processor->getUrls($lesson['id'], $smsType);
             $callbackUrls = $return['urls'];
             $count        = ceil($return['count'] / 1000);
@@ -213,29 +212,19 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function getUserService()
+    protected function getCourseService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getSmsService()
     {
-        return ServiceKernel::instance()->createService('Sms.SmsService');
-    }
-
-    protected function getCourseService()
-    {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->getBiz()->service('Sms:SmsService');
     }
 
     protected function getCrontabService()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        return $this->getBiz()->service('Crontab:CrontabService');
     }
 
     protected function getKernel()

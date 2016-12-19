@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Sms\SmsProcessor;
+namespace Biz\Sms\SmsProcessor;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
@@ -8,8 +8,15 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
+class LessonSmsProcessor implements SmsProcessor
 {
+    protected $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->$biz = $biz;
+    }
+
     public function getUrls($targetId, $smsType)
     {
         $lesson = $this->getCourseService()->getLesson($targetId);
@@ -106,30 +113,44 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
     }
 
-    protected function getLogService()
+    protected function getUsersMobile($userIds)
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
+        $to      = implode(',', $mobiles);
+
+        return $to;
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->biz->service('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
     }
+
     protected function getKernel()
     {
         return ServiceKernel::instance();
