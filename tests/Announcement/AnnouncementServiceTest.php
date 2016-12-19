@@ -1,9 +1,8 @@
 <?php
-namespace Topxia\Service\Announcement\Tests;
+namespace Tests\Announcement;
 
+use Biz\Announcement\Service\AnnouncementService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Announcement\AnnouncementService;
-use Topxia\Common\ArrayToolkit;
 
 class AnnouncementServiceTest extends BaseTestCase
 {
@@ -65,7 +64,7 @@ class AnnouncementServiceTest extends BaseTestCase
 
         $announcement1 = $this->getAnnouncementService()->createAnnouncement($announcementInfo1);
         $announcement2 = $this->getAnnouncementService()->createAnnouncement($announcementInfo2);
-        $resultAnnouncements = $this->getAnnouncementService()->searchAnnouncements(array('targetType'=>'course','targetId'=>1), array('createdTime','DESC'), 0, 30);
+        $resultAnnouncements = $this->getAnnouncementService()->searchAnnouncements(array('targetType'=>'course','targetId'=>1), array('createdTime' => 'DESC'), 0, 30);
 
         $this->assertContains($announcement1, $resultAnnouncements);
         $this->assertContains($announcement2, $resultAnnouncements);
@@ -116,9 +115,12 @@ class AnnouncementServiceTest extends BaseTestCase
         $this->assertEquals($updateInfo['content'], $getAnnouncement['content']);
     }
 
+    /**
+     * @return AnnouncementService
+     */
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return $this->getBiz()->service('Announcement:AnnouncementService');
     }
 
 }

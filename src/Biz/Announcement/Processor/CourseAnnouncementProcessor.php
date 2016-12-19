@@ -1,11 +1,10 @@
 <?php
-namespace Topxia\Service\Announcement\AnnouncementProcessor;
+namespace Biz\Announcement\Processor;
 
+use Biz\User\Service\NotificationService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\NumberToolkit;
-use Exception;
 
-class CourseAnnouncementProcessor implements AnnouncementProcessor
+class CourseAnnouncementProcessor extends AnnouncementProcessor
 {
 	public function checkManage($targetId)
 	{
@@ -67,8 +66,11 @@ class CourseAnnouncementProcessor implements AnnouncementProcessor
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return $this->biz->service('User:NotificationService');
     }
 }

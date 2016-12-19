@@ -35,7 +35,10 @@ class OrgBatchUpdateFactory
                 'service' => 'Classroom:ClassroomService'
             ),
             'article'      => 'Article.ArticleService',
-            'announcement' => 'Announcement.AnnouncementService'
+            'announcement' => array(
+                'protocol'=> 'biz',
+                'service' => 'Announcement:AnnouncementService',
+            )
         );
     }
 
