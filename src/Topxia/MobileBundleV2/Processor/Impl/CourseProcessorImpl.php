@@ -30,7 +30,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'targetId'   => $courseId
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }

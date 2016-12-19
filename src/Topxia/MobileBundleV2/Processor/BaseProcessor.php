@@ -235,7 +235,7 @@ class BaseProcessor {
 
     protected function getAnnouncementService()
     {
-        return $this->controller->getService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     public function getEduCloudService()

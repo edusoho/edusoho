@@ -181,7 +181,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     protected function getUserService()

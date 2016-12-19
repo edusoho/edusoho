@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Announcement;
+namespace Biz\Announcement\Service;
 
 interface AnnouncementService
 {

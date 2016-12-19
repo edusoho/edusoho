@@ -1,30 +1,32 @@
 <?php
-namespace Topxia\Service\Announcement\Impl;
+namespace Biz\Announcement\Service\Impl;
 
+use Biz\Announcement\Dao\AnnouncementDao;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\BaseService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\LogService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Announcement\AnnouncementService;
-use Topxia\Service\Common\ServiceKernel;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
     public function getAnnouncement($id)
     {
-        return $this->getAnnouncementDao()->getAnnouncement($id);
+        return $this->getAnnouncementDao()->get($id);
     }
 
     public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $announcements = $this->getAnnouncementDao()->searchAnnouncements($conditions, $orderBy, $start, $limit);
+        $announcements = $this->getAnnouncementDao()->search($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($announcements, 'id');
     }
 
     public function searchAnnouncementsCount($conditions)
     {
-        return $this->getAnnouncementDao()->searchAnnouncementsCount($conditions);
+        return $this->getAnnouncementDao()->count($conditions);
     }
 
     public function searchCount($conditions)
@@ -35,27 +37,27 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function createAnnouncement($announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException($this->getKernel()->trans('公告内容不能为空！'));
+            throw $this->createServiceException('公告内容不能为空！');
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException($this->getKernel()->trans('发布时间不能为空！'));
+            throw $this->createServiceException('发布时间不能为空！');
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException($this->getKernel()->trans('结束时间不能为空！'));
+            throw $this->createServiceException('结束时间不能为空！');
         }
 
         if (isset($announcement['notify'])) {
             unset($announcement['notify']);
         }
 
-        $announcement['content'] = $this->purifyHtml(empty($announcement['content']) ? '' : $announcement['content']);
+        $announcement['content'] = $this->biz['html_helper']->purify(empty($announcement['content']) ? '' : $announcement['content']);
 
         $announcement['userId']      = $this->getCurrentUser()->id;
         $announcement['createdTime'] = time();
         $announcement                = $this->fillOrgId($announcement);
-        $announcement                = $this->getAnnouncementDao()->addAnnouncement($announcement);
+        $announcement                = $this->getAnnouncementDao()->create($announcement);
         $this->dispatchEvent('announcement.create', $announcement);
         return $announcement;
     }
@@ -63,20 +65,20 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function updateAnnouncement($id, $announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException($this->getKernel()->trans('公告内容不能为空！'));
+            throw $this->createServiceException('公告内容不能为空！');
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException($this->getKernel()->trans('发布时间不能为空！'));
+            throw $this->createServiceException('发布时间不能为空！');
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException($this->getKernel()->trans('结束时间不能为空！'));
+            throw $this->createServiceException('结束时间不能为空！');
         }
         $announcement                = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
 
-        $announcement = $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
+        $announcement = $this->getAnnouncementDao()->update($id, $announcement);
 
         $this->dispatchEvent('announcement.update', $announcement);
 
@@ -87,10 +89,10 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $announcement = $this->getAnnouncement($id);
         if (empty($announcement)) {
-            $this->createNotFoundException($this->getKernel()->trans('公告#%id%不存在。', array('%id%' => $id)));
+            $this->createNotFoundException(sprintf('公告#%id%不存在。', $id));
         }
 
-        $this->getAnnouncementDao()->deleteAnnouncement($id);
+        $this->getAnnouncementDao()->delete($id);
 
         $content = strip_tags($announcement['content']);
         $this->getLogService()->info('announcement', 'delete', "删除{$announcement['targetType']}(#{$announcement['targetId']})的公告《{$content}》(#{$announcement['id']})");
@@ -108,13 +110,16 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $fields = $this->fillOrgId(array('orgCode' => $orgCode));
 
         foreach ($ids as $id) {
-            $this->getAnnouncementDao()->updateAnnouncement($id, $fields);
+            $this->getAnnouncementDao()->update($id, $fields);
         }
     }
 
+    /**
+     * @return AnnouncementDao
+     */
     protected function getAnnouncementDao()
     {
-        return $this->createDao('Announcement.AnnouncementDao');
+        return $this->createDao('Announcement:AnnouncementDao');
     }
 
     protected function _prepareSearchConditions($conditions)
@@ -127,13 +132,19 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return $conditions;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->biz->service('System:LogService');
     }
 }
