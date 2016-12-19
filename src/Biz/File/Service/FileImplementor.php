@@ -9,6 +9,14 @@ interface FileImplementor
 
     public function getFullFile($file);
 
+    public function getDefaultHumbnails($globalId);
+
+    public function getThumbnail($globalId, $options);
+
+    public function getStatistics($options);
+
+    public function player($globalId);
+
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
 
     public function convertFile($file, $status, $result = null, $callback = null);
@@ -52,4 +60,5 @@ interface FileImplementor
 
     public function synData($conditions);
 
+    public function download($globalId);
 }

@@ -18,7 +18,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
     {
         $publishedActicles = $this->getArticleService()->searchArticles(
             array('status' => 'published'),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
         $targetIds = ArrayToolkit::column($publishedActicles, 'id');
@@ -79,7 +79,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     private function getThreadService()

@@ -83,7 +83,7 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     protected function getCloudFileService()
     {
-        return $this->createService('CloudFile.CloudFileService');
+        return $this->getKernel()->getBiz()->service('CloudFile:CloudFileService');
     }
 
     protected function getTokenService()

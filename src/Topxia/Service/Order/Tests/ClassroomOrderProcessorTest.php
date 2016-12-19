@@ -303,7 +303,7 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getClassroomOrderService()

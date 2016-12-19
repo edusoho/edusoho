@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Biz\Announcement\Service\AnnouncementService;
 
 /**
  * @todo  
@@ -25,18 +25,19 @@ class AnnouncementDataTag extends BaseDataTag implements DataTag
 
         $currentTime = time();
 
-        // $currentTime = $currentTime - $currentTime%900;
-
         $conditions  = $this->fillOrgCode(array('targetType'=>'global', 'startTime'=>$currentTime, 'endTime'=>$currentTime));
 
-        $announcement = $this->getAnnouncementService()->searchAnnouncements($conditions,array('createdTime','DESC'), 0, $arguments['count']);
+        $announcement = $this->getAnnouncementService()->searchAnnouncements($conditions,array('createdTime' => 'DESC'), 0, $arguments['count']);
         
         return $announcement;
     }
 
+    /**
+     * @return AnnouncementService
+     */
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return $this->getServiceKernel()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     protected function checkCount(array $arguments)

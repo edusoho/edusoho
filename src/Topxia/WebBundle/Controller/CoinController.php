@@ -74,7 +74,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID', 'DESC'),
+            array('ID' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -136,7 +136,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID', 'DESC'),
+            array('ID' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -474,7 +474,7 @@ class CoinController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
+        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
     }
 
     protected function getInviteRecordService()
@@ -484,17 +484,17 @@ class CoinController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getOrderService()

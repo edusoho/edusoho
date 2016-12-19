@@ -578,7 +578,7 @@ class DefaultController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     private function getWebExtension()

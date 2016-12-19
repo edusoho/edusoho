@@ -715,7 +715,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return ServiceKernel::instance()->getBiz()->service('Card:CardService');
     }
 
     protected function getUserService()

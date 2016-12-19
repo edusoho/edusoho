@@ -56,7 +56,7 @@ class ThreadEventSubscriber implements EventSubscriberInterface
         $this->callTargetEventProcessor('onPostVote', $event);
     }
 
-    protected function callTargetEventProcessor($method, $event)
+    protected function callTargetEventProcessor($method, Event $event)
     {
         $subject = $event->getSubject();
 
