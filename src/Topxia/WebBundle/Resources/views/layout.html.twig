@@ -5,7 +5,7 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
-<html lang="{{ app.request.getLocale() }}" class="mobile">
+<html lang="{{ app.request.getLocale() }}" class="es-mobile">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -68,6 +68,10 @@
 
     {% block footer %}
       {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
+    {% endblock %}
+
+    {% block footer_mobile %}
+      {% include 'TopxiaWebBundle:Default:Mobile/es-footer-mobile.html.twig' %}
     {% endblock %}
 
     {% block bottom %}{% endblock %}

@@ -1,0 +1,24 @@
+.footer-tool-bar{
+  display: none;
+  position: fixed;
+  height: 50px;
+  padding-top: 7px;
+  width: 100%;
+  bottom: 0px;
+  background-color: @gray-lighter;
+  overflow: hidden;
+  >div {
+    display: inline-block;
+    width: 33.33333333333333%;
+    float: left;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1;
+    i {
+      font-size: 24px;
+    }
+    &.active{
+      color: @brand-primary;
+    }
+  }
+}
