@@ -2,7 +2,9 @@
 
 namespace Biz\Crontab\Dao;
 
-interface JobDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface JobDao extends GeneralDaoInterface
 {
     public function deleteByTargetTypeAndTargetId($targetType, $targetId);
 
