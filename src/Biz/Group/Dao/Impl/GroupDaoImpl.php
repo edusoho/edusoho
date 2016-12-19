@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Biz\Group\Dao\Impl;
-
 
 use Biz\Group\Dao\GroupDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -10,6 +7,24 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
 {
     protected $table = 'groups';
+
+    public function findByTitle($title)
+    {
+        return $this->findByFields(array('title' => $title));
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
+    public function _createQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['title'] = '%'.$conditions['title'].'%';
+        }
+        return parent::_createQueryBuilder($conditions);
+    }
 
     public function declares()
     {
@@ -21,13 +36,7 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
                 'ownerId=:ownerId',
                 'status = :status',
                 'title like :title'
-            ),
+            )
         );
     }
-
-    public function getGroupsByIds($ids)
-    {
-        return $this->findInField('id' , $ids);
-    }
-
 }
