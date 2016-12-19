@@ -3,17 +3,17 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -112,6 +112,56 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->getCourseDao()->update($id, $fields);
+    }
+
+    public function setCourseTeachers($courseId, $teachers)
+    {
+        $teacherMembers = array();
+
+        foreach (array_values($teachers) as $index => $teacher) {
+            if (empty($teacher['id'])) {
+                throw $this->createInvalidArgumentException('Teacher ID Required');
+            }
+
+            $user = $this->getUserService()->getUser($teacher['id']);
+
+            if (empty($user)) {
+                throw $this->createInvalidArgumentException('No Such Teacher');
+            }
+
+            $teacherMembers[] = array(
+                'courseId'  => $courseId,
+                'userId'    => $user['id'],
+                'role'      => 'teacher',
+                'seq'       => $index,
+                'isVisible' => empty($teacher['isVisible']) ? 0 : 1
+            );
+        }
+
+        $existTeachers = $this->findTeachersByCourseId($courseId);
+
+        foreach ($existTeachers as $member) {
+            $this->getMemberDao()->delete($member['id']);
+        }
+
+        $visibleTeacherIds = array();
+
+        foreach ($teacherMembers as $member) {
+            $existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+
+            if ($existMember) {
+                $this->getMemberDao()->delete($existMember['id']);
+            }
+
+            $member = $this->getMemberDao()->create($member);
+
+            if ($member['isVisible']) {
+                $visibleTeacherIds[] = $member['userId'];
+            }
+        }
+
+        $fields = array('teacherIds' => $visibleTeacherIds);
+        $course = $this->getCourseDao()->update($courseId, $fields);
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -258,18 +308,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findStudentsByCourseId($courseId)
     {
         $students = $this->getMemberDao()->findStudentsByCourseId($courseId);
-        if (!empty($students)) {
-            $userIds = ArrayToolkit::column($students, 'userId');
-            $user    = $this->getUserService()->findUsersByIds($userIds);
-            $userMap = ArrayToolkit::index($user, 'id');
-            foreach ($students as $index => $student) {
-                $student['nickname']    = $userMap[$student['userId']]['nickname'];
-                $student['smallAvatar'] = $userMap[$student['userId']]['smallAvatar'];
-                $students[$index]       = $student;
-            }
-        }
 
-        return $students;
+        return $this->fillMembersWithUserInfo($students);
+    }
+
+    public function findTeachersByCourseId($courseId)
+    {
+        $teachers = $this->getMemberDao()->findTeachersByCourseId($courseId);
+
+        return $this->fillMembersWithUserInfo($teachers);
     }
 
     public function countStudentsByCourseId($courseId)
@@ -356,13 +403,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int)$num,
+            'noteNum'            => (int) $num,
             'noteLastUpdateTime' => time()
         ));
 
         return true;
     }
-
 
     public function getUserRoleInCourse($courseId, $userId)
     {
@@ -585,6 +631,24 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
     }
 
+    protected function fillMembersWithUserInfo($members)
+    {
+        if (empty($members)) {
+            return $members;
+        }
+
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $user    = $this->getUserService()->findUsersByIds($userIds);
+        $userMap = ArrayToolkit::index($user, 'id');
+        foreach ($members as $index => $member) {
+            $member['nickname']    = $userMap[$member['userId']]['nickname'];
+            $member['smallAvatar'] = $userMap[$member['userId']]['smallAvatar'];
+            $members[$index]       = $member;
+        }
+
+        return $members;
+    }
+
     protected function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -672,7 +736,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $conditions;
     }
-
 
     protected function createCourseStrategy($course)
     {
