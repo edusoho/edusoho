@@ -96,7 +96,6 @@ class EduCloudController extends BaseController
         if (!isset($overview['error'])) {
             $paidService = array();
             $unPaidService = array();
-
             $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
             foreach ($overview['services'] as $key => $value) {
                 if ($value == true) {
@@ -113,6 +112,10 @@ class EduCloudController extends BaseController
             }
             foreach ($unPaidService as $key => $value) {
                 if ($value == 'email') {
+                    unset($unPaidService[$key]);
+                }
+
+                if ($value == 'search') {
                     unset($unPaidService[$key]);
                 }
             }
