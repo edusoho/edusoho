@@ -3,9 +3,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
 {
@@ -251,7 +251,7 @@ class DefaultController extends BaseController
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->createService('Theme.ThemeService');
+        return $this->getServiceKernel()->getBiz()->service('Theme.ThemeService');
     }
 
     private function getBlacklistService()

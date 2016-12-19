@@ -1,16 +1,19 @@
 <?php
-namespace Topxia\Service\Theme\Impl;
+namespace Biz\Theme\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Theme\ThemeService;
+use Biz\BaseService;
+use Biz\Theme\Service\ThemeService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThemeServiceImpl extends BaseService implements ThemeService
 {
     private $defaultConfig;
     private $allConfig;
     private $themeName;
+
     public function __construct()
     {
+        parent::__construct(ServiceKernel::instance()->getBiz());
         $currentTheme = $this->getSettingService()->get('theme');
 
         try {
@@ -43,7 +46,25 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return false;
     }
 
-    protected function getThemeConfigByName($name)
+    public function createThemeConfig($name, $config)
+    {
+        return $this->getThemeConfigDao()->create(array(
+            'name'          => $name,
+            'config'        => $config,
+            'updatedTime'   => time(),
+            'createdTime'   => time(),
+            'updatedUserId' => $this->getCurrentUser()->id
+        ));
+    }
+
+    public function editThemeConfig($name, $config)
+    {
+        $config['updatedTime']   = time();
+        $config['updatedUserId'] = $this->getCurrentUser()->id;
+        return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
+    }
+
+    public function getThemeConfigByName($name)
     {
         $config              = $this->getThemeConfigDao()->getThemeConfigByName($name);
         $config['allConfig'] = $this->allConfig;
@@ -149,26 +170,18 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->editThemeConfig($currentTheme['name'], $config);
     }
 
-    protected function createThemeConfig($name, $config)
-    {
-        return $this->getThemeConfigDao()->addThemeConfig(array(
-            'name'          => $name,
-            'config'        => $config,
-            'updatedTime'   => time(),
-            'createdTime'   => time(),
-            'updatedUserId' => $this->getCurrentUser()->id
-        ));
-    }
-
-    protected function editThemeConfig($name, $config)
-    {
-        $config['updatedTime']   = time();
-        $config['updatedUserId'] = $this->getCurrentUser()->id;
-        return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
-    }
-
     protected function getThemeConfigDao()
     {
-        return $this->createDao('Theme.ThemeConfigDao');
+        return $this->createDao('Theme:ThemeConfigDao');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

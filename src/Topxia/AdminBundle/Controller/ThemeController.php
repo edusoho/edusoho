@@ -4,7 +4,6 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class ThemeController extends BaseController
 {
@@ -95,7 +94,7 @@ class ThemeController extends BaseController
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
-            'isEditColor' => true,
+            'isEditColor'   => true,
             'friendlyLinks' => $friendlyLinks
         ));
     }
@@ -214,12 +213,12 @@ class ThemeController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getServiceKernel()->getBiz()->service('System:SettingService');
     }
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->createService('Theme.ThemeService');
+        return $this->getServiceKernel()->getBiz()->service('Theme.ThemeService');
     }
 
     protected function getNavigationService()
