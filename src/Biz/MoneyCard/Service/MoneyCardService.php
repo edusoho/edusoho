@@ -47,6 +47,7 @@ interface MoneyCardService
     /**
      * @param array $conditions
      * @return mixed
+     * @deprecated  searchBatchsCount
      */
     public function countBatches(array $conditions);
 
