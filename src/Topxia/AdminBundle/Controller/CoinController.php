@@ -893,7 +893,7 @@ class CoinController extends BaseController
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService')
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
