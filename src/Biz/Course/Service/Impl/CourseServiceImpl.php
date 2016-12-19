@@ -129,12 +129,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
 
             $teacherMembers[] = array(
-                'courseId'    => $courseId,
-                'userId'      => $user['id'],
-                'role'        => 'teacher',
-                'seq'         => $index,
-                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1,
-                'createdTime' => time()
+                'courseId'  => $courseId,
+                'userId'    => $user['id'],
+                'role'      => 'teacher',
+                'seq'       => $index,
+                'isVisible' => empty($teacher['isVisible']) ? 0 : 1
             );
         }
 

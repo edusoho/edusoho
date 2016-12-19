@@ -83,7 +83,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys'   => array('createdTime'),
             'conditions' => array(
                 'userId = :userId',
