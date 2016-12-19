@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Service\Crontab\Tests;
+namespace Tests\Crontab;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 
 class TestJob implements Job
 {

@@ -1,47 +1,44 @@
 <?php
-namespace Topxia\Service\Crontab\Impl;
+namespace Biz\Crontab\Service\Crontab\Impl;
 
+use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Crontab\CrontabService;
+use Biz\Crontab\Service\CrontabService;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
     public function getJob($id)
     {
-        return $this->getJobDao()->getJob($id);
+        return $this->getJobDao()->get($id);
     }
 
-    public function searchJobs($conditions, $sort, $start, $limit)
+    public function searchJobs($conditions, $orderby, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        switch ($sort) {
+        switch ($orderby) {
             case 'created':
-                $sort = array('createdTime', 'DESC');
+                $orderby = array('createdTime' => 'DESC');
                 break;
             case 'createdByAsc':
-                $sort = array('createdTime', 'ASC');
+                $orderby = array('createdTime' => 'ASC');
                 break;
             case 'nextExcutedTime':
-                $sort = array('nextExcutedTime', 'DESC');
+                $orderby = array('nextExcutedTime' => 'DESC');
                 break;
             default:
-                throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
+                throw $this->createInvalidArgumentException('Invalid Order-by Params');
                 break;
         }
 
-        $jobs = $this->getJobDao()->searchJobs($conditions, $sort, $start, $limit);
-
-        return $jobs;
+        return $this->getJobDao()->search($conditions, $orderby, $start, $limit);
     }
 
     public function searchJobsCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
-        return $this->getJobDao()->searchJobsCount($conditions);
+        return $this->getJobDao()->count($conditions);
     }
 
     public function createJob($job)
@@ -49,13 +46,13 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $user = $this->getCurrentUser();
 
         if (!ArrayToolKit::requireds($job, array('nextExcutedTime'))) {
-            throw $this->createServiceException('缺少 nextExcutedTime 字段,创建job失败');
+            throw $this->createInvalidException('Field nextExcutedTime Required');
         }
 
         $job['creatorId']   = $user['id'];
         $job['createdTime'] = time();
 
-        $job = $this->getJobDao()->addJob($job);
+        $job = $this->getJobDao()->create($job);
 
         $this->refreshNextExecutedTime();
 
@@ -67,7 +64,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $job = array();
         // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
         $this->setNextExcutedTime(0);
-        $this->getJobDao()->getConnection()->beginTransaction();
+        $this->getJobDao()->db()->beginTransaction();
 
         try {
             // 加锁
@@ -77,11 +74,11 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
             if (empty($job) || $job['executing']) {
                 $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
-                $this->getJobDao()->getConnection()->commit();
+                $this->getJobDao()->db()->commit();
                 return;
             }
 
-            $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
+            $this->getJobDao()->update($job['id'], array('executing' => 1));
             $jobInstance = new $job['jobClass']();
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];
@@ -97,20 +94,20 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
         }
 
-        $this->afterJonExecute($job);
-        $this->getJobDao()->getConnection()->commit();
+        $this->afterJobExecute($job);
+        $this->getJobDao()->db()->commit();
         $this->refreshNextExecutedTime();
     }
 
-    protected function afterJonExecute($job)
+    protected function afterJobExecute($job)
     {
         if ($job['cycle'] == 'once') {
-            $this->getJobDao()->deleteJob($job['id']);
+            $this->getJobDao()->delete($job['id']);
         }
 
         if ($job['cycle'] == 'everyhour') {
             $time = time();
-            $this->getJobDao()->updateJob($job['id'], array(
+            $this->getJobDao()->update($job['id'], array(
                 'executing'          => '0',
                 'latestExecutedTime' => $time,
                 'nextExcutedTime'    => strtotime('+1 hours', $time)
@@ -119,24 +116,24 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         if ($job['cycle'] == 'everyday') {
             $time = time();
-            $this->getJobDao()->updateJob($job['id'], array(
+            $this->getJobDao()->update($job['id'], array(
                 'executing'          => '0',
                 'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)) . ' ' . $job['cycleTime'])
+                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime'])
             ));
         }
     }
 
     public function deleteJob($id)
     {
-        $deleted = $this->getJobDao()->deleteJob($id);
+        $deleted = $this->getJobDao()->delete($id);
         $this->refreshNextExecutedTime();
         return $deleted;
     }
 
     public function deleteJobs($targetId, $targetType)
     {
-        $deleted = $this->getJobDao()->deleteJobs($targetId, $targetType);
+        $deleted = $this->getJobDao()->deleteByTargetTypeAndTargetId($targetId, $targetType);
         $this->refreshNextExecutedTime();
         return $deleted;
     }
@@ -147,7 +144,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             'executing'       => 0,
             'nextExcutedTime' => time()
         );
-        $job        = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
+        $job = $this->getJobDao()->search($conditions, array('nextExcutedTime' => 'ASC'), 0, 1);
 
         if (!empty($job)) {
             $job = $job[0];
@@ -163,7 +160,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             'executing' => 0
         );
 
-        $job = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
+        $job = $this->getJobDao()->search($conditions, array('nextExcutedTime' => 'ASC'), 0, 1);
 
         if (empty($job)) {
             $this->setNextExcutedTime(0);
@@ -174,7 +171,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function getNextExcutedTime()
     {
-        $filePath = __DIR__ . '/../../../../../app/data/crontab_config.yml';
+        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
         $yaml     = new Yaml();
 
         if (!file_exists($filePath)) {
@@ -192,7 +189,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function setNextExcutedTime($nextExcutedTime)
     {
-        $filePath = __DIR__ . '/../../../../../app/data/crontab_config.yml';
+        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
         $yaml     = new Yaml();
         $content  = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
         $fh       = fopen($filePath, "w");
@@ -202,17 +199,17 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function findJobByTargetTypeAndTargetId($targetType, $targetId)
     {
-        return $this->getJobDao()->findJobByTargetTypeAndTargetId($targetType, $targetId);
+        return $this->getJobDao()->findByTargetTypeAndTargetId($targetType, $targetId);
     }
 
     public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId)
     {
-        return $this->getJobDao()->findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId);
+        return $this->getJobDao()->findByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId);
     }
 
     public function updateJob($id, $fields)
     {
-        return $this->getJobDao()->updateJob($id, $fields);
+        return $this->getJobDao()->update($id, $fields);
     }
 
     protected function prepareSearchConditions($conditions)
@@ -232,7 +229,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         if (empty($conditions['name'])) {
             unset($conditions['name']);
         } else {
-            $conditions['name'] = '%' . $conditions['name'] . '%';
+            $conditions['name'] = '%'.$conditions['name'].'%';
         }
 
         return $conditions;
@@ -240,12 +237,11 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     protected function getJobDao()
     {
-        return $this->createDao('Crontab.JobDao');
+        return $this->createDao('Crontab:JobDao');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->createService('System:LogService');
     }
-
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Crontab;
+namespace Biz\Crontab\Service\Crontab;
 
 interface CrontabService
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course\Tests;
+namespace Tests\Crontab;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
