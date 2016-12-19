@@ -21,6 +21,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function addMember($member)
     {
+        $member['createdTime'] = time();
         $affected = $this->getConnection()->insert($this->table, $member);
 
         if ($affected <= 0) {
@@ -36,7 +37,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->incrVersions(array(
             "{$this->table}:version:userId:{$courseMember['userId']}",
-            "{$this->table}:version:courseId:{$courseMember['courseId']}"
+            "{$this->table}:version:courseId:{$courseMember['courseId']}",
+            "{$this->table}:search"
         ));
 
         $this->deleteCache(array(
@@ -316,14 +318,19 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
+            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        };
+        
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -369,6 +376,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function updateMember($id, $member)
     {
+        $member['updatedTime'] = time();
         $this->getConnection()->update($this->table, $member, array('id' => $id));
 
         $sql          = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
@@ -494,7 +502,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('userId IN (:userIds)')
             ->andWhere('learnedNum >= :learnedNumGreaterThan')
             ->andWhere('learnedNum < :learnedNumLessThan')
-            ->andWhere('classroomId = :classroomId');
+            ->andWhere('classroomId = :classroomId')
+            ->andWhere('updatedTime >= :updatedTime_GE');
         return $builder;
     }
 }

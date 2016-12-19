@@ -11,8 +11,12 @@ class LiveroomController extends BaseController
         $user           = $request->query->all();
         $user['device'] = $this->getDevice($request);
 
-        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$id}/tickets", $user);
+        $systemUser = $this->getUserService()->getUser($user['id']);
+        $avatar = !empty($systemUser['smallAvatar']) ? $systemUser['smallAvatar'] : '';
+        $avatar = $this->getWebExtension()->getFurl($avatar, 'avatar.png');
+        $user['avatar'] = $avatar;
 
+        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$id}/tickets", $user);
         return $this->render("TopxiaWebBundle:Liveroom:entry.html.twig", array(
             'roomId' => $id,
             'ticket' => $ticket
@@ -34,5 +38,10 @@ class LiveroomController extends BaseController
         } else {
             return 'desktop';
         }
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

@@ -2,14 +2,6 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-test:
-    path:  /test
-    defaults: { _controller: TopxiaWebBundle:Test:test }
-
-webpack_test:
-    path:  /webpack_test
-    defaults: { _controller: TopxiaWebBundle:Default:webpackTest }
-
 switch_language:
     path: /switch/language
     defaults: { _controller: TopxiaWebBundle:Default:translate }
@@ -790,6 +782,10 @@ course_manage_student_create:
 course_manage_student_export_csv:
     path:  /course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
+
+course_manage_student_export_datas:
+    path:  /course/{id}/manage/student/export/datas
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportDatas }
 
 course_manage_student_remove:
     path:  /course/{courseId}/manage/student/{userId}/remove
@@ -1659,6 +1655,10 @@ content_page_show:
     path: /page/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:pageShow }
 
+content_course_rule:
+    path: /courserule
+    defaults: {_controller: TopxiaWebBundle:CourseManage:courseRule }
+
 content_page_list:
     path: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
@@ -2324,6 +2324,10 @@ open_course_manage_replay_title_update:
 open_course_manage_student_export_csv:
     path:  /open/course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
+
+open_course_manage_student_export_datas:
+    path:  /open/course/{id}/manage/student/export/datas
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExportDatas }
 
 open_course_manage_material:
     path:  /open/course/{courseId}/manage/lesson/{lessonId}/material
