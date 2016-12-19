@@ -5,6 +5,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    card_event_subscriber:
+        class: Biz\Card\Event\EventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     user_message_event_subscriber:
         class: Biz\User\Event\MessageEventSubscriber
         arguments: ['@biz']

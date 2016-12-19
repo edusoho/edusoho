@@ -624,7 +624,7 @@ class MoneyCardServiceImpl extends BaseService
 
     protected function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return ServiceKernel::instance()->getBiz()->service('Card:CardService');
     }
 
     protected function getMoneyCardBatchDao()

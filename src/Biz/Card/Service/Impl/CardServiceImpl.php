@@ -1,63 +1,66 @@
 <?php
-namespace Topxia\Service\Card\Impl;
+namespace Biz\Card\Service\Impl;
 
+use Biz\BaseService;
+use Biz\Card\Dao\CardDao;
+use Biz\Card\DetailProcessor\DetailFactory;
+use Biz\Card\DetailProcessor\DetailProcessor;
+use Biz\Card\Service\CardService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Card\CardService;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Card\DetailProcessor\DetailFactory;
-use Topxia\Service\Common\ServiceKernel;
+
 
 class CardServiceImpl extends BaseService implements CardService
 {
     public function addCard($card)
     {
         if (!ArrayToolkit::requireds($card, array('cardType', 'cardId', 'deadline', 'userId'))) {
-            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，新创建卡失败！'));
+            throw $this->createInvalidArgumentException('缺少必要字段，新创建卡失败！');
         }
 
         $card['createdTime'] = time();
 
-        return $this->getCardDao()->addCard($card);
+        return $this->getCardDao()->create($card);
     }
 
     public function getCard($id)
     {
-        return $this->getCardDao()->getCard($id);
+        return $this->getCardDao()->get($id);
     }
 
     public function getCardByCardId($cardId)
     {
-        return $this->getCardDao()->getCardByCardId($cardId);
+        return $this->getCardDao()->getByCardId($cardId);
     }
 
     public function getCardByUserId($userId)
     {
-        return $this->getCardDao()->getCardByUserId($userId);
+        return $this->getCardDao()->getByUserId($userId);
     }
 
     public function getCardByCardIdAndCardType($cardId, $cardType)
     {
-        return $this->getCardDao()->getCardByCardIdAndCardType($cardId, $cardType);
+        return $this->getCardDao()->getByCardIdAndCardType($cardId, $cardType);
     }
 
     public function updateCardByCardIdAndCardType($cardId, $cardType, $fields)
     {
-        return $this->getCardDao()->updateCardByCardIdAndCardType($cardId, $cardType, $fields);
+        return $this->getCardDao()->updateByCardIdAndCardType($fields, $cardId, $cardType);
     }
 
     public function searchCards($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareRecordConditions($conditions);
-        return $this->getCardDao()->searchCards($conditions, $orderBy, $start, $limit);
+        return $this->getCardDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
         if (empty($cardType)) {
-            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，请明确卡的类型'));
+            throw $this->createNotFoundException('缺少必要字段，请明确卡的类型');
         }
 
-        return $this->getCardDao()->findCardsByUserIdAndCardType($userId, $cardType);
+        return $this->getCardDao()->findByUserIdAndCardType($userId, $cardType);
     }
 
     public function findCardDetailByCardTypeAndCardId($cardType, $id)
@@ -69,14 +72,13 @@ class CardServiceImpl extends BaseService implements CardService
     public function findCardDetailsByCardTypeAndCardIds($cardType, $ids)
     {
         $processor   = $this->getDetailProcessor($cardType);
-        $limit       = count($ids);
         $cardsDetail = $processor->getCardDetailsByCardIds($ids);
         return $cardsDetail;
     }
 
     public function findCardsByCardIds($cardIds)
     {
-        $cards = $this->getCardDao()->findCardsByCardIds($cardIds);
+        $cards = $this->getCardDao()->findByCardIds($cardIds);
         return ArrayToolkit::index($cards, 'cardId');
     }
 
@@ -115,15 +117,12 @@ class CardServiceImpl extends BaseService implements CardService
             if ($value == 0) {
                 return true;
             }
-
             return !empty($value);
-        }
-
-        );
+        });
 
         if (array_key_exists('nickname', $conditions)) {
             if ($conditions['nickname']) {
-                $users                 = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                $users                 = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
                 $conditions['userIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
             }
         }
@@ -141,18 +140,29 @@ class CardServiceImpl extends BaseService implements CardService
         return $conditions;
     }
 
+    /**
+     * @return CardDao
+     */
     protected function getCardDao()
     {
-        return $this->createDao('Card.CardDao');
+        return $this->createDao('Card:CardDao');
     }
 
+    /**
+     * @param $cardType
+     *
+     * @return DetailProcessor
+     */
     protected function getDetailProcessor($cardType)
     {
         return DetailFactory::create($cardType);
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

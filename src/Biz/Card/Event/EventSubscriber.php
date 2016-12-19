@@ -1,11 +1,15 @@
 <?php
-namespace Topxia\Service\Card\Event;
+namespace Biz\Card\Event;
 
+use Biz\Card\Service\CardService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\InviteRecordService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Common\ServiceKernel;
 
-class EventSubscriber implements EventSubscriberInterface
+class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -66,14 +70,20 @@ class EventSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @return CardService
+     */
     private function getCardService()
     {
-        return ServiceKernel::instance()->createService('Card.CardService');
+        return $this->getBiz()->service('Card:CardService');
     }
 
+    /**
+     * @return InviteRecordService
+     */
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getCouponService()
@@ -81,13 +91,19 @@ class EventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('Coupon.CouponService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 }
