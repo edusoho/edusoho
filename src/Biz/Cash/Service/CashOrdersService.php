@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Cash;
+namespace Biz\Cash\Service;
 
 interface CashOrdersService
 {
@@ -12,6 +12,12 @@ interface CashOrdersService
     public function getOrderByToken($token);
 
     public function cancelOrder($id, $message, $data);
+
+    public function payOrder($payData);
+
+    public function closeOrders();
+
+    public function canOrderPay($order);
 
     public function updateOrder($id, $fileds);
 

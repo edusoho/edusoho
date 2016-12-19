@@ -1,8 +1,11 @@
 <?php
-namespace Topxia\Service\Cash\Tests;
+namespace Tests\Cash;
 
+use Biz\Cash\Service\CashAccountService;
+use Biz\Cash\Service\CashService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class CashServiceTest extends BaseTestCase
 {
@@ -22,7 +25,7 @@ class CashServiceTest extends BaseTestCase
         $flow3 = $this->createInflowOrOutflow('outflow', $user['id'], 'Coin');
         $flow4 = $this->createInflowOrOutflow('inflow', $user['id'], 'RMB');
 
-        $flows = $this->getCashService()->searchFlows(array('amount' => 10), array('id', 'ASC'), 0, PHP_INT_MAX);
+        $flows = $this->getCashService()->searchFlows(array('amount' => 10), array('id' => 'ASC'), 0, PHP_INT_MAX);
         $this->assertEquals($flows[0]['type'], 'inflow');
         $this->assertEquals($flows[1]['type'], 'outflow');
         $this->assertEquals($flows[2]['cashType'], 'Coin');
@@ -303,23 +306,35 @@ class CashServiceTest extends BaseTestCase
         $this->getSettingService()->set('coin', $coinSettingsPosted);
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return CashAccountService
+     */
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return CashService
+     */
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getBiz()->service('Cash:CashService');
     }
 }

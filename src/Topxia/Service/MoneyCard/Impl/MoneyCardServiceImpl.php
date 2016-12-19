@@ -639,7 +639,7 @@ class MoneyCardServiceImpl extends BaseService
 
     protected function getCashService()
     {
-        return $this->createService('Cash.CashService');
+        return $this->getKernel()->getBiz()->service('Cash:CashService');
     }
 
     private function getTokenService()

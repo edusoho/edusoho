@@ -1,8 +1,10 @@
 <?php
-namespace Topxia\Service\Cash\Tests;
+namespace Tests\Cash;
 
+use Biz\Cash\Dao\CashOrdersDao;
+use Biz\Cash\Service\CashOrdersService;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class CashOrdersServiceTest extends BaseTestCase
 {
@@ -113,9 +115,9 @@ class CashOrdersServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
-    public function testAddOrderTwice()
+    public function testAddOrderInvalidAmount()
     {
         $this->setSettingcoin();
         $order = array(
@@ -154,9 +156,9 @@ class CashOrdersServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
-    public function testPayOrderTwice()
+    public function testPayOrderWhenNotExists()
     {
         $this->setSettingcoin();
         $payData = array(
@@ -176,7 +178,7 @@ class CashOrdersServiceTest extends BaseTestCase
         $result2 = $this->payOrder($createOrder2['sn']);
         $result3 = $this->payOrder($createOrder3['sn']);
 
-        $orders = $this->getCashOrdersService()->searchOrders(array('status' => 'paid'), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $orders = $this->getCashOrdersService()->searchOrders(array('status' => 'paid'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $this->assertEquals(count($orders), 3);
     }
 
@@ -241,7 +243,7 @@ class CashOrdersServiceTest extends BaseTestCase
             'userId'      => '1',
             'createdTime' => time() - 72 * 3600
         );
-        $createOrder = $this->getOrderDao()->addOrder($order);
+        $createOrder = $this->getOrderDao()->create($order);
         $this->getCashOrdersService()->closeOrders();
         $getOrder = $this->getCashOrdersService()->getOrder($createOrder['id']);
         $this->assertEquals($getOrder['status'], 'cancelled');
@@ -255,15 +257,6 @@ class CashOrdersServiceTest extends BaseTestCase
         $this->assertEquals(true, $result);
     }
 
-    // public function testCanOrderPayWithEmptyOrder()
-    // {
-    //     $this->setSettingcoin();
-    //     $order = array(
-    //         'status' => null
-    //     );
-    //     $this->getCashOrdersService()->canOrderPay($order);
-    // }
-
     private function payOrder($createOrderSn)
     {
         $payData = array(
@@ -273,7 +266,6 @@ class CashOrdersServiceTest extends BaseTestCase
             'paidTime' => time()
         );
         return $this->getCashOrdersService()->payOrder($payData);
-        // return list($success,$order);
     }
 
     private function createOrder($sn)
@@ -302,19 +294,28 @@ class CashOrdersServiceTest extends BaseTestCase
 
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return CashOrdersService
+     */
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getBiz()->service('Cash:CashOrdersService');
     }
 
+    /**
+     * @return CashOrdersDao
+     */
     protected function getOrderDao()
     {
-        return $this->getServiceKernel()->createDao('Cash.CashOrdersDao');
+        return $this->getBiz()->dao('Cash:CashOrdersDao');
     }
 
 }

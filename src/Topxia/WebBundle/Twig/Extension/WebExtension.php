@@ -352,7 +352,7 @@ class WebExtension extends \Twig_Extension
             'startTime' => $time
         );
 
-        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
     }
 
     public function getInCash($userId, $timeType = "oneWeek")
@@ -364,7 +364,7 @@ class WebExtension extends \Twig_Extension
             'cashType'  => 'Coin',
             'startTime' => $time
         );
-        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
     }
 
     private function getUserService()
@@ -374,7 +374,7 @@ class WebExtension extends \Twig_Extension
 
     public function getAccount($userId)
     {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($userId);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($userId);
     }
 
     private function filterTime($type)

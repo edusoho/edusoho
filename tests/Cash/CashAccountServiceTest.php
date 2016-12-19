@@ -1,8 +1,10 @@
 <?php
-namespace Topxia\Service\Cash\Tests;
+namespace Tests\Cash;
 
+use Biz\Cash\Service\CashAccountService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class CashAccountServiceTest extends BaseTestCase
 {
@@ -44,7 +46,7 @@ class CashAccountServiceTest extends BaseTestCase
         $conditions = array(
             'userId' => $user['id']
         );
-        $orderBy    = array('createdTime', 'Desc');
+        $orderBy    = array('id' => 'ASC');
         $result     = $this->getCashAccountService()->SearchAccount($conditions, $orderBy, 0, 10);
         $conditions = array(
             'userId' => $user2['id']
@@ -69,16 +71,15 @@ class CashAccountServiceTest extends BaseTestCase
             'userId' => $user['id']
         );
 
-        $orderBy = array('createdTime', 'Desc');
-        $result  = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $result  = $this->getCashAccountService()->searchAccountCount($conditions);
         $this->assertEquals($result, 1);
         $conditions = array(
             'userId' => $user2['id']
         );
-        $result = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $result = $this->getCashAccountService()->searchAccountCount($conditions);
         $this->assertEquals($result, 1);
         $conditions = array();
-        $result     = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $result     = $this->getCashAccountService()->searchAccountCount($conditions);
         $this->assertEquals($result, 2);
         return $result;
     }
@@ -149,19 +150,28 @@ class CashAccountServiceTest extends BaseTestCase
         return $result;
     }
 
+    /**
+     * @return CashAccountService
+     */
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function createUser()

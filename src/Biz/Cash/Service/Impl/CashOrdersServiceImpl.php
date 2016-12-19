@@ -1,16 +1,20 @@
 <?php
-namespace Topxia\Service\Cash\Impl;
+namespace Biz\Cash\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Cash\CashOrdersService;
-use Topxia\Service\Common\ServiceKernel;
+
+use Biz\BaseService;
+use Biz\Cash\Dao\CashOrdersDao;
+use Biz\Cash\Dao\CashOrdersLogDao;
+use Biz\Cash\Service\CashOrdersService;
+use Biz\Cash\Service\CashService;
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Event\Event;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 {
     public function getOrder($id)
     {
-        return $this->getOrderDao()->getOrder($id);
+        return $this->getOrderDao()->get($id);
     }
 
     public function addOrder($order)
@@ -18,26 +22,26 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $coinSetting = $this->getSettingService()->get('coin', array());
 
         if (!is_numeric($order['amount'])) {
-            throw $this->createServiceException($this->getKernel()->trans('充值金额必须为整数!'));
+            throw $this->createInvalidArgumentException('充值金额必须为整数!');
         }
 
         $coin                 = $coinSetting['cash_rate'] * $order['amount'];
         $order['sn']          = "O".date('YmdHis').rand(10000, 99999);
         $order['status']      = "created";
-        $order['title']       = $this->getKernel()->trans('充值购买').$coin.$coinSetting['coin_name'];
+        $order['title']       =  '充值购买' . $coin.$coinSetting['coin_name'];
         $order['createdTime'] = time();
 
-        return $this->getOrderDao()->addOrder($order);
+        return $this->getOrderDao()->create($order);
     }
 
     public function getOrderBySn($sn, $lock = false)
     {
-        return $this->getOrderDao()->getOrderBySn($sn, $lock);
+        return $this->getOrderDao()->getBySn($sn, $lock);
     }
 
     public function getOrderByToken($token)
     {
-        return $this->getOrderDao()->getOrderByToken($token);
+        return $this->getOrderDao()->getByToken($token);
     }
 
     public function cancelOrder($id, $message = '', $data = array())
@@ -45,23 +49,23 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消订单失败！'));
+            throw $this->createNotFoundException('订单不存在，取消订单失败！');
         }
 
         if (!in_array($order['status'], array('created'))) {
-            throw $this->createServiceException($this->getKernel()->trans('当前订单状态不能取消订单！'));
+            throw $this->createServiceException('当前订单状态不能取消订单！');
         }
 
-        $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
+        $order = $this->getOrderDao()->update($order['id'], array('status' => 'cancelled'));
 
         $this->_createLog($order['id'], 'cancelled', $message, $data);
 
         return $order;
     }
 
-    public function updateOrder($id, $fileds)
+    public function updateOrder($id, $fields)
     {
-        return $this->getOrderDao()->updateOrder($id, $fileds);
+        return $this->getOrderDao()->update($id, $fields);
     }
 
     public function payOrder($payData)
@@ -69,38 +73,37 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $success = true;
 
         try {
-            $this->getOrderDao()->getConnection()->beginTransaction();
+            $this->beginTransaction();
 
-            $order = $this->getOrderDao()->getOrderBySn($payData['sn'], true);
+            $order = $this->getOrderDao()->getBySn($payData['sn'], true);
 
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('订单(%sn%)已被删除，支付失败。', array('%sn%' =>$payData['sn'] )));
+                throw $this->createNotFoundException(sprintf('订单(%s)已被删除，支付失败。', $payData['sn'] ));
             }
 
             if ($payData['status'] == 'success') {
                 // 避免浮点数比较大小可能带来的问题，转成整数再比较。
 
                 if (intval($payData['amount'] * 100) !== intval($order['amount'] * 100)) {
-                    $message = sprintf($this->getKernel()->trans('订单(%sn%)的金额(%orderAmount%)与实际支付的金额(%payAmount%)不一致，支付失败。',array(
-                        '%sn%' => $order['sn'],
-                        '%orderAmount%' => $order['amount'],
-                        '%payAmount%' => $payData['amount'])));
+                    $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
                     $this->_createLog($order['id'], 'pay_error', $message, $payData);
                     throw $this->createServiceException($message);
                 }
 
                 if ($this->canOrderPay($order)) {
-                    $this->getOrderDao()->updateOrder($order['id'], array(
+
+                    $this->getOrderDao()->update($order['id'], array(
                         'status'   => 'paid',
                         'paidTime' => $payData['paidTime']
                     ));
-                    $this->_createLog($order['id'], 'pay_success', $this->getKernel()->trans('付款成功'), $payData);
+
+                    $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
 
                     $userId = $order["userId"];
                     $inFlow = array(
                         'userId'   => $userId,
                         'amount'   => $order["amount"],
-                        'name'     => $this->getKernel()->trans('入账'),
+                        'name'     => '入账',
                         'orderSn'  => $order['sn'],
                         'category' => 'outflow',
                         'note'     => '',
@@ -112,35 +115,33 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                     $rmbOutFlow = array(
                         'userId'   => $userId,
                         'amount'   => $order["amount"],
-                        'name'     => $this->getKernel()->trans('出账'),
+                        'name'     => '出账',
                         'orderSn'  => $order['sn'],
                         'category' => 'inflow',
                         'note'     => '',
                         'parentSn' => $rmbInFlow['sn']
                     );
 
-                    $coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
+                    $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
                     $success = true;
                     $this->dispatchEvent("order.pay.success",
-                        new ServiceEvent($order, array('targetType' => 'coin'))
+                        new Event($order, array('targetType' => 'coin'))
                     );
                 } else {
-                    $this->_createLog($order['id'], 'pay_ignore', $this->getKernel()->trans('订单已处理'), $payData);
+                    $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
                 }
             } else {
                 $this->_createLog($order['id'], 'pay_unknown', '', $payData);
             }
 
-            $this->getOrderDao()->getConnection()->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $this->getOrderDao()->getConnection()->rollback();
-
+            $this->rollback();
             throw $e;
         }
 
-        $order = $this->getOrderDao()->getOrder($order['id']);
-
+        $order = $this->getOrderDao()->get($order['id']);
         return array($success, $order);
     }
 
@@ -148,12 +149,12 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     {
         $this->closeOrders();
 
-        return $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+        return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchOrdersCount($conditions)
     {
-        return $this->getOrderDao()->searchOrdersCount($conditions);
+        return $this->getOrderDao()->count($conditions);
     }
 
     public function closeOrders()
@@ -182,7 +183,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
         $fields = array('data' => json_encode($data));
         $order  = $this->updateOrder($id, $fields);
-        $this->_createLog($order['id'], 'cash_pay_create', $this->getKernel()->trans('创建交易'), $payData);
+        $this->_createLog($order['id'], 'cash_pay_create', '创建交易', $payData);
     }
 
     protected function _createLog($orderId, $type, $message = '', array $data = array())
@@ -194,17 +195,17 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             'type'        => $type,
             'message'     => $message,
             'data'        => json_encode($data),
-            'userId'      => $user->id,
-            'ip'          => $user->currentIp,
+            'userId'      => $user['id'],
+            'ip'          => $user['currentIp'],
             'createdTime' => time()
         );
 
-        return $this->getOrderLogDao()->addLog($log);
+        return $this->getOrderLogDao()->create($log);
     }
 
     public function getLogsByOrderId($orderId)
     {
-        return $this->getOrderLogDao()->getLogsByOrderId($orderId);
+        return $this->getOrderLogDao()->findByOrderId($orderId);
     }
 
     public function canOrderPay($order)
@@ -216,23 +217,35 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return in_array($order['status'], array('created'));
     }
 
+    /**
+     * @return CashOrdersDao
+     */
     protected function getOrderDao()
     {
-        return $this->createDao('Cash.CashOrdersDao');
+        return $this->createDao('Cash:CashOrdersDao');
     }
 
+    /**
+     * @return CashOrdersLogDao
+     */
     protected function getOrderLogDao()
     {
-        return $this->createDao('Cash.CashOrdersLogDao');
+        return $this->createDao('Cash:CashOrdersLogDao');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return CashService
+     */
     protected function getCashService()
     {
-        return $this->createService('Cash.CashService');
+        return $this->createService('Cash:CashService');
     }
 }
