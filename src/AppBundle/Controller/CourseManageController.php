@@ -5,6 +5,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseManageController extends BaseController
 {
@@ -115,7 +116,7 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            if (empty($data)) {
+            if (empty($data) || !isset($data['teachers'])) {
                 throw new InvalidArgumentException('Empty Data');
             }
             $teachers = json_decode($data['teachers'], true);
@@ -148,8 +149,8 @@ class CourseManageController extends BaseController
 
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
-        $likeString = $request->query->get('q');
-        $users      = $this->getUserService()->searchUsers(array('nickname' => $likeString, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $queryField = $request->query->get('q');
+        $users      = $this->getUserService()->searchUsers(array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
 
         $teachers = array();
 

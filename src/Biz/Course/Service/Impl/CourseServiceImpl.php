@@ -115,7 +115,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function setCourseTeachers($courseId, $teachers)
     {
-        // 过滤数据
         $teacherMembers = array();
 
         foreach (array_values($teachers) as $index => $teacher) {
@@ -139,18 +138,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
 
-        // 先清除所有的已存在的教师学员
         $existTeachers = $this->findTeachersByCourseId($courseId);
 
         foreach ($existTeachers as $member) {
             $this->getMemberDao()->delete($member['id']);
         }
 
-        // 逐个插入新的教师的学员数据
         $visibleTeacherIds = array();
 
         foreach ($teacherMembers as $member) {
-            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
             $existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
@@ -164,17 +160,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        // $this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
-
-        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->getCourseDao()->update($courseId, $fields);
-
-        // $this->dispatchEvent("course.teacher.update", array(
-        //     "courseId" => $courseId,
-        //     "course"   => $course,
-        //     'teachers' => $teachers
-        // ));
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -321,36 +308,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findStudentsByCourseId($courseId)
     {
         $students = $this->getMemberDao()->findStudentsByCourseId($courseId);
-        if (!empty($students)) {
-            $userIds = ArrayToolkit::column($students, 'userId');
-            $user    = $this->getUserService()->findUsersByIds($userIds);
-            $userMap = ArrayToolkit::index($user, 'id');
-            foreach ($students as $index => $student) {
-                $student['nickname']    = $userMap[$student['userId']]['nickname'];
-                $student['smallAvatar'] = $userMap[$student['userId']]['smallAvatar'];
-                $students[$index]       = $student;
-            }
-        }
 
-        return $students;
+        return $this->fillMembersWithUserInfo($students);
     }
 
     public function findTeachersByCourseId($courseId)
     {
         $teachers = $this->getMemberDao()->findTeachersByCourseId($courseId);
 
-        if (!empty($teachers)) {
-            $userIds = ArrayToolkit::column($teachers, 'userId');
-            $user    = $this->getUserService()->findUsersByIds($userIds);
-            $userMap = ArrayToolkit::index($user, 'id');
-            foreach ($teachers as $index => $teacher) {
-                $teacher['nickname']    = $userMap[$teacher['userId']]['nickname'];
-                $teacher['smallAvatar'] = $userMap[$teacher['userId']]['smallAvatar'];
-                $teachers[$index]       = $teacher;
-            }
-        }
-
-        return $teachers;
+        return $this->fillMembersWithUserInfo($teachers);
     }
 
     public function countStudentsByCourseId($courseId)
@@ -663,6 +629,24 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    }
+
+    protected function fillMembersWithUserInfo($members)
+    {
+        if (empty($members)) {
+            return $members;
+        }
+
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $user    = $this->getUserService()->findUsersByIds($userIds);
+        $userMap = ArrayToolkit::index($user, 'id');
+        foreach ($members as $index => $member) {
+            $member['nickname']    = $userMap[$member['userId']]['nickname'];
+            $member['smallAvatar'] = $userMap[$member['userId']]['smallAvatar'];
+            $members[$index]       = $member;
+        }
+
+        return $members;
     }
 
     protected function hasCourseManagerRole($courseId = 0)
