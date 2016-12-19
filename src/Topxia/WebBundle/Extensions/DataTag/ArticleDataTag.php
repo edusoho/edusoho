@@ -20,6 +20,6 @@ class ArticleDataTag extends BaseDataTag implements DataTag
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 }

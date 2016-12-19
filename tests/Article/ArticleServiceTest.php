@@ -1,10 +1,14 @@
 <?php
-namespace Topxia\Service\Article\Tests;
+namespace Tests\Article;
 
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Article\Service\ArticleService;
+use Biz\Article\Service\CategoryService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\UserService;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
+
 
 class ArticleServiceTest extends BaseTestCase
 {
@@ -35,8 +39,21 @@ class ArticleServiceTest extends BaseTestCase
     public function testgetArticleNext()
     {
         $newArticle = $this->createArticle();
-        sleep(1);
-        $newArticlesend = $this->createArticle();
+        sleep(2);
+
+        $fields = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article2',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => $newArticle['categoryId'],
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => 'default',
+        );
+        $newArticlesend = $this->getArticleService()->createArticle($fields);
         $getArticle     = $this->getArticleService()->getArticleNext($newArticle['id']);
 
         $this->assertEquals($newArticlesend['id'], $getArticle['id']);
@@ -114,7 +131,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testcreateEmptyArticle()
     {
@@ -142,7 +159,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testupdateEmptyArticle()
     {
@@ -165,7 +182,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testhitEmptyArticle()
     {
@@ -202,7 +219,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testlikeWithEmptyContent()
     {
@@ -211,7 +228,7 @@ class ArticleServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testlikeTwich()
     {
@@ -284,17 +301,6 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals($getArticle['status'], 'unpublished');
     }
 
-    // public function changeIndexPicture($options);
-
-    public function findPublishedArticlesByTagIdsAndCount()
-    {
-        $newArticle = $this->createArticle();
-        $this->getArticleService()->publishArticle($newArticle['id']);
-        $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
-
-        $result = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount();
-    }
-
     public function testFindRelativeArticles()
     {
         $tag1     = $this->getTagService()->addTag(array('name' => 'tag1'));
@@ -351,36 +357,51 @@ class ArticleServiceTest extends BaseTestCase
 
     protected function createArticle()
     {
-        $fileds = array(
+        $category = $this->createCategory();
+
+        $fields = array(
             'publishedTime' => 'now',
             'title'         => 'test article',
             'type'          => 'article',
             'body'          => '正午时分',
             'thumb'         => 'thumb',
             'originalThumb' => 'originalThumb',
-            'categoryId'    => '1',
+            'categoryId'    => $category['id'],
             'source'        => 'http://www.edusoho.com',
             'sourceUrl'     => 'http://www.edusoho.com',
             'tags'          => 'default',
         );
-        return $this->getArticleService()->createArticle($fileds);
+        return $this->getArticleService()->createArticle($fields);
+    }
+
+    protected function createCategory()
+    {
+        $category = array(
+            'name'     => 'test article ' . random_int(0, 10000),
+            'code'     => 'ta' . random_int(0, 10000),
+            'parentId' => 0
+        );
+        return $this->getCategoryService()->createCategory($category);
     }
 
     protected function createArticlesencond()
     {
-        $fileds = array(
+        $category = $this->createCategory();
+
+        $fields = array(
             'publishedTime' => 'now',
             'title'         => 'test article2',
             'type'          => 'article2',
             'body'          => '正午时分2',
             'thumb'         => 'thumb2',
             'originalThumb' => 'originalThumb2',
-            'categoryId'    => '2',
+            'categoryId'    => $category['id'],
             'source'        => 'http://try6.edusoho.cn',
             'sourceUrl'     => 'http://try6.edusoho.cn',
             'tags'          => 'default'
         );
-        return $this->getArticleService()->createArticle($fileds);
+
+        return $this->getArticleService()->createArticle($fields);
     }
 
     protected function createUser($user)
@@ -405,23 +426,44 @@ class ArticleServiceTest extends BaseTestCase
         return $user;
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getBiz()->service('Article:ArticleService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->getBiz()->service('Article:CategoryService');
+    }
+
 }

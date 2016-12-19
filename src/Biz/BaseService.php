@@ -31,7 +31,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz->service($alias);
     }
 
-    protected function getDispatcher()
+    private function getDispatcher()
     {
         return $this->biz['dispatcher'];
     }

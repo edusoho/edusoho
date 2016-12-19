@@ -116,6 +116,6 @@ class OperationSettingController extends BaseController
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 }

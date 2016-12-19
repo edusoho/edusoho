@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Article;
+namespace Biz\Article\Service;
 
 interface CategoryService
 {
@@ -8,6 +8,10 @@ interface CategoryService
     public function getCategoryByCode($code);
 
     public function getCategoryTree();
+
+    public function getCategoryStructureTree();
+
+    public function sortCategories($ids);
 
     public function getCategoryByParentId($parentId);
 

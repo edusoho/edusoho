@@ -482,12 +482,12 @@ class ArticleController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
     }
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getSettingService()

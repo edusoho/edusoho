@@ -1,13 +1,14 @@
 <?php
-namespace Topxia\Service\Article\Tests;
+namespace Tests\Article;
 
+
+use Biz\Article\Service\CategoryService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
 
-class CategoeryServiceTest extends BaseTestCase
+class CategoryServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateCategoeryWithoutName()
     {
@@ -89,8 +90,11 @@ class CategoeryServiceTest extends BaseTestCase
         return $this->getCategoryService()->createCategory($category);
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 }

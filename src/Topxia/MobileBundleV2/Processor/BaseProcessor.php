@@ -195,7 +195,7 @@ class BaseProcessor {
 
     protected function getArticleService()
     {
-        return $this->controller->getService('Article.ArticleService');
+        return ServiceKernel::instance()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getOrderService()
