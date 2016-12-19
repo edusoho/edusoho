@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\CloudFile;
+namespace Biz\CloudFile\Service;
 
 interface CloudFileService
 {

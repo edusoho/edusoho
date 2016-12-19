@@ -1,11 +1,16 @@
 <?php
 
-namespace Topxia\Service\CloudFile\Impl;
+namespace Biz\CloudFile\Service\Impl;
 
+use Biz\BaseService;
+use Biz\File\Service\FileImplementor;
+use Biz\File\Service\UploadFileService;
+use Biz\File\Service\UploadFileTagService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\CloudFile\CloudFileService;
+use Biz\CloudFile\Service\CloudFileService;
 use Topxia\Service\Common\ServiceKernel;
+
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
@@ -109,9 +114,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         if ($usedStatus == "used") {
             $conditions = array('startCount' => 1);
-        }
-
-        if ($usedStatus == "unused") {
+        }else{
             $conditions = array('endCount' => 1);
         }
 
@@ -186,7 +189,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->update($file['id'], $fields);
+            $this->getUploadFileService()->update($file['id'], $fields);
             return array('success' => true);
         }
 
@@ -203,7 +206,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->deleteFile($file['id']);
+            $this->getUploadFileService()->deleteFile($file['id']);
             return array('success' => true);
         }
 
@@ -219,6 +222,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         foreach ($globalIds as $globalId) {
             $this->delete($globalId);
         }
+
+        return true;
     }
 
     public function getByGlobalId($globalId)
@@ -239,7 +244,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     public function reconvert($globalId, $options = array())
     {
         $this->getCloudFileImplementor()->reconvert($globalId, $options);
-        $file = $this->getUploadFileService()->getThinFileByGlobalId($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (empty($file)) {
             $file = array('globalId' => $globalId);
@@ -268,33 +273,45 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->synData($conditions);
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
+    /**
+     * @return UploadFileTagService
+     */
     protected function getUploadFileTagService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
+        return $this->createService('File:UploadFileTagService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
+    /**
+     * @return FileImplementor
+     */
     protected function getCloudFileImplementor()
     {
-        return $this->createService('File.CloudFileImplementor');
+        return $this->createService('File:CloudFileImplementor');
     }
 
     protected function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course.MaterialService');
     }
 }
