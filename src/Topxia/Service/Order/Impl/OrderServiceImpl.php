@@ -725,7 +725,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getOrderRefundDao()
     {
-        return $this->createDao('Order.OrderRefundDao');
+        return $this->createDao('Order:OrderRefundDao');
     }
 
     /**
@@ -733,12 +733,12 @@ class OrderServiceImpl extends BaseService implements OrderService
      */
     protected function getOrderDao()
     {
-        return $this->createDao('Order.OrderDao');
+        return $this->createDao('Order:OrderDao');
     }
 
     protected function getOrderLogDao()
     {
-        return $this->createDao('Order.OrderLogDao');
+        return $this->createDao('Order:OrderLogDao');
     }
 
     protected function getCouponService()

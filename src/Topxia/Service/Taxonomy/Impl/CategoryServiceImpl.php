@@ -428,12 +428,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function getCategoryDao()
     {
-        return $this->createDao('Taxonomy.CategoryDao');
+        return $this->createDao('Taxonomy:CategoryDao');
     }
 
     protected function getGroupDao()
     {
-        return $this->createDao('Taxonomy.CategoryGroupDao');
+        return $this->createDao('Taxonomy:CategoryGroupDao');
     }
 
     protected function getLogService()

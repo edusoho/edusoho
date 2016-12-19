@@ -91,7 +91,7 @@ class ThemeServiceTest extends BaseTestCase
 
     protected function getThemeConfigDao()
     {
-        return $this->getServiceKernel()->createDao('Theme.ThemeConfigDao');
+        return $this->getServiceKernel()->createDao('Theme:ThemeConfigDao');
     }
 
     protected function getSettingService()

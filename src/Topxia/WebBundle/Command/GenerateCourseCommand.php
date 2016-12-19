@@ -67,11 +67,11 @@ class GenerateCourseCommand extends BaseCommand
 
     private function getCourseDao ()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseDao');
+        return $this->getServiceKernel()->createDao('Course:CourseDao');
     }
 
     private function getMemberDao ()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }
 }

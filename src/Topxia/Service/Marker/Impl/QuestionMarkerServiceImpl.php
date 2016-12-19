@@ -162,7 +162,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     protected function getQuestionMarkerDao()
     {
-        return $this->createDao('Marker.QuestionMarkerDao');
+        return $this->createDao('Marker:QuestionMarkerDao');
     }
 
     protected function getLogService()

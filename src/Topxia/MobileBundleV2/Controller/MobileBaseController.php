@@ -546,7 +546,7 @@ class MobileBaseController extends BaseController
 
     public function getMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }
 
     public function getAuthService()

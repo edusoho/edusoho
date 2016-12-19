@@ -249,7 +249,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     protected function getNavigationDao()
     {
-        return $this->createDao('Content.NavigationDao');
+        return $this->createDao('Content:NavigationDao');
     }
 
     protected function getLogService()

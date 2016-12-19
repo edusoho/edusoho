@@ -271,7 +271,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getMaterialDao()
     {
-        return $this->createDao('Course.CourseMaterialDao');
+        return $this->createDao('Course:CourseMaterialDao');
     }
 
     protected function getCourseService()

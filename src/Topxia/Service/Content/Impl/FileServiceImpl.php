@@ -345,11 +345,11 @@ class FileServiceImpl extends BaseService implements FileService
 
     protected function getFileDao()
     {
-        return $this->createDao('Content.FileDao');
+        return $this->createDao('Content:FileDao');
     }
 
     protected function getGroupDao()
     {
-        return $this->createDao('Content.FileGroupDao');
+        return $this->createDao('Content:FileGroupDao');
     }
 }

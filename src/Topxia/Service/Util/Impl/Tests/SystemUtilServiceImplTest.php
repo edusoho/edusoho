@@ -28,7 +28,7 @@ class SystemUtilServiceImplTest extends BaseTestCase
 
     protected function getUploadFileDao()
     {
-        return $this->getServiceKernel()->createDao('File.UploadFileDao');
+        return $this->getServiceKernel()->createDao('File:UploadFileDao');
     }
 
     protected function getSystemUtilService()

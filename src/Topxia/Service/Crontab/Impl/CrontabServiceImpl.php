@@ -240,7 +240,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     protected function getJobDao()
     {
-        return $this->createDao('Crontab.JobDao');
+        return $this->createDao('Crontab:JobDao');
     }
 
     protected function getLogService()

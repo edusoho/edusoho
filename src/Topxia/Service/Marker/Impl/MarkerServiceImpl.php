@@ -167,7 +167,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     protected function getMarkerDao()
     {
-        return $this->createDao('Marker.MarkerDao');
+        return $this->createDao('Marker:MarkerDao');
     }
 
     protected function getQuestionMarkerService()

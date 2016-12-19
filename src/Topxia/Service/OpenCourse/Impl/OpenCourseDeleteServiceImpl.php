@@ -149,22 +149,22 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getOpenCourseDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseDao');
+        return $this->createDao('OpenCourse:OpenCourseDao');
     }
 
     protected function getOpenCourseLessonDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseLessonDao');
+        return $this->createDao('OpenCourse:OpenCourseLessonDao');
     }
 
     protected function getOpenCourseMemberDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseMemberDao');
+        return $this->createDao('OpenCourse:OpenCourseMemberDao');
     }
 
     protected function getRecommendCourseDao()
     {
-        return $this->createDao('OpenCourse.RecommendedCourseDao');
+        return $this->createDao('OpenCourse:RecommendedCourseDao');
     }
 
     protected function getCrontabService()

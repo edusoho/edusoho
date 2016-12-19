@@ -91,7 +91,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 
 	protected function getCommentDao()
 	{
-        return $this->createDao('Content.CommentDao');
+        return $this->createDao('Content:CommentDao');
 	}
 
 	protected function getCourseService()

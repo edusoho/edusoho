@@ -836,12 +836,12 @@ class AppServiceImpl extends BaseService implements AppService
      */
     protected function getAppDao()
     {
-        return $this->createDao('CloudPlatform.CloudAppDao');
+        return $this->createDao('CloudPlatform:CloudAppDao');
     }
 
     protected function getAppLogDao()
     {
-        return $this->createDao('CloudPlatform.CloudAppLogDao');
+        return $this->createDao('CloudPlatform:CloudAppLogDao');
     }
 
     protected function createAppClient()

@@ -2923,7 +2923,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getCourseLessonReplayDao()
     {
-        return $this->createDao('Course.CourseLessonReplayDao');
+        return $this->createDao('Course:CourseLessonReplayDao');
     }
 
     protected function hasAdminRole()
@@ -2975,52 +2975,52 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getTagOwnerDao()
     {
-        return $this->createDao('Taxonomy.TagOwnerDao');
+        return $this->createDao('Taxonomy:TagOwnerDao');
     }
 
     protected function getCourseDao()
     {
-        return $this->createDao('Course.CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course.FavoriteDao');
+        return $this->createDao('Course:FavoriteDao');
     }
 
     protected function getMemberDao()
     {
-        return $this->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     protected function getLessonDao()
     {
-        return $this->createDao('Course.LessonDao');
+        return $this->createDao('Course:LessonDao');
     }
 
     protected function getLessonExtendDao()
     {
-        return $this->createDao('Course.LessonExtendDao');
+        return $this->createDao('Course:LessonExtendDao');
     }
 
     protected function getCourseDraftDao()
     {
-        return $this->createDao('Course.CourseDraftDao');
+        return $this->createDao('Course:CourseDraftDao');
     }
 
     protected function getLessonLearnDao()
     {
-        return $this->createDao('Course.LessonLearnDao');
+        return $this->createDao('Course:LessonLearnDao');
     }
 
     protected function getLessonViewDao()
     {
-        return $this->createDao('Course.LessonViewDao');
+        return $this->createDao('Course:LessonViewDao');
     }
 
     protected function getChapterDao()
     {
-        return $this->createDao('Course.CourseChapterDao');
+        return $this->createDao('Course:CourseChapterDao');
     }
 
     protected function getCategoryService()
@@ -3070,7 +3070,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getCourseMaterialService()

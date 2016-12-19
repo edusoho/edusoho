@@ -122,6 +122,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function getTaskDao()
     {
-        return $this->createDao('Task.TaskDao');
+        return $this->createDao('Task:TaskDao');
     }
 }

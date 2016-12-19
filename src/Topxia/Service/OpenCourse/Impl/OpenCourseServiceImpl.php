@@ -995,27 +995,27 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function getOpenCourseDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseDao');
+        return $this->createDao('OpenCourse:OpenCourseDao');
     }
 
     protected function getOpenCourseLessonDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseLessonDao');
+        return $this->createDao('OpenCourse:OpenCourseLessonDao');
     }
 
     protected function getOpenCourseMemberDao()
     {
-        return $this->createDao('OpenCourse.OpenCourseMemberDao');
+        return $this->createDao('OpenCourse:OpenCourseMemberDao');
     }
 
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course.FavoriteDao');
+        return $this->createDao('Course:FavoriteDao');
     }
 
     protected function getCourseLessonReplayDao()
     {
-        return $this->createDao('Course.CourseLessonReplayDao');
+        return $this->createDao('Course:CourseLessonReplayDao');
     }
 
     protected function getLogService()

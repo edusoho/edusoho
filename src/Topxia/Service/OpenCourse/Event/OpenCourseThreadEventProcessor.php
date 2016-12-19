@@ -25,6 +25,6 @@ class OpenCourseThreadEventProcessor
 
     private function getThreadService()
     {
-        return ServiceKernel::instance()->createDao('Thread.ThreadService');
+        return ServiceKernel::instance()->createDao('Thread:ThreadService');
     }
 }

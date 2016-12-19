@@ -325,17 +325,17 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     protected function getBlockTemplateDao()
     {
-        return $this->createDao('Content.BlockTemplateDao');
+        return $this->createDao('Content:BlockTemplateDao');
     }
 
     protected function getBlockDao()
     {
-        return $this->createDao('Content.BlockDao');
+        return $this->createDao('Content:BlockDao');
     }
 
     protected function getBlockHistoryDao()
     {
-        return $this->createDao('Content.BlockHistoryDao');
+        return $this->createDao('Content:BlockHistoryDao');
     }
 
     /**

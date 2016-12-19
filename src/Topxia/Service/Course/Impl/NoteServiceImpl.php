@@ -231,7 +231,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getCourseService()
@@ -251,6 +251,6 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getNoteLikeDao()
     {
-        return $this->createDao('Course.CourseNoteLikeDao');
+        return $this->createDao('Course:CourseNoteLikeDao');
     }
 }

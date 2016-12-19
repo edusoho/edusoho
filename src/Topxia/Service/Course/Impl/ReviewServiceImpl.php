@@ -177,7 +177,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     protected function getReviewDao()
     {
-        return $this->createDao('Course.ReviewDao');
+        return $this->createDao('Course:ReviewDao');
     }
 
     protected function getUserService()

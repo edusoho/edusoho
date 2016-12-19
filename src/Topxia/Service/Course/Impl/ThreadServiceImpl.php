@@ -491,7 +491,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
      */
     protected function getThreadDao()
     {
-        return $this->createDao('Course.ThreadDao');
+        return $this->createDao('Course:ThreadDao');
     }
 
     /**
@@ -499,7 +499,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
      */
     protected function getThreadPostDao()
     {
-        return $this->createDao('Course.ThreadPostDao');
+        return $this->createDao('Course:ThreadPostDao');
     }
 
     protected function getCourseService()

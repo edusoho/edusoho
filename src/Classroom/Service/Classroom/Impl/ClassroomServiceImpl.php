@@ -1486,7 +1486,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getStatusService()

@@ -287,12 +287,12 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     protected function getGroupDao() 
     {
-        return $this->createDao('Group.GroupDao');
+        return $this->createDao('Group:GroupDao');
     }
 
     protected function getGroupMemberDao() 
     {
-        return $this->createDao('Group.GroupMemberDao');
+        return $this->createDao('Group:GroupMemberDao');
     }
 
     protected function getFileService()

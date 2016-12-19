@@ -13,6 +13,6 @@ class LessonLearnDaoTest extends BaseTestCase
 
     protected function getLessonLearnDao()
     {
-        return $this->getServiceKernel()->createDao('Course.LessonLearnDao'); 
+        return $this->getServiceKernel()->createDao('Course:LessonLearnDao'); 
     }
 }

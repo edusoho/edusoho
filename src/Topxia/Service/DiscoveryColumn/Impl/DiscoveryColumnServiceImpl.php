@@ -52,6 +52,6 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
 
     protected function getDiscoveryColumnDao()
     {
-        return $this->createDao('DiscoveryColumn.DiscoveryColumnDao');
+        return $this->createDao('DiscoveryColumn:DiscoveryColumnDao');
     }
 }

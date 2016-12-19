@@ -88,7 +88,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
 
     protected function getQuestionMarkerResultDao()
     {
-        return $this->createDao('Marker.QuestionMarkerResultDao');
+        return $this->createDao('Marker:QuestionMarkerResultDao');
     }
 
     protected function getQuestionMarkerService()
