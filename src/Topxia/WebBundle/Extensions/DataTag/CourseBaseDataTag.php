@@ -24,7 +24,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
     }
 
     protected function getReviewService()
