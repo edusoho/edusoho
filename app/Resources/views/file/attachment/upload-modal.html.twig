@@ -1,0 +1,32 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}上传文件{% endblock %}
+
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/attachment/index.js']) %}
+
+{% block body %}
+
+  {% set single_file_size = setting('cloud_attachment.fileSize',0) %}
+  <input type="hidden" name="media" id="media">
+  <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
+    <span data-role="placeholder">{{ file.filename|default(null) }}</span>
+    <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+    
+    <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
+    </div>
+  </div>
+
+  <div class="row" id="chooser-upload-panel">
+    {% include 'file/attachment/upload-file.html.twig' %}
+
+    <input type="hidden" data-role="metas" data-ids-class="{{idsClass}}" data-list-class="{{listClass}}" data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024  }}" data-url=""/>
+  </div>
+
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}
+

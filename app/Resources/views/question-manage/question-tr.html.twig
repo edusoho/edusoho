@@ -1,4 +1,7 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% set questionTypesDict = getQuestionTypes() %}
+
 <tr data-role='item'>
   <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
@@ -20,7 +23,7 @@
 
   </td>
   <td>
-    {{ dict_text('questionType',question.type) }}
+    {{ questionTypesDict[question.type] }}
     {% if question.type == 'material'%}
       <br><small class="text-muted">({{ question.subCount }}{{'子题'|trans}})</small>
     {% endif %}

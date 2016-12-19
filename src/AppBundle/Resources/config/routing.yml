@@ -1,42 +1,3 @@
-#question
-course_set_manage_question:
-    path: /course_set/{id}/manage/question
-    defaults: { _controller: AppBundle:Question/Manage:index }
-
-course_set_manage_question_create:
-    path: /course_set/{id}/manage/question/{type}/create
-    defaults: { _controller: AppBundle:Question/Manage:create }
-
-course_set_manage_question_update:
-    path: /course_set/{courseSetId}/manage/question/{questionId}/update
-    defaults: { _controller: AppBundle:Question/Manage:update }
-
-course_set_manage_question_delete:
-    path: /course_set/{courseSetId}/manage/question/delete/{questionId}
-    defaults: { _controller: AppBundle:Question/Manage:delete }
-    methods: [POST]
-
-course_set_manage_question_deletes:
-    path: /course_set/{courseSetId}/manage/question/deletes
-    defaults: { _controller: AppBundle:Question/Manage:deletes }
-    methods: [POST]
-
-course_set_manage_question_preview:
-    path: /course_set/{courseSetId}/manage/question/{questionId}/preview
-    defaults: { _controller: AppBundle:Question/Manage:preview }
-
-course_set_manage_question_picker:
-    path: /course_set/{id}/manage/question/picker
-    defaults: { _controller: AppBundle:Question/Manage:questionPicker }
-
-course_set_manage_question_picked:
-    path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
-    defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
-
-course_set_manage_question_check:
-    path: /course_set/{id}/manage/question/check
-    defaults: { _controller: AppBundle:Question/Manage:check }
-
 #activity
 course_activity_trigger:
     path: /course/{courseId}/activity/{activityId}/trigger
@@ -305,3 +266,221 @@ uploader_finished_v2:
     defaults: { _controller: AppBundle:Uploader:finished }
     methods: [GET]
 
+#question
+course_set_manage_question:
+    path: /course_set/{id}/manage/question
+    defaults: { _controller: AppBundle:Question/Manage:index }
+
+course_set_manage_question_create:
+    path: /course_set/{id}/manage/question/{type}/create
+    defaults: { _controller: AppBundle:Question/Manage:create }
+
+course_set_manage_question_update:
+    path: /course_set/{courseSetId}/manage/question/{questionId}/update
+    defaults: { _controller: AppBundle:Question/Manage:update }
+
+course_set_manage_question_delete:
+    path: /course_set/{courseSetId}/manage/question/delete/{questionId}
+    defaults: { _controller: AppBundle:Question/Manage:delete }
+    methods: [POST]
+
+course_set_manage_question_deletes:
+    path: /course_set/{courseSetId}/manage/question/deletes
+    defaults: { _controller: AppBundle:Question/Manage:deletes }
+    methods: [POST]
+
+course_set_manage_question_preview:
+    path: /course_set/{courseSetId}/manage/question/{questionId}/preview
+    defaults: { _controller: AppBundle:Question/Manage:preview }
+
+course_set_manage_question_picker:
+    path: /course_set/{id}/manage/question/picker
+    defaults: { _controller: AppBundle:Question/Manage:questionPicker }
+
+course_set_manage_question_picked:
+  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
+  defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
+
+course_set_manage_question_check:
+  path: /course_set/{id}/manage/question/check
+  defaults: { _controller: AppBundle:Question/Manage:check }
+
+#testpaper
+course_set_manage_testpaper:  
+  path: /course_set/{id}/manage/testpaper
+  defaults: { _controller: AppBundle:Testpaper/Manage:index }
+
+course_set_manage_testpaper_create:
+  path: /course_set/{id}/manage/testpaper/create
+  defaults: { _controller: AppBundle:Testpaper/Manage:create }
+
+course_set_manage_testpaper_update:
+    path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/update
+    defaults: { _controller: AppBundle:Testpaper/Manage:update }
+
+course_set_manage_testpaper_info:
+  path: /course_set/{id}/manage/testpaper/info
+  defaults: { _controller: AppBundle:Testpaper/Manage:info }
+  methods: [POST]
+
+course_set_manage_testpaper_publish:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/publish
+  defaults: { _controller: AppBundle:Testpaper/Manage:publish }
+  methods: [POST]
+
+course_set_manage_testpaper_close:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/close
+  defaults: { _controller: AppBundle:Testpaper/Manage:close }
+  methods: [POST]
+
+course_set_manage_testpaper_delete:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/delete
+  defaults: { _controller: AppBundle:Testpaper/Manage:delete }
+  methods: [POST]
+
+course_set_manage_testpaper_deletes:
+  path: /course_set/{courseSetId}/manage/testpaper/deletes
+  defaults: { _controller: AppBundle:Testpaper/Manage:deletes }
+  methods: [POST]
+
+course_set_manage_testpaper_preivew:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
+  defaults: { _controller: AppBundle:Testpaper/Manage:preview }
+
+course_set_manage_testpaper_questions:
+  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/questions
+  defaults: { _controller: AppBundle:Testpaper/Manage:questions }
+
+course_manage_testpaper_check:
+  path: /course/{id}/manage/testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:CourseTestpaperManage:check }
+
+course_manage_testpaper_check_list:
+  path: /course/{id}/manage/testpaper/check
+  defaults: { _controller: AppBundle:CourseTestpaperManage:checkList }
+
+course_manage_testpaper_result_list:
+  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: AppBundle:CourseTestpaperManage:resultList }
+
+course_manage_testpaper_questions:
+  path: /course/{courseId}/manage/testpaper/{testpaperId}/items
+  defaults: { _controller: AppBundle:TestpaperManage:questions }
+
+testpaper_do:
+  path: /lesson/{lessonId}/testpaper/{testId}/do
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:doTestpaper }
+
+testpaper_show:
+  path: /testpaper/{resultId}/show
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:doTest }
+
+testpaper_result_show:
+  path: /testpaper/result/{resultId}/show
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:showResult }
+
+testpaper_result_submit:
+  path: /testpaper/result/{resultId}/submit
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:submitTest }
+  methods: [POST]
+
+testpaper_finish:
+  path: /testpaper/result/{resultId}/finish
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:finishTest }
+
+testpaper_do_suspend:
+  path: /testpaper/result/{resultId}/suspend
+  defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
+  methods: [POST]
+
+#homework
+course_manage_homework:
+  path: /course/{courseId}/manage/homework
+  defaults: { _controller: AppBundle:HomeworkManage:index }
+
+course_set_manage_homework_question_picker:
+  path: /course_set/{id}/manage/homework/question/picker
+  defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
+
+course_set_manage_homework_question_picked:
+  path:  /course_set/{courseSetId}/manage/homework/question/{questionId}/picked
+  defaults: { _controller: AppBundle:HomeworkManage:pickedQuestion }
+
+course_manage_homework_check_list:
+  path: /course/{id}/manage/homework/check
+  defaults: { _controller: AppBundle:CourseHomeworkManage:checkList }
+
+course_manage_homework_check:
+  path: /course/{id}/manage/homework/{resultId}/check
+  defaults: { _controller: AppBundle:CourseHomeworkManage:check }
+
+
+homework_start_do:
+  pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
+  defaults: { _controller: AppBundle:Homework:startDo }
+
+homework_show:
+  pattern: /homework/{resultId}/show
+  defaults: { _controller: AppBundle:Homework:doTest }
+
+homework_result_show:
+  pattern: /homework/result/{resultId}/show
+  defaults: { _controller: AppBundle:Homework:showResult }
+
+homework_finish:
+  path: /homework/result/{resultId}/finish
+  defaults: { _controller: AppBundle:Homework:submit }
+  methods: [POST]
+
+#exercise
+#todo 与homework_check合并
+course_manage_exercise_check:
+  path:  /course/{courseId}/manage/exercise/check
+  defaults: { _controller: AppBundle:ExerciseManage:buildCheck }
+
+exercise_start_do:
+  path: /lesson/{lessonId}/exercise/{exerciseId}/startDo
+  defaults: { _controller: AppBundle:Exercise:startDo }
+
+exercise_show:
+  path: /exercise/{resultId}/show
+  defaults: { _controller: AppBundle:Exercise:doTest }
+
+exercise_result_show:
+  path: /exercise/result/{resultId}/show
+  defaults: { _controller: AppBundle:Exercise:showResult }
+
+exercise_finish:
+  path: /exercise/result/{resultId}/finish
+  defaults: { _controller: AppBundle:Exercise:submit }
+  methods: [POST]
+
+course_set_manage_question_check:
+  path: /course_set/{id}/manage/question/check
+  defaults: { _controller: AppBundle:Question/Manage:check }
+
+#attachment
+attachment_upload:
+  path: /attachment/upload
+  defaults: { _controller: AppBundle:File/Attachment:upload }
+  methods: [GET]
+
+attachment_item_show:
+  path: /attachment/file/{fileId}/show
+  defaults: { _controller: AppBundle:File/Attachment:fileShow }
+  methods: [GET]
+
+attachment_delete:
+  path: /attachment/{id}/delete
+  defaults: { _controller: AppBundle:File/Attachment:delete }
+  methods: [POST]
+
+attachment_preview:
+  path: /attachment/{id}/preview
+  defaults: { _controller: AppBundle:File/Attachment:preview }
+  methods: [GET]
+
+attachment_download:
+  path: /attachment/{id}/download
+  defaults: { _controller: AppBundle:File/Attachment:download }
+  methods: [GET]

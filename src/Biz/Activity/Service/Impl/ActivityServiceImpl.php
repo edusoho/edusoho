@@ -90,25 +90,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $fields['mediaId'] = $media['id'];
             }
 
-            $fields = ArrayToolkit::parts($fields, array(
-                'title',
-                'remark',
-                'mediaId',
-                'mediaType',
-                'content',
-                'length',
-                'fromCourseId',
-                'fromCourseSetId',
-                'fromUserId',
-                'startTime',
-                'endTime'
-            ));
-
-            $fields = array_filter($fields);
-
-            if (isset($fields['startTime']) && isset($fields['length'])) {
-                $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
-            }
+            $fields['fromUserId']  = $this->getCurrentUser()->getId();
+            $fields                = $this->filterFields($fields);
+            $fields['createdTime'] = time();
 
             $activity = $this->getActivityDao()->create($fields);
 
@@ -117,6 +101,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $listener->handle($activity, array());
             }
             $this->commit();
+
             return $activity;
         } catch (\Exception $e) {
             $this->rollback();
@@ -132,29 +117,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw $this->createAccessDeniedException('无权更新教学活动');
         }
 
+        $media          = array();
         $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
 
         if (!empty($savedActivity['mediaId'])) {
-            $activityConfig->update($savedActivity['mediaId'], $fields);
+            $media = $activityConfig->update($savedActivity['mediaId'], $fields);
         }
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'remark',
-            'desc',
-            'content',
-            'length',
-            'startTime',
-            'endTime'
-        ));
-
-        if (isset($fields['startTime']) && isset($fields['length'])) {
-            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        if ($media) {
+            $fields['mediaId'] = $media['id'];
         }
+
+        $fields                = $this->filterFields($fields);
+        $fields['updatedTime'] = time();
 
         return $this->getActivityDao()->update($id, $fields);
     }
-
 
     public function deleteActivity($id)
     {
@@ -176,6 +154,29 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity       = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
         return $activityConfig->isFinished($id);
+    }
+
+    protected function filterFields($fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'remark',
+            'mediaId',
+            'mediaType',
+            'content',
+            'length',
+            'fromCourseId',
+            'fromCourseSetId',
+            'fromUserId',
+            'startTime',
+            'endTime'
+        ));
+
+        if (isset($fields['startTime']) && isset($fields['length'])) {
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
+
+        return $fields;
     }
 
     /**

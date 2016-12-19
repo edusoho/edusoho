@@ -3,7 +3,8 @@
 {% set modal_class = 'modal-lg' %}
 
 {% set replaceFor= replaceFor|default(null) %}
-{% do script(['app/question-manage/picker/index.js']) %}
+
+{% do script(['app/js/question-manage/picker/index.js']) %}
 
 {% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目{% endblock %}
 

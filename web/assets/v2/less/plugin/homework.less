@@ -1,3 +1,36 @@
+.testpaper-timer {
+  height: 46px;
+  line-height: 46px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  .timer {
+    margin-left: 30px;
+    font-size: 18px;
+    color: @brand-primary;
+  }
+  .btn-pause {
+    background-color: @brand-primary;
+    padding: 0 15px;
+    float: right;
+    color: #fff;
+    .pause {
+      display: inline;
+    }
+    .play {
+      display: none;
+    }
+    &.active {
+      .pause {
+        display: none;
+      }
+      .play {
+        display: inline;
+      }
+    }
+  }
+}
+
 .question-stem-fill-blank {
   padding-left: 15px;
   padding-right: 15px;
@@ -5,17 +38,17 @@
   color: #aaa;
 }
 
-.testpaper-titlebar {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
-}
+// .testpaper-titlebar {
+//   border-bottom: 1px solid #ddd;
+//   margin-bottom: 20px;
+// }
 
-.testpaper-title {
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  color: #444;
-}
+// .testpaper-title {
+//   float: left;
+//   font-size: 24px;
+//   font-weight: bold;
+//   color: #444;
+// }
 
 .testpaper-status {
   margin-top: 20px;
@@ -34,16 +67,16 @@
   font-size: 100%;
 }
 
-.testpaper-description {
-  color: #444;
-  font-size: 14px;
-}
+// .testpaper-description {
+//   color: #444;
+//   font-size: 14px;
+// }
 
-.testpaper-metas {
-  color: #666;
-  font-size: 12px;
-  margin-bottom: 20px;
-}
+// .testpaper-metas {
+//   color: #666;
+//   font-size: 12px;
+//   margin-bottom: 20px;
+// }
 
 .testpaper-result-total {
   width: 160px;
@@ -223,7 +256,7 @@
 
 .testpaper-question-choice-right, 
 .testpaper-question-choice-right .testpaper-question-choice-index {
-  color: #3c763d;
+  color: @brand-success;
 }
 
 .question-text-success {
@@ -335,6 +368,10 @@
   margin-left: 50px;
 }
 
+.testpaper-question-footer {
+  margin-bottom: 20px;
+}
+
 .testpaper-question-analysis img {
   max-width: 100%;
 }
@@ -395,7 +432,7 @@
   }
   .testpaper-card.affix {
     position: fixed;
-    top: 60px;
+    top: 0;
   }
   .testpaper-card.affix-bottom {
     position: absolute;
@@ -408,7 +445,6 @@
     width: 270px;
   }
 }
-
 
 .homwork-choice-index {
   margin-right: 20px;

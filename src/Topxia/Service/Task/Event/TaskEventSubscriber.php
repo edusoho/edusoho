@@ -13,11 +13,11 @@ class TaskEventSubscriber implements EventSubscriberInterface
         return array(
             //'task.finished' => 'onFinished',
 
-            'course.lesson_finish' => 'onLessonFinished',
-            'homework.finish'      => 'onHomeworkFinished',
-            'homework.check'       => 'onHomeworkCheck',
-            'testpaper.reviewed'   => 'onTestPaperFinished',
-            'testpaper.finish'     => 'onTestPaperFinished'
+            /*'course.lesson_finish' => 'onLessonFinished',
+        'homework.finish'      => 'onHomeworkFinished',
+        'homework.check'       => 'onHomeworkCheck',
+        'testpaper.reviewed'   => 'onTestPaperFinished',
+        'testpaper.finish'     => 'onTestPaperFinished'*/
         );
     }
 

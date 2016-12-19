@@ -1,0 +1,34 @@
+{% extends 'course-manage/layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}{{'批阅列表'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'plan' %}
+
+{% if testpaper.type == 'homework' %}
+  {% set active = 'homework-check' %}
+  {% set typeName = '作业' %}
+{% else %}
+  {% set active = 'testpaper-check' %}
+  {% set typeName = '试卷' %}
+{% endif %}
+
+{% block course %}
+
+<div class="panel panel-default panel-col">
+
+  <div class="panel-heading">
+    {{ testpaper.name }}
+  </div>
+  <div class="panel-body">
+
+    {% if isTeacher is defined and not isTeacher %}
+      <span class="color-danger">{{'当前用户不是本课程教师，没有批改%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
+    {% endif %}
+
+    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
+
+  </div>
+</div>
+
+{% endblock %}

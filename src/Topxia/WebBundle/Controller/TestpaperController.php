@@ -165,7 +165,7 @@ class TestpaperController extends BaseController
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
-        
+
         $total       = $this->makeTestpaperTotal($testpaper, $items);
         $attachments = $this->findAttachments($testpaper['id']);
 
@@ -533,7 +533,7 @@ class TestpaperController extends BaseController
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
             array(
                 'testIds' => $testpaperIds,
-                'status'  => 'reviewing',
+                'status'  => 'reviewing'
             ),
             array(
                 'checkedTime',
@@ -601,7 +601,7 @@ class TestpaperController extends BaseController
             array(
                 'checkedTime',
                 'DESC'
-            ),            
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -658,7 +658,7 @@ class TestpaperController extends BaseController
             array(
                 'checkedTime',
                 'DESC'
-            ), 
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

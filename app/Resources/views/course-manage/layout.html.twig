@@ -29,6 +29,12 @@
         <li class="{% if active == 'students' %}active{% endif %}">
           <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学员管理'|trans}}</a>
         </li>
+        <li class="{% if active == 'testpaper-check' %}active{% endif %}">
+          <a href="{{path('course_manage_testpaper_check_list', {id: course.id})}}">{{'试卷批阅'|trans}}</a>
+        </li>
+        <li class="{% if active == 'homework-check' %}active{% endif %}">
+          <a href="{{path('course_manage_homework_check_list', {id: course.id})}}">{{'作业批阅'|trans}}</a>
+        </li>
       </ul>
       {% block course %}
 

@@ -1,1 +1,0 @@
-console.log('js for courseset-manage');
