@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'course-list-page ' %}
+{% set bodyClass = 'course-list-page' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
@@ -30,6 +30,7 @@
       </div>
     </div>
   </div>
+  {% include 'TopxiaWebBundle:Course:search-mobile.html.twig'%}
 {% endblock %}
 
 {% block content %}
@@ -97,4 +98,8 @@
       <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
     </div>
   </div>
+{% endblock %}
+
+{% block bottom %}
+  {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' %}
 {% endblock %}

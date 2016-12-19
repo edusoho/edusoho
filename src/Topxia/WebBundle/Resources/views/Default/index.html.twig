@@ -3,7 +3,7 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set bodyClass = 'homepage' %}
+{% set bodyClass = 'homepage has-app' %}
 {% set siteNav = '/' %}
 {% set script_controller = 'index' %}
 {% set _target_path = path('homepage') %}
@@ -16,6 +16,7 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
+    {% include 'TopxiaWebBundle:Default:Mobile/app-download.html.twig' %}
     {% cache 'jianmo/home/top/banner' 600 %}
       {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}
@@ -39,5 +40,6 @@
         {% endif %}
       {% endif %}
     {% endfor %}
-
+    {% include 'TopxiaWebBundle:Default:Mobile/es-footer-mobile.html.twig' %}
+    {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' %}
 {% endblock %}
