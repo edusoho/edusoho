@@ -57,7 +57,7 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchLessonCount($conditions)
+    public function countLessons($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');

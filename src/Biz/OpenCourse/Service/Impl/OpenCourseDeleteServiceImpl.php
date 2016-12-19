@@ -33,7 +33,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteLessons($course)
     {
-        $lessonCount = $this->getOpenCourseLessonDao()->searchLessonCount(array('courseId' => $course['id']));
+        $lessonCount = $this->getOpenCourseLessonDao()->countLessons(array('courseId' => $course['id']));
 
         $count = 0;
 

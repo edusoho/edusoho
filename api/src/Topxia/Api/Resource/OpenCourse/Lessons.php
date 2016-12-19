@@ -22,7 +22,7 @@ class Lessons extends BaseResource
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
             return $this->wrap($this->filter($lessons), $next);
         } else {
-            $total   = $this->getOpenCourseService()->searchLessonCount($conditions);
+            $total   = $this->getOpenCourseService()->countLessons($conditions);
             $start   = $start == -1 ? rand(0, $total - 1) : $start;
             $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('createdTime', 'ASC'), $start, $limit);
             return $this->wrap($this->filter($lessons), $total);

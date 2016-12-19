@@ -55,7 +55,12 @@ interface OpenCourseService
 
     public function searchLessons($condition, $orderBy, $start, $limit);
 
-    public function searchLessonCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  searchLessonCount
+     */
+    public function countLessons($conditions);
 
     public function createLesson($lesson);
 

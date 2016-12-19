@@ -12,7 +12,7 @@ interface OpenCourseLessonDao
 
     public function searchLessons($condition, $orderBy, $start, $limit);
 
-    public function searchLessonCount($conditions);
+    public function countLessons($conditions);
 
     public function addLesson($lesson);
 

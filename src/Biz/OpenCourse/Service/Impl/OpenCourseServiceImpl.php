@@ -118,7 +118,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $course = $this->tryManageOpenCourse($id);
 
-        $lessonCount = $this->searchLessonCount(array('courseId' => $id, 'status' => 'published'));
+        $lessonCount = $this->countLessons(array('courseId' => $id, 'status' => 'published'));
 
         if ($lessonCount < 1) {
             return array('result' => false, 'message' => '请先添加课时并发布！');
@@ -339,9 +339,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseLessonDao()->searchLessons($condition, $orderBy, $start, $limit);
     }
 
-    public function searchLessonCount($conditions)
+    public function countLessons($conditions)
     {
-        return $this->getOpenCourseLessonDao()->searchLessonCount($conditions);
+        return $this->getOpenCourseLessonDao()->countLessons($conditions);
     }
 
     public function createLesson($lesson)
@@ -953,7 +953,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     private function _getNextLessonNumber($courseId)
     {
-        $lessonCount = $this->searchLessonCount(array('courseId' => $courseId));
+        $lessonCount = $this->countLessons(array('courseId' => $courseId));
         return ($lessonCount + 1);
     }
 

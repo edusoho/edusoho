@@ -59,7 +59,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 
-        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
@@ -68,7 +68,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
 
-        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 

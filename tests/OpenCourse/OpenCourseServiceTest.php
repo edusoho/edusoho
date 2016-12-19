@@ -259,7 +259,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $lesson1 = $this->_createOpenLiveCourseLesson($course1);
         $lesson2 = $this->_createOpenCourseLesson($course2);
 
-        $count = $this->getOpenCourseService()->searchLessonCount(array('type' => 'liveOpen'));
+        $count = $this->getOpenCourseService()->countLessons(array('type' => 'liveOpen'));
 
         $this->assertEquals(1, $count);
     }
