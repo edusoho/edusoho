@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\MoneyCard\MoneyCardProcessor;
+namespace  Biz\MoneyCard\MoneyCardProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Card\DetailProcessor\DetailProcessor;

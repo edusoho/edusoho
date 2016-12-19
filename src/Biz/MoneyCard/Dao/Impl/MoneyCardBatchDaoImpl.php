@@ -1,81 +1,34 @@
 <?php
 namespace Topxia\Service\MoneyCard\Dao\Impl;
 
+use Biz\MoneyCard\Dao\MoneyCardBatchDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Topxia\Service\Common\BaseDao;
 
-class MoneyCardBatchDaoImpl extends BaseDao
+class MoneyCardBatchDaoImpl extends GeneralDaoImpl implements MoneyCardBatchDao
 {
-	protected $table = 'money_card_batch';
+    protected $table = 'money_card_batch';
 
-	public function getBatch ($id)
+    public function declares()
     {
-		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-	}
-
-
-	public function searchBatches($conditions, $orderBy, $start, $limit)
-    {
-        $this->checkOrderBy($orderBy, array('id','createdTime'));
-
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->createBatchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        return $builder->execute()->fetchAll() ? : array();
+        return array(
+            'timestamps' => array(),
+            'serializes' => array(),
+            'orderbys'   => array('id', 'createdTime'),
+            'conditions' => array(
+                'cardPrefix = :cardPrefix',
+                'batchName LIKE :batchName'
+            ),
+        );
     }
 
-    public function countBatches($conditions)
-    {
-        $builder = $this->createBatchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    public function getBatchByToken ($token, $locked = false)
+    public function getBatchByToken($token, $locked = false)
     {
         $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        if($locked)
-        {
-            $sql =  $sql." for update";
+        if ($locked) {
+            $sql = $sql." for update";
         }
 
-        return $this->getConnection()->fetchAssoc($sql, array($token)) ? : null;
+        return $this->db()->fetchAssoc($sql, array($token)) ?: null;
     }
-
-    public function addBatch ($batch)
-    {
-        $affected = $this->getConnection()->insert($this->table, $batch);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert moneyCard error.');
-        }
-
-        return $this->getBatch($this->getConnection()->lastInsertId());
-    }
-
-    public function updateBatch ($id, $fields)
-    {
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-
-        return $this->getBatch($id);
-    }
-
-    public function deleteBatch ($id)
-    {
-        $this->getConnection()->delete($this->table,array('id' => $id));
-    }
-
-    protected function createBatchQueryBuilder($conditions)
-    {
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'batch')
-            ->andWhere('cardPrefix = :cardPrefix')
-            ->andWhere('batchName LIKE :batchName');
-    }
-
 }
