@@ -8,6 +8,7 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\OpenCourse\Dao\OpenCourseDao;
 use Topxia\Service\OpenCourse\Dao\OpenCourseLessonDao;
+use Topxia\Service\OpenCourse\Dao\OpenCourseMemberDao;
 use Topxia\Service\OpenCourse\OpenCourseService;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
@@ -52,13 +53,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->getOpenCourseDao()->create($course);
 
         $member = array(
-            'courseId'    => $course['id'],
-            'userId'      => $course['userId'],
-            'role'        => 'teacher',
-            'createdTime' => time()
+            'courseId' => $course['id'],
+            'userId'   => $course['userId'],
+            'role'     => 'teacher'
         );
 
-        $this->getOpenCourseMemberDao()->addMember($member);
+        $this->getOpenCourseMemberDao()->create($member);
 
         $this->getLogService()->info('open_course', 'create_course', "创建公开课《{$course['title']}》(#{$course['id']})");
 
@@ -95,7 +95,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $course = $this->tryAdminCourse($id);
 
-        $this->getOpenCourseMemberDao()->deleteMembersByCourseId($id);
+        $this->getOpenCourseMemberDao()->deleteByCourseId($id);
         $this->deleteLessonsByCourseId($id);
 
         $this->getOpenCourseDao()->delete($id);
@@ -667,37 +667,37 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
      */
     public function getMember($id)
     {
-        return $this->getOpenCourseMemberDao()->getMember($id);
+        return $this->getOpenCourseMemberDao()->get($id);
     }
 
     public function getCourseMember($courseId, $userId)
     {
-        return $this->getOpenCourseMemberDao()->getCourseMember($courseId, $userId);
+        return $this->getOpenCourseMemberDao()->getByUserIdAndCourseId($courseId, $userId);
     }
 
     public function getCourseMemberByIp($courseId, $ip)
     {
-        return $this->getOpenCourseMemberDao()->getCourseMemberByIp($courseId, $ip);
+        return $this->getOpenCourseMemberDao()->getByIpAndCourseId($courseId, $ip);
     }
 
     public function getCourseMemberByMobile($courseId, $mobile)
     {
-        return $this->getOpenCourseMemberDao()->getCourseMemberByMobile($courseId, $mobile);
+        return $this->getOpenCourseMemberDao()->getByMobileAndCourseId($courseId, $mobile);
     }
 
     public function findMembersByCourseIds($courseIds)
     {
-        return $this->getOpenCourseMemberDao()->findMembersByCourseIds($courseIds);
+        return $this->getOpenCourseMemberDao()->findByCourseIds($courseIds);
     }
 
     public function countMembers($conditions)
     {
-        return $this->getOpenCourseMemberDao()->countMembers($conditions);
+        return $this->getOpenCourseMemberDao()->count($conditions);
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-        return $this->getOpenCourseMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+        return $this->getOpenCourseMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function setCourseTeachers($courseId, $teachers)
@@ -728,7 +728,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $existTeacherMembers = $this->findCourseTeachers($courseId);
 
         foreach ($existTeacherMembers as $member) {
-            $this->getOpenCourseMemberDao()->deleteMember($member['id']);
+            $this->getOpenCourseMemberDao()->delete($member['id']);
         }
 
         $visibleTeacherIds = array();
@@ -737,10 +737,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $existMember = $this->getCourseMember($courseId, $member['userId']);
 
             if ($existMember) {
-                $this->getOpenCourseMemberDao()->deleteMember($existMember['id']);
+                $this->getOpenCourseMemberDao()->delete($existMember['id']);
             }
 
-            $member = $this->getOpenCourseMemberDao()->addMember($member);
+            $member = $this->getOpenCourseMemberDao()->create($member);
 
             if ($member['isVisible']) {
                 $visibleTeacherIds[] = $member['userId'];
@@ -766,7 +766,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $member['createdTime'] = time();
 
-        $newMember = $this->getOpenCourseMemberDao()->addMember($member);
+        $newMember = $this->getOpenCourseMemberDao()->create($member);
 
         $this->dispatchEvent("open.course.member.create", array('argument' => $member, 'newMember' => $newMember));
 
@@ -788,12 +788,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'isNotified'    => 0
         ));
 
-        return $this->getOpenCourseMemberDao()->updateMember($id, $member);
+        return $this->getOpenCourseMemberDao()->update($id, $member);
     }
 
     public function deleteMember($id)
     {
-        return $this->getOpenCourseMemberDao()->deleteMember($id);
+        return $this->getOpenCourseMemberDao()->delete($id);
     }
 
     protected function deleteLessonsByCourseId($courseId)
@@ -986,12 +986,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function findCourseTeachers($courseId)
     {
-        return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
+        $conditions = array(
+            'courseId' => $courseId,
+            'role'     => 'teacher',
+        );
+        $orders     = array('seq' => 'DESC', 'createdTime' => 'DESC');
+        return $this->getOpenCourseMemberDao()->search($conditions, $orders, 0, 100);
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -1010,6 +1015,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->createDao('OpenCourse:OpenCourseLessonDao');
     }
 
+    /**
+     * @return OpenCourseMemberDao
+     */
     protected function getOpenCourseMemberDao()
     {
         return $this->createDao('OpenCourse:OpenCourseMemberDao');
@@ -1027,12 +1035,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getFileService()

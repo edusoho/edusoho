@@ -3,23 +3,11 @@ namespace Topxia\Service\OpenCourse\Dao;
 
 interface RecommendedCourseDao
 {
-    public function getRecommendedCourse($id);
+    public function getByCourseIdAndType($openCourseId, $recommendCourseId, $type);
 
-    public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
+    public function findByOpenCourseId($openCourseId);
 
-    public function findRecommendedCoursesByOpenCourseId($oepnCourseId);
+    public function deleteByOpenCourseIdAndRecommendCourseId($openCourseId, $recommendCourseId);
 
-    public function addRecommendedCourse($recommended);
-
-    public function deleteRecommendedCourse($id);
-
-    public function updateRecommendedCourse($id, $fields);
-
-    public function deleteRecommendByOpenCouseIdAndRecommendCourseId($openCourseId, $recommendCourseId);
-
-    public function countRecommends($conditions);
-
-    public function searchRecommends($conditions, $orderBy, $start, $limit);
-
-    public function findRandomRecommendCourses($courseId, $num);
+    public function findRandom($courseId, $num);
 }

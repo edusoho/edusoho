@@ -2,30 +2,20 @@
 
 namespace Topxia\Service\OpenCourse\Dao;
 
-interface OpenCourseMemberDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OpenCourseMemberDao extends  GeneralDaoInterface
 {
-    public function getMember($id);
+    public function getByUserIdAndCourseId($userId, $courseId);
 
-    public function getCourseMember($courseId, $userId);
+    public function getByIpAndCourseId($ip, $courseId);
 
-    public function getCourseMemberByIp($courseId, $ip);
+    public function getByMobileAndCourseId($courseId, $mobile);
 
-    public function getCourseMemberByMobile($courseId, $mobile);
+    public function findByCourseIds($courseIds);
 
-    public function findMembersByCourseIds($courseIds);
+    public function deleteByCourseId($courseId);
 
-    public function countMembers($conditions);
-
-    public function searchMembers($conditions, $orderBy, $start, $limit);
-
-    public function addMember($member);
-
-    public function updateMember($id, $member);
-
-    public function deleteMember($id);
-
-    public function deleteMembersByCourseId($courseId);
-
-    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
+    public function findByCourseIdAndRole($courseId, $role, $start, $limit);
 
 }
