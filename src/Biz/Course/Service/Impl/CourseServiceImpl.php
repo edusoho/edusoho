@@ -3,16 +3,16 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -111,6 +111,70 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->getCourseDao()->update($id, $fields);
+    }
+
+    public function setCourseTeachers($courseId, $teachers)
+    {
+        // 过滤数据
+        $teacherMembers = array();
+
+        foreach (array_values($teachers) as $index => $teacher) {
+            if (empty($teacher['id'])) {
+                throw $this->createInvalidArgumentException('Teacher ID Required');
+            }
+
+            $user = $this->getUserService()->getUser($teacher['id']);
+
+            if (empty($user)) {
+                throw $this->createInvalidArgumentException('No Such Teacher');
+            }
+
+            $teacherMembers[] = array(
+                'courseId'    => $courseId,
+                'userId'      => $user['id'],
+                'role'        => 'teacher',
+                'seq'         => $index,
+                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1,
+                'createdTime' => time()
+            );
+        }
+
+        // 先清除所有的已存在的教师学员
+        $existTeachers = $this->findTeachersByCourseId($courseId);
+
+        foreach ($existTeachers as $member) {
+            $this->getMemberDao()->delete($member['id']);
+        }
+
+        // 逐个插入新的教师的学员数据
+        $visibleTeacherIds = array();
+
+        foreach ($teacherMembers as $member) {
+            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
+            $existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+
+            if ($existMember) {
+                $this->getMemberDao()->delete($existMember['id']);
+            }
+
+            $member = $this->getMemberDao()->create($member);
+
+            if ($member['isVisible']) {
+                $visibleTeacherIds[] = $member['userId'];
+            }
+        }
+
+        // $this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+
+        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
+        $fields = array('teacherIds' => $visibleTeacherIds);
+        $course = $this->getCourseDao()->update($courseId, $fields);
+
+        // $this->dispatchEvent("course.teacher.update", array(
+        //     "courseId" => $courseId,
+        //     "course"   => $course,
+        //     'teachers' => $teachers
+        // ));
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -271,6 +335,24 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $students;
     }
 
+    public function findTeachersByCourseId($courseId)
+    {
+        $teachers = $this->getMemberDao()->findTeachersByCourseId($courseId);
+
+        if (!empty($teachers)) {
+            $userIds = ArrayToolkit::column($teachers, 'userId');
+            $user    = $this->getUserService()->findUsersByIds($userIds);
+            $userMap = ArrayToolkit::index($user, 'id');
+            foreach ($teachers as $index => $teacher) {
+                $teacher['nickname']    = $userMap[$teacher['userId']]['nickname'];
+                $teacher['smallAvatar'] = $userMap[$teacher['userId']]['smallAvatar'];
+                $teachers[$index]       = $teacher;
+            }
+        }
+
+        return $teachers;
+    }
+
     public function countStudentsByCourseId($courseId)
     {
         return $this->getMemberDao()->count(array(
@@ -355,13 +437,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int)$num,
+            'noteNum'            => (int) $num,
             'noteLastUpdateTime' => time()
         ));
 
         return true;
     }
-
 
     public function getUserRoleInCourse($courseId, $userId)
     {
@@ -671,7 +752,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $conditions;
     }
-
 
     protected function createCourseStrategy($course)
     {
