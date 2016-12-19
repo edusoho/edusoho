@@ -473,12 +473,17 @@ class EduCloudController extends BaseController
 
     protected function checkSmsSign($smsInfo)
     {
-        if (empty($smsInfo['name'])) {
+        if (empty($smsInfo)) {
             $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
-        }
-        if (!$smsInfo['name'] && $smsInfo['usedSmsSign']['status'] == 'checking') {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+        } else {
+            if (empty($smsInfo['name'])) {
+                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            }
+            if (empty($smsInfo['name']) && $smsInfo['usedSmsSign']['status'] == 'checking') {
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+            }
         }
     }
 
