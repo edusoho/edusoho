@@ -3,8 +3,8 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -22,13 +22,19 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($courseId));
     }
 
+    public function findTeachersByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and role = 'teacher'";
+        return $this->db()->fetchAll($sql, array($courseId));
+    }
+
     public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
         if (!empty($orderBy)) {
             $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
         }
-        if ($start and $limit) {
+        if ($start && $limit) {
             $builder = $builder->setFirstResult($start)->setMaxResults($limit);
         }
         return $builder->execute()->fetchAll() ?: array();
@@ -70,15 +76,14 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     protected function filterStartLimit(&$start, &$limit)
     {
-        $start = (int)$start;
-        $limit = (int)$limit;
-
+        $start = (int) $start;
+        $limit = (int) $limit;
     }
 
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys'   => array('createdTime'),
             'conditions' => array(
                 'userId = :userId',
@@ -93,7 +98,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseId IN (:courseIds)',
                 'userId IN (:userIds)',
                 'learnedNum >= :learnedNumGreaterThan',
-                'learnedNum < :learnedNumLessThan',
+                'learnedNum < :learnedNumLessThan'
             )
         );
     }

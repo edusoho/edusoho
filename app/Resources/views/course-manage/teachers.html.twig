@@ -11,7 +11,7 @@
     <div class="form-group" id="teachers-form-group">
       <div class="col-md-2 control-label"><label>{{'已添加教师'|trans}}</label></div>
       <div class="col-md-8 controls">
-        <div id="course-teachers" data-field-name="teachers" data-init-value="[]"></div>
+        <div id="course-teachers" data-field-name="teachers" data-init-value="{{teacherIds|json_encode}}" data-query-url="{{path('course_set_manage_course_teachers_match', {courseSetId: courseSet.id, courseId: course.id})}}"></div>
         <div class="help-block">{{'只能添加有教师权限的用户'|trans}}</div>
       </div>
     </div>
