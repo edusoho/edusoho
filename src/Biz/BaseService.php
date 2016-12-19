@@ -2,10 +2,9 @@
 
 namespace Biz;
 
-
+use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
-use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -22,7 +21,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     /**
      * @return CurrentUser
      */
-    protected function getCurrentUser()
+    public function getCurrentUser()
     {
         return $this->biz['user'];
     }
@@ -72,8 +71,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                  $message
      * @return AccessDeniedException
      */
     protected function createAccessDeniedException($message = '')
@@ -82,8 +80,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                     $message
      * @return InvalidArgumentException
      */
     protected function createInvalidArgumentException($message = '')
@@ -92,8 +89,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string              $message
      * @return NotFoundException
      */
     protected function createNotFoundException($message = '')
@@ -102,8 +98,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string             $message
      * @return ServiceException
      */
     protected function createServiceException($message = '')
