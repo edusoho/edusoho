@@ -47,6 +47,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    conversation_event_subscriber:
+        class: Biz\IM\Event\ConversationEventSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
 

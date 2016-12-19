@@ -2,10 +2,9 @@
 
 namespace Biz;
 
-
+use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
-use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -14,6 +13,8 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
+    private $lock = null;
+
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
@@ -72,8 +73,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                  $message
      * @return AccessDeniedException
      */
     protected function createAccessDeniedException($message = '')
@@ -82,8 +82,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                     $message
      * @return InvalidArgumentException
      */
     protected function createInvalidArgumentException($message = '')
@@ -92,8 +91,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string              $message
      * @return NotFoundException
      */
     protected function createNotFoundException($message = '')
@@ -102,8 +100,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string             $message
      * @return ServiceException
      */
     protected function createServiceException($message = '')
@@ -130,5 +127,14 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             unset($fields['orgCode']);
         }
         return $fields;
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 }
