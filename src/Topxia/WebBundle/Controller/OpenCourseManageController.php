@@ -168,7 +168,7 @@ class OpenCourseManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOpenCourseService()->searchMemberCount($condition),
+            $this->getOpenCourseService()->countMembers($condition),
             20
         );
 
@@ -391,7 +391,7 @@ class OpenCourseManageController extends BaseController
             $conditions['isNotified'] = 1;
         }
 
-        $courseMemberCount = $this->getOpenCourseService()->searchMemberCount($conditions);
+        $courseMemberCount = $this->getOpenCourseService()->countMembers($conditions);
         $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;

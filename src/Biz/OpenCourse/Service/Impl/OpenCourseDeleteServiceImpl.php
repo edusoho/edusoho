@@ -60,7 +60,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteMembers($course)
     {
-        $memberCount = $this->getOpenCourseMemberDao()->searchMemberCount(array('courseId' => $course['id']));
+        $memberCount = $this->getOpenCourseMemberDao()->countMembers(array('courseId' => $course['id']));
         $count       = 0;
 
         if ($memberCount > 0) {

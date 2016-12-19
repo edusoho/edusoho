@@ -153,7 +153,7 @@ class OpenCourseController extends BaseOpenCourseController
             $lesson['replays'] = $this->_getLiveReplay($lesson);
         }
 
-        $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
+        $notifyNum = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
             'course'    => $course,
@@ -379,7 +379,7 @@ class OpenCourseController extends BaseOpenCourseController
 
             $this->_loginMemberMobileBind($fields['mobile']);
 
-            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id, 'isNotified' => 1));
+            $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $id, 'isNotified' => 1));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
@@ -403,7 +403,7 @@ class OpenCourseController extends BaseOpenCourseController
             $fields['courseId'] = $id;
 
             $member    = $this->getOpenCourseService()->createMember($fields);
-            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id));
+            $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $id));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }

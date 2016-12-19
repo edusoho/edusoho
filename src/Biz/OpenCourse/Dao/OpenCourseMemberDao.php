@@ -14,7 +14,7 @@ interface OpenCourseMemberDao
 
     public function findMembersByCourseIds($courseIds);
 
-    public function searchMemberCount($conditions);
+    public function countMembers($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 

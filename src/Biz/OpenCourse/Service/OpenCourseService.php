@@ -99,7 +99,12 @@ interface OpenCourseService
 
     public function findMembersByCourseIds($courseIds);
 
-    public function searchMemberCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  searchMemberCount
+     */
+    public function countMembers($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 

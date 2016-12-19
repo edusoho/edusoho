@@ -391,7 +391,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $this->getOpenCourseService()->updateMember($courseMember2['id'], array('mobile' => '15869165222', 'isNotified' => 1));
-        $membersCount = $this->getOpenCourseService()->searchMemberCount(array('mobile' => '15869165222'));
+        $membersCount = $this->getOpenCourseService()->countMembers(array('mobile' => '15869165222'));
 
         $this->assertEquals(1, $membersCount);
     }

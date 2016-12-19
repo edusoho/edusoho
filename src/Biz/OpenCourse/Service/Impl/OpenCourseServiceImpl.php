@@ -689,9 +689,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->findMembersByCourseIds($courseIds);
     }
 
-    public function searchMemberCount($conditions)
+    public function countMembers($conditions)
     {
-        return $this->getOpenCourseMemberDao()->searchMemberCount($conditions);
+        return $this->getOpenCourseMemberDao()->countMembers($conditions);
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)

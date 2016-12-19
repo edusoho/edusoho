@@ -64,7 +64,7 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
     }
 
-    public function searchMemberCount($conditions)
+    public function countMembers($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');

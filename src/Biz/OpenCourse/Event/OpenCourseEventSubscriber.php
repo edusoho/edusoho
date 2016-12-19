@@ -78,7 +78,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $fields  = $context['argument'];
         $member  = $context['newMember'];
 
-        $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $fields['courseId']));
+        $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $fields['courseId']));
 
         $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
     }
