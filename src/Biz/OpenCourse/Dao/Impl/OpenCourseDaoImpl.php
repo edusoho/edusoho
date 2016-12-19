@@ -41,14 +41,8 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
         );
     }
 
-    public function findCoursesByIds(array $ids)
+    public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
     }
-
-    public function waveCourse($id, $field, $diff)
-    {
-        return $this->wave(array($id), array($field => $diff));
-    }
-
 }

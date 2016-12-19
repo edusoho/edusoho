@@ -2,27 +2,17 @@
 
 namespace Topxia\Service\OpenCourse\Dao;
 
-interface OpenCourseLessonDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OpenCourseLessonDao extends GeneralDaoInterface
 {
-    public function getLesson($id);
+    public function findByIds(array $ids);
 
-    public function findLessonsByIds(array $ids);
+    public function findByCourseId($courseId);
 
-    public function findLessonsByCourseId($courseId);
+    public function deleteByCourseId($id);
 
-    public function searchLessons($condition, $orderBy, $start, $limit);
-
-    public function countLessons($conditions);
-
-    public function addLesson($lesson);
-
-    public function updateLesson($id, $fields);
-
-    public function waveCourseLesson($id, $field, $diff);
-
-    public function deleteLesson($id);
-
-    public function deleteLessonsByCourseId($id);
+    public function getLessonMaxSeqByCourseId($courseId);
 
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId);
 }
