@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\OpenCourse\Tests;
+namespace Tests\OpenCourseRecommendedServiceTest;
 
 use Topxia\Service\Common\BaseTestCase;
 
@@ -49,7 +49,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $course1 = $this->_createLiveOpenCourse();
         $course2 = $this->_createOpenCourse();
 
-        $courseCount = $this->getOpenCourseService()->searchCourseCount(array('type' => 'liveOpen'));
+        $courseCount = $this->getOpenCourseService()->countCourses(array('type' => 'liveOpen'));
 
         $this->assertEquals(1, $courseCount);
     }

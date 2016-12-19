@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Tests;
+namespace Tests\OpenCourseRecommendedServiceTest;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;

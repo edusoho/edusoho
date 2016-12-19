@@ -54,7 +54,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
         return $courses ? $this->createSerializer()->unserializes($courses, $this->serializeFields) : array();
     }
 
-    public function searchCourseCount($conditions)
+    public function countCourses($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');

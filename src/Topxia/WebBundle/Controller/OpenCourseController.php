@@ -19,7 +19,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOpenCourseService()->searchCourseCount($conditions),
+            $this->getOpenCourseService()->countCourses($conditions),
             $pageSize
         );
 
@@ -710,7 +710,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $conditions['recommended'] = 1;
 
-        $recommendCount = $this->getOpenCourseService()->searchCourseCount($conditions);
+        $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
         $currentPage    = $request->query->get('page') ? $request->query->get('page') : 1;
         $recommendPage  = intval($recommendCount / $pageSize);
         $recommendLeft  = $recommendCount % $pageSize;

@@ -13,7 +13,12 @@ interface OpenCourseService
 
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
-    public function searchCourseCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  countCourses
+     */
+    public function countCourses($conditions);
 
     public function createCourse($course);
 

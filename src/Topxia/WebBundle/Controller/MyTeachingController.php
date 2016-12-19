@@ -76,7 +76,7 @@ class MyTeachingController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOpenCourseService()->searchCourseCount($conditions),
+            $this->getOpenCourseService()->countCourses($conditions),
             10
         );
 

@@ -29,9 +29,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->searchCourses($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchCourseCount($conditions)
+    public function countCourses($conditions)
     {
-        return $this->getOpenCourseDao()->searchCourseCount($conditions);
+        return $this->getOpenCourseDao()->countCourses($conditions);
     }
 
     public function createCourse($course)
@@ -971,7 +971,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'largePicture'  => $course['largePicture'] ? $course['largePicture'] : null
         );
 
-        $courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
+        $courseCount = $this->countCourses(array('smallPicture' => $course['smallPicture']));
 
         if ($courseCount <= 1) {
             $fileService = $this->getFileService();

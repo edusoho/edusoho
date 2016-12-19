@@ -10,7 +10,7 @@ interface OpenCourseDao
 
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
-    public function searchCourseCount($conditions);
+    public function countCourses($conditions);
 
     public function addCourse($course);
 
