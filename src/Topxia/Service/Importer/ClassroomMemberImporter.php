@@ -422,7 +422,7 @@ class ClassroomMemberImporter extends Importer
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getClassroomService()
@@ -437,7 +437,7 @@ class ClassroomMemberImporter extends Importer
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getLogService()

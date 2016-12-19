@@ -55,7 +55,7 @@ class LoginListener extends BaseService implements AuthenticationSuccessHandlerI
 
     protected function getUserService()
     {
-      	return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
 	protected function getLogService(){

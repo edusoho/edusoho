@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
@@ -166,11 +168,17 @@ class CloudController extends BaseController
         return md5($server . $secretKey) == $sign;
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');

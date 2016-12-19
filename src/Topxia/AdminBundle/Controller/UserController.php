@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\Mail\MailFactory;
@@ -519,27 +521,33 @@ class UserController extends BaseController
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getSessionService()
     {
-        return $this->getServiceKernel()->createService('System.SessionService');
+        return $this->getServiceKernel()->getBiz()->service('System:SessionService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getCourseService()
@@ -549,7 +557,7 @@ class UserController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getAppService()
@@ -559,12 +567,12 @@ class UserController extends BaseController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     protected function getNotifiactionService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getFileService()

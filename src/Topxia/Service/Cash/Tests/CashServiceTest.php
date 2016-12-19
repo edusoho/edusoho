@@ -2,6 +2,7 @@
 namespace Topxia\Service\Cash\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class CashServiceTest extends BaseTestCase
 {
@@ -304,7 +305,7 @@ class CashServiceTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCashAccountService()
@@ -314,7 +315,7 @@ class CashServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCashService()

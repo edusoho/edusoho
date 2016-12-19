@@ -4,6 +4,7 @@ namespace Topxia\Service\Group\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceTest extends BaseTestCase
 {
@@ -483,7 +484,7 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getThreadService()

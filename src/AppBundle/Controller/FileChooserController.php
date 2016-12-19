@@ -156,7 +156,7 @@ class FileChooserController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getMaterialService()

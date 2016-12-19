@@ -461,6 +461,6 @@ class LoginBindController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 }

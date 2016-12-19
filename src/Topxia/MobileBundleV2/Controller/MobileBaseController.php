@@ -4,7 +4,7 @@ namespace Topxia\MobileBundleV2\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -551,17 +551,17 @@ class MobileBaseController extends BaseController
 
     public function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     public function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     public function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     public function getCategoryService()
@@ -571,7 +571,7 @@ class MobileBaseController extends BaseController
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     public function getLogService()
@@ -591,7 +591,7 @@ class MobileBaseController extends BaseController
 
     public function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     public function getCourseOrderService()

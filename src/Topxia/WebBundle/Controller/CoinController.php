@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -476,14 +477,9 @@ class CoinController extends BaseController
         return $this->getServiceKernel()->createService('Card.CardService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getInviteRecordService()
     {
-        return $this->getServiceKernel()->createService('User.InviteRecordService');
+        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getCashService()
@@ -508,7 +504,7 @@ class CoinController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getAppService()

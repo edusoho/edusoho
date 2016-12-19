@@ -32,7 +32,7 @@ class SmsSendOneHourJob implements Job
 
     protected function getSmsService()
     {
-        return ServiceKernel::instance()->createService('Sms.SmsService');
+        return $this->getKernel()->getBiz()->service('Sms:SmsService');
     }
 
     protected function getKernel()

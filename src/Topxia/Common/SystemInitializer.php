@@ -6,12 +6,7 @@ namespace Topxia\Common;
 
 use Org\Service\Org\OrgService;
 use Permission\Service\Role\RoleService;
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\BlockService;
@@ -20,11 +15,11 @@ use Topxia\Service\Content\FileService;
 use Topxia\Service\Content\NavigationService;
 use Topxia\Service\Crontab\CrontabService;
 use Topxia\Service\Dictionary\DictionaryService;
-use Topxia\Service\System\SettingService;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Taxonomy\CategoryService;
 use Topxia\Service\Taxonomy\TagService;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\User\UserService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
 
 class SystemInitializer
 {
@@ -731,7 +726,7 @@ EOD;
      */
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     /**
@@ -739,7 +734,7 @@ EOD;
      */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     /**

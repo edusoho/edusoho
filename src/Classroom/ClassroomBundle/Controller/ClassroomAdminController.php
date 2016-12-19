@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomAdminController extends BaseController
 {
@@ -319,7 +320,7 @@ class ClassroomAdminController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCourseService()

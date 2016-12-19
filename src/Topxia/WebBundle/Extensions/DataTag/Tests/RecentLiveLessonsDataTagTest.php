@@ -5,6 +5,7 @@ namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\RecentLiveLessonsDataTag;
 
 class RecentLiveLessonsDataTagTest extends BaseTestCase {
@@ -88,11 +89,11 @@ class RecentLiveLessonsDataTagTest extends BaseTestCase {
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 }

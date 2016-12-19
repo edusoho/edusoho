@@ -6,6 +6,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserImporter extends Importer
 {
@@ -751,7 +752,7 @@ class UserImporter extends Importer
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function getClassroomService()
@@ -761,7 +762,7 @@ class UserImporter extends Importer
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getUserImporterService()
@@ -771,12 +772,12 @@ class UserImporter extends Importer
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCourseMemberService()

@@ -763,12 +763,7 @@ class CourseController extends CourseBaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getVipService()
@@ -788,7 +783,7 @@ class CourseController extends CourseBaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getThreadService()

@@ -4,7 +4,8 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\User\TokenService;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\TokenService;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 
@@ -217,6 +218,6 @@ class MobileController extends BaseController
      */
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 }

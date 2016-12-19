@@ -8,6 +8,7 @@ use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomController extends BaseController
@@ -945,7 +946,7 @@ class ClassroomController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getLevelService()
@@ -970,7 +971,7 @@ class ClassroomController extends BaseController
 
     protected function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     private function getCategoryService()
@@ -980,7 +981,7 @@ class ClassroomController extends BaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getCashAccountService()
@@ -1000,7 +1001,7 @@ class ClassroomController extends BaseController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     protected function getTagService()
@@ -1015,6 +1016,6 @@ class ClassroomController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 }

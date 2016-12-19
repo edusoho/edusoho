@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller\Course;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\CourseBaseController;
 
 class NoteController extends CourseBaseController
@@ -166,6 +167,6 @@ class NoteController extends CourseBaseController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 }

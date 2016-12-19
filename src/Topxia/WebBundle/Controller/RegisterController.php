@@ -8,6 +8,7 @@ use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class RegisterController extends BaseController
 {
@@ -411,7 +412,7 @@ class RegisterController extends BaseController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     public function getEmailLoginUrl($email)
@@ -454,22 +455,22 @@ class RegisterController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getMessageService()
     {
-        return $this->getServiceKernel()->createService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
     }
 
     protected function sendRegisterMessage($user)

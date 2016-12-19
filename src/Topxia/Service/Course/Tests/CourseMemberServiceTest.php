@@ -1,8 +1,9 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseMemberServiceTest extends BaseTestCase
 {
@@ -76,6 +77,6 @@ class CourseMemberServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

@@ -39,10 +39,10 @@ class CourseController extends BaseController
         ));
     }
 
-    // TODO old
+
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     // TODO old

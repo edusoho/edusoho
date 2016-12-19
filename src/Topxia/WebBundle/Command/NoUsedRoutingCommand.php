@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Symfony\Component\Yaml\Yaml;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

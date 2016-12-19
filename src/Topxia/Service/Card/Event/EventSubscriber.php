@@ -73,7 +73,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->createService('User.InviteRecordService');
+        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getCouponService()
@@ -83,11 +83,11 @@ class EventSubscriber implements EventSubscriberInterface
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

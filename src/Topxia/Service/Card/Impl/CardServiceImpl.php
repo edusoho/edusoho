@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Card\CardService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Card\DetailProcessor\DetailFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class CardServiceImpl extends BaseService implements CardService
 {
@@ -152,6 +153,6 @@ class CardServiceImpl extends BaseService implements CardService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

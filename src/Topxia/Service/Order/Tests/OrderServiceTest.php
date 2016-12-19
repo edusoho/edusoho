@@ -3,7 +3,8 @@ namespace Topxia\Service\Order\Tests;
 
 // use Coupon\Service\Coupon\CouponService;
 
-use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceException;
 
@@ -2886,7 +2887,7 @@ class OrderServiceTest extends BaseTestCase
     //=================私有或者受保护的方法，用来调用命名空间外的对象[start]==============
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrderService()
@@ -2901,7 +2902,7 @@ class OrderServiceTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     private function createUser()

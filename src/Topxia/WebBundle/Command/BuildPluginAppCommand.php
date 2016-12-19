@@ -3,7 +3,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;

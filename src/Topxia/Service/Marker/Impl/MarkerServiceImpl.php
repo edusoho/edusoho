@@ -180,11 +180,6 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $this->createService('Marker.QuestionMarkerResultService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
-
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');

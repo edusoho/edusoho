@@ -1471,7 +1471,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrderService()
@@ -1491,7 +1491,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getStatusService()
     {
-        return $this->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     protected function getCategoryService()

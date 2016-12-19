@@ -4,6 +4,7 @@ namespace Biz\Taxonomy\Service\Impl;
 
 
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Dao\TagDao;
 use Biz\Taxonomy\Dao\TagGroupDao;
 use Biz\Taxonomy\Dao\TagGroupTagDao;
@@ -373,9 +374,12 @@ class TagServiceImpl extends BaseService implements TagService
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getKernel()

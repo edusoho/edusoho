@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class CommonController extends BaseController
 {
@@ -64,11 +65,11 @@ class CommonController extends BaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

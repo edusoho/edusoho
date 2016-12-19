@@ -1025,7 +1025,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getFileService()

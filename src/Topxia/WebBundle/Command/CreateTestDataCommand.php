@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,12 +69,12 @@ class CreateTestDataCommand extends BaseCommand
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User.AuthService');
+        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function authenticateUser($user)

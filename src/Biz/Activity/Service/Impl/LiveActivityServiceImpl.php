@@ -3,6 +3,8 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Biz\Activity\Service\LiveActivityService;
@@ -110,14 +112,20 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return ServiceKernel::instance();
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     public function getEdusohoLiveClient()

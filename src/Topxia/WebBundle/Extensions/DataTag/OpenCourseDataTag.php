@@ -2,6 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class OpenCourseDataTag extends BaseDataTag implements DataTag
 {
     /**
@@ -37,7 +39,7 @@ class OpenCourseDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCategoryService()

@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -16,7 +17,9 @@ class DefaultServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
-        $biz['html_helper'] = new HTMLHelper($biz);
+        $biz['html_helper'] = function ($biz) {
+            return new HTMLHelper($biz);
+        };
 
         $biz['testpaper_builder.testpaper'] = function ($biz) {
             return new TestpaperBuilder($biz);
@@ -34,13 +37,18 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ExerciseBuilder($biz);
         };
 
+        $biz['announcement_processor'] = function ($biz){
+            return new AnnouncementProcessorFactory($biz);
+        };
+
         $biz['sms_processor.lesson'] = function ($biz) {
             return new LessonSmsProcessor($biz);
         };
 
         $biz['sms_processor.liveOpen'] = function ($biz) {
             return new LiveOpenLessonSmsProcessor($biz);
-        };
+        }
+        
     }
 
 }

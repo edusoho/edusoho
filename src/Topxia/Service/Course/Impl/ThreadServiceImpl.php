@@ -514,12 +514,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getNotifiactionService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getLogService()

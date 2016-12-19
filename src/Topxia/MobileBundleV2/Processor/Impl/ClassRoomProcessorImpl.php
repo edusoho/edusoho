@@ -115,7 +115,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             'targetId' => $classRoomId
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), $start, $limit);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' =>'DESC'), $start, $limit);
         $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }

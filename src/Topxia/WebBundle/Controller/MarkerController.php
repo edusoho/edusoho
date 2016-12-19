@@ -141,11 +141,6 @@ class MarkerController extends BaseController
         return $this->getServiceKernel()->createService('Marker.MarkerService');
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
@@ -153,6 +148,6 @@ class MarkerController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }
