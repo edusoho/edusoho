@@ -52,16 +52,12 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
 
     public function deleteByCourseId($courseId)
     {
-        $result = $this->getConnection()->delete($this->table, array('courseId' => $courseId));
-        $this->clearCached();
-        return $result;
+        return $this->db()->delete($this->table, array('courseId' => $courseId));
     }
 
     public function findByCourseIdAndRole($courseId, $role, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+        return $this->db()->fetchAll($sql, array($courseId, $role));
     }
 }

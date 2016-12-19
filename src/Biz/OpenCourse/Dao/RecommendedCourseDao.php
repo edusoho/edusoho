@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\OpenCourse\Dao;
 
-interface RecommendedCourseDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface RecommendedCourseDao extends  GeneralDaoInterface
 {
     public function getByCourseIdAndType($openCourseId, $recommendCourseId, $type);
 
