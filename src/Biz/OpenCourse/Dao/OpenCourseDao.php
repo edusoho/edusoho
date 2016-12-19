@@ -2,22 +2,11 @@
 
 namespace Topxia\Service\OpenCourse\Dao;
 
-interface OpenCourseDao
-{
-    public function getCourse($id);
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
+interface OpenCourseDao extends GeneralDaoInterface
+{
     public function findCoursesByIds(array $ids);
 
-    public function searchCourses($conditions, $orderBy, $start, $limit);
-
-    public function countCourses($conditions);
-
-    public function addCourse($course);
-
-    public function updateCourse($id, $fields);
-
-    public function deleteCourse($id);
-
     public function waveCourse($id, $field, $diff);
-
 }
