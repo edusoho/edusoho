@@ -6,6 +6,8 @@ interface UploadFileTagService
 {
 	public function get($id);
 
+    public function add($fields);
+
 	public function delete($id);
 
 	public function edit($fileIds, $tagIds);

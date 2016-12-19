@@ -127,7 +127,7 @@ class BaseProcessor {
 
     protected function getCashAccountService()
     {
-        return $this->controller->getService('Cash.CashAccountService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getAppService()
@@ -137,7 +137,7 @@ class BaseProcessor {
 
     protected function getCashOrdersService()
     {
-        return $this->controller->getService('Cash.CashOrdersService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
@@ -152,12 +152,12 @@ class BaseProcessor {
 
     protected function getUserService()
     {
-        return $this->controller->getService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return $this->controller->getService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     protected function getCouponService()
@@ -172,7 +172,7 @@ class BaseProcessor {
 
     protected function getNotificationService()
     {
-        return $this->controller->getService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     /**
@@ -180,7 +180,7 @@ class BaseProcessor {
      */
     protected function getTokenService()
     {
-        return $this->controller->getService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getCourseOrderService()
@@ -195,7 +195,7 @@ class BaseProcessor {
 
     protected function getArticleService()
     {
-        return $this->controller->getService('Article.ArticleService');
+        return ServiceKernel::instance()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getOrderService()
@@ -215,7 +215,7 @@ class BaseProcessor {
 
     protected function getSettingService()
     {
-        return $this->controller->getService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCourseService()
@@ -235,7 +235,7 @@ class BaseProcessor {
 
     protected function getAnnouncementService()
     {
-        return $this->controller->getService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     public function getEduCloudService()
@@ -250,7 +250,7 @@ class BaseProcessor {
 
     protected function getUserFieldService()
     {
-        return $this->controller->getService('User.UserFieldService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 
     public function createErrorResponse($name, $message)

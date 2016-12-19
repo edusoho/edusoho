@@ -4,6 +4,7 @@ namespace Permission\Common\Tests;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\BaseTestCase;
 use Permission\Common\PermissionBuilder;
+use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilderTest extends BaseTestCase
 {
@@ -88,7 +89,7 @@ class PermissionBuilderTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getRoleService()

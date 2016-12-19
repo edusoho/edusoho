@@ -5,7 +5,7 @@ namespace Tests\File;
 use Biz\File\Service\UploadFileService;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\UserService;
+use Biz\User\Service\UserService;
 
 
 class UploadFileServiceTest extends BaseTestCase
@@ -839,7 +839,7 @@ class UploadFileServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
 }

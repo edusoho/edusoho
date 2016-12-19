@@ -117,6 +117,10 @@ course_set_manage_course_teachers:
   path: /course_set/{courseSetId}/manage/course/{courseId}/teachers
   defaults: {_controller: AppBundle:CourseManage:teachers}
 
+course_set_manage_course_teachers_match:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/teachers_match
+  defaults: {_controller: TopxiaWebBundle:CourseManage:teachersMatch}
+
 course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: AppBundle:CourseManage:students}

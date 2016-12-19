@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Util;
 
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 
 class CloudClientFactory
@@ -12,7 +13,7 @@ class CloudClientFactory
 
         $arguments = empty($parameter['arguments']) ? array() : $parameter['arguments'];
 
-        $setting = $this->getKernenl()->createService('System.SettingService')->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', array());
 
         $class = __NAMESPACE__.'\\EdusohoCloudClient';
 
@@ -25,6 +26,14 @@ class CloudClientFactory
         $client = new $class($arguments);
 
         return $client;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getKernenl()

@@ -27,7 +27,7 @@ class KernelRequestListener
             return;
         }
 
-        $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+        $blacklistIps = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('blacklist_ip');
         if (isset($blacklistIps['ips'])) {
             $blacklistIps = $blacklistIps['ips'];
 
@@ -88,6 +88,6 @@ class KernelRequestListener
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

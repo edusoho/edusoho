@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class RoleController extends BaseController
 {
@@ -164,6 +165,6 @@ class RoleController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

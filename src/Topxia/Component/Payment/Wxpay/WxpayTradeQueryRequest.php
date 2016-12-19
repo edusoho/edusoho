@@ -154,6 +154,6 @@ class WxpayTradeQueryRequest extends Request
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

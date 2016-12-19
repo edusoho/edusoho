@@ -713,19 +713,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
-
     protected function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return ServiceKernel::instance()->getBiz()->service('Card:CardService');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getOrderRefundDao()
@@ -753,7 +748,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getInviteRecordService()
     {
-        return $this->createService('User.InviteRecordService');
+        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getPayCenterService()

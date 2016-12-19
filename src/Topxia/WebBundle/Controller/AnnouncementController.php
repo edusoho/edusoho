@@ -1,9 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Biz\Announcement\Processor\AnnouncementProcessor;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessorFactory;
 
 class AnnouncementController extends BaseController
 {
@@ -29,7 +31,7 @@ class AnnouncementController extends BaseController
         $processor = $this->getAnnouncementProcessor($targetType);
         $canManage = $processor->checkManage($targetId);
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'), 0, 10);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
 
         return $this->render('TopxiaWebBundle:Announcement:announcement-list-modal.html.twig', array(
             'announcements' => $announcements,
@@ -46,7 +48,7 @@ class AnnouncementController extends BaseController
             'targetId'   => $targetId
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'), 0, 10000);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10000);
         $users         = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
         return $this->render('TopxiaWebBundle:Announcement:announcement-show-all-modal.html.twig', array(
@@ -132,19 +134,31 @@ class AnnouncementController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @param $targetType
+     *
+     * @return AnnouncementProcessor
+     */
     protected function getAnnouncementProcessor($targetType)
     {
-        $processor = AnnouncementProcessorFactory::create($targetType);
+        $biz = $this->get('biz');
+        $processor = $biz['announcement_processor']->create($targetType);
         return $processor;
     }
 
+    /**
+     * @return AnnouncementService
+     */
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return $this->get('biz')->service('Announcement:AnnouncementService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->get('biz')->service('User:UserService');
     }
 }

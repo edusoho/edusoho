@@ -4,6 +4,7 @@ namespace Topxia\Service\Testpaper\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Testpaper\TestpaperService;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
 use Topxia\Service\Testpaper\Builder\TestpaperBuilderFactory;
@@ -1040,7 +1041,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getStatusService()
     {
-        return $this->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     protected function getClassroomService()

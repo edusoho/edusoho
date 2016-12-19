@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Client;
 
+use Biz\System\Service\SettingService;
 use Psr\Log\LoggerInterface;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -198,8 +199,17 @@ class AbstractCloudAPI
 
     protected function isWithoutNetwork()
     {
-        $developer = ServiceKernel::instance()->createService('System.SettingService')->get('developer');
+        $developer = $this->getSettingService()->get('developer');
 
         return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+    }
+
 }

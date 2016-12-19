@@ -241,7 +241,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getLogService()

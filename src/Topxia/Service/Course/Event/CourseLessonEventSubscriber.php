@@ -564,7 +564,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
+        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
     }
 
     private function getClassroomService()
@@ -589,7 +589,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getCloudFileService()
     {
-        return ServiceKernel::instance()->createService('CloudFile.CloudFileService');
+        return ServiceKernel::instance()->getBiz()->service('CloudFile:CloudFileService');
     }
 
     protected function getCrontabJobService()

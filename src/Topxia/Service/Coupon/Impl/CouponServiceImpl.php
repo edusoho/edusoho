@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Coupon\Impl;
 
+use Biz\System\Service\LogService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
@@ -283,29 +284,9 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->createService('Coupon:Coupon.CouponBatchService');
     }
 
-    private function getTokenService()
-    {
-        return $this->createService('User.TokenService');
-    }
-
-    private function getNotifiactionService()
-    {
-        return $this->createService('User.NotificationService');
-    }
-
-    private function getInviteRecordService()
-    {
-        return $this->createService('User.InviteRecordService');
-    }
-
-    private function getOrderService()
-    {
-        return $this->createService('Order.OrderService');
-    }
-
     private function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return $this->getKernel()->getBiz()->service('Card:CardService');
     }
 
     private function getCouponDao()
@@ -313,16 +294,9 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->createDao('Coupon.CouponDao');
     }
 
-    private function getSettingService()
-    {
-        return $this->createService('System.SettingService');
-    }
-
-    private function getClassroomService()
-    {
-        return $this->createService('Classroom:Classroom.ClassroomService');
-    }
-
+    /**
+     * @return LogService
+     */
     private function getLogService()
     {
         return ServiceKernel::instance()->getBiz()->service('System:LogService');
@@ -330,7 +304,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getNotificationService()
     {
-        return $this->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getCourseService()
@@ -340,6 +314,6 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

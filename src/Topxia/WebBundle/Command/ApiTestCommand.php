@@ -1,12 +1,13 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Biz\System\Service\SettingService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\CloudPlatform\Client\CloudAPI;
 use Topxia\Service\CloudPlatform\Client\FailoverCloudAPI;
 
@@ -39,7 +40,10 @@ class ApiTestCommand extends BaseCommand
 
     public static function createAPI($type = 'root')
     {
-        $setting = ServiceKernel::instance()->createService('System.SettingService');
+        /**
+         * @var $setting SettingService
+         */
+        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
         $storage = $setting->get('storage', array());
         $developer = $setting->get('developer', array());

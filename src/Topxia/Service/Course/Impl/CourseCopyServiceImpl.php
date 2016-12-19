@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseCopyService;
 
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
@@ -424,7 +425,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                 'targetId'   => $courseId,
                 'targetType' => 'course'
             ),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
 
@@ -526,6 +527,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function getAnnouncementService()
     {
-        return $this->createService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 }

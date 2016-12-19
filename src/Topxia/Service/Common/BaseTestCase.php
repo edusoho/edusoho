@@ -3,7 +3,7 @@
 namespace Topxia\Service\Common;
 
 use Mockery;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Permission\Common\PermissionBuilder;
 
@@ -36,7 +36,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function initDevelopSetting()
     {
-        $this->getServiceKernel()->createService('System.SettingService')->set('developer', array(
+        $this->getServiceKernel()->getBiz()->service('System:SettingService')->set('developer', array(
             'without_network' => '1'
         ));
 
@@ -45,7 +45,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function initCurrentUser()
     {
-        $userService = $this->getServiceKernel()->createService('User.UserService');
+        $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(

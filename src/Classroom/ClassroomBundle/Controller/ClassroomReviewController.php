@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewController extends BaseController
 {
@@ -74,7 +75,7 @@ class ClassroomReviewController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getClassroomReviewService()

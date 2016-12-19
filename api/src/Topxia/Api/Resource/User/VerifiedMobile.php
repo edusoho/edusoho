@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Util\SmsUtil;
 use Topxia\Api\Resource\BaseResource;
+use Topxia\Service\Common\ServiceKernel;
 
 class VerifiedMobile extends BaseResource
 {
@@ -55,11 +56,11 @@ class VerifiedMobile extends BaseResource
     
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

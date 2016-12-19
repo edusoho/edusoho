@@ -1,4 +1,45 @@
 services:
+    article_article_event_subscriber:
+        class: Biz\Article\Event\ArticleEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    card_event_subscriber:
+        class: Biz\Card\Event\EventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_message_event_subscriber:
+        class: Biz\User\Event\MessageEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_order_event_subscriber:
+        class: Biz\User\Event\OrderEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_status_event_subscriber:
+        class: Biz\User\Event\StatusEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_user_event_subscriber:
+        class: Biz\User\Event\UserEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_vip_member_event_subscriber:
+        class: Biz\User\Event\VipMemberEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
 
     task_event_subscriber:
         class: Biz\Task\Event\ActivitySubscriber

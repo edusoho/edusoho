@@ -3,6 +3,7 @@
 namespace Classroom\Service\Classroom\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderServiceTest extends BaseTestCase
 {
@@ -198,11 +199,6 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $this->assertEquals($order['status'], $result['status']);
     }
 
-    private function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
     private function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
@@ -215,7 +211,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getOrderService()

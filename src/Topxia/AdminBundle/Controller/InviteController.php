@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class InviteController extends BaseController
 {
@@ -137,7 +138,7 @@ class InviteController extends BaseController
         $conditions['cardType'] = 'coupon';
         $cards                  = $this->getCardService()->searchCards(
             $conditions,
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             0,
             PHP_INT_MAX
         );
@@ -206,7 +207,7 @@ class InviteController extends BaseController
 
     protected function getInviteRecordService()
     {
-        return $this->getServiceKernel()->createService('User.InviteRecordService');
+        return $this->getServiceKernel()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getOrderService()
@@ -216,12 +217,12 @@ class InviteController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
+        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
     }
 
     protected function getCouponService()

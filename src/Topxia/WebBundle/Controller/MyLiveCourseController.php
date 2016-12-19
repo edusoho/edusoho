@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\AvatarAlert;
 
 class MyLiveCourseController extends BaseController
@@ -60,9 +61,9 @@ class MyLiveCourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-        protected function getSettingService()
+    protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
 }

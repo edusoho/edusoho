@@ -11,6 +11,7 @@ use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Dao\CourseNoteLikeDao;
 use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -243,9 +244,12 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $conditions;
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     /**

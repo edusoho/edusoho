@@ -149,7 +149,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     public function getCurrentUser()

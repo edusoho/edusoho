@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\EncryptionToolkit;
 use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\ServiceKernel;
 
 class Emails extends BaseResource
 {
@@ -93,7 +94,7 @@ class Emails extends BaseResource
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getPasswordEncoder()
@@ -103,7 +104,7 @@ class Emails extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getLogService()
@@ -113,6 +114,6 @@ class Emails extends BaseResource
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
     }
 }

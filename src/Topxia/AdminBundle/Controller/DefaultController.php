@@ -526,12 +526,12 @@ class DefaultController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getStatisticsService()
     {
-        return $this->getServiceKernel()->createService('System.StatisticsService');
+        return $this->getServiceKernel()->getBiz()->service('System:StatisticsService');
     }
 
     /**
@@ -560,7 +560,7 @@ class DefaultController extends BaseController
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getLogService()
@@ -578,7 +578,7 @@ class DefaultController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     private function getWebExtension()
@@ -588,7 +588,7 @@ class DefaultController extends BaseController
 
     protected function getUpgradeNoticeService()
     {
-        return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
+        return ServiceKernel::instance()->getBiz()->service('User:UpgradeNoticeService');
     }
 
     protected function getReviewService()
@@ -598,7 +598,7 @@ class DefaultController extends BaseController
 
     protected function getUserActiveService()
     {
-        return $this->createService('User.UserActiveService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserActiveService');
     }
 
     /**

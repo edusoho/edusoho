@@ -2,8 +2,10 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\Article\Service\ArticleService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Article extends BaseResource
 {
@@ -29,13 +31,16 @@ class Article extends BaseResource
         return $res;
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

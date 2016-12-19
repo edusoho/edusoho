@@ -6,6 +6,7 @@ use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class MemberSync extends BaseResource
 {
@@ -174,7 +175,7 @@ class MemberSync extends BaseResource
 
     private function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getClassroomService()

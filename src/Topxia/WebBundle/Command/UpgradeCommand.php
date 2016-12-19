@@ -9,7 +9,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\PluginUtil;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 class UpgradeCommand extends BaseCommand
 {

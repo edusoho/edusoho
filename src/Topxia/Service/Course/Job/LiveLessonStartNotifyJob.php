@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Job;
 
+use Biz\System\Service\SettingService;
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\IMAPIFactory;
@@ -123,9 +124,12 @@ class LiveLessonStartNotifyJob implements Job
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     private function getServiceKernel()

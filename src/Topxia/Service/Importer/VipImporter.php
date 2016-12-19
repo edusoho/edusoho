@@ -7,6 +7,7 @@ namespace Topxia\Service\Importer;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\ServiceKernel;
 
 class VipImporter extends Importer
 {
@@ -461,7 +462,7 @@ class VipImporter extends Importer
 
     protected function getMessageService()
     {
-        return $this->getServiceKernel()->createService('User.MessageService');
+        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
     }
 
     protected function getOrderService()
@@ -476,12 +477,12 @@ class VipImporter extends Importer
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getFileService()
@@ -491,6 +492,6 @@ class VipImporter extends Importer
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

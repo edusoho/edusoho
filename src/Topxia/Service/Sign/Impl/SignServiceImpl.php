@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Sign\Impl;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sign\SignService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
@@ -147,6 +148,6 @@ class SignServiceImpl extends BaseService implements SignService
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 }

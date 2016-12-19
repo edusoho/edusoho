@@ -7,8 +7,7 @@ use Biz\File\Service\FileImplementor;
 use Topxia\Common\FileToolkit;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\UserService;
+use Biz\User\Service\UserService;
 
 class LocalFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -246,11 +245,67 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function download($globalId)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function getDefaultHumbnails($globalId)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     * @param $options
+     *
+     * @return array
+     */
+    public function getThumbnail($globalId, $options)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $options
+     *
+     * @return array
+     */
+    public function getStatistics($options)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function player($globalId)
+    {
+        return array();
+    }
+
+    /**
      * @return UserService
      */
     protected function getUserService()
     {
-        return  ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
     /**

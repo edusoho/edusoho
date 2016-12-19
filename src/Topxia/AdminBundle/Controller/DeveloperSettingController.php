@@ -160,7 +160,7 @@ class DeveloperSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getAppService()
@@ -170,7 +170,7 @@ class DeveloperSettingController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()

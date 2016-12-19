@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -73,7 +74,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID', 'DESC'),
+            array('ID' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -135,7 +136,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID', 'DESC'),
+            array('ID' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -473,32 +474,27 @@ class CoinController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
     }
 
     protected function getInviteRecordService()
     {
-        return $this->getServiceKernel()->createService('User.InviteRecordService');
+        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getOrderService()
@@ -508,7 +504,7 @@ class CoinController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getAppService()

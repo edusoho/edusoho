@@ -1,13 +1,13 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Biz\User\Service\NotificationService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExportHelp;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\User\Impl\NotificationServiceImpl;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseStudentManageController extends BaseController
 {
@@ -152,13 +152,13 @@ class CourseStudentManageController extends BaseController
             'userId'     => $userId,
             'status'     => 'paid'
         );
-        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        $orders    = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
             $order = $value;
         }
         $reason = array(
             'type'     => 'other',
-            'note'     => '"'.$user['nickname'].'"'.' 手动移除',
+            'note'     => '"' . $user['nickname'] . '"' . ' 手动移除',
             'operator' => $user['id']
         );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
@@ -181,19 +181,19 @@ class CourseStudentManageController extends BaseController
 
         $file = '';
         if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request,'course_students', $title);
+            $file = ExportHelp::addFileTitle($request, 'course_students', $title);
         }
 
         $content = implode("\r\n", $students);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $file    = ExportHelp::saveToTempFile($request, $content, $file);
 
-        $status = ExportHelp::getNextMethod($start+$limit, $courseMemberCount);
+        $status = ExportHelp::getNextMethod($start + $limit, $courseMemberCount);
 
         return $this->createJsonResponse(
             array(
-                'status' => $status,
+                'status'   => $status,
                 'fileName' => $file,
-                'start' => $start+$limit
+                'start'    => $start + $limit
             )
         );
     }
@@ -203,7 +203,7 @@ class CourseStudentManageController extends BaseController
         $fileName = sprintf("course-%s-students-(%s).csv", $id, date('Y-n-d'));
         return ExportHelp::exportCsv($request, $fileName);
     }
-    
+
     private function getExportContent($id, $start, $limit, $exportAllowCount)
     {
         $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
@@ -223,17 +223,17 @@ class CourseStudentManageController extends BaseController
 
         $condition = array(
             'courseId' => $course['id'],
-            'role' => 'student'
+            'role'     => 'student'
         );
 
         $courseMemberCount = $this->getCourseService()->searchMemberCount($condition);
 
-        $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
+        $courseMemberCount = ($courseMemberCount > $exportAllowCount) ? $exportAllowCount : $courseMemberCount;
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
         $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields    = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 
@@ -266,28 +266,28 @@ class CourseStudentManageController extends BaseController
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
-            $str .= ",".$value;
+            $str .= "," . $value;
         }
 
         $students = array();
 
         foreach ($courseMembers as $courseMember) {
             $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'].",";
-            $member .= $users[$courseMember['userId']]['email'].",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
-            $member .= $progresses[$courseMember['userId']]['percent'].",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['nickname'] . ",";
+            $member .= $users[$courseMember['userId']]['email'] . ",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']) . ",";
+            $member .= $progresses[$courseMember['userId']]['percent'] . ",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] . "," : "-" . ",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']] . ",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] . "," : "-" . ",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] . "," : "-" . ",";
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key] . "," : "-" . ",";
             }
 
             $students[] = $member;
@@ -485,7 +485,7 @@ class CourseStudentManageController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return array(
             'percent' => $percent,
@@ -521,7 +521,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getCourseService()
@@ -530,11 +530,11 @@ class CourseStudentManageController extends BaseController
     }
 
     /**
-     * @return NotificationServiceImpl
+     * @return NotificationService
      */
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
     }
 
     protected function getOrderService()
@@ -544,11 +544,6 @@ class CourseStudentManageController extends BaseController
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
     }
 }

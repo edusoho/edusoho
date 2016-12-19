@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource\AnalysisType;
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Course extends BaseAnalysisType
 {
@@ -119,6 +120,6 @@ class Course extends BaseAnalysisType
 
 	private function getUserService()
 	{
-		return $this->getServiceKernel()->createService('User.UserService');
+		return ServiceKernel::instance()->getBiz()->service('User:UserService');
 	}
 }

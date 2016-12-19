@@ -187,7 +187,7 @@ class CloudFileController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->createService('System.SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     protected function getTagService()
@@ -197,7 +197,7 @@ class CloudFileController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->createService('CloudFile.CloudFileService');
+        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()

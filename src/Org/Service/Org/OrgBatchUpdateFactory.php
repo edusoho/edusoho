@@ -2,6 +2,7 @@
 namespace Org\Service\Org;
 
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Service\Common\ServiceKernel;
 
 
 class OrgBatchUpdateFactory
@@ -21,11 +22,26 @@ class OrgBatchUpdateFactory
     public static function getModules()
     {
         return array(
-            'user'         => 'User.UserService',
-            'course'       => 'Course.CourseService',
-            'classroom'    => 'Classroom:Classroom.ClassroomService',
-            'article'      => 'Article.ArticleService',
-            'announcement' => 'Announcement.AnnouncementService'
+            'user'         => array(
+                'protocol' => 'biz',
+                'service'  => 'User:UserService'
+            ),
+            'course'       => array(
+                'protocol' => 'biz',
+                'service'  => 'Course:CourseService',
+            ),
+            'classroom'    => array(
+                'protocol' => 'biz',
+                'service'  => 'Classroom:ClassroomService'
+            ),
+            'article'      => array(
+                'protocol' => 'biz',
+                'service'  => 'Article:ArticleService'
+            ),
+            'announcement' => array(
+                'protocol' => 'biz',
+                'service'  => 'Announcement:AnnouncementService',
+            )
         );
     }
 

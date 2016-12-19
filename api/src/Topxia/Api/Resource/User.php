@@ -115,16 +115,21 @@ class User extends BaseResource
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSmsService()
     {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
+        return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->getServiceKernel()->getBiz();
     }
 }
