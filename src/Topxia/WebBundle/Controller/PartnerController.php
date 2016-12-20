@@ -60,7 +60,7 @@ class PartnerController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
 }

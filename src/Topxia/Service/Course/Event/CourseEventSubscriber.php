@@ -4,7 +4,7 @@ namespace Topxia\Service\Course\Event;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
@@ -392,7 +392,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getNoteService()
@@ -412,12 +412,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 
     protected function getReviewService()
@@ -427,6 +427,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 }

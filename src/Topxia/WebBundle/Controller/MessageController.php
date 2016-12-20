@@ -220,6 +220,6 @@ class MessageController extends BaseController
 
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
+        return ServiceKernel::instance()->createService('User:MessageService');
     }
 }

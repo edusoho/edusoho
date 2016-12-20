@@ -8,7 +8,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\BlockToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
@@ -366,6 +366,6 @@ class BlockController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

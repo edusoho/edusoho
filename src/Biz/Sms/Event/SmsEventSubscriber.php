@@ -5,7 +5,7 @@ use Topxia\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -214,17 +214,17 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getSmsService()
     {
-        return $this->getBiz()->service('Sms:SmsService');
+        return $this->createService('Sms:SmsService');
     }
 
     protected function getCrontabService()
     {
-        return $this->getBiz()->service('Crontab:CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getKernel()

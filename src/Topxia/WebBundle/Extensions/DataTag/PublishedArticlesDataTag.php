@@ -49,12 +49,12 @@ class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag
      */
     private function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 
 }

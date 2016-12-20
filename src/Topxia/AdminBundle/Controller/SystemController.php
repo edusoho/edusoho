@@ -4,7 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
@@ -188,6 +188,6 @@ class SystemController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

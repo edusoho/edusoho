@@ -3,7 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\NoteService;
 
@@ -97,11 +97,11 @@ class NoteServiceImpl extends BaseService implements NoteService
             $note['createdTime'] = time();
             $note['updatedTime'] = time();
             $note                = $this->getNoteDao()->addNote($note);
-            $this->getDispatcher()->dispatch('course.note.create', new ServiceEvent($note));
+            $this->getDispatcher()->dispatch('course.note.create', new Event($note));
         } else {
             $note['updatedTime'] = time();
             $note                = $this->getNoteDao()->updateNote($existNote['id'], $note);
-            $this->getDispatcher()->dispatch('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
+            $this->getDispatcher()->dispatch('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
         $this->getCourseService()->setMemberNoteNumber(
@@ -126,7 +126,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $this->getNoteDao()->deleteNote($id);
-        $this->getDispatcher()->dispatch('course.note.delete', new ServiceEvent($note));
+        $this->getDispatcher()->dispatch('course.note.delete', new Event($note));
 
         $this->getCourseService()->setMemberNoteNumber(
             $note['courseId'],
@@ -174,7 +174,7 @@ class NoteServiceImpl extends BaseService implements NoteService
             'createdTime' => time()
         );
 
-        $this->getDispatcher()->dispatch('course.note.liked', new ServiceEvent($note));
+        $this->getDispatcher()->dispatch('course.note.liked', new Event($note));
 
         return $this->getNoteLikeDao()->addNoteLike($noteLike);
     }
@@ -193,7 +193,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
         $this->getNoteLikeDao()->deleteNoteLikeByNoteIdAndUserId($noteId, $user['id']);
 
-        $this->getDispatcher()->dispatch('course.note.cancelLike', new ServiceEvent($note));
+        $this->getDispatcher()->dispatch('course.note.cancelLike', new Event($note));
     }
 
     public function getNoteLikeByNoteIdAndUserId($noteId, $userId)
@@ -241,12 +241,12 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getNoteLikeDao()

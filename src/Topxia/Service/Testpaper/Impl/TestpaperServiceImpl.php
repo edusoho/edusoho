@@ -3,7 +3,7 @@ namespace Topxia\Service\Testpaper\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Testpaper\TestpaperService;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
@@ -605,7 +605,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $this->dispatchEvent(
             'testpaper.finish',
-            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+            new Event($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
         return $testpaperResult;
@@ -703,7 +703,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaperDao()->getTestpaper($testpaperResult['testId']);
         $this->dispatchEvent(
             'testpaper.reviewed',
-            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+            new Event($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
         return $testPaperResult;
@@ -1041,7 +1041,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getClassroomService()

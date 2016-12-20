@@ -213,7 +213,7 @@ class ThemeController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 
     protected function getThemeService()

@@ -1,36 +1,17 @@
 <?php
-
-
 namespace Biz\Group\Dao\Impl;
-
 
 use Biz\Group\Dao\ThreadPostDao;
 use Codeages\Biz\Framework\Dao\DaoException;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class ThreadPostDaoImpl extends  GeneralDaoImpl implements ThreadPostDao
+class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 {
     protected $table = 'groups_thread_post';
 
-    public function declares()
+    public function searchPostsThreadIds($conditions, $orderbys, $start, $limit)
     {
-        return array(
-            'timestamps' => array('createdTime'),
-            'serializes' => array('tagIds'=>'json'),
-            'orderbys'   => array('id', 'createdTime'),
-            'conditions' => array(
-                'id < :id',
-                'userId = :userId',
-                'postId = :postId',
-                'adopt = :adopt',
-                'threadId = :threadId'
-            ),
-        );
-    }
-
-    public function searchPostsThreadIds($conditions,$orderbys,$start,$limit)
-    {
-        $builder=$this->_createQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('distinct threadId')
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -46,8 +27,7 @@ class ThreadPostDaoImpl extends  GeneralDaoImpl implements ThreadPostDao
             $builder->addOrderBy($field, $direction);
         }
 
-
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function countPostsThreadIds($conditions)
@@ -58,5 +38,24 @@ class ThreadPostDaoImpl extends  GeneralDaoImpl implements ThreadPostDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function deleteByThreadId($threadId)
+    {
+        return $this->db()->delete($this->table, array('threadId' => $threadId));
+    }
 
+    public function declares()
+    {
+        return array(
+            'timestamps' => array('createdTime'),
+            'serializes' => array('tagIds' => 'json'),
+            'orderbys'   => array('id', 'createdTime'),
+            'conditions' => array(
+                'id < :id',
+                'userId = :userId',
+                'postId = :postId',
+                'adopt = :adopt',
+                'threadId = :threadId'
+            )
+        );
+    }
 }

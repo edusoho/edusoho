@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\ContentService;
 use Topxia\Service\Content\Type\ContentTypeFactory;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class ContentServiceImpl extends BaseService implements ContentService
 {
@@ -84,7 +84,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-        $this->dispatchEvent('content.create', new ServiceEvent(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
+        $this->dispatchEvent('content.create', new Event(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
 		$this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
 		return $content;
@@ -118,7 +118,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
 
-        $this->dispatchEvent('content.update', new ServiceEvent(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
+        $this->dispatchEvent('content.update', new Event(array('contentId' => $id, 'userId' => $user['id'], 'tagIds' => $tagIds)));
 		return $content;
 	}
 
@@ -163,7 +163,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
 }

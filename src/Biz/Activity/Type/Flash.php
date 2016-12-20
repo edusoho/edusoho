@@ -91,12 +91,12 @@ class Flash extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->createService("Activity:ActivityLearnLogService");
     }
 
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->createService("Activity:ActivityService");
     }
     
 }

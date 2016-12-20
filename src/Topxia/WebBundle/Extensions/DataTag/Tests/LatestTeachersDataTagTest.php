@@ -42,7 +42,7 @@ class LatestTeachersDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
 }

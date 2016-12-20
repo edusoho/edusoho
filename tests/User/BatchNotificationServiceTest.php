@@ -51,11 +51,11 @@ class BatchNotificationServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getBatchNotificationService()
     {
-        return $this->getBiz()->service('User:BatchNotificationService');
+        return $this->createService('User:BatchNotificationService');
     }
 }

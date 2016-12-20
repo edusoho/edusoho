@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Biz\System\Service\SettingService;
+use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -217,6 +218,6 @@ class CloudController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

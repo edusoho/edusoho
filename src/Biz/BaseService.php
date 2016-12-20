@@ -4,10 +4,10 @@ namespace Biz;
 
 use Monolog\Logger;
 use Biz\User\CurrentUser;
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -15,9 +15,10 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
+    private $lock = null;
+
     /**
-     * @param $alias
-     *
+     * @param  $alias
      * @return GeneralDaoInterface
      */
     protected function createDao($alias)
@@ -34,8 +35,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param $alias
-     *
+     * @param  $alias
      * @return BaseService
      */
     protected function createService($alias)
@@ -124,7 +124,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = ServiceKernel::instance()->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = ServiceKernel::instance()->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }
@@ -153,5 +153,14 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 }

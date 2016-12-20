@@ -25,6 +25,6 @@ class ArticleCategoryDataTag extends BaseDataTag implements DataTag
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 }

@@ -33,6 +33,6 @@ class SettingServiceTest extends BaseTestCase
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }

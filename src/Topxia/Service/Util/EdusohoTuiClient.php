@@ -3,7 +3,7 @@
 namespace Topxia\Service\Util;
 
 use \RuntimeException;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\BaseService;
 
 class EdusohoTuiClient extends BaseService

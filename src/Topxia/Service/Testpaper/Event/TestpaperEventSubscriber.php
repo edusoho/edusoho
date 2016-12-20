@@ -4,7 +4,7 @@ namespace Topxia\Service\Testpaper\Event;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -263,7 +263,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getTestpaperService()

@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class GlobalFilePlayerController extends BaseController
 {
@@ -283,16 +283,16 @@ class GlobalFilePlayerController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
     }
 }

@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\EncryptionToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -94,7 +94,7 @@ class Emails extends BaseResource
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getPasswordEncoder()
@@ -104,16 +104,16 @@ class Emails extends BaseResource
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:LogService');
+        return $this->getServiceKernel()->createService('System:LogService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 }

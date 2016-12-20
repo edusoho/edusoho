@@ -131,6 +131,6 @@ class UserFieldServiceTest extends BaseTestCase
 
     protected function getUserFieldService()
     {
-        return $this->getBiz()->service('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 }

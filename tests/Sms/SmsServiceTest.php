@@ -4,7 +4,7 @@ namespace Tests\Sms;
 
 use Mockery;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceTest extends BaseTestCase
 {
@@ -124,16 +124,16 @@ class SmsServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getSmsService()
     {
-        return $this->getBiz()->service('Sms:SmsService');
+        return $this->createService('Sms:SmsService');
     }
 }

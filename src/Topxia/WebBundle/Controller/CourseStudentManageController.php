@@ -81,7 +81,7 @@ class CourseStudentManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchRefundCount($condition),
+            $this->getOrderService()->countRefunds($condition),
             20
         );
 
@@ -521,7 +521,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCourseService()
@@ -534,7 +534,7 @@ class CourseStudentManageController extends BaseController
      */
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getOrderService()
@@ -544,6 +544,6 @@ class CourseStudentManageController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 }

@@ -4,7 +4,7 @@ namespace Biz\Sms\SmsProcessor;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class LiveOpenLessonSmsProcessor implements SmsProcessor
@@ -22,7 +22,7 @@ class LiveOpenLessonSmsProcessor implements SmsProcessor
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         $count  = 0;
 
-        $count = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id']));
+        $count = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id']));
 
         global $kernel;
         $container          = $kernel->getContainer();

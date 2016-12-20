@@ -3,7 +3,7 @@ namespace Topxia\Service\Sms\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 
 class SmsSendOneDayJob implements Job
@@ -31,7 +31,7 @@ class SmsSendOneDayJob implements Job
 
     protected function getSmsService()
     {
-        return $this->getKernel()->getBiz()->service('Sms:SmsService');
+        return $this->getKernel()->createService('Sms:SmsService');
     }
 
     protected function getKernel()

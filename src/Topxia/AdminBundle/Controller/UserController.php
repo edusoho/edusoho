@@ -5,7 +5,7 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
@@ -516,12 +516,12 @@ class UserController extends BaseController
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
+        return $this->getServiceKernel()->createService('Role:RoleService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     /**
@@ -529,7 +529,7 @@ class UserController extends BaseController
      */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     /**
@@ -537,17 +537,17 @@ class UserController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getSessionService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:SessionService');
+        return $this->getServiceKernel()->createService('System:SessionService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getCourseService()
@@ -557,7 +557,7 @@ class UserController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getAppService()
@@ -567,12 +567,12 @@ class UserController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getFileService()
@@ -582,6 +582,6 @@ class UserController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:OrgService');
     }
 }

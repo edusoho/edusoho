@@ -26,7 +26,7 @@ class OpenCourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        $count = $this->getOpenCourseService()->searchCourseCount($conditions);
+        $count = $this->getOpenCourseService()->countCourses($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
         $courses   = $this->getOpenCourseService()->searchCourses(
@@ -121,7 +121,7 @@ class OpenCourseController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOpenCourseService()->searchCourseCount($conditions),
+            $this->getOpenCourseService()->countCourses($conditions),
             20
         );
 
@@ -229,7 +229,7 @@ class OpenCourseController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCategoryService()

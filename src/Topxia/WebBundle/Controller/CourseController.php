@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
@@ -215,7 +215,7 @@ class CourseController extends CourseBaseController
 
         if ('normal' == $course['type']){
             $this->dispatchEvent('course.view',
-                new ServiceEvent($course, array('userId' => $user['id'])));
+                new Event($course, array('userId' => $user['id'])));
         }
         $allTags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'classroom',
@@ -763,7 +763,7 @@ class CourseController extends CourseBaseController
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getVipService()
@@ -783,7 +783,7 @@ class CourseController extends CourseBaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getThreadService()
@@ -793,7 +793,7 @@ class CourseController extends CourseBaseController
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getAppService()

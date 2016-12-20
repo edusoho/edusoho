@@ -39,7 +39,7 @@ class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     private function getTagService()

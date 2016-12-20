@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
@@ -190,6 +190,6 @@ class OrderServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

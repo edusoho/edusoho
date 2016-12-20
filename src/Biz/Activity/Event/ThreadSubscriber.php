@@ -43,7 +43,7 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
 
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     protected function getLogger($name)

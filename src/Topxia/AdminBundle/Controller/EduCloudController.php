@@ -2,20 +2,17 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Service\CloudPlatform\KeyApplier;
+use Biz\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Biz\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -1432,12 +1429,12 @@ class EduCloudController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     private function getWebExtension()

@@ -4,7 +4,7 @@ namespace Topxia\Service\Course\Job;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class LiveLessonStartNotifyJob implements Job
 {
@@ -129,7 +129,7 @@ class LiveLessonStartNotifyJob implements Job
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     private function getServiceKernel()

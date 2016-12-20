@@ -5,7 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class CloudFileController extends BaseController
@@ -187,7 +187,7 @@ class CloudFileController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getTagService()
@@ -197,17 +197,17 @@ class CloudFileController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
     }
 
     protected function getCourseMaterialService()

@@ -1,0 +1,766 @@
+<?php
+namespace Biz\Order\Service\Impl;
+
+use Biz\Order\Dao\OrderLogDao;
+use Biz\Order\Dao\OrderRefundDao;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExtensionManager;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Order\Dao\OrderDao;
+use Topxia\Service\Order\OrderService;
+use Codeages\Biz\Framework\Event\Event;
+
+class OrderServiceImpl extends BaseService implements OrderService
+{
+    public function getOrder($id)
+    {
+        return $this->getOrderDao()->get($id);
+    }
+
+    public function getOrderBySn($sn, $lock = false)
+    {
+        return $this->getOrderDao()->getBySn($sn, $lock);
+    }
+
+    public function getOrderByToken($token)
+    {
+        return $this->getOrderDao()->getByToken($token);
+    }
+
+    public function findOrdersByIds(array $ids)
+    {
+        $orders = $this->getOrderDao()->findByIds($ids);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function findOrdersBySns(array $sns)
+    {
+        $orders = $this->getOrderDao()->findBySns($sns);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function createOrder($order)
+    {
+        if (!ArrayToolkit::requireds($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment'))) {
+            throw $this->createServiceException($this->getKernel()->trans('创建订单失败：缺少参数。'));
+        }
+        $order = ArrayToolkit::parts($order, array(
+            'userId',
+            'title',
+            'amount',
+            'targetType',
+            'targetId',
+            'payment',
+            'note',
+            'snPrefix',
+            'data',
+            'couponCode',
+            'coinAmount',
+            'coinRate',
+            'priceType',
+            'totalPrice',
+            'coupon',
+            'couponDiscount',
+            'discountId',
+            'discount'
+        ));
+
+        $orderUser = $this->getUserService()->getUser($order['userId']);
+
+        if (empty($orderUser)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单用户(#%id%)不存在，不能创建订单。', array('%id%' => $order['userId'])));
+        }
+
+        $payment = ExtensionManager::instance()->getDataDict('payment');
+        $payment = array_keys($payment);
+
+        if (!in_array($order['payment'], $payment)) {
+            throw $this->createServiceException($this->getKernel()->trans('创建订单失败：payment取值不正确。'));
+        }
+
+        $order['sn'] = $this->generateOrderSn($order);
+        unset($order['snPrefix']);
+
+        if (!empty($order['couponCode'])) {
+            $couponInfo = $this->getCouponService()->checkCouponUseable($order['couponCode'], $order['targetType'], $order['targetId'], $order['amount']);
+
+            if ($couponInfo['useable'] != 'yes') {
+                throw $this->createServiceException($this->getKernel()->trans('优惠码不可用'));
+            }
+        }
+
+        unset($order['couponCode']);
+
+        $order['amount'] = number_format($order['amount'], 2, '.', '');
+
+        if (intval($order['amount'] * 100) == 0 && $order['payment'] != 'outside') {
+            $order['payment'] = 'none';
+        }
+
+        $order['status']      = 'created';
+
+        $order = $this->getOrderDao()->create($order);
+
+        $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
+        $this->getDispatcher()->dispatch('order.service.created', new Event($order));
+        return $order;
+    }
+
+    public function payOrder($payData)
+    {
+        $success = false;
+        $order   = $this->getOrderDao()->getBySn($payData['sn']);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单(%payData%)已被删除，支付失败。', array('%payData%' => $payData['sn'])));
+        }
+
+        if ($payData['status'] == 'success') {
+            // 避免浮点数比较大小可能带来的问题，转成整数再比较。
+
+            if (intval($payData['amount'] * 100) !== intval($order['amount'] * 100)) {
+                $message = sprintf($this->getKernel()->trans('订单(%sn%)的金额(%amount%)与实际支付的金额(%payData%)不一致，支付失败。', array('%sn%' => $order['sn'], '%amount%' => $order['amount'], '%payData%' => $payData['amount'])));
+                $this->_createLog($order['id'], 'pay_error', $message, $payData);
+                throw $this->createServiceException($message);
+            }
+
+            if ($this->canOrderPay($order)) {
+                $payFields = array(
+                    'status'   => 'paid',
+                    'paidTime' => $payData['paidTime']
+                );
+
+                !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
+
+                $this->getOrderDao()->update($order['id'], $payFields);
+                $this->_createLog($order['id'], 'pay_success', $this->getKernel()->trans('付款成功'), $payData);
+                $success = true;
+            } else {
+                $this->_createLog($order['id'], 'pay_ignore', $this->getKernel()->trans('订单已处理'), $payData);
+            }
+        } else {
+            $this->_createLog($order['id'], 'pay_unknown', '', $payData);
+        }
+
+        $order = $this->getOrder($order['id']);
+
+        if ($success) {
+            $this->getDispatcher()->dispatch('order.service.paid', new Event($order));
+        }
+
+        return array($success, $order);
+    }
+
+    public function findOrderLogs($orderId)
+    {
+        $order = $this->getOrder($orderId);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，获取订单日志失败！'));
+        }
+
+        return $this->getOrderLogDao()->findByOrderId($orderId);
+    }
+
+    public function canOrderPay($order)
+    {
+        if (empty($order['status'])) {
+            throw new \InvalidArgumentException();
+        }
+
+        return in_array($order['status'], array('created', 'cancelled'));
+    }
+
+    public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status)
+    {
+        return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status);
+    }
+
+    public function analysisPaidCourseOrderDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime, $endTime);
+    }
+
+    public function analysisPaidClassroomOrderDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisPaidClassroomOrderDataByTime($startTime, $endTime);
+    }
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime, $endTime);
+    }
+
+    public function analysisAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisAmount($conditions);
+    }
+
+    public function analysisCoinAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisCoinAmount($conditions);
+    }
+
+    public function analysisTotalPrice($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisTotalPrice($conditions);
+    }
+
+    public function analysisAmountDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountDataByTime($startTime, $endTime);
+    }
+
+    public function analysisCourseAmountDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime, $endTime);
+    }
+
+    public function analysisClassroomAmountDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisClassroomAmountDataByTime($startTime, $endTime);
+    }
+
+    public function analysisVipAmountDataByTime($startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisVipAmountDataByTime($startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTime($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    public function analysisAmountsDataByUserId($conditions, $orderBy, $startTime, $endTime)
+    {
+        return $this->getOrderDao()->analysisAmountsDataByTitle($conditions, $orderBy, $startTime, $endTime);
+    }
+
+    protected function generateOrderSn($order)
+    {
+        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
+        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function createOrderLog($orderId, $type, $message = '', array $data = array())
+    {
+        $order = $this->getOrder($orderId);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，获取订单日志失败！'));
+        }
+
+        return $this->_createLog($orderId, $type, $message, $data);
+    }
+
+    protected function _createLog($orderId, $type, $message = '', array $data = array())
+    {
+        $user = $this->getCurrentUser();
+
+        $log = array(
+            'orderId'     => $orderId,
+            'type'        => $type,
+            'message'     => $message,
+            'data'        => json_encode($data),
+            'userId'      => $user->id,
+            'ip'          => $user->currentIp,
+            'createdTime' => time()
+        );
+
+        return $this->getOrderLogDao()->create($log);
+    }
+
+    public function cancelOrder($id, $message = '', $data = array())
+    {
+        $order = $this->getOrder($id);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消订单失败！'));
+        }
+
+        if (!in_array($order['status'], array('created'))) {
+            throw $this->createServiceException($this->getKernel()->trans('当前订单状态不能取消订单！'));
+        }
+
+        $payment = $this->getSettingService()->get("payment");
+
+        if (isset($payment["enabled"]) && $payment["enabled"] == 1
+            && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
+            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
+        ) {
+            $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
+        }
+
+        $order = $this->getOrderDao()->update($order['id'], array('status' => 'cancelled'));
+
+        $this->_createLog($order['id'], 'cancelled', $message, $data);
+
+        return $order;
+    }
+
+    public function createPayRecord($id, array $payData)
+    {
+        $order = $this->getOrder($id);
+        $data  = $order['data'];
+
+        if (!is_array($data)) {
+            $data = json_decode($order['data'], true);
+        }
+
+        foreach ($payData as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        $fields = array('data' => $data);
+        $order  = $this->updateOrder($id, $fields);
+        $this->_createLog($order['id'], 'pay_create', $this->getKernel()->trans('创建交易'), $payData);
+    }
+
+    public function sumOrderPriceByTarget($targetType, $targetId)
+    {
+        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'refunding', 'refunded'));
+    }
+
+    public function sumCouponDiscountByOrderIds($orderIds)
+    {
+        return $this->getOrderDao()->sumCouponDiscountByOrderIds($orderIds);
+    }
+
+    public function findUserRefundCount($userId)
+    {
+        return $this->getOrderRefundDao()->countByUserId($userId);
+    }
+
+    public function findRefundsByIds(array $ids)
+    {
+        return $this->getOrderRefundDao()->findByIds($ids);
+    }
+
+    public function findUserRefunds($userId, $start, $limit)
+    {
+        return $this->getOrderRefundDao()->findByUserId($userId, $start, $limit);
+    }
+
+    public function searchRefunds($conditions, $sort, $start, $limit)
+    {
+        $conditions = array_filter($conditions);
+        $orderBy    = array('createdTime', 'DESC');
+        return $this->getOrderRefundDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countRefunds($conditions)
+    {
+        $conditions = array_filter($conditions);
+        return $this->getOrderRefundDao()->count($conditions);
+    }
+
+    public function applyRefundOrder($id, $expectedAmount = null, $reason = array())
+    {
+        $order = $this->getOrder($id);
+
+        if (empty($order)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($order['status'] != 'paid') {
+            throw $this->createServiceException($this->getKernel()->trans('订单#%id%，不能退款', array('%id%' => $order['id'])));
+        }
+
+        // 订单金额为０时，不能退款
+
+        if (intval($order['amount'] * 100) == 0) {
+            $expectedAmount = 0;
+        }
+
+        $setting = $this->getSettingService()->get('refund');
+
+        // 系统未设置退款期限，不能退款
+
+        if (empty($setting) || empty($setting['maxRefundDays'])) {
+            $expectedAmount = 0;
+        }
+
+        // 超出退款期限，不能退款
+
+        if ((time() - $order['createdTime']) > (86400 * $setting['maxRefundDays'])) {
+            $expectedAmount = 0;
+        }
+
+        $status = 'created';
+
+        if (!is_null($expectedAmount)) {
+            $expectedAmount = number_format($expectedAmount, 2, '.', '');
+
+            if (intval($expectedAmount * 100) === 0) {
+                $status = 'success';
+            };
+        }
+
+        $refund = $this->getOrderRefundDao()->create(array(
+            'orderId'        => $order['id'],
+            'userId'         => $order['userId'],
+            'targetType'     => $order['targetType'],
+            'targetId'       => $order['targetId'],
+            'status'         => $status,
+            'expectedAmount' => $expectedAmount,
+            'reasonType'     => empty($reason['type']) ? 'other' : $reason['type'],
+            'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
+            'updatedTime'    => time(),
+            'createdTime'    => time(),
+            'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
+        ));
+
+        $this->getOrderDao()->update($order['id'], array(
+            'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
+            'refundId' => $refund['id']
+        ));
+
+        if ($refund['status'] == 'success') {
+            $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('订单退款成功(无退款金额)'));
+        } else {
+            $this->_createLog($order['id'], 'refund_apply', $this->getKernel()->trans('订单申请退款').(is_null($expectedAmount) ? '' : $this->getKernel()->trans("，期望退款%amount%元", array('%amount%' => $expectedAmount))));
+        }
+
+        return $refund;
+    }
+
+    public function auditRefundOrder($id, $pass, $actualAmount = null, $note = '')
+    {
+        $order = $this->getOrder($id);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)不存在，退款确认失败', array('%id%' => $id)));
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isAdmin()) {
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)，你无权进行退款确认操作', array('%id' => $id)));
+        }
+
+        if ($order['status'] != 'refunding') {
+            throw $this->createServiceException($this->getKernel()->trans("当前订单(#%id%)状态下，不能进行确认退款操作", array('%id%' => $order['id'])));
+        }
+
+        $refund = $this->getOrderRefundDao()->get($order['refundId']);
+
+        if (empty($refund)) {
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能进行确认退款操作', array('%id%' => $order['id'])));
+        }
+
+        if ($refund['status'] != 'created') {
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录状态下，不能进行确认退款操作款', array('%id%' => $order['id'])));
+        }
+
+        if ($pass == true) {
+            if (empty($actualAmount)) {
+                $actualAmount = 0;
+            }
+
+            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
+
+            $this->getOrderRefundDao()->update($refund['id'], array(
+                'status'       => 'success',
+                'operator'     => $user->id,
+                'actualAmount' => $actualAmount,
+                'updatedTime'  => time()
+            ));
+
+            $this->getOrderDao()->update($order['id'], array(
+                'status' => 'refunded'
+            ));
+
+            $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('退款申请(ID:%id%)已审核通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
+        } else {
+            $this->getOrderRefundDao()->update($refund['id'], array(
+                'status'      => 'failed',
+                'operator'    => $user->id,
+                'updatedTime' => time()
+            ));
+
+            $this->getOrderDao()->update($order['id'], array(
+                'status' => 'paid'
+            ));
+
+            $this->_createLog($order['id'], 'refund_failed', $this->getKernel()->trans('退款申请(ID:%id%)已审核未通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
+        }
+
+        $this->getLogService()->info('order', 'andit_refund', $this->getKernel()->trans("审核退款申请#%id%", array('%id%' => $refund['id'])));
+
+        return $pass;
+    }
+
+    public function cancelRefundOrder($id)
+    {
+        $order = $this->getOrder($id);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)不存在，取消退款失败', array('%id%' => $id)));
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createServiceException($this->getKernel()->trans('用户未登录，订单(#%id%)取消退款失败', array('%id%' => $id)));
+        }
+
+        if ($order['userId'] != $user['id'] && !$user->isAdmin()) {
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)，你无权限取消退款', array('%id%' => $id)));
+        }
+
+        if ($order['status'] != 'refunding') {
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)状态下，不能取消退款', array('%id%' => $order['id'])));
+        }
+
+        $refund = $this->getOrderRefundDao()->get($order['refundId']);
+
+        if (empty($refund)) {
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能取消退款', array('%id%' => $order['id'])));
+        }
+
+        $this->getOrderRefundDao()->update($refund['id'], array(
+            'status'      => 'cancelled',
+            'operator'    => $user->id,
+            'updatedTime' => time()
+        ));
+
+        $this->getOrderDao()->update($order['id'], array(
+            'status' => 'paid'
+        ));
+
+        $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
+        $this->_createLog($order['id'], 'refund_cancel', $this->getKernel()->trans('取消退款申请(ID:%id%)', array('%id%' => $refund['id'])));
+    }
+
+    public function searchOrders($conditions, $sort, $start, $limit)
+    {
+
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime', 'ASC');
+            } else {
+                $orderBy = array('createdTime', 'DESC');
+            }
+        }else{
+            $orderBy = $sort;
+        }
+       
+        $conditions = $this->_prepareSearchConditions($conditions);
+
+        $orders     = $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function searchBill($conditions, $sort, $start, $limit)
+    {
+        $orderBy = array();
+
+        if ($sort == 'early') {
+            $orderBy = array('createdTime', 'ASC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        $conditions = $this->_prepareSearchConditions($conditions);
+        $orders     = $this->getOrderDao()->searchBill($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function countUserBillNum($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->countBill($conditions);
+    }
+
+    public function sumOrderAmounts($startTime, $endTime, array $courseId)
+    {
+        return $this->getOrderDao()->sumOrderAmounts($startTime, $endTime, $courseId);
+    }
+
+    public function countOrders($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->count($conditions);
+    }
+
+    protected function _prepareSearchConditions($conditions)
+    {
+        $tmpConditions = array();
+
+        if (isset($conditions['coinAmount'])) {
+            $tmpConditions['coinAmount'] = $conditions['coinAmount'];
+        }
+
+        if (isset($conditions['amount'])) {
+            $tmpConditions['amount'] = $conditions['amount'];
+        }
+
+		if (isset($conditions['totalPrice_GT'])){
+			$tmpConditions['totalPrice_GT'] = $conditions['totalPrice_GT'];
+		}
+
+		if (isset($conditions['updatedTime_GE'])){
+			$tmpConditions['updatedTime_GE'] = $conditions['updatedTime_GE'];
+		}
+
+        $conditions = array_filter($conditions);
+        $conditions = array_merge($conditions, $tmpConditions);
+
+        if (isset($conditions['date'])) {
+            $dates = array(
+                'yesterday'  => array(
+                    strtotime('yesterday'),
+                    strtotime('today')
+                ),
+                'today'      => array(
+                    strtotime('today'),
+                    strtotime('tomorrow')
+                ),
+                'this_week'  => array(
+                    strtotime('Monday this week'),
+                    strtotime('Monday next week')
+                ),
+                'last_week'  => array(
+                    strtotime('Monday last week'),
+                    strtotime('Monday this week')
+                ),
+                'next_week'  => array(
+                    strtotime('Monday next week'),
+                    strtotime('Monday next week', strtotime('Monday next week'))
+                ),
+                'this_month' => array(
+                    strtotime('first day of this month midnight'),
+                    strtotime('first day of next month midnight')
+                ),
+                'last_month' => array(
+                    strtotime('first day of last month midnight'),
+                    strtotime('first day of this month midnight')
+                ),
+                'next_month' => array(
+                    strtotime('first day of next month midnight'),
+                    strtotime('first day of next month midnight', strtotime('first day of next month midnight'))
+                )
+            );
+
+            if (array_key_exists($conditions['date'], $dates)) {
+                $conditions['paidStartTime'] = $dates[$conditions['date']][0];
+                $conditions['paidEndTime']   = $dates[$conditions['date']][1];
+                unset($conditions['date']);
+            }
+        }
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+        }
+
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        if (isset($conditions['buyer'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
+    }
+
+    public function updateOrderCashSn($id, $cashSn)
+    {
+        $order = $this->getOrder($id);
+
+        if (empty($order)) {
+            throw $this->createServiceException($this->getKernel()->trans('更新订单失败：订单不存在。'));
+        }
+
+        if (empty($cashSn)) {
+            throw $this->createServiceException($this->getKernel()->trans('更新订单失败：支付流水号不存在。'));
+        }
+
+        $this->getOrderDao()->update($id, array("cashSn" => $cashSn));
+    }
+
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
+    {
+        return $this->getOrderDao()->analysisPaidOrderGroupByTargetType($startTime, $groupBy);
+    }
+
+    public function analysisOrderDate($conditions)
+    {
+        return $this->getOrderDao()->analysisOrderDate($conditions);
+    }
+
+    public function updateOrder($id, $orderFileds)
+    {
+        return $this->getOrderDao()->update($id, $orderFileds);
+    }
+
+    public function findRefundByOrderId($orderId)
+    {
+        return $this->getOrderRefundDao()->findByOrderId($orderId);
+    }
+
+    protected function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System:LogService');
+    }
+
+    protected function getCardService()
+    {
+        return ServiceKernel::instance()->createService('Card:CardService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User:UserService');
+    }
+
+    /**
+     * @return OrderRefundDao
+     */
+    protected function getOrderRefundDao()
+    {
+        return $this->createDao('Order:OrderRefundDao');
+    }
+
+    /**
+     * @return OrderDao
+     */
+    protected function getOrderDao()
+    {
+        return $this->createDao('Order:OrderDao');
+    }
+
+    /**
+     * @return OrderLogDao
+     */
+    protected function getOrderLogDao()
+    {
+        return $this->createDao('Order:OrderLogDao');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->createService('Coupon:CouponService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return ServiceKernel::instance()->createService('User:InviteRecordService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return $this->createService('PayCenter:PayCenterService');
+    }
+}

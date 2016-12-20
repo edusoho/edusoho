@@ -264,7 +264,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -272,7 +272,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getOpenCourseService()

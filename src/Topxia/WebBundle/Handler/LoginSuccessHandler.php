@@ -61,6 +61,6 @@ class LoginSuccessHandler
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

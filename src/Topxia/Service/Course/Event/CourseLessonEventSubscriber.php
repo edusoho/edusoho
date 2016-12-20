@@ -4,7 +4,7 @@ namespace Topxia\Service\Course\Event;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -564,7 +564,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     private function getClassroomService()
@@ -584,12 +584,12 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCloudFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('CloudFile:CloudFileService');
+        return ServiceKernel::instance()->createService('CloudFile:CloudFileService');
     }
 
     protected function getCrontabJobService()

@@ -2,7 +2,7 @@
 namespace Topxia\Service\Thread\Tests;
 
 use Biz\User\CurrentUser;
-//  use Topxia\Service\Common\ServiceException;
+//  use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -972,7 +972,7 @@ class ThreadServiceTest extends BaseTestCase
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     private function getCourseService()
@@ -982,12 +982,12 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function createProtectThread()

@@ -71,7 +71,7 @@ class LiveNotifyCommand extends BaseCommand
 	
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     private function getCourseService()
@@ -92,7 +92,7 @@ class LiveNotifyCommand extends BaseCommand
 
 	protected function getUserService()
 	{
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
 	}
 
 }

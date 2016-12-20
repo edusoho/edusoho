@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
@@ -231,7 +231,7 @@ class ClassroomController extends BaseController
         }
 
         $this->dispatchEvent('classroom.view',
-            new ServiceEvent($classroom, array('userId' =>$user['id']))
+            new Event($classroom, array('userId' =>$user['id']))
         );
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction'         => $introduction,
@@ -946,7 +946,7 @@ class ClassroomController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getLevelService()
@@ -971,7 +971,7 @@ class ClassroomController extends BaseController
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     private function getCategoryService()
@@ -981,17 +981,17 @@ class ClassroomController extends BaseController
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
+        return $this->getServiceKernel()->createService('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 
     protected function getOrderService()
@@ -1001,7 +1001,7 @@ class ClassroomController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     protected function getTagService()
@@ -1016,6 +1016,6 @@ class ClassroomController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 }

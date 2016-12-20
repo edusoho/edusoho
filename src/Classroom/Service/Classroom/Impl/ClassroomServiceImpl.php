@@ -4,7 +4,7 @@ namespace Classroom\Service\Classroom\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Classroom\Service\Classroom\ClassroomService;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -203,7 +203,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
-        $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+        $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
 
         return $classroom;
     }
@@ -473,7 +473,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})");
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
+            new Event($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
@@ -608,7 +608,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getClassroomDao()->updateClassroom($classroomId, $fields);
         $this->dispatchEvent(
             'classroom.join',
-            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
+            new Event($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
 
         return $member;
@@ -656,7 +656,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.delete',
-                new ServiceEvent($activeCourseIds, array('classroomId' => $classroomId))
+                new Event($activeCourseIds, array('classroomId' => $classroomId))
             );
         } catch (\Exception $e) {
             $this->getClassroomDao()->getConnection()->rollback();
@@ -763,7 +763,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getClassroomMemberDao()->addMember($fields);
             }
 
-            $this->dispatchEvent('classMaster.become', new ServiceEvent($member));
+            $this->dispatchEvent('classMaster.become', new Event($member));
         }
     }
 
@@ -845,7 +845,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
         $this->dispatchEvent(
             'classroom.auditor_join',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new Event($classroom, array('userId' => $member['userId']))
         );
 
         return $member;
@@ -879,7 +879,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.become_assistant',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new Event($classroom, array('userId' => $member['userId']))
         );
 
         return $member;
@@ -913,7 +913,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.become_teacher',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new Event($classroom, array('userId' => $member['userId']))
         );
 
         return $member;
@@ -1191,7 +1191,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $userId, 'member' => $member))
+            new Event($classroom, array('userId' => $userId, 'member' => $member))
         );
     }
 
@@ -1436,7 +1436,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getClassroomDao()
@@ -1471,7 +1471,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getOrderService()
@@ -1491,7 +1491,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getCategoryService()

@@ -37,6 +37,6 @@ class DiscussController extends BaseController implements ActivityActionInterfac
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }

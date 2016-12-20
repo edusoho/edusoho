@@ -32,6 +32,6 @@ class IpBlacklistServiceTest extends BaseTestCase
 
     protected function getIpBlacklistService()
     {
-        return $this->getBiz()->service('System:IpBlacklistService');
+        return $this->createService('System:IpBlacklistService');
     }
 }

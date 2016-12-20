@@ -7,7 +7,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class FlashController extends BaseController implements ActivityActionInterface
@@ -59,7 +59,7 @@ class FlashController extends BaseController implements ActivityActionInterface
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**

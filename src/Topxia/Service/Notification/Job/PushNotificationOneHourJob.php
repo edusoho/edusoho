@@ -3,7 +3,7 @@ namespace Topxia\Service\Notification\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class PushNotificationOneHourJob implements Job
 {
@@ -43,6 +43,6 @@ class PushNotificationOneHourJob implements Job
 
     protected function getCloudDataService()
     {
-        return ServiceKernel::instance()->getBiz()->service('CloudData:CloudDataService');
+        return ServiceKernel::instance()->createService('CloudData:CloudDataService');
     }
 }

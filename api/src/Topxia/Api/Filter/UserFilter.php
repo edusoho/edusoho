@@ -11,7 +11,7 @@ class UserFilter implements Filter
     public function filter(array &$data)
     {
         $fileService = ServiceKernel::instance()->createService('Content:FileService');
-        $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
+        $userService = ServiceKernel::instance()->createService('User:UserService');
         
         unset($data['password']);
         unset($data['salt']);
