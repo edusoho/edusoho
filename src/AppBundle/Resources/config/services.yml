@@ -96,7 +96,7 @@ services:
             - { name: codeages_plugin.event.subscriber }
 
     notification_event_subscriber:
-        class: Biz\Event\Notification\PushMessageEventSubscriber
+        class: Biz\Notification\Event\PushMessageEventSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

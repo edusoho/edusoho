@@ -2,7 +2,7 @@
 
 namespace Tests\OpenCourseRecommendedServiceTest;
 
-use Codeages\Biz\Framework\UnitTests\BaseTestCase;
+use Biz\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase

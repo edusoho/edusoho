@@ -1,5 +1,5 @@
 <?php
-namespace Biz\Event\Notification;
+namespace Biz\Notification\Event;
 
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Topxia\Api\Util\MobileSchoolUtil;
