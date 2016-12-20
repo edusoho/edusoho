@@ -2,13 +2,15 @@
   body.homepage,
   body.course-list-page,
   body.open-course-list,
+  body.login,
+  body.register,
   body.my-course {
-    transition: all .3s ease;
     &.has-app .es-wrap {
       padding-top: 110px;
     }
     .es-wrap {
       padding-top: 60px;
+      padding-bottom: 50px;
     }
     .es-header {
       position: fixed;
@@ -20,9 +22,6 @@
     .es-footer-mobile,
     {
       display: block;
-    }
-    .footer-tool-bar {
-      z-index: 10;
     }
     .course-list-section .course-filter,
     .dynamic-section,
@@ -54,6 +53,7 @@
       }
     }
   }
+
   body.my-course{
     background-color: white;
     #content-container{
@@ -70,6 +70,7 @@
       }
     }
   }
+
   body.open-course-list{
     .es-banner{
       display: none;
@@ -77,6 +78,17 @@
     #content-container{
       margin-top: 0;
       margin-bottom: 0;
+    }
+  }
+  //注册登录页面因为页面较短，所以让footer-mobile固定在底部
+  body.login,
+  body.register{
+    .es-footer-mobile
+    {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
   
