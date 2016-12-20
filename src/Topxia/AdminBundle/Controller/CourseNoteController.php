@@ -29,7 +29,7 @@ class CourseNoteController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getNoteService()->searchNoteCount($conditions),
+            $this->getNoteService()->countCourseNotes($conditions),
             20
         );
         $notes = $this->getNoteService()->searchNotes(
@@ -70,7 +70,7 @@ class CourseNoteController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     /**
@@ -78,6 +78,6 @@ class CourseNoteController extends BaseController
      */
     protected function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

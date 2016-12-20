@@ -5,6 +5,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseManageController extends BaseController
 {
@@ -115,17 +116,54 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $this->getCourseService()->updateCourseTeachers($courseId, $data);
+            if (empty($data) || !isset($data['teachers'])) {
+                throw new InvalidArgumentException('Empty Data');
+            }
+            $teachers = json_decode($data['teachers'], true);
+
+            $this->getCourseService()->setCourseTeachers($courseId, $teachers);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $teachers   = $this->getCourseService()->findTeachersByCourseId($courseId);
+        $teacherIds = array();
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                $teacherIds[] = array(
+                    'id'        => $teacher['userId'],
+                    'isVisible' => $teacher['isVisible'],
+                    'nickname'  => $teacher['nickname'],
+                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'])
+                );
+            }
+        }
         return $this->render('course-manage/teachers.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'teacherIds' => $teacherIds
         ));
+    }
+
+    public function teachersMatchAction(Request $request, $courseSetId, $courseId)
+    {
+        $queryField = $request->query->get('q');
+        $users      = $this->getUserService()->searchUsers(array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+
+        $teachers = array();
+
+        foreach ($users as $user) {
+            $teachers[] = array(
+                'id'        => $user['id'],
+                'nickname'  => $user['nickname'],
+                'avatar'    => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'isVisible' => 1
+            );
+        }
+
+        return $this->createJsonResponse($teachers);
     }
 
     public function studentsAction(Request $request, $courseSetId, $courseId)

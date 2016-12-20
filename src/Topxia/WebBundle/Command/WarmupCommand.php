@@ -31,19 +31,19 @@ class WarmupCommand extends BaseCommand
 			$this->getUserService()->getUserByNickname($user['nickname']);
             $this->getUserService()->getUserByEmail($user['email']);
 
-            $this->getServiceKernel()->createDao('Course.CourseMemberDao')->getMemberByCourseIdAndUserId(1, $user['id']);
+            $this->getServiceKernel()->createDao('Course:CourseMemberDao')->getMemberByCourseIdAndUserId(1, $user['id']);
 
-            $this->getServiceKernel()->createDao('Course.LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
+            $this->getServiceKernel()->createDao('Course:LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
         }
 
 
         $this->getCacheService()->get('settings');
 
-        $this->getServiceKernel()->createService('Content.NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
+        $this->getServiceKernel()->createService('Content:NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
 
-        $this->getServiceKernel()->createService('Theme.ThemeService')->getCurrentThemeConfig();
+        $this->getServiceKernel()->createService('Theme:ThemeService')->getCurrentThemeConfig();
 
-        $this->getServiceKernel()->createService('Content.BlockService')->getBlockByCode('jianmo:home_top_banner');
+        $this->getServiceKernel()->createService('Content:BlockService')->getBlockByCode('jianmo:home_top_banner');
 
         $this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->findClassroomByCourseId(1);
     }

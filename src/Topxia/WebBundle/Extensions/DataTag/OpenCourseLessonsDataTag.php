@@ -27,6 +27,6 @@ class OpenCourseLessonsDataTag extends BaseDataTag implements DataTag
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 }

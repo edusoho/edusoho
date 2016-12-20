@@ -111,6 +111,6 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
     protected function getRecentPostNumDao()
     {
-        return $this->createDao('PostFilter.RecentPostNumDao');
+        return $this->createDao('PostFilter:RecentPostNumDao');
     }
 }

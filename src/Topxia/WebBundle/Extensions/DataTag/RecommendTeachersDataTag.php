@@ -26,10 +26,10 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         );
 
         $users = $this->getUserService()->searchUsers($conditions, array(
-            'promoted', 'DESC',
-            'promotedSeq', 'ASC',
-            'promotedTime', 'DESC',
-            'createdTime', 'DESC'
+            'promoted'     => 'DESC',
+            'promotedSeq'  => 'ASC',
+            'promotedTime' => 'DESC',
+            'createdTime'  => 'DESC'
         ), 0, $arguments['count']);
 
         $promotedSeq  = ArrayToolkit::column($users, 'promotedSeq');

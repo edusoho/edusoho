@@ -12,7 +12,7 @@ class FileFilter implements Filter
         unset($data['mime']);
         unset($data['status']);
         unset($data['file']);
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
 
         $data['createdTime'] = date('c', $data['createdTime']);
         $uri = empty($data['uri']) ? '' : $fileService->parseFileUri($data['uri']);

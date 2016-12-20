@@ -607,32 +607,32 @@ class CourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseDeleteService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseDeleteService');
+        return $this->getServiceKernel()->createService('Course:CourseDeleteService');
     }
 
     protected function getCourseCopyService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseCopyService');
+        return $this->getServiceKernel()->createService('Course:CourseCopyService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getClassroomService()

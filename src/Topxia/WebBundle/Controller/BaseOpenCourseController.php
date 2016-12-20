@@ -50,6 +50,6 @@ class BaseOpenCourseController extends BaseController
 
     protected function getRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
+        return $this->getServiceKernel()->createService('RefererLog:RefererLogService');
     }
 }

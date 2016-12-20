@@ -109,7 +109,7 @@ class FileController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
 }

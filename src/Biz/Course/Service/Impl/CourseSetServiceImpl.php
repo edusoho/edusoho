@@ -176,6 +176,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content.FileService');
+        return ServiceKernel::instance()->createService('Content:FileService');
     }
 }

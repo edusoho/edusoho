@@ -25,7 +25,7 @@ class ClientIpVoter implements VoterInterface
 
     function vote(TokenInterface $token, $object, array $attributes)
     {
-        // $blacklistedIp = ServiceKernel::instance()->createService('Util.SimpleStorageService')->get('blacklist_ip');
+        // $blacklistedIp = ServiceKernel::instance()->createService('Util:SimpleStorageService')->get('blacklist_ip');
 
         // if (empty($blacklistedIp) || !is_array($blacklistedIp)) {
         //     return VoterInterface::ACCESS_ABSTAIN;

@@ -131,20 +131,17 @@ class UserController extends BaseController
                 $classrooms[$key]['teachers'] = $teachers;
             }
 
-            $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
         } else {
             $paginator = new Paginator(
                 $this->get('request'),
                 0,
                 20
             );
-            $members = array();
         }
 
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
             'paginator'  => $paginator,
             'classrooms' => $classrooms,
-            'members'    => $members,
             'user'       => $user
         ));
     }
@@ -169,7 +166,6 @@ class UserController extends BaseController
                 0,
                 20
             );
-            $members    = array();
             $classrooms = array();
         } else {
             $conditions = array(
@@ -191,7 +187,6 @@ class UserController extends BaseController
                 $paginator->getPerPageCount()
             );
 
-            $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
             foreach ($classrooms as $key => $classroom) {
                 if (empty($classroom['teacherIds'])) {
@@ -207,7 +202,6 @@ class UserController extends BaseController
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
             'paginator'  => $paginator,
             'classrooms' => $classrooms,
-            'members'    => $members,
             'user'       => $user
         ));
     }
@@ -497,17 +491,17 @@ class UserController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     protected function getNotificationService()
@@ -595,7 +589,7 @@ class UserController extends BaseController
 
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getClassroomService()

@@ -335,7 +335,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getClassroomService()

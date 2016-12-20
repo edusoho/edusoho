@@ -13,7 +13,7 @@ class MyNotebookController extends BaseController
 
         $course  = $this->getCourseService()->getCourse($courseId);
         $lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
-        $notes   = $this->getNoteService()->findUserCourseNotes($user['id'], $course['id']);
+        $notes   = $this->getNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
 
         foreach ($notes as &$note) {
             $note['lessonNumber'] = empty($lessons[$note['lessonId']]) ? 0 : $lessons[$note['lessonId']]['number'];
@@ -47,7 +47,7 @@ class MyNotebookController extends BaseController
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     protected function getCourseService()

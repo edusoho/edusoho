@@ -104,32 +104,32 @@ class BaseProcessor
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon:CouponService');
     }
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
+        return ServiceKernel::instance()->createService('Cash:CashAccountService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     protected function getAppService()
     {
-        return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+        return ServiceKernel::instance()->createService('CloudPlatform:AppService');
     }
 
     protected function getKernel()

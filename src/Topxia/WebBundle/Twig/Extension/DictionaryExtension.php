@@ -62,6 +62,6 @@ class DictionaryExtension extends \Twig_Extension
 
     protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
+        return $this->getServiceKernel()->createService('Dictionary:DictionaryService');
     }
 }

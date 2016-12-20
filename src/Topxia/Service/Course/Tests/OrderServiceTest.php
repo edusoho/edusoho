@@ -151,17 +151,17 @@ class OrderServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     private function createNormalUser()

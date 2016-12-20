@@ -93,7 +93,7 @@ class NavigationController extends BaseController
 
     protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content.NavigationService');
+        return $this->getServiceKernel()->createService('Content:NavigationService');
     }
 
 }

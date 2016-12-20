@@ -162,11 +162,11 @@ class MobileAlipayController extends MobileBaseController
 
     protected function getPayCenterService()
     {
-        return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
+        return $this->getServiceKernel()->createService('PayCenter:PayCenterService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 }

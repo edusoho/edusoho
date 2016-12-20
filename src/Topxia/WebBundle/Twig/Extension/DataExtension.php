@@ -98,12 +98,12 @@ class DataExtension extends \Twig_Extension
 
     private function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     private function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+        return $this->getServiceKernel()->createService('CloudPlatform:EduCloudService');
     }
 
     private function getUserService()

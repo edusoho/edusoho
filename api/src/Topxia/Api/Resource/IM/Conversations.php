@@ -58,6 +58,6 @@ class Conversations extends BaseResource
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 }

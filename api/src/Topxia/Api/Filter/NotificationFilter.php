@@ -9,7 +9,7 @@ class NotificationFilter implements Filter
     public function filter(array &$data)
     {
         $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
         unset($data['isRead']);
         $user = $userService->getUser($data['content']['userId']);
         $avatar = empty($user['largeAvatar']) ? '' : $fileService->parseFileUri($user['largeAvatar']);

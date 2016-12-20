@@ -45,6 +45,6 @@ class TagOwnerManager
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 }

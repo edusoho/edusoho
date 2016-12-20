@@ -1431,7 +1431,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getLogService()
@@ -1451,17 +1451,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getTagService()
     {
-        return $this->createService('Taxonomy.TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseCopyService()
     {
-        return $this->createService('Course.CourseCopyService');
+        return $this->createService('Course:CourseCopyService');
     }
 
     protected function getClassroomCourseDao()
@@ -1476,7 +1476,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getOrderService()
     {
-        return $this->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getVipService()
@@ -1486,7 +1486,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getStatusService()
@@ -1496,7 +1496,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getCategoryService()
     {
-        return $this->createService('Taxonomy.CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 }
 

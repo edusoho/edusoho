@@ -47,7 +47,7 @@ class LiveOpenPushNotificationOneHourJob implements Job
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getFileUrl($path)

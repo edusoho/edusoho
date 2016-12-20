@@ -180,12 +180,12 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order.OrderService');
+        return ServiceKernel::instance()->createService('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
     }
 
     protected function getKernel()

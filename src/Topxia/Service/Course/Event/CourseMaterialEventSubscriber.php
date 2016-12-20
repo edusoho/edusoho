@@ -455,7 +455,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
@@ -465,6 +465,6 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

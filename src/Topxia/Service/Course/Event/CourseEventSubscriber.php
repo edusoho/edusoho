@@ -292,7 +292,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                     'targetIds'  => $courseIds,
                     'copyId'     => $announcement['id']
                 ),
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0, PHP_INT_MAX
             );
 
@@ -330,7 +330,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                     'targetIds'  => $courseIds,
                     'copyId'     => $announcement['id']
                 ),
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0, PHP_INT_MAX
             );
 
@@ -397,12 +397,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNoteService()
     {
-        return ServiceKernel::instance()->createService('Course.NoteService');
+        return ServiceKernel::instance()->createService('Course:NoteService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
@@ -417,12 +417,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->createService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     protected function getReviewService()
     {
-        return ServiceKernel::instance()->createService('Course.ReviewService');
+        return ServiceKernel::instance()->createService('Course:ReviewService');
     }
 
     protected function getNotifiactionService()

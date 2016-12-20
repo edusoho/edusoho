@@ -238,9 +238,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getCourseService($courseType = 'live')
     {
         if ($courseType == 'liveOpen') {
-            return $this->createService('OpenCourse.OpenCourseService');
+            return $this->createService('OpenCourse:OpenCourseService');
         } else {
-            return $this->createService('Course.CourseService');
+            return $this->createService('Course:CourseService');
         }
     }
 

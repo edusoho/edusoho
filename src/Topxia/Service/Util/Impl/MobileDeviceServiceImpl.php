@@ -21,8 +21,8 @@ class MobileDeviceServiceImpl extends BaseService implements MobileDeviceService
     		return $this->getMobileDeviceDao()->findMobileDeviceByIMEI($imei);
     	}
 
-    	protected function getMobileDeviceDao ()
+    protected function getMobileDeviceDao()
 	{
-	    return $this->createDao('Util.MobileDeviceDao');
+	    return $this->createDao('Util:MobileDeviceDao');
 	}
 }

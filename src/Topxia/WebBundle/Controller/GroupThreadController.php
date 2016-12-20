@@ -999,17 +999,17 @@ class GroupThreadController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getPostSearchFilters($request)
@@ -1143,12 +1143,12 @@ class GroupThreadController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getUploadFileService()

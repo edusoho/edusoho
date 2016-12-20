@@ -57,7 +57,7 @@ class CommonController extends BaseController
         $setting = $this->getSettingService()->get('magic', array());
 
         if (empty($setting['disable_web_crontab'])) {
-            $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
+            $this->getServiceKernel()->createService('Crontab:CrontabService')->scheduleJobs();
         }
 
         return $this->createJsonResponse(true);

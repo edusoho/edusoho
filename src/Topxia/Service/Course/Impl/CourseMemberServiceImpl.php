@@ -90,7 +90,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getOrderService()
     {
-        return $this->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getLogService()
@@ -105,6 +105,6 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

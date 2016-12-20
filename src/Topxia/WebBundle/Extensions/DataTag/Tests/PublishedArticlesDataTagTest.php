@@ -2,8 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
+use Biz\Article\Service\ArticleService;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\WebBundle\Extensions\DataTag\PublishedArticlesDataTag;
 
 class PublishedArticlesDataTagTest extends BaseTestCase
 {   
@@ -31,7 +31,7 @@ class PublishedArticlesDataTagTest extends BaseTestCase
             'parentId' => 0
         ));
 
-    	$article1 = $this->getArtcileService()->createArticle(array(
+    	$article1 = $this->getArticleService()->createArticle(array(
     		'title' => 'Article1',
     		'categoryId' => $category1['id'],
     		'featured' => 1,
@@ -44,7 +44,7 @@ class PublishedArticlesDataTagTest extends BaseTestCase
     		'tags' => array()
     	));
 
-    	$article2 = $this->getArtcileService()->createArticle(array(
+    	$article2 = $this->getArticleService()->createArticle(array(
     		'title' => 'Article2',
     		'categoryId' => $category2['id'],
     		'featured' => 1,
@@ -57,7 +57,7 @@ class PublishedArticlesDataTagTest extends BaseTestCase
     		'publishedTime' => '2015-05-12 09:58:05',
     		'tags' => array()
     	));
-    	$article3 = $this->getArtcileService()->createArticle(array(
+    	$article3 = $this->getArticleService()->createArticle(array(
     		'title' => 'Article2',
     		'categoryId' => $category2['id'],
     		'promoted' => 1,
@@ -75,14 +75,17 @@ class PublishedArticlesDataTagTest extends BaseTestCase
         $this->assertEquals(2, $articles[0]['id']);
     }
 
-    public function getArtcileService()
+    /**
+     * @return ArticleService
+     */
+    public function getArticleService()
     {
-    	return $this->getServiceKernel()->createService('Article.ArticleService');
+    	return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     public function getCategoryService()
     {
-    	return $this->getServiceKernel()->createService('Article.CategoryService');
+    	return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
     }
 
 }

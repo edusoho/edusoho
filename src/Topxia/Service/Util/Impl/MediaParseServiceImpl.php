@@ -74,8 +74,8 @@ class MediaParseServiceImpl extends BaseService implements MediaParseService
     	return $media;
 	}
 
-    protected function getMediaParseDao ()
+    protected function getMediaParseDao()
     {
-        return $this->createDao('Util.MediaParseDao');
+        return $this->createDao('Util:MediaParseDao');
     }
 }

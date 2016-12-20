@@ -25,6 +25,6 @@ class ArticleCategories extends BaseResource
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
     }
 }

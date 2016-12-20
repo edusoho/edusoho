@@ -345,22 +345,22 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getTagOwnerDao()
     {
-        return $this->createDao('Taxonomy.TagOwnerDao');
+        return $this->createDao('Taxonomy:TagOwnerDao');
     }
 
     protected function getTagGroupTagDao()
     {
-        return $this->createDao('Taxonomy.TagGroupTagDao');
+        return $this->createDao('Taxonomy:TagGroupTagDao');
     }
     
     protected function getTagDao()
     {
-        return $this->createDao('Taxonomy.TagDao');
+        return $this->createDao('Taxonomy:TagDao');
     }
 
     protected function getTagGroupDao()
     {
-        return $this->createDao('Taxonomy.TagGroupDao');
+        return $this->createDao('Taxonomy:TagGroupDao');
     }
 
     protected function getLogService()

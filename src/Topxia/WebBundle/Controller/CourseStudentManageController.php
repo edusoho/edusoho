@@ -516,7 +516,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:CourseMemberService');
     }
 
     protected function getSettingService()
@@ -526,7 +526,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     /**
@@ -539,7 +539,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getUserFieldService()

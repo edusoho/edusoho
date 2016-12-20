@@ -121,7 +121,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     protected function getQuestionMarkerResultService()
     {
-        return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
+        return $this->getServiceKernel()->createService('Marker:QuestionMarkerResultService');
     }
 
 }

@@ -153,12 +153,12 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 	protected function getContentDao()
 	{
-		return $this->createDao('Content.ContentDao');
+		return $this->createDao('Content:ContentDao');
 	}
 
     protected function getCategoryService()
     {
-        return $this->createService('Taxonomy.CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getLogService()

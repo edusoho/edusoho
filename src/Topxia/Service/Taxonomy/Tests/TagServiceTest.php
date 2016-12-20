@@ -420,6 +420,6 @@ class TagServiceTest extends BaseTestCase
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 }

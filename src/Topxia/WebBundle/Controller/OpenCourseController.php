@@ -783,17 +783,17 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getSettingService()
@@ -813,12 +813,12 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 
     protected function getAuthService()
@@ -828,6 +828,6 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseRecommendedService');
     }
 }

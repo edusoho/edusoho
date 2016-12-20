@@ -21,6 +21,6 @@ class DiscoveryColumn extends BaseResource
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
+        return $this->getServiceKernel()->createService('DiscoveryColumn:DiscoveryColumnService');
     }
 }

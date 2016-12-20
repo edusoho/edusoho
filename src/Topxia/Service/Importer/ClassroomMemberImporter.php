@@ -432,7 +432,7 @@ class ClassroomMemberImporter extends Importer
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getNotificationService()

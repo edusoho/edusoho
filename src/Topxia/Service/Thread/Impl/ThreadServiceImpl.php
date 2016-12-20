@@ -722,22 +722,22 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getThreadDao()
     {
-        return $this->createDao('Thread.ThreadDao');
+        return $this->createDao('Thread:ThreadDao');
     }
 
     protected function getThreadPostDao()
     {
-        return $this->createDao('Thread.ThreadPostDao');
+        return $this->createDao('Thread:ThreadPostDao');
     }
 
     protected function getThreadVoteDao()
     {
-        return $this->createDao('Thread.ThreadVoteDao');
+        return $this->createDao('Thread:ThreadVoteDao');
     }
 
     protected function getThreadMemberDao()
     {
-        return $this->createDao('Thread.ThreadMemberDao');
+        return $this->createDao('Thread:ThreadMemberDao');
     }
 
     protected function getUserService()

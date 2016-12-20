@@ -94,7 +94,7 @@ class TagController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getTagWithException($tagId)

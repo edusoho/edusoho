@@ -89,12 +89,12 @@ class CourseCopyServiceTest extends BaseTestCase
 
 	protected function getCourseCopyService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseCopyService');
+        return $this->getServiceKernel()->createService('Course:CourseCopyService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

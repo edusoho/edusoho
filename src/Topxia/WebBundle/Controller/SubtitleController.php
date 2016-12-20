@@ -1,10 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {
@@ -16,14 +15,14 @@ class SubtitleController extends BaseController
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
 
-        $media   = $this->getUploadFileService()->getFile($mediaId);
+        $media = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
             throw new ResourceNotFoundException('uploadFile', $mediaId);
         }
-        
+
         return $this->render('TopxiaWebBundle:MediaManage/Subtitle:manage.html.twig', array(
-            'media'  => $media,
-            'goto' => $request->query->get('goto'),
+            'media'     => $media,
+            'goto'      => $request->query->get('goto'),
             'subtitles' => $subtitles
         ));
     }
@@ -38,7 +37,7 @@ class SubtitleController extends BaseController
         }
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
-        
+
         return $this->createJsonResponse(array(
             'subtitles' => $subtitles
         ));
@@ -73,7 +72,7 @@ class SubtitleController extends BaseController
         return $this->render('TopxiaWebBundle:MediaManage:preview.html.twig', array(
             'mediaId' => $mediaId,
             'context' => array(
-                'hideQuestion' => 1,
+                'hideQuestion'  => 1,
                 'hideBeginning' => true
             )
         ));
@@ -87,16 +86,16 @@ class SubtitleController extends BaseController
         }
 
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
-        $media   = $this->getUploadFileService()->getFile($mediaId);
+        $media     = $this->getUploadFileService()->getFile($mediaId);
         return $this->render('TopxiaWebBundle:MediaManage/Subtitle:dialog.html.twig', array(
             'subtitles' => $subtitles,
-            'media' => $media
+            'media'     => $media
         ));
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
@@ -106,6 +105,6 @@ class SubtitleController extends BaseController
 
     protected function getSubtitleService()
     {
-        return $this->createService('Subtitle.SubtitleService');
+        return ServiceKernel::instance()->getBiz()->service('Subtitle:SubtitleService');
     }
 }

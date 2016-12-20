@@ -73,7 +73,7 @@ class OptimizeController extends BaseController
 
     protected function getSystemUtilService()
     {
-        return $this->getServiceKernel()->createService('Util.SystemUtilService');
+        return $this->getServiceKernel()->createService('Util:SystemUtilService');
     }
 
 

@@ -1,7 +1,7 @@
 <?php
-
 namespace Biz\Group\Service;
 
+// TODO refactor. use Thread.
 interface ThreadService
 {
     public function getThread($id);

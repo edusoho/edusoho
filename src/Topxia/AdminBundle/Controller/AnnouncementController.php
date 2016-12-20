@@ -2,11 +2,11 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Biz\Announcement\Service\AnnouncementService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Announcement\Impl\AnnouncementServiceImpl;
 
 class AnnouncementController extends BaseController
 {
@@ -26,7 +26,7 @@ class AnnouncementController extends BaseController
             20
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'),
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
@@ -83,10 +83,10 @@ class AnnouncementController extends BaseController
     }
 
     /**
-     * @return AnnouncementServiceImpl
+     * @return AnnouncementService
      */
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return $this->get('biz')->service('Announcement:AnnouncementService');
     }
 }

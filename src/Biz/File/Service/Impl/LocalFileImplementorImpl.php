@@ -245,6 +245,62 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function download($globalId)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function getDefaultHumbnails($globalId)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     * @param $options
+     *
+     * @return array
+     */
+    public function getThumbnail($globalId, $options)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $options
+     *
+     * @return array
+     */
+    public function getStatistics($options)
+    {
+        return array();
+    }
+
+    /**
+     * only support for cloud file
+     * @param $globalId
+     *
+     * @return array
+     */
+    public function player($globalId)
+    {
+        return array();
+    }
+
+    /**
      * @return UserService
      */
     protected function getUserService()

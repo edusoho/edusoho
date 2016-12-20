@@ -40,11 +40,11 @@ class GroupFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Group.ThreadService');
+        return $this->getKernel()->createService('Group:ThreadService');
     }
 
     protected function getGroupService()
     {
-        return $this->getKernel()->createService('Group.GroupService');
+        return $this->getKernel()->createService('Group:GroupService');
     }
 }

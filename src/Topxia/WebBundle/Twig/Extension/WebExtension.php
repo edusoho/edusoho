@@ -352,7 +352,7 @@ class WebExtension extends \Twig_Extension
             'startTime' => $time
         );
 
-        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
     }
 
     public function getInCash($userId, $timeType = "oneWeek")
@@ -364,7 +364,7 @@ class WebExtension extends \Twig_Extension
             'cashType'  => 'Coin',
             'startTime' => $time
         );
-        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
     }
 
     private function getUserService()
@@ -374,7 +374,7 @@ class WebExtension extends \Twig_Extension
 
     public function getAccount($userId)
     {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($userId);
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($userId);
     }
 
     private function filterTime($type)
@@ -692,7 +692,7 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $tags  = ServiceKernel::instance()->createService('Taxonomy.TagService')->findTagsByIds($tagIds);
+        $tags  = ServiceKernel::instance()->createService('Taxonomy:TagService')->findTagsByIds($tagIds);
         $names = ArrayToolkit::column($tags, 'name');
 
         return join($names, ',');
@@ -724,7 +724,7 @@ class WebExtension extends \Twig_Extension
     public function locationTextFilter($districeId, $format = 'P C D')
     {
         $text  = '';
-        $names = ServiceKernel::instance()->createService('Taxonomy.LocationService')->getLocationFullName($districeId);
+        $names = ServiceKernel::instance()->createService('Taxonomy:LocationService')->getLocationFullName($districeId);
 
         $len = strlen($format);
 
@@ -763,7 +763,7 @@ class WebExtension extends \Twig_Extension
     public function tagsHtmlFilter($tags, $class = '')
     {
         $links = array();
-        $tags  = ServiceKernel::instance()->createService('Taxonomy.TagService')->findTagsByIds($tags);
+        $tags  = ServiceKernel::instance()->createService('Taxonomy:TagService')->findTagsByIds($tags);
 
         foreach ($tags as $tag) {
             $url     = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
@@ -776,7 +776,7 @@ class WebExtension extends \Twig_Extension
     public function parseFileUri($uri)
     {
         $kernel = ServiceKernel::instance();
-        return $kernel->createService('Content.FileService')->parseFileUri($uri);
+        return $kernel->createService('Content:FileService')->parseFileUri($uri);
     }
 
     public function getFilePath($uri, $default = '', $absolute = false)
@@ -1036,11 +1036,11 @@ class WebExtension extends \Twig_Extension
             case 'user':
                 return ServiceKernel::instance()->getBiz()->service('User:UserService')->getUser($id);
             case 'category':
-                return $kernel->createService('Taxonomy.CategoryService')->getCategory($id);
+                return $kernel->createService('Taxonomy:CategoryService')->getCategory($id);
             case 'course':
-                return $kernel->createService('Course.CourseService')->getCourse($id);
+                return $kernel->createService('Course:CourseService')->getCourse($id);
             case 'file_group':
-                return $kernel->createService('Content.FileService')->getFileGroup($id);
+                return $kernel->createService('Content:FileService')->getFileGroup($id);
             default:
                 return null;
         }
@@ -1100,9 +1100,9 @@ class WebExtension extends \Twig_Extension
 
     public function isHideThread($id)
     {
-        $need = ServiceKernel::instance()->createService('Group.ThreadService')->sumGoodsCoinsByThreadId($id);
+        $need = ServiceKernel::instance()->createService('Group:ThreadService')->sumGoodsCoinsByThreadId($id);
 
-        $thread = ServiceKernel::instance()->createService('Group.ThreadService')->getThread($id);
+        $thread = ServiceKernel::instance()->createService('Group:ThreadService')->getThread($id);
 
         $data = explode('[/hide]', $thread['content']);
 
@@ -1323,7 +1323,7 @@ class WebExtension extends \Twig_Extension
 
     public function getNextExecutedTime()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService')->getNextExcutedTime();
+        return ServiceKernel::instance()->createService('Crontab:CrontabService')->getNextExcutedTime();
     }
 
     public function getUploadMaxFilesize($formated = true)
@@ -1377,7 +1377,7 @@ class WebExtension extends \Twig_Extension
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     public function getPurifyAndTrimHtml($html)

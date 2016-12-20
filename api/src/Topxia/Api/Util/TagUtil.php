@@ -19,7 +19,7 @@ class TagUtil
 
     protected static function getTagService()
     {
-        return self::getServiceKernel()->createService('Taxonomy.TagService');
+        return self::getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected static function getServiceKernel()

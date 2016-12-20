@@ -286,7 +286,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -417,7 +417,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -599,7 +599,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID', 'DESC'),
+            array('ID' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -641,7 +641,7 @@ class CoinController extends BaseController
         $conditions['cashType'] = $cashType;
 
         $num            = $this->getCashService()->searchFlowsCount($conditions);
-        $orders         = $this->getCashService()->searchFlows($conditions, array('ID', 'DESC'), 0, $num);
+        $orders         = $this->getCashService()->searchFlows($conditions, array('ID' => 'DESC'), 0, $num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -873,12 +873,12 @@ class CoinController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getLevelService()
@@ -888,17 +888,17 @@ class CoinController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getLogService()
@@ -913,6 +913,6 @@ class CoinController extends BaseController
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip.VipService');
+        return $this->getServiceKernel()->createService('Vip:VipService');
     }
 }

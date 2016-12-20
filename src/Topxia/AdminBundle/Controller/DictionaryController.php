@@ -85,6 +85,6 @@ class DictionaryController extends BaseController
 
     protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
+        return $this->getServiceKernel()->createService('Dictionary:DictionaryService');
     }
 }

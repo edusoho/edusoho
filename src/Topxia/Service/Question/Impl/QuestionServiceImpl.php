@@ -313,17 +313,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function getQuestionDao()
     {
-        return $this->createDao('Question.QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     protected function getCategoryDao()
     {
-        return $this->createDao('Question.CategoryDao');
+        return $this->createDao('Question:CategoryDao');
     }
 
     protected function getQuestionFavoriteDao()
     {
-        return $this->createDao('Question.QuestionFavoriteDao');
+        return $this->createDao('Question:QuestionFavoriteDao');
     }
 
 }

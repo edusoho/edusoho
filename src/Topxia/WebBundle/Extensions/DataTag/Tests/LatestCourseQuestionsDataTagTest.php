@@ -52,12 +52,12 @@ class LatestCourseQuestionsDataTagTest extends BaseTestCase
 
     public function getThreadService()
     {
-    	return $this->getServiceKernel()->createService('Course.ThreadService');
+    	return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
 	public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

@@ -56,6 +56,6 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
 
     protected function getOrderRefererLogDao()
     {
-        return $this->createDao('RefererLog.OrderRefererLogDao');
+        return $this->createDao('RefererLog:OrderRefererLogDao');
     }
 }

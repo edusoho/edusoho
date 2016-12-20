@@ -67,7 +67,7 @@ $api->get('/followings', function (Request $request) {
 //获得当前用户虚拟币账户信息
 $api->get('/accounts', function () {
     $user = getCurrentUser();
-    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
+    $accounts = ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($user['id']);
 
     if (empty($accounts)) {
         throw new \Exception('accounts not found');
@@ -111,8 +111,8 @@ $api->get('/coursethreads', function (Request $request) {
     $type = $request->query->get('type', '');
     $conditions = empty($type) ? array() : array('type' => $type);
     $conditions['userId'] = $user['id'];
-    $total = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreadCount($conditions);
-    $coursethreads = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreads($conditions, 'created', $start, $limit);
+    $total = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreadCount($conditions);
+    $coursethreads = ServiceKernel::instance()->createService('Course:ThreadService')->searchThreads($conditions, 'created', $start, $limit);
 
     return array(
         'data'  => $coursethreads,
