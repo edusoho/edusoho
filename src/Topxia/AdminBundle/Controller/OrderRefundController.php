@@ -35,7 +35,7 @@ class OrderRefundController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOrderService()->searchRefundCount($conditions),
+            $this->getOrderService()->countRefunds($conditions),
             20
         );
 

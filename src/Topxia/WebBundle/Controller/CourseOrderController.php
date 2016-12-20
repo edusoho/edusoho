@@ -321,7 +321,7 @@ class CourseOrderController extends OrderController
             if ($course['price'] <= 0) {
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
             } else {
-                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                $createdOrdersCount = $this->getOrderService()->countOrders(array(
                     'targetType'             => 'course',
                     'targetId'               => $course['id'],
                     'status'                 => 'created',

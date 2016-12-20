@@ -31,7 +31,7 @@ class OrderController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount($conditions),
+            $this->getOrderService()->countOrders($conditions),
             20
         );
         $orders = $this->getOrderService()->searchOrders(
@@ -120,7 +120,7 @@ class OrderController extends BaseController
         );
 
         $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
+        $orderCount     = $this->getOrderService()->countOrders($conditions);
         $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
