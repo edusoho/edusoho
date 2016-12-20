@@ -4,7 +4,7 @@ namespace Topxia\Service\Order\Tests;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class ClassroomOrderProcessorTest extends BaseTestCase
 {

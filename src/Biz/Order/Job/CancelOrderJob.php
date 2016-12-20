@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Order\Job;
+namespace Biz\Order\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;

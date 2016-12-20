@@ -1,11 +1,13 @@
 <?php
-namespace Topxia\Service\Order\Impl;
+namespace Biz\Order\Service\Impl;
 
+use Biz\Order\Dao\OrderLogDao;
+use Biz\Order\Dao\OrderRefundDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Order\Dao\OrderDao;
+use Biz\Order\Dao\OrderDao;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -13,28 +15,28 @@ class OrderServiceImpl extends BaseService implements OrderService
 {
     public function getOrder($id)
     {
-        return $this->getOrderDao()->getOrder($id);
+        return $this->getOrderDao()->get($id);
     }
 
     public function getOrderBySn($sn, $lock = false)
     {
-        return $this->getOrderDao()->getOrderBySn($sn, $lock);
+        return $this->getOrderDao()->getBySn($sn, $lock);
     }
 
     public function getOrderByToken($token)
     {
-        return $this->getOrderDao()->getOrderByToken($token);
+        return $this->getOrderDao()->getByToken($token);
     }
 
     public function findOrdersByIds(array $ids)
     {
-        $orders = $this->getOrderDao()->findOrdersByIds($ids);
+        $orders = $this->getOrderDao()->findByIds($ids);
         return ArrayToolkit::index($orders, 'id');
     }
 
     public function findOrdersBySns(array $sns)
     {
-        $orders = $this->getOrderDao()->findOrdersBySns($sns);
+        $orders = $this->getOrderDao()->findBySns($sns);
         return ArrayToolkit::index($orders, 'id');
     }
 
@@ -98,7 +100,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['status']      = 'created';
 
-        $order = $this->getOrderDao()->addOrder($order);
+        $order = $this->getOrderDao()->create($order);
 
         $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
         $this->getDispatcher()->dispatch('order.service.created', new ServiceEvent($order));
@@ -108,7 +110,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function payOrder($payData)
     {
         $success = false;
-        $order   = $this->getOrderDao()->getOrderBySn($payData['sn']);
+        $order   = $this->getOrderDao()->getBySn($payData['sn']);
 
         if (empty($order)) {
             throw $this->createServiceException($this->getKernel()->trans('订单(%payData%)已被删除，支付失败。', array('%payData%' => $payData['sn'])));
@@ -131,7 +133,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
                 !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
 
-                $this->getOrderDao()->updateOrder($order['id'], $payFields);
+                $this->getOrderDao()->update($order['id'], $payFields);
                 $this->_createLog($order['id'], 'pay_success', $this->getKernel()->trans('付款成功'), $payData);
                 $success = true;
             } else {
@@ -158,7 +160,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException($this->getKernel()->trans('订单不存在，获取订单日志失败！'));
         }
 
-        return $this->getOrderLogDao()->findLogsByOrderId($orderId);
+        return $this->getOrderLogDao()->findByOrderId($orderId);
     }
 
     public function canOrderPay($order)
@@ -274,7 +276,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'createdTime' => time()
         );
 
-        return $this->getOrderLogDao()->addLog($log);
+        return $this->getOrderLogDao()->create($log);
     }
 
     public function cancelOrder($id, $message = '', $data = array())
@@ -298,7 +300,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 
-        $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
+        $order = $this->getOrderDao()->update($order['id'], array('status' => 'cancelled'));
 
         $this->_createLog($order['id'], 'cancelled', $message, $data);
 
@@ -335,30 +337,30 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function findUserRefundCount($userId)
     {
-        return $this->getOrderRefundDao()->findRefundCountByUserId($userId);
+        return $this->getOrderRefundDao()->countByUserId($userId);
     }
 
     public function findRefundsByIds(array $ids)
     {
-        return $this->getOrderRefundDao()->findRefundsByIds($ids);
+        return $this->getOrderRefundDao()->findByIds($ids);
     }
 
     public function findUserRefunds($userId, $start, $limit)
     {
-        return $this->getOrderRefundDao()->findRefundsByUserId($userId, $start, $limit);
+        return $this->getOrderRefundDao()->findByUserId($userId, $start, $limit);
     }
 
     public function searchRefunds($conditions, $sort, $start, $limit)
     {
         $conditions = array_filter($conditions);
         $orderBy    = array('createdTime', 'DESC');
-        return $this->getOrderRefundDao()->searchRefunds($conditions, $orderBy, $start, $limit);
+        return $this->getOrderRefundDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchRefundCount($conditions)
     {
         $conditions = array_filter($conditions);
-        return $this->getOrderRefundDao()->searchRefundCount($conditions);
+        return $this->getOrderRefundDao()->count($conditions);
     }
 
     public function applyRefundOrder($id, $expectedAmount = null, $reason = array())
@@ -403,7 +405,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             };
         }
 
-        $refund = $this->getOrderRefundDao()->addRefund(array(
+        $refund = $this->getOrderRefundDao()->create(array(
             'orderId'        => $order['id'],
             'userId'         => $order['userId'],
             'targetType'     => $order['targetType'],
@@ -417,7 +419,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
         ));
 
-        $this->getOrderDao()->updateOrder($order['id'], array(
+        $this->getOrderDao()->update($order['id'], array(
             'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id']
         ));
@@ -449,7 +451,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException($this->getKernel()->trans("当前订单(#%id%)状态下，不能进行确认退款操作", array('%id%' => $order['id'])));
         }
 
-        $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
+        $refund = $this->getOrderRefundDao()->get($order['refundId']);
 
         if (empty($refund)) {
             throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能进行确认退款操作', array('%id%' => $order['id'])));
@@ -466,26 +468,26 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
-            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+            $this->getOrderRefundDao()->update($refund['id'], array(
                 'status'       => 'success',
                 'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
 
-            $this->getOrderDao()->updateOrder($order['id'], array(
+            $this->getOrderDao()->update($order['id'], array(
                 'status' => 'refunded'
             ));
 
             $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('退款申请(ID:%id%)已审核通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
         } else {
-            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+            $this->getOrderRefundDao()->update($refund['id'], array(
                 'status'      => 'failed',
                 'operator'    => $user->id,
                 'updatedTime' => time()
             ));
 
-            $this->getOrderDao()->updateOrder($order['id'], array(
+            $this->getOrderDao()->update($order['id'], array(
                 'status' => 'paid'
             ));
 
@@ -519,19 +521,19 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)状态下，不能取消退款', array('%id%' => $order['id'])));
         }
 
-        $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
+        $refund = $this->getOrderRefundDao()->get($order['refundId']);
 
         if (empty($refund)) {
             throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能取消退款', array('%id%' => $order['id'])));
         }
 
-        $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+        $this->getOrderRefundDao()->update($refund['id'], array(
             'status'      => 'cancelled',
             'operator'    => $user->id,
             'updatedTime' => time()
         ));
 
-        $this->getOrderDao()->updateOrder($order['id'], array(
+        $this->getOrderDao()->update($order['id'], array(
             'status' => 'paid'
         ));
 
@@ -554,7 +556,7 @@ class OrderServiceImpl extends BaseService implements OrderService
        
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $orders     = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+        $orders     = $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
     }
@@ -578,7 +580,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function countUserBillNum($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        return $this->getOrderDao()->countUserBillNum($conditions);
+        return $this->getOrderDao()->countBill($conditions);
     }
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId)
@@ -589,7 +591,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function searchOrderCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        return $this->getOrderDao()->searchOrderCount($conditions);
+        return $this->getOrderDao()->count($conditions);
     }
 
     protected function _prepareSearchConditions($conditions)
@@ -685,7 +687,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException($this->getKernel()->trans('更新订单失败：支付流水号不存在。'));
         }
 
-        $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
+        $this->getOrderDao()->update($id, array("cashSn" => $cashSn));
     }
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
@@ -700,12 +702,12 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function updateOrder($id, $orderFileds)
     {
-        return $this->getOrderDao()->updateOrder($id, $orderFileds);
+        return $this->getOrderDao()->update($id, $orderFileds);
     }
 
     public function findRefundByOrderId($orderId)
     {
-        return $this->getOrderRefundDao()->findRefundByOrderId($orderId);
+        return $this->getOrderRefundDao()->findByOrderId($orderId);
     }
 
     protected function getLogService()
@@ -723,6 +725,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
+    /**
+     * @return OrderRefundDao
+     */
     protected function getOrderRefundDao()
     {
         return $this->createDao('Order:OrderRefundDao');
@@ -736,6 +741,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createDao('Order:OrderDao');
     }
 
+    /**
+     * @return OrderLogDao
+     */
     protected function getOrderLogDao()
     {
         return $this->createDao('Order:OrderLogDao');

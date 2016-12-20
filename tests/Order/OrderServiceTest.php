@@ -1,14 +1,12 @@
 <?php
 namespace Topxia\Service\Order\Tests;
 
-// use Coupon\Service\Coupon\CouponService;
 
+use Biz\Order\Service\OrderService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
 
-// use Topxia\Service\Taxonomy\TagService;
 
 class OrderServiceTest extends BaseTestCase
 {
@@ -2890,6 +2888,9 @@ class OrderServiceTest extends BaseTestCase
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order:OrderService');

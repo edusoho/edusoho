@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Order\OrderProcessor;
+namespace Biz\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 

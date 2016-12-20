@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Order;
+namespace Biz\Order\Service;
 
 interface MoneyService {
 

@@ -1,14 +1,10 @@
 <?php
 
-namespace Topxia\Service\Order\Dao;
+namespace Biz\Order\Dao;
 
-interface OrderLogDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OrderLogDao extends  GeneralDaoInterface
 {
-
-	public function getLog($id);
-
-	public function addLog($log);
-
-	public function findLogsByOrderId($orderId);
-
+	public function findByOrderId($orderId);
 }

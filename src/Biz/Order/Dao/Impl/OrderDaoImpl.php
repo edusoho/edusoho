@@ -1,28 +1,51 @@
 <?php
 
-namespace Topxia\Service\Order\Dao\Impl;
+namespace Biz\Order\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Order\Dao\OrderDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Biz\Order\Dao\OrderDao;
 
-class OrderDaoImpl extends BaseDao implements OrderDao
+class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 {
     protected $table = 'orders';
 
-    private $serializeFields
-        = array(
-            'data' => 'json'
-        );
-
-    public function getOrder($id)
+    public function declares()
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-
-        $order = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+        return array(
+            'timestamps' => array(),
+            'serializes' => array('data' => 'json'),
+            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'conditions' => array(
+                'sn = :sn',
+                'targetType = :targetType',
+                'targetId = :targetId',
+                'userId = :userId',
+                'amount > :amount',
+                'totalPrice >= totalPrice',
+                'totalPrice > :totalPriceGreaterThan',
+                'coinAmount > :coinAmount',
+                'status = :status',
+                'status <> :statusPaid',
+                'status <> :statusCreated',
+                'payment = :payment',
+                'payment <> :cashPayment',
+                'createdTime >= :createdTimeGreaterThan',
+                'paidTime >= :paidStartTime',
+                'paidTime < :paidEndTime',
+                'createdTime >= :startTime',
+                'createdTime < :endTime',
+                'createdTime < :createdTime_LT',
+                'title LIKE :title',
+                'targetType IN ( :targetTypes)',
+                'updatedTime >= :updatedTime_GE ',
+                'userId IN ( :userIds)',
+                'status IN ( :includeStatus)',
+                'totalPrice > :totalPrice_GT'
+            )
+        );
     }
 
-    public function getOrderBySn($sn, $lock = false)
+    public function getBySn($sn, $lock = false)
     {
         $forUpdate = "";
 
@@ -36,72 +59,19 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
 
-    public function getOrderByToken($token)
+    public function getByToken($token)
     {
-        $sql   = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        $order = $this->getConnection()->fetchAssoc($sql, array($token));
-        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+        return $this->getByFields(array('token' => $token));
     }
 
-    public function findOrdersByIds(array $ids)
+    public function findByIds(array $ids)
     {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks  = str_repeat('?,', count($ids) - 1).'?';
-        $sql    = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        $orders = $this->getConnection()->fetchAll($sql, $ids);
-        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
+        return $this->findInField('id', $ids);
     }
 
-    public function findOrdersBySns(array $sns)
+    public function findBySns(array $sns)
     {
-        if (empty($sns)) {
-            return array();
-        }
-
-        $marks  = str_repeat('?,', count($sns) - 1).'?';
-        $sql    = "SELECT * FROM {$this->table} WHERE sn IN ({$marks});";
-        $orders = $this->getConnection()->fetchAll($sql, $sns);
-        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
-    }
-
-    public function addOrder($order)
-    {
-        $order['createdTime'] = time();
-        $order['updatedTime'] = $order['createdTime'];        
-        $order    = $this->createSerializer()->serialize($order, $this->serializeFields);
-        $affected = $this->getConnection()->insert($this->table, $order);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert order error.');
-        }
-
-        return $this->getOrder($this->getConnection()->lastInsertId());
-    }
-
-    public function updateOrder($id, $fields)
-    {
-        $fields['updatedTime'] = time();
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getOrder($id);
-    }
-
-    public function searchOrders($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
-        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
-            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
-        };
-
-        $orders = $builder->execute()->fetchAll() ?: array();
-        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
+        return $this->findInField('sn', $sns);
     }
 
     public function searchBill($conditions, $orderBy, $start, $limit)
@@ -114,7 +84,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, array());
     }
 
-    public function countUserBillNum($conditions)
+    public function countBill($conditions)
     {
         if (!isset($conditions['startTime'])) {
             $conditions['startTime'] = 0;
@@ -122,13 +92,6 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
         $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
         return $this->getConnection()->fetchColumn($sql, array());
-    }
-
-    public function searchOrderCount($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
     }
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId)
@@ -143,39 +106,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, array_merge(array($startTime, $endTime), $courseId));
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions["title"])) {
             $conditions["title"] = '%'.$conditions["title"]."%";
         }
-
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course_order')
-            ->andWhere('sn = :sn')
-            ->andWhere('targetType = :targetType')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('userId = :userId')
-            ->andWhere('amount > :amount')
-            ->andWhere('totalPrice >= totalPrice')
-            ->andWhere('totalPrice > :totalPriceGreaterThan')
-            ->andWhere('coinAmount > :coinAmount')
-            ->andWhere('status = :status')
-            ->andWhere('status <> :statusPaid')
-            ->andWhere('status <> :statusCreated')
-            ->andWhere('payment = :payment')
-            ->andWhere('payment <> :cashPayment')
-            ->andWhere('createdTime >= :createdTimeGreaterThan')
-            ->andWhere('paidTime >= :paidStartTime')
-            ->andWhere('paidTime < :paidEndTime')
-            ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime < :endTime')
-            ->andWhere('createdTime < :createdTime_LT')
-            ->andWhere('title LIKE :title')
-            ->andWhere('targetType IN ( :targetTypes)')
-            ->andWhere('updatedTime >= :updatedTime_GE ')
-			->andWhere('userId IN ( :userIds)')
-			->andWhere('status IN ( :includeStatus)')
-			->andWhere('totalPrice > :totalPrice_GT');
+        return parent::_createQueryBuilder($conditions);
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)

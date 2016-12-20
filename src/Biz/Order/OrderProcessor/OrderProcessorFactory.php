@@ -1,9 +1,9 @@
 <?php
-namespace Topxia\Service\Order\OrderProcessor;
+namespace Biz\Order\OrderProcessor;
 
 use Topxia\Common\JoinPointToolkit;
-use Topxia\Service\Order\OrderProcessor\OrderProcessor;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Service\Common\ServiceKernel;
 
 class OrderProcessorFactory
 {

@@ -1,23 +1,16 @@
 <?php
 
-namespace Topxia\Service\Order\Dao;
+namespace Biz\Order\Dao;
 
-interface OrderRefundDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OrderRefundDao extends GeneralDaoInterface
 {
-	public function getRefund($id);
+    public function countByUserId($userId);
 
-	public function findRefundCountByUserId($userId);
+    public function findByUserId($userId, $start, $limit);
 
-	public function findRefundsByUserId($userId, $start, $limit);
+    public function findByIds(array $ids);
 
-	public function findRefundsByIds(array $ids);
-
-	public function searchRefunds($conditions, $orderBy, $start, $limit);
-		
-	public function searchRefundCount($conditions);
-
-	public function addRefund($refund);
-
-	public function updateRefund($id, $refund);
-
+    public function findByOrderId($orderId);
 }

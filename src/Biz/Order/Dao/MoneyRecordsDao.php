@@ -1,12 +1,10 @@
 <?php
 
-namespace Topxia\Service\Order\Dao;
+namespace Biz\Order\Dao;
 
-interface MoneyRecordsDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface MoneyRecordsDao extends GeneralDaoInterface
 {
-
-    public function searchMoneyRecordsCount($conditions);
-
-    public function searchMoneyRecords($conditions, $orderBy, $start, $limit);
 
 }

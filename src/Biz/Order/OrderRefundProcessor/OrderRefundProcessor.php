@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Order\OrderRefundProcessor;
+namespace Biz\Order\OrderRefundProcessor;
 
 interface OrderRefundProcessor 
 {

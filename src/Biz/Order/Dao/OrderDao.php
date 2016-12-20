@@ -1,30 +1,24 @@
 <?php
 
-namespace Topxia\Service\Order\Dao;
+namespace Biz\Order\Dao;
 
-interface OrderDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface OrderDao extends GeneralDaoInterface
 {
-    public function getOrder($id);
+    public function getBySn($sn);
 
-    public function getOrderBySn($sn);
+    public function getByToken($token);
 
-    public function getOrderByToken($token);
+    public function findByIds(array $ids);
 
-    public function findOrdersByIds(array $ids);
-
-    public function addOrder($order);
-
-    public function updateOrder($id, $fields);
-
-    public function searchOrders($conditions, $orderBy, $start, $limit);
+    public function findBySns(array $sns);
 
     public function searchBill($conditions, $orderBy, $start, $limit);
 
-    public function countUserBillNum($conditions);
+    public function countBill($conditions);
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId);
-
-    public function searchOrderCount($conditions);
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses);
 

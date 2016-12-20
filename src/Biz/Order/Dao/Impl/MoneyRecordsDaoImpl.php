@@ -1,41 +1,27 @@
 <?php
 
-namespace Topxia\Service\Order\Dao\Impl;
+namespace Biz\Order\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Order\Dao\MoneyRecordsDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Biz\Order\Dao\MoneyRecordsDao;
 use PDO;
 
-class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
+class MoneyRecordsDaoImpl extends GeneralDaoImpl implements MoneyRecordsDao
 {
     protected $table = 'money_record';
 
-    public function searchMoneyRecordsCount($conditions)
+    public function declares()
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        return array(
+            'timestamps' => array(),
+            'serializes' => array(),
+            'orderbys'   => array(),
+            'conditions' => array(
+                'userId = :userId',
+                'type = :type',
+                'status = :status',
+                'transactionNo = :transactionNo'
+            )
+        );
     }
-
-    public function searchMoneyRecords($conditions, $orderBy, $start, $limit)
-    {
-    	$this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array(); 
-    }
-
-    protected function _createSearchQueryBuilder($conditions)
-    {
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'money_record')
-            ->andWhere('userId = :userId')
-            ->andWhere('type = :type')
-            ->andWhere('status = :status')
-            ->andWhere('transactionNo = :transactionNo');
-    }
-
 }
