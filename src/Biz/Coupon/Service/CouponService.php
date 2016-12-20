@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Coupon;
+namespace Biz\Coupon\Service;
 
 interface CouponService
 {
