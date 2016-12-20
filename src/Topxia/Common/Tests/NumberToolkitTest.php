@@ -2,7 +2,7 @@
 
 namespace Topxia\Common\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Common\NumberToolkit;
 
 class NumberToolkitTest extends BaseTestCase

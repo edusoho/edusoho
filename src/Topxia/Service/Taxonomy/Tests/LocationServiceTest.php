@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\LocationService;
 use Topxia\Service\User\UserService;

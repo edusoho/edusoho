@@ -5,7 +5,7 @@ use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
 use Biz\Note\Service\CourseNoteService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Biz\Course\Service\CourseSetService;
 
 class NoteServiceTest extends BaseTestCase

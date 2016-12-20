@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Taxonomy\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class TagServiceTest extends BaseTestCase

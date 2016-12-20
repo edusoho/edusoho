@@ -2,7 +2,7 @@
 namespace Permission\Common\Tests;
 
 use Symfony\Component\Yaml\Yaml;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 

@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Theme\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class ThemeServiceTest extends BaseTestCase

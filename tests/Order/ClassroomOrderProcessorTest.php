@@ -2,7 +2,7 @@
 namespace Topxia\Service\Order\Tests;
 
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 

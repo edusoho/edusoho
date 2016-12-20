@@ -4,7 +4,7 @@ namespace Tests\Cash;
 use Biz\Cash\Service\CashAccountService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CashAccountServiceTest extends BaseTestCase
 {

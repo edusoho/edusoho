@@ -3,7 +3,7 @@
 namespace Topxia\Common\Tests;
 
 use Topxia\Common\ConvertIpToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class ConvertIpToolkitTest extends BaseTestCase
 {

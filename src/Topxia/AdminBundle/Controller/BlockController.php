@@ -70,7 +70,7 @@ class BlockController extends BaseController
     public function blockMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $blocks     = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime', 'DESC'), 0, 10);
+        $blocks     = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime' => 'DESC'), 0, 10);
 
         return $this->createJsonResponse($blocks);
     }
