@@ -2,8 +2,8 @@
 namespace Biz\Sensitive\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Sensitive\Service\SensitiveService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Sensitive\Service\SensitiveService;
 
 class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
@@ -65,7 +65,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $this->getBanlogDao()->add($banlog);
 
-        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum'=>1));
+        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
 
         return array('success' => true, 'text' => $text);
     }
@@ -111,7 +111,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
             $this->getBanlogDao()->add($banlog);
 
-            $this->getSensitiveDao()->wave(array($keyword['id']), array('bannedNum'=>1));
+            $this->getSensitiveDao()->wave(array($keyword['id']), array('bannedNum' => 1));
         }
 
         return preg_replace($pattern, '*', $text);
@@ -163,7 +163,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $this->getBanlogDao()->add($banlog);
 
-        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum'=>1));
+        $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
 
         return $match[1];
     }

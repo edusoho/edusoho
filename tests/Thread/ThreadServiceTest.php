@@ -1,9 +1,8 @@
 <?php
 namespace Tests\Thread;
 
+use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
-//  use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Common\BaseTestCase;
 
 class ThreadServiceTest extends BaseTestCase
 {

@@ -53,8 +53,8 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $auth = $this->getSettingService()->get('auth', array());
 
         if (empty($auth['welcome_enabled'])
-        || $auth['welcome_enabled'] != 'opened'
-        || empty($auth['welcome_sender'])) {
+            || $auth['welcome_enabled'] != 'opened'
+            || empty($auth['welcome_sender'])) {
             return;
         }
 
@@ -90,7 +90,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
 
-        $auth = $this->getSettingService()->get('auth', array());
+        $auth        = $this->getSettingService()->get('auth', array());
         $welcomeBody = '';
         if (!empty($auth) && isset($auth['welcome_body'])) {
             $welcomeBody = $auth['welcome_body'];
@@ -102,21 +102,21 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getMessageService()
     {
-        return $this->createService('User:MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
 
     private function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getNotificationService()
     {
-        return $this->createService('User:NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 }

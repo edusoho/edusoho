@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Service\Testpaper\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;

@@ -2,8 +2,8 @@
 
 namespace Tests\Thread;
 
+use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
 
 class ArticleThreadFirewallTest extends BaseTestCase
 {
@@ -69,10 +69,6 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     protected function getUserService()
     {
-<<<<<<< Updated upstream:src/Topxia/Service/Thread/Tests/ArticleThreadFirewallTest.php
-        return ServiceKernel::instance()->createService('User:UserService');
-=======
         return $this->getServiceKernel()->createService('User:UserService');
->>>>>>> Stashed changes:tests/Thread/ArticleThreadFirewallTest.php
     }
 }
