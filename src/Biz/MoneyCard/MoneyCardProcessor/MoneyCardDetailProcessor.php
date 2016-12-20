@@ -2,8 +2,8 @@
 
 namespace  Biz\MoneyCard\MoneyCardProcessor;
 
+use Biz\Card\DetailProcessor\DetailProcessor;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Card\DetailProcessor\DetailProcessor;
 
 class MoneyCardDetailProcessor implements DetailProcessor
 {

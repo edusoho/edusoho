@@ -430,15 +430,13 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     public function useMoneyCard($id, $fields)
     {
-        $connection = ServiceKernel::instance()->getConnection();
-
         try {
-            $connection->beginTransaction();
+            $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
 
             if ($moneyCard['cardStatus'] == 'recharged') {
-                $connection->rollback();
+                $this->rollback();
                 return $moneyCard;
             }
 
@@ -477,9 +475,9 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 ));
             }
 
-            $connection->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $this->rollback();
             throw $e;
         }
 

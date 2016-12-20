@@ -1,60 +1,59 @@
 <?php
-namespace Topxia\Service\Notification;
+namespace Biz\Event\Notification;
 
+use Codeages\Biz\Framework\Event\EventSubscriber;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\CloudPlatform\IMAPIFactory;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Taxonomy\TagOwnerManager;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Biz\Taxonomy\TagOwnerManager;
 
-class PushMessageEventSubscriber implements EventSubscriberInterface
+class PushMessageEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'user.registered'           => 'onUserCreate',
-            'user.unlock'               => 'onUserCreate',
-            'user.lock'                 => 'onUserDelete',
-            'user.update'               => 'onUserUpdate',
-            'user.change_nickname'      => 'onUserUpdate',
-            'user.follow'               => 'onUserFollow',
-            'user.unfollow'             => 'onUserUnFollow',
+            'user.registered'      => 'onUserCreate',
+            'user.unlock'          => 'onUserCreate',
+            'user.lock'            => 'onUserDelete',
+            'user.update'          => 'onUserUpdate',
+            'user.change_nickname' => 'onUserUpdate',
+            'user.follow'          => 'onUserFollow',
+            'user.unfollow'        => 'onUserUnFollow',
 
-            'course.publish'            => 'onCourseCreate',
-            'course.update'             => 'onCourseUpdate',
-            'course.delete'             => 'onCourseDelete',
-            'course.close'              => 'onCourseDelete',
-            'course.join'               => 'onCourseJoin',
-            'course.quit'               => 'onCourseQuit',
-            'course.create'             => 'onCourseCreate',
+            'course.publish' => 'onCourseCreate',
+            'course.update'  => 'onCourseUpdate',
+            'course.delete'  => 'onCourseDelete',
+            'course.close'   => 'onCourseDelete',
+            'course.join'    => 'onCourseJoin',
+            'course.quit'    => 'onCourseQuit',
+            'course.create'  => 'onCourseCreate',
 
-            'course.lesson.publish'     => 'onCourseLessonCreate',
-            'course.lesson.unpublish'   => 'onCourseLessonDelete',
-            'course.lesson.update'      => 'onCourseLessonUpdate',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
+            'course.lesson.publish'   => 'onCourseLessonCreate',
+            'course.lesson.unpublish' => 'onCourseLessonDelete',
+            'course.lesson.update'    => 'onCourseLessonUpdate',
+            'course.lesson.delete'    => 'onCourseLessonDelete',
 
-            'classroom.join'            => 'onClassroomJoin',
-            'classroom.quit'            => 'onClassroomQuit',
+            'classroom.join' => 'onClassroomJoin',
+            'classroom.quit' => 'onClassroomQuit',
 
-            'article.create'            => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
-            'article.publish'           => 'onArticleCreate',
-            'article.update'            => 'onArticleUpdate',
-            'article.trash'             => 'onArticleDelete',
-            'article.unpublish'         => 'onArticleDelete',
-            'article.delete'            => 'onArticleDelete',
+            'article.create'       => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
+            'article.publish'      => 'onArticleCreate',
+            'article.update'       => 'onArticleUpdate',
+            'article.trash'        => 'onArticleDelete',
+            'article.unpublish'    => 'onArticleDelete',
+            'article.delete'       => 'onArticleDelete',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'             => 'onThreadCreate',
-            'thread.update'             => 'onThreadUpdate',
-            'thread.delete'             => 'onThreadDelete',
-            'course.thread.create'      => 'onCourseThreadCreate',
-            'course.thread.update'      => 'onCourseThreadUpdate',
-            'course.thread.delete'      => 'onCourseThreadDelete',
-            'group.thread.create'       => 'onGroupThreadCreate',
-            'group.thread.open'         => 'onGroupThreadOpen',
-            'group.thread.update'       => 'onGroupThreadUpdate',
-            'group.thread.delete'       => 'onGroupThreadDelete',
+            'thread.create'        => 'onThreadCreate',
+            'thread.update'        => 'onThreadUpdate',
+            'thread.delete'        => 'onThreadDelete',
+            'course.thread.create' => 'onCourseThreadCreate',
+            'course.thread.update' => 'onCourseThreadUpdate',
+            'course.thread.delete' => 'onCourseThreadDelete',
+            'group.thread.create'  => 'onGroupThreadCreate',
+            'group.thread.open'    => 'onGroupThreadOpen',
+            'group.thread.update'  => 'onGroupThreadUpdate',
+            'group.thread.delete'  => 'onGroupThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
@@ -64,7 +63,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'group.thread.post.create'  => 'onGroupThreadPostCreate',
             'group.thread.post.delete'  => 'onGroupThreadPostDelete',
 
-            'announcement.create'       => 'onAnnouncementCreate'
+            'announcement.create' => 'onAnnouncementCreate'
 
             //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
@@ -888,64 +887,69 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getThreadService($type = '')
     {
         if ($type == 'course') {
-            return ServiceKernel::instance()->createService('Course:ThreadService');
+            return $this->createService('Course:ThreadService');
         }
 
         if ($type == 'group') {
-            return ServiceKernel::instance()->getBiz()->service('Group:ThreadService');
+            return $this->createService('Group:ThreadService');
         }
 
-        return ServiceKernel::instance()->getBiz()->service('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getCloudDataService()
     {
-        return ServiceKernel::instance()->createService('CloudData:CloudDataService');
+        return $this->createService('CloudData:CloudDataService');
     }
 
     protected function getCrontabService()
     {
-        return ServiceKernel::instance()->createService('Crontab:CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getHomeworkService()
     {
-        return ServiceKernel::instance()->createService('Homework:Homework.HomeworkService');
+        return $this->createService('Homework:Homework.HomeworkService');
     }
 
     protected function getGroupService()
     {
-        return ServiceKernel::instance()->createService('Group:GroupService');
+        return $this->createService('Group:GroupService');
     }
 
     protected function getConversationService()
     {
-        return ServiceKernel::instance()->createService('IM:ConversationService');
+        return $this->createService('IM:ConversationService');
+    }
+
+    protected function createService($alias)
+    {
+        return $this->getBiz()->service($alias);
     }
 
     protected function pushIM($from, $to, $body)

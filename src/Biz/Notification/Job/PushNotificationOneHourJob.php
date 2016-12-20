@@ -1,16 +1,15 @@
 <?php
-namespace Topxia\Service\Notification\Job;
+namespace Biz\Notification\Job;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class PushNotificationOneHourJob implements Job
 {
     public function execute($params)
     {
         $targetType = $params['targetType'];
-        $targetId = $params['targetId'];
+        $targetId   = $params['targetId'];
         if ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
