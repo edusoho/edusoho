@@ -50,14 +50,14 @@ $api->post('/', function (Request $request) {
     $user = getCurrentUser();
     $method = $request->request->get('method','post');
     if ($method == 'delete') {
-        $result = ServiceKernel::instance()->getBiz()->service('User:BlacklistService')->deleteBlacklistByUserIdAndBlackId($user['id'],$blackId);
+        $result = ServiceKernel::instance()->createService('User:BlacklistService')->deleteBlacklistByUserIdAndBlackId($user['id'],$blackId);
         return array(
             'success' => $result>0 ? true : false
         );
     }
     $blacklist['userId'] = $user['id'];
     $blacklist['blackId'] = $blackId;
-    $blacklist = ServiceKernel::instance()->getBiz()->service('User:BlacklistService')->addBlacklist($blacklist);
+    $blacklist = ServiceKernel::instance()->createService('User:BlacklistService')->addBlacklist($blacklist);
     return filter($blacklist, 'blacklist');
 });
 

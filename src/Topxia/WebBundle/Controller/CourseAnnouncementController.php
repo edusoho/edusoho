@@ -107,7 +107,7 @@ class CourseAnnouncementController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
 }

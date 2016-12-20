@@ -12,7 +12,7 @@ class CloudAPIFactory
 {
     public static function create($type = 'root')
     {
-        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        $setting = ServiceKernel::instance()->createService('System:SettingService');
 
         $storage   = $setting->get('storage', array());
         $developer = $setting->get('developer', array());

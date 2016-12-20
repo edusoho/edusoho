@@ -145,16 +145,16 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileTagService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
+        return ServiceKernel::instance()->createService('File:UploadFileTagService');
     }
 }

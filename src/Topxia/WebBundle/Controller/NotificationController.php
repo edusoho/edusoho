@@ -50,11 +50,11 @@ class NotificationController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:BatchNotificationService');
+        return $this->getServiceKernel()->createService('User:BatchNotificationService');
     }
 }

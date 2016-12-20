@@ -59,7 +59,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 
   	protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
 }

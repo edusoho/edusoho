@@ -14,7 +14,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCategoryService()
@@ -24,7 +24,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getReviewService()

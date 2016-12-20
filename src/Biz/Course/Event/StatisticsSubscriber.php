@@ -42,6 +42,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

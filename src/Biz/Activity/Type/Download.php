@@ -135,7 +135,7 @@ class Download extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->createService("Activity:ActivityLearnLogService");
     }
 
     protected function getConnection()

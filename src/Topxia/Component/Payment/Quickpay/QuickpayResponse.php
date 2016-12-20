@@ -210,16 +210,16 @@ class QuickpayResponse extends Response
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 }

@@ -65,7 +65,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -74,7 +74,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     protected function getCourseService()
     {
 
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -82,6 +82,6 @@ class DownloadController extends BaseController implements ActivityActionInterfa
      */
     protected function getDownloadActivityService()
     {
-        return $this->getBiz()->service('Activity:DownloadActivityService');
+        return $this->createService('Activity:DownloadActivityService');
     }
 }

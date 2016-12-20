@@ -188,12 +188,12 @@ class AuthenticationProvider extends UserAuthenticationProvider
      */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
@@ -201,7 +201,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
      */
     private function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     /**
@@ -209,7 +209,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
      */
     private function getAuthService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     protected function getServiceKernel()

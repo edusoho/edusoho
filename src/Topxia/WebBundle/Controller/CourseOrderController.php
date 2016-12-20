@@ -386,7 +386,7 @@ class CourseOrderController extends OrderController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getOrderService()
@@ -396,17 +396,17 @@ class CourseOrderController extends OrderController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
+        return $this->getServiceKernel()->createService('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 
     protected function getAppService()
@@ -421,7 +421,7 @@ class CourseOrderController extends OrderController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     protected function getLevelService()

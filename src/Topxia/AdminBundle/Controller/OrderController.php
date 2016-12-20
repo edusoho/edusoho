@@ -325,7 +325,7 @@ class OrderController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     protected function getCourseService()
@@ -340,11 +340,11 @@ class OrderController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
+        return $this->getServiceKernel()->createService('Cash:CashService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 }

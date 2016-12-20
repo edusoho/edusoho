@@ -54,7 +54,7 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        ServiceKernel::instance()->getBiz()->service('System:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
+        ServiceKernel::instance()->createService('System:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
             return $this->downloadCloudFile($file);
@@ -396,12 +396,12 @@ class UploadFileController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCourseService()
@@ -411,7 +411,7 @@ class UploadFileController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getAppService()

@@ -343,7 +343,7 @@ class BlockServiceImpl extends BaseService implements BlockService
      */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     /**
@@ -351,6 +351,6 @@ class BlockServiceImpl extends BaseService implements BlockService
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }
