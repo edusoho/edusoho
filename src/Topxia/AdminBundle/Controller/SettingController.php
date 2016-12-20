@@ -470,27 +470,44 @@ class SettingController extends BaseController
 
     public function ipBlacklistAction(Request $request)
     {
-        $ips = $this->getSettingService()->get('blacklist_ip', array());
-
-        if (!empty($ips)) {
-            $default['ips'] = join("\n", $ips['ips']);
-            $ips            = array_merge($ips, $default);
-        }
+        $settingService = $this->getSettingService();
 
         if ($request->getMethod() == 'POST') {
-            $data       = $request->request->all();
-            $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
-            $this->getSettingService()->set('blacklist_ip', $ips);
-            $this->getLogService()->info('system', 'update_settings', '更新IP黑名单', $ips);
+            $data = $request->request->all();
 
-            $ips        = $this->getSettingService()->get('blacklist_ip', array());
-            $ips['ips'] = join("\n", $ips['ips']);
+            $blackListIps['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", trim($data['blackListIps']))));
+            $whiteListIps['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", trim($data['whiteListIps']))));
+
+            $settingService->set('blacklist_ip', $blackListIps);
+            $settingService->set('whitelist_ip', $whiteListIps);
+
+            $logService = $this->getLogService();
+
+            $logService->info('system', 'update_settings', '更新IP黑名单', $blackListIps);
+            $logService->info('system', 'update_settings', '更新IP白名单', $whiteListIps);
 
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }
 
+        $blackListIps = $settingService->get('blacklist_ip', array());
+        $whiteListIps = $settingService->get('whitelist_ip', array());
+
+        if (!empty($blackListIps)) {
+            $default['ips'] = join("\n", $blackListIps['ips']);
+            $blackListIps = array_merge($blackListIps, $default);
+        } else {
+            $blackListIps = array();
+        }
+
+        if (!empty($whiteListIps)) {
+            $default['ips'] = join("\n", $whiteListIps['ips']);
+            $whiteListIps = array_merge($whiteListIps, $default);
+        } else {
+            $whiteListIps = array();
+        }
+
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
-            'ips' => $ips
+            'blackListIps' => $blackListIps, 'whiteListIps' => $whiteListIps
         ));
     }
 
