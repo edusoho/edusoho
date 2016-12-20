@@ -1,8 +1,10 @@
 <?php
-namespace Topxia\Service\PostFilter\Impl;
+namespace Biz\PostFilter\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\PostFilter\TokenBucketService;
+
+use Biz\BaseService;
+use Biz\PostFilter\Dao\RecentPostNumDao;
+use Biz\PostFilter\Service\TokenBucketService;
 
 class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 {
@@ -14,7 +16,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
             'num'         => 0,
             'createdTime' => time()
         );
-        return $this->getRecentPostNumDao()->addRecentPostNum($fields);
+        return $this->getRecentPostNumDao()->create($fields);
     }
 
     public function incrToken($ip, $type)
@@ -35,13 +37,12 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
                     }
 
                     $ruleName      = "{$key}.{$ruleName}";
-                    $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $ruleName);
+                    $recentPostNum = $this->getRecentPostNumDao()->getByIpAndType($ip, $ruleName);
 
                     if (empty($recentPostNum)) {
                         $recentPostNum = $this->createRecentPostNum($ip, $ruleName);
                     }
-
-                    $this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
+                    $this->getRecentPostNumDao()->wave(array($recentPostNum["id"]), array('num' => 1));
                 }
             }
         }
@@ -80,14 +81,14 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
     protected function confirmRule($ip, $type, $postNumRule)
     {
-        $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
+        $recentPostNum = $this->getRecentPostNumDao()->getByIpAndType($ip, $type);
 
         if (empty($recentPostNum)) {
             return true;
         }
 
         if ((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
-            $this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
+            $this->getRecentPostNumDao()->delete($recentPostNum["id"]);
             return true;
         }
 
@@ -109,6 +110,9 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
         return array();
     }
 
+    /**
+     * @return RecentPostNumDao
+     */
     protected function getRecentPostNumDao()
     {
         return $this->createDao('PostFilter:RecentPostNumDao');

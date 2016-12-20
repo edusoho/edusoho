@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\PostFilter;
+namespace Biz\PostFilter\Service;
 
 interface TokenBucketService
 {
