@@ -10,6 +10,9 @@ use Biz\Testpaper\Builder\ExerciseBuilder;
 use Biz\Testpaper\Builder\HomeworkBuilder;
 use Biz\Testpaper\Builder\TestpaperBuilder;
 use Biz\Sms\SmsProcessor\LessonSmsProcessor;
+use Biz\Thread\Firewall\ArticleThreadFirewall;
+use Biz\Thread\Firewall\ClassroomThreadFirewall;
+use Biz\Thread\Firewall\OpenCourseThreadFirewall;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 
@@ -47,6 +50,18 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['sms_processor.liveOpen'] = function ($biz) {
             return new LiveOpenLessonSmsProcessor($biz);
+        };
+
+        $biz['thread_firewall.article'] = function ($biz) {
+            return new ArticleThreadFirewall();
+        };
+
+        $biz['thread_firewall.classroom'] = function ($biz) {
+            return new ClassroomThreadFirewall();
+        };
+
+        $biz['thread_firewall.openCourse'] = function ($biz) {
+            return new OpenCourseThreadFirewall();
         };
 
     }

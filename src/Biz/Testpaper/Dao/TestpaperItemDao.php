@@ -2,7 +2,9 @@
 
 namespace Biz\Testpaper\Dao;
 
-interface TestpaperItemDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TestpaperItemDao extends GeneralDaoInterface
 {
     public function findItemsByIds(array $ids);
 

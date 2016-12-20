@@ -264,7 +264,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->getServiceKernel()->createService('File:UploadFileService');
     }
 
     /**
@@ -272,11 +272,16 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getCourseService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Biz\Question\Dao;
 
-interface QuestionDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface QuestionDao extends GeneralDaoInterface
 {
     public function findQuestionsByIds(array $ids);
 

@@ -5,20 +5,19 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassRoomThreads extends BaseResource
 {
     public function get(Application $app, Request $request, $classRoomId)
     {
-        $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 10);
-        $sort = $request->query->get('sort', 'posted');
+        $start    = $request->query->get('start', 0);
+        $limit    = $request->query->get('limit', 10);
+        $sort     = $request->query->get('sort', 'posted');
         $simplify = $request->query->get('simplify', 0);
 
         $conditions = array(
             'targetType' => 'classroom',
-            'targetId' => $classRoomId
+            'targetId'   => $classRoomId
         );
 
         $total = $this->getThreadService()->searchThreadCount($conditions);
@@ -26,7 +25,7 @@ class ClassRoomThreads extends BaseResource
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $start, $limit);
 
         $userIds = ArrayToolkit::column($threads, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($threads as $key => $value) {
             $threads[$key]['user'] = $this->simpleUser($users[$value['userId']]);
@@ -58,6 +57,6 @@ class ClassRoomThreads extends BaseResource
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 }

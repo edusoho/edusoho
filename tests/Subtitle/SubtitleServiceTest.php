@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Subtitle;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class SubtitleServiceTest extends BaseTestCase
 {

@@ -3,8 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController
 {
@@ -159,7 +159,7 @@ class ArticleController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
 
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId'=> $id));
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $id));
 
         $tagNames = ArrayToolkit::column($tags, 'name');
 
@@ -303,7 +303,13 @@ class ArticleController extends BaseController
             )));
         }
 
-        $position = $this->getThreadService()->getPostPostionInArticle($articleId, $post['id']);
+        $conditions = array(
+            'targetType'    => 'article',
+            'targetId'      => $article['id'],
+            'parentId'      => 0,
+            'greaterThanId' => $post['id']
+        );
+        $position = $this->getThreadService()->searchPostsCount($conditions);
 
         $page = ceil($position / 10);
 
@@ -315,15 +321,24 @@ class ArticleController extends BaseController
 
     public function subpostsAction(Request $request, $targetId, $postId, $less = false)
     {
+        $conditions = array(
+            'parentId' => $postId
+        );
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->findPostsCountByParentId($postId),
+            $this->getThreadService()->searchPostsCount($conditions),
             10
         );
 
         $paginator->setBaseUrl($this->generateUrl('article_post_subposts', array('targetId' => $targetId, 'postId' => $postId)));
 
-        $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $posts = $this->getThreadService()->searchPosts(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(

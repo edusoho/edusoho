@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -429,16 +428,16 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function dealESReplay($replay)
     {
         $lessonId = $replay['lessonId'];
-        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $lesson   = $this->getCourseService()->getLesson($lessonId);
         if ($lesson['liveProvider'] == 5) {
-            $globalId = $replay['globalId'];
-            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
-            $currentUser = $this->getCurrentUser();
-            $cloudFile['status'] = 'ok';
-            $cloudFile['targetId'] = $replay['id'];
-            $cloudFile['targetType'] = 'repaly';
-            $cloudFile['convertHash'] = $cloudFile['hashId'];
-            $cloudFile['etag'] = $cloudFile['hashId'];
+            $globalId                   = $replay['globalId'];
+            $cloudFile                  = $this->getCloudFileService()->getByGlobalId($globalId);
+            $currentUser                = $this->getCurrentUser();
+            $cloudFile['status']        = 'ok';
+            $cloudFile['targetId']      = $replay['id'];
+            $cloudFile['targetType']    = 'repaly';
+            $cloudFile['convertHash']   = $cloudFile['hashId'];
+            $cloudFile['etag']          = $cloudFile['hashId'];
             $cloudFile['createdUserId'] = $currentUser['id'];
             $cloudFile['updatedUserId'] = $currentUser['id'];
             $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);

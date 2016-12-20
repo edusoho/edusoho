@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseEventSubscriber implements EventSubscriberInterface
 {
@@ -194,10 +193,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $context = $event->getSubject();
 
-        $argument  = $context['argument'];
-        $course    = $context['course'];
-        $tagIds    = $context['tagIds'];
-        $userId    = $context['userId'];
+        $argument = $context['argument'];
+        $course   = $context['course'];
+        $tagIds   = $context['tagIds'];
+        $userId   = $context['userId'];
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
