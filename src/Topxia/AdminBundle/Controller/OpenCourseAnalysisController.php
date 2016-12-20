@@ -367,7 +367,7 @@ class OpenCourseAnalysisController extends BaseController
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getRefererLogService()

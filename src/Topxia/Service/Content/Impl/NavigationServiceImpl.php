@@ -254,7 +254,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     /**
@@ -262,6 +262,6 @@ class NavigationServiceImpl extends BaseService implements NavigationService
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

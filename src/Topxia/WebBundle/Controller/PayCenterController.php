@@ -570,7 +570,7 @@ class PayCenterController extends BaseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getOrderService()
@@ -585,6 +585,6 @@ class PayCenterController extends BaseController
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 }

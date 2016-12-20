@@ -44,7 +44,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
     protected function isPageCacheEnabled()
     {
-        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('performance', array());
+        $setting = ServiceKernel::instance()->createService('System:SettingService')->get('performance', array());
         return empty($setting['pageCache']) ? 0 : $setting['pageCache'];
     }
 }

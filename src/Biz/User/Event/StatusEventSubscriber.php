@@ -47,12 +47,12 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     protected function getStatusService()
     {
-        return $this->getBiz()->service('User:StatusService');
+        return $this->createService('User:StatusService');
     }
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getThreadService()

@@ -286,7 +286,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getCardService()
     {
-        return $this->getKernel()->getBiz()->service('Card:CardService');
+        return $this->getKernel()->createService('Card:CardService');
     }
 
     private function getCouponDao()
@@ -299,12 +299,12 @@ class CouponServiceImpl extends BaseService implements CouponService
      */
     private function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     private function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getCourseService()
@@ -314,6 +314,6 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

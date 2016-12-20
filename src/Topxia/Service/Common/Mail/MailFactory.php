@@ -8,7 +8,7 @@ class MailFactory
 {
     public static function create($mailOptions)
     {
-        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        $setting = ServiceKernel::instance()->createService('System:SettingService');
 
         $cloudConfig = $setting->get('cloud_email', array());
 

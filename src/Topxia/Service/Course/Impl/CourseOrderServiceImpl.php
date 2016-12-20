@@ -211,22 +211,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     protected function getCashService()
     {
-        return $this->getKernel()->getBiz()->service('Cash:CashService');
+        return $this->getKernel()->createService('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getKernel()->getBiz()->service('Cash:CashAccountService');
+        return $this->getKernel()->createService('Cash:CashAccountService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getCourseService()
@@ -241,6 +241,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 }

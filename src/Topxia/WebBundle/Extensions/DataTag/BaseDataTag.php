@@ -39,7 +39,7 @@ abstract class BaseDataTag
 
     protected function setting($name, $default = array())
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService')->get($name, $default);
+        return ServiceKernel::instance()->createService('System:SettingService')->get($name, $default);
     }
 
 }

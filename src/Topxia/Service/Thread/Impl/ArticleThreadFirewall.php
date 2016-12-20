@@ -51,7 +51,7 @@ class ArticleThreadFirewall
 
     protected function getArticleService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Article:ArticleService');
+        return ServiceKernel::instance()->createService('Article:ArticleService');
     }
 
     protected function getKernel()

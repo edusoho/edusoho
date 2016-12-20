@@ -207,7 +207,7 @@ class InviteController extends BaseController
 
     protected function getInviteRecordService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:InviteRecordService');
+        return $this->getServiceKernel()->createService('User:InviteRecordService');
     }
 
     protected function getOrderService()
@@ -217,12 +217,12 @@ class InviteController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
+        return $this->getServiceKernel()->createService('Card:CardService');
     }
 
     protected function getCouponService()

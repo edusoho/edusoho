@@ -27,6 +27,6 @@ class TagEventSubscriber implements EventSubscriberInterface
      */
     protected function getUploadFileTagService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
+        return ServiceKernel::instance()->createService('File:UploadFileTagService');
     }
 }

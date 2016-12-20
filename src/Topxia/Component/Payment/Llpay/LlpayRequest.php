@@ -109,7 +109,7 @@ class LlpayRequest extends Request
 
     protected function geUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
@@ -117,6 +117,6 @@ class LlpayRequest extends Request
      */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

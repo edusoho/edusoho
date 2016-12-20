@@ -526,12 +526,12 @@ class DefaultController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getStatisticsService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:StatisticsService');
+        return $this->getServiceKernel()->createService('System:StatisticsService');
     }
 
     /**
@@ -560,12 +560,12 @@ class DefaultController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     /**
@@ -578,7 +578,7 @@ class DefaultController extends BaseController
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
+        return $this->getServiceKernel()->createService('Cash:CashService');
     }
 
     private function getWebExtension()
@@ -588,7 +588,7 @@ class DefaultController extends BaseController
 
     protected function getUpgradeNoticeService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UpgradeNoticeService');
+        return ServiceKernel::instance()->createService('User:UpgradeNoticeService');
     }
 
     protected function getReviewService()
@@ -598,7 +598,7 @@ class DefaultController extends BaseController
 
     protected function getUserActiveService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserActiveService');
+        return ServiceKernel::instance()->createService('User:UserActiveService');
     }
 
     /**

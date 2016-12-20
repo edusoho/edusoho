@@ -527,6 +527,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 }

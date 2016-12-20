@@ -1155,6 +1155,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 }

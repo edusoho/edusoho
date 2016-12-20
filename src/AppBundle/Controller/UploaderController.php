@@ -71,7 +71,7 @@ class UploaderController extends BaseController
      */
     private function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
 }

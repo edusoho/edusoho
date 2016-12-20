@@ -108,7 +108,7 @@ class DataExtension extends \Twig_Extension
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
 

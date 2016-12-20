@@ -536,7 +536,7 @@ class OpenCourseServiceTest extends BaseTestCase
 <<<<<<< HEAD:tests/OpenCourse/OpenCourseServiceTest.php
         return self::$biz->service('OpenCourse:OpenCourseService');
 =======
-        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
 >>>>>>> feature/x8-migrate:src/Topxia/Service/OpenCourse/Tests/OpenCourseServiceTest.php
     }
 }

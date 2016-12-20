@@ -64,6 +64,6 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
      */
     protected function getArticleService()
     {
-        return $this->getBiz()->service('Article:ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 }

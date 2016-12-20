@@ -79,6 +79,6 @@ class CommonAdminController extends BaseController
 
     protected function getUserCommonAdminService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserCommonAdminService');
+        return ServiceKernel::instance()->createService('User:UserCommonAdminService');
     }
 }

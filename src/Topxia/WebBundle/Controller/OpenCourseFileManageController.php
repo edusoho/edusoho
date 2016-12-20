@@ -190,12 +190,12 @@ class OpenCourseFileManageController extends BaseController
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getMaterialService()
