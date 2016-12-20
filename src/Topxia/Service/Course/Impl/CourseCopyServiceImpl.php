@@ -447,47 +447,47 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function getUploadFileDao()
     {
-        return $this->createDao('File.UploadFileDao');
+        return $this->createDao('File:UploadFileDao');
     }
 
     protected function getCourseMemberDao()
     {
-        return $this->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     protected function getTestpaperItemDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemDao');
+        return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
     protected function getTestpaperDao()
     {
-        return $this->createDao('Testpaper.TestpaperDao');
+        return $this->createDao('Testpaper:TestpaperDao');
     }
 
     protected function getQuestionDao()
     {
-        return $this->createDao('Question.QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     protected function getCourseChapterDao()
     {
-        return $this->createDao('Course.CourseChapterDao');
+        return $this->createDao('Course:CourseChapterDao');
     }
 
     protected function getLessonDao()
     {
-        return $this->createDao('Course.LessonDao');
+        return $this->createDao('Course:LessonDao');
     }
 
     protected function getCourseDao()
     {
-        return $this->createDao('Course.CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 
     protected function getMaterialDao()
     {
-        return $this->createDao('Course.CourseMaterialDao');
+        return $this->createDao('Course:CourseMaterialDao');
     }
 
     protected function getHomeworkDao()
@@ -507,22 +507,22 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getSmsService()
     {
-        return $this->createService('Sms.SmsService');
+        return $this->createService('Sms:SmsService');
     }
 
     protected function getAnnouncementService()

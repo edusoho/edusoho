@@ -110,12 +110,12 @@ class ContentController extends BaseController
 
     protected function getContentService()
     {
-        return $this->getServiceKernel()->createService('Content.ContentService');
+        return $this->getServiceKernel()->createService('Content:ContentService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
 }

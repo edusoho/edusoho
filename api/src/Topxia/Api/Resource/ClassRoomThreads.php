@@ -4,7 +4,6 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomThreads extends BaseResource
@@ -53,11 +52,11 @@ class ClassRoomThreads extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->servic('Thread:ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 }

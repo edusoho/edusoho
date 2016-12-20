@@ -178,11 +178,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 
     protected function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content.FileService');
+        return ServiceKernel::instance()->createService('Content:FileService');
     }
 }

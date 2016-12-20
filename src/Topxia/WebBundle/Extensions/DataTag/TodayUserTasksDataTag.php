@@ -57,7 +57,7 @@ class TodayUserTasksDataTag extends BaseDataTag implements DataTag
 
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task.TaskService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
     protected function checkArguments(array $arguments)

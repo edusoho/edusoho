@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ThreadController extends BaseController
@@ -411,7 +410,7 @@ class ThreadController extends BaseController
 
     protected function getThreadService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function convertFiltersToConditions($id, $filters)
@@ -455,16 +454,16 @@ class ThreadController extends BaseController
 
     protected function getTokenBucketService()
     {
-        return $this->getServiceKernel()->createService('PostFilter.TokenBucketService');
+        return $this->getServiceKernel()->createService('PostFilter:TokenBucketService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return $this->getServiceKernel()->createService('User:NotificationService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return $this->getServiceKernel()->createService('File:UploadFileService');
     }
 }

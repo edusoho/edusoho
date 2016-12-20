@@ -368,17 +368,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
+        return ServiceKernel::instance()->createService('Cash:CashAccountService');
     }
 
     protected function getClassroomOrderService()
@@ -388,12 +388,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order.OrderService');
+        return ServiceKernel::instance()->createService('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
     }
 
     protected function getKernel()

@@ -521,6 +521,6 @@ class ConversationServiceTest extends BaseTestCase
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 }

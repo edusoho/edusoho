@@ -111,12 +111,12 @@ class Member extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 
     protected function getClassroomService()

@@ -277,6 +277,6 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
     }
 }

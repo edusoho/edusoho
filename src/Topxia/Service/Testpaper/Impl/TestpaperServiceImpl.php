@@ -1006,37 +1006,37 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getTestpaperDao()
     {
-        return $this->createDao('Testpaper.TestpaperDao');
+        return $this->createDao('Testpaper:TestpaperDao');
     }
 
     protected function getTestpaperResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperResultDao');
+        return $this->createDao('Testpaper:TestpaperResultDao');
     }
 
     protected function getTestpaperItemDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemDao');
+        return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
     protected function getTestpaperItemResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemResultDao');
+        return $this->createDao('Testpaper:TestpaperItemResultDao');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getQuestionService()
     {
-        return $this->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getMemberDao()
     {
-        return $this->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     protected function getStatusService()

@@ -55,7 +55,7 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

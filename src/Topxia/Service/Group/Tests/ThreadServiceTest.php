@@ -479,7 +479,7 @@ class ThreadServiceTest extends BaseTestCase
     }
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getUserService()
@@ -489,7 +489,7 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
     protected function createUser(){
         $user = array();

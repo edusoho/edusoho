@@ -128,17 +128,17 @@ class MarkerController extends BaseController
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getMarkerService()
     {
-        return $this->getServiceKernel()->createService('Marker.MarkerService');
+        return $this->getServiceKernel()->createService('Marker:MarkerService');
     }
 
     protected function getUploadFileService()

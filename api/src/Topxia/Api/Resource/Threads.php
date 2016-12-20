@@ -40,6 +40,6 @@ class Threads extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Thread:ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 }

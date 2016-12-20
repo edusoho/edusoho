@@ -78,12 +78,12 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -91,6 +91,6 @@ class CourseSearchAdapter extends AbstractSearchAdapter
      */
     protected function getOpenCourseService()
     {
-        return $this->createService('OpenCourse.OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

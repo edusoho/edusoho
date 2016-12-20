@@ -4,7 +4,6 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ThreadPosts extends BaseResource
@@ -53,16 +52,16 @@ class ThreadPosts extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Thread:ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 }

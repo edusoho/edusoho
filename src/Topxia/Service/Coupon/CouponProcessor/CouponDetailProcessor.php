@@ -19,6 +19,6 @@ class CouponDetailProcessor implements DetailProcessor
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon:CouponService');
     }
 }

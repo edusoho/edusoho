@@ -43,6 +43,6 @@ class {{bigName}}ServiceImpl extends BaseService  implements {{bigName}}Service
 
     private function get{{bigName}}Dao()
     {
-        return $this->createDao('{{service}}.{{bigName}}Dao');
+        return $this->createDao('{{service}}:{{bigName}}Dao');
     }
 }

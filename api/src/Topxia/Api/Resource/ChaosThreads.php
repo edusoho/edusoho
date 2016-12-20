@@ -250,21 +250,21 @@ class ChaosThreads extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Thread:ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getGroupThreadService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Group:ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

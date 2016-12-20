@@ -4,6 +4,7 @@ namespace Biz;
 
 use Monolog\Logger;
 use Biz\User\CurrentUser;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\HTMLPurifierFactory;
@@ -14,6 +15,11 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
+    /**
+     * @param $alias
+     *
+     * @return GeneralDaoInterface
+     */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
@@ -27,12 +33,17 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->biz['user'];
     }
 
+    /**
+     * @param $alias
+     *
+     * @return BaseService
+     */
     protected function createService($alias)
     {
         return $this->biz->service($alias);
     }
 
-    protected function getDispatcher()
+    private function getDispatcher()
     {
         return $this->biz['dispatcher'];
     }

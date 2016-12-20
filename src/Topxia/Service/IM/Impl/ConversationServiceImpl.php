@@ -326,17 +326,17 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     protected function getConversationDao()
     {
-        return $this->createDao('IM.ConversationDao');
+        return $this->createDao('IM:ConversationDao');
     }
 
     protected function getConversationMemberDao()
     {
-        return $this->createDao('IM.ConversationMemberDao');
+        return $this->createDao('IM:ConversationMemberDao');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getClassroomService()

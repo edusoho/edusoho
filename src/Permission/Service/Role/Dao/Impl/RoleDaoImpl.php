@@ -110,7 +110,7 @@ class RoleDaoImpl extends BaseDao implements RoleDao
 
     protected function getRoleDao()
     {
-        return $this->createDao('System.RoleDao');
+        return $this->createDao('System:RoleDao');
     }
 
     public function getSerializeFields()

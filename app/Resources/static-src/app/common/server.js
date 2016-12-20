@@ -7,16 +7,10 @@ export const send = (url,callback,data=null,type="POST") =>{
       (callback && typeof(callback) === "function") && callback(res);
     },  
     error: function(){
-      (callback && typeof(callback) === "function") && callback([{
-        value:1,
-        test:'ad',
-      }]);
-    },  
-    complete: function(){
-      (callback && typeof(callback) === "function") && callback([{
-        value:1,
-        test:'ad',
-      }]);
+      (callback && typeof(callback) === "function") && callback([]);
+    // },  
+    // complete: function(){
+    //   (callback && typeof(callback) === "function") && callback([]);
     }  
   });
 }

@@ -177,7 +177,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getKernel()

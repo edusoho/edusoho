@@ -27,7 +27,7 @@ class BlocksDataTag extends BaseDataTag implements DataTag
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return $this->getServiceKernel()->createService('Content:BlockService');
     }
 
 }

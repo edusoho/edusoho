@@ -702,7 +702,7 @@ EOD;
      */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 
     /**
@@ -710,7 +710,7 @@ EOD;
      */
     protected function getCategoryService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
+        return ServiceKernel::instance()->createService('Taxonomy:CategoryService');
     }
 
     /**
@@ -718,7 +718,7 @@ EOD;
      */
     private function getCrontabService()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        return ServiceKernel::instance()->createService('Crontab:CrontabService');
     }
 
     /**
@@ -742,7 +742,7 @@ EOD;
      */
     private function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content.FileService');
+        return ServiceKernel::instance()->createService('Content:FileService');
     }
 
     /**
@@ -750,7 +750,7 @@ EOD;
      */
     protected function getContentService()
     {
-        return ServiceKernel::instance()->createService('Content.ContentService');
+        return ServiceKernel::instance()->createService('Content:ContentService');
     }
 
     /**
@@ -758,7 +758,7 @@ EOD;
      */
     protected function getBlockService()
     {
-        return ServiceKernel::instance()->createService('Content.BlockService');
+        return ServiceKernel::instance()->createService('Content:BlockService');
     }
 
     /**
@@ -766,7 +766,7 @@ EOD;
      */
     protected function getNavigationService()
     {
-        return ServiceKernel::instance()->createService('Content.NavigationService');
+        return ServiceKernel::instance()->createService('Content:NavigationService');
     }
 
     /**
@@ -790,6 +790,6 @@ EOD;
      */
     protected function getDictionaryService()
     {
-        return ServiceKernel::instance()->createService('Dictionary.DictionaryService');
+        return ServiceKernel::instance()->createService('Dictionary:DictionaryService');
     }
 }

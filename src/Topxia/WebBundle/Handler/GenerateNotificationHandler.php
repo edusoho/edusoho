@@ -78,7 +78,7 @@ class GenerateNotificationHandler
 
 	private function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     private function getNotificationService()
@@ -88,7 +88,7 @@ class GenerateNotificationHandler
 
     private function getAppService()
     {
-    	return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+    	return ServiceKernel::instance()->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()

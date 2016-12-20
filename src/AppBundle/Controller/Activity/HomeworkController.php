@@ -105,7 +105,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getServiceKernel()

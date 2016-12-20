@@ -11,7 +11,7 @@ class MeFilter implements Filter
         if (empty($data['id'])) {
             return $data;
         }
-        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $fileService = ServiceKernel::instance()->createService('Content:FileService');
         $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
         unset($data['password']);
         unset($data['salt']);

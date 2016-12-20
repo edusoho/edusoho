@@ -23,12 +23,12 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->get($id);
     }
 
-    public function getUserTaskNote($userId, $taskId)
+    public function findCourseNotesByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getNoteDao()->getByUserIdAndTaskId($userId, $taskId);
     }
 
-    public function findUserCourseNotes($userId, $courseId)
+    public function findCourseNotesByUserIdAndCourseId($userId, $courseId)
     {
         return $this->getNoteDao()->findByUserIdAndCourseId($userId, $courseId);
     }
@@ -39,7 +39,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->search($conditions, $sort, $start, $limit);
     }
 
-    public function searchNoteCount($conditions)
+    public function countCourseNotes($conditions)
     {
         $conditions = $this->prepareSearchNoteConditions($conditions);
         return $this->getNoteDao()->count($conditions);
@@ -51,7 +51,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      * @return array
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
-    public function saveNote(array $note)
+    public function createCourseNote(array $note)
     {
         if (!ArrayToolkit::requireds($note, array('taskId', 'courseId', 'content'))) {
             throw $this->createServiceException('缺少必要的字段，保存笔记失败');
@@ -76,7 +76,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $note['content'] = $this->biz['html_helper']->purify($note['content']) ?: '';
         $note['length']  = $this->calculateContentLength($note['content']);
 
-        $existNote = $this->getUserTaskNote($user['id'], $note['taskId']);
+        $existNote = $this->findCourseNotesByUserIdAndTaskId($user['id'], $note['taskId']);
         if (!$existNote) {
             $note['userId']      = $user['id'];
             $note                = $this->getNoteDao()->create($note);

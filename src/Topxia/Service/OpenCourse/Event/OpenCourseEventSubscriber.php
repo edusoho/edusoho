@@ -147,7 +147,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNoteService()
     {
-        return ServiceKernel::instance()->createService('Course.NoteService');
+        return ServiceKernel::instance()->createService('Course:NoteService');
     }
 
     /**
@@ -155,11 +155,11 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
      */
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

@@ -101,7 +101,7 @@ class CourseReviewController extends CourseBaseController
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     protected function getClassroomService()

@@ -88,12 +88,12 @@ class UpgradeScriptsCommand extends BaseCommand
 
     protected function getAppDao()
     {
-        return $this->getServiceKernel()->createDao('CloudPlatform.CloudAppDao');
+        return $this->getServiceKernel()->createDao('CloudPlatform:CloudAppDao');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getLogService()

@@ -258,7 +258,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getStatusService()
@@ -268,7 +268,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
     }
 
     private function getClassroomService()

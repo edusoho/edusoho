@@ -252,7 +252,7 @@ class TaskServiceTest extends BaseTestCase
 
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task.TaskService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
 }

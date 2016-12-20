@@ -193,7 +193,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     protected function getOrderService()
     {
-        return $this->createService('Order.OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getClassroomService()
@@ -203,12 +203,12 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     protected function getCashService()
     {
-        return $this->createService('Cash.CashService');
+        return $this->getKernel()->getBiz()->service('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->createService('Cash.CashAccountService');
+        return $this->getKernel()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getUserService()

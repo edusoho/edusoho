@@ -34,14 +34,7 @@ class LessonController extends BaseController
 
     public function buyHintAction(Request $request, $courseId)
     {
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
-
-        if (!empty($classrooms) && count($classrooms) > 0) {
-            $keys      = array_keys($classrooms);
-            $classroom = $this->getClassroomService()->getClassroom($keys[0]);
-        } else {
-            $classroom = array();
-        }
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         return $this->render('ClassroomBundle:Classroom:hint-modal.html.twig', array(
             'classroom' => $classroom
@@ -66,6 +59,6 @@ class LessonController extends BaseController
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

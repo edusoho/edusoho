@@ -41,11 +41,11 @@ class ConversationEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getConversationService()
     {
-        return ServiceKernel::instance()->createService('IM.ConversationService');
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 }

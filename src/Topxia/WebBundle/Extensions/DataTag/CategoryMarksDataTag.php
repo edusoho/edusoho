@@ -22,6 +22,6 @@ class CategoryMarksDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

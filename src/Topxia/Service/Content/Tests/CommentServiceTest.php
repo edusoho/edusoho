@@ -40,12 +40,12 @@ class CommentServiceTest extends BaseTestCase
 
 	protected function getCommentService()
     {
-        return $this->getServiceKernel()->createService('Content.CommentService');
+        return $this->getServiceKernel()->createService('Content:CommentService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

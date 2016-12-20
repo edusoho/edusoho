@@ -20,7 +20,7 @@ class NoteController extends CourseBaseController
             (isset($conditions['courseId']) && !empty($conditions['courseId']))) {
             $paginator = new Paginator(
                 $request,
-                $this->getNoteService()->searchNoteCount($conditions),
+                $this->getNoteService()->countCourseNotes($conditions),
                 20
             );
             $orderBy = $this->convertFiltersToOrderBy($filters);
@@ -162,7 +162,7 @@ class NoteController extends CourseBaseController
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     protected function getUserFieldService()

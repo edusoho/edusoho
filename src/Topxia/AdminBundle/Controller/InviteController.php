@@ -138,7 +138,7 @@ class InviteController extends BaseController
         $conditions['cardType'] = 'coupon';
         $cards                  = $this->getCardService()->searchCards(
             $conditions,
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             0,
             PHP_INT_MAX
         );
@@ -212,7 +212,7 @@ class InviteController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getUserService()
@@ -222,11 +222,11 @@ class InviteController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card.CardService');
+        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
     }
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:CouponService');
     }
 }

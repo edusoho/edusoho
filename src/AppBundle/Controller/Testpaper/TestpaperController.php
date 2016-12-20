@@ -299,7 +299,7 @@ class TestpaperController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 
     protected function getTestpaperService()
@@ -324,12 +324,12 @@ class TestpaperController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
     protected function getServiceKernel()

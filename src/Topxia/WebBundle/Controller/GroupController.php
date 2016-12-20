@@ -534,12 +534,12 @@ class GroupController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getNotifiactionService()
@@ -614,7 +614,7 @@ class GroupController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
     protected function convertFiltersToConditions($id, $filters)

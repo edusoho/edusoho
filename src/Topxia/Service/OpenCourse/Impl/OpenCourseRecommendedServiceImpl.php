@@ -157,11 +157,11 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
     protected function getOpenCourseService()
     {
-        return $this->createService('OpenCourse.OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getRecommendedCourseDao()
     {
-        return $this->createDao('OpenCourse.RecommendedCourseDao');
+        return $this->createDao('OpenCourse:RecommendedCourseDao');
     }
 }

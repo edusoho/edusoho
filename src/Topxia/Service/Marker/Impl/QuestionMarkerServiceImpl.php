@@ -162,7 +162,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     protected function getQuestionMarkerDao()
     {
-        return $this->createDao('Marker.QuestionMarkerDao');
+        return $this->createDao('Marker:QuestionMarkerDao');
     }
 
     protected function getLogService()
@@ -172,16 +172,16 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     protected function getQuestionService()
     {
-        return $this->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getQuestionMarkerResultService()
     {
-        return $this->createService('Marker.QuestionMarkerResultService');
+        return $this->createService('Marker:QuestionMarkerResultService');
     }
 
     protected function getMarkerService()
     {
-        return $this->createService('Marker.MarkerService');
+        return $this->createService('Marker:MarkerService');
     }
 }

@@ -29,6 +29,6 @@ class GroupDataTag extends BaseDataTag implements DataTag
 
     private function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 }

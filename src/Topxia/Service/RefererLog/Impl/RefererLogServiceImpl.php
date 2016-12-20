@@ -130,12 +130,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     protected function getRefererLogDao()
     {
-        return $this->createDao('RefererLog.RefererLogDao');
+        return $this->createDao('RefererLog:RefererLogDao');
     }
 
     protected function getOrderRefererDao()
     {
-        return $this->createDao('RefererLog.OrderRefererDao');
+        return $this->createDao('RefererLog:OrderRefererDao');
     }
 
     private function prepareAnalysisSummary($refererlogDatas)

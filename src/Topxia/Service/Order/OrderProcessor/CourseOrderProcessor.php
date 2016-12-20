@@ -257,37 +257,37 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon:CouponService');
     }
 
     protected function getAppService()
     {
-        return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+        return ServiceKernel::instance()->createService('CloudPlatform:AppService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseOrderService()
     {
-        return ServiceKernel::instance()->createService("Course.CourseOrderService");
+        return ServiceKernel::instance()->createService("Course:CourseOrderService");
     }
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order.OrderService');
+        return ServiceKernel::instance()->createService('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
     }
 
     protected function getKernel()

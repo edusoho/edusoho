@@ -52,7 +52,7 @@ $api->post('/', function (Request $request) {
     $fields['title'] = $request->request->get('title');
     $fields['content'] = $request->request->get('content');
 
-    $thread = ServiceKernel::instance()->createService('Course.ThreadService')->createThread($fields);
+    $thread = ServiceKernel::instance()->createService('Course:ThreadService')->createThread($fields);
     return filter($thread, 'courseThread');
 });
 
@@ -82,7 +82,7 @@ $api->post('/{id}', function (Request $request, $id) {
         
     $conditions['title'] = empty($title) ? $thread['title'] : $title;
     $conditions['content'] = empty($content) ? $thread['content'] : $content;
-    $thread = ServiceKernel::instance()->createService('Course.ThreadService')->updateThread(2, $thread['id'], $conditions);
+    $thread = ServiceKernel::instance()->createService('Course:ThreadService')->updateThread(2, $thread['id'], $conditions);
     return filter($thread, 'courseThread');
 });
 
@@ -127,7 +127,7 @@ $api->post('/{id}/posts', function (Request $request, $id) {
     $post = empty($content) ? array() : array('content' => $content);
     $post['threadId'] = $thread['id'];
     $post['courseId'] = $thread['courseId'];
-    $post = ServiceKernel::instance()->createService('Course.ThreadService')->createPost($post);
+    $post = ServiceKernel::instance()->createService('Course:ThreadService')->createPost($post);
     return filter($post, 'courseThreadPost');
 });
 
@@ -149,7 +149,7 @@ $api->get('/{id}/teacher_posts', function (Request $request, $id) {
     $thread = convert($id, 'courseThread');
     $start = $request->query->get('start',0);
     $limit = $request->query->get('limit',10);
-    $posts = ServiceKernel::instance()->createService('Course.ThreadService')->findThreadElitePosts($thread['courseId'], $thread['id'], $start, $limit);
+    $posts = ServiceKernel::instance()->createService('Course:ThreadService')->findThreadElitePosts($thread['courseId'], $thread['id'], $start, $limit);
     return $posts;
 });
 return $api;

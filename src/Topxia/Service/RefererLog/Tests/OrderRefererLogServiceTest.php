@@ -184,6 +184,6 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     protected function getOrderRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog.OrderRefererLogService');
+        return $this->getServiceKernel()->createService('RefererLog:OrderRefererLogService');
     }
 }

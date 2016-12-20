@@ -23,21 +23,24 @@ class OrgBatchUpdateFactory
     {
         return array(
             'user'         => array(
-                'protocol'=> 'biz',
-                'service' => 'User:UserService'
+                'protocol' => 'biz',
+                'service'  => 'User:UserService'
             ),
-            'course'       =>  array(
-                'protocol'=> 'biz',
-                'service' => 'Course:CourseService',
+            'course'       => array(
+                'protocol' => 'biz',
+                'service'  => 'Course:CourseService',
             ),
             'classroom'    => array(
-                'protocol'=> 'biz',
-                'service' => 'Classroom:ClassroomService'
+                'protocol' => 'biz',
+                'service'  => 'Classroom:ClassroomService'
             ),
-            'article'      => 'Article.ArticleService',
+            'article'      => array(
+                'protocol' => 'biz',
+                'service'  => 'Article:ArticleService'
+            ),
             'announcement' => array(
-                'protocol'=> 'biz',
-                'service' => 'Announcement:AnnouncementService',
+                'protocol' => 'biz',
+                'service'  => 'Announcement:AnnouncementService',
             )
         );
     }

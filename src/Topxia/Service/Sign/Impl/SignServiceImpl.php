@@ -133,17 +133,17 @@ class SignServiceImpl extends BaseService implements SignService
 
     protected function getSignUserLogDao()
     {
-        return $this->createDao('Sign.SignUserLogDao');
+        return $this->createDao('Sign:SignUserLogDao');
     }
 
     protected function getSignUserStatisticsDao()
     {
-        return $this->createDao('Sign.SignUserStatisticsDao');
+        return $this->createDao('Sign:SignUserStatisticsDao');
     }
 
     protected function getSignTargetStatisticsDao()
     {
-        return $this->createDao('Sign.SignTargetStatisticsDao');
+        return $this->createDao('Sign:SignTargetStatisticsDao');
     }
 
     protected function getUserService()

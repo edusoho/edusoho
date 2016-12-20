@@ -358,7 +358,7 @@ class BlockController extends BaseController
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return $this->getServiceKernel()->createService('Content:BlockService');
     }
 
     /**

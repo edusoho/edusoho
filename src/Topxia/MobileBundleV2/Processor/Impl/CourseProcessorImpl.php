@@ -447,7 +447,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'userId' => $user['id']
         );
 
-        $total     = $this->controller->getNoteService()->searchNoteCount($conditions);
+        $total     = $this->controller->getNoteService()->countCourseNotes($conditions);
         $noteInfos = $this->controller->getNoteService()->searchNotes($conditions, array("updatedTime" => "DESC"), $start, $limit);
         $lessonIds = ArrayToolkit::column($noteInfos, "lessonId");
         $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
@@ -516,7 +516,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $noteInfo['content'] = $this->uploadImage($content);
 
-        $result            = $this->controller->getNoteService()->saveNote($noteInfo);
+        $result            = $this->controller->getNoteService()->createCourseNote($noteInfo);
         $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
 
         if ($result['updatedTime'] == 0) {

@@ -397,12 +397,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNoteService()
     {
-        return ServiceKernel::instance()->createService('Course.NoteService');
+        return ServiceKernel::instance()->createService('Course:NoteService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
@@ -422,7 +422,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getReviewService()
     {
-        return ServiceKernel::instance()->createService('Course.ReviewService');
+        return ServiceKernel::instance()->createService('Course:ReviewService');
     }
 
     protected function getNotifiactionService()
