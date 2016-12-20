@@ -1,7 +1,9 @@
 .es-mobile {
   body.homepage,
   body.course-list-page,
+  body.open-course-list,
   body.my-course {
+    transition: all .3s ease;
     &.has-app .es-wrap {
       padding-top: 110px;
     }
@@ -68,4 +70,14 @@
       }
     }
   }
+  body.open-course-list{
+    .es-banner{
+      display: none;
+    }
+    #content-container{
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  
 }

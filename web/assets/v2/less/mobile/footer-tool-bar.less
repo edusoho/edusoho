@@ -8,6 +8,9 @@
   background-color: @gray-lighter;
   overflow: hidden;
   >div {
+    a {
+      color: #919191;
+    }
     display: inline-block;
     width: 33.33333333333333%;
     float: left;
@@ -17,8 +20,17 @@
     i {
       font-size: 24px;
     }
-    &.active{
+    &.active a {
       color: @brand-primary;
+      .es-icon-home1::before{
+        content: "\e6d1";
+      }
+      .es-icon-newshot::before{
+        content: "\e7c4";
+      }
+      .es-icon-write::before{
+        content: "\e760";
+      }
     }
   }
 }

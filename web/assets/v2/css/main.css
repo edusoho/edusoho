@@ -15498,18 +15498,27 @@ textarea {
   left: 120px;
   right: 120px;
 }
+.es-mobile body.homepage,
+.es-mobile body.course-list-page,
+.es-mobile body.open-course-list,
+.es-mobile body.my-course {
+  transition: all .3s ease;
+}
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
+.es-mobile body.open-course-list.has-app .es-wrap,
 .es-mobile body.my-course.has-app .es-wrap {
   padding-top: 110px;
 }
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
+.es-mobile body.open-course-list .es-wrap,
 .es-mobile body.my-course .es-wrap {
   padding-top: 60px;
 }
 .es-mobile body.homepage .es-header,
 .es-mobile body.course-list-page .es-header,
+.es-mobile body.open-course-list .es-header,
 .es-mobile body.my-course .es-header {
   position: fixed;
   top: 0;
@@ -15518,28 +15527,35 @@ textarea {
 }
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar,
 .es-mobile body.homepage .es-footer-mobile,
 .es-mobile body.course-list-page .es-footer-mobile,
+.es-mobile body.open-course-list .es-footer-mobile,
 .es-mobile body.my-course .es-footer-mobile {
   display: block;
 }
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar {
   z-index: 10;
 }
 .es-mobile body.homepage .course-list-section .course-filter,
 .es-mobile body.course-list-page .course-list-section .course-filter,
+.es-mobile body.open-course-list .course-list-section .course-filter,
 .es-mobile body.my-course .course-list-section .course-filter,
 .es-mobile body.homepage .dynamic-section,
 .es-mobile body.course-list-page .dynamic-section,
+.es-mobile body.open-course-list .dynamic-section,
 .es-mobile body.my-course .dynamic-section,
 .es-mobile body.homepage .es-footer-link,
 .es-mobile body.course-list-page .es-footer-link,
+.es-mobile body.open-course-list .es-footer-link,
 .es-mobile body.my-course .es-footer-link,
 .es-mobile body.homepage .es-footer,
 .es-mobile body.course-list-page .es-footer,
+.es-mobile body.open-course-list .es-footer,
 .es-mobile body.my-course .es-footer {
   display: none;
 }
@@ -15578,6 +15594,13 @@ textarea {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.es-mobile body.open-course-list .es-banner {
+  display: none;
+}
+.es-mobile body.open-course-list #content-container {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .footer-tool-bar {
   display: none;
   position: fixed;
@@ -15596,11 +15619,23 @@ textarea {
   font-size: 10px;
   line-height: 1;
 }
+.footer-tool-bar > div a {
+  color: #919191;
+}
 .footer-tool-bar > div i {
   font-size: 24px;
 }
-.footer-tool-bar > div.active {
+.footer-tool-bar > div.active a {
   color: #46c37b;
+}
+.footer-tool-bar > div.active a .es-icon-home1::before {
+  content: "\e6d1";
+}
+.footer-tool-bar > div.active a .es-icon-newshot::before {
+  content: "\e7c4";
+}
+.footer-tool-bar > div.active a .es-icon-write::before {
+  content: "\e760";
 }
 .es-footer-mobile {
   display: none;
@@ -15640,6 +15675,7 @@ textarea {
   left: 7px;
   font-size: 26px;
   color: #d9d9d9;
+  z-index: 2;
 }
 .app-download .slogan {
   position: absolute;

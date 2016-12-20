@@ -15500,16 +15500,19 @@ textarea {
 }
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
+.es-mobile body.open-course-list.has-app .es-wrap,
 .es-mobile body.my-course.has-app .es-wrap {
   padding-top: 110px;
 }
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
+.es-mobile body.open-course-list .es-wrap,
 .es-mobile body.my-course .es-wrap {
   padding-top: 60px;
 }
 .es-mobile body.homepage .es-header,
 .es-mobile body.course-list-page .es-header,
+.es-mobile body.open-course-list .es-header,
 .es-mobile body.my-course .es-header {
   position: fixed;
   top: 0;
@@ -15518,28 +15521,35 @@ textarea {
 }
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar,
 .es-mobile body.homepage .es-footer-mobile,
 .es-mobile body.course-list-page .es-footer-mobile,
+.es-mobile body.open-course-list .es-footer-mobile,
 .es-mobile body.my-course .es-footer-mobile {
   display: block;
 }
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar {
   z-index: 10;
 }
 .es-mobile body.homepage .course-list-section .course-filter,
 .es-mobile body.course-list-page .course-list-section .course-filter,
+.es-mobile body.open-course-list .course-list-section .course-filter,
 .es-mobile body.my-course .course-list-section .course-filter,
 .es-mobile body.homepage .dynamic-section,
 .es-mobile body.course-list-page .dynamic-section,
+.es-mobile body.open-course-list .dynamic-section,
 .es-mobile body.my-course .dynamic-section,
 .es-mobile body.homepage .es-footer-link,
 .es-mobile body.course-list-page .es-footer-link,
+.es-mobile body.open-course-list .es-footer-link,
 .es-mobile body.my-course .es-footer-link,
 .es-mobile body.homepage .es-footer,
 .es-mobile body.course-list-page .es-footer,
+.es-mobile body.open-course-list .es-footer,
 .es-mobile body.my-course .es-footer {
   display: none;
 }
@@ -15577,6 +15587,13 @@ textarea {
 .es-mobile body.my-course #content-container .my-course-section .title {
   margin-top: 15px;
   margin-bottom: 15px;
+}
+.es-mobile body.open-course-list .es-banner {
+  display: none;
+}
+.es-mobile body.open-course-list #content-container {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .footer-tool-bar {
   display: none;

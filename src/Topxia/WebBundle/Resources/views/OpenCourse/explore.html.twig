@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'bg-blank' %}
+{% set bodyClass = 'bg-blank open-course-list' %}
 
 {% set siteNav = 'open/course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
@@ -21,8 +21,8 @@
         </a>
       </div>
     </div>
-    </div>
   </div>
+  {% include 'TopxiaWebBundle:Course:search-mobile.html.twig'%}
 {% endblock %}
 {% block content %}
   <div class="open-course-list">
@@ -36,8 +36,8 @@
                  target="{{ course.title }}">
                 {% if course.type == 'liveOpen' %}
                   <span class="tags">
-            <span class="tag-live"></span>
-          </span>
+                    <span class="tag-live"></span>
+                  </span>
                 {% endif %}
                 {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
               </a>
@@ -72,4 +72,8 @@
     </div>
     {{ web_macro.paginator(paginator) }}
   </div>
+{% endblock %}
+
+{% block bottom %}
+  {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' } %}
 {% endblock %}
