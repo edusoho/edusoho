@@ -897,7 +897,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 return $user['id'];
             }
 
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($targetId[0]);
 
             if (!empty($classroom)) {
                 $isTeacher              = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'], $user['id']);
@@ -955,7 +955,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 return $user['id'];
             }
 
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($targetId[0]);
 
             if (!empty($classroom)) {
                 $isTeacher              = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'], $user['id']);
@@ -1046,6 +1046,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

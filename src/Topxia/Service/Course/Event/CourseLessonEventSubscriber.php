@@ -165,7 +165,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -195,7 +195,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -569,7 +569,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()

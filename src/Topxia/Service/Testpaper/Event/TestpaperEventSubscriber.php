@@ -219,7 +219,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $classroom = array();
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -273,6 +273,6 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 }

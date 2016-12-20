@@ -340,7 +340,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getUserService()

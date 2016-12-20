@@ -122,7 +122,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     private function getClassroomReviewService()

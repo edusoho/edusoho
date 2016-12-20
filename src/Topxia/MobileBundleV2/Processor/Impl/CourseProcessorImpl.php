@@ -1020,7 +1020,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function setCourseTarget($courseId)
     {
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         return empty($classroom) ? null : 'classroom';
     }
@@ -1645,6 +1645,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function getClassroomService()
     {
-        return $this->controller->getService('Classroom:Classroom.ClassroomService');
+        return $this->controller->getService('Classroom:ClassroomService');
     }
 }

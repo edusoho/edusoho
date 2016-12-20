@@ -43,7 +43,7 @@ class NoteController extends CourseBaseController
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             $classroomSetting = $this->setting('classroom', array());
             $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
@@ -157,7 +157,7 @@ class NoteController extends CourseBaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getNoteService()

@@ -62,6 +62,6 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 }

@@ -305,7 +305,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function becomeStudentByClassroomJoined($courseId, $userId)
     {
         $isCourseStudent = $this->isCourseStudent($courseId, $userId);
-        $classroom       = $this->getClassroomService()->findClassroomByCourseId($courseId);
+        $classroom       = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         if ($classroom['classroomId']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
@@ -2908,7 +2908,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function isClassroomMember($course, $userId)
     {
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         if ($classroom['classroomId']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
@@ -2970,7 +2970,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getTagOwnerDao()
