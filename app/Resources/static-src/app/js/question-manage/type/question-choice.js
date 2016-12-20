@@ -8,14 +8,6 @@ class Choice extends QuestionFormBase {
     super($form);
     this.initTitleEditor();
     this.initAnalysisEditor();
-    this.initTemple();
-  }
-
-  initTemple() {
-    let id = 'choices-group';
-    ReactDOM.render( <QuestionOptions />,
-      document.getElementById(id),
-    );
   }
 }
 
