@@ -1,31 +1,32 @@
 <?php
 
-namespace Classroom\Service\Classroom\Impl;
+namespace Biz\Classroom\Service\Impl;
+
+use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Classroom\Service\Classroom\ClassroomReviewService;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {
     public function getReview($id)
     {
-        return $this->getClassroomReviewDao()->getReview($id);
+        return $this->getClassroomReviewDao()->get($id);
     }
 
     public function searchReviews($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
 
-        return $this->getClassroomReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
+        return $this->getClassroomReviewDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchReviewCount($conditions)
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
-        $count      = $this->getClassroomReviewDao()->searchReviewCount($conditions);
+        $count      = $this->getClassroomReviewDao()->count($conditions);
 
         return $count;
     }
@@ -34,13 +35,13 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $user = $this->getUserService()->getUser($userId);
 
-        $classroom = $this->getClassroomDao()->getClassroom($classroomId);
+        $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
             throw $this->createServiceException("Classroom is not Exist!");
         }
 
-        return $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($userId, $classroomId);
+        return $this->getClassroomReviewDao()->getByUserIdAndClassroomId($userId, $classroomId);
     }
 
     private function _prepareReviewSearchConditions($conditions)
@@ -69,7 +70,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
         }
 
-        $classroom = $this->getClassroomDao()->getClassroom($fields['classroomId']);
+        $classroom = $this->getClassroomDao()->get($fields['classroomId']);
 
         $userId = $this->getCurrentUser()->id;
 
@@ -83,11 +84,11 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在,评价失败!', array('%userId%' => $fields['userId'])));
         }
 
-        $review = $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($user['id'], $classroom['id']);
+        $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
 
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
-            $review = $this->getClassroomReviewDao()->addReview(array(
+            $review = $this->getClassroomReviewDao()->create(array(
                 'userId'      => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating'      => $fields['rating'],
@@ -99,7 +100,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             ));
             $this->dispatchEvent('classReview.add', new ServiceEvent($review));
         } else {
-            $review = $this->getClassroomReviewDao()->updateReview($review['id'], array(
+            $review = $this->getClassroomReviewDao()->update($review['id'], array(
                 'rating'      => $fields['rating'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
@@ -115,8 +116,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     private function calculateClassroomRating($classroomId)
     {
-        $ratingSum = $this->getClassroomReviewDao()->getReviewRatingSumByClassroomId($classroomId);
-        $ratingNum = $this->getClassroomReviewDao()->getReviewCountByClassroomId($classroomId);
+        $ratingSum = $this->getClassroomReviewDao()->sumReviewRatingByClassroomId($classroomId);
+        $ratingNum = $this->getClassroomReviewDao()->countReviewByClassroomId($classroomId);
 
         $this->getClassroomService()->updateClassroom($classroomId, array(
             'rating'    => $ratingNum ? $ratingSum / $ratingNum : 0,
@@ -132,7 +133,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
         }
 
-        $this->getClassroomReviewDao()->deleteReview($id);
+        $this->getClassroomReviewDao()->delete($id);
 
         $this->calculateClassroomRating($review['classroomId']);
 
@@ -141,17 +142,17 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     protected function getClassroomReviewDao()
     {
-        return $this->createDao('Classroom:Classroom.ClassroomReviewDao');
+        return $this->createDao('Classroom:ClassroomReviewDao');
     }
 
     private function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getClassroomDao()
     {
-        return $this->createDao('Classroom:Classroom.ClassroomDao');
+        return $this->createDao('Classroom:ClassroomDao');
     }
 
     private function getUserService()

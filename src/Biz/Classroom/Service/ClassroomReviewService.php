@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom;
+namespace Biz\Classroom\Service;
 
 interface ClassroomReviewService
 {

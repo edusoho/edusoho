@@ -198,7 +198,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getCashService()
