@@ -8,7 +8,7 @@ use Topxia\Service\Order\MoneyService;
 
 class MoneyServiceImpl extends BaseService implements MoneyService
 {
-    public function searchMoneyRecordsCount($conditions)
+    public function countMoneyRecords($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->getMoneyRecordsDao()->count($conditions);

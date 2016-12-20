@@ -20,7 +20,7 @@ class MoneyController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMoneyService()->searchMoneyRecordsCount($conditions),
+            $this->getMoneyService()->countMoneyRecords($conditions),
             15
         );
 
