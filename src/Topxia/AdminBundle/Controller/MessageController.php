@@ -105,12 +105,12 @@ class MessageController extends BaseController
 
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
+        return ServiceKernel::instance()->createService('User:MessageService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
@@ -120,6 +120,6 @@ class MessageController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

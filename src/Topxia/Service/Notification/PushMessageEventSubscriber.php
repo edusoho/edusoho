@@ -1,12 +1,12 @@
 <?php
 namespace Topxia\Service\Notification;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\IMAPIFactory;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface
 {
@@ -45,17 +45,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'article.delete'            => 'onArticleDelete',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'        => 'onThreadCreate',
-            'thread.update'        => 'onThreadUpdate',
-            'thread.delete'        => 'onThreadDelete',
-            'course.thread.create' => 'onCourseThreadCreate',
-            'course.thread.update' => 'onCourseThreadUpdate',
-            'course.thread.delete' => 'onCourseThreadDelete',
-            'group.thread.create'  => 'onGroupThreadCreate',
-            'group.thread.open'    => 'onGroupThreadOpen',
-            'group.thread.update'  => 'onGroupThreadUpdate',
-            'group.thread.delete'  => 'onGroupThreadDelete',
-
+            'thread.create'             => 'onThreadCreate',
+            'thread.update'             => 'onThreadUpdate',
+            'thread.delete'             => 'onThreadDelete',
+            'course.thread.create'      => 'onCourseThreadCreate',
+            'course.thread.update'      => 'onCourseThreadUpdate',
+            'course.thread.delete'      => 'onCourseThreadDelete',
+            'group.thread.create'       => 'onGroupThreadCreate',
+            'group.thread.open'         => 'onGroupThreadOpen',
+            'group.thread.update'       => 'onGroupThreadUpdate',
+            'group.thread.delete'       => 'onGroupThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
@@ -261,13 +260,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        if(isset($context['lesson'])){
+        if (isset($context['lesson'])) {
             $lesson = $context['lesson'];
-        }else{
+        } else {
             $lesson = $context;
         }
 
-        $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
         if ($jobs) {
             $this->deleteJob($jobs);
@@ -350,7 +349,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->pushIM($from, $to, $body);
-
 
         if (!empty($fields['tagIds'])) {
             $tagIds = $fields['tagIds'];
@@ -453,7 +451,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             $to['id']  = $teacherId;
             $results[] = $this->pushIM($from, $to, $body);
         }
-
     }
 
     public function onThreadUpdate(Event $event)
@@ -533,7 +530,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onThreadPostCreate(Event $event)
     {
-
         $threadPost = $event->getSubject();
         $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'thread.post.create'));
     }
@@ -896,10 +892,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         if ($type == 'group') {
-            return ServiceKernel::instance()->createService('Group:ThreadService');
+            return ServiceKernel::instance()->getBiz()->service('Group:ThreadService');
         }
 
-        return ServiceKernel::instance()->createService('Thread:ThreadService');
+        return ServiceKernel::instance()->getBiz()->service('Thread:ThreadService');
     }
 
     protected function getCourseService()
@@ -914,7 +910,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getTestpaperService()
@@ -924,7 +920,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getCloudDataService()
     {
-        return ServiceKernel::instance()->getBiz()->service('CloudData:CloudDataService');
+        return ServiceKernel::instance()->createService('CloudData:CloudDataService');
     }
 
     protected function getCrontabService()
@@ -934,7 +930,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getHomeworkService()

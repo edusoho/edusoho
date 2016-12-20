@@ -20,6 +20,7 @@ class IMAPIFactory
             return self::$client;
         }
 
+
         /**
          * @var $setting SettingService
          */

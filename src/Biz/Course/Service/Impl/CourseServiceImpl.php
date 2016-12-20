@@ -4,15 +4,14 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -104,13 +103,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields = $this->validateExpiryMode($fields);
         }
 
-        if (isset($fields['goals'])) {
-            $fields['goals'] = json_decode($fields['goals'], true);
-        }
-        if (isset($fields['audiences'])) {
-            $fields['audiences'] = json_decode($fields['audiences'], true);
-        }
-
         return $this->getCourseDao()->update($id, $fields);
     }
 
@@ -190,10 +182,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if (isset($fields['price'])) {
             $fields['price'] = round(floatval($fields['price']) * 100, 0);
-        }
-
-        if (isset($fields['services'])) {
-            $fields['services'] = json_decode($fields['services'], true);
         }
 
         return $this->getCourseDao()->update($id, $fields);

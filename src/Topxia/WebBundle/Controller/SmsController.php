@@ -118,12 +118,12 @@ class SmsController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getSmsService()
     {
-        return $this->getBiz()->service('Sms:SmsService');
+        return $this->createService('Sms:SmsService');
     }
 
     protected function getCourseService()

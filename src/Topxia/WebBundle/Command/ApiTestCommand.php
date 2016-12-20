@@ -41,7 +41,7 @@ class ApiTestCommand extends BaseCommand
         /**
          * @var $setting SettingService
          */
-        $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        $setting = ServiceKernel::instance()->createService('System:SettingService');
 
         $storage = $setting->get('storage', array());
 

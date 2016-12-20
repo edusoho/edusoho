@@ -283,12 +283,12 @@ class GlobalFilePlayerController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getMaterialLibService()

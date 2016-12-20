@@ -55,6 +55,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
     protected function isPageCacheEnabled()
     {
+
         $setting = $this->getSettingService()->get('performance', array());
         return empty($setting['pageCache']) ? 0 : $setting['pageCache'];
     }

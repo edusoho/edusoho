@@ -31,7 +31,7 @@ class UploadFileCollectDaoImpl extends GeneralDaoImpl implements UploadFileColle
         return $this->db()->fetchAll($sql, $parameters);
     }
 
-    public function findCollectionsByUserId($userId)
+    public function findByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? ";
         return $this->db()->fetchAll($sql, array($userId));

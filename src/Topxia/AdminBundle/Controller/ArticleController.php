@@ -195,7 +195,7 @@ class ArticleController extends BaseController
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getTagService()
@@ -205,7 +205,7 @@ class ArticleController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 
     protected function getFileService()
@@ -218,7 +218,7 @@ class ArticleController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     /**
@@ -226,6 +226,6 @@ class ArticleController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 }

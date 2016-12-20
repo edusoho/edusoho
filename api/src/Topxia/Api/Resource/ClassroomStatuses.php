@@ -52,7 +52,7 @@ class ClassroomStatuses extends BaseResource
      */
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getClassroomService()
@@ -62,7 +62,7 @@ class ClassroomStatuses extends BaseResource
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()

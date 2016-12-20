@@ -7,10 +7,10 @@ use Biz\CloudPlatform\Dao\CloudAppDao;
 use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\CloudPlatform\UpgradeLock;
+use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use Permission\Service\Role\RoleService;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -899,6 +899,6 @@ class AppServiceImpl extends BaseService implements AppService
      */
     protected function getRoleService()
     {
-        return $this->createService('Permission:Role.RoleService');
+        return $this->createService('Role:RoleService');
     }
 }

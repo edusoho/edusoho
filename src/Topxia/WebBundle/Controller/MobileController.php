@@ -14,7 +14,7 @@ class MobileController extends BaseController
 {    
     protected function createAPIClient()
     {
-        $settings = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('storage', array());
+        $settings = ServiceKernel::instance()->createService('System:SettingService')->get('storage', array());
         return new CloudAPI(array(
             'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
             'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],

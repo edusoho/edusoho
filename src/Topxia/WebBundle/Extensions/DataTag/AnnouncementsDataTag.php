@@ -44,7 +44,7 @@ class AnnouncementsDataTag extends BaseDataTag implements DataTag
      */
     protected function getAnnouncementService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Announcement:AnnouncementService');
+        return $this->getServiceKernel()->createService('Announcement:AnnouncementService');
     }
 
     protected function checkCount(array $arguments)

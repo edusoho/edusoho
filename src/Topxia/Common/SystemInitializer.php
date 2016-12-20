@@ -726,7 +726,7 @@ EOD;
      */
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
@@ -734,7 +734,7 @@ EOD;
      */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     /**
@@ -774,7 +774,7 @@ EOD;
      */
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org:Org.OrgService');
+        return ServiceKernel::instance()->createService('Org:OrgService');
     }
 
     /**
@@ -782,7 +782,7 @@ EOD;
      */
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 
     /**

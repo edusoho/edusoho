@@ -35,7 +35,7 @@ class OrderRefundController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOrderService()->searchRefundCount($conditions),
+            $this->getOrderService()->countRefunds($conditions),
             20
         );
 
@@ -158,6 +158,6 @@ class OrderRefundController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 }

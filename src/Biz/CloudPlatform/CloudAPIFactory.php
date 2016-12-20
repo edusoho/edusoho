@@ -13,6 +13,7 @@ class CloudAPIFactory
 {
     public static function create($type = 'root')
     {
+
         /**
          * @var $setting SettingService
          */

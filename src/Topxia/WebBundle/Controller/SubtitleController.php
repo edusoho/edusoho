@@ -100,11 +100,11 @@ class SubtitleController extends BaseController
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getSubtitleService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Subtitle:SubtitleService');
+        return ServiceKernel::instance()->createService('Subtitle:SubtitleService');
     }
 }

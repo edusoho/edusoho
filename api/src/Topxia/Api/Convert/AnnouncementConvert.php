@@ -8,7 +8,7 @@ class AnnouncementConvert implements Convert
     //根据id等参数获取完整数据
     public function convert($id)
     {
-        $announcement = ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService')->getAnnouncement($id);
+        $announcement = ServiceKernel::instance()->createService('Announcement:AnnouncementService')->getAnnouncement($id);
         if (empty($announcement)) {
             throw new \Exception('announcement not found');
         }

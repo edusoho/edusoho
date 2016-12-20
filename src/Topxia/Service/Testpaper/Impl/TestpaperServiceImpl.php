@@ -1041,7 +1041,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getClassroomService()

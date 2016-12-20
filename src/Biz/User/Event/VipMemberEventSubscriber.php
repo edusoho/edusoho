@@ -26,6 +26,6 @@ class VipMemberEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     private function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

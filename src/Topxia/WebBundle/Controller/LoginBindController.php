@@ -456,11 +456,11 @@ class LoginBindController extends BaseController
 
     protected function getSensitiveService()
     {
-        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+        return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 }

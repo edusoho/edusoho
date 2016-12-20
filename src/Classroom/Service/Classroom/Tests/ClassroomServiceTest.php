@@ -191,7 +191,6 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom2['id'], array($course2['id']));
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId(1);
         $classroom  = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
 
         $this->assertEquals('test12333', $classroom['title']);
@@ -1316,7 +1315,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private function getCourseService()

@@ -567,7 +567,7 @@ class MaterialLibController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getMaterialLibService()
@@ -577,7 +577,7 @@ class MaterialLibController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getTagService()
@@ -587,12 +587,12 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getUploadFileTagService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
+        return ServiceKernel::instance()->createService('File:UploadFileTagService');
     }
 
     protected function getUploadFileShareHistoryService()
@@ -602,12 +602,12 @@ class MaterialLibController extends BaseController
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getCourseMaterialService()
