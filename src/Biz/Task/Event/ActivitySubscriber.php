@@ -53,11 +53,11 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     protected function getTaskService()
     {
-        return $this->createService('Task:TaskService');
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     protected function getTaskResultService()
     {
-        return $this->createService('Task:TaskResultService');
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 }

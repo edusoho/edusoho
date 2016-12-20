@@ -18,6 +18,6 @@ class ActivityLearnLogListener extends Listener
      */
     protected function getActivityLearnLogService()
     {
-        return $this->createService('Activity:ActivityLearnLogService');
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 }
