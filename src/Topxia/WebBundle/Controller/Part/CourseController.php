@@ -91,17 +91,11 @@ class CourseController extends BaseController
 
     public function belongClassroomsAction($course)
     {
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($course['id']);
-
-        foreach ($classrooms as $key => $classroom) {
-            if ($classroom["status"] != "published") {
-                unset($classrooms[$key]);
-            }
-        }
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
             'course'     => $course,
-            'classrooms' => $classrooms
+            'classrooms' => !empty($classroom) && $classroom["status"] == "published" ? array($classroom) : array()
         ));
     }
 
@@ -116,8 +110,8 @@ class CourseController extends BaseController
 
     public function recommendClassroomsAction($course)
     {
-        $classrooms               = array();
-        $classrooms               = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
+        $classroom               = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        $classrooms = !empty($classroom) ? array($classroom) : array();
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
         $conditions               = array(
             'categoryIds' => array($course['categoryId']),

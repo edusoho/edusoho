@@ -191,7 +191,6 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom2['id'], array($course2['id']));
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId(1);
         $classroom  = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
 
         $this->assertEquals('test12333', $classroom['title']);
