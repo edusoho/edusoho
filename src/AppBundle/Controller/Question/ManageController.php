@@ -261,11 +261,7 @@ class ManageController extends BaseController
 
         //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-<<<<<<< Updated upstream
         return $this->render('question-manage/question-picked.html.twig', array(
-=======
-        return $this->render('question-manage/question-picked-tr.html.twig', array(
->>>>>>> Stashed changes
             'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,
