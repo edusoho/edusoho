@@ -1,5 +1,5 @@
 <?php
-namespace SensitiveWord\Service\Sensitive;
+namespace Biz\Sensitive\Service;
 
 interface SensitiveService {
     /**

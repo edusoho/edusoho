@@ -1,5 +1,5 @@
 <?php
-namespace Org\Service\Org;
+namespace Biz\Org\Service;
 
 interface OrgService
 {

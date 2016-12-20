@@ -2,9 +2,9 @@
 namespace Biz\Org\Dao\Impl;
 
 use Biz\Org\Dao\OrgDao;
-use Codeages\Biz\Framework\Dao\GenralDaoImpl;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class OrgDaoImpl extends GenralDaoImpl implements OrgDao
+class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
 {
     protected $table = 'org';
 
