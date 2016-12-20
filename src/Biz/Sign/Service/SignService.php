@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Sign;
+namespace Topxia\Sign\Service;
 
 interface SignService
 {
