@@ -2,7 +2,7 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\TokenDao;
-use Topxia\Service\Common\FieldSerializer;
+use Biz\Common\FieldSerializer;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TokenDaoImpl extends GeneralDaoImpl implements TokenDao

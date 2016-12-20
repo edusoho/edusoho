@@ -3,7 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class CloudAttachmentController extends BaseController

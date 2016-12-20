@@ -9,7 +9,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\Dao\OrderDao;
 use Topxia\Service\Order\OrderService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class OrderServiceImpl extends BaseService implements OrderService
 {
@@ -103,7 +103,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrderDao()->create($order);
 
         $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
-        $this->getDispatcher()->dispatch('order.service.created', new ServiceEvent($order));
+        $this->getDispatcher()->dispatch('order.service.created', new Event($order));
         return $order;
     }
 
@@ -146,7 +146,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($order['id']);
 
         if ($success) {
-            $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
+            $this->getDispatcher()->dispatch('order.service.paid', new Event($order));
         }
 
         return array($success, $order);

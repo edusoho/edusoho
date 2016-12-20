@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
@@ -231,7 +231,7 @@ class ClassroomController extends BaseController
         }
 
         $this->dispatchEvent('classroom.view',
-            new ServiceEvent($classroom, array('userId' =>$user['id']))
+            new Event($classroom, array('userId' =>$user['id']))
         );
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction'         => $introduction,

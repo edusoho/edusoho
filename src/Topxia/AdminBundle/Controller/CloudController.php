@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Biz\System\Service\SettingService;
+use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;

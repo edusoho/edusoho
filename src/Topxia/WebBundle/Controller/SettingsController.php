@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
@@ -1105,7 +1105,7 @@ class SettingsController extends BaseController
 
     protected function getSensitiveService()
     {
-        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+        return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
     }
 
     private function getWebExtension()

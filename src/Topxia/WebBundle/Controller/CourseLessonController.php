@@ -4,10 +4,10 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -183,7 +183,7 @@ class CourseLessonController extends BaseController
         }
         $this->dispatchEvent(
             'course.preview',
-            new ServiceEvent($course, array('userId' => $user['id']))
+            new Event($course, array('userId' => $user['id']))
         );
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
@@ -856,6 +856,6 @@ class CourseLessonController extends BaseController
 
     protected function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
     }
 }

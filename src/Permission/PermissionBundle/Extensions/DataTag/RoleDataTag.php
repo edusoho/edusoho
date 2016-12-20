@@ -24,7 +24,7 @@ class RoleDataTag extends BaseDataTag implements DataTag
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
+        return $this->getServiceKernel()->createService('Role:RoleService');
     }
 
     protected function checkCode(array $arguments)

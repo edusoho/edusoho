@@ -785,7 +785,7 @@ class UserImporter extends Importer
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:OrgService');
     }
 
     private function getOrderService()

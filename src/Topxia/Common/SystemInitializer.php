@@ -774,7 +774,7 @@ EOD;
      */
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org:Org.OrgService');
+        return ServiceKernel::instance()->createService('Org:OrgService');
     }
 
     /**
@@ -782,7 +782,7 @@ EOD;
      */
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 
     /**

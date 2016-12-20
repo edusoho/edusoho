@@ -5,7 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\TextHelper;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Thread\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -212,7 +212,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $fields['startTime'] = strtotime($fields['startTime']);
         }
 
-        $this->dispatchEvent('thread.update', new ServiceEvent($thread));
+        $this->dispatchEvent('thread.update', new Event($thread));
 
         return $this->getThreadDao()->updateThread($id, $fields);
     }
@@ -256,7 +256,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 1, 'updateTime' => time()));
 
-        $this->dispatchEvent('thread.sticky', new ServiceEvent($thread, array('sticky' => 'set')));
+        $this->dispatchEvent('thread.sticky', new Event($thread, array('sticky' => 'set')));
     }
 
     public function cancelThreadSticky($threadId)
@@ -284,7 +284,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('nice' => 1, 'updateTime' => time()));
 
-        $this->dispatchEvent('thread.nice', new ServiceEvent($thread, array('nice' => 'set')));
+        $this->dispatchEvent('thread.nice', new Event($thread, array('nice' => 'set')));
     }
 
     public function cancelThreadNice($threadId)
@@ -299,7 +299,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('nice' => 0, 'updateTime' => time()));
 
-        $this->dispatchEvent('thread.nice', new ServiceEvent($thread, array('nice' => 'cancel')));
+        $this->dispatchEvent('thread.nice', new Event($thread, array('nice' => 'cancel')));
     }
 
     public function setThreadSolved($threadId)
@@ -311,7 +311,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread = $this->getThreadDao()->updateThread($thread['id'], array('solved' => 1, 'updateTime' => time()));
-        // $this->dispatchEvent('thread.solved', new ServiceEvent($thread, array('nice' => 'set')));
+        // $this->dispatchEvent('thread.solved', new Event($thread, array('nice' => 'set')));
     }
 
     public function cancelThreadSolved($threadId)
@@ -324,7 +324,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('solved' => 0, 'updateTime' => time()));
 
-        // $this->dispatchEvent('thread.solved', new ServiceEvent($thread, array('nice' => 'cancel')));
+        // $this->dispatchEvent('thread.solved', new Event($thread, array('nice' => 'cancel')));
     }
 
     public function hitThread($targetId, $threadId)
@@ -510,7 +510,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', 0 - $totalDeleted);
 
-        $this->dispatchEvent("thread.post.delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
+        $this->dispatchEvent("thread.post.delete", new Event($post, array('deleted' => $totalDeleted)));
     }
 
     public function searchPostsCount($conditions)
@@ -717,7 +717,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
+        return $this->createService("Sensitive:SensitiveService");
     }
 
     protected function getThreadDao()

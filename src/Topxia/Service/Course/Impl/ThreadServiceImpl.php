@@ -3,7 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\Dao\Impl\ThreadPostDaoImpl;
 use Topxia\Service\Course\Dao\ThreadDao;
@@ -264,7 +264,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['content'] = $this->purifyHtml($fields['content']);
 
         $thread = $this->getThreadDao()->updateThread($threadId, $fields);
-        $this->dispatchEvent('course.thread.update', new ServiceEvent($thread));
+        $this->dispatchEvent('course.thread.update', new Event($thread));
         return $thread;
     }
 
@@ -283,7 +283,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
-        $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
+        $this->dispatchEvent('course.thread.delete', new Event($thread));
         $this->getLogService()->info('course', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
@@ -325,7 +325,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
 
-        $this->dispatchEvent('course.thread.elite', new ServiceEvent($thread));
+        $this->dispatchEvent('course.thread.elite', new Event($thread));
     }
 
     public function uneliteThread($courseId, $threadId)
@@ -509,7 +509,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
+        return $this->createService("Sensitive:SensitiveService");
     }
 
     protected function getUserService()

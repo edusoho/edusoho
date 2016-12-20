@@ -5,7 +5,7 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
@@ -516,7 +516,7 @@ class UserController extends BaseController
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
+        return $this->getServiceKernel()->createService('Role:RoleService');
     }
 
     protected function getNotificationService()
@@ -582,6 +582,6 @@ class UserController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:OrgService');
     }
 }

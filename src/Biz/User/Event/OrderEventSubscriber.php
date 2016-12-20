@@ -1,7 +1,7 @@
 <?php
 namespace Biz\User\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderEventSubscriber implements EventSubscriberInterface
@@ -13,7 +13,7 @@ class OrderEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onOrderPaid(ServiceEvent $event)
+    public function onOrderPaid(Event $event)
     {
     }
 

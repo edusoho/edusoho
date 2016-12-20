@@ -529,7 +529,7 @@ function _initKey()
         );
     }
 
-    $applier = new \Topxia\Service\CloudPlatform\KeyApplier();
+    $applier = new \Biz\CloudPlatform\KeyApplier();
 
     $userService = ServiceKernel::instance()->createService('User:UserService');
     $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);

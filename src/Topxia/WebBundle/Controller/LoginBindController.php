@@ -456,7 +456,7 @@ class LoginBindController extends BaseController
 
     protected function getSensitiveService()
     {
-        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+        return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
     }
 
     protected function getAuthService()

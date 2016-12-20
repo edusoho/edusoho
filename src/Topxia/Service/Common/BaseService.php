@@ -3,9 +3,8 @@ namespace Topxia\Service\Common;
 
 use Biz\System\Service\SettingService;
 use Monolog\Logger;
-use Topxia\Service\Common\Lock;
+use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -47,10 +46,10 @@ abstract class BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
@@ -102,7 +101,7 @@ abstract class BaseService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = $this->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
                 }

@@ -382,7 +382,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getSensitiveService()
     {
-        return $this->getKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+        return $this->getKernel()->createService('Sensitive:SensitiveService');
     }
 
     protected function getUserService()

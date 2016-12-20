@@ -7,7 +7,7 @@ use Biz\Thread\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -83,7 +83,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('Thread has bean collected');
         }
 
-        $this->dispatchEvent('group.thread.collect', new ServiceEvent($thread));
+        $this->dispatchEvent('group.thread.collect', new Event($thread));
 
         return $this->getThreadCollectDao()->create(array(
             "userId"   => $userId,
@@ -530,7 +530,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return ServiceKernel::instance()->createService('SensitiveWord:Sensitive.SensitiveService');
+        return ServiceKernel::instance()->createService('Sensitive:SensitiveService');
     }
 
     protected function getGroupService()

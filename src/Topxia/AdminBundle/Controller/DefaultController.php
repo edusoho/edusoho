@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Course\ThreadService;

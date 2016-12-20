@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Biz\Common\FieldSerializer;
+
 abstract class BaseDao
 {
     protected $connection;

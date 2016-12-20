@@ -4,7 +4,7 @@ namespace Topxia\Service\Sign\Impl;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sign\SignService;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class SignServiceImpl extends BaseService implements SignService
 {
@@ -34,7 +34,7 @@ class SignServiceImpl extends BaseService implements SignService
             ->updateSignLog($sign['id'], array('rank' => $statistics['signedNum']));
         $this->refreshKeepDays($userId, $targetType, $targetId);
 
-        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent($sign));
+        $this->getDispatcher()->dispatch('class.signed', new Event($sign));
 
         return $sign;
     }

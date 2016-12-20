@@ -29,7 +29,8 @@ services:
         class: Topxia\WebBundle\DataDict\GenderDict
 
     authentication_handler:
-        class: 'Topxia\Service\Common\LoginListener'
+        class: Biz\Common\LoginListener
+        arguments: ['@biz']
 
     topxia.timemachine:
         class:			Topxia\Common\TimeMachine

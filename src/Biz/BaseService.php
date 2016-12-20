@@ -123,7 +123,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = ServiceKernel::instance()->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = ServiceKernel::instance()->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }

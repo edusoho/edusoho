@@ -2,6 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserDao;
 use Biz\User\Dao\TokenDao;
 use Biz\User\Dao\FriendDao;
@@ -18,16 +19,15 @@ use Biz\User\Dao\UserPayAgreementDao;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\BlacklistService;
 use Biz\User\Dao\UserSecureQuestionDao;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\System\Service\IpBlacklistService;
 use Symfony\Component\HttpFoundation\File\File;
-use Permission\Service\Role\Impl\RoleServiceImpl;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Codeages\Biz\Framework\Event\Event;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -244,6 +244,10 @@ class UserServiceImpl extends BaseService implements UserService
             $conditions['nickname'] = strtoupper($conditions['nickname']);
         }
 
+        if(!empty($orderBy)){
+            $orderBy = array($orderBy[0] => $orderBy[1]);
+        }
+
         $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }
@@ -272,7 +276,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $this->getUserDao()->update($userId, array('emailVerified' => 1));
         $user = $this->getUser($userId);
-        $this->dispatchEvent('email.verify', new ServiceEvent($user));
+        $this->dispatchEvent('email.verify', new Event($user));
     }
 
     public function changeNickname($userId, $nickname)
@@ -294,7 +298,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, array('nickname' => $nickname));
-        $this->dispatchEvent('user.change_nickname', new ServiceEvent($updatedUser));
+        $this->dispatchEvent('user.change_nickname', new Event($updatedUser));
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
@@ -345,7 +349,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, array('email' => $email));
-        $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
+        $this->dispatchEvent('user.change_email', new Event($updatedUser));
         return $updatedUser;
     }
 
@@ -562,7 +566,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
-        $this->dispatchEvent('mobile.change', new ServiceEvent($user));
+        $this->dispatchEvent('mobile.change', new Event($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
@@ -759,7 +763,7 @@ class UserServiceImpl extends BaseService implements UserService
 
             $this->dispatchEvent(
                 'user.register',
-                new ServiceEvent(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+                new Event(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
             );
         }
 
@@ -805,7 +809,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
-        $this->dispatchEvent('user.registered', new ServiceEvent($user));
+        $this->dispatchEvent('user.registered', new Event($user));
 
         return $user;
     }
@@ -942,7 +946,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (isset($fields['title'])) {
             $this->getUserDao()->update($id, array('title' => $fields['title']));
-            $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
+            $this->dispatchEvent('user.update', new Event(array('user' => $user, 'fields' => $fields)));
         }
 
         unset($fields['title']);
@@ -987,7 +991,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userProfile = $this->getProfileDao()->update($id, $fields);
 
-        $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
+        $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;
     }
@@ -1018,8 +1022,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
 
-        $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+
+        $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
+
         return UserSerialize::unserialize($user);
     }
 
@@ -1291,7 +1297,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->update($user['id'], array('locked' => 1));
-        $this->dispatchEvent("user.lock", new ServiceEvent($user));
+        $this->dispatchEvent("user.lock", new Event($user));
 
         $this->getLogService()->info('user', 'lock', sprintf('封禁用户%s(#%u)', $user['nickname'], $user['id']));
 
@@ -1308,7 +1314,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
+        $this->dispatchEvent("user.unlock", new Event($user));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1459,7 +1465,7 @@ class UserServiceImpl extends BaseService implements UserService
             'pair'        => $pair
         ));
         $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => $pair));
-        $this->dispatchEvent('user.follow', new ServiceEvent($friend));
+        $this->dispatchEvent('user.follow', new Event($friend));
         return $friend;
     }
 
@@ -1489,7 +1495,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => 0));
         }
 
-        $this->dispatchEvent('user.unfollow', new ServiceEvent($friend));
+        $this->dispatchEvent('user.unfollow', new Event($friend));
         return $result;
     }
 
@@ -1935,16 +1941,16 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     /**
-     * @return RoleServiceImpl
+     * @return RoleService
      */
     protected function getRoleService()
     {
-        return $this->getKernel()->createService('Permission:Role.RoleService');
+        return $this->getKernel()->createService('Role:RoleService');
     }
 
     protected function getOrgService()
     {
-        return $this->getKernel()->createService('Org:Org.OrgService');
+        return $this->getKernel()->createService('Org:OrgService');
     }
 
     public function getKernel()

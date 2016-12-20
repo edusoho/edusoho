@@ -13,7 +13,7 @@ use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseNoteServiceImpl extends BaseService implements CourseNoteService
@@ -84,7 +84,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         } else {
             unset($note['id']);
             $note                = $this->getNoteDao()->update($existNote['id'], $note);
-            $this->dispatchEvent('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
+            $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
         $this->getCourseService()->setMemberNoteNumber(
