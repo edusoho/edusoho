@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Search\Adapter;
+namespace Biz\Search\Adapter;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
