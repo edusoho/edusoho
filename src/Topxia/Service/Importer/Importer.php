@@ -3,7 +3,7 @@
 namespace Topxia\Service\Importer;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class Importer

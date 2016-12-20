@@ -3,9 +3,8 @@ namespace Topxia\Service\Common;
 
 use Biz\System\Service\SettingService;
 use Monolog\Logger;
-use Topxia\Service\Common\Lock;
+use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -47,10 +46,10 @@ abstract class BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);

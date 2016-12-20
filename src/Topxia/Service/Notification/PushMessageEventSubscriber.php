@@ -3,9 +3,8 @@ namespace Topxia\Service\Notification;
 
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Api\Util\MobileSchoolUtil;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 

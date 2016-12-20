@@ -2,7 +2,7 @@
 namespace Topxia\Service\IM\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

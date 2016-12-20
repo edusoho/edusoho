@@ -2,7 +2,7 @@
 namespace Topxia\Service\Taxonomy\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class TagServiceTest extends BaseTestCase
 {

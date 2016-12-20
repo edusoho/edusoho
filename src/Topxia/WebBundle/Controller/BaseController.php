@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseController extends Controller
@@ -312,10 +312,10 @@ abstract class BaseController extends Controller
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
         return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }

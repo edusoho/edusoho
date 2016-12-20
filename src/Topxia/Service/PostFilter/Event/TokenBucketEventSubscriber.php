@@ -3,7 +3,7 @@ namespace Topxia\Service\PostFilter\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
 class TokenBucketEventSubscriber implements EventSubscriberInterface

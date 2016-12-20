@@ -4,7 +4,7 @@ namespace Topxia\Service\Course\Job;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class LiveLessonStartNotifyJob implements Job
 {

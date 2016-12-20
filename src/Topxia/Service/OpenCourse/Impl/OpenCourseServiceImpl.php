@@ -4,7 +4,7 @@ namespace Topxia\Service\OpenCourse\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\OpenCourse\OpenCourseService;
 
@@ -243,7 +243,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         //添加动态
         $this->dispatchEvent(
             'open.course.favorite',
-            new ServiceEvent($course)
+            new Event($course)
         );
 
         $this->getFavoriteDao()->addFavorite(array(

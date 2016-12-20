@@ -6,8 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Client\CloudAPI;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class MobileController extends BaseController

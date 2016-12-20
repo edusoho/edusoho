@@ -4,7 +4,7 @@ namespace Topxia\Service\Group\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Group\ThreadService;
 
@@ -45,7 +45,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException($this->getKernel()->trans('不允许重复收藏!'));
         }
 
-        $this->dispatchEvent('group.thread.collect', new ServiceEvent($thread));
+        $this->dispatchEvent('group.thread.collect', new Event($thread));
 
         return $this->getThreadCollectDao()->addThreadCollect(array(
             "userId"      => $userId,

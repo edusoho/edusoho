@@ -4,7 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseDeleteService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {

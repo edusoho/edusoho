@@ -6,7 +6,6 @@ namespace Topxia\Service\Order\Tests;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
 
 // use Topxia\Service\Taxonomy\TagService;
 

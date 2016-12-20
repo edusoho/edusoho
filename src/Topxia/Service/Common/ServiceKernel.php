@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\Redis\RedisFactory;
+use Biz\Common\Redis\RedisFactory;
 use Biz\User\CurrentUser;
 
 class ServiceKernel

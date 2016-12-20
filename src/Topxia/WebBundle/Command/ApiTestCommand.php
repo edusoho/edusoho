@@ -1,15 +1,13 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Biz\CloudPlatform\Client\FailoverCloudAPI;
 use Biz\System\Service\SettingService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-
+use Biz\CloudPlatform\Client\CloudAPI;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\User\CurrentUser;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Topxia\Service\CloudPlatform\Client\FailoverCloudAPI;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -46,7 +44,6 @@ class ApiTestCommand extends BaseCommand
         $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
         $storage = $setting->get('storage', array());
-        $developer = $setting->get('developer', array());
 
         if ($type == 'root') {
             $api = new CloudAPI(array(

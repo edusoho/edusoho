@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\EncryptionToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
 

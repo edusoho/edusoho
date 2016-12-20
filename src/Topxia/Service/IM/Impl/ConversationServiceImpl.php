@@ -6,7 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\IM\ConversationService;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\IMAPIFactory;
 
 class ConversationServiceImpl extends BaseService implements ConversationService
 {

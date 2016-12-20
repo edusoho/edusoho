@@ -4,12 +4,12 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
-use Topxia\Service\Common\Mail\MailFactory;
+use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SettingController extends BaseController
