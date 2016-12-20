@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Dao;
+namespace Biz\OpenCourse\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 

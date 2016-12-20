@@ -2,7 +2,7 @@
 
 namespace Tests\OpenCourseRecommendedServiceTest;
 
-use Topxia\Service\Common\BaseTestCase;
+use Codeages\Biz\Framework\UnitTests\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
@@ -137,16 +137,16 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     protected function getCourseRecommendedService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+        return self::$biz->service('OpenCourse:OpenCourseRecommendedService');
     }
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return self::$biz->service('OpenCourse:OpenCourseService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return self::$biz->service('Course:CourseService');
     }
 }

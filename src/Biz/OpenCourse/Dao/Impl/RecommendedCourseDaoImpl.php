@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Dao\Impl;
+namespace Biz\OpenCourse\Dao\Impl;
 
+use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\OpenCourse\Dao\RecommendedCourseDao;
 
 class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCourseDao
 {

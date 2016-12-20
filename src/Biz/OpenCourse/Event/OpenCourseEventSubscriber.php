@@ -1,11 +1,9 @@
 <?php
-namespace Topxia\Service\OpenCourse\Event;
+namespace Biz\OpenCourse\Service\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class OpenCourseEventSubscriber implements EventSubscriberInterface
@@ -150,9 +148,6 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('Course.NoteService');
     }
 
-    /**
-     * @return OpenCourseServiceImpl
-     */
     protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');

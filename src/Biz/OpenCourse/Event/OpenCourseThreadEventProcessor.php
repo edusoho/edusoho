@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\OpenCourse\Event;
+namespace Biz\OpenCourse\Service\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;

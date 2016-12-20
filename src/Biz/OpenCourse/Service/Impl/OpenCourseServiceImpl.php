@@ -1,14 +1,13 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Impl;
+namespace Biz\OpenCourse\Service\Impl;
 
+use Biz\BaseService;
+use Biz\OpenCourse\Dao\OpenCourseDao;
+use Biz\OpenCourse\Dao\OpenCourseLessonDao;
+use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\OpenCourse\Dao\OpenCourseDao;
-use Topxia\Service\OpenCourse\Dao\OpenCourseLessonDao;
-use Topxia\Service\OpenCourse\Dao\OpenCourseMemberDao;
 use Topxia\Service\OpenCourse\OpenCourseService;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService

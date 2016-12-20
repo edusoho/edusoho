@@ -1,11 +1,9 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Dao\Impl;
+namespace Biz\OpenCourse\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
+use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\Common\BaseDao;
-use Topxia\Service\OpenCourse\Dao\OpenCourseLessonDao;
 
 class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLessonDao
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Impl;
+namespace Biz\OpenCourse\Service\Impl;
 
+use Biz\BaseService;
+use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\OpenCourse\Dao\RecommendedCourseDao;
 use Topxia\Service\OpenCourse\OpenCourseRecommendedService;
 use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
 

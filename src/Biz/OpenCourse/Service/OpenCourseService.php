@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\OpenCourse;
+namespace Biz\OpenCourse\Service;
 
 interface OpenCourseService
 {
