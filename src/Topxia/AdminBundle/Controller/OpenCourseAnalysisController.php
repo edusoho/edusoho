@@ -124,7 +124,7 @@ class OpenCourseAnalysisController extends BaseController
         if (!empty($type)) {
             $conditions['targetInnerType'] = $type;
         }
-        $totalWatchNum      = $this->getRefererLogService()->searchRefererLogCount($conditions);
+        $totalWatchNum      = $this->getRefererLogService()->countRefererLogs($conditions);
         $logs = $this->getRefererLogService()->searchRefererLogs($conditions, array('createdTime', 'DESC'), 0, $totalWatchNum);
         $totalOpenCourseNum = count(array_unique(ArrayToolkit::column($logs, 'targetId')));
         $logsGroupByDate    = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
@@ -359,7 +359,7 @@ class OpenCourseAnalysisController extends BaseController
     {
         $totalData = array();
 
-        $totalData['visitCount'] = $this->getRefererLogService()->searchRefererLogCount(array('targetType' => 'openCourse'));
+        $totalData['visitCount'] = $this->getRefererLogService()->countRefererLogs(array('targetType' => 'openCourse'));
         $totalData['orderCount'] = $this->getOrderRefererLogService()->searchOrderRefererLogCount(array(), '');
 
         return $totalData;
