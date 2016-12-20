@@ -1,8 +1,7 @@
 <?php
+namespace Biz\RefererLog\Service;;
 
-namespace Topxia\Service\RefererLog\Dao;
-
-interface OrderRefererLogDao
+interface OrderRefererLogService
 {
     public function getOrderRefererLog($id);
 
@@ -12,10 +11,9 @@ interface OrderRefererLogDao
 
     public function deleteOrderRefererLog($id);
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit);
 
-    public function searchOrderRefererLogCount($conditions, $groupBy);
+    public function searchOrderRefererLogCount($conditions);
 
     public function searchDistinctOrderRefererLogCount($conditions, $distinctField);
-
 }

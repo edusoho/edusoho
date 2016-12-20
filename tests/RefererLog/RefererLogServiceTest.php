@@ -124,7 +124,7 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog2       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $count = $this->getRefererLogService()->searchRefererLogCount(array());
+        $count = $this->getRefererLogService()->countRefererLogs(array());
 
         $this->assertEquals(count(array($createRefererLog1, $createRefererLog2)), $count);
     }

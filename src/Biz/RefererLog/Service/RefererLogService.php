@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\RefererLog;
+namespace Biz\RefererLog\Service;
 
 interface RefererLogService
 {
@@ -39,7 +39,12 @@ interface RefererLogService
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 
-    public function searchRefererLogCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated searchRefererLogCount
+     */
+    public function countRefererLogs($conditions);
 
     /**
      * 通过时间段得到来源日志 以Y-m-d时间格式分组
