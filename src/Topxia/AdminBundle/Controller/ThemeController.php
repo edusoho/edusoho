@@ -218,7 +218,7 @@ class ThemeController extends BaseController
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Theme.ThemeService');
+        return $this->getServiceKernel()->getBiz()->service('Theme:ThemeService');
     }
 
     protected function getNavigationService()

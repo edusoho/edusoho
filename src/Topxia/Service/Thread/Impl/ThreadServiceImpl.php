@@ -2,10 +2,10 @@
 namespace Topxia\Service\Thread\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\TextHelper;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Thread\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService

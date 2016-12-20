@@ -251,7 +251,7 @@ class DefaultController extends BaseController
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Theme.ThemeService');
+        return $this->getServiceKernel()->getBiz()->service('Theme:ThemeService');
     }
 
     private function getBlacklistService()

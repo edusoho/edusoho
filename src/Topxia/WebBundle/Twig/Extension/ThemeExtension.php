@@ -39,7 +39,7 @@ class ThemeExtension extends \Twig_Extension
 
     private function getThemeService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Theme.ThemeService');
+        return ServiceKernel::instance()->getBiz()->service('Theme:ThemeService');
     }
 
     public function getName()

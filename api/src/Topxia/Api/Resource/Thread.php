@@ -19,7 +19,7 @@ class Thread extends BaseResource
             }
 
             $targetType = $data['targetType'];
-            $targetId = $data['targetId'];
+            $targetId   = $data['targetId'];
 
             if (empty($targetId) || empty($targetType)) {
                 return $this->error('500', '创建问答失败，缺失数据');
@@ -51,7 +51,7 @@ class Thread extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
     }
 
     protected function getCourseService()
@@ -61,9 +61,9 @@ class Thread extends BaseResource
 
     public function filter($res)
     {
-        $res['updateTime'] = date('c', $res['updateTime']);
+        $res['updateTime']  = date('c', $res['updateTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
-        $res['threadId'] = $res['id'];
+        $res['threadId']    = $res['id'];
 
         unset($res['id']);
         unset($res['relationId']);

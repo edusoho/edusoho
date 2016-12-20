@@ -3,8 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class ThreadController extends BaseController
 {
@@ -94,15 +94,23 @@ class ThreadController extends BaseController
     {
         $post = $this->getThreadService()->getPost($postId);
 
+        $conditions = array('parentId' => $postId);
+
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->findPostsCountByParentId($postId),
+            $this->getThreadService()->searchPostsCount($conditions),
             10
         );
 
         $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $post['threadId'], 'postId' => $postId)));
 
-        $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $posts = $this->getThreadService()->searchPosts(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
@@ -146,7 +154,6 @@ class ThreadController extends BaseController
 
     public function updateAction(Request $request, $target, $thread)
     {
-
         if ($request->getMethod() == 'POST') {
             try {
                 $user = $this->getCurrentUser();
@@ -360,7 +367,12 @@ class ThreadController extends BaseController
             )));
         }
 
-        $position = $this->getThreadService()->getPostPostionInThread($post['id']);
+        $conditions = array(
+            'threadId'   => $post['threadId'],
+            'parentId'   => 0,
+            'lessThanId' => $post['id']
+        );
+        $count = $this->getThreadService()->searchPostsCount($conditions);
 
         $page = ceil($position / 20);
 
@@ -373,7 +385,12 @@ class ThreadController extends BaseController
 
     public function userOtherThreadsBlockAction(Request $request, $thread, $userId)
     {
-        $threads = $this->getThreadService()->findThreadsByTargetAndUserId(array('type' => $thread['targetType'], 'id' => $thread['targetId']), $userId, 0, 11);
+        $conditions = array(
+            'targetType' => $thread['targetType'],
+            'targetId'   => $thread['targetId'],
+            'userId'     => $userId
+        );
+        $threads = $this->getThreadService()->searchThreads($conditions, array('createdTime' => 'DESC'), 0, 11);
 
         return $this->render('TopxiaWebBundle:Thread:user-threads-block.html.twig', array(
             'currentThread' => $thread,
@@ -394,7 +411,7 @@ class ThreadController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return ServiceKernel::instance()->getBiz()->service('Thread.ThreadService');
     }
 
     protected function convertFiltersToConditions($id, $filters)

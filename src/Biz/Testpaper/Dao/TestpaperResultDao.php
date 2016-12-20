@@ -2,7 +2,9 @@
 
 namespace Biz\Testpaper\Dao;
 
-interface TestpaperResultDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TestpaperResultDao extends GeneralDaoInterface
 {
     public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
 

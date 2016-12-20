@@ -3,21 +3,19 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomThread extends BaseResource
 {
- 
     public function get(Application $app, Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $user = $this->getUserService()->getUser($thread['userId']);
-        $thread['user'] = $this->simpleUser($user);
-        $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);
-        $thread['target']['id'] = $classroom['id'];
+        $user                      = $this->getUserService()->getUser($thread['userId']);
+        $thread['user']            = $this->simpleUser($user);
+        $classroom                 = $this->getClassroomService()->getClassRoom($thread['targetId']);
+        $thread['target']['id']    = $classroom['id'];
         $thread['target']['title'] = $classroom['title'];
 
         return $this->filter($thread);
@@ -26,8 +24,8 @@ class ClassRoomThread extends BaseResource
     public function filter($res)
     {
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['createdTime']  = date('c', $res['createdTime']);
+        $res['updatedTime']  = date('c', $res['updatedTime']);
         return $res;
     }
 
@@ -35,14 +33,14 @@ class ClassRoomThread extends BaseResource
     {
         $simple = array();
 
-        $simple['id'] = $res['id'];
-        $simple['title'] = $res['title'];
-        $simple['content'] = substr(strip_tags($res['content']), 0, 100);
-        $simple['postNum'] = $res['postNum'];
-        $simple['hitNum'] = $res['hitNum'];
-        $simple['userId'] = $res['userId'];
+        $simple['id']          = $res['id'];
+        $simple['title']       = $res['title'];
+        $simple['content']     = substr(strip_tags($res['content']), 0, 100);
+        $simple['postNum']     = $res['postNum'];
+        $simple['hitNum']      = $res['hitNum'];
+        $simple['userId']      = $res['userId'];
         $simple['classRoomId'] = $res['classRoomId'];
-        $simple['type'] = $res['type'];
+        $simple['type']        = $res['type'];
 
         if (isset($res['user'])) {
             $simple['user'] = $res['user'];
@@ -53,7 +51,7 @@ class ClassRoomThread extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Thread:ThreadService');
     }
 
     protected function getClassroomService()

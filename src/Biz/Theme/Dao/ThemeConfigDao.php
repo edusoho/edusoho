@@ -2,7 +2,9 @@
 
 namespace Biz\Theme\Dao;
 
-interface ThemeConfigDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface ThemeConfigDao extends GeneralDaoInterface
 {
     public function getThemeConfigByName($name);
 
