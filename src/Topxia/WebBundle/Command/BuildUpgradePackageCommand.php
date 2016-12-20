@@ -53,7 +53,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->generateDiffFile();
 
-        $submoduleDiffs = $this->generateSubmodulesDiffFile(array('vendor'));
+        $submoduleDiffs = $this->generateSubmodulesDiffFile(array());
 
         $this->diffFilePrompt($diffFile, $submoduleDiffs);
 
