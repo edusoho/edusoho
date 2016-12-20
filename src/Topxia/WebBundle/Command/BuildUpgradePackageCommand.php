@@ -116,10 +116,6 @@ class BuildUpgradePackageCommand extends BaseCommand
                     $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
                 }
 
-                if (empty($module) && strpos($opFile, 'vendor') === 0){
-                    continue;
-                }
-
                 if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
