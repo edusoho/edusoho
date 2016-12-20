@@ -1,13 +1,14 @@
 <?php
 
-namespace Topxia\Service\PayCenter\Impl;
+namespace Biz\PayCenter\Service\Impl;
 
+use Biz\Order\Service\OrderService;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\PayCenter\PayCenterService;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\PayCenter\Service\PayCenterService;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
@@ -130,11 +131,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         }
 
         if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)未开启，请先开启。',array('%payment%'=>$payment)));
+            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)未开启，请先开启。', array('%payment%' => $payment)));
         }
 
         if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)参数未设置，请先设置。',array('%payment%'=>$payment)));
+            throw new \RuntimeException($this->getKernel()->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
         }
 
         $options = array(
@@ -267,6 +268,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');

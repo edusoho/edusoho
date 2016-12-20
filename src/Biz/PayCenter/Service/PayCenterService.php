@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\PayCenter;
+namespace Biz\PayCenter\Service;
 
 interface PayCenterService
 {
