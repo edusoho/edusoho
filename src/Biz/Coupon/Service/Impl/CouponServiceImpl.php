@@ -1,58 +1,64 @@
 <?php
-namespace Topxia\Service\Coupon\Impl;
+namespace Biz\Coupon\Service\Impl;
 
+
+use Biz\BaseService;
+use Biz\Card\Service\CardService;
+use Biz\Coupon\Dao\CouponDao;
+use Biz\Coupon\Service\CouponService;
+use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Coupon\CouponService;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
     public function getCoupon($id)
     {
-        return $this->getCouponDao()->getCoupon($id);
+        return $this->getCouponDao()->get($id);
     }
 
     public function getCouponsByIds($ids)
     {
-        return $this->getCouponDao()->getCouponsByIds($ids);
+        return $this->getCouponDao()->findByIds($ids);
     }
 
     public function addCoupon($coupon)
     {
-        return $this->getCouponDao()->addCoupon($coupon);
+        return $this->getCouponDao()->create($coupon);
     }
 
     public function updateCoupon($couponId, $fields)
     {
-        return $this->getCouponDao()->updateCoupon($couponId, $fields);
+        return $this->getCouponDao()->update($couponId, $fields);
     }
 
     public function findCouponsByBatchId($batchId, $start, $limit)
     {
-        $coupons = $this->getCouponDao()->findCouponsByBatchId($batchId, $start, $limit);
+        $coupons = $this->getCouponDao()->findByBatchId($batchId, $start, $limit);
 
         return ArrayToolkit::index($coupons, 'id');
     }
 
     public function findCouponsByIds(array $ids)
     {
-        $coupons = $this->getCouponDao()->findCouponsByIds($ids);
+        $coupons = $this->getCouponDao()->findByIds($ids);
 
         return ArrayToolkit::index($coupons, 'id');
     }
 
     public function searchCoupons(array $conditions, $orderBy, $start, $limit)
     {
-        $coupons = $this->getCouponDao()->searchCoupons($conditions, $orderBy, $start, $limit);
+        $coupons = $this->getCouponDao()->search($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($coupons, 'id');
     }
 
     public function searchCouponsCount(array $conditions)
     {
-        return $this->getCouponDao()->searchCouponsCount($conditions);
+        return $this->getCouponDao()->count($conditions);
     }
 
     public function generateInviteCoupon($userId, $mode) //user可能是邀请者*pay，也可能是被邀请者*register
@@ -97,7 +103,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'createdTime' => time()
                 );
 
-                $coupon = $this->getCouponDao()->addCoupon($coupon);
+                $coupon = $this->getCouponDao()->create($coupon);
 
                 $card = $this->getCardService()->addCard(array(
                     'cardId'      => $coupon['id'],
@@ -135,7 +141,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function deleteCouponsByBatch($batchId)
     {
-        return $this->getCouponDao()->deleteCouponsByBatch($batchId);
+        return $this->getCouponDao()->deleteByBatch($batchId);
     }
 
     public function checkCouponUseable($code, $targetType, $targetId, $amount)
@@ -153,21 +159,21 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%已经被使用', array('%code%' => $code))
+                'message' => sprintf('优惠券%s已经被使用', $code)
             );
         }
 
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%已经被其他人领取', array('%code%' => $code))
+                'message' => sprintf('优惠券%s已经被其他人领取', $code)
             );
         }
 
         if ($coupon['deadline'] + 86400 < time()) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠券%code%已过期', array('%code%' => $code))
+                'message' =>  sprintf('优惠券%s已过期',$code)
             );
         }
 
@@ -207,7 +213,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         }
 
         if ($coupon['status'] == 'unused') {
-            $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
+            $coupon = $this->getCouponDao()->update($coupon['id'], array(
                 'userId' => $currentUser['id'],
                 'status' => 'receive'
             ));
@@ -237,12 +243,12 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function getCouponByCode($code)
     {
-        return $this->getCouponDao()->getCouponByCode($code);
+        return $this->getCouponDao()->getByCode($code);
     }
 
     public function useCoupon($code, $order)
     {
-        $coupon = $this->getCouponDao()->getCouponByCode($code, true);
+        $coupon = $this->getCouponDao()->getByCode($code, true);
         $user   = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;
@@ -252,7 +258,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             return null;
         }
 
-        $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
+        $coupon = $this->getCouponDao()->update($coupon['id'], array(
             'status'     => 'used',
             'targetType' => $order['targetType'],
             'targetId'   => $order['targetId'],
@@ -279,19 +285,20 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $randomCode;
     }
 
-    private function getCouponBatchService()
-    {
-        return $this->createService('Coupon:Coupon.CouponBatchService');
-    }
-
+    /**
+     * @return CardService
+     */
     private function getCardService()
     {
-        return $this->getKernel()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
+    /**
+     * @return CouponDao
+     */
     private function getCouponDao()
     {
-        return $this->createDao('Coupon.CouponDao');
+        return $this->createDao('Coupon:CouponDao');
     }
 
     /**
@@ -299,21 +306,38 @@ class CouponServiceImpl extends BaseService implements CouponService
      */
     private function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
+    /**
+     * @return NotificationService
+     */
     private function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
