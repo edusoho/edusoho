@@ -52,7 +52,7 @@ class MyOrderController extends BaseController
         $conditions['payment'] = $request->get('payWays');
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount($conditions),
+            $this->getOrderService()->countOrders($conditions),
             20
         );
 
@@ -64,7 +64,7 @@ class MyOrderController extends BaseController
     	);
 
         $waitToBePaidCountConditions = array('userId' => $user['id'],'status' => 'created');
-        $waitToBePaidCount = $this->getOrderService()->searchOrderCount($waitToBePaidCountConditions);
+        $waitToBePaidCount = $this->getOrderService()->countOrders($waitToBePaidCountConditions);
 
         foreach ($orders as $index => $expiredOrderToBeUpdated ){
             if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){

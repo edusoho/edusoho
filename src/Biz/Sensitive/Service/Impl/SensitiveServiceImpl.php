@@ -319,7 +319,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getBanlogDao()

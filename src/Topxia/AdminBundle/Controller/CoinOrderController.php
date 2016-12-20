@@ -176,11 +176,11 @@ class CoinOrderController extends BaseController
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
+        return $this->getServiceKernel()->createService('Cash:CashService');
     }
 }

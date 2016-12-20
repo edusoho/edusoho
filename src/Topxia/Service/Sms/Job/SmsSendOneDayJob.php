@@ -31,7 +31,7 @@ class SmsSendOneDayJob implements Job
 
     protected function getSmsService()
     {
-        return $this->getKernel()->getBiz()->service('Sms:SmsService');
+        return $this->getKernel()->createService('Sms:SmsService');
     }
 
     protected function getKernel()

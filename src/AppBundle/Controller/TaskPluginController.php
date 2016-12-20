@@ -55,7 +55,7 @@ class TaskPluginController extends BaseController
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -63,7 +63,7 @@ class TaskPluginController extends BaseController
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -71,7 +71,7 @@ class TaskPluginController extends BaseController
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**

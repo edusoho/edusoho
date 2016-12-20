@@ -38,7 +38,7 @@ $api->get('/', function (Request $request) {
  */
 $api->get('/followers', function (Request $request) {
     $user = getCurrentUser();
-    $follwers = ServiceKernel::instance()->getBiz()->service('User:UserService')->findAllUserFollower($user['id']);
+    $follwers = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollower($user['id']);
     return $follwers;
 }
 
@@ -58,7 +58,7 @@ $api->get('/followers', function (Request $request) {
  */
 $api->get('/followings', function (Request $request) {
     $user = getCurrentUser();
-    $follwings = ServiceKernel::instance()->getBiz()->service('User:UserService')->findAllUserFollowing($user['id']);
+    $follwings = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollowing($user['id']);
     return $follwings;
 }
 
@@ -67,7 +67,7 @@ $api->get('/followings', function (Request $request) {
 //获得当前用户虚拟币账户信息
 $api->get('/accounts', function () {
     $user = getCurrentUser();
-    $accounts = ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($user['id']);
+    $accounts = ServiceKernel::instance()->createService('Cash:CashAccountService')->getAccountByUserId($user['id']);
 
     if (empty($accounts)) {
         throw new \Exception('accounts not found');
@@ -148,7 +148,7 @@ userId:{blacklist-userId},
 
 $api->get('/blacklists', function () {
     $user = getCurrentUser();
-    $blacklists = ServiceKernel::instance()->getBiz()->service('User:BlacklistService')->findBlacklistsByUserId($user['id']);
+    $blacklists = ServiceKernel::instance()->createService('User:BlacklistService')->findBlacklistsByUserId($user['id']);
     return filters($blacklists, 'blacklist');
 }
 
@@ -175,8 +175,8 @@ $api->get('/friends', function (Request $request) {
     $user = getCurrentUser();
     $start = $request->query->get('start', 0);
     $limit = $request->query->get('limit', 10);
-    $friends = ServiceKernel::instance()->getBiz()->service('User:UserService')->findFriends($user['id'], $start, $limit);
-    $count = ServiceKernel::instance()->getBiz()->service('User:UserService')->findFriendCount($user['id']);
+    $friends = ServiceKernel::instance()->createService('User:UserService')->findFriends($user['id'], $start, $limit);
+    $count = ServiceKernel::instance()->createService('User:UserService')->findFriendCount($user['id']);
     return array(
         'data'  => filters($friends, 'user'),
         'total' => $count
@@ -223,13 +223,13 @@ $api->get('/notifications', function (Request $request) {
         $conditions['type'] = $type;
     }
 
-    $notifications = ServiceKernel::instance()->getBiz()->service('User:NotificationService')->searchNotifications(
+    $notifications = ServiceKernel::instance()->createService('User:NotificationService')->searchNotifications(
         $conditions,
         array('createdTime', 'DESC'),
         $start,
         $limit
     );
-    $count = ServiceKernel::instance()->getBiz()->service('User:NotificationService')->searchNotificationCount($conditions);
+    $count = ServiceKernel::instance()->createService('User:NotificationService')->searchNotificationCount($conditions);
     return array(
         'data'  => filters($notifications, 'notification'),
         'total' => $count

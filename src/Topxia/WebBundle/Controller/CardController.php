@@ -174,7 +174,7 @@ class CardController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
+        return $this->getServiceKernel()->createService('Card:CardService');
     }
 
     private function getWebExtension()

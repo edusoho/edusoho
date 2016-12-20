@@ -1,17 +1,15 @@
 <?php
-
 namespace Tests\Activity;
 
-
-use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Course\CourseService;
+use Biz\Activity\Service\ActivityService;
 
 class ActivityServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateActivityWhenInvalidArgument()
     {
@@ -84,7 +82,11 @@ class ActivityServiceTest extends BaseTestCase
     public function testFinishTrigger()
     {
         $course = array(
-            'title' => 'test'
+            'title'       => 'test',
+            'courseSetId' => 1,
+            'expiryMode'  => 'days',
+            'learnMode'   => 'lockMode',
+            'expiryDays'  => 0
         );
         $course = $this->getCourseService()->createCourse($course);
 
@@ -109,7 +111,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -117,7 +119,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -125,6 +127,6 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

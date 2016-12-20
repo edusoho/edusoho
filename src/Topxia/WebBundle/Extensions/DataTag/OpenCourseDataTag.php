@@ -39,7 +39,7 @@ class OpenCourseDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCategoryService()

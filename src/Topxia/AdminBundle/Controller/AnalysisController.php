@@ -394,7 +394,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid")),
             20
         );
 
@@ -457,7 +457,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created")),
             20
         );
 
@@ -526,7 +526,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "amount" => "0.00", "targetType" => 'course')),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "amount" => "0.00", "targetType" => 'course')),
             20
         );
 
@@ -595,7 +595,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created", "targetType" => 'classroom')),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created", "targetType" => 'classroom')),
             20
         );
         $paidClassroomDetail = $this->getOrderService()->searchOrders(
@@ -995,7 +995,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "amount" => "0.00")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "amount" => "0.00")),
             20
         );
 
@@ -1062,7 +1062,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "course", "amount" => "0.00")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "course", "amount" => "0.00")),
             20
         );
 
@@ -1125,7 +1125,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "classroom", "amount" => "0.00")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "classroom", "amount" => "0.00")),
             20
         );
 
@@ -1188,7 +1188,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "vip", "amount" => "0.00")),
+            $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "targetType" => "vip", "amount" => "0.00")),
             20
         );
 
@@ -1386,7 +1386,7 @@ class AnalysisController extends BaseController
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getCourseService()

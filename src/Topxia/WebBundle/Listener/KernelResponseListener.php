@@ -162,12 +162,12 @@ class KernelResponseListener
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
@@ -175,7 +175,7 @@ class KernelResponseListener
      */
     private function getUserActiveLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserActiveService');
+        return ServiceKernel::instance()->createService('User:UserActiveService');
     }
 
 }

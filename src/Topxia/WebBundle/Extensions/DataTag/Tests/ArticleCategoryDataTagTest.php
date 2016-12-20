@@ -65,7 +65,7 @@ class ArticleCategoryDataTagTest extends BaseTestCase
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 
 }

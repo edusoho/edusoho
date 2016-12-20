@@ -36,7 +36,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function initDevelopSetting()
     {
-        $this->getServiceKernel()->getBiz()->service('System:SettingService')->set('developer', array(
+        $this->getServiceKernel()->createService('System:SettingService')->set('developer', array(
             'without_network' => '1'
         ));
 
@@ -45,7 +45,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function initCurrentUser()
     {
-        $userService = ServiceKernel::instance()->getBiz()->service('User:UserService');
+        $userService = ServiceKernel::instance()->createService('User:UserService');
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(

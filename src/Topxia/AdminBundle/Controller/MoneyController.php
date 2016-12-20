@@ -20,7 +20,7 @@ class MoneyController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMoneyService()->searchMoneyRecordsCount($conditions),
+            $this->getMoneyService()->countMoneyRecords($conditions),
             15
         );
 
@@ -52,6 +52,6 @@ class MoneyController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

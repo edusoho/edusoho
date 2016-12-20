@@ -215,7 +215,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
 
         if(is_array($moduleService) && $moduleService['protocol'] === 'biz'){
-            return ServiceKernel::instance()->getBiz()->service($moduleService['service']);
+            return ServiceKernel::instance()->createService($moduleService['service']);
         }
 
         return $this->createService($moduleService);

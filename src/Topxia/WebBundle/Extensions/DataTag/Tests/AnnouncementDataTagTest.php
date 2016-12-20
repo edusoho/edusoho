@@ -61,6 +61,6 @@ class AnnouncementDataTagTest extends BaseTestCase
      */
     private function getAnnouncementService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Announcement:AnnouncementService');
+        return $this->getServiceKernel()->createService('Announcement:AnnouncementService');
     }
 }

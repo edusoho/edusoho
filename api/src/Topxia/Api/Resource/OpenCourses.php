@@ -30,7 +30,7 @@ class OpenCourses extends BaseResource
 
             return $this->wrap($this->filter($openCourses), $next);
         } else {
-            $total       = $this->getOpenCourseService()->searchCourseCount($conditions);
+            $total       = $this->getOpenCourseService()->countCourses($conditions);
             $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
 
             return $this->wrap($this->filter($openCourses), $total);

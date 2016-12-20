@@ -192,7 +192,7 @@ class WebExtension extends \Twig_Extension
         if (!(bool)$weixinmob_enabled) {
             return null;
         }
-        $jsApiTicket = ServiceKernel::instance()->getBiz()->service('User:TokenService')->getTokenByType('jsapi.ticket');
+        $jsApiTicket = ServiceKernel::instance()->createService('User:TokenService')->getTokenByType('jsapi.ticket');
 
         $key    = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
@@ -201,7 +201,7 @@ class WebExtension extends \Twig_Extension
             $weixinshare = new WeixinShare($config);
             $token       = $weixinshare->getJsApiTicket();
 
-            $jsApiTicket = ServiceKernel::instance()->getBiz()->service('User:TokenService')->makeToken(
+            $jsApiTicket = ServiceKernel::instance()->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
                 array('data' => $token, 'duration' => $token['expires_in'])
             );
@@ -352,7 +352,7 @@ class WebExtension extends \Twig_Extension
             'startTime' => $time
         );
 
-        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->createService('Cash:CashService')->analysisAmount($condition);
     }
 
     public function getInCash($userId, $timeType = "oneWeek")
@@ -364,17 +364,17 @@ class WebExtension extends \Twig_Extension
             'cashType'  => 'Coin',
             'startTime' => $time
         );
-        return ServiceKernel::instance()->getBiz()->service('Cash:CashService')->analysisAmount($condition);
+        return ServiceKernel::instance()->createService('Cash:CashService')->analysisAmount($condition);
     }
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     public function getAccount($userId)
     {
-        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService')->getAccountByUserId($userId);
+        return ServiceKernel::instance()->createService('Cash:CashAccountService')->getAccountByUserId($userId);
     }
 
     private function filterTime($type)
@@ -824,7 +824,7 @@ class WebExtension extends \Twig_Extension
             $publicUrlpath = 'assets/img/default/';
             $url           = $assets->getUrl($publicUrlpath.$size.$category);
 
-            $defaultSetting = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('default', array());
+            $defaultSetting = ServiceKernel::instance()->createService('System:SettingService')->get('default', array());
 
             $key      = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
@@ -1034,7 +1034,7 @@ class WebExtension extends \Twig_Extension
 
         switch ($type) {
             case 'user':
-                return ServiceKernel::instance()->getBiz()->service('User:UserService')->getUser($id);
+                return ServiceKernel::instance()->createService('User:UserService')->getUser($id);
             case 'category':
                 return $kernel->createService('Taxonomy:CategoryService')->getCategory($id);
             case 'course':
@@ -1233,7 +1233,7 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
 
-        $value = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get($name);
+        $value = ServiceKernel::instance()->createService('System:SettingService')->get($name);
 
         if (!isset($value)) {
             return $default;
@@ -1258,7 +1258,7 @@ class WebExtension extends \Twig_Extension
 
     public function getOrderPayment($order, $default = null)
     {
-        $coinSettings = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('coin', array());
+        $coinSettings = ServiceKernel::instance()->createService('System:SettingService')->get('coin', array());
 
         if (!isset($coinSettings['price_type'])) {
             $coinSettings['price_type'] = "RMB";
