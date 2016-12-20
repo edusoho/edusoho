@@ -1,7 +1,7 @@
 <?php
-namespace Org\Service\Org;
+namespace Biz\Org\Service;
 
-use Topxia\Common\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 
 

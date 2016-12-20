@@ -1,12 +1,11 @@
 <?php
 
-namespace Org\Service\Org\Impl;
+namespace Biz\Org\Service\Impl;
 
-use Org\Service\Org\OrgService;
+use Biz\BaseService;
+use Biz\Org\Service\OrgService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Org\Service\Org\Dao\Impl\OrgDaoImpl;
-use Org\Service\Org\OrgBatchUpdateFactory;
+use Biz\Org\Service\OrgBatchUpdateFactory;
 use Topxia\Service\Common\ServiceKernel;
 
 class OrgServiceImpl extends BaseService implements OrgService
@@ -23,7 +22,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         $org['createdUserId'] = $user['id'];
 
-        $org = $this->getOrgDao()->createOrg($org);
+        $org = $this->getOrgDao()->create($org);
 
         $parentOrg = $this->updateParentOrg($org);
 
@@ -37,7 +36,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $parentOrg = null;
 
         if (isset($org['parentId']) && $org['parentId'] > 0) {
-            $parentOrg = $this->getOrgDao()->getOrg($org['parentId']);
+            $parentOrg = $this->getOrgDao()->get($org['parentId']);
             $this->getOrgDao()->wave($parentOrg['id'], array('childrenNum' => +1));
         }
 
@@ -56,7 +55,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             $fields['depth']   = $parentOrg['depth'] + 1;
         }
 
-        return $this->getOrgDao()->updateOrg($org['id'], $fields);
+        return $this->getOrgDao()->update($org['id'], $fields);
     }
 
     public function updateOrg($id, $fields)
@@ -69,7 +68,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
         }
 
-        $org = $this->getOrgDao()->updateOrg($id, $fields);
+        $org = $this->getOrgDao()->update($id, $fields);
         return $org;
     }
 
@@ -84,7 +83,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             }
             $that->getOrgDao()->delete($id);
             //删除辖下
-            $that->getOrgDao()->deleteOrgsByPrefixOrgCode($org['orgCode']);
+            $that->getOrgDao()->deleteByPrefixOrgCode($org['orgCode']);
         });
     }
 
@@ -100,17 +99,17 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function getOrgByOrgCode($orgCode)
     {
-        return $this->getOrgDao()->getOrgByOrgCode($orgCode);
+        return $this->getOrgDao()->getByOrgCode($orgCode);
     }
 
     public function getOrg($id)
     {
-        return $this->getOrgDao()->getOrg($id);
+        return $this->getOrgDao()->get($id);
     }
 
     public function findOrgsByIds($ids)
     {
-        return $this->getOrgDao()->findOrgsByIds($ids);
+        return $this->getOrgDao()->findByIds($ids);
     }
 
     public function findOrgsByPrefixOrgCode($orgCode = null)
@@ -122,12 +121,12 @@ class OrgServiceImpl extends BaseService implements OrgService
             $orgCode = $org['orgCode'];
         }
 
-        return $this->getOrgDao()->findOrgsByPrefixOrgCode($orgCode);
+        return $this->getOrgDao()->findByPrefixOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)
     {
-        $org = $this->getOrgDao()->getOrgByCode($value);
+        $org = $this->getOrgDao()->getByCode($value);
 
         if (empty($org)) {
             return true;
@@ -149,18 +148,18 @@ class OrgServiceImpl extends BaseService implements OrgService
     public function sortOrg($ids)
     {
         foreach ($ids as $index => $id) {
-            $this->getOrgDao()->updateOrg($id, array('seq' => $index));
+            $this->getOrgDao()->update($id, array('seq' => $index));
         }
     }
 
     public function searchOrgs($conditions, $orderBy, $start, $limit)
     {
-        return $this->getOrgDao()->searchOrgs($conditions, $orderBy, $start, $limit);
+        return $this->getOrgDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function getOrgByCode($code)
     {
-        return $this->getOrgDao()->getOrgByCode($code);
+        return $this->getOrgDao()->getByCode($code);
     }
 
     public function geFullOrgNameById($id, $orgs = array())
@@ -183,7 +182,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function isNameAvaliable($name, $parentId, $exclude)
     {
-        $org = $this->getOrgDao()->findOrgByNameAndParentId($name, $parentId);
+        $org = $this->getOrgDao()->findByNameAndParentId($name, $parentId);
         if (empty($org)) {
             return true;
         }
@@ -208,7 +207,7 @@ class OrgServiceImpl extends BaseService implements OrgService
      */
     public function getOrgDao()
     {
-        return $this->createDao('Org:Org.OrgDao');
+        return $this->createDao('Org:OrgDao');
     }
 
     protected function getModuleService($module)

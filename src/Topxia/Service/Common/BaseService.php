@@ -102,7 +102,7 @@ abstract class BaseService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = $this->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
                 }
