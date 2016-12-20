@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Subtitle;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;
 
 class SubtitleServiceTest extends BaseTestCase
 {

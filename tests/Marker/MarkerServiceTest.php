@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Marker;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class MarkerServiceTest extends BaseTestCase

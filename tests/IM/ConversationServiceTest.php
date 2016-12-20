@@ -3,7 +3,7 @@ namespace Tests\IM;
 
 use Mockery;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class ConversationServiceTest extends BaseTestCase

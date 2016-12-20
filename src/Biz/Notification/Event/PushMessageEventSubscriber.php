@@ -4,7 +4,6 @@ namespace Biz\Event\Notification;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\CloudPlatform\IMAPIFactory;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\TagOwnerManager;
 

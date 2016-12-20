@@ -3,8 +3,8 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class Threads extends BaseResource
 {
@@ -12,12 +12,12 @@ class Threads extends BaseResource
     {
         $conditions = ArrayToolkit::parts($request->query->all(), array());
 
-        $sort = $request->query->get('sort', 'created');
+        $sort  = $request->query->get('sort', 'created');
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $total = $this->getThreadService()->searchThreadCount($conditions);
-        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        $total   = $this->getThreadService()->searchThreadCount($conditions);
+        $start   = $start == -1 ? rand(0, $total - 1) : $start;
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $start, $limit);
 
         return $this->wrap($this->filter($threads), $total);
@@ -31,7 +31,7 @@ class Threads extends BaseResource
     protected function multicallFilter($name, $res)
     {
         foreach ($res as $key => $one) {
-            $res[$key] = $this->callFilter($name, $one);
+            $res[$key]         = $this->callFilter($name, $one);
             $res[$key]['body'] = '';
         }
 

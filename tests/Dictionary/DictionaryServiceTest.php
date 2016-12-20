@@ -2,7 +2,7 @@
 
 namespace Tests\Dictionary;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class DictionaryServiceTest extends BaseTestCase
 {

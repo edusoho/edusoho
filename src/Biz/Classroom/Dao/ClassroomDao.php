@@ -10,4 +10,9 @@ interface ClassroomDao extends  GeneralDaoInterface
 {
 
     public function findByIds($ids);
+
+    public function getByTitle($title);
+
+    public function findByLikeTitle($title);
+
 }

@@ -1285,10 +1285,10 @@ class WebExtension extends \Twig_Extension
         $funcName = 'can'.$permission.'Classroom';
 
         if ($isStudentOrAuditor) {
-            return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId, $isStudentOrAuditor);
+            return ServiceKernel::instance()->createService('Classroom:ClassroomService')->$funcName($classroomId, $isStudentOrAuditor);
         }
 
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId);
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService')->$funcName($classroomId);
     }
 
     public function calculatePercent($number, $total)

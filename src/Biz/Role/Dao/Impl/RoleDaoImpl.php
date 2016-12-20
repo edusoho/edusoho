@@ -10,7 +10,6 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
 
     public function declares()
     {
-
         $declares['conditions'] = array(
             'name = :name',
             'code = :code',

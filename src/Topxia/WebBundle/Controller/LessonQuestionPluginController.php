@@ -190,20 +190,20 @@ class LessonQuestionPluginController extends BaseController
     protected function createQuestionForm($data = array())
     {
         return $this->createNamedFormBuilder('question', $data)
-                    ->add('title', 'text')
-                    ->add('content', 'textarea')
-                    ->add('courseId', 'hidden')
-                    ->add('lessonId', 'hidden')
-                    ->getForm();
+            ->add('title', 'text')
+            ->add('content', 'textarea')
+            ->add('courseId', 'hidden')
+            ->add('lessonId', 'hidden')
+            ->getForm();
     }
 
     protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
-                    ->add('content', 'textarea')
-                    ->add('courseId', 'hidden')
-                    ->add('threadId', 'hidden')
-                    ->getForm();
+            ->add('content', 'textarea')
+            ->add('courseId', 'hidden')
+            ->add('threadId', 'hidden')
+            ->getForm();
     }
 
     protected function getThreadService()

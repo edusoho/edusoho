@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\RefererLog\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class RefererLogServiceTest extends BaseTestCase
 {

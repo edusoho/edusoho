@@ -3,7 +3,7 @@ namespace Tests\File;
 
 
 use Biz\File\Service\UploadFileService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\UserService;
 

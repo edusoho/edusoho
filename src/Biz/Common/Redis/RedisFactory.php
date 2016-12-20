@@ -1,14 +1,10 @@
 <?php
 namespace Biz\Common\Redis;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class RedisFactory
 {
-    /**
-     * @var ContainerInterface
-     */
     private $container;
 
     /**
@@ -23,7 +19,7 @@ class RedisFactory
      */
     private $redisPool;
 
-    private function __construct(ContainerInterface $container)
+    private function __construct($container)
     {
         $this->container = $container;
     }

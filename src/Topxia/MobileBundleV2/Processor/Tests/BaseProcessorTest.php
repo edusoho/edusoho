@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\MobileBundleV2\Controller\MobileApiController;
 

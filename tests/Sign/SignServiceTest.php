@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Sign\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class SignServiceTest extends BaseTestCase

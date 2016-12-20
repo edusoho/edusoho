@@ -2,7 +2,7 @@
 namespace Tests\Activity;
 
 use Biz\Task\Service\TaskService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 

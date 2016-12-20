@@ -2,7 +2,7 @@
 
 namespace SensitiveWord\Service\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 
 class  SensitiveServiceTest extends BaseTestCase{

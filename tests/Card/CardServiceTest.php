@@ -4,7 +4,7 @@ namespace Tests\Card;
 use Biz\Card\Service\CardService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CardServiceTest extends BaseTestCase
 {

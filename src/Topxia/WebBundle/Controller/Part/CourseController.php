@@ -101,7 +101,7 @@ class CourseController extends BaseController
 
     public function classroomInfoAction($courseId)
     {
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
         $classroom = $this->getClassroomService()->getClassroom($classroom["classroomId"]);
         return $this->render('TopxiaWebBundle:Course/Part:normal-header-classroom-info.html.twig', array(
             'classroom' => $classroom
@@ -167,7 +167,7 @@ class CourseController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()

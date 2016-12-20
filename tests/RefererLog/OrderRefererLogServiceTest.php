@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\RefererLog\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class OrderRefererLogServiceTest extends BaseTestCase
 {

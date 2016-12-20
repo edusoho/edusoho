@@ -1,11 +1,11 @@
 imports:
+    - { resource: biz.yml }
     - { resource: parameters_default.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
-    - { resource: biz.yml }
 
 framework:
     # esi:             ~

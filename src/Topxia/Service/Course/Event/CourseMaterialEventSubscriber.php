@@ -1,12 +1,10 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseMaterialEventSubscriber implements EventSubscriberInterface
 {

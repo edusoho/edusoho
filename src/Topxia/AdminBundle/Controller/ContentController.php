@@ -23,7 +23,7 @@ class ContentController extends BaseController
 
         $contents = $this->getContentService()->searchContents(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
