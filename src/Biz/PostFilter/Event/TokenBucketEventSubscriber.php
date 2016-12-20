@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\PostFilter\Event;
+namespace Biz\PostFilter\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
