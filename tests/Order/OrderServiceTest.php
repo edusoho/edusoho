@@ -893,7 +893,7 @@ class OrderServiceTest extends BaseTestCase
         $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->createOrder($order2);
         $conditions = array("userId" => $user['id']);
-        $result     = $this->getOrderService()->searchOrderCount($conditions);
+        $result     = $this->getOrderService()->countOrders($conditions);
         $this->assertEquals(2, $result);
     }
 

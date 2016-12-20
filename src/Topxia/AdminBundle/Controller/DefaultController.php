@@ -189,11 +189,11 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->searchUserCount(array());
 
-        $todayCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
-        $todayClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
+        $todayCourseMemberNum    = $this->getOrderService()->countOrders(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
+        $todayClassroomMemberNum = $this->getOrderService()->countOrders(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
 
-        $totalCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
-        $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
+        $totalCourseMemberNum    = $this->getOrderService()->countOrders(array("targetType" => 'course', "status" => "paid"));
+        $totalClassroomMemberNum = $this->getOrderService()->countOrders(array("targetType" => 'classroom', "status" => "paid"));
 
         $todayVipNum = 0;
         $totalVipNum = 0;

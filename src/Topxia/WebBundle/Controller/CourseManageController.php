@@ -316,7 +316,7 @@ class CourseManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount($conditions),
+            $this->getOrderService()->countOrders($conditions),
             10
         );
 
