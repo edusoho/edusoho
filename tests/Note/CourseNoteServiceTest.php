@@ -1,24 +1,21 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\Course\Service\CourseService;
+use Biz\Note\Service\CourseNoteService;
 use Topxia\Service\Common\BaseTestCase;
+use Biz\Course\Service\CourseSetService;
 
 class NoteServiceTest extends BaseTestCase
 {
-
     public function testGetNote()
     {
-        $note = $this->createNote();
+        $note      = $this->createNote();
         $foundNote = $this->getNoteService()->getNote($note['id']);
         $this->assertEquals($note['userId'], $foundNote['userId']);
     }
-
 
     public function testGetNoteWithNotExistNote()
     {
@@ -42,9 +39,9 @@ class NoteServiceTest extends BaseTestCase
      */
     public function testsearchNoteCount()
     {
-        $user           = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
             'fromCourseId'    => $course['id'],
@@ -64,15 +61,15 @@ class NoteServiceTest extends BaseTestCase
             'fromCourseSetId' => $courseSet['id']
         ));
 
-        $createdNote1   = $this->getNoteService()->saveNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task1['id'],
+            'taskId'   => $task1['id'],
             'courseId' => $task1['courseId']
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task2['id'],
+            'taskId'   => $task2['id'],
             'courseId' => $task2['courseId']
         ));
 
@@ -87,10 +84,9 @@ class NoteServiceTest extends BaseTestCase
      */
     public function testSearchNotes()
     {
-
-        $user           = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
             'fromCourseId'    => $course['id'],
@@ -110,15 +106,15 @@ class NoteServiceTest extends BaseTestCase
             'fromCourseSetId' => $courseSet['id']
         ));
 
-        $createdNote1   = $this->getNoteService()->saveNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task1['id'],
+            'taskId'   => $task1['id'],
             'courseId' => $task1['courseId']
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task2['id'],
+            'taskId'   => $task2['id'],
             'courseId' => $task2['courseId']
         ));
 
@@ -134,9 +130,9 @@ class NoteServiceTest extends BaseTestCase
         $note = $this->createNote();
 
         $savedNote = $this->getNoteService()->saveNote(array(
-            'content' => 'Save Second Time',
-            'taskId'  => $note['taskId'],
-            'courseId'=> $note['courseId']
+            'content'  => 'Save Second Time',
+            'taskId'   => $note['taskId'],
+            'courseId' => $note['courseId']
         ));
 
         $this->assertNotNull($savedNote);
@@ -158,12 +154,11 @@ class NoteServiceTest extends BaseTestCase
         $this->getNoteService()->deleteNote(999);
     }
 
-
     public function testDeleteNotes()
     {
-        $user           = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
             'fromCourseId'    => $course['id'],
@@ -183,15 +178,15 @@ class NoteServiceTest extends BaseTestCase
             'fromCourseSetId' => $courseSet['id']
         ));
 
-        $createdNote1   = $this->getNoteService()->saveNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task1['id'],
+            'taskId'   => $task1['id'],
             'courseId' => $task1['courseId']
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
             'content'  => 'note_content1',
-            'taskId' => $task2['id'],
+            'taskId'   => $task2['id'],
             'courseId' => $task2['courseId']
         ));
 
@@ -218,8 +213,8 @@ class NoteServiceTest extends BaseTestCase
     protected function createTask()
     {
         $courseSet = $this->createCourseSet();
-        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
-        $task = $this->getTaskService()->createTask(array(
+        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task      = $this->getTaskService()->createTask(array(
             'fromCourseId'    => $course['id'],
             'title'           => 'test task',
             'mode'            => 'lesson',
@@ -234,7 +229,7 @@ class NoteServiceTest extends BaseTestCase
     protected function createNote()
     {
         $task = $this->createTask();
-        $note = $this->getNoteService()->saveNote(array(
+        $note = $this->getNoteService()->createCourseNote(array(
             'content'  => 'note content',
             'taskId'   => $task['id'],
             'courseId' => $task['courseId']

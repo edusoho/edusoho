@@ -31,7 +31,7 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('tagIds' => 'json'),
-            'orderbys'   => array('createdTime'),
+            'orderbys'   => array('createdTime', 'memberNum'),
             'conditions' => array(
                 'ownerId=:ownerId',
                 'status = :status',

@@ -5,11 +5,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ThreadTradeDao extends GeneralDaoInterface
 {
-    public function getTrade($id);
+    public function getByUserIdAndThreadId($userId, $threadId);
 
-    public function addTrade($fields);
-
-    public function getTradeByUserIdAndThreadId($userId, $threadId);
-
-    public function getTradeByUserIdAndGoodsId($userId, $goodsId);
+    public function getByUserIdAndGoodsId($userId, $goodsId);
 }

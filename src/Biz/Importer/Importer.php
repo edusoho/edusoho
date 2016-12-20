@@ -2,8 +2,8 @@
 namespace Biz\Importer;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 abstract class Importer
 {
@@ -33,7 +33,7 @@ abstract class Importer
     protected function createDangerResponse($message)
     {
         if (!is_string($message)) {
-            throw new ServiceException($this->getServiceKernel()->trans('message must be a string'));
+            throw new ServiceException('Message must be a string');
         }
 
         return array(
