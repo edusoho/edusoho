@@ -3,7 +3,7 @@ namespace Topxia\Service\Notification\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class LiveOpenPushNotificationOneHourJob implements Job
 {

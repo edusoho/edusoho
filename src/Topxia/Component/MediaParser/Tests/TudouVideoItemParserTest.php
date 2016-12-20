@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Component\MediaParser\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Component\MediaParser\ItemParser\TudouVideoItemParser;
 
 class TudouVideoItemParserTest extends BaseTestCase

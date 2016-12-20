@@ -3,7 +3,7 @@
 namespace Topxia\Common\Tests;
 
 use Topxia\Common\Tree;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class TreeTest extends BaseTestCase
 {

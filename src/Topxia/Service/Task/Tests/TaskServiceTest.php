@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Task\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Task\TaskService;
 use Topxia\Common\ArrayToolkit;
 

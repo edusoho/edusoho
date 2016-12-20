@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Common\BaseTestCase;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Biz\User\CurrentUser;

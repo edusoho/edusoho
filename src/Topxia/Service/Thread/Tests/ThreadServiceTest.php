@@ -2,8 +2,8 @@
 namespace Topxia\Service\Thread\Tests;
 
 use Biz\User\CurrentUser;
-//  use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Common\BaseTestCase;
+//  use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceTest extends BaseTestCase

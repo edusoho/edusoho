@@ -3,7 +3,7 @@
 namespace Topxia\Service\Course\Tests;
 
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class MaterialLibServiceImplTest extends BaseTestCase
 {

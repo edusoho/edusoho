@@ -1,7 +1,7 @@
 <?php
 namespace Tests\System;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CacheServiceTest extends BaseTestCase
 {

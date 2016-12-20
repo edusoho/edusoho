@@ -92,6 +92,6 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 
     protected function getClassroomOrderService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomOrderService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomOrderService');
     }
 }

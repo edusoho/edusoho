@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\Cash\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceException;
+use Biz\BaseTestCase;;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 
 class LessonDaoImplTest extends BaseTestCase

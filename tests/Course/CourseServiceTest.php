@@ -5,7 +5,7 @@ namespace Tests\Course;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceTest extends BaseTestCase

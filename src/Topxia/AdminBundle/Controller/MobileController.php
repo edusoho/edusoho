@@ -10,7 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {

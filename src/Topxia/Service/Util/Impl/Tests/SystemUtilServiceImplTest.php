@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Util\Impl\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class SystemUtilServiceImplTest extends BaseTestCase
 {

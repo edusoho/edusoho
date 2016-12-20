@@ -6,7 +6,7 @@ use Biz\BaseService;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
 use Topxia\Common\PluginToolkit;
-use Topxia\Service\Common\Logger;
+use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 
 class LogServiceImpl extends BaseService implements LogService
@@ -62,13 +62,14 @@ class LogServiceImpl extends BaseService implements LogService
 
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
+        $user = $this->getCurrentUser();
         return $this->getLogDao()->create(array(
             'module'      => Logger::getModule($module),
             'action'      => $action,
             'message'     => $message,
             'data'        => empty($data) ? '' : json_encode($data),
-            'userId'      => $this->getCurrentUser()->id,
-            'ip'          => $this->getCurrentUser()->currentIp,
+            'userId'      => $user['id'],
+            'ip'          => $user['currentIp'],
             'createdTime' => time(),
             'level'       => $level
         ));

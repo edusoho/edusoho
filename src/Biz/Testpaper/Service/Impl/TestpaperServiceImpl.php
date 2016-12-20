@@ -3,7 +3,7 @@ namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -253,7 +253,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult($result['id'], $formData['usedTime']);
 
-        $this->dispatchEvent('testpaper.finish', new ServiceEvent($paperResult));
+        $this->dispatchEvent('testpaper.finish', new Event($paperResult));
 
         return $paperResult;
     }
@@ -272,7 +272,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
 
-        $this->dispatchEvent('testpaper.publish', new ServiceEvent($testpaper));
+        $this->dispatchEvent('testpaper.publish', new Event($testpaper));
 
         return $testpaper;
     }
@@ -291,7 +291,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
 
-        $this->dispatchEvent('testpaper.close', new ServiceEvent($testpaper));
+        $this->dispatchEvent('testpaper.close', new Event($testpaper));
 
         return $testpaper;
     }
@@ -441,7 +441,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->updateTestpaperResult($paperResult['id'], $fields);
 
-        $this->dispatchEvent('testpaper.reviewed', new ServiceEvent($paperResult));
+        $this->dispatchEvent('testpaper.reviewed', new Event($paperResult));
 
         return $paperResult;
     }

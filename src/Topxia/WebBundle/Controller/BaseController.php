@@ -4,11 +4,11 @@ namespace Topxia\WebBundle\Controller;
 use Biz\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -310,10 +310,10 @@ abstract class BaseController extends Controller
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
         return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }

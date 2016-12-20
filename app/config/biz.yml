@@ -4,10 +4,16 @@ parameters:
         db.options: "%biz_db_options%"
         cache_directory: "%kernel.cache_dir%"
         log_directory: "%kernel.logs_dir%"
+        kernel.root_dir: "%kernel.root_dir%"
         plugin.directory: "%kernel.root_dir%/../plugins"
+        theme.directory: "%kernel.root_dir%/../web/themes"
         cloud_convertor: "%cloud_convertor%"
         topxia.upload.public_url_path: "%topxia.upload.public_url_path%"
         topxia.disk.local_directory: "%topxia.disk.local_directory%"
+        topxia.disk.backup_dir: "%topxia.disk.backup_dir%"
+        topxia.disk.update_dir: "%topxia.disk.update_dir%"
+        topxia.upload.public_directory: "%topxia.upload.public_url_path%"
+        topxia.upload.private_directory: "%topxia.upload.private_directory%"
         plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
 
     biz_db_options:

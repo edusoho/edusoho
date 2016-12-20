@@ -3,7 +3,6 @@ namespace Topxia\Service\Question\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

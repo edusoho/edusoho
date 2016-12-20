@@ -3,7 +3,7 @@ namespace Biz\Order\OrderRefundProcessor;
 
 use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessor;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseOrderRefundProcessor implements OrderRefundProcessor
 {

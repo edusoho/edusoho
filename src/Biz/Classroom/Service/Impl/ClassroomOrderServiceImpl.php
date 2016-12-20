@@ -203,31 +203,31 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     protected function getCashService()
     {
-        return $this->getKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getKernel()->createService('Cash:CashAccountService');
+        return $this->createService('Cash:CashAccountService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 }

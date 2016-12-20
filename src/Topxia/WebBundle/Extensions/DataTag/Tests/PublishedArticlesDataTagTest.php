@@ -3,7 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Biz\Article\Service\ArticleService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class PublishedArticlesDataTagTest extends BaseTestCase
 {   

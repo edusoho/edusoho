@@ -2,7 +2,7 @@
 
 namespace Tests\Course;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CourseSetServiceTest extends BaseTestCase
 {

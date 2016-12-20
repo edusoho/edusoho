@@ -8,7 +8,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\BlockToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
@@ -70,7 +70,7 @@ class BlockController extends BaseController
     public function blockMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $blocks     = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime', 'DESC'), 0, 10);
+        $blocks     = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime' => 'DESC'), 0, 10);
 
         return $this->createJsonResponse($blocks);
     }

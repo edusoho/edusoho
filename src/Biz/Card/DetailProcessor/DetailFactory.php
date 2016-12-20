@@ -20,7 +20,7 @@ class DetailFactory
         }
 
         if ($cardType == "coupon") {
-            $class = "Topxia\\Service\\Coupon\\CouponProcessor\\CouponDetailProcessor";
+            $class = "Biz\\Coupon\\CouponProcessor\\CouponDetailProcessor";
         }
 
         if ($cardType == "moneyCard") {

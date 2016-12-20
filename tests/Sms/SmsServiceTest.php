@@ -3,8 +3,8 @@
 namespace Tests\Sms;
 
 use Mockery;
-use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\BaseTestCase;;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceTest extends BaseTestCase
 {

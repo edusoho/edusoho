@@ -5,7 +5,7 @@ namespace Biz\PayCenter\Service\Impl;
 use Biz\Order\Service\OrderService;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\PayCenter\Service\PayCenterService;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
@@ -67,7 +67,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
             if ($success) {
                 $this->dispatchEvent("order.pay.success",
-                    new ServiceEvent($order, array('targetType' => $order["targetType"]))
+                    new Event($order, array('targetType' => $order["targetType"]))
                 );
             }
 

@@ -6,9 +6,10 @@ use Biz\BaseService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\OpenCourse\OpenCourseService;
+use Codeages\Biz\Framework\Event\Event;
+
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -244,7 +245,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         //添加动态
         $this->dispatchEvent(
             'open.course.favorite',
-            new ServiceEvent($course)
+            new Event($course)
         );
 
         $this->getFavoriteDao()->addFavorite(array(

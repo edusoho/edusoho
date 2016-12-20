@@ -4,9 +4,9 @@ namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomReviewService;
+use Codeages\Biz\Framework\Event\Event;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
@@ -98,7 +98,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'createdTime' => time(),
                 'meta'        => array()
             ));
-            $this->dispatchEvent('classReview.add', new ServiceEvent($review));
+            $this->dispatchEvent('classReview.add', new Event($review));
         } else {
             $review = $this->getClassroomReviewDao()->update($review['id'], array(
                 'rating'      => $fields['rating'],

@@ -3,7 +3,7 @@ namespace Tests\Article;
 
 
 use Biz\Article\Service\CategoryService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CategoryServiceTest extends BaseTestCase
 {
