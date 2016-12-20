@@ -26,10 +26,10 @@ class SmsController extends BaseController
             $url  = $this->generateUrl('course_show', array('id' => $id));
 
             if ($item['parentId']) {
-                $classroom = $this->getClassroomService()->findClassroomByCourseId($item['id']);
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($item['id']);
 
                 if ($classroom) {
-                    $mobileNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'], 1);
+                    $mobileNum = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['classroomId'], 1);
                 }
             } else {
                 $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
@@ -72,7 +72,7 @@ class SmsController extends BaseController
             $description                = $parameters['course_title'].$this->trans('发布');
 
             if ($course['parentId']) {
-                $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
                 if ($classroom) {
                     $count    = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
@@ -133,7 +133,7 @@ class SmsController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getBiz()

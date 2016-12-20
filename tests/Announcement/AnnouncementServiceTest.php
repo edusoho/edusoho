@@ -2,7 +2,7 @@
 namespace Tests\Announcement;
 
 use Biz\Announcement\Service\AnnouncementService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class AnnouncementServiceTest extends BaseTestCase
 {

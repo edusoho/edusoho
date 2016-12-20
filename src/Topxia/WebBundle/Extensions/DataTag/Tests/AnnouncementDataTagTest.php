@@ -3,7 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Biz\Announcement\Service\AnnouncementService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\AnnouncementDataTag;
 
 class AnnouncementDataTagTest extends BaseTestCase

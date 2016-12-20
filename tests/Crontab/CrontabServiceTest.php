@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Crontab;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CrontabServiceTest extends BaseTestCase
 {

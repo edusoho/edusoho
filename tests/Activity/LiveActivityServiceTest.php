@@ -2,7 +2,7 @@
 
 namespace Tests\Activity;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceTest extends BaseTestCase

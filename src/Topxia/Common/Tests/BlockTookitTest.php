@@ -2,7 +2,7 @@
 
 namespace Topxia\Common\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class BlockTookitTest extends BaseTestCase
 {

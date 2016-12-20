@@ -19,7 +19,7 @@ class GetClassroomByCourseIdDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {	
 
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($arguments['courseId']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($arguments['courseId']);
         if ($classroom) {
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
         }
@@ -29,7 +29,7 @@ class GetClassroomByCourseIdDataTag extends BaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
 }

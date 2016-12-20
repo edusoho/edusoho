@@ -3,7 +3,6 @@ namespace Topxia\Service\Course\Event;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -46,7 +45,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -76,7 +75,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -101,7 +100,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseNoteCreate(Event $event)
     {
         $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         $course    = $this->getCourseService()->getCourse($note['courseId']);
 
         if ($classroom && $note['status']) {
@@ -117,7 +116,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $note      = $event->getSubject();
         $preStatus = $event->getArgument('preStatus');
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         $course    = $this->getCourseService()->getCourse($note['courseId']);
 
         if ($classroom && $note['status'] && !$preStatus) {
@@ -140,7 +139,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseNoteDelete(Event $event)
     {
         $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
         if ($classroom) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
@@ -406,7 +405,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     protected function getUploadFileService()

@@ -363,7 +363,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     protected function getUserService()
@@ -383,7 +383,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getClassroomOrderService()
     {
-        return ServiceKernel::instance()->createService("Classroom:Classroom.ClassroomOrderService");
+        return ServiceKernel::instance()->createService("Classroom:ClassroomOrderService");
     }
 
     protected function getOrderService()

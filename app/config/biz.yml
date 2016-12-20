@@ -12,6 +12,8 @@ parameters:
         topxia.disk.local_directory: "%topxia.disk.local_directory%"
         topxia.disk.backup_dir: "%topxia.disk.backup_dir%"
         topxia.disk.update_dir: "%topxia.disk.update_dir%"
+        topxia.upload.public_directory: "%topxia.upload.public_url_path%"
+        topxia.upload.private_directory: "%topxia.upload.private_directory%"
         plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
 
     biz_db_options:

@@ -5,7 +5,7 @@ use Biz\Cash\Service\CashAccountService;
 use Biz\Cash\Service\CashService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CashServiceTest extends BaseTestCase
 {

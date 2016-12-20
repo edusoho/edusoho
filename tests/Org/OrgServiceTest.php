@@ -6,7 +6,7 @@ use Biz\System\Service\SettingService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class OrgServiceTest extends BaseTestCase
 {

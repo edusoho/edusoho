@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class ThreadServiceTest extends BaseTestCase
 {

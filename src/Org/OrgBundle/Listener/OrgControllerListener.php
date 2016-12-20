@@ -63,7 +63,7 @@ class OrgControllerListener
     private $_serviceMapper = array(
         'user'      => array('User.UserService', 'getUser'),
         'course'    => array('Course.CourseService', 'getCourse'),
-        'classroom' => array('Classroom:Classroom.ClassroomService', 'getClassroom'),
+        'classroom' => array('Classroom:ClassroomService', 'getClassroom'),
         'article'   => array('Article.ArticleService', 'getArticle')
     );
 }

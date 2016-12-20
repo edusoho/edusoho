@@ -2,7 +2,6 @@
 namespace Topxia\Service\Course\Event;
 
 use Topxia\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -119,7 +118,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
 
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         if (!empty($classroom)) {
             $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId($classroom['classroomId'], $learn['userId']);
@@ -133,6 +132,6 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 }

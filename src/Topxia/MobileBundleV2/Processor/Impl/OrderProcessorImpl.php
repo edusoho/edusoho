@@ -880,7 +880,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function getClassroomService()
     {
-        return $this->controller->getService('Classroom:Classroom.ClassroomService');
+        return $this->controller->getService('Classroom:ClassroomService');
     }
 
     private function getLevelService()

@@ -2,7 +2,7 @@
 namespace Topxia\Service\Course\Tests;
 
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceTest extends BaseTestCase
@@ -3422,7 +3422,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
         $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
-        $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $this->getClassroomService()->getClassroomByCourseId($course['id']);
         $normalUser = $this->createNormalUser();
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $normalUser['id']);
@@ -3724,7 +3724,7 @@ class CourseServiceTest extends BaseTestCase
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseMemberService()

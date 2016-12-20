@@ -1,7 +1,7 @@
 <?php
 namespace Tests\DiscovieryColumn;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class DiscoveryColumnServiceTest extends BaseTestCase
 {

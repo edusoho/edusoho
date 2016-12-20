@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\LatestCourseReviewsDataTag;
 

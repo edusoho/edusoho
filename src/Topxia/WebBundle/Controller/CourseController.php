@@ -114,7 +114,7 @@ class CourseController extends CourseBaseController
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
@@ -132,7 +132,7 @@ class CourseController extends CourseBaseController
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
@@ -194,7 +194,7 @@ class CourseController extends CourseBaseController
         }     
 
         if ($course['parentId'] && empty($member)) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
@@ -808,7 +808,7 @@ class CourseController extends CourseBaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     public function getLevelService()
