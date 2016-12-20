@@ -24,6 +24,8 @@
     <div class="controls col-md-10">
 	  <textarea id="whiteListIps" name="whiteListIps" rows="8" class="form-control">{% if whiteListIps  %}{{whiteListIps.ips}}{% endif %}</textarea>
 	  <div class="help-block">{{'一行一个IP，只有列表中的IP地址允许访问系统！可使用通配符，例如：202.101.20.*'|trans}}</div>
+	  <div class="alert alert-info">{{'请谨慎设置，避免管理员无法访问系统！'|trans}}</div>
+
 	</div>
 
 	<div class="col-md-2 control-label"></div>
