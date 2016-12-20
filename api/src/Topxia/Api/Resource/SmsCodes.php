@@ -1,13 +1,11 @@
-<?php 
+<?php
 
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use Gregwar\Captcha\CaptchaBuilder;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Api\Util\ImgCodeUtil;
-use Topxia\Service\Common\ServiceKernel;
+use Gregwar\Captcha\CaptchaBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 class SmsCodes extends BaseResource
 {
@@ -25,27 +23,27 @@ class SmsCodes extends BaseResource
 
         if ($remain == 0 && empty($fields['img_code']) && empty($fields['verified_token'])) {
             $this->imgBuilder = new CaptchaBuilder;
-            $str = $this->buildImg();
+            $str              = $this->buildImg();
 
             $imgToken = $this->getTokenService()->makeToken('img_verify', array(
                 'times'    => 5,
                 'duration' => 60 * 30,
                 'userId'   => 0,
                 'data'     => array(
-                    'img_code' => $this->imgBuilder->getPhrase(),
+                    'img_code' => $this->imgBuilder->getPhrase()
                 )
             ));
 
             $this->imgBuilder = null;
-            
+
             return array('img_code' => $str, 'verified_token' => $imgToken['token'], 'status' => 'limited');
         }
 
-        if (isset($fields['img_code'])&& !isset($fields['verified_token'])) {
+        if (isset($fields['img_code']) && !isset($fields['verified_token'])) {
             return $this->error('500', '非法请求');
         }
 
-        if (!isset($fields['img_code'])&& isset($fields['verified_token'])) {
+        if (!isset($fields['img_code']) && isset($fields['verified_token'])) {
             return $this->error('500', '非法请求');
         }
 
@@ -59,21 +57,20 @@ class SmsCodes extends BaseResource
 
             if (empty($fields['verified_token'])) {
                 return $this->error('500', 'Token为空');
-            }            
+            }
 
             $imgCodeUtil = new ImgCodeUtil();
             try {
                 $imgCodeUtil->verifyImgCode('img_verify', $imgCode, $imgToken);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
 
-
         $type   = $fields['type'];
         $mobile = $fields['mobile'];
 
-        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile','sms_bind','sms_third_registration'))) {
+        if (!in_array($type, array('sms_change_password', 'sms_verify_mobile', 'sms_bind', 'sms_third_registration'))) {
             return $this->error('500', '短信服务不支持该业务');
         }
         if (empty($mobile)) {
@@ -86,12 +83,12 @@ class SmsCodes extends BaseResource
                     throw new \Exception("该手机号已被绑定");
                 }
                 $user = $this->getCurrentUser();
-                if(!$user->isLogin()){
+                if (!$user->isLogin()) {
                     return $this->error('500', '用户没有登录');
                 }
 
                 $result = $this->getSmsService()->sendVerifySms('sms_bind', $mobile);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
@@ -99,7 +96,7 @@ class SmsCodes extends BaseResource
         if ($type == 'sms_change_password') {
             try {
                 $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $mobile);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
@@ -107,28 +104,28 @@ class SmsCodes extends BaseResource
         if ($type == 'sms_verify_mobile') {
             try {
                 $result = $this->getSmsService()->sendVerifySms('sms_bind', $mobile);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->error('500', $e->getMessage());
             }
         }
-        if($type =='sms_bind'){
+        if ($type == 'sms_bind') {
             $type = 'sms_change_password';
         }
-        
+
         $smsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
             'duration' => 60 * 30,
             'userId'   => 0,
             'data'     => array(
                 'sms_code' => $result['captcha_code'],
-                'mobile' => $mobile
+                'mobile'   => $mobile
             )
         ));
 
         return array(
-            'mobile'    => $mobile,
+            'mobile'         => $mobile,
             'verified_token' => $smsToken['token'],
-            'status'    => 'ok'
+            'status'         => 'ok'
         );
     }
 
@@ -150,21 +147,26 @@ class SmsCodes extends BaseResource
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
     protected function getSmsService()
     {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
+        return $this->getBiz()->service('Sms:SmsService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->getServiceKernel()->getBiz();
     }
 }

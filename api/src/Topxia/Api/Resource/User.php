@@ -4,7 +4,6 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class User extends BaseResource
 {
@@ -116,16 +115,21 @@ class User extends BaseResource
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSmsService()
     {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
+        return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->getServiceKernel()->getBiz();
     }
 }

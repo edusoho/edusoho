@@ -61,12 +61,12 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
 
     public function getReviewService()
     {
-    	return $this->getServiceKernel()->createService('Course.ReviewService');
+    	return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
 	public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getUserService()

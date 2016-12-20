@@ -467,7 +467,7 @@ class VipImporter extends Importer
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getLevelService()
@@ -487,7 +487,7 @@ class VipImporter extends Importer
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
     protected function getUserService()

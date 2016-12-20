@@ -96,6 +96,6 @@ class HomeworkResult extends BaseResource
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 }

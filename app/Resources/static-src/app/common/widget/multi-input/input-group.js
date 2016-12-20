@@ -48,9 +48,10 @@ export default class InputGroup extends Component {
         console.log({'seach url':this.searchableUrl+value});
 
         if(this.state.itemName.length>0) {
-          console.log({'searchResult':searchResult});
+          console.log({'searchResult': searchResult});
           this.setState({
-            searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
+            // searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
+            searchResult: searchResult,
             resultful:true,
           });
           console.log({'searchResult':this.state.searchResult});

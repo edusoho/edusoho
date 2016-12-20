@@ -286,7 +286,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return $this->getKernel()->getBiz()->service('Card:CardService');
     }
 
     private function getCouponDao()
@@ -309,7 +309,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     private function getUserService()

@@ -36,6 +36,6 @@ class MoneyServiceImpl extends BaseService implements MoneyService
 
     protected function getMoneyRecordsDao()
     {
-        return $this->createDao('Order.MoneyRecordsDao');
+        return $this->createDao('Order:MoneyRecordsDao');
     }
 }

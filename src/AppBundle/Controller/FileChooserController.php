@@ -161,7 +161,7 @@ class FileChooserController extends BaseController
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 
     protected function getServiceKernel()

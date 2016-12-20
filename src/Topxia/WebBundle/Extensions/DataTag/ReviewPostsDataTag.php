@@ -38,7 +38,7 @@ class ReviewPostsDataTag extends BaseDataTag implements DataTag
 
     protected function getCourseReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     private function getClassroomReviewService()

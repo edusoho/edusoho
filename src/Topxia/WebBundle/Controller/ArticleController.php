@@ -482,12 +482,12 @@ class ArticleController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getServiceKernel()->getBiz()->service('Article:CategoryService');
     }
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getSettingService()
@@ -497,11 +497,11 @@ class ArticleController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 }

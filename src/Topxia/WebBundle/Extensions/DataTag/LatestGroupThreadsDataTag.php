@@ -50,7 +50,7 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
 
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getUserService()
@@ -60,6 +60,6 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
 
     private function getGroupService() 
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 }

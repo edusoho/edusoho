@@ -264,17 +264,17 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getLiveCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.LiveCourseService');
+        return $this->getServiceKernel()->createService('Course:LiveCourseService');
     }
 
     protected function getSettingService()

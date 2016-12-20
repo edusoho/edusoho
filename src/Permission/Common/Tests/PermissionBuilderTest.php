@@ -94,6 +94,6 @@ class PermissionBuilderTest extends BaseTestCase
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('System.RoleService');
+        return $this->getServiceKernel()->createService('System:RoleService');
     }
 }

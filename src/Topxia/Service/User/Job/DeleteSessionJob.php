@@ -25,6 +25,6 @@ class DeleteSessionJob implements Job
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('Log.LogService'); 
+        return $this->getServiceKernel()->createService('Log:LogService'); 
     }
 }

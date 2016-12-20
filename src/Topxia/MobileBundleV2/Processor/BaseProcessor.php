@@ -127,7 +127,7 @@ class BaseProcessor {
 
     protected function getCashAccountService()
     {
-        return $this->controller->getService('Cash.CashAccountService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getAppService()
@@ -137,7 +137,7 @@ class BaseProcessor {
 
     protected function getCashOrdersService()
     {
-        return $this->controller->getService('Cash.CashOrdersService');
+        return ServiceKernel::instance()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
@@ -195,7 +195,7 @@ class BaseProcessor {
 
     protected function getArticleService()
     {
-        return $this->controller->getService('Article.ArticleService');
+        return ServiceKernel::instance()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getOrderService()
@@ -235,7 +235,7 @@ class BaseProcessor {
 
     protected function getAnnouncementService()
     {
-        return $this->controller->getService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
     }
 
     public function getEduCloudService()

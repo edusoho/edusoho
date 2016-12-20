@@ -35,6 +35,6 @@ class ContentServiceTest extends BaseTestCase
 
     protected function getContentService()
     {
-        return $this->getServiceKernel()->createService('Content.ContentService');
+        return $this->getServiceKernel()->createService('Content:ContentService');
     }
 }

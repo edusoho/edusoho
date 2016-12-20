@@ -70,10 +70,10 @@ $api->get('/token', function () {
 $api->get('/announcements', function (Request $request) {
     $start = $request->query->get('start', 0);
     $limit = $request->query->get('limit', 10);
-    $count = ServiceKernel::instance()->createService('Announcement.AnnouncementService')->searchAnnouncementsCount(array('targetType' => 'global'));
-    $announcements = ServiceKernel::instance()->createService('Announcement.AnnouncementService')->searchAnnouncements(
+    $count = ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService')->searchAnnouncementsCount(array('targetType' => 'global'));
+    $announcements = ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService')->searchAnnouncements(
         array('targetType' => 'global'),
-        array('createdTime','DESC'),
+        array('createdTime' => 'DESC'),
         $start,
         $limit
     );

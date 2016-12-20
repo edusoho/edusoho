@@ -100,7 +100,7 @@ class PluginUtil extends BaseService
 
     private static function getAppService()
     {
-        return self::$kernel->createService('CloudPlatform.AppService');
+        return self::$kernel->createService('CloudPlatform:AppService');
     }
 }
 

@@ -56,7 +56,7 @@ class DictionaryServiceImpl extends BaseService implements DictionaryService
 
 	protected function getDictionaryItemDao()
 	{
-		return $this->createDao('Dictionary.DictionaryItemDao');
+		return $this->createDao('Dictionary:DictionaryItemDao');
 	}
 
     /**
@@ -64,6 +64,6 @@ class DictionaryServiceImpl extends BaseService implements DictionaryService
      */
 	protected function getDictionaryDao()
 	{
-		return $this->createDao('Dictionary.DictionaryDao');
+		return $this->createDao('Dictionary:DictionaryDao');
 	}
 }

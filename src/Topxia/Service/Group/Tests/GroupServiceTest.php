@@ -403,7 +403,7 @@ class GroupServiceTest extends BaseTestCase
 
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getUserService()

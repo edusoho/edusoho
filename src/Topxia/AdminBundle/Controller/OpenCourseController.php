@@ -219,12 +219,12 @@ class OpenCourseController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getSettingService()
@@ -234,11 +234,11 @@ class OpenCourseController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getOpenCourseDeleteService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseDeleteService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseDeleteService');
     }
 }

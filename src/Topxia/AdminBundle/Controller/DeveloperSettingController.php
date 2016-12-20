@@ -165,12 +165,12 @@ class DeveloperSettingController extends BaseController
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+        return $this->getServiceKernel()->getBiz()->service('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()

@@ -26,7 +26,7 @@ services:
 
 security:
     encoders:
-        Topxia\Service\User\CurrentUser: sha256
+        Biz\User\CurrentUser: sha256
 
     providers:
         custom_provider:

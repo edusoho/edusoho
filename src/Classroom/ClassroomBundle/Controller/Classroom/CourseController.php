@@ -171,7 +171,7 @@ class CourseController extends BaseController
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     private function getClassroomService()
@@ -186,7 +186,7 @@ class CourseController extends BaseController
 
     private function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getSettingService()

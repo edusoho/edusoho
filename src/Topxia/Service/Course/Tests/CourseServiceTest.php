@@ -3709,17 +3709,17 @@ class CourseServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseDao');
+        return $this->getServiceKernel()->createDao('Course:CourseDao');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getClassroomService()
@@ -3729,6 +3729,6 @@ class CourseServiceTest extends BaseTestCase
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:CourseMemberService');
     }
 }

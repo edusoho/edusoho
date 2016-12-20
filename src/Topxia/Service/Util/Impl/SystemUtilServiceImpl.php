@@ -53,7 +53,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 
     protected function getSystemUtilDao ()
     {
-        return $this->createDao('Util.SystemUtilDao');
+        return $this->createDao('Util:SystemUtilDao');
     }    
 
 

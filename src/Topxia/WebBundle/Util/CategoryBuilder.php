@@ -24,6 +24,6 @@ class CategoryBuilder
 
     private function getCategoryService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
+        return ServiceKernel::instance()->createService('Taxonomy:CategoryService');
     }
 }

@@ -62,7 +62,7 @@ class LatestGroupThreadsDataTagTest extends BaseTestCase
     }
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getUserService()
@@ -72,6 +72,6 @@ class LatestGroupThreadsDataTagTest extends BaseTestCase
 
     private function getGroupService() 
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 }

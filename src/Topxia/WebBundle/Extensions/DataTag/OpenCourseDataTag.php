@@ -34,7 +34,7 @@ class OpenCourseDataTag extends BaseDataTag implements DataTag
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getUserService()
@@ -44,6 +44,6 @@ class OpenCourseDataTag extends BaseDataTag implements DataTag
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

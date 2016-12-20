@@ -41,11 +41,11 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
 
     protected function getOpenCourseRecommendService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseRecommendedService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

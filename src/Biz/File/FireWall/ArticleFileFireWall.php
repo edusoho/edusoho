@@ -27,6 +27,6 @@ class ArticleFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getArticleService()
     {
-        return $this->getKernel()->createService('Article.ArticleService');
+        return $this->biz->service('Article:ArticleService');
     }
 }

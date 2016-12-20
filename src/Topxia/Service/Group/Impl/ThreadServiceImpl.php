@@ -476,37 +476,37 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getThreadTradeDao()
     {
-        return $this->createDao('Group.ThreadTradeDao');
+        return $this->createDao('Group:ThreadTradeDao');
     }
 
     protected function getThreadGoodsDao()
     {
-        return $this->createDao('Group.ThreadGoodsDao');
+        return $this->createDao('Group:ThreadGoodsDao');
     }
 
     protected function getThreadDao()
     {
-        return $this->createDao('Group.ThreadDao');
+        return $this->createDao('Group:ThreadDao');
     }
 
     protected function getGroupService()
     {
-        return $this->createService('Group.GroupService');
+        return $this->createService('Group:GroupService');
     }
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getThreadPostDao()
     {
-        return $this->createDao('Group.ThreadPostDao');
+        return $this->createDao('Group:ThreadPostDao');
     }
 
     protected function getThreadCollectDao()
     {
-        return $this->createDao('Group.ThreadCollectDao');
+        return $this->createDao('Group:ThreadCollectDao');
     }
 
     protected function getSensitiveService()

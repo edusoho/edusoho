@@ -252,7 +252,11 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
-            $this->pool[$name] = new $class();
+            if(class_exists($class)){
+                $this->pool[$name] = new $class();
+            } else {
+                $this->pool[$name] = $this->biz->service($name);
+            }
         }
 
         return $this->pool[$name];
@@ -325,22 +329,34 @@ class ServiceKernel
             return $classMap[$name];
         }
 
-        if (strpos($name, ':') > 0) {
-            list($namespace, $name) = explode(':', $name, 2);
+        return $this->getServiceClassName($type, $name);
+
+    }
+
+    protected function getServiceClassName($type, $name)
+    {
+        $type = strtolower($type);
+        list($namespace, $name) = explode(':', $name, 2);
+
+        if (strpos($name, '.') > 0) {
             $namespace .= '\\Service';
+            list($module, $className) = explode('.', $name);
+            
+            if ($type == 'dao') {
+                return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
+            }
+
+            return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
         } else {
-            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1);
+            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1).'\\'.$namespace;
         }
 
-        list($module, $className) = explode('.', $name);
-
-        $type = strtolower($type);
 
         if ($type == 'dao') {
-            return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
+            return $namespace.'\\Dao\\Impl\\'.$name.'Impl';
         }
-
-        return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+            
+        return $namespace.'\\Impl\\'.$name.'Impl';
     }
 
     public function setBiz(Biz $biz)

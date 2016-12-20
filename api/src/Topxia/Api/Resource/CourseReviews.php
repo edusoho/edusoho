@@ -48,6 +48,6 @@ class CourseReviews extends BaseResource
 
     protected function getCourseReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 }

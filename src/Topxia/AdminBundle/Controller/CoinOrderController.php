@@ -48,7 +48,7 @@ class CoinOrderController extends BaseController
 
         $orders = $this->getCashOrdersService()->searchOrders(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -113,7 +113,7 @@ class CoinOrderController extends BaseController
 
         $status  = array('created' => $this->trans('未付款'), 'paid' => $this->trans('已付款'), 'cancelled' => $this->trans('已关闭'));
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -176,11 +176,11 @@ class CoinOrderController extends BaseController
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
     }
 }

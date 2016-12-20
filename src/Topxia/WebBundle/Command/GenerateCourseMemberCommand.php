@@ -65,7 +65,7 @@ class GenerateCourseMemberCommand extends BaseCommand
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:CourseMemberService');
     }
     protected function getUserService()
     {
@@ -74,7 +74,7 @@ class GenerateCourseMemberCommand extends BaseCommand
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

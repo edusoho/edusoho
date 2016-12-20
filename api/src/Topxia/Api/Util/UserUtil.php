@@ -91,19 +91,19 @@ class UserUtil
             fwrite($tp, $imageData);
             fclose($tp);
 
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($smallPath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($smallPath));
             $fields[] = array(
                 'type' => 'large',
                 'id' => $file['id']
             );
             
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($mediumPath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($mediumPath));
             $fields[] = array(
                 'type' => 'medium',
                 'id' => $file['id']
             );
 
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($largePath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($largePath));
             $fields[] = array(
                 'type' => 'small',
                 'id' => $file['id']

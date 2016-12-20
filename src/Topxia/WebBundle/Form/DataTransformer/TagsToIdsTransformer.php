@@ -33,6 +33,6 @@ class TagsToIdsTransformer implements DataTransformerInterface
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 }

@@ -715,7 +715,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getCardService()
     {
-        return $this->createService('Card.CardService');
+        return ServiceKernel::instance()->getBiz()->service('Card:CardService');
     }
 
     protected function getUserService()
@@ -725,7 +725,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getOrderRefundDao()
     {
-        return $this->createDao('Order.OrderRefundDao');
+        return $this->createDao('Order:OrderRefundDao');
     }
 
     /**
@@ -733,26 +733,26 @@ class OrderServiceImpl extends BaseService implements OrderService
      */
     protected function getOrderDao()
     {
-        return $this->createDao('Order.OrderDao');
+        return $this->createDao('Order:OrderDao');
     }
 
     protected function getOrderLogDao()
     {
-        return $this->createDao('Order.OrderLogDao');
+        return $this->createDao('Order:OrderLogDao');
     }
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon.CouponService');
+        return $this->createService('Coupon:CouponService');
     }
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
+        return ServiceKernel::instance()->createService('User:InviteRecordService');
     }
 
     protected function getPayCenterService()
     {
-        return $this->createService('PayCenter.PayCenterService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 }

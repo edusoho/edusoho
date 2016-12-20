@@ -100,12 +100,12 @@ class ThemeRegisterCommand extends BaseCommand
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return $this->getServiceKernel()->createService('Content:BlockService');
     }
 
 }

@@ -394,7 +394,7 @@ class ThreadController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function convertFiltersToConditions($id, $filters)
@@ -438,7 +438,7 @@ class ThreadController extends BaseController
 
     protected function getTokenBucketService()
     {
-        return $this->getServiceKernel()->createService('PostFilter.TokenBucketService');
+        return $this->getServiceKernel()->createService('PostFilter:TokenBucketService');
     }
 
     protected function getNotifiactionService()

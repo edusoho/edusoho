@@ -1,9 +1,12 @@
 <?php
 namespace Biz\File\Service;
 
+// TODO refactor. use tagOwner.
 interface UploadFileTagService
 {
 	public function get($id);
+
+    public function add($fields);
 
 	public function delete($id);
 

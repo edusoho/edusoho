@@ -387,7 +387,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $count             = 0;
 
         if ($announcementCount > 0) {
-            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $course['id']), array('createdTime', 'DESC'), 0, 500);
+            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $course['id']), array('createdTime' => 'DESC'), 0, 500);
 
             foreach ($announcements as $announcement) {
                 $result = $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
@@ -464,17 +464,17 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->createService('Testpaper.TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getLogService()
@@ -489,52 +489,52 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getConversationService()
     {
-        return $this->createService('IM.ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     protected function getCourseChapterDao()
     {
-        return $this->createDao('Course.CourseChapterDao');
+        return $this->createDao('Course:CourseChapterDao');
     }
 
     protected function getDraftDao()
     {
-        return $this->createDao('Course.CourseDraftDao');
+        return $this->createDao('Course:CourseDraftDao');
     }
 
     protected function getLessonDao()
     {
-        return $this->createDao('Course.LessonDao');
+        return $this->createDao('Course:LessonDao');
     }
 
     protected function getLessonExtendDao()
     {
-        return $this->createDao('Course.LessonExtendDao');
+        return $this->createDao('Course:LessonExtendDao');
     }
 
     protected function getLessonLearnDao()
     {
-        return $this->createDao('Course.LessonLearnDao');
+        return $this->createDao('Course:LessonLearnDao');
     }
 
     protected function getCourseLessonReplayDao()
     {
-        return $this->createDao('Course.CourseLessonReplayDao');
+        return $this->createDao('Course:CourseLessonReplayDao');
     }
 
     protected function getLessonViewDao()
     {
-        return $this->createDao('Course.LessonViewDao');
+        return $this->createDao('Course:LessonViewDao');
     }
 
     protected function getClassroomDao()
@@ -544,37 +544,37 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getQuestionDao()
     {
-        return $this->createDao('Question.QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     protected function getQuestionFavoriteDao()
     {
-        return $this->createDao('Question.QuestionFavoriteDao');
+        return $this->createDao('Question:QuestionFavoriteDao');
     }
 
     protected function getTestpaperResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperResultDao');
+        return $this->createDao('Testpaper:TestpaperResultDao');
     }
 
     protected function getTestpaperItemResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemResultDao');
+        return $this->createDao('Testpaper:TestpaperItemResultDao');
     }
 
     protected function getTestpaperItemDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemDao');
+        return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
     protected function getTestpaperDao()
     {
-        return $this->createDao('Testpaper.TestpaperDao');
+        return $this->createDao('Testpaper:TestpaperDao');
     }
 
     protected function getCourseDao()
     {
-        return $this->createDao('Course.CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 
     protected function getHomeworkDao()
@@ -619,37 +619,37 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course.FavoriteDao');
+        return $this->createDao('Course:FavoriteDao');
     }
 
     protected function getCourseNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getCourseNoteLikeDao()
     {
-        return $this->createDao('Course.CourseNoteLikeDao');
+        return $this->createDao('Course:CourseNoteLikeDao');
     }
 
     protected function getThreadDao()
     {
-        return $this->createDao('Course.ThreadDao');
+        return $this->createDao('Course:ThreadDao');
     }
 
     protected function getThreadPostDao()
     {
-        return $this->createDao('Course.ThreadPostDao');
+        return $this->createDao('Course:ThreadPostDao');
     }
 
     protected function getReviewDao()
     {
-        return $this->createDao('Course.ReviewDao');
+        return $this->createDao('Course:ReviewDao');
     }
 
     protected function getAnnouncementDao()
     {
-        return $this->createDao('Announcement.AnnouncementDao');
+        return $this->createDao('Announcement:AnnouncementDao');
     }
 
     protected function getStatusDao()
@@ -659,6 +659,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCourseMemberDao()
     {
-        return $this->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 }

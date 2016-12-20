@@ -742,7 +742,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getUploadFileService()
     {
-        return $this->getKernel()->createService('File.UploadFileService');
+        return $this->getKernel()->createService('File:UploadFileService');
     }
 
     protected function getKernel()

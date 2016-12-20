@@ -18,13 +18,13 @@ class Articles extends BaseResource
         if (isset($conditions['cursor'])) {
             $conditions['status'] = 'published';
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime' => 'ASC'), $start, $limit);
             $articles = $this->assemblyArticles($articles);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $articles);
             return $this->wrap($this->filter($articles), $next);
         } else {
             $total = $this->getArticleService()->searchArticlesCount($conditions);
-            $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime', 'DESC'), $start, $limit);
+            $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
             return $this->wrap($this->filter($articles), $total);
         }
     }
@@ -94,16 +94,16 @@ class Articles extends BaseResource
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

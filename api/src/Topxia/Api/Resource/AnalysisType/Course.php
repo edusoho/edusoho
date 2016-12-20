@@ -115,7 +115,7 @@ class Course extends BaseAnalysisType
 
 	private function getCourseService()
 	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
+		return $this->getServiceKernel()->createService('Course:CourseService');
 	}
 
 	private function getUserService()

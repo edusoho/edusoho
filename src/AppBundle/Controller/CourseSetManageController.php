@@ -148,7 +148,7 @@ class CourseSetManageController extends BaseController
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 
     protected function getUserService()
@@ -158,6 +158,6 @@ class CourseSetManageController extends BaseController
 
     protected function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content.FileService');
+        return ServiceKernel::instance()->createService('Content:FileService');
     }
 }

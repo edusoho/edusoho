@@ -47,7 +47,7 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUserService()

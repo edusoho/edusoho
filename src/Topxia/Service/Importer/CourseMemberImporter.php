@@ -413,7 +413,7 @@ class CourseMemberImporter extends Importer
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getNecessaryFields()
@@ -429,7 +429,7 @@ class CourseMemberImporter extends Importer
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getNotificationService()

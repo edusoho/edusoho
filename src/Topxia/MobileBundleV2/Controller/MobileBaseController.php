@@ -526,17 +526,17 @@ class MobileBaseController extends BaseController
 
     public function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     public function getUploadFileService()
@@ -546,7 +546,7 @@ class MobileBaseController extends BaseController
 
     public function getMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }
 
     public function getAuthService()
@@ -596,22 +596,22 @@ class MobileBaseController extends BaseController
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 
     public function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     public function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:NoteService');
     }
 
     public function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+        return $this->getServiceKernel()->createService('EduCloud:EduCloudService');
     }
 
     public function getMaterialLibService()

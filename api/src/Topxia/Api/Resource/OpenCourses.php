@@ -97,7 +97,7 @@ class OpenCourses extends BaseResource
      */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     /**
@@ -105,7 +105,7 @@ class OpenCourses extends BaseResource
      */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->getBiz()->service('Taxonomy:TagService');
     }
 
     /**
@@ -113,6 +113,6 @@ class OpenCourses extends BaseResource
      */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->getBiz()->service('Taxonomy:CategoryService');
     }
 }
