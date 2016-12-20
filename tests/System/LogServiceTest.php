@@ -2,7 +2,7 @@
 namespace Tests\System;
 
 use Biz\System\Service\LogService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class LogServiceTest extends BaseTestCase
 {

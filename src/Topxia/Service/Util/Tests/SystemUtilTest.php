@@ -5,7 +5,7 @@ namespace Topxia\Service\Util\Tests;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\MySQLDumper;
 use Topxia\Service\Util\SystemUtil;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class SystemUtilTest extends BaseTestCase
 {

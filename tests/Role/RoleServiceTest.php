@@ -4,7 +4,7 @@ namespace Tests\Role;
 
 use Topxia\Common\Tree;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Permission\Common\PermissionBuilder;
 
 

@@ -2,7 +2,7 @@
 
 namespace Classroom\Service\Classroom\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewServiceTest extends BaseTestCase

@@ -2,7 +2,7 @@
 namespace Topxia\Service\Course\Tests;
 
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Biz\User\CurrentUser;

@@ -4,7 +4,7 @@ namespace Tests\Cash;
 use Biz\Cash\Dao\CashOrdersDao;
 use Biz\Cash\Service\CashOrdersService;
 use Biz\System\Service\SettingService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CashOrdersServiceTest extends BaseTestCase
 {

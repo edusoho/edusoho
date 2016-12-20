@@ -3,7 +3,7 @@
 namespace Topxia\Common\Tests;
 
 use Topxia\Common\CurlToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CurlTookitTest extends BaseTestCase
 {

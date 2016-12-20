@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Question\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Common\ArrayToolkit;
 
 class TestpaperServiceTest extends BaseTestCase
