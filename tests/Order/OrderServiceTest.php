@@ -1704,7 +1704,7 @@ class OrderServiceTest extends BaseTestCase
 
         $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
         $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
-        $result = $this->getOrderService()->searchRefundCount($conditions);
+        $result = $this->getOrderService()->countRefunds($conditions);
         $this->assertEquals($result, 2);
     }
 

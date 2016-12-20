@@ -199,7 +199,7 @@ class ClassroomManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchRefundCount($condition),
+            $this->getOrderService()->countRefunds($condition),
             20
         );
 

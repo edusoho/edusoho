@@ -357,7 +357,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderRefundDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchRefundCount($conditions)
+    public function countRefunds($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->getOrderRefundDao()->count($conditions);
@@ -588,7 +588,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->sumOrderAmounts($startTime, $endTime, $courseId);
     }
 
-    public function searchOrderCount($conditions)
+    public function countOrders($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
         return $this->getOrderDao()->count($conditions);

@@ -22,7 +22,7 @@ interface OrderService
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId);
 
-    public function searchOrderCount($conditions);
+    public function countOrders($conditions);
 
     public function findOrderLogs($orderId);
 
@@ -46,7 +46,12 @@ interface OrderService
 
     public function searchRefunds($conditions, $sort, $start, $limit);
 
-    public function searchRefundCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  searchRefundCount
+     */
+    public function countRefunds($conditions);
 
     public function findRefundByOrderId($orderId);
 
