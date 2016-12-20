@@ -76,11 +76,11 @@ class Password extends BaseResource
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

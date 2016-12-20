@@ -151,12 +151,12 @@ class FileChooserController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getMaterialService()

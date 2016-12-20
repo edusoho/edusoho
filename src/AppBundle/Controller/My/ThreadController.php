@@ -93,7 +93,7 @@ class ThreadController extends BaseController
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**

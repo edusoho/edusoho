@@ -69,12 +69,12 @@ class CreateTestDataCommand extends BaseCommand
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function authenticateUser($user)

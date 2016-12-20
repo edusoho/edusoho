@@ -755,7 +755,7 @@ class CourseManageController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getClassroomService()
@@ -775,6 +775,6 @@ class CourseManageController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 }

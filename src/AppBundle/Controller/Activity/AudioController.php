@@ -47,6 +47,6 @@ class AudioController extends BaseController implements ActivityActionInterface
 
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }

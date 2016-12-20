@@ -177,6 +177,6 @@ class PlayerController extends BaseController
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 }

@@ -424,7 +424,7 @@ class CourseMemberImporter extends Importer
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getOrderService()
@@ -434,11 +434,11 @@ class CourseMemberImporter extends Importer
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 }

@@ -102,7 +102,7 @@ class CardServiceTest extends BaseTestCase
      */
     protected function getCardService()
     {
-        return $this->getBiz()->service('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     protected function getCouponService()
@@ -115,7 +115,7 @@ class CardServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -123,7 +123,7 @@ class CardServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function generateCard($currentUser = null)

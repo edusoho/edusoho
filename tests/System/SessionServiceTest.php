@@ -12,6 +12,6 @@ class SessionServiceTest extends BaseTestCase
 
     protected function getSessionService()
     {
-        return $this->getBiz()->service('System:SessionService');
+        return $this->createService('System:SessionService');
     }
 }

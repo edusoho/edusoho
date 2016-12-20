@@ -710,17 +710,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getCardService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Card:CardService');
+        return ServiceKernel::instance()->createService('Card:CardService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getOrderRefundDao()

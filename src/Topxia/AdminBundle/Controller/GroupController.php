@@ -289,7 +289,7 @@ class GroupController extends BaseController
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function filterSort($sort)
@@ -327,7 +327,7 @@ class GroupController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function prepareThreadConditions($conditions)

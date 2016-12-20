@@ -57,7 +57,7 @@ class UpgradeNoticeServiceTest extends BaseTestCase
 
     protected function getUpgradeNoticeService()
     {
-        return $this->getBiz()->service('User:UpgradeNoticeService');
+        return $this->createService('User:UpgradeNoticeService');
     }
 
 }

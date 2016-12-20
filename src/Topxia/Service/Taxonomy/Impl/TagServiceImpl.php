@@ -365,6 +365,6 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 }

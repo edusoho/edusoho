@@ -79,12 +79,12 @@ class KeyApplier
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
 }

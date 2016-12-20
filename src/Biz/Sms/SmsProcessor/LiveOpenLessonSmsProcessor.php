@@ -22,7 +22,7 @@ class LiveOpenLessonSmsProcessor implements SmsProcessor
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         $count  = 0;
 
-        $count = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id']));
+        $count = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id']));
 
         global $kernel;
         $container          = $kernel->getContainer();

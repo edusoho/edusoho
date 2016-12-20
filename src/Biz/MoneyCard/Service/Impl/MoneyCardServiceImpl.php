@@ -605,7 +605,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     protected function getCardService()
     {
-        return $this->getKernel()->getBiz()->service('Card:CardService');
+        return $this->getKernel()->createService('Card:CardService');
     }
 
     /**
@@ -623,7 +623,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     protected function getCashService()
     {
-        return $this->getKernel()->getBiz()->service('Cash:CashService');
+        return $this->getKernel()->createService('Cash:CashService');
     }
 
     private function getTokenService()

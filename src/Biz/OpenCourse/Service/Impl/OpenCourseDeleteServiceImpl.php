@@ -1,9 +1,11 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Impl;
+namespace Biz\OpenCourse\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\BaseService;
+use Biz\OpenCourse\Dao\OpenCourseLessonDao;
+use Biz\OpenCourse\Dao\OpenCourseMemberDao;
+use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Topxia\Service\OpenCourse\OpenCourseDeleteService;
 
 class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDeleteService
@@ -11,7 +13,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     public function delete($courseId, $type)
     {
         try {
-            $this->getOpenCourseDao()->getConnection()->beginTransaction();
+            $this->beginTransaction();
             $course = $this->getOpenCourseService()->getCourse($courseId);
 
             $types = array('lessons', 'members', 'course', 'recommend', 'materials');
@@ -22,23 +24,23 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
             $method = 'delete'.ucwords($type);
             $result = $this->$method($course);
-            $this->getOpenCourseDao()->getConnection()->commit();
+            $this->commit();
 
             return $result;
         } catch (\Exception $e) {
-            $this->getOpenCourseDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
 
     protected function deleteLessons($course)
     {
-        $lessonCount = $this->getOpenCourseLessonDao()->searchLessonCount(array('courseId' => $course['id']));
+        $lessonCount = $this->getOpenCourseLessonDao()->count(array('courseId' => $course['id']));
 
         $count = 0;
 
         if ($lessonCount > 0) {
-            $lessons = $this->getOpenCourseLessonDao()->searchLessons(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $lessons = $this->getOpenCourseLessonDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($lessons as $lesson) {
                 if (!empty($lesson['mediaId'])) {
@@ -47,7 +49,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
                 $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
 
-                $result = $this->getOpenCourseLessonDao()->deleteLesson($lesson['id']);
+                $result = $this->getOpenCourseLessonDao()->delete($lesson['id']);
                 $count += $result;
             }
 
@@ -60,14 +62,14 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteMembers($course)
     {
-        $memberCount = $this->getOpenCourseMemberDao()->searchMemberCount(array('courseId' => $course['id']));
+        $memberCount = $this->getOpenCourseMemberDao()->count(array('courseId' => $course['id']));
         $count       = 0;
 
         if ($memberCount > 0) {
-            $members = $this->getOpenCourseMemberDao()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $members = $this->getOpenCourseMemberDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($members as $member) {
-                $result = $this->getOpenCourseMemberDao()->deleteMember($member['id']);
+                $result = $this->getOpenCourseMemberDao()->delete($member['id']);
                 $count += $result;
             }
 
@@ -80,14 +82,14 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteRecommend($course)
     {
-        $openCount = $this->getRecommendCourseDao()->searchRecommendCount(array('openCourseId' => $course['id']));
+        $openCount = $this->getRecommendCourseDao()->count(array('openCourseId' => $course['id']));
         $count     = 0;
 
         if ($openCount > 0) {
-            $openCourses = $this->getRecommendCourseDao()->searchRecommends(array('openCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $openCourses = $this->getRecommendCourseDao()->search(array('openCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($openCourses as $openCourse) {
-                $result = $this->getRecommendCourseDao()->deleteRecommendedCourse($openCourse['id']);
+                $result = $this->getRecommendCourseDao()->delete($openCourse['id']);
                 $count += $result;
             }
 
@@ -134,12 +136,12 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getMaterialService()
@@ -152,16 +154,25 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         return $this->createDao('OpenCourse:OpenCourseDao');
     }
 
+    /**
+     * @return OpenCourseLessonDao
+     */
     protected function getOpenCourseLessonDao()
     {
         return $this->createDao('OpenCourse:OpenCourseLessonDao');
     }
 
+    /**
+     * @return OpenCourseMemberDao
+     */
     protected function getOpenCourseMemberDao()
     {
         return $this->createDao('OpenCourse:OpenCourseMemberDao');
     }
 
+    /**
+     * @return RecommendedCourseDao
+     */
     protected function getRecommendCourseDao()
     {
         return $this->createDao('OpenCourse:RecommendedCourseDao');

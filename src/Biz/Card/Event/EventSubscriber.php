@@ -75,7 +75,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     private function getCardService()
     {
-        return $this->getBiz()->service('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     /**
@@ -83,7 +83,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getInviteRecordService()
     {
-        return $this->getBiz()->service('User:InviteRecordService');
+        return $this->createService('User:InviteRecordService');
     }
 
     protected function getCouponService()
@@ -96,7 +96,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -104,6 +104,6 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

@@ -286,7 +286,7 @@ class CourseManageController extends BaseController
 
     protected function getCourseSetService()
     {
-        return $this->getBiz()->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
@@ -304,7 +304,7 @@ class CourseManageController extends BaseController
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getServiceKernel()

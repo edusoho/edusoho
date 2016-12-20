@@ -43,6 +43,6 @@ class QuestionEventSubscriber extends EventSubscriber implements EventSubscriber
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 }

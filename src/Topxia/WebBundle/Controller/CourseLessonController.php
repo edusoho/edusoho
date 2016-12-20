@@ -805,12 +805,12 @@ class CourseLessonController extends BaseController
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()

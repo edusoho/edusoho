@@ -19,7 +19,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOpenCourseService()->searchCourseCount($conditions),
+            $this->getOpenCourseService()->countCourses($conditions),
             $pageSize
         );
 
@@ -153,7 +153,7 @@ class OpenCourseController extends BaseOpenCourseController
             $lesson['replays'] = $this->_getLiveReplay($lesson);
         }
 
-        $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
+        $notifyNum = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
             'course'    => $course,
@@ -379,7 +379,7 @@ class OpenCourseController extends BaseOpenCourseController
 
             $this->_loginMemberMobileBind($fields['mobile']);
 
-            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id, 'isNotified' => 1));
+            $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $id, 'isNotified' => 1));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
@@ -403,7 +403,7 @@ class OpenCourseController extends BaseOpenCourseController
             $fields['courseId'] = $id;
 
             $member    = $this->getOpenCourseService()->createMember($fields);
-            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id));
+            $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $id));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
@@ -710,7 +710,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $conditions['recommended'] = 1;
 
-        $recommendCount = $this->getOpenCourseService()->searchCourseCount($conditions);
+        $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
         $currentPage    = $request->query->get('page') ? $request->query->get('page') : 1;
         $recommendPage  = intval($recommendCount / $pageSize);
         $recommendLeft  = $recommendCount % $pageSize;
@@ -798,17 +798,17 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getThreadService()
@@ -823,7 +823,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getOpenCourseRecommendedService()

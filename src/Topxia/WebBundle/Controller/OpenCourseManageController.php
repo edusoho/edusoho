@@ -168,7 +168,7 @@ class OpenCourseManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOpenCourseService()->searchMemberCount($condition),
+            $this->getOpenCourseService()->countMembers($condition),
             20
         );
 
@@ -311,7 +311,7 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $recommendNum = $this->getOpenCourseRecommendedService()->searchRecommendCount(array('openCourseId' => $id));
+        $recommendNum = $this->getOpenCourseRecommendedService()->countRecommends(array('openCourseId' => $id));
 
         $ids = $request->request->get('ids');
 
@@ -391,7 +391,7 @@ class OpenCourseManageController extends BaseController
             $conditions['isNotified'] = 1;
         }
 
-        $courseMemberCount = $this->getOpenCourseService()->searchMemberCount($conditions);
+        $courseMemberCount = $this->getOpenCourseService()->countMembers($conditions);
         $courseMemberCount = ($courseMemberCount>$exportAllowCount) ? $exportAllowCount:$courseMemberCount;
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
@@ -583,12 +583,12 @@ class OpenCourseManageController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCourseService()
@@ -608,6 +608,6 @@ class OpenCourseManageController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 }

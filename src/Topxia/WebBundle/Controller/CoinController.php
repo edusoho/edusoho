@@ -474,27 +474,27 @@ class CoinController extends BaseController
 
     protected function getCardService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Card:CardService');
+        return $this->getServiceKernel()->createService('Card:CardService');
     }
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:InviteRecordService');
+        return ServiceKernel::instance()->createService('User:InviteRecordService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashService');
+        return $this->getServiceKernel()->createService('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashAccountService');
+        return $this->getServiceKernel()->createService('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Cash:CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 
     protected function getOrderService()
@@ -504,7 +504,7 @@ class CoinController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getAppService()

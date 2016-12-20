@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\OpenCourse;
+namespace Biz\OpenCourse\Service;
 
 interface OpenCourseService
 {
@@ -13,7 +13,12 @@ interface OpenCourseService
 
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
-    public function searchCourseCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  countCourses
+     */
+    public function countCourses($conditions);
 
     public function createCourse($course);
 
@@ -50,7 +55,12 @@ interface OpenCourseService
 
     public function searchLessons($condition, $orderBy, $start, $limit);
 
-    public function searchLessonCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  searchLessonCount
+     */
+    public function countLessons($conditions);
 
     public function createLesson($lesson);
 
@@ -89,7 +99,12 @@ interface OpenCourseService
 
     public function findMembersByCourseIds($courseIds);
 
-    public function searchMemberCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  searchMemberCount
+     */
+    public function countMembers($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 

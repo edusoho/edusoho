@@ -206,7 +206,7 @@ class DefaultController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getNavigationService()
@@ -246,7 +246,7 @@ class DefaultController extends BaseController
 
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:BatchNotificationService');
+        return $this->getServiceKernel()->createService('User:BatchNotificationService');
     }
 
     protected function getThemeService()
@@ -256,6 +256,6 @@ class DefaultController extends BaseController
 
     private function getBlacklistService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:BlacklistService');
+        return $this->getServiceKernel()->createService('User:BlacklistService');
     }
 }

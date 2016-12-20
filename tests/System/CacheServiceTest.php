@@ -82,6 +82,6 @@ class CacheServiceTest extends BaseTestCase
 
     protected function getCacheService()
     {
-        return $this->getBiz()->service('System:CacheService');
+        return $this->createService('System:CacheService');
     }
 }

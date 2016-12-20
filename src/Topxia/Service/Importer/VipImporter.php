@@ -462,7 +462,7 @@ class VipImporter extends Importer
 
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
+        return ServiceKernel::instance()->createService('User:MessageService');
     }
 
     protected function getOrderService()
@@ -477,12 +477,12 @@ class VipImporter extends Importer
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getFileService()
@@ -492,6 +492,6 @@ class VipImporter extends Importer
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

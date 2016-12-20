@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\OpenCourse;
+namespace Biz\OpenCourse\Service;
 
 interface OpenCourseRecommendedService
 {
@@ -9,7 +9,7 @@ interface OpenCourseRecommendedService
 
     public function updateOpenCourseRecommendedCourses($openCourseId, $activeCourseIds);
 
-    public function searchRecommendCount($conditions);
+    public function countRecommends($conditions);
 
     public function searchRecommends($conditions, $orderBy, $start, $limit);
 

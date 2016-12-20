@@ -248,7 +248,7 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Note:CourseNoteService');
+        return $this->createService('Note:CourseNoteService');
     }
 
     /**
@@ -256,7 +256,7 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -264,7 +264,7 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getCourseSetService()
     {
-        return $this->getBiz()->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
@@ -272,7 +272,7 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -280,6 +280,6 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

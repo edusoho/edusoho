@@ -94,7 +94,7 @@ class Articles extends BaseResource
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getTagService()

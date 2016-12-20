@@ -92,7 +92,7 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
-        return ServiceKernel::instance()->getBiz()->service('System:LogService')->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
+        return ServiceKernel::instance()->createService('System:LogService')->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
 
         $loginBind = $this->setting('login_bind', array());
 
@@ -274,12 +274,12 @@ abstract class BaseController extends Controller
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function fillOrgCode($conditions)

@@ -1,9 +1,10 @@
 <?php
 
-namespace Topxia\Service\OpenCourse\Impl;
+namespace Biz\OpenCourse\Service\Impl;
 
+use Biz\BaseService;
+use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\OpenCourse\OpenCourseRecommendedService;
 use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
 
@@ -11,7 +12,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 {
     public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type)
     {
-        return $this->getRecommendedCourseDao()->getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
+        return $this->getRecommendedCourseDao()->getByCourseIdAndType($openCourseId, $recommendCourseId, $type);
     }
 
     public function addRecommendedCourses($openCourseId, $recommendCourseIds, $type)
@@ -31,7 +32,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
                     'openCourseId'      => $openCourseId,
                     'type'              => $type
                 );
-                $recommendCourses[] = $this->getRecommendedCourseDao()->addRecommendedCourse($fields);
+                $recommendCourses[] = $this->getRecommendedCourseDao()->create($fields);
             }
         }
 
@@ -63,7 +64,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
     public function findRecommendedCoursesByOpenCourseId($openCourseId)
     {
-        $recommendCourses = $this->getRecommendedCourseDao()->findRecommendedCoursesByOpenCourseId($openCourseId);
+        $recommendCourses = $this->getRecommendedCourseDao()->findByOpenCourseId($openCourseId);
         return $recommendCourses;
     }
 
@@ -76,7 +77,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
 
         foreach ($recommendIds as $key => &$recommendId) {
-            $this->getRecommendedCourseDao()->updateRecommendedCourse($recommendId, array('seq' => $seq));
+            $this->getRecommendedCourseDao()->update($recommendId, array('seq' => $seq));
             $seq++;
         }
 
@@ -95,7 +96,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
 
         foreach ($recommendIds as $key => $recommendId) {
-            $this->getRecommendedCourseDao()->deleteRecommendedCourse($recommendId);
+            $this->getRecommendedCourseDao()->delete($recommendId);
         }
 
         return true;
@@ -109,20 +110,20 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
                 'openCourseId'      => $openCourseId,
                 'type'              => $type
             );
-            $this->getRecommendedCourseDao()->addRecommendedCourse($recommended);
+            $this->getRecommendedCourseDao()->create($recommended);
         }
 
         return true;
     }
 
-    public function searchRecommendCount($conditions)
+    public function countRecommends($conditions)
     {
-        return $this->getRecommendedCourseDao()->searchRecommendCount($conditions);
+        return $this->getRecommendedCourseDao()->count($conditions);
     }
 
     public function searchRecommends($conditions, $orderBy, $start, $limit)
     {
-        return $this->getRecommendedCourseDao()->searchRecommends($conditions, $orderBy, $start, $limit);
+        return $this->getRecommendedCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function recommendedCoursesSort($recommendCourses)
@@ -145,7 +146,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         if ($num < 0) {
             throw $this->createServiceException('num must be a unsigned int');
         }
-        $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
+        $recommendCourses = $this->getRecommendedCourseDao()->findRandom($courseId, $num);
         $courseIds        = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
         return $this->getTypeCourseService('course')->findCoursesByIds($courseIds);
     }
@@ -160,6 +161,9 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return $this->createService('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return RecommendedCourseDao
+     */
     protected function getRecommendedCourseDao()
     {
         return $this->createDao('OpenCourse:RecommendedCourseDao');

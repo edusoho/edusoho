@@ -127,7 +127,7 @@ class BaseProcessor {
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Cash:CashAccountService');
+        return ServiceKernel::instance()->createService('Cash:CashAccountService');
     }
 
     protected function getAppService()
@@ -137,7 +137,7 @@ class BaseProcessor {
 
     protected function getCashOrdersService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Cash:CashOrdersService');
+        return ServiceKernel::instance()->createService('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
@@ -147,17 +147,17 @@ class BaseProcessor {
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:MessageService');
+        return ServiceKernel::instance()->createService('User:MessageService');
     }
 
     protected function getCouponService()
@@ -172,7 +172,7 @@ class BaseProcessor {
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     /**
@@ -180,7 +180,7 @@ class BaseProcessor {
      */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getCourseOrderService()
@@ -195,7 +195,7 @@ class BaseProcessor {
 
     protected function getArticleService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Article:ArticleService');
+        return ServiceKernel::instance()->createService('Article:ArticleService');
     }
 
     protected function getOrderService()
@@ -215,7 +215,7 @@ class BaseProcessor {
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCourseService()
@@ -235,7 +235,7 @@ class BaseProcessor {
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 
     public function getEduCloudService()
@@ -245,12 +245,12 @@ class BaseProcessor {
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     public function createErrorResponse($name, $message)

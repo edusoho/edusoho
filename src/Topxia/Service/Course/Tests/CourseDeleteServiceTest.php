@@ -176,17 +176,17 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Announcement:AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getReviewService()

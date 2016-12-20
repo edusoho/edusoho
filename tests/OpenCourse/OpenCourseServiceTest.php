@@ -1,7 +1,8 @@
 <?php
-namespace Topxia\Service\OpenCourse\Tests;
+namespace Tests\OpenCourseRecommendedServiceTest;
 
-use Topxia\Service\Common\BaseTestCase;
+
+use Codeages\Biz\Framework\UnitTests\BaseTestCase;
 
 class OpenCourseServiceTest extends BaseTestCase
 {
@@ -49,7 +50,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $course1 = $this->_createLiveOpenCourse();
         $course2 = $this->_createOpenCourse();
 
-        $courseCount = $this->getOpenCourseService()->searchCourseCount(array('type' => 'liveOpen'));
+        $courseCount = $this->getOpenCourseService()->countCourses(array('type' => 'liveOpen'));
 
         $this->assertEquals(1, $courseCount);
     }
@@ -259,7 +260,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $lesson1 = $this->_createOpenLiveCourseLesson($course1);
         $lesson2 = $this->_createOpenCourseLesson($course2);
 
-        $count = $this->getOpenCourseService()->searchLessonCount(array('type' => 'liveOpen'));
+        $count = $this->getOpenCourseService()->countLessons(array('type' => 'liveOpen'));
 
         $this->assertEquals(1, $count);
     }
@@ -391,7 +392,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $this->getOpenCourseService()->updateMember($courseMember2['id'], array('mobile' => '15869165222', 'isNotified' => 1));
-        $membersCount = $this->getOpenCourseService()->searchMemberCount(array('mobile' => '15869165222'));
+        $membersCount = $this->getOpenCourseService()->countMembers(array('mobile' => '15869165222'));
 
         $this->assertEquals(1, $membersCount);
     }
@@ -532,6 +533,10 @@ class OpenCourseServiceTest extends BaseTestCase
 
     protected function getOpenCourseService()
     {
+<<<<<<< HEAD:tests/OpenCourse/OpenCourseServiceTest.php
+        return self::$biz->service('OpenCourse:OpenCourseService');
+=======
         return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+>>>>>>> feature/x8-migrate:src/Topxia/Service/OpenCourse/Tests/OpenCourseServiceTest.php
     }
 }

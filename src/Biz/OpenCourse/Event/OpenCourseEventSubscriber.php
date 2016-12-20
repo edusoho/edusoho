@@ -1,11 +1,9 @@
 <?php
-namespace Topxia\Service\OpenCourse\Event;
+namespace Biz\OpenCourse\Service\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class OpenCourseEventSubscriber implements EventSubscriberInterface
@@ -59,7 +57,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 
-        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
@@ -68,7 +66,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
 
-        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $lessonNum = $this->getOpenCourseService()->countLessons(array('courseId' => $lesson['courseId']));
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
@@ -78,7 +76,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $fields  = $context['argument'];
         $member  = $context['newMember'];
 
-        $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $fields['courseId']));
+        $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $fields['courseId']));
 
         $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
     }
@@ -150,9 +148,6 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('Course:NoteService');
     }
 
-    /**
-     * @return OpenCourseServiceImpl
-     */
     protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');

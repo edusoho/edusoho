@@ -78,16 +78,16 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getKernel()->getBiz()->service('CloudFile:CloudFileService');
+        return $this->getKernel()->createService('CloudFile:CloudFileService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 }

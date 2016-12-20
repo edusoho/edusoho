@@ -147,22 +147,22 @@ class SmsCodes extends BaseResource
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return $this->getBiz()->service('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     protected function getSmsService()
     {
-        return $this->getBiz()->service('Sms:SmsService');
+        return $this->createService('Sms:SmsService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getBiz()
