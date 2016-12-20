@@ -113,13 +113,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'audiences'
         ));
 
-        if (isset($fields['goals'])) {
-            $fields['goals'] = json_decode($fields['goals'], true);
-        }
-        if (isset($fields['audiences'])) {
-            $fields['audiences'] = json_decode($fields['audiences'], true);
-        }
-
         return $this->getCourseSetDao()->update($courseSet['id'], $fields);
     }
 
@@ -178,7 +171,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return $this->biz->service('Taxonomy:TagService');
     }
 
     protected function getFileService()
