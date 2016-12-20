@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Search\Adapter;
+namespace Biz\Search\Adapter;
 
 use Topxia\Service\Common\BaseService;
 

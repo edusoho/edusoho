@@ -1,11 +1,11 @@
 <?php
-namespace Topxia\Service\Search\Impl;
+namespace Biz\Search\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
+use Biz\Search\Service\SearchService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Search\SearchService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Search\Adapter\SearchAdapterFactory;
+use Biz\Search\Adapter\SearchAdapterFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class SearchServiceImpl extends BaseService implements SearchService
@@ -111,7 +111,7 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSignEncoder()

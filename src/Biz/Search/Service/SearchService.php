@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Search;
+namespace Biz\Search\Service;
 
 interface SearchService
 {
