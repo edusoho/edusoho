@@ -91,6 +91,20 @@ interface TestpaperService
 
     public function finishTest($resultId, $formData);
 
+    public function showTestpaperItems($testId, $resultId = 0);
+
+    public function makeAccuracy($resultId);
+
+    public function checkFinish($resultId, $fields);
+
+    public function submitAnswers($id, $answers);
+
+    public function sumScore($itemResults);
+
+    public function findAttachments($testId);
+
+    public function canLookTestpaper($resultId);
+
     public function updateTestpaperItems($testpaperId, $items);
 
 }

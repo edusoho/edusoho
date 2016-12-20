@@ -22,7 +22,7 @@ class QuestionFavoriteDaoImpl extends GeneralDaoImpl implements QuestionFavorite
     public function declares()
     {
         $declares['orderbys'] = array(
-            'updatedTime'
+            'createdTime'
         );
 
         $declares['conditions'] = array(
