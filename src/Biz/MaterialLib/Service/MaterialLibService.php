@@ -1,6 +1,6 @@
 <?php
 
-namespace MaterialLib\Service\MaterialLib;
+namespace Biz\MaterialLib\Service;
 
 interface MaterialLibService
 {

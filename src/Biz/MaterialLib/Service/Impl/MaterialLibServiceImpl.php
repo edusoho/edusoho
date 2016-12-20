@@ -1,11 +1,11 @@
 <?php
 
-namespace MaterialLib\Service\MaterialLib\Impl;
+namespace Biz\MaterialLib\Service\Impl;
 
+use Biz\BaseService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Topxia\Common\ArrayToolkit;
-use MaterialLib\Service\BaseService;
 use Topxia\Service\Common\AccessDeniedException;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
 use Topxia\Service\Common\ServiceKernel;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
@@ -157,4 +157,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         return ServiceKernel::instance()->createService('File:UploadFileTagService');
     }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User:UserService');
+    }
+
 }

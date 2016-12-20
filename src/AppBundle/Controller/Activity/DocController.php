@@ -99,6 +99,6 @@ class DocController extends BaseController implements ActivityActionInterface
      */
     protected function getMaterialLibService()
     {
-        return ServiceKernel::instance()->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return ServiceKernel::instance()->createService('MaterialLib:MaterialLibService');
     }
 }

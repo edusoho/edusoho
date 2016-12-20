@@ -207,7 +207,7 @@ class CloudFileController extends BaseController
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
     }
 
     protected function getCourseMaterialService()
