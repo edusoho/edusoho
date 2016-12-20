@@ -33,14 +33,14 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
     public function countByUserId($userId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE userId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId));
+        return $this->db()->fetchColumn($sql, array($userId));
     }
 
     public function findByUserId($userId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+        return $this->db()->fetchAll($sql, array($userId)) ?: array();
     }
 
 
@@ -78,18 +78,12 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
 
     public function findByIds(array $ids)
     {
-        if (empty($ids)) {
-            return array();
-        }
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        return $this->findInField('id', $ids);
     }
 
-    public function findByOrderId($orderId)
+    public function getByOrderId($orderId)
     {
-        $sql = " SELECT * FROM {$this->table} WHERE orderId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($orderId));
+        return $this->getByFields(array('orderId' => $orderId));
     }
 
 }
