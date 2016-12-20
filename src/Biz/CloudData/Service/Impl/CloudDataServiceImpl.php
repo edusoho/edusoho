@@ -8,7 +8,7 @@ use Biz\BaseService;
 use Biz\CloudData\Dao\CloudDataDao;
 use Biz\CloudData\Service\CloudDataService;
 use Biz\System\Service\LogService;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class CloudDataServiceImpl extends BaseService implements CloudDataService
 {

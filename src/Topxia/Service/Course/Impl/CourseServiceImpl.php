@@ -3,12 +3,12 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Common\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -753,7 +753,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //添加动态
         $this->dispatchEvent(
             'course.favorite',
-            new ServiceEvent($course)
+            new Event($course)
         );
 
         $this->getFavoriteDao()->addFavorite(array(
@@ -1596,7 +1596,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
             $this->dispatchEvent(
                 'course.lesson_start',
-                new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
+                new Event($lesson, array('course' => $course, 'learn' => $learn))
             );
 
             return true;
@@ -1650,7 +1650,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent(
             'course.lesson_finish',
-            new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
+            new Event($lesson, array('course' => $course, 'learn' => $learn))
         );
     }
 
@@ -2104,7 +2104,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getMemberDao()->deleteMember($member['id']);
         $this->dispatchEvent(
             'learning.quit',
-            new ServiceEvent($course, array('userId' => $userId))
+            new Event($course, array('userId' => $userId))
         );
 
         $this->getCourseDao()->updateCourse($courseId, array(
@@ -2392,7 +2392,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->updateCourse($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
+            new Event($course, array('userId' => $member['userId'], 'member' => $member))
         );
         return $member;
     }
@@ -2459,7 +2459,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
-            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
+            new Event($course, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 

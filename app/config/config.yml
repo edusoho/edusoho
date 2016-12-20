@@ -3,9 +3,9 @@ imports:
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: biz.yml }
     - { resource: services.xml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: biz.yml }
 
 framework:
     # esi:             ~
@@ -102,8 +102,8 @@ services:
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis.factory:
-        class: Topxia\Service\Common\Redis\RedisFactory
-        factory: ['Topxia\Service\Common\Redis\RedisFactory', instance]
+        class: Biz\Common\Redis\RedisFactory
+        factory: ['Biz\Common\Redis\RedisFactory', instance]
         arguments:
             - "@service_container"
 
@@ -113,7 +113,7 @@ services:
 
     session.handler.factory:
         class: SessionHandlerInterface
-        factory: ['Topxia\Service\Common\SessionHandlerFactory', getSessionHandler]
+        factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
 
@@ -188,7 +188,7 @@ services:
             - { name: twig.extension }
 
     topxia.twig.file_cache:
-        class: Topxia\Service\Common\FilesystemCache
+        class: Biz\Common\FilesystemCache
         arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
@@ -196,8 +196,8 @@ services:
         arguments:    ['@topxia.twig.file_cache']
 
     topxia.twig.cache_strategy:
-        class: Topxia\Service\Common\LifetimeCacheStrategy
-        arguments:    ['@topxia.twig.cache_provider']
+        class: Biz\Common\LifetimeCacheStrategy
+        arguments:    ['@biz', '@topxia.twig.cache_provider']
 
     topxia.twig.cache_extension:
         class: Asm89\Twig\CacheExtension\Extension

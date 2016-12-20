@@ -3,7 +3,7 @@ namespace Topxia\Service\Task\Impl;
 
 use Topxia\Service\Task\TaskService;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -98,7 +98,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
                 $task = $this->updateTask($getTask['id'], $updateInfo);
 
-                $this->dispatchEvent('task.finished', new ServiceEvent($task));
+                $this->dispatchEvent('task.finished', new Event($task));
 
                 return $task;
             }

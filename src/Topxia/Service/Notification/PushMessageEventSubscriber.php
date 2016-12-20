@@ -2,10 +2,10 @@
 namespace Topxia\Service\Notification;
 
 use Topxia\Api\Util\MobileSchoolUtil;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\CloudPlatform\IMAPIFactory;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Taxonomy\TagOwnerManager;
-use Topxia\Service\CloudPlatform\IMAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface

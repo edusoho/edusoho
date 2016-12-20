@@ -4,7 +4,7 @@ namespace Topxia\Service\Search\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Search\SearchService;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Search\Adapter\SearchAdapterFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 

@@ -7,7 +7,7 @@ use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Group\Service\GroupService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 
 class GroupServiceImpl extends BaseService implements GroupService
 {
@@ -160,7 +160,7 @@ class GroupServiceImpl extends BaseService implements GroupService
 
         $this->reCountGroupMember($groupId);
 
-        $this->dispatchEvent('group.join', new ServiceEvent($group));
+        $this->dispatchEvent('group.join', new Event($group));
 
         return $member;
     }

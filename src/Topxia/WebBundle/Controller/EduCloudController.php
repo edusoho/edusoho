@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

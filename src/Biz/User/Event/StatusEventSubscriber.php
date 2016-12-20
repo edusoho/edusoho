@@ -1,7 +1,7 @@
 <?php
 namespace Biz\User\Event;
 
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +15,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         );
     }
 
-    public function onThreadPostCreate(ServiceEvent $event)
+    public function onThreadPostCreate(Event $event)
     {
         $post   = $event->getSubject();
         $thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);

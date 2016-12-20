@@ -3,7 +3,7 @@ namespace Biz\User\Event;
 
 use Biz\User\Service\UserService;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class VipMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -15,7 +15,7 @@ class VipMemberEventSubscriber extends EventSubscriber implements EventSubscribe
 		);
     }
 
-	public function onOperateVipMember(ServiceEvent $event)
+	public function onOperateVipMember(Event $event)
 	{
 		$vipMember = $event->getSubject();
 		$this->getUserService()->updateUserUpdatedTime($vipMember['userId']);

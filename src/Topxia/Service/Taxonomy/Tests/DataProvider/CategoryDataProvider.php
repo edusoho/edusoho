@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\User\Tests\DataProvider;
 
-use Topxia\Service\Common\TestDataProvider;
+use Biz\Common\TestDataProvider;
 
 class UserDataProvider extends TestDataProvider {
 

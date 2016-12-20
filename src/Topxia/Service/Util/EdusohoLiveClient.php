@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Util;
 
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class EdusohoLiveClient
 {
