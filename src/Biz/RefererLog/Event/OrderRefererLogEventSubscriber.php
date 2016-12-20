@@ -2,10 +2,9 @@
 namespace Biz\RefererLog\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Codeages\Biz\Framework\Event\EventSubscriber;
 
-class OrderRefererLogEventSubscriber implements EventSubscriberInterface
+class OrderRefererLogEventSubscriber extends  EventSubscriber
 {
     public static function getSubscribedEvents()
     {
@@ -80,11 +79,11 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
     protected function getOrderRefererLogService()
     {
-        return ServiceKernel::instance()->createService('RefererLog:OrderRefererLogService');
+        return $this->getBiz()->service('RefererLog:OrderRefererLogService');
     }
 
     protected function getRefererLogService()
     {
-        return ServiceKernel::instance()->createService('RefererLog:RefererLogService');
+        return $this->getBiz()->service('RefererLog:RefererLogService');
     }
 }
