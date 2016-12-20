@@ -4,9 +4,9 @@ namespace Biz;
 
 use Monolog\Logger;
 use Biz\User\CurrentUser;
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -14,9 +14,10 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
+    private $lock = null;
+
     /**
-     * @param $alias
-     *
+     * @param  $alias
      * @return GeneralDaoInterface
      */
     protected function createDao($alias)
@@ -33,8 +34,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param $alias
-     *
+     * @param  $alias
      * @return BaseService
      */
     protected function createService($alias)
@@ -136,5 +136,14 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             unset($fields['orgCode']);
         }
         return $fields;
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 }

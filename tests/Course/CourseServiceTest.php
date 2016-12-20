@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests;
+namespace Tests\Course;
 
-use Biz\Course\Service\CourseService;
-use Biz\User\Service\UserService;
-use Topxia\Service\Common\BaseTestCase;
 use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
+use Biz\Course\Service\CourseService;
+use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseServiceTest extends BaseTestCase
@@ -75,17 +75,17 @@ class CourseServiceTest extends BaseTestCase
 
         $result = $this->getCourseService()->createCourse($course);
 
-        $result['isFree']         = 0;
-        $result['price']          = 111;
-        $result['vipLevelId']     = 1;
-        $result['buyable']        = 1;
-        $result['tryLookable']    = 1;
-        $result['$tryLookLength'] = 2;
-        $result['watchLimit']     = 3;
-        $result['services']       = array('xxx', 'yy', 'zzz');
-        $updated                  = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
+        $result['isFree']        = 0;
+        $result['price']         = 111;
+        $result['vipLevelId']    = 1;
+        $result['buyable']       = 1;
+        $result['tryLookable']   = 1;
+        $result['tryLookLength'] = 2;
+        $result['watchLimit']    = 3;
+        $result['services']      = array('xxx', 'yy', 'zzz');
+        $updated                 = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
 
-        $this->assertEquals($result['price'], $updated['price']);
+        $this->assertEquals($result['price'] * 100, $updated['price']);
         $this->assertEquals($result['vipLevelId'], $updated['vipLevelId']);
         $this->assertEquals($result['buyable'], $updated['buyable']);
         $this->assertEquals($result['tryLookable'], $updated['tryLookable']);
@@ -150,13 +150,13 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
-        $course1       = array(
+        $course1 = array(
             'title'       => 'test course 1',
             'courseSetId' => 1,
             'expiryMode'  => 'days',
             'learnMode'   => 'lockMode'
         );
-        $course2       = array(
+        $course2 = array(
             'title'       => 'test course 2',
             'courseSetId' => 1,
             'expiryMode'  => 'days',
@@ -194,7 +194,6 @@ class CourseServiceTest extends BaseTestCase
             'userId'      => 1,
             'createdTime' => time()
         );
-
 
         $user        = $this->createNormalUser();
         $currentUser = new CurrentUser();

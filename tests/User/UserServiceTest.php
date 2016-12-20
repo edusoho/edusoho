@@ -676,7 +676,7 @@ class UserServiceTest extends BaseTestCase
             'securityAnswer3'   => 'answer-3'
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->findUserSecureQuestionsByUserId($registeredUser['id']);
+        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
         $this->assertEquals(3, count($result));
     }
 
@@ -698,7 +698,7 @@ class UserServiceTest extends BaseTestCase
             'securityAnswer3'   => 'answer-3'
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->findUserSecureQuestionsByUserId($registeredUser['id']);
+        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
         $this->assertEquals(3, count($result));
     }
 

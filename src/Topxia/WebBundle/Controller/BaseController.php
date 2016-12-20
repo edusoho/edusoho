@@ -1,20 +1,19 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-
 use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\InvalidArgumentException;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\SecurityEvents;
+use Topxia\Common\Exception\InvalidArgumentException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 abstract class BaseController extends Controller
 {
@@ -43,12 +42,11 @@ abstract class BaseController extends Controller
     /**
      * 创建消息提示响应
      *
-     * @param  string  $type     消息类型：info, warning, error
-     * @param  string  $message  消息内容
-     * @param  string  $title    消息抬头
-     * @param  integer $duration 消息显示持续的时间
-     * @param  string  $goto     消息跳转的页面
-     *
+     * @param  string     $type     消息类型：info, warning, error
+     * @param  string     $message  消息内容
+     * @param  string     $title    消息抬头
+     * @param  integer    $duration 消息显示持续的时间
+     * @param  string     $goto     消息跳转的页面
      * @return Response
      */
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
@@ -242,7 +240,7 @@ abstract class BaseController extends Controller
             );
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
-            if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
