@@ -30,6 +30,12 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+
+    {# webpack #}
+    {% for path in css() %}
+      <link href="{{ asset('build/' ~ path) }}" rel="stylesheet" />
+    {% endfor %}
+
   {% endblock %}
 
   <!--[if lt IE 9]>
