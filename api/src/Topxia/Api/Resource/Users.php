@@ -53,7 +53,7 @@ class Users extends BaseResource
         $ip = $request->getClientIp();
         $fields['createdIp'] = $ip;
 
-        $authSettings = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('auth', array());
+        $authSettings = ServiceKernel::instance()->createService('System:SettingService')->get('auth', array());
 
         if (isset($authSettings['register_protective'])) {
             $type = $authSettings['register_protective'];
@@ -125,7 +125,7 @@ class Users extends BaseResource
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**

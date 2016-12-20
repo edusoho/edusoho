@@ -38,7 +38,7 @@ class UserUtil
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
 
             foreach ($nicknames as $name) {
-                if (ServiceKernel::instance()->getBiz()->service('User:UserService')->isNicknameAvaliable($name)) {
+                if (ServiceKernel::instance()->createService('User:UserService')->isNicknameAvaliable($name)) {
                     $registration['nickname'] = $name;
                     break;
                 }
@@ -59,14 +59,14 @@ class UserUtil
             unset($registration['email']);
         }
 
-        $user = ServiceKernel::instance()->getBiz()->service('User:AuthService')->register($registration, $type);
+        $user = ServiceKernel::instance()->createService('User:AuthService')->register($registration, $type);
         return $user;
     }
 
 
     public function fillUserAttr($userId, $userInfo)
     {
-        $user = ServiceKernel::instance()->getBiz()->service('User:UserService')->getUser($userId);
+        $user = ServiceKernel::instance()->createService('User:UserService')->getUser($userId);
         if (!empty($userInfo['avatar'])) {
             $curl = curl_init($userInfo['avatar']);
             
@@ -108,7 +108,7 @@ class UserUtil
                 'type' => 'small',
                 'id' => $file['id']
             );
-            $user = ServiceKernel::instance()->getBiz()->service('User:UserService')->changeAvatar($userId, $fields);
+            $user = ServiceKernel::instance()->createService('User:UserService')->changeAvatar($userId, $fields);
         }
         return $user;
     }
@@ -118,6 +118,6 @@ class UserUtil
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

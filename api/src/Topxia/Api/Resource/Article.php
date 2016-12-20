@@ -36,11 +36,11 @@ class Article extends BaseResource
      */
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }
