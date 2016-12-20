@@ -1,7 +1,6 @@
 <?php
-namespace Topxia\Service\RefererLog\Event;
+namespace Biz\RefererLog\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

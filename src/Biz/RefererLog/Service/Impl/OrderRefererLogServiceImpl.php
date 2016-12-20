@@ -1,15 +1,16 @@
 <?php
-namespace Topxia\Service\RefererLog\Impl;
+namespace Biz\RefererLog\Service\Impl;
 
+use Biz\BaseService;
+use Biz\RefererLog\Dao\OrderRefererLogDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\RefererLog\OrderRefererLogService;
+use Biz\RefererLog\Service\OrderRefererLogService;
 
 class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogService
 {
     public function getOrderRefererLog($id)
     {
-        return $this->getOrderRefererLogDao()->getOrderRefererLog($id);
+        return $this->getOrderRefererLogDao()->get($id);
     }
 
     public function addOrderRefererLog($fields)
@@ -19,17 +20,17 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
         }
 
         $fields['createdTime'] = time();
-        return $this->getOrderRefererLogDao()->addOrderRefererLog($fields);
+        return $this->getOrderRefererLogDao()->create($fields);
     }
 
     public function updateOrderRefererLog($id, $fields)
     {
-        return $this->getOrderRefererLogDao()->updateOrderRefererLog($id, $fields);
+        return $this->getOrderRefererLogDao()->update($id, $fields);
     }
 
     public function deleteOrderRefererLog($id)
     {
-        return $this->getOrderRefererLogDao()->deleteOrderRefererLog($id);
+        return $this->getOrderRefererLogDao()->delete($id);
     }
 
     public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy = '')
@@ -41,12 +42,12 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
     public function searchOrderRefererLogCount($conditions, $groupBy = '')
     {
         $conditions = $this->prepareConditions($conditions);
-        return $this->getOrderRefererLogDao()->searchOrderRefererLogCount($conditions, $groupBy);
+        return $this->getOrderRefererLogDao()->countOrderRefererLogs($conditions, $groupBy);
     }
 
     public function searchDistinctOrderRefererLogCount($conditions, $distinctField)
     {
-        return $this->getOrderRefererLogDao()->searchDistinctOrderRefererLogCount($conditions, $distinctField);
+        return $this->getOrderRefererLogDao()->countDistinctOrderRefererLogs($conditions, $distinctField);
     }
 
     protected function prepareConditions($conditions)
@@ -54,6 +55,9 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
         return $conditions;
     }
 
+    /**
+     * @return OrderRefererLogDao
+     */
     protected function getOrderRefererLogDao()
     {
         return $this->createDao('RefererLog:OrderRefererLogDao');

@@ -1,9 +1,12 @@
 <?php
-namespace Topxia\Service\RefererLog\Impl;
+namespace Biz\RefererLog\Service\Impl;
 
+use Biz\BaseService;
+use Biz\RefererLog\Dao\OrderRefererDao;
+use Biz\RefererLog\Dao\RefererLogDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\RefererLog\RefererLogService;
+use Biz\RefererLog\Service\RefererLogService;
+use Topxia\Service\Common\ServiceKernel;
 
 class RefererLogServiceImpl extends BaseService implements RefererLogService
 {
@@ -22,7 +25,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $user                        = $this->getCurrentUser();
         $refererlog                  = $this->prepareRefererUrl($refererlog);
         $refererlog['createdUserId'] = $user['id'];
-        return $this->getRefererLogDao()->addRefererLog($refererlog);
+        return $this->getRefererLogDao()->create($refererlog);
     }
 
     private function ignoreLog($refererlog)
@@ -40,12 +43,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function getRefererLogById($id)
     {
-        return $this->getRefererLogDao()->getRefererLogById($id);
+        return $this->getRefererLogDao()->get($id);
     }
 
     public function waveRefererLog($id, $field, $diff)
     {
-        return $this->getRefererLogDao()->waveRefererLog($id, $field, $diff);
+        return $this->getRefererLogDao()->wave(array($id), array($field => $diff));
     }
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
@@ -71,11 +74,6 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }, $analysisSummaryList);
     }
 
-    public function searchAnalysisDetailListCount($conditions)
-    {
-        return $this->getRefererLogDao()->searchAnalysisDetailListCount($conditions);
-    }
-
     public function countDistinctLogsByField($conditions, $field)
     {
         return $this->getRefererLogDao()->countDistinctLogsByField($conditions, $field);
@@ -88,17 +86,17 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit)
     {
-        return $this->getRefererLogDao()->searchRefererLogs($conditions, $orderBy, $start, $limit);
+        return $this->getRefererLogDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchRefererLogCount($conditions)
+    public function countRefererLogs($conditions)
     {
-        return $this->getRefererLogDao()->searchRefererLogCount($conditions);
+        return $this->getRefererLogDao()->count($conditions);
     }
 
     public function findRefererLogsGroupByDate($conditions)
     {
-        $timeRangeRefererLogCount = $this->searchRefererLogCount($conditions);
+        $timeRangeRefererLogCount = $this->countRefererLogs($conditions);
         $timeRangeRefererLogs     = $this->searchRefererLogs($conditions, array('createdTime', 'ASC'), 0, $timeRangeRefererLogCount);
         $timeRangeRefererLogs     = array_map(function ($log) {
             $log['createdTime'] = date("Y-m-d", $log['createdTime']);
@@ -110,29 +108,35 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function getOrderRefererByUv($uv)
     {
-        return $this->getOrderRefererDao()->getOrderRefererByUv($uv);
+        return $this->getOrderRefererDao()->getByUv($uv);
     }
 
     public function getOrderRefererLikeByOrderId($orderId)
     {
-        return $this->getOrderRefererDao()->getOrderRefererLikeByOrderId($orderId);
+        return $this->getOrderRefererDao()->getLikeByOrderId($orderId);
     }
 
     public function createOrderReferer($token)
     {
-        return $this->getOrderRefererDao()->createOrderReferer($token);
+        return $this->getOrderRefererDao()->create($token);
     }
 
     public function updateOrderReferer($id, $fields)
     {
-        return $this->getOrderRefererDao()->updateOrderReferer($id, $fields);
+        return $this->getOrderRefererDao()->update($id, $fields);
     }
 
+    /**
+     * @return RefererLogDao
+     */
     protected function getRefererLogDao()
     {
         return $this->createDao('RefererLog:RefererLogDao');
     }
 
+    /**
+     * @return OrderRefererDao
+     */
     protected function getOrderRefererDao()
     {
         return $this->createDao('RefererLog:OrderRefererDao');
@@ -217,18 +221,18 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function getRefererMap()
     {
-        $host = $this->getKernel()->getEnvVariable('host');
+        $host =ServiceKernel::instance()->getEnvVariable('host');
         return array(
             'open/course/explore'  => '公开课列表',
             'open/course'          => '公开课详情页',
             'my/courses/favorited' => '我的收藏',
             $host                  => '首页',
 
-            'baidu.com'            => '百度',
-            'www.so.com'           => '360搜索',
-            'www.sogou.com'        => '搜狗搜索',
-            'mp.weixin.qq.com'     => '微信',
-            'weibo.com'            => '微博'
+            'baidu.com'        => '百度',
+            'www.so.com'       => '360搜索',
+            'www.sogou.com'    => '搜狗搜索',
+            'mp.weixin.qq.com' => '微信',
+            'weibo.com'        => '微博'
         );
     }
 }
