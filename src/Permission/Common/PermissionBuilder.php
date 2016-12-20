@@ -43,7 +43,7 @@ class PermissionBuilder
         if (in_array('ROLE_SUPER_ADMIN', $roles)) {
             $permissions = $originPermissions;
         } else {
-            $roleService = ServiceKernel::instance()->createService('Permission:Role.RoleService');
+            $roleService = ServiceKernel::instance()->createService('Role:RoleService');
 
             $permissionCode = array();
             foreach ($roles as $code) {

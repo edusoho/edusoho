@@ -163,7 +163,7 @@ class WebExtension extends \Twig_Extension
 
     public function getAdminRoles()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+        return ServiceKernel::instance()->createService('Role:RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function cdn($content)

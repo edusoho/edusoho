@@ -73,7 +73,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getServiceKernel()->createService('Permission:Role.RoleService')->refreshRoles();
+        $this->getServiceKernel()->createService('Role:RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
         $biz         = $this->getBiz();

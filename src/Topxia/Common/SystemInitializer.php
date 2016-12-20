@@ -782,7 +782,7 @@ EOD;
      */
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 
     /**

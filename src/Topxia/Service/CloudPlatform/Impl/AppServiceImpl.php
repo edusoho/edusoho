@@ -888,6 +888,6 @@ class AppServiceImpl extends BaseService implements AppService
      */
     protected function getRoleService()
     {
-        return $this->createService('Permission:Role.RoleService');
+        return $this->createService('Role:RoleService');
     }
 }

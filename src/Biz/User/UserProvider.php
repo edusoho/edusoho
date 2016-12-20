@@ -74,7 +74,7 @@ class UserProvider implements UserProviderInterface
 
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 
     /**
