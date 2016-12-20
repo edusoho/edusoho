@@ -475,16 +475,32 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
 
-            $blackListIps['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", trim($data['blackListIps']))));
-            $whiteListIps['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", trim($data['whiteListIps']))));
-
-            $settingService->set('blacklist_ip', $blackListIps);
-            $settingService->set('whitelist_ip', $whiteListIps);
+            $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['blackListIps']));
+            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['whiteListIps']));
 
             $logService = $this->getLogService();
 
-            $logService->info('system', 'update_settings', '更新IP黑名单', $blackListIps);
-            $logService->info('system', 'update_settings', '更新IP白名单', $whiteListIps);
+            if (empty($purifiedBlackIps)) {
+                $settingService->delete('blacklist_ip');
+
+                $blackListIps['ips'] = array();
+            } else {
+                $blackListIps['ips'] = array_filter(explode(' ', $purifiedBlackIps));
+                $settingService->set('blacklist_ip', $blackListIps);
+            }
+
+            if (empty($purifiedWhiteIps)) {
+                $settingService->delete('whitelist_ip');
+
+                $whiteListIps['ips'] = array();
+            } else {
+                $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
+                $settingService->set('whitelist_ip', $whiteListIps);
+            }
+
+            $logService->info('system', 'update_settings', '更新IP黑名单/白名单', 
+                array('blacklist_ip' => $blackListIps['ips'], 
+                    'whitelist_ip' => $whiteListIps['ips']));
 
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }
