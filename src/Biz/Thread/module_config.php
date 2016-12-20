@@ -2,7 +2,7 @@
 
 return array(
     'event_subscriber' => array(
-        'Topxia\\Service\\Thread\\Event\\ThreadEventSubscriber',
-    ),
+        'Biz\\Thread\\Event\\ThreadEventSubscriber'
+    )
 
 );

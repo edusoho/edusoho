@@ -4,6 +4,7 @@ namespace Biz\Thread\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Thread\Dao\ThreadDao;
+use Topxia\Common\ArrayToolkit;
 use Biz\Thread\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -57,7 +58,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if ($thread['type'] == 'event') {
             if ($this->tryAccess('thread.event.create', $thread)) {
-                throw $this->createAccessDeniedException($this->getKernel()->trans('权限不够!'));
+                throw $this->createAccessDeniedException('permision access denied.');
             }
 
             if (!empty($thread['location'])) {
@@ -254,7 +255,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function hitThread($targetId, $threadId)
     {
-        $this->wave($threadId, 'hitNum', +1);
+        $this->waveThread($threadId, 'hitNum', +1);
     }
 
     public function cancelThreadSolved($threadId)
@@ -281,7 +282,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
-    public function countThreads($conditions)
+    public function searchThreadCount($conditions)
     {
         $conditions = $this->prepareThreadSearchConditions($conditions);
 
@@ -409,14 +410,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', 0 - $totalDeleted);
 
-        $this->dispatchEvent("thread.post.delete", new Event($post, array('deleted' => $totalDeleted)));
+        $this->dispatchEvent('thread.post.delete', new Event($post, array('deleted' => $totalDeleted)));
 
         return true;
-    }
-
-    public function getPostPostionInArticle($articleId, $postId)
-    {
-        return $this->getThreadPostDao()->getPostPostionInArticle($articleId, $postId);
     }
 
     public function searchPostsCount($conditions)
@@ -439,6 +435,108 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->wave(array($id), array($field => $diff));
     }
 
+    public function setPostAdopted($postId)
+    {
+        $post = $this->getPost($postId);
+
+        if (empty($post)) {
+            throw $this->createNotFoundException("thread(#{$postId}) not found");
+        }
+
+        $this->tryAccess('post.adopted', $post);
+        $this->getThreadPostDao()->update($post['id'], array('adopted' => 1));
+    }
+
+    public function cancelPostAdopted($postId)
+    {
+        $post = $this->getPost($postId);
+
+        if (empty($post)) {
+            throw $this->createNotFoundException("post(#{$postId}) not found");
+        }
+
+        $this->tryAccess('post.adopted', $post);
+
+        $this->getThreadPostDao()->update($post['id'], array('adopted' => 0));
+    }
+
+    /**
+     * thread_member
+     */
+
+    public function getMember($memberId)
+    {
+        return $this->getThreadMemberDao()->get($memberId);
+    }
+
+    public function getMemberByThreadIdAndUserId($threadId, $userId)
+    {
+        return $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($threadId, $userId);
+    }
+
+    public function createMember($fields)
+    {
+        $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
+
+        if (empty($member)) {
+            $thread = $this->getThreadDao()->getThread($fields['threadId']);
+
+            if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
+                throw $this->createAccessDeniedException('limit on the number of people');
+            }
+
+            $fields['createdTime'] = time();
+            $member                = $this->getThreadMemberDao()->create($fields);
+            $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);
+
+            return $member;
+        } else {
+            throw $this->createServiceException('member already exists');
+        }
+    }
+
+    public function deleteMember($memberId)
+    {
+        $member               = $this->getMember($memberId);
+        $thread               = $this->getThreadDao()->getThread($member['threadId']);
+        $member['targetType'] = $thread['targetType'];
+        $member['targetId']   = $thread['targetId'];
+        $this->tryAccess('thread.member.delete', $member);
+
+        if (empty($member)) {
+            throw $this->createNotFoundException('thread member not found');
+        }
+
+        $this->getThreadMemberDao()->delete($memberId);
+        $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
+    }
+
+    public function deleteMembersByThreadId($threadId)
+    {
+        if (empty($threadId)) {
+            throw $this->createNotFoundException("thread(#{$threadId}) not found");
+        }
+
+        $thread = $this->getThread($threadId);
+        $this->tryAccess('thread.delete', $thread);
+
+        $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
+    }
+
+    public function searchMembers($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getThreadMemberDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchMemberCount($conditions)
+    {
+        return $this->getThreadMemberDao()->count($conditions);
+    }
+
+    /**
+     * thread_vote
+     */
+
     public function voteUpPost($id)
     {
         $user = $this->getCurrentUser();
@@ -460,109 +558,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'createdTime' => time()
         );
 
-        $vote = $this->getThreadVoteDao()->addVote($fields);
+        $vote = $this->getThreadVoteDao()->create($fields);
 
         $this->wavePost($post['id'], 'ups', 1);
 
         return array('status' => 'ok');
-    }
-
-    public function setPostAdopted($postId)
-    {
-        $post = $this->getPost($postId);
-
-        if (empty($post)) {
-            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题回复(ID: %id%)不存在。', array('%id%' => $post['id']))));
-        }
-
-        $this->tryAccess('post.adopted', $post);
-        $this->getThreadPostDao()->update($post['id'], array('adopted' => 1));
-    }
-
-    public function cancelPostAdopted($postId)
-    {
-        $post = $this->getPost($postId);
-
-        if (empty($post)) {
-            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题回复(ID: %id%)不存在。', array('%id%' => $post['id']))));
-        }
-
-        $this->tryAccess('post.adopted', $post);
-
-        $this->getThreadPostDao()->update($post['id'], array('adopted' => 0));
-    }
-
-    /**
-     * thread_member
-     */
-
-    public function getMemberByThreadIdAndUserId($threadId, $userId)
-    {
-        return $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($threadId, $userId);
-    }
-
-    public function createMember($fields)
-    {
-        $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
-
-        if (empty($member)) {
-            $thread = $this->getThreadDao()->getThread($fields['threadId']);
-
-            if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
-                throw $this->createAccessDeniedException($this->getKernel()->trans('已超过人数限制!'));
-            }
-
-            $fields['createdTime'] = time();
-            $member                = $this->getThreadMemberDao()->addMember($fields);
-            $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);
-
-            return $member;
-        } else {
-            throw $this->createServiceException($this->getKernel()->trans('成员已存在!'));
-        }
-    }
-
-    public function deleteMember($memberId)
-    {
-        $member               = $this->getThreadMemberDao()->getMember($memberId);
-        $thread               = $this->getThreadDao()->getThread($member['threadId']);
-        $member['targetType'] = $thread['targetType'];
-        $member['targetId']   = $thread['targetId'];
-        $this->tryAccess('thread.member.delete', $member);
-
-        if (empty($member)) {
-            throw $this->createServiceException($this->getKernel()->trans('成员不存在!'));
-        }
-
-        $this->getThreadMemberDao()->deleteMember($memberId);
-        $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
-    }
-
-    public function deleteMembersByThreadId($threadId)
-    {
-        if (empty($threadId)) {
-            throw $this->createServiceException($this->getKernel()->trans('参数错误!'));
-        }
-
-        $thread = $this->getThread($threadId);
-        $this->tryAccess('thread.delete', $thread);
-
-        $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
-    }
-
-    public function findMembersCountByThreadId($threadId)
-    {
-        return $this->getThreadMemberDao()->findMembersCountByThreadId($threadId);
-    }
-
-    public function findMembersByThreadId($threadId, $start, $limit)
-    {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $start, $limit), 'userId');
-    }
-
-    public function findMembersByThreadIdAndUserIds($threadId, $userIds)
-    {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadIdAndUserIds($threadId, $userIds), 'userId');
     }
 
     public function tryAccess($permision, $resource)
@@ -570,6 +570,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (!$this->canAccess($permision, $resource)) {
             throw $this->createAccessDeniedException("Permision `{$permision}`, resource `{$resource['targetType']}[{$resource['targetId']}]`, access denied.");
         }
+
+        return true;
     }
 
     public function canAccess($permision, $resource)
@@ -655,7 +657,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
-                throw $this->createServiceException($this->getKernel()->trans('keywordType参数不正确'));
+                throw $this->InvalidArgumentException('invalid argument');
             }
 
             $conditions[$conditions['keywordType']] = $conditions['keyword'];

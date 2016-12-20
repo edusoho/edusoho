@@ -303,7 +303,13 @@ class ArticleController extends BaseController
             )));
         }
 
-        $position = $this->getThreadService()->getPostPostionInArticle($articleId, $post['id']);
+        $conditions = array(
+            'targetType'    => 'article',
+            'targetId'      => $article['id'],
+            'parentId'      => 0,
+            'greaterThanId' => $post['id']
+        );
+        $position = $this->getThreadService()->searchPostsCount($conditions);
 
         $page = ceil($position / 10);
 

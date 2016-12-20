@@ -126,7 +126,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function getVipService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+        return ServiceKernel::instance()->createService('Vip:Vip:VipService');
     }
 
     protected function getKernel()
@@ -142,13 +142,14 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function isPluginInstalled($code)
     {
-        $app = ServiceKernel::instance()->createService('CloudPlatform.AppService')->getAppByCode($code);
+        $app = ServiceKernel::instance()->createService('CloudPlatform:AppService')->getAppByCode($code);
+
         return !empty($app);
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     public function getCurrentUser()

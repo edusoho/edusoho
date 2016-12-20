@@ -32,7 +32,9 @@ interface ThreadService
 
     public function searchThreads($conditions, $sort, $start, $limit);
 
-    public function countThreads($conditions);
+    public function searchThreadCount($conditions);
+
+    public function waveThread($id, $field, $diff);
 
     /**
      * thread_post
@@ -44,17 +46,15 @@ interface ThreadService
 
     public function deletePost($postId);
 
-    public function getPostPostionInArticle($articleId, $postId);
-
     public function searchPostsCount($conditions);
 
     public function searchPosts($conditions, $orderBy, $start, $limit);
 
-    public function voteUpPost($id);
-
     public function setPostAdopted($postId);
 
     public function cancelPostAdopted($postId);
+
+    public function wavePost($id, $field, $diff);
 
     /**
      * thread_member
@@ -68,10 +68,13 @@ interface ThreadService
 
     public function deleteMembersByThreadId($threadId);
 
-    public function findMembersCountByThreadId($threadId);
+    public function searchMembers($conditions, $orderBy, $start, $limit);
 
-    public function findMembersByThreadId($threadId, $start, $limit);
+    public function searchMemberCount($conditions);
 
-    public function findMembersByThreadIdAndUserIds($threadId, $userIds);
+    /**
+     * thread_vote
+     */
 
+    public function voteUpPost($id);
 }

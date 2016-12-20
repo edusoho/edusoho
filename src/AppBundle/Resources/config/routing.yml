@@ -298,8 +298,13 @@ course_set_manage_question_preview:
     defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
+<<<<<<< Updated upstream
     path: /course_set/{id}/manage/question/picker
     defaults: { _controller: AppBundle:Question/Manage:questionPicker }
+=======
+  path: /course_set/{id}/manage/question/picker
+  defaults: { _controller: AppBundle:Question/Manage:questionPicker }
+>>>>>>> Stashed changes
 
 course_set_manage_question_picked:
   path:  /course_set/{courseSetId}/manage/question/{questionId}/picked

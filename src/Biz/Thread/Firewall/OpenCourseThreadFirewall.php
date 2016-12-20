@@ -54,6 +54,6 @@ class OpenCourseThreadFirewall
 
     protected function getThreadService()
     {
-        return $this->getKernel()->getBiz()->service('Thread:ThreadService');
+        return $this->getKernel()->createService('Thread:ThreadService');
     }
 }

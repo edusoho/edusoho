@@ -1,11 +1,10 @@
 <?php
-namespace Topxia\Service\Thread;
+namespace Biz\Thread\Firewall;
 
 use UnderflowException;
 
 abstract class AbstractThreadFirewall
 {
-
     public function accessThreadRead($thread)
     {
         throw new UnderflowException("Method accessThreadRead is not implement");

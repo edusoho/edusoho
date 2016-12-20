@@ -1,10 +1,9 @@
 <?php
 
-namespace Topxia\Service\Thread\Tests;
+namespace Tests\Thread;
 
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class ArticleThreadFirewallTest extends BaseTestCase
 {
@@ -19,7 +18,6 @@ class ArticleThreadFirewallTest extends BaseTestCase
             return $result;
         }
         $this->assertFalse($result);
-
     }
 
     public function testaccessPostDelete()
@@ -32,15 +30,11 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $user1Id = '1';
 
         if ($result = $user1->isLogin()) {
-
             if ($result = $user1Id == $user['id'] ? true : false) {
                 return $result;
-
             }
         }
         $this->assertFalse($result);
-
-
     }
 
     public function testaccessPostVote()
@@ -54,9 +48,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
             return $result;
         }
         $this->assertFalse($result);
-
     }
-
 
     protected function createUser()
     {
@@ -77,6 +69,10 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     protected function getUserService()
     {
+<<<<<<< Updated upstream:src/Topxia/Service/Thread/Tests/ArticleThreadFirewallTest.php
         return ServiceKernel::instance()->createService('User:UserService');
+=======
+        return $this->getServiceKernel()->createService('User:UserService');
+>>>>>>> Stashed changes:tests/Thread/ArticleThreadFirewallTest.php
     }
 }

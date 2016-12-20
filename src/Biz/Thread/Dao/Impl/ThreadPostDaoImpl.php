@@ -9,12 +9,6 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 {
     protected $table = 'thread_post';
 
-    public function getPostPostionInArticle($articleId, $postId)
-    {
-        $sql = "SELECT COUNT(1) FROM {$this->table} WHERE targetType = 'article' AND targetId = ? AND parentId = 0 AND id >= ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchColumn($sql, array($articleId, $postId));
-    }
-
     public function deletePostsByThreadId($threadId)
     {
         return $this->db()->delete($this->table, array('threadId' => $threadId));
@@ -38,6 +32,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             'userId IN (:userIds)',
             'id < :id',
             'id < :lessThanId',
+            'id >= :greaterThanId',
             'ups >= :ups_GT',
             'id NOT IN (:excludeIds)',
             'createdTime >= :GTEcreatedTime',
