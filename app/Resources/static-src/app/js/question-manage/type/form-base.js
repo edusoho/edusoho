@@ -46,6 +46,9 @@ class QuestionFormBase {
         messages: {
             '[data-role="target"]': "请选择从属",
             difficulty : "请选择难度"
+        },
+        submitHandler(){
+          console.log('submitHandler111');
         }
     });
     this.validator = validator;

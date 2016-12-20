@@ -31,22 +31,12 @@ class SingleChoice extends QuestionFormBase {
     this.initTitleEditor();
     this.initAnalysisEditor();
     this.initOptions();
-    this.initValidator();
   }
 
   initOptions() {
     ReactDOM.render( <QuestionOptions dataSource={[]} inputValueName='value' checkedName="checked" idName="id" isRadio={true}/>,
       document.getElementById('question-options')
     );
-  }
-
-  initValidator() {
-    if(this.validator.form()) {
-      console.log("ok");
-    }else {
-      console.log('false');
-    }
-    console.log('initValidator');
   }
 }
 

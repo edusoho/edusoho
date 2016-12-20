@@ -29,9 +29,10 @@ $.validator.setDefaults({
     }
   },
   submitSuccess: function(data) {
-    
+    console.log('submitSuccess');
   },
   submitHandler: function(form) {
+    // console.log('submitHandler');
     let $form = $(form);
     let settings = this.settings;
 

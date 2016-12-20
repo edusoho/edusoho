@@ -27,14 +27,11 @@ export default class Options extends Component {
       });
       let self = this;
       editor.on('change', function( event ) {   
-        console.log('change');
         let data = this.getData();//内容
-        console.log(data);
         self.updateInputValue(item.optionId,data);
       });
       item.editor = editor;
       $(`[name='${item.optionId}']`).rules("add", { required: true, messages: { required: "请输入选项内容"} });
-      console.log($(`[name='${item.optionId}']`));
     }else {
       item.editor.setData(item.inputValue);
     }
@@ -53,7 +50,7 @@ export default class Options extends Component {
         </div>
         <div className="col-sm-8 controls">
           <textarea className="form-control item-input col-md-8" id={item.optionId}  value={item.inputValue} name={item.optionId}></textarea>
-          <p className="mtm"><label><input type="radio" name={item.checked}  checked={item.checked} className="answer-checkbox" value={JSON.stringify({id:item.optionId,checked:item.checked})} onChange = {(event)=>this.onChange(event)}/>正确答案</label></p>
+          <div className="mtm"><label><input type="radio" name={item.checked}  checked={item.checked} className="answer-checkbox" value={JSON.stringify({id:item.optionId,checked:item.checked})} onChange = {(event)=>this.onChange(event)}/>正确答案</label></div>
         </div>
         <div className="col-sm-2">
           <a className="btn btn-default btn-sm"  href="javascript:;" id={`${item.optionId}`} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>

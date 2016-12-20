@@ -27,7 +27,7 @@ function deleteOption(dataSourceUi,optionId) {
   console.log(dataSourceUi);
 }
 
-function changeOption(dataSourceUi,value,isRadio) {
+function changeOption(dataSourceUi,value,isRadio,checkedId) {
   let objValue = JSON.parse(value);
   dataSourceUi.map((item,index)=> {
     console.log(objValue.id);
@@ -48,7 +48,7 @@ export default class QuestionOptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSourceUi:[]
+      dataSourceUi:[],
     }
     const dataSource = this.props.dataSource;
     if(dataSource.length > 0) {
@@ -60,6 +60,11 @@ export default class QuestionOptions extends Component {
         InitOptionData(this.state.dataSourceUi,this.props,null,i);
       }
     }
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+    $("[name='answers']").rules("add", { required: true, messages: { required: "未选择正确答案"} });
   }
 
   addOption() {
@@ -106,14 +111,20 @@ export default class QuestionOptions extends Component {
 
   render() {
     let outputSets= [];
+    let checkedLenght = '';
     this.state.dataSourceUi.map((item,index)=>{
       let obj = {
         [this.props.idName]:item.optionId,
         [this.props.inputValueName]:item.inputValue,
         [this.props.checkedName]:item.checked ? 1 : 0,
       }
+      if(item.checked ) {
+        checkedLenght = item.optionId;
+      }
       outputSets.push(obj);   
     });
+
+
     return(
       <div className="question-options-group">
         {
@@ -126,10 +137,10 @@ export default class QuestionOptions extends Component {
         <div className="form-group">
           <div className="col-md-8 col-md-offset-2">
             <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>新增选项</a>
+            <input type="hidden" value={checkedLenght} name="answers"/>
           </div>
         </div>
         <input type="hidden" value={JSON.stringify(outputSets)} />
-        <input type="hidden" />
       </div>
     )
   }
