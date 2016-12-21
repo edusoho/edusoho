@@ -2760,7 +2760,7 @@ class OrderServiceTest extends BaseTestCase
     //=================私有或者受保护的方法，用来调用命名空间外的对象[start]==============
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**
@@ -2768,17 +2768,17 @@ class OrderServiceTest extends BaseTestCase
      */
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     private function createUser()

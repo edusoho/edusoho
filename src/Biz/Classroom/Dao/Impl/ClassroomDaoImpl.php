@@ -12,7 +12,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
+            'timestamps' => array('createdTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
             'orderbys'   => array('name', 'createdTime', 'recommendedSeq'),
             'conditions' => array(
