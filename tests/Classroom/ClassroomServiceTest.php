@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom\Tests;
+namespace Tests\Classroom;
 
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;;
