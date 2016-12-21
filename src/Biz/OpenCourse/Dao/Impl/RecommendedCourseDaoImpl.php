@@ -12,8 +12,7 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
     public function declares()
     {
         return array(
-            'timestamps' => array(),
-            'serializes' => array(),
+            'timestamps' => array('createdTime'),
             'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
                 'id = :id',
@@ -53,13 +52,14 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
             'openCourseId' => $courseId
         );
 
-        $count = $this->countRecommends($conditions);
+        $count = $this->count($conditions);
         $max   = $count - $num - 1;
         if ($max < 0) {
             $max = 0;
         }
         $randomSeed = (int)rand(0, $max);
-        $sql        = "SELECT * FROM {$this->getTable()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+        $sql        = "SELECT * FROM {$this->table()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 

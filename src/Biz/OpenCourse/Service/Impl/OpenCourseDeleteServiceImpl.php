@@ -6,7 +6,7 @@ use Biz\BaseService;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
-use Topxia\Service\OpenCourse\OpenCourseDeleteService;
+use Biz\OpenCourse\Service\OpenCourseDeleteService;
 
 class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDeleteService
 {

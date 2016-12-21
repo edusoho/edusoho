@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\OpenCourse\CourseProcessor;
+namespace Biz\OpenCourse\Processor;
 
 use Topxia\Service\Common\ServiceKernel;
 
