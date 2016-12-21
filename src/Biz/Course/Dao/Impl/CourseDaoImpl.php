@@ -32,7 +32,74 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'audiences'  => 'delimiter',
                 'services'   => 'delimiter',
                 'teacherIds' => 'delimiter'
+            ),
+            'orderbys'   => array('hitNum', 'recommendedTime', 'rating', 'studentNum', 'recommendedSeq', 'createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
+            'conditions' => array(
+                'updatedTime >= :updatedTime_GE',
+                'status = :status',
+                'type = :type',
+                'price = :price',
+                'price > :price_GT',
+                'originPrice > :originPrice_GT',
+                'originPrice = :originPrice',
+                'coinPrice > :coinPrice_GT',
+                'coinPrice = :coinPrice',
+                'originCoinPrice > :originCoinPrice_GT',
+                'originCoinPrice = :originCoinPrice',
+                'title LIKE :titleLike',
+                'userId = :userId',
+                'recommended = :recommended',
+                'startTime >= :startTimeGreaterThan',
+                'startTime < :startTimeLessThan',
+                'rating > :ratingGreaterThan',
+                'vipLevelId >= :vipLevelIdGreaterThan',
+                'vipLevelId = :vipLevelId',
+                'createdTime >= :startTime',
+                'createdTime <= :endTime',
+                'categoryId = :categoryId',
+                'smallPicture = :smallPicture',
+                'categoryId IN ( :categoryIds )',
+                'vipLevelId IN ( :vipLevelIds )',
+                'parentId = :parentId',
+                'parentId > :parentId_GT',
+                'parentId IN ( :parentIds )',
+                'id NOT IN ( :excludeIds )',
+                'id IN ( :courseIds )',
+                'locked = :locked',
+                'lessonNum > :lessonNumGT',
+                'orgCode = :orgCode',
+                'orgCode LIKE :likeOrgCode'
             )
         );
+    }
+
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
+
+        if (empty($conditions['status'])) {
+            unset($conditions['status']);
+        }
+
+        if (empty($conditions['categoryIds'])) {
+            unset($conditions['categoryIds']);
+        }
+
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] .= "%";
+        }
+
+        $builder = parent::_createQueryBuilder($conditions);
+
+        if (isset($conditions['types'])) {
+            $builder->andWhere('type IN ( :types )');
+        }
+
+        return $builder;
     }
 }
