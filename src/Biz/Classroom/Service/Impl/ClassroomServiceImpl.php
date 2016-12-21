@@ -3,6 +3,7 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Dao\ClassroomDao;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
@@ -1490,6 +1491,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ServiceKernel::instance()->createService('System:LogService');
     }
 
+    /**
+     * @return ClassroomDao
+     */
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');

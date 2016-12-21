@@ -11,5 +11,5 @@ interface RecommendedCourseDao extends  GeneralDaoInterface
 
     public function deleteByOpenCourseIdAndRecommendCourseId($openCourseId, $recommendCourseId);
 
-    public function findRandom($courseId, $num);
+    public function findRandomRecommendCourses($courseId, $num);
 }

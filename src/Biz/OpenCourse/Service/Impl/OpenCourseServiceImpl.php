@@ -3,6 +3,8 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
@@ -19,7 +21,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
      */
     public function getCourse($id)
     {
-        return $this->getOpenCourseDao()->getCourse($id);
+        return $this->getOpenCourseDao()->get($id);
     }
 
     public function findCoursesByIds(array $ids)
@@ -102,7 +104,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->getOpenCourseDao()->delete($id);
 
         if ($course["type"] == "liveOpen") {
-            $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id, 'liveOpen');
+            $this->getCourseLessonReplayDao()->deleteByCourseId($id, 'liveOpen');
         }
 
         $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
@@ -237,7 +239,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException('不能收藏未发布课程');
         }
 
-        $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
 
         if ($favorite) {
             throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
@@ -249,14 +251,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             new Event($course)
         );
 
-        $this->getFavoriteDao()->addFavorite(array(
+        $this->getFavoriteDao()->create(array(
             'courseId'    => $course['id'],
             'userId'      => $user['id'],
             'createdTime' => time(),
             'type'        => 'openCourse'
         ));
 
-        $courseFavoriteNum = $this->getFavoriteDao()->searchCourseFavoriteCount(array(
+        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
             'courseId' => $courseId,
             'type'     => 'openCourse'
         ));
@@ -278,15 +280,15 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException("该课程不存在,收藏失败!");
         }
 
-        $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
 
         if (empty($favorite)) {
             throw $this->createServiceException("你未收藏本课程，取消收藏失败!");
         }
 
-        $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+        $this->getFavoriteDao()->delete($favorite['id']);
 
-        $courseFavoriteNum = $this->getFavoriteDao()->searchCourseFavoriteCount(array(
+        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
             'courseId' => $courseId,
             'type'     => 'openCourse'
         ));
@@ -296,12 +298,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type)
     {
-        return $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
+        return $this->getFavoriteDao()->getByUserIdAndCourseId($userId, $courseId, $type);
     }
 
     public function getLessonItems($courseId)
     {
-        $lessons = $this->searchLessons(array('courseId' => $courseId), array('seq', 'ASC'), 0, 1);
+        $lessons = $this->searchLessons(array('courseId' => $courseId), array('seq' => 'ASC'), 0, 1);
 
         $items = array();
 
@@ -522,7 +524,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getCourseLesson($courseId, $lessonId)
     {
-        $lesson = $this->getOpenCourseLessonDao()->update($lessonId);
+        $lesson = $this->getOpenCourseLessonDao()->get($lessonId);
 
         if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
             return null;
@@ -543,7 +545,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
-        $orderBy     = array('seq', 'ASC');
+        $orderBy     = array('seq' => 'ASC');
         $nextLessons = $this->searchLessons($conditions, $orderBy, 0, 1);
         return array_shift($nextLessons);
     }
@@ -1024,11 +1026,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->createDao('OpenCourse:OpenCourseMemberDao');
     }
 
+    /**
+     * @return FavoriteDao
+     */
     protected function getFavoriteDao()
     {
         return $this->createDao('Course:FavoriteDao');
     }
 
+    /**
+     * @return CourseLessonReplayDao
+     */
     protected function getCourseLessonReplayDao()
     {
         return $this->createDao('Course:CourseLessonReplayDao');
