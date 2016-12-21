@@ -3,6 +3,7 @@ namespace Biz\Role\Service;
 
 interface RoleService
 {
+
     public function getRole($id);
 
     public function getRoleByCode($code);
