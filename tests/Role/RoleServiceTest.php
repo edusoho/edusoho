@@ -17,9 +17,21 @@ class  RoleServiceTest extends BaseTestCase
         $permissionTree = Tree::buildWithArray($permissions, null, 'code', 'parent');
         $superAdminPermissions = ArrayToolkit::column($permissions, 'code');
 
-        $adminForbiddenPermissions = array();
 
-        foreach (RoleService::ADMIN_FORBIDDEN_PERMISSIONS as $rootPermission) {
+        $adminForbiddenRootPermissions   = array(
+            'admin_user_avatar',
+            'admin_user_change_password',
+            'admin_my_cloud',
+            'admin_cloud_video_setting',
+            'admin_edu_cloud_sms',
+            'admin_edu_cloud_search_setting',
+            'admin_setting_cloud_attachment',
+            'admin_setting_cloud',
+            'admin_system'
+        );
+
+        $adminForbiddenPermissions = array();
+        foreach ($adminForbiddenRootPermissions as $rootPermission) {
             $adminRoleTree = $permissionTree->find(function ($permissionNode) use ($rootPermission){
                 return $permissionNode->data['code'] === $rootPermission;
             });
