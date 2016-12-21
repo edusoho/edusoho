@@ -1,9 +1,7 @@
 <?php
 namespace Biz\Order\OrderRefundProcessor;
 
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessor;
 use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseOrderRefundProcessor implements OrderRefundProcessor
 {

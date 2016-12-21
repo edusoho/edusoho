@@ -1,7 +1,6 @@
 <?php
 namespace Biz\Order\OrderRefundProcessor;
 
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessor;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderRefundProcessor implements OrderRefundProcessor

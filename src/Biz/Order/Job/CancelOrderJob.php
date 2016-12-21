@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Order\Job;
 
-use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
+use  Biz\Crontab\Service\Job;
 
 class CancelOrderJob implements Job
 {

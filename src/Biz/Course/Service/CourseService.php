@@ -62,4 +62,8 @@ interface CourseService
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
+    public function searchCourses($conditions, $sort, $start, $limit);
+
+    public function searchCourseCount($conditions);
+
 }

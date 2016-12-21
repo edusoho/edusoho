@@ -2,11 +2,11 @@
 namespace Biz\PostFilter\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 
-class TokenBucketEventSubscriber implements EventSubscriberInterface
+class TokenBucketEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
