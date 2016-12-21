@@ -1,54 +1,57 @@
 import React,{ Component } from 'react';
+import { trim } from '../../unit';
+
 
 export default class Options extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.item.value,
-      checked: this.props.item.checked,
+      datas: this.props.datas,
     }
+    this.editor = null;
+    //value不需传递给付组件的state,因为value是属于自身组件的行为不应该去出发别的组件的Render；
   }
-
+ 
   componentDidMount() {
     console.log('componentDidMount');
     this.initCkeditor();
   }
 
+  
   deleteOption(event) {
     this.props.deleteOption(event.currentTarget.id);
   }
 
-  onChange(event) {
-    this.props.changeOption(event.currentTarget.value);
+  onChangeChecked(event) {
+    this.props.changeOptionChecked(event.currentTarget.value);
   }
 
   initCkeditor(dataSourceUi) {
-    let item =this.props.item;
-    if(!item.editor) {
-      let editor = CKEDITOR.replace(item.optionId, {
+    if(!this.editor) {
+      this.editor = CKEDITOR.replace(this.state.datas.optionId, {
         toolbar: 'Minimal',
         height: 120
       });
       let self = this;
-      editor.on('change', function( event ) {   
+      this.editor.on('change', function( event ) {   
         let data = this.getData();//内容
-        self.updateInputValue(item.optionId,data);
+        self.updateInputValue(data);
       });
-      item.editor = editor;
-      $(`[name='${item.optionId}']`).rules("add", { required: true, messages: { required: "请输入选项内容"} });
     }else {
-      item.editor.setData(item.inputValue);
+      this.editor.setData(datas.inputValue);
     }
   }
 
-  updateInputValue(id,inputValue) {
+  updateInputValue(inputValue) {
+    this.state.datas.inputValue = inputValue;
     this.setState({
-      value: inputValue,
+      datas: this.state.datas,
     })
   }
 
   render() {
-    let item = this.props.item;
+    let isValidator = this.props.isValidator;
+    let showDanger = this.props.isValidator && trim(this.state.datas.inputValue).length <= 0;
     let type = 'checkbox';
     if(this.props.isRadio) {
       type= 'radio';
@@ -56,18 +59,19 @@ export default class Options extends Component {
     return (
       <div className="form-group">
         <div className="col-sm-2 control-label">
-          <label className="choice-label">{item.optionLabel}</label>
+          <label className="choice-label">{this.state.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control item-input col-md-8" id={item.optionId}  value={this.state.value} name={item.optionId}></textarea>
+          <textarea className="form-control datas-input col-md-8" id={this.state.datas.optionId}  value={this.state.datas.inputValue} name={this.state.datas.optionId}></textarea>
           <div className="mtm">
             <label>
-              <input type={type} name={item.checked}  checked={item.checked} className="answer-checkbox" value={JSON.stringify({id:item.optionId,checked:item.checked})} onChange = {(event)=>this.onChange(event)}/>正确答案 
+              <input type={type} name={this.state.datas.checked} value={JSON.stringify({id:this.state.datas.optionId,checked:this.state.datas.checked})}  checked={this.state.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 
             </label>
           </div>
+          { showDanger && <p className="color-danger">请输入选项内容</p>}
         </div>
         <div className="col-sm-2">
-          <a className="btn btn-default btn-sm"  href="javascript:;" id={`${item.optionId}`} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>
+          <a className="btn btn-default btn-sm"  href="javascript:;" id={`${this.state.datas.optionId}`} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>
         </div>
       </div>
     )

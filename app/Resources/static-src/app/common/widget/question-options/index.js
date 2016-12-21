@@ -1,146 +1,136 @@
 import React, { Component } from 'react';
 import Option from './option';
-import notify from 'common/notify'
-
+import notify from 'common/notify';
 
 function convert(num){
   return num <= 26 ? String.fromCharCode(num + 64) : convert(~~((num - 1) / 26)) + convert(num % 26 || 26);
 }
 
-function InitOptionData(dataSourceUi,props,datas,seq) {
+function InitOptionData(dataSource,props,datas,validatorDatas,seq) {
   var obj = {
     optionId:`question-option-${seq}`,
     optionLabel: '选项'+ convert(seq),
     inputValue:datas ? datas[props.inputValueName] : '',
     checked: datas ? datas[props.checkedName] : false,
-    editor: null,
   }
-  dataSourceUi.push(obj);
+  validatorDatas[`question-option-${seq}`] = datas ? datas[props.inputValueName] : '',
+  dataSource.push(obj);
 }
 
-function deleteOption(dataSourceUi,optionId) {
-  for(let i = 0; i< dataSourceUi.length ;i++) {
-    if(dataSourceUi[i].optionId==optionId) {
-      dataSourceUi.splice(i, 1);
+function deleteOption(dataSource,validatorDatas,optionId) {
+  for(let i = 0; i< dataSource.length ;i++) {
+    if(dataSource[i].optionId==optionId) {
+      dataSource.splice(i, 1);
+      delete validatorDatas[optionId];
       i--;
     }else {
-      dataSourceUi[i].optionLabel = '选项'+ convert(i+1);
+      dataSource[i].optionLabel = '选项'+ convert(i+1);
     }
   }
 }
 
-function changeOption(dataSourceUi,value,isRadio,checkedId) {
+function changeOptionChecked(dataSource,validatorDatas,value,isRadio,checkedId) {
   let objValue = JSON.parse(value);
-  dataSourceUi.map((item,index)=> {
+  let checkedNum = 0;
+  dataSource.map((item,index)=> {
     if(item.optionId == objValue.id) {
       //如果是单选，
       if(isRadio && objValue.checked){
         return;
       }
-      dataSourceUi[index].checked= !objValue.checked;
+      console.log(isRadio);
+      dataSource[index].checked= !objValue.checked;
     }else if(isRadio && !objValue.checked){
       //如果是单选;
-      dataSourceUi[index].checked = false;
+      dataSource[index].checked = false;
     }
-  })
+    if(dataSource[index].checked) {
+      checkedNum++;
+    }
+  });
+  validatorDatas.checkedNum = checkedNum;
+  console.log(validatorDatas);
+  console.log(dataSource);
 }
 
 export default class QuestionOptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSourceUi:[],
+      dataSource:[],
+      isValidator: false,
     }
+
+    //验证的数据
+    this.validatorDatas = {
+      checkedNum: 0,
+      validNum:0,
+    };
+
     const dataSource = this.props.dataSource;
     if(dataSource.length > 0) {
       dataSource.map((item,index)=>{
-        InitOptionData(this.state.dataSourceUi,this.props,item,index);
+        InitOptionData(this.state.dataSource,this.props,item,this.validatorDatas,index);
       })
     }else {
       for(let i = 1; i<= this.props.defaultNum;i++) {
-        InitOptionData(this.state.dataSourceUi,this.props,null,i);
+        InitOptionData(this.state.dataSource,this.props,null,this.validatorDatas,i);
       }
     }
   }
 
-  componentDidMount() {
-    console.log('componentDidMount');
-    $("[name='answers']").rules("add", { required: true, messages: { required: "未选择正确答案"} });
+  sub() {
+    //首先出发验证，
+    
+    //验证是否选择了合理个数的答案；
+    //验证每一项目是否为空；
+    //是否需要时候去显示验证效果；
   }
-
   addOption() {
-    if(this.state.dataSourceUi.length >= this.props.maxNum) {
+    if(this.state.dataSource.length >= this.props.maxNum) {
       notify('danger', `选项最多${this.props.maxNum}个!`);
       return;
     }
-    InitOptionData(this.state.dataSourceUi,this.props,null,this.state.dataSourceUi.length+1);
+    InitOptionData(this.state.dataSource,this.props,null,this.validatorDatas,this.state.dataSource.length+1);
     this.setState({
-      dataSourceUi:this.state.dataSourceUi,
+      dataSource:this.state.dataSource,
     });
   }
 
-  changeOption(value) {
-    changeOption(this.state.dataSourceUi,value,this.props.isRadio);
+  changeOptionChecked(value) {
+    changeOptionChecked(this.state.dataSource,this.validatorDatas,value,this.props.isRadio);
     this.setState({
-      dataSourceUi:this.state.dataSourceUi,
+      dataSource:this.state.dataSource,
     });
   }
 
   deleteOption(id) {
-    if(this.state.dataSourceUi.length <= this.props.minNum) {
+    if(this.state.dataSource.length <= this.props.minNum) {
       notify('danger', `选项最少${this.props.maxNum}个!`);
       return;
     }
-    deleteOption(this.state.dataSourceUi,id);
+    deleteOption(this.state.dataSource,this.validatorDatas,id);
     this.setState({
-      dataSourceUi:this.state.dataSourceUi,
+      dataSource:this.state.dataSource,
     });
-  }
-
-  updateInputValue(id,inputValue) {
-    this.state.dataSourceUi.map((item,index)=>{
-      if(item.optionId == id) {
-        console.log('ok');
-        item.inputValue = inputValue;
-      }
-    });
-    this.setState({
-      dataSourceUi:this.state.dataSourceUi,
-    });
-    console.log(this.state.dataSourceUi);
+    console.log(this.validatorDatas);
   }
 
   render() {
-    let outputSets= [];
-    let checkedLenght = '';
-    this.state.dataSourceUi.map((item,index)=>{
-      let obj = {
-        [this.props.idName]:item.optionId,
-        [this.props.inputValueName]:item.inputValue,
-        [this.props.checkedName]:item.checked ? 1 : 0,
-      }
-      if(item.checked ) {
-        checkedLenght = item.optionId;
-      }
-      outputSets.push(obj);   
-    });
-
     return(
       <div className="question-options-group">
         {
-          this.state.dataSourceUi.map((item,index)=>{
+          this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} item = {item} key = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOption= {(id)=>this.changeOption(id)} updateInputValue = {(id,inputValue)=>this.updateInputValue(id,inputValue)}></Option>
+              <Option isRadio = {this.props.isRadio} isValidator= {this.state.isValidator} datas = {item} key = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id)=>this.changeOptionChecked(id)}></Option>
             )
           })
         }
         <div className="form-group">
           <div className="col-md-8 col-md-offset-2">
             <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>新增选项</a>
-            <input type="hidden" value={checkedLenght} name="answers"/>
           </div>
         </div>
-        <input type="hidden" value={JSON.stringify(outputSets)} />
       </div>
     )
   }
