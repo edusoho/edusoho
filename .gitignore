@@ -63,3 +63,4 @@ web/php-performance.php
 chunk-manifest.json
 .ac-php-conf.json
 .npminstall.done
+/web/static-dist/dev.lock

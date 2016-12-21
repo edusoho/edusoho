@@ -81,7 +81,8 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
-  {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
-  {% include 'script_boot.html.twig' %}
+{% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+
+{% include 'script_boot.html.twig' %}
 </body>
 </html>

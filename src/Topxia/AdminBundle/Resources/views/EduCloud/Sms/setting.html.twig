@@ -9,9 +9,6 @@
   {% if setting('cloud_status.locked') == true %}
     <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
     {{ currentMenu.code|parent_permission.name|trans }}
-  {% elseif smsInfo.name == '' %}
-    <div class="alert alert-warning" role="alert">{{'尚未设置短信签名，不能发送签信，'|trans}}<a href="{{ path('admin_cloud_sms_sign') }}" target="_blank">立即设置</a></div>
-    {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif smsInfo.status == 'stoped' %}
     <div class="alert alert-warning" role="alert">{{'
     您的云短信服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
@@ -86,8 +83,8 @@
     模板设置
   </div>
   <form class="form-horizontal" method="post" id="sms-form" novalidate="">
-  <div class="table-responsive sms-table">
-    <table class="table table-striped table-hover ">
+  <div class="table-responsive sms-table mtl">
+    <table class="table table-striped table-hover table-bordered ">
       <thead>
         <tr>
           <th>短信类型</th>
@@ -303,7 +300,7 @@
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
-          <td class="radios">
+          <td>
             {% if (is_plugin_installed('Homework')) %}
               <label>
                 <input type="radio" name="sms_homework_check" value="on"
