@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom\Tests;
+namespace Tests\Classroom;
 
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
@@ -285,12 +285,12 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getClassRoomReviewService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomReviewService');
     }
 
     protected function getUserService()

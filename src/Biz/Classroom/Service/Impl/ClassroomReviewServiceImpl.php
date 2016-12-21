@@ -20,6 +20,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
 
+        $orderBy = empty($orderBy) ? $orderBy : array($orderBy[0] => $orderBy[1]);
+
         return $this->getClassroomReviewDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -163,5 +165,10 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     private function getLogService()
     {
         return ServiceKernel::instance()->createService('System:LogService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

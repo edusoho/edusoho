@@ -16,7 +16,17 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
 
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
+            'rating'
+        );
+
+        $declares['conditions'] = array(
+            'userId = :userId',
+            'classroomId = :classroomId',
+            'rating = :rating',
+            'content LIKE :content',
+            'parentId = :parentId',
+            'classroomId IN (:classroomIds)'
         );
 
         return $declares;
@@ -25,37 +35,27 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
     public function sumReviewRatingByClassroomId($classroomId)
     {
         $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function countReviewByClassroomId($classroomId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function getByUserIdAndClassroomId($userId, $classroomId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
-        $review = $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
-        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
+        return $this->db()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
     }
 
 
-    private function _createQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('userId = :userId')
-            ->andWhere('classroomId = :classroomId')
-            ->andWhere('rating = :rating')
-            ->andWhere('content LIKE :content')
-            ->andWhere('parentId = :parentId')
-            ->andWhere('classroomId IN (:classroomIds)');
-
-        return $builder;
+        return parent::_createQueryBuilder($conditions);
     }
 }
