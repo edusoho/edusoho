@@ -19,15 +19,15 @@ class OrderRefererDaoImpl extends GeneralDaoImpl implements OrderRefererDao
 
     public function getByUv($uv)
     {
-        $sql   = "SELECT * FROM {$this->getTable()} WHERE uv = ?  AND expiredTime >= ? LIMIT 1";
+        $sql   = "SELECT * FROM {$this->table()} WHERE uv = ?  AND expiredTime >= ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($uv, time())) ?: null;
     }
 
     public function getLikeByOrderId($orderId)
     {
         $likeOrderIds = '%|'.$orderId.'|%';
-        $sql          = "SELECT * FROM {$this->getTable()} WHERE orderIds like ?  LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($likeOrderIds)) ?: null;
+        $sql          = "SELECT * FROM {$this->table()} WHERE orderIds like ?  LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($likeOrderIds)) ?: null;
     }
 
 }

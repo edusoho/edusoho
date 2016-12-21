@@ -205,7 +205,7 @@ class ClassroomManageController extends BaseController
 
         $refunds = $this->getOrderService()->searchRefunds(
             $condition,
-            'createdTime',
+            array('createdTime'=> 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
