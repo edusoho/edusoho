@@ -19,8 +19,43 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
             'orderbys'   => array('name', 'created_time'),
             'conditions' => array(
                 'name = :name',
+                'status = :status',
+                'title like :title',
+                'price > :price_GT',
+                'price = :price',
+                'private = :private',
+                'categoryId IN (:categoryIds)',
+                'categoryId =:categoryId',
+                'id IN (:classroomIds)',
+                'recommended = :recommended',
+                'showable = :showable',
+                'buyable = :buyable',
+                'vipLevelId >= :vipLevelIdGreaterThan',
+                'vipLevelId = :vipLevelId',
+                'vipLevelId IN ( :vipLevelIds )',
+                'orgCode = :orgCode',
+                'orgCode LIKE :likeOrgCode',
+                'headTeacherId = :headTeacherId',
+                'updatedTime >= :updatedTime_GE'
             ),
         );
+    }
+
+    public function getByTitle($title)
+    {
+        $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($title));
+    }
+
+    public function findByLikeTitle($title)
+    {
+        if (empty($title)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+
+        return $this->db()->fetchAll($sql, array('%'.$title.'%'));
     }
 
     public function findByIds($ids)

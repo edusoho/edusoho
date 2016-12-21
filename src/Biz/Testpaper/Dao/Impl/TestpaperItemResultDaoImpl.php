@@ -9,10 +9,6 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
 {
     protected $table = "testpaper_item_result";
 
-    private $serializeFields = array(
-        'answer' => 'json'
-    );
-
     public function findItemResultsByResultId($resultId)
     {
         return $this->findInField('resultId', array($resultId));

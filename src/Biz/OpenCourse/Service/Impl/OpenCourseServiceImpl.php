@@ -7,6 +7,7 @@ use Biz\OpenCourse\Dao\OpenCourseDao;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\LogService;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -1033,6 +1034,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->createDao('Course:CourseLessonReplayDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');

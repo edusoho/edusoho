@@ -79,7 +79,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
 }

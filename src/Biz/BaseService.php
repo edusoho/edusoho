@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -136,6 +137,22 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             unset($fields['orgCode']);
         }
         return $fields;
+    }
+
+    protected function purifyHtml($html, $trusted = false)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
+        );
+
+        $factory  = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($trusted);
+
+        return $purifier->purify($html);
     }
 
     protected function getLock()

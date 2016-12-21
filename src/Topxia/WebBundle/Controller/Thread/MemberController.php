@@ -54,9 +54,11 @@ class MemberController extends BaseController
 
     public function showMembersAction(Request $request, $thread)
     {
-        $members      = $this->_findPageMembers($request, $thread['id']);
-        $myFriends    = $this->_findMyJoindedFriends($members);
-        $membersCount = $this->getThreadService()->findMembersCountByThreadId($thread['id']);
+        $members   = $this->_findPageMembers($request, $thread['id']);
+        $myFriends = $this->_findMyJoindedFriends($members);
+
+        $conditions   = array('threadId' => $thread['id']);
+        $membersCount = $this->getThreadService()->searchMemberCount($conditions);
 
         return $this->render('TopxiaWebBundle:Thread/Event:user-grids.html.twig', array(
             'members'      => $members,
@@ -118,15 +120,30 @@ class MemberController extends BaseController
 
     protected function _findMembersByThreadId($threadId)
     {
-        $members = $this->getThreadService()->findMembersByThreadId($threadId, 0, PHP_INT_MAX);
-        return $members;
+        $conditions = array('threadId' => $threadId);
+        $members    = $this->getThreadService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        return ArrayToolkit::index($members, 'userId');
     }
 
     protected function _findPageMembers($request, $threadId)
     {
-        $page    = $request->query->get('page', 1);
-        $start   = (intval($page) - 1) * 16;
-        $members = $this->getThreadService()->findMembersByThreadId($threadId, $start, $start + 16);
+        $page  = $request->query->get('page', 1);
+        $start = (intval($page) - 1) * 16;
+
+        $conditions = array('threadId' => $threadId);
+
+        $members = $this->getThreadService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $start,
+            $start + 16
+        );
+        $members = ArrayToolkit::index($members, 'userId');
         $userIds = ArrayToolkit::column($members, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
 

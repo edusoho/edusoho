@@ -55,6 +55,6 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getClassroomService()
     {
-        return $this->getKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getKernel()->createService('Classroom:ClassroomService');
     }
 }

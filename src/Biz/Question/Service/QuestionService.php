@@ -33,9 +33,9 @@ interface QuestionService
      * question_favorite
      */
 
-    public function createFavoriteQuestion($fields);
+    public function getFavoriteQuestion($favoriteId);
 
-    public function updateFavoriteQuestion($id, $fields);
+    public function createFavoriteQuestion($fields);
 
     public function deleteFavoriteQuestion($id);
 

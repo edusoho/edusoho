@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -109,17 +108,17 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $memberFields['learnedNum'] = $userLearnCount;
 
         if ($course['serializeMode'] != 'serialize') {
-            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+            $memberFields['isLearned']    = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
             $memberFields['finishedTime'] = $memberFields['isLearned'] ? time() : 0;
         }
 
-        $memberFields['credit'] = $totalCredits;
+        $memberFields['credit']        = $totalCredits;
         $memberFields['lastLearnTime'] = time();
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
 
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         if (!empty($classroom)) {
             $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId($classroom['classroomId'], $learn['userId']);
@@ -133,6 +132,6 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 }
