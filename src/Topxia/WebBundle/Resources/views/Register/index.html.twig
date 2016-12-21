@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{'注册'|trans}} - {{ parent() }}{% endblock %}
+{% set bodyClass = 'register' %}
 {% set script_controller = 'auth/register' %}
 
 {% set parameter = get_parameters_from_url(app.request.uri) %}

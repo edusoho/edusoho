@@ -34,8 +34,6 @@
 ## 下载EduSoho源码
 
     * git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
-    * git submodule init    #初始化git子模块
-    * git submodule update  #更新git子模块
     注：/var/www/edusoho-dev 为本地要放的目录,如果要修改，下面出现的目录相应变化
 
     由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
@@ -47,9 +45,6 @@
 ## 安装Composer
 
     curl -sS https://getcomposer.org/installer | php
-
-## 安装程序的依赖库(Vendor)
-    * vendor依赖已经在git submodule vendor
 
 ## 创建数据库
 
@@ -66,7 +61,7 @@
 ## 初始化程序基础数据
 
     bin/phpmig migrate
-    app/console topxia:init
+    app/console system:init
 
 
 ## 配置Nginx

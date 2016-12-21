@@ -683,8 +683,8 @@
 }
 @font-face {
   font-family: "consultfont";
-  src: url('/assets/v2/css/fonts/consult-font.eot');
-  src: url('/assets/v2/css/fonts/consult-font.eot?#iefix') format('embedded-opentype'), url('/assets/v2/css/fonts/consult-font.woff') format('woff'), url('/assets/v2/css/fonts/consult-font.ttf') format('truetype'), url('/assets/v2/css/fonts/consult-font.svg#consultfont') format('svg');
+  src: url('../fonts/consult-font.eot');
+  src: url('../fonts/consult-font.eot?#iefix') format('embedded-opentype'), url('../fonts/consult-font.woff') format('woff'), url('../fonts/consult-font.ttf') format('truetype'), url('../fonts/consult-font.svg#consultfont') format('svg');
 }
 .float-consult .icon {
   font-family: "consultfont" !important;
@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3410,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -6962,6 +6962,48 @@ textarea {
   margin-bottom: 30px;
   background-color: #ffffff;
 }
+.tabs-wrapper .tabs-mark-group {
+  border-bottom: 1px dashed #e4ecf3;
+}
+.tabs-wrapper .tabs-mark-group .title {
+  width: 90px;
+  margin-top: 3px;
+  float: left;
+}
+.tabs-wrapper .tabs-mark-group .classify {
+  margin-top: 3px;
+}
+.tabs-wrapper .tabs-mark-group .classify i {
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark-group .classify a {
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark-group .classify a:hover,
+.tabs-wrapper .tabs-mark-group .classify a:focus {
+  color: #46c37b;
+}
+.tabs-wrapper .tabs-mark-group .content {
+  margin-left: 100px;
+}
+.tabs-wrapper .tabs-mark {
+  margin: 0 4px;
+}
+.tabs-wrapper .tabs-mark a {
+  border: 1px solid #e4ecf3;
+  padding: 2px 5px;
+  color: #919191;
+}
+.tabs-wrapper .tabs-mark:hover a,
+.tabs-wrapper .tabs-mark:focus a,
+.tabs-wrapper .tabs-mark.active a {
+  color: #46c37b;
+  border: 1px solid #46c37b;
+}
+.tabs-wrapper .tabs-mark i {
+  font-size: 10px;
+  margin-left: 5px;
+}
 .tabs-wrapper .tabs-group {
   padding: 0 60px 0 15px;
   position: relative;
@@ -7001,9 +7043,6 @@ textarea {
 .tabs-wrapper .tabs-group .content > li:focus > a,
 .tabs-wrapper .tabs-group .content > li.active > a {
   color: #46c37b;
-}
-.tabs-wrapper .tabs-group .content > li:first-child {
-  padding-left: 0;
 }
 .tabs-wrapper .tabs-group .tabs-toggle {
   position: absolute;
@@ -9745,6 +9784,15 @@ textarea {
   top: 50%;
   margin-top: -15px;
 }
+.lesson-list-wrapper.pbs {
+  padding-bottom: 100px !important;
+}
+.lesson-list-wrapper.pbm {
+  padding-bottom: 150px !important;
+}
+.lesson-list-wrapper.pbl {
+  padding-bottom: 200px !important;
+}
 .lesson-list {
   margin: 0 10px 0 40px;
   padding: 0;
@@ -11025,7 +11073,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -12653,6 +12701,9 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+.es-share.top .ml30-o {
+  margin-left: -30px;
+}
 @-webkit-keyframes boxshow {
   0% {
     box-shadow: 0 0 15px #2db7f5;
@@ -13537,6 +13588,35 @@ textarea {
 }
 .track-select-parent .track-selcet-list li.active {
   color: #46c37b;
+}
+.subtitle-transcode-status {
+  color: white;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  line-height: 1;
+  text-align: center;
+  min-width: 72px;
+}
+.subtitle-transcode-status.waiting,
+.subtitle-transcode-status.none {
+  background: #919191;
+}
+.subtitle-transcode-status.doing {
+  background: #2db7f5;
+}
+.subtitle-transcode-status.success {
+  background: #46c37b;
+}
+.subtitle-transcode-status.error {
+  background: #e83d2c;
+}
+.subtitle-name {
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user-center-header {
   position: relative;
@@ -15405,6 +15485,233 @@ textarea {
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;
+}
+.media-preview .media-preview-content .title {
+  padding-top: 35px;
+  text-align: center;
+  font-size: 30px;
+}
+.media-preview .media-preview-content .media-preview-player {
+  position: absolute;
+  top: 120px;
+  bottom: 60px;
+  left: 120px;
+  right: 120px;
+}
+.es-mobile body.homepage.has-app .es-wrap,
+.es-mobile body.course-list-page.has-app .es-wrap,
+.es-mobile body.open-course-list.has-app .es-wrap,
+.es-mobile body.my-course.has-app .es-wrap {
+  padding-top: 110px;
+}
+.es-mobile body.homepage .es-wrap,
+.es-mobile body.course-list-page .es-wrap,
+.es-mobile body.open-course-list .es-wrap,
+.es-mobile body.my-course .es-wrap {
+  padding-top: 60px;
+}
+.es-mobile body.homepage .es-header,
+.es-mobile body.course-list-page .es-header,
+.es-mobile body.open-course-list .es-header,
+.es-mobile body.my-course .es-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.es-mobile body.homepage .footer-tool-bar,
+.es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
+.es-mobile body.my-course .footer-tool-bar,
+.es-mobile body.homepage .es-footer-mobile,
+.es-mobile body.course-list-page .es-footer-mobile,
+.es-mobile body.open-course-list .es-footer-mobile,
+.es-mobile body.my-course .es-footer-mobile {
+  display: block;
+}
+.es-mobile body.homepage .footer-tool-bar,
+.es-mobile body.course-list-page .footer-tool-bar,
+.es-mobile body.open-course-list .footer-tool-bar,
+.es-mobile body.my-course .footer-tool-bar {
+  z-index: 10;
+}
+.es-mobile body.homepage .course-list-section .course-filter,
+.es-mobile body.course-list-page .course-list-section .course-filter,
+.es-mobile body.open-course-list .course-list-section .course-filter,
+.es-mobile body.my-course .course-list-section .course-filter,
+.es-mobile body.homepage .dynamic-section,
+.es-mobile body.course-list-page .dynamic-section,
+.es-mobile body.open-course-list .dynamic-section,
+.es-mobile body.my-course .dynamic-section,
+.es-mobile body.homepage .es-footer-link,
+.es-mobile body.course-list-page .es-footer-link,
+.es-mobile body.open-course-list .es-footer-link,
+.es-mobile body.my-course .es-footer-link,
+.es-mobile body.homepage .es-footer,
+.es-mobile body.course-list-page .es-footer,
+.es-mobile body.open-course-list .es-footer,
+.es-mobile body.my-course .es-footer {
+  display: none;
+}
+.es-mobile body.course-list-page {
+  background-color: white;
+}
+.es-mobile body.course-list-page .es-banner {
+  display: none;
+}
+.es-mobile body.course-list-page #content-container {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.es-mobile body.course-list-page #content-container .tabs-wrapper,
+.es-mobile body.course-list-page #content-container .es-filter {
+  display: none;
+}
+.es-mobile body.course-list-page #content-container .panel.panel-default {
+  border: none;
+  margin-top: -15px;
+  margin-bottom: -15px;
+}
+.es-mobile body.my-course {
+  background-color: white;
+}
+.es-mobile body.my-course #content-container {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.es-mobile body.my-course #content-container .my-layout {
+  display: none;
+}
+.es-mobile body.my-course #content-container .my-course-section .title {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.es-mobile body.open-course-list .es-banner {
+  display: none;
+}
+.es-mobile body.open-course-list #content-container {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.footer-tool-bar {
+  display: none;
+  position: fixed;
+  height: 50px;
+  padding-top: 7px;
+  width: 100%;
+  bottom: 0px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+.footer-tool-bar > div {
+  display: inline-block;
+  width: 33.33333333333333%;
+  float: left;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1;
+}
+.footer-tool-bar > div i {
+  font-size: 24px;
+}
+.footer-tool-bar > div.active {
+  color: #46c37b;
+}
+.es-footer-mobile {
+  display: none;
+  height: 40px;
+  margin-bottom: 50px;
+  background-color: #212121;
+  position: relative;
+  color: #919191;
+  font-size: 12px;
+}
+.es-footer-mobile .ICP {
+  margin-right: 80px;
+  text-align: center;
+  line-height: 40px;
+}
+.es-footer-mobile .pc-version-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  width: 80px;
+  line-height: 40px;
+  background-color: #313131;
+}
+.app-download {
+  position: fixed;
+  top: 60px;
+  width: 100%;
+  height: 50px;
+  background: #fafafa;
+  z-index: 10;
+}
+.app-download i {
+  position: absolute;
+  top: 0;
+  line-height: 50px;
+  left: 7px;
+  font-size: 26px;
+  color: #d9d9d9;
+}
+.app-download .slogan {
+  position: absolute;
+  top: 0;
+  background: url('../img/mobile/app_logo.png') no-repeat;
+  background-size: 36px 36px;
+  background-position: 38px 7px;
+  padding-left: 83px;
+  padding-top: 8px;
+  height: 50px;
+}
+.app-download .slogan .main-slogan {
+  line-height: 1;
+  margin-bottom: 6px;
+  color: #313131;
+}
+.app-download .slogan .sub-slogan {
+  font-size: 10px;
+  color: #919191;
+}
+.app-download .app-download-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  line-height: 50px;
+  width: 116px;
+  background-color: #46c37b;
+  color: white;
+  text-align: center;
+}
+.mobile-search {
+  padding: 15px 10px;
+  position: relative;
+}
+.mobile-search .form-group {
+  margin-bottom: 0px;
+}
+.mobile-search .search-input {
+  height: 40px;
+  background-color: #f5f5f5;
+  font-size: 10px;
+}
+.mobile-search button {
+  position: absolute;
+  display: inline-block;
+  top: 14px;
+  right: 10px;
+  line-height: 1;
+  padding: 0px 10px;
+  border-radius: 0px;
+  border-left: 1px solid #C1C1C1;
+  font-size: 18px;
+  margin-top: 10px;
+  color: #919191;
+  background-color: transparent;
 }
 html {
   height: 100%;

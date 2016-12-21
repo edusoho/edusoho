@@ -1,0 +1,20 @@
+<div class="footer-tool-bar">
+  <div class="{% if mobile_tool_bar == 'index' %}active{% endif %}">
+    <a href="{{ path('homepage') }}">
+      <i class="es-icon es-icon-home1"></i><br>
+      首页
+    </a>
+  </div>
+  <div class="{% if mobile_tool_bar == 'course' %}active{% endif %}">
+    <a href="{{ path('course_explore') }}">
+      <i class="es-icon es-icon-newshot"></i><br>
+      课程
+    </a>
+  </div>
+  <div class="{% if mobile_tool_bar == 'learning' %}active{% endif %}">
+    <a href="{{ path('my_courses_learning') }}">
+      <i class="es-icon es-icon-write"></i><br>
+      学习
+    </a>
+  </div>
+</div>

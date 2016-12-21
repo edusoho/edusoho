@@ -94,6 +94,8 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
         if (!isset($overview['error'])) {
+            $paidService = array();
+            $unPaidService = array();
             $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
             foreach ($overview['services'] as $key => $value) {
                 if ($value == true) {
@@ -102,18 +104,23 @@ class EduCloudController extends BaseController
                     $unPaidService[] = $key;
                 }
             }
-        }
-        //暂时去掉email
-        foreach ($paidService as $key => $value) {
-            if ($value == 'email') {
-                unset($paidService[$key]);
+                //暂时去掉email
+            foreach ($paidService as $key => $value) {
+                if ($value == 'email') {
+                    unset($paidService[$key]);
+                }
+            }
+            foreach ($unPaidService as $key => $value) {
+                if ($value == 'email') {
+                    unset($unPaidService[$key]);
+                }
+
+                if ($value == 'search') {
+                    unset($unPaidService[$key]);
+                }
             }
         }
-        foreach ($unPaidService as $key => $value) {
-            if ($value == 'email') {
-                unset($unPaidService[$key]);
-            }
-        }
+        
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
@@ -469,12 +476,17 @@ class EduCloudController extends BaseController
 
     protected function checkSmsSign($smsInfo)
     {
-        if (!$smsInfo['name']) {
+        if (empty($smsInfo)) {
             $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
-        }
-        if (!$smsInfo['name'] && $smsInfo['usedSmsSign']['status'] == 'checking') {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+        } else {
+            if (empty($smsInfo['name']) && empty($smsInfo['isExistSmsSign'])) {
+                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            }
+            if (empty($smsInfo['name']) && !empty($smsInfo['isExistSmsSign']) && $smsInfo['usedSmsSign'] == null) {
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+            }
         }
     }
 
