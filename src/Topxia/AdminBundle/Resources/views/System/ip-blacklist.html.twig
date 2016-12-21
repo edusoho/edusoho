@@ -6,13 +6,35 @@
 
 {{ web_macro.flash_messages() }}
 
-<form method="post">
-	<textarea id="ips" name="ips" rows="18" class="form-control">{% if ips  %}{{ips.ips}}{% endif %}
-</textarea>
+<form class="form-horizontal" method="post">
+  <fieldset>
+  <div class="form-group">
 
-  <div class="help-block">{{'一行一个IP，被加入黑名单的IP将被禁止访问！暂不支持网段的封锁!'|trans}}</div>
-  <input type="submit" class="btn btn-primary" value="{{'提交'|trans}}">
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="col-md-2 control-label">
+      <label >{{'IP黑名单'|trans}}</label>
+    </div>
+    <div class="controls col-md-10">
+	  <textarea id="blackListIps" name="blackListIps" rows="8" class="form-control">{% if blackListIps  %}{{blackListIps.ips}}{% endif %}</textarea>
+	  <div class="help-block">{{'一行一个IP，被加入黑名单的IP将被禁止访问！可使用通配符，例如：202.101.20.*。黑名单优先级高于白名单。'|trans}}</div>
+	</div>
+
+    <div class="col-md-2 control-label">
+      <label >{{'IP白名单'|trans}}</label>
+    </div>
+    <div class="controls col-md-10">
+	  <textarea id="whiteListIps" name="whiteListIps" rows="8" class="form-control">{% if whiteListIps  %}{{whiteListIps.ips}}{% endif %}</textarea>
+	  <div class="help-block">{{'一行一个IP，只有列表中的IP地址允许访问系统！可使用通配符，例如：202.101.20.*'|trans}}</div>
+	  <div class="alert alert-info">{{'警告：如果设置了白名单，必须将本机IP包含在内，否则将导致管理员无法访问系统！'|trans}}</div>
+
+	</div>
+
+	<div class="col-md-2 control-label"></div>
+	<div class="controls col-md-10">
+	  <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</div>
+  </div>
+  </fieldset>
 </form>
 
 {% endblock %}
