@@ -37,9 +37,9 @@ define(function(require, exports, module) {
         });
 
         $('.courses-list').on('click', '.pagination li', function() {
-            var url = $('.courses-list').find('.pagination').data('url');
+            var url = $(this).data('url');
             if (typeof(url) !== 'undefined') {
-                $.post(url+'?page='+$(this).data('page'), $('.form-search').serialize(),function(data){
+                $.post(url, $('.form-search').serialize(),function(data){
                     $('.courses-list').html(data);
                 });
             }

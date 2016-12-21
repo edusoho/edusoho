@@ -101,8 +101,7 @@
 </ul>
 
 {% if type|default('') == 'ajax_pagination' %}
-{% set url = path('classroom_course_search',{classroomId:classroomId}) %}
-{{ web_macro.ajax_paginator(paginator, url) }}
+{{ web_macro.ajax_paginator(paginator) }}
 {% else %}
 {{ web_macro.paginator(paginator) }}
 {% endif %}
