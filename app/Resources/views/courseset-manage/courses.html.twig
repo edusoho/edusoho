@@ -34,29 +34,29 @@
       			<td>{{course.price|currency}}{{'元'|trans}}</td> {# 货币国际化？ #}
       			<td>
       				<div class="btn-group">
-		                <a class="btn btn-default btn-sm" href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
-		                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-		                  <span class="caret"></span>
+		                <a class="mrl" href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
+		                <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      更多<i class="es-icon es-icon-keyboardarrowdown"></i>
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}">{{'预览'|trans}}</a>
+		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}"><i class="es-icon es-icon-removeredeye mrm"></i>{{'预览'|trans}}</a>
 		                  </li>
-	      				  {# <li>
-	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
-	      				  </li> #}
-                    {% if course.status|default('') == 'published' %}
-      				      <li>
-      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course">{{'关闭'|trans}}</a>
-      				      </li>
-                    {% else %}
-      				      <li>
-      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-delete-course">{{'删除'|trans}}</a>
-      				      </li>
-      				      <li>
-      				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-publish-course">{{'发布'|trans}}</a><!-- 已发布的不能删除，可关闭 -->
-      				      </li>
-                    {% endif %}
+    	      				  {# <li>
+    	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
+    	      				  </li> #}
+                      {% if course.status|default('') == 'published' %}
+        				      <li>
+        				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course"><i class="es-icon es-icon-close01 mrm"></i>{{'取消发布'|trans}}</a>
+        				      </li>
+                      {% else %}
+        				      <li>
+        				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-delete-course"><i class="es-icon es-icon-delete mrm"></i>{{'删除'|trans}}</a>
+        				      </li>
+        				      <li>
+        				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-publish-course"><i class="es-icon es-icon--check-circle mrm"></i>{{'发布'|trans}}</a><!-- 已发布的不能删除，可关闭 -->
+        				      </li>
+                      {% endif %}
 		                </ul>
 		            </div>
       			</td>
