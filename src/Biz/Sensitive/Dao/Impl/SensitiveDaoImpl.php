@@ -8,6 +8,11 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
 {
     protected $table = 'keyword';
 
+    public function declares()
+    {
+        return array();
+    }
+
     public function getByName($name)
     {
         return $this->getByFields(array('name' => $name));
@@ -22,7 +27,7 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
     public function findByState($state)
     {
         $sql = "SELECT * FROM {$this->table} where state = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql, array($state));
+        return $this->db()->fetchAll($sql, array($state));
     }
 
 
