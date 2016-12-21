@@ -87,7 +87,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
         $day = date('d', time());
 
-        $signDay = $this->getSignService()->getSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
+        $signDay = $this->getSignService()->findSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
         $notSign = $day-count($signDay);
 
         if (!empty($userSignStatistics)) {
