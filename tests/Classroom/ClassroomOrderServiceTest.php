@@ -33,7 +33,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testCreateOrderWithEmptyInfo()
     {
@@ -42,7 +42,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testCreateOrderWithIsStudent()
     {
@@ -58,7 +58,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testCreateOrderWithEmptyClassroom()
     {
@@ -73,7 +73,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testCreateOrderWithEmptyCantBuyClassroom()
     {
@@ -121,7 +121,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testDoSuccessPayOrderNotClassroomOrder()
     {
@@ -178,7 +178,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException \Topxia\Service\Common\ServiceException
      */
     public function testApplyRefundOrderWithEmptyOrder()
     {

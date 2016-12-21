@@ -81,6 +81,6 @@ class SubtitleServiceTest extends BaseTestCase
 
     protected function getSubtitleService()
     {
-        return $this->createService('Subtitle:SubtitleService');
+        return $this->getBiz()->service('Subtitle:SubtitleService');
     }
 }

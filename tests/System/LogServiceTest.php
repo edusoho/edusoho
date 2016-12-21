@@ -82,7 +82,7 @@ class LogServiceTest extends BaseTestCase
      */
     protected function getLogService()
     {
-        return $this->createService('System:LogService');
+        return $this->getBiz()->service('System:LogService');
     }
 
 }
