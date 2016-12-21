@@ -54,7 +54,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function getClassroomByCourseId($courseId)
     {
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
-        if(empty($classroomIds)) {
+        if (empty($classroomIds)) {
             return array();
         }
         
@@ -188,7 +188,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * 要过滤要更新的字段
      */
     public function updateClassroom($id, $fields)
-    {   
+    {
         $user = $this->getCurrentUser();
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
@@ -1440,7 +1440,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields['learnedNum'] = $userLearnCount;
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
-        return $this->updateMember($classroomMember['id'], $fields);       
+        return $this->updateMember($classroomMember['id'], $fields);
+    }
+
+    public function calculateUserLearnProgress($classroomId, $userId)
+    {
+
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
