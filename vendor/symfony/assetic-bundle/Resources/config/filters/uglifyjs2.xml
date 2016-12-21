@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.uglifyjs2.class">Assetic\Filter\UglifyJs2Filter</parameter>
+        <parameter key="assetic.filter.uglifyjs2.bin">/usr/bin/uglifyjs</parameter>
+        <parameter key="assetic.filter.uglifyjs2.node">%assetic.node.bin%</parameter>
+        <parameter key="assetic.filter.uglifyjs2.timeout">null</parameter>
+        <parameter key="assetic.filter.uglifyjs2.node_paths">%assetic.node.paths%</parameter>
+        <parameter key="assetic.filter.uglifyjs2.compress">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.beautify">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.mangle">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.screw_ie8">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.comments">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.wrap">false</parameter>
+        <parameter key="assetic.filter.uglifyjs2.defines" type="collection"></parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.uglifyjs2" class="%assetic.filter.uglifyjs2.class%">
+            <tag name="assetic.filter" alias="uglifyjs2" />
+            <argument>%assetic.filter.uglifyjs2.bin%</argument>
+            <argument>%assetic.filter.uglifyjs2.node%</argument>
+            <call method="setTimeout"><argument>%assetic.filter.uglifyjs2.timeout%</argument></call>
+            <call method="setNodePaths"><argument>%assetic.filter.uglifyjs2.node_paths%</argument></call>
+            <call method="setCompress"><argument>%assetic.filter.uglifyjs2.compress%</argument></call>
+            <call method="setBeautify"><argument>%assetic.filter.uglifyjs2.beautify%</argument></call>
+            <call method="setMangle"><argument>%assetic.filter.uglifyjs2.mangle%</argument></call>
+            <call method="setScrewIe8"><argument>%assetic.filter.uglifyjs2.screw_ie8%</argument></call>
+            <call method="setComments"><argument>%assetic.filter.uglifyjs2.comments%</argument></call>
+            <call method="setWrap"><argument>%assetic.filter.uglifyjs2.wrap%</argument></call>
+            <call method="setDefines"><argument>%assetic.filter.uglifyjs2.defines%</argument></call>
+        </service>
+    </services>
+</container>

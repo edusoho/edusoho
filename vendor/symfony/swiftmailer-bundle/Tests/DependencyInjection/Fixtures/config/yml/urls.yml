@@ -1,0 +1,5 @@
+swiftmailer:
+    default_mailer: smtp_mailer
+    mailers:
+        smtp_mailer:
+            url: smtp://username:password@example.com:12345?encryption=tls&auth_mode=login

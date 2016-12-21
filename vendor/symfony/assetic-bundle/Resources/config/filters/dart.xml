@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.dart.class">Assetic\Filter\DartFilter</parameter>
+        <parameter key="assetic.filter.dart.bin">/usr/bin/dart2js</parameter>
+        <parameter key="assetic.filter.dart.timeout">null</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.dart" class="%assetic.filter.dart.class%">
+            <tag name="assetic.filter" alias="dart" />
+            <argument>%assetic.filter.dart.bin%</argument>
+            <call method="setTimeout"><argument>%assetic.filter.dart.timeout%</argument></call>
+        </service>
+    </services>
+</container>
