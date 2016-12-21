@@ -251,7 +251,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        //@TODO course2.0后 应改为教学计划的复制
+/*        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
             $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
@@ -263,7 +264,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
                 $this->getAnnouncementService()->createAnnouncement($fields);
             }
-        }
+        }*/
 
         return true;
     }
@@ -281,6 +282,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
+        //@TODO course2.0后 应改为教学计划的复制
+/*
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
@@ -301,7 +304,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
                 $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
             }
-        }
+        }*/
 
         return true;
     }
@@ -319,7 +322,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        //@TODO course2.0后 应改为教学计划的复制
+        /*$courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
             $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
@@ -335,7 +339,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             foreach ($copyAnnouncements as $copyAnnouncement) {
                 $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
             }
-        }
+        }*/
 
         return true;
     }

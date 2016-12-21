@@ -61,7 +61,8 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             'number',
             'note',
             'deadline',
-            'batchName'
+            'batchName',
+            'passwordLength'
         ));
 
         if (isset($batch['money'])) {

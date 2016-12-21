@@ -2,9 +2,9 @@
 namespace Biz\Order\Service\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardDao;
+use Biz\Order\Service\MoneyService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Order\MoneyService;
 
 class MoneyServiceImpl extends BaseService implements MoneyService
 {

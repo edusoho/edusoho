@@ -5,7 +5,7 @@ interface CourseNoteService
 {
     public function getNote($id);
 
-    public function findCourseNotesByUserIdAndTaskId($userId, $taskId);
+    public function getCourseNoteByUserIdAndTaskId($userId, $taskId);
 
     public function findCourseNotesByUserIdAndCourseId($userId, $courseId);
 
@@ -13,7 +13,7 @@ interface CourseNoteService
 
     public function countCourseNotes($conditions);
 
-    public function createCourseNote(array $note);
+    public function saveNote(array $note);
 
     public function deleteNote($id);
 

@@ -221,7 +221,7 @@ class ManageController extends BaseController
 
         $data           = $request->request->all();
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
-        $result         = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
+        $result         = $this->getTestpaperService()->canBuildTestpaper('testpaper', $data);
         return $this->createJsonResponse($result);
     }
 

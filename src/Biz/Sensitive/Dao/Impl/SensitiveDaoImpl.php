@@ -1,17 +1,12 @@
 <?php
 namespace Biz\Sensitive\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Sensitive\Dao\SensitiveDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
 {
     protected $table = 'keyword';
-
-    public function declares()
-    {
-        return array();
-    }
 
     public function getByName($name)
     {
@@ -26,10 +21,23 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
 
     public function findByState($state)
     {
-        $sql = "SELECT * FROM {$this->table} where state = ? ORDER BY createdTime DESC";
-        return $this->db()->fetchAll($sql, array($state));
+        return $this->findInField('state', array($state));
     }
 
+    public function declares()
+    {
+        $declares['orderbys'] = array(
+            'createdTime'
+        );
+
+        $declares['conditions'] = array(
+            'id = :id',
+            'state = :state',
+            'UPPER(name) LIKE :name'
+        );
+
+        return $declares;
+    }
 
     protected function _createQueryBuilder($conditions)
     {
@@ -50,17 +58,15 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
         if (isset($conditions['keyword'])) {
             if ($conditions['searchKeyWord'] == 'id') {
                 $conditions['id'] = $conditions['keyword'];
-            } else
-
-            if ($conditions['searchKeyWord'] == 'name') {
+            } elseif ($conditions['searchKeyWord'] == 'name') {
                 $conditions['name'] = "%{$conditions['keyword']}%";
             }
         }
 
         return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'keyword')
-                    ->andWhere('id = :id')
-                    ->andWhere('state = :state')
-                    ->andWhere('UPPER(name) LIKE :name');
+            ->from($this->table, 'keyword')
+            ->andWhere('id = :id')
+            ->andWhere('state = :state')
+            ->andWhere('UPPER(name) LIKE :name');
     }
 }

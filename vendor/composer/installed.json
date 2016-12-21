@@ -21,7 +21,7 @@
             "symfony/debug": "~2.7",
             "symfony/phpunit-bridge": "~2.7"
         },
-        "time": "2016-10-05T18:57:41+00:00",
+        "time": "2016-10-05 18:57:41",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -87,7 +87,7 @@
         "suggest": {
             "psr/cache-implementation": "To make use of PSR-6 cache implementation via PsrCacheAdapter."
         },
-        "time": "2016-06-14T09:16:57+00:00",
+        "time": "2016-06-14 09:16:57",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -142,7 +142,7 @@
             "predis/predis": "Required to use the Redis storage engine",
             "thobbs/phpcassa": "Required to use the Cassandra storage engine"
         },
-        "time": "2015-09-18T18:05:10+00:00",
+        "time": "2015-09-18 18:05:10",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -261,7 +261,7 @@
             "phpdocumentor/reflection": "^1.0.7",
             "symfony/phpunit-bridge": "~3.2"
         },
-        "time": "2016-10-03T18:44:12+00:00",
+        "time": "2016-10-03 18:44:12",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -336,7 +336,7 @@
             "symfony/class-loader": "For using the ACL generateSql script",
             "symfony/finder": "For using the ACL generateSql script"
         },
-        "time": "2015-12-28T09:39:09+00:00",
+        "time": "2015-12-28 09:39:09",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -387,7 +387,7 @@
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -442,7 +442,7 @@
             "paragonie/random_compat": "~1.0|~2.0",
             "php": ">=5.3.3"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -503,7 +503,7 @@
             "php": ">=5.3.3",
             "symfony/polyfill-util": "~1.0"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -560,7 +560,7 @@
         "require-dev": {
             "phpunit/phpunit": "4.*"
         },
-        "time": "2014-11-20T16:49:30+00:00",
+        "time": "2014-11-20 16:49:30",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -605,7 +605,7 @@
             "ircmaxell/password-compat": "~1.0",
             "php": ">=5.3.3"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -662,7 +662,7 @@
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -725,7 +725,7 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -787,7 +787,7 @@
         "suggest": {
             "ext-intl": "For best performance"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -843,7 +843,7 @@
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2016-05-18T14:26:46+00:00",
+        "time": "2016-05-18 14:26:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -898,7 +898,7 @@
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2016-10-10T12:19:37+00:00",
+        "time": "2016-10-10 12:19:37",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -947,7 +947,7 @@
         "require": {
             "php": ">=5.3.2"
         },
-        "time": "2014-09-09T13:34:57+00:00",
+        "time": "2014-09-09 13:34:57",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1006,7 +1006,7 @@
         "require-dev": {
             "phpunit/phpunit": "4.*"
         },
-        "time": "2015-11-06T14:35:42+00:00",
+        "time": "2015-11-06 14:35:42",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1075,7 +1075,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2015-04-14T22:21:58+00:00",
+        "time": "2015-04-14 22:21:58",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1148,7 +1148,7 @@
             "predis/predis": "~1.0",
             "satooshi/php-coveralls": "~0.6"
         },
-        "time": "2015-12-31T16:37:02+00:00",
+        "time": "2015-12-31 16:37:02",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1217,7 +1217,7 @@
             "doctrine/cache": "1.*",
             "phpunit/phpunit": "4.*"
         },
-        "time": "2015-08-31T12:32:49+00:00",
+        "time": "2015-08-31 12:32:49",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1284,7 +1284,7 @@
             "php": ">=5.3.0",
             "symfony/http-foundation": ">=2.1"
         },
-        "time": "2014-08-27T15:40:29+00:00",
+        "time": "2014-08-27 15:40:29",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1337,7 +1337,7 @@
             "doctrine/orm": "2.4.*",
             "symfony/symfony": "2.5.*"
         },
-        "time": "2014-10-15T22:50:28+00:00",
+        "time": "2014-10-15 22:50:28",
         "type": "symfony-bundle",
         "installation-source": "dist",
         "autoload": {
@@ -1381,7 +1381,7 @@
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2015-09-11T15:10:35+00:00",
+        "time": "2015-09-11 15:10:35",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1437,7 +1437,7 @@
         "suggest": {
             "symfony/console": "For helpful console commands such as SQL execution and import of files."
         },
-        "time": "2016-09-09T19:13:33+00:00",
+        "time": "2016-09-09 19:13:33",
         "bin": [
             "bin/doctrine-dbal"
         ],
@@ -1513,7 +1513,7 @@
         "suggest": {
             "pimple/pimple": "Pimple allows to bootstrap phpmig really easily."
         },
-        "time": "2015-07-29T08:00:40+00:00",
+        "time": "2015-07-29 08:00:40",
         "bin": [
             "bin/phpmig"
         ],
@@ -1591,7 +1591,7 @@
         "suggest": {
             "symfony/security-acl": "For using this bundle to cache ACLs"
         },
-        "time": "2016-01-26T17:28:51+00:00",
+        "time": "2016-01-26 17:28:51",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1662,7 +1662,7 @@
         "require-dev": {
             "phpunit/phpunit": "3.7.*"
         },
-        "time": "2014-01-12T16:20:24+00:00",
+        "time": "2014-01-12 16:20:24",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1732,7 +1732,7 @@
             "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
             "symfony/web-profiler-bundle": "To use the data collector."
         },
-        "time": "2016-08-10T15:35:22+00:00",
+        "time": "2016-08-10 15:35:22",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1811,7 +1811,7 @@
             "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
             "symfony/security-bundle": ""
         },
-        "time": "2016-03-25T17:08:27+00:00",
+        "time": "2016-03-25 17:08:27",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1860,7 +1860,7 @@
             "php": ">=5.3.0",
             "symfony/options-resolver": "^2.3|^3.0"
         },
-        "time": "2016-07-26T09:39:07+00:00",
+        "time": "2016-07-26 09:39:07",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1911,7 +1911,7 @@
         "require": {
             "php": ">=5.2"
         },
-        "time": "2016-07-16T12:58:58+00:00",
+        "time": "2016-07-16 12:58:58",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1967,7 +1967,7 @@
             "symfony/stopwatch": "^2.0.0",
             "symfony/yaml": "^2.0.0"
         },
-        "time": "2016-04-22T21:03:23+00:00",
+        "time": "2016-04-22 21:03:23",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2013,7 +2013,7 @@
             "ext-gd": "*",
             "php": ">=5.3.0"
         },
-        "time": "2015-09-11T15:23:20+00:00",
+        "time": "2015-09-11 15:23:20",
         "type": "captcha",
         "installation-source": "dist",
         "autoload": {
@@ -2070,7 +2070,7 @@
             "ext-gmagick": "to use the Gmagick implementation",
             "ext-imagick": "to use the Imagick implementation"
         },
-        "time": "2015-09-19T16:54:05+00:00",
+        "time": "2015-09-19 16:54:05",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2127,7 +2127,7 @@
             "phpspec/prophecy-phpunit": "~1.0",
             "symfony/filesystem": "~2.2"
         },
-        "time": "2015-11-10T17:04:01+00:00",
+        "time": "2015-11-10 17:04:01",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2176,7 +2176,7 @@
             "ext-xmlwriter": "*",
             "php": ">=5.2.0"
         },
-        "time": "2015-05-01T07:00:55+00:00",
+        "time": "2015-05-01 07:00:55",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2233,7 +2233,7 @@
         "require": {
             "symfony/console": "~2.7|~3.0"
         },
-        "time": "2016-09-23T18:09:57+00:00",
+        "time": "2016-09-23 18:09:57",
         "bin": [
             "security-checker"
         ],
@@ -2286,7 +2286,7 @@
             "symfony/http-kernel": "~2.3|~3.0",
             "symfony/process": "~2.3|~3.0"
         },
-        "time": "2016-10-08T18:50:33+00:00",
+        "time": "2016-10-08 18:50:33",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -2369,7 +2369,7 @@
             "symfony/var-dumper": "~2.8|^3.0",
             "twig/twig": "~1.8|~2.0"
         },
-        "time": "2016-08-22T17:50:21+00:00",
+        "time": "2016-08-22 17:50:21",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2446,7 +2446,7 @@
             "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
             "twig/twig": "Assetic provides the integration with the Twig templating engine"
         },
-        "time": "2015-11-12T13:51:40+00:00",
+        "time": "2015-11-12 13:51:40",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2521,7 +2521,7 @@
             "kriswallsmith/spork": "to be able to dump assets in parallel",
             "symfony/twig-bundle": "to use the Twig integration"
         },
-        "time": "2015-12-28T13:12:39+00:00",
+        "time": "2015-12-28 13:12:39",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -2601,7 +2601,7 @@
             "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
             "sentry/sentry": "Allow sending log messages to a Sentry server"
         },
-        "time": "2016-07-29T03:23:52+00:00",
+        "time": "2016-07-29 03:23:52",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2661,7 +2661,7 @@
             "symfony/console": "~2.3|~3.0",
             "symfony/yaml": "~2.3|~3.0"
         },
-        "time": "2016-04-13T16:21:01+00:00",
+        "time": "2016-04-13 16:21:01",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -2716,7 +2716,7 @@
         "require-dev": {
             "mockery/mockery": "~0.9.1"
         },
-        "time": "2016-07-08T11:51:25+00:00",
+        "time": "2016-07-08 11:51:25",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2779,7 +2779,7 @@
         "suggest": {
             "psr/log": "Allows logging"
         },
-        "time": "2016-01-15T16:41:20+00:00",
+        "time": "2016-01-15 16:41:20",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -2836,7 +2836,7 @@
             "phpunit/php-file-iterator": "1.3.3",
             "satooshi/php-coveralls": "dev-master"
         },
-        "time": "2015-05-11T14:41:42+00:00",
+        "time": "2015-05-11 14:41:42",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2879,7 +2879,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2016-05-22T21:52:33+00:00",
+        "time": "2016-05-22 21:52:33",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2949,7 +2949,7 @@
             "symfony/doctrine-bridge": "~2.7|~3.0",
             "twig/twig": "~1.18"
         },
-        "time": "2016-10-10T14:17:42+00:00",
+        "time": "2016-10-10 14:17:42",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -2998,7 +2998,7 @@
         "suggest": {
             "symfony/debug": "For tracking deprecated interfaces usages at runtime with DebugClassLoader"
         },
-        "time": "2016-08-19T06:48:39+00:00",
+        "time": "2016-08-19 06:48:39",
         "type": "symfony-bridge",
         "extra": {
             "branch-alias": {
@@ -3060,7 +3060,7 @@
         "require-dev": {
             "phpunit/phpunit": "~3.7"
         },
-        "time": "2015-08-31T14:38:45+00:00",
+        "time": "2015-08-31 14:38:45",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3138,7 +3138,7 @@
         "suggest": {
             "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
         },
-        "time": "2015-08-31T13:19:01+00:00",
+        "time": "2015-08-31 13:19:01",
         "bin": [
             "bin/doctrine",
             "bin/doctrine.php"
@@ -3209,7 +3209,7 @@
             "symfony/browser-kit": "^2.3|^3.0",
             "symfony/framework-bundle": "^2.3|^3.0"
         },
-        "time": "2016-01-16T00:41:57+00:00",
+        "time": "2016-01-16 00:41:57",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3268,7 +3268,7 @@
         "suggest": {
             "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
         },
-        "time": "2016-10-17T15:23:22+00:00",
+        "time": "2016-10-17 15:23:22",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3325,7 +3325,7 @@
             "symfony/twig-bundle": "~2.3|~3.0",
             "symfony/yaml": "~2.3|~3.0"
         },
-        "time": "2015-11-10T13:04:08+00:00",
+        "time": "2015-11-10 13:04:08",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -3356,43 +3356,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.1.7",
-        "version_normalized": "0.1.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/69eb16e1bf90b80567d88aa88aab697ee292a5a6.zip",
-            "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "time": "2016-11-22T08:31:24+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.1.4",
         "version_normalized": "0.1.4.0",
@@ -3414,7 +3377,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2016-10-18T06:00:00+00:00",
+        "time": "2016-10-18 06:00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3456,7 +3419,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.8|~5.0"
         },
-        "time": "2016-12-01T04:00:35+00:00",
+        "time": "2016-12-01 04:00:35",
         "type": "symfony-bundle",
         "installation-source": "dist",
         "autoload": {
@@ -3506,7 +3469,7 @@
         "suggest": {
             "ext-redis": "^2.2"
         },
-        "time": "2016-12-05T08:06:43+00:00",
+        "time": "2016-12-05 08:06:43",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3545,7 +3508,7 @@
             "codeages/biz-framework": "^0.1.6",
             "codeages/rate-limiter": "^0.1.3"
         },
-        "time": "2016-12-06T09:13:51+00:00",
+        "time": "2016-12-06 09:13:51",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3580,7 +3543,7 @@
         "require-dev": {
             "phpunit/phpunit": ">=4.0.0"
         },
-        "time": "2016-02-13T11:45:07+00:00",
+        "time": "2016-02-13 11:45:07",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3611,5 +3574,42 @@
             "security",
             "xxtea"
         ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.1.8",
+        "version_normalized": "0.1.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "e19e959627156dd0f6b4e034dc8a085539b107da"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/e19e959627156dd0f6b4e034dc8a085539b107da.zip",
+            "reference": "e19e959627156dd0f6b4e034dc8a085539b107da",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "time": "2016-12-15 06:24:17",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]
