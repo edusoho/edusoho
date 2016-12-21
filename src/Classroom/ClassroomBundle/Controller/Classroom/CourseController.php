@@ -124,11 +124,12 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-search-select-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
             'courses' => $courses,
             'paginator' => $paginator,
-            'classroomId' => $classroomId
+            'classroomId' => $classroomId,
+            'type' => 'ajax_pagination'
         ));
     }
 

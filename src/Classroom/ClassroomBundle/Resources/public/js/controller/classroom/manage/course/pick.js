@@ -37,9 +37,12 @@ define(function(require, exports, module) {
         });
 
         $('.courses-list').on('click', '.pagination li', function() {
-            $.post($('.courses-list').find('.pagination').data('url')+'?page='+$(this).data('page'), $('.form-search').serialize(),function(data){
-                $('.courses-list').html(data);
-            });
+            var url = $('.courses-list').find('.pagination').data('url');
+            if (typeof(url) !== 'undefined') {
+                $.post(url+'?page='+$(this).data('page'), $('.form-search').serialize(),function(data){
+                    $('.courses-list').html(data);
+                });
+            }
         });
 
         $('#enterSearch').keydown(function(event){

@@ -99,5 +99,10 @@
   <div class="empty">{{'找不到相关课程！'|trans}}</div>
   {% endif %}
 </ul>
-{% block paginator %}
-{% endblock %}
+
+{% if type|default('') == 'ajax_pagination' %}
+{% set url = path('classroom_course_search',{classroomId:classroomId}) %}
+{{ web_macro.ajax_paginator(paginator, url) }}
+{% else %}
+{{ web_macro.paginator(paginator) }}
+{% endif %}
