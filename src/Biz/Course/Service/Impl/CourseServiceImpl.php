@@ -391,7 +391,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int) $num,
+            'noteNum'            => (int)$num,
             'noteLastUpdateTime' => time()
         ));
 
@@ -579,7 +579,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime'=>'DESC'), $start, $limit);
         } else {
             $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
@@ -723,6 +723,43 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $conditions;
+    }
+
+
+    public function searchCourses($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        $orderBy    = $this->_prepareCourseOrderBy($sort);
+
+        return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function _prepareCourseOrderBy($sort)
+    {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'popular' || $sort == 'hitNum') {
+            $orderBy = array('hitNum'=>'DESC');
+        } elseif ($sort == 'recommended') {
+            $orderBy = array('recommendedTime'=>'DESC');
+        } elseif ($sort == 'Rating') {
+            $orderBy = array('Rating'=>'DESC');
+        } elseif ($sort == 'studentNum') {
+            $orderBy = array('studentNum'=>'DESC');
+        } elseif ($sort == 'recommendedSeq') {
+            $orderBy = array('recommendedSeq'=> 'ASC', 'recommendedTime'=>'DESC');
+        } elseif ($sort == 'createdTimeByAsc') {
+            $orderBy = array('createdTime'=> 'ASC');
+        } else {
+            $orderBy = array('createdTime'=>'DESC');
+        }
+        return $orderBy;
+    }
+
+    public function searchCourseCount($conditions)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+        return $this->getCourseDao()->count($conditions);
     }
 
     protected function createCourseStrategy($course)

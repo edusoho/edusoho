@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 {
@@ -184,7 +184,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
 
     		if (empty($member)) {
-        		throw $this->createErrorResponse('error', '您不是班级的学员。');
+        		return  $this->createErrorResponse('error', '您不是班级的学员。');
     		}
 
     		if (!in_array($member["role"], array("auditor", "student"))) {
@@ -210,7 +210,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$targetType = $this->getParam("targetType");
 
         if(!in_array($targetType, array("course", "classroom"))) {
-            throw $this->createErrorResponse('error', '退出学习失败');
+            return  $this->createErrorResponse('error', '退出学习失败');
         }
         $processor = OrderRefundProcessorFactory::create($targetType);
 
