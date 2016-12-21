@@ -23,7 +23,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->get($id);
     }
 
-    public function findCourseNotesByUserIdAndTaskId($userId, $taskId)
+    public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getNoteDao()->getByUserIdAndTaskId($userId, $taskId);
     }
@@ -51,10 +51,10 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      * @return array
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
-    public function createCourseNote(array $note)
+    public function saveNote(array $note)
     {
         if (!ArrayToolkit::requireds($note, array('taskId', 'courseId', 'content'))) {
-            throw $this->createServiceException('缺少必要的字段，保存笔记失败');
+            throw $this->createInvalidArgumentException('缺少必要的字段，保存笔记失败');
         }
 
         $this->getCourseService()->tryTakeCourse($note['courseId']);
@@ -76,7 +76,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $note['content'] = $this->biz['html_helper']->purify($note['content']) ?: '';
         $note['length']  = $this->calculateContentLength($note['content']);
 
-        $existNote = $this->findCourseNotesByUserIdAndTaskId($user['id'], $note['taskId']);
+        $existNote = $this->getCourseNoteByUserIdAndTaskId($user['id'], $note['taskId']);
         if (!$existNote) {
             $note['userId']      = $user['id'];
             $note                = $this->getNoteDao()->create($note);
