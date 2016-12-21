@@ -19,7 +19,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
      */
     public function getCourse($id)
     {
-        return $this->getOpenCourseDao()->getCourse($id);
+        return $this->getOpenCourseDao()->get($id);
     }
 
     public function findCoursesByIds(array $ids)
@@ -522,7 +522,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getCourseLesson($courseId, $lessonId)
     {
-        $lesson = $this->getOpenCourseLessonDao()->update($lessonId);
+        $lesson = $this->getOpenCourseLessonDao()->get($lessonId);
 
         if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
             return null;

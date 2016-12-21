@@ -3,8 +3,7 @@ namespace Biz\OpenCourse\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Taxonomy\TagOwnerManager;
+use Biz\Taxonomy\TagOwnerManager;
 
 class OpenCourseEventSubscriber extends EventSubscriber
 {
