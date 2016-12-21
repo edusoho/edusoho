@@ -48,7 +48,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         }
 
         
-        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime', 'DESC'), 0, $arguments['count']);
+        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime'=>'DESC'), 0, $arguments['count']);
 
         if ($statuses) {
             $userIds = ArrayToolkit::column($statuses, 'userId');
