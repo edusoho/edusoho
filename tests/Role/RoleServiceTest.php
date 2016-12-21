@@ -26,16 +26,24 @@ class  RoleServiceTest extends BaseTestCase
             $getAdminRole = array_merge($adminRole->column('code'), $getAdminRole);
         }
         $getAdminRole = array_diff($getSuperAdminRole, $getAdminRole);
+
         $getTeacherRole = $permissionTree->find(function ($tree){
             return $tree->data['code'] === 'web';
         });
         $getUserRole = array();
 
         $userRoles = $this->getRoleService()->refreshRoles();
-        $this->assertEquals(count($getSuperAdminRole), count($userRoles['ROLE_SUPER_ADMIN']['data']));
-        $this->assertEquals(count($getAdminRole), count($userRoles['ROLE_ADMIN']['data']));
-        $this->assertEquals(count($getTeacherRole->column('code')), count($userRoles['ROLE_TEACHER']['data']));
-        $this->assertEquals(count($getUserRole), count($userRoles['ROLE_USER']['data']));
+        $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
+        $this->assertEquals(count($getSuperAdminRole), count($role['data']));
+
+        $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
+        $this->assertEquals(count($getAdminRole), count($role['data']));
+
+        $role = $this->getRoleService()->getRoleByCode('ROLE_TEACHER');
+        $this->assertEquals(count($getTeacherRole->column('code')), count($role['data']));
+        
+        $role = $this->getRoleService()->getRoleByCode('ROLE_USER');
+        $this->assertEquals(count($getUserRole), count($role['data']));
     }
 
     protected function getRoleService()
