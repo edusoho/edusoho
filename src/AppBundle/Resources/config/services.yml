@@ -112,6 +112,11 @@ services:
         arguments: ['@biz']
         tags:
                 - { name: codeages_plugin.event.subscriber }
+    tokenbucket_event_subscriber:
+        class: Biz\PostFilter\Event\TokenBucketEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
 
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
