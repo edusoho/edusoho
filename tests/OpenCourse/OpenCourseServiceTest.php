@@ -40,7 +40,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $course1 = $this->_createLiveOpenCourse();
         $course2 = $this->_createOpenCourse();
 
-        $courses = $this->getOpenCourseService()->searchCourses(array('type' => 'liveOpen'), array('createdTime', 'DESC'), 0, 1);
+        $courses = $this->getOpenCourseService()->searchCourses(array('type' => 'liveOpen'), array('createdTime'=> 'DESC'), 0, 1);
 
         $this->assertNotEmpty($courses);
         $this->assertEquals($courses[0]['title'], $course1['title']);
@@ -247,7 +247,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $lesson1 = $this->_createOpenLiveCourseLesson($course1);
         $lesson2 = $this->_createOpenCourseLesson($course2);
 
-        $lessons = $this->getOpenCourseService()->searchLessons(array('type' => 'liveOpen'), array('createdTime', 'DESC'), 0, 1);
+        $lessons = $this->getOpenCourseService()->searchLessons(array('type' => 'liveOpen'), array('createdTime'=> 'DESC'), 0, 1);
 
         $this->assertCount(1, $lessons);
         $this->assertEquals($lessons[0]['title'], $lesson1['title']);
@@ -296,7 +296,8 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $lesson = $this->getOpenCourseService()->waveCourseLesson($lesson1['id'], 'materialNum', +1);
 
-        $this->assertEquals(1, $lesson['materialNum']);
+        $updatedLesson = $this->getOpenCourseService()->getCourseLesson($lesson1['courseId'],$lesson1['id']);
+        $this->assertEquals(1, $updatedLesson['materialNum']);
     }
 
     public function testUnpublishLesson()
@@ -407,7 +408,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $this->getOpenCourseService()->updateMember($courseMember2['id'], array('mobile' => '15869165222', 'isNotified' => 1));
-        $members = $this->getOpenCourseService()->searchMembers(array('mobile' => '15869165222'), array('createdTime', 'DESC'), 0, 1);
+        $members = $this->getOpenCourseService()->searchMembers(array('mobile' => '15869165222'), array('createdTime'=> 'DESC'), 0, 1);
 
         $this->assertCount(1, $members);
         $this->assertEquals($courseMember2['userId'], $members[0]['userId']);

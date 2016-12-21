@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Classroom\Dao\Impl;
-
 
 use Biz\Classroom\Dao\ClassroomCourseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -18,7 +16,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
             'conditions' => array(
                 'classroomId =:classroomId',
                 'courseId = :courseId'
-            ),
+            )
         );
     }
 
@@ -47,7 +45,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
 
     public function getByClassroomIdAndCourseId($classroomId, $courseId)
     {
-        $sql = "SELECT * FROM {$this->table()} where classroomId = ? AND courseId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} where classroomId = ? AND courseId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
     }
 
@@ -73,7 +71,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
 
     public function findByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? ORDER BY seq ASC;";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? ORDER BY seq ASC;";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
@@ -101,11 +99,9 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
     }
 
-
     public function findActiveCoursesByClassroomId($classroomId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
-
 }

@@ -6,10 +6,9 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceKernel;
 
-class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber implements EventSubscriberInterface
+class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber
 {
     public static function getSubscribedEvents()
     {
@@ -75,7 +74,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     private function getCardService()
     {
-        return $this->createService('Card:CardService');
+        return $this->getBiz()->service('Card:CardService');
     }
 
     /**
@@ -83,12 +82,12 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getInviteRecordService()
     {
-        return $this->createService('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon:CouponService');
+        return $this->getBiz()->service('Coupon:CouponService');
     }
 
     /**
@@ -96,7 +95,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**
@@ -104,7 +103,7 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber imple
      */
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function createService($name)

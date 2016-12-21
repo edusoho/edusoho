@@ -9,7 +9,7 @@ use Biz\Activity\Service\ActivityService;
 class ActivityServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateActivityWhenInvalidArgument()
     {
@@ -111,7 +111,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getActivityService()
     {
-        return $this->createService('Activity:ActivityService');
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**
@@ -119,7 +119,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->createService('Task:TaskService');
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     /**

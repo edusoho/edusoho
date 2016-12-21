@@ -156,21 +156,21 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmount($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(amount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisCoinAmount($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(coinAmount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisTotalPrice($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(totalPrice)');
         return $builder->execute()->fetchColumn(0);
     }
@@ -201,7 +201,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTime($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select("from_unixtime(paidTime,'%Y-%m-%d') date, sum(amount) as count")
             ->groupBy("from_unixtime(`paidTime`,'%Y-%m-%d')")
             ->orderBy($orderBy[0], $orderBy[1])
@@ -212,7 +212,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('title')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -223,7 +223,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('userId')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -247,7 +247,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisOrderDate($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
             ->groupBy('date');
         return $builder->execute()->fetchAll(0) ?: array();

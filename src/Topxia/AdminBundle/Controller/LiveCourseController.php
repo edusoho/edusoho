@@ -11,6 +11,7 @@ class LiveCourseController extends BaseController
 {
     public function indexAction(Request $request, $status)
     {
+        $eduCloudStatus = $this->getEduCloudStatus();
 
         $default = $this->getSettingService()->get('default', array());
 
@@ -46,7 +47,8 @@ class LiveCourseController extends BaseController
                     0,
                     20
                 ),
-                'default'   => $default
+                'default'   => $default,
+                'eduCloudStatus' => $eduCloudStatus
             ));
         }
 
@@ -98,7 +100,8 @@ class LiveCourseController extends BaseController
             'lessons'   => $lessons,
             'courses'   => ArrayToolkit::index($courses, 'id'),
             'paginator' => $paginator,
-            'default'   => $default
+            'default'   => $default,
+            'eduCloudStatus' => $eduCloudStatus
         ));
     }
 
@@ -128,5 +131,22 @@ class LiveCourseController extends BaseController
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    private function getEduCloudStatus()
+    {
+        $status = $this->getEduCloudService()->isHiddenCloud();
+        if ($status) {
+            $eduCloudStatus = 'open';
+        } else {
+            $eduCloudStatus = 'closed';
+        }
+
+        return $eduCloudStatus;
+    }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
     }
 }

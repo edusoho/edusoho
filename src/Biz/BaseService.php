@@ -2,11 +2,11 @@
 
 namespace Biz;
 
+use Biz\Util\HTMLPurifierFactory;
 use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;

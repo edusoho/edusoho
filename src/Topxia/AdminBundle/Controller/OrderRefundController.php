@@ -41,7 +41,7 @@ class OrderRefundController extends BaseController
 
         $refunds = $this->getOrderService()->searchRefunds(
             $conditions,
-            'latest',
+            array('createdTime'=> 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

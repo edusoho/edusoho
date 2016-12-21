@@ -217,11 +217,11 @@ class MessageServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return $this->createService('User:MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
 }

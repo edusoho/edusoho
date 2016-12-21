@@ -53,7 +53,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->generateDiffFile();
 
-        $submoduleDiffs = $this->generateSubmodulesDiffFile(array('vendor'));
+        $submoduleDiffs = $this->generateSubmodulesDiffFile(array());
 
         $this->diffFilePrompt($diffFile, $submoduleDiffs);
 
@@ -114,10 +114,6 @@ class BuildUpgradePackageCommand extends BaseCommand
                 if(!empty($module)){
                     $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
                     $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
-                }
-
-                if (empty($module) && strpos($opFile, 'vendor') === 0){
-                    continue;
                 }
 
                 if (strpos($opFile, 'app/DoctrineMigrations') === 0) {

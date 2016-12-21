@@ -52,7 +52,7 @@ class TokenServiceTest extends BaseTestCase
 
     protected function getTokenService()
     {
-        return $this->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
 }

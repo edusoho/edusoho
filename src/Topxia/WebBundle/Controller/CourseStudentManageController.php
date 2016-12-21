@@ -87,7 +87,7 @@ class CourseStudentManageController extends BaseController
 
         $refunds = $this->getOrderService()->searchRefunds(
             $condition,
-            'createdTime',
+            array('createdTime'=> 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -245,7 +245,7 @@ class CourseStudentManageController extends BaseController
 
         $fields = array_intersect_key($fields, $userinfoFields);
 
-        if (!$courseSetting['buy_fill_userinfo']) {
+        if (empty($courseSetting['buy_fill_userinfo'])) {
             $fields = array();
         }
 

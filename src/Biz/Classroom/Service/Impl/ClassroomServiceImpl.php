@@ -1,13 +1,13 @@
 <?php
 
-
 namespace Biz\Classroom\Service\Impl;
 
-
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Dao\ClassroomDao;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -91,10 +91,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function getClassroomByCourseId($courseId)
     {
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
-        if(empty($classroomIds)) {
+        if (empty($classroomIds)) {
             return array();
         }
-        
+
         return $this->getClassroom($classroomIds[0]);
     }
 
@@ -152,7 +152,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->fillOrgId($classroom);
 
-        $classroom                = $this->getClassroomDao()->create($classroom);
+        $classroom = $this->getClassroomDao()->create($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
 
@@ -219,7 +219,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * 要过滤要更新的字段
      */
     public function updateClassroom($id, $fields)
-    {   
+    {
         $user = $this->getCurrentUser();
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
@@ -615,7 +615,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $info = array(
                     'orderId'   => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
-                    'levelId' => empty($member['levelId']) ? 0 : $member['levelId']
+                    'levelId'   => empty($member['levelId']) ? 0 : $member['levelId']
                 );
                 $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
@@ -1403,21 +1403,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'id');
 
-        $conditions = array();
+        $conditions              = array();
         $conditions['courseIds'] = $courseIds;
-        $conditions['userId'] = $userId;
-        $conditions = array(
-            'userId'   => $userId,
+        $conditions['userId']    = $userId;
+        $conditions              = array(
+            'userId'    => $userId,
             'courseIds' => $courseIds,
-            'status'   => 'finished'
+            'status'    => 'finished'
         );
         $userLearnCount = $this->getCourseService()->searchLearnCount($conditions);
-        
+
         $fields['lastLearnTime'] = time();
-        $fields['learnedNum'] = $userLearnCount;
+        $fields['learnedNum']    = $userLearnCount;
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
-        return $this->updateMember($classroomMember['id'], $fields);       
+        return $this->updateMember($classroomMember['id'], $fields);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
@@ -1481,7 +1481,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $conditions;
     }
 
-
     public function getFileService()
     {
         return $this->createService('Content:FileService');
@@ -1492,6 +1491,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('System:LogService');
     }
 
+    /**
+     * @return ClassroomDao
+     */
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');
@@ -1551,5 +1553,4 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         return $this->createService('Taxonomy:CategoryService');
     }
-
 }

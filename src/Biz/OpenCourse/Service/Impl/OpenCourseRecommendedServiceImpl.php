@@ -4,9 +4,9 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\OpenCourse\OpenCourseRecommendedService;
-use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
+use Biz\OpenCourse\Processor\CourseProcessorFactory;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
 {
@@ -24,10 +24,10 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $recommendCourses = array();
 
         foreach ($recommendCourseIds as $key => $courseId) {
-            $exsitsRecommendCourse = $this->getRecommendedCourseByCourseIdAndType($openCourseId, $courseId, $type);
+            $exitsRecommendCourse = $this->getRecommendedCourseByCourseIdAndType($openCourseId, $courseId, $type);
 
-            if (!$exsitsRecommendCourse) {
-                $fields = array(
+            if (!$exitsRecommendCourse) {
+                $fields             = array(
                     'recommendCourseId' => $courseId,
                     'openCourseId'      => $openCourseId,
                     'type'              => $type
@@ -39,7 +39,6 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $recommendIds = ArrayToolkit::column($recommendCourses, 'id');
 
         $this->refreshCoursesSeq($openCourseId, $recommendIds);
-
         return $recommendCourses;
     }
 
@@ -146,8 +145,10 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         if ($num < 0) {
             throw $this->createServiceException('num must be a unsigned int');
         }
-        $recommendCourses = $this->getRecommendedCourseDao()->findRandom($courseId, $num);
+        $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
+
         $courseIds        = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
+
         return $this->getTypeCourseService('course')->findCoursesByIds($courseIds);
     }
 

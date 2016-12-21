@@ -6,6 +6,6 @@
       <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
     {% endif %}
   {% else %}
-    <script src="{{ asset('static-dist/' ~ path, 'webpack') }}"></script>
+    <script src="{{ asset('static-dist/' ~ path) }}"></script>
   {% endif %}
 {% endfor %}

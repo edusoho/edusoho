@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Classroom\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Classroom\Dao\ClassroomReviewDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDao
 {
@@ -20,6 +20,11 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
             'rating'
         );
 
+        $declares['timestamps'] = array(
+            'createdTime',
+            'updatedTime'
+        );
+
         $declares['conditions'] = array(
             'userId = :userId',
             'classroomId = :classroomId',
@@ -28,8 +33,6 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
             'parentId = :parentId',
             'classroomId IN (:classroomIds)'
         );
-
-        return $declares;
     }
 
     public function sumReviewRatingByClassroomId($classroomId)
@@ -40,16 +43,13 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
 
     public function countReviewByClassroomId($classroomId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
-        return $this->db()->fetchColumn($sql, array($classroomId));
+        return $this->count(array('classroomId' => $classroomId, 'parentId' => 0));
     }
 
     public function getByUserIdAndClassroomId($userId, $classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
-        return $this->db()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
+        return $this->getByFields(array('userId' => $userId, 'classroomId' => $classroomId, 'parentId' => 0));
     }
-
 
     protected function _createQueryBuilder($conditions)
     {

@@ -3,11 +3,7 @@
 namespace Tests\Sms;
 
 use Mockery;
-<<<<<<< HEAD
 use Biz\BaseTestCase;
-=======
-use Biz\BaseTestCase;;
->>>>>>> feature/x8-migrate
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceTest extends BaseTestCase
@@ -128,16 +124,16 @@ class SmsServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getSmsService()
     {
-        return $this->createService('Sms:SmsService');
+        return $this->getBiz()->service('Sms:SmsService');
     }
 }

@@ -407,6 +407,6 @@ class TagServiceTest extends BaseTestCase
      */
     protected function getTagService()
     {
-        return $this->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 }

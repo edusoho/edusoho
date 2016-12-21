@@ -431,7 +431,7 @@ class ArticleServiceTest extends BaseTestCase
      */
     protected function getTagService()
     {
-        return $this->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
     /**
@@ -439,7 +439,7 @@ class ArticleServiceTest extends BaseTestCase
      */
     protected function getArticleService()
     {
-        return $this->createService('Article:ArticleService');
+        return $this->getBiz()->service('Article:ArticleService');
     }
 
     /**
@@ -447,7 +447,7 @@ class ArticleServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**
@@ -455,7 +455,7 @@ class ArticleServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**
@@ -463,7 +463,7 @@ class ArticleServiceTest extends BaseTestCase
      */
     protected function getCategoryService()
     {
-        return $this->createService('Article:CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 
 }

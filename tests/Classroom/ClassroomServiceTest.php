@@ -2,9 +2,8 @@
 
 namespace Tests\Classroom;
 
+use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
-use Biz\BaseTestCase;;
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -191,7 +190,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom2['id'], array($course2['id']));
 
-        $classroom  = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
+        $classroom = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
 
         $this->assertEquals('test12333', $classroom['title']);
     }
@@ -1315,17 +1314,17 @@ class ClassroomServiceTest extends BaseTestCase
 
     private function getUserService()
     {
-        return $this->getServiceKernel()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     private function createStudent()
