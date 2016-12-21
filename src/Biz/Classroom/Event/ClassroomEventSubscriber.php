@@ -1,11 +1,11 @@
 <?php
-namespace Classroom\Service\Classroom\Event;
+namespace Biz\Classroom\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\StringToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface
 {

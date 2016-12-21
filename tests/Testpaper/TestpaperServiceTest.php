@@ -50,7 +50,7 @@ class TestpaperServiceTest extends BaseTestCase
         $findTestpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
         $this->assertEquals($testpaper['name'], $findTestpaper['name']);
 
-        $this->getTestpaperService()->deleteTestpaper($id);
+        $this->getTestpaperService()->deleteTestpaper($testpaper['id']);
 
         $findTestpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
 
@@ -128,7 +128,7 @@ class TestpaperServiceTest extends BaseTestCase
 
         $this->assertEquals('draft', $testpaper['status']);
 
-        $testpaper = $this->getTestpaperService()->publishTestpaper($id);
+        $testpaper = $this->getTestpaperService()->publishTestpaper($testpaper['id']);
         $this->assertEquals('open', $testpaper['status']);
     }
 
@@ -189,7 +189,7 @@ class TestpaperServiceTest extends BaseTestCase
         $findItem = $this->getTestpaperService()->getItem($item['id']);
         $this->assertEquals($item['questionType'], $findItem['questionType']);
 
-        $this->getTestpaperService()->deleteItem($id);
+        $this->getTestpaperService()->deleteItem($item['id']);
 
         $item = $this->getTestpaperService()->getItem($item['id']);
 
@@ -221,9 +221,11 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $result = $this->getTestpaperService()->getItemsCountByParams($conditions, 'questionType');
 
-        $types = array_keys($result);
+        $types = ArrayToolkit::column($result, 'questionType');
 
-        $this->assertArrayEquals($itemsTyps, $types);
+        $this->assertTrue(in_array('choice', $types));
+        $this->assertTrue(in_array('fill', $types));
+        $this->assertTrue(in_array('determine', $types));
     }
 
     public function testFindItemsByTestId()
@@ -355,14 +357,16 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testGetUserUnfinishResult()
     {
-        $result = $this->getTestpaperService()->getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+        $testpaper = $this->createTestpaper1();
+
+        $result = $this->getTestpaperService()->getUserUnfinishResult($testpaper['id'], 1, 1, $testpaper['type'], 1);
         $this->assertNull($result);
 
-        $testpaper   = $this->createTestpaper1();
         $paperResult = $this->createTestpaperResult1($testpaper);
 
-        $result = $this->getTestpaperService()->getUserUnfinishResult($testpaper['id'], $testpaper['courseId'], 1, $testpaper['type'], 1);
-        $this->assertEquals(1, count($result));
+        $result = $this->getTestpaperService()->getUserUnfinishResult($testpaper['id'], 1, 1, $testpaper['type'], 1);
+
+        $this->assertNotNull($result);
     }
 
     public function testGetUserLatelyResultByTestId()
@@ -372,9 +376,9 @@ class TestpaperServiceTest extends BaseTestCase
         $paperResult1 = $this->createTestpaperResult3($testpaper);
         $paperResult2 = $this->createTestpaperResult1($testpaper);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId(1, $testpaper['id'], $testpaper['courseId'], 1, $testpaper['type']);
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId(1, $testpaper['id'], $testpaper['courseSetId'], 1, $testpaper['type']);
 
-        $this->assertArrayEquals($paperResult2, $result);
+        $this->assertEquals($paperResult1['status'], $result['status']);
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId)
@@ -471,7 +475,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $score = $this->getTestpaperService()->searchTestpapersScore($conditions);
 
-        $this->assertEqual($testpaperResult3['score'], $score);
+        $this->assertEquals($testpaperResult3['score'], $score);
     }
 
     public function testBuildTestpaper()
@@ -484,6 +488,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'rand',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2, 'determine' => 2),
@@ -509,9 +514,9 @@ class TestpaperServiceTest extends BaseTestCase
             'type'        => 'homework'
         );
         $homework = $this->getTestpaperService()->buildTestpaper($fields2, 'homework');
-        $this->assertEquals($fields3['type'], $homework['type']);
-        $this->assertEquals($fields3['description'], $homework['description']);
-        $this->assertEquals($fields3['itemCount'], $homework['itemCount']);
+        $this->assertEquals($fields2['type'], $homework['type']);
+        $this->assertEquals($fields2['description'], $homework['description']);
+        $this->assertEquals($fields2['itemCount'], $homework['itemCount']);
 
         $fields3 = array(
             'name'          => 'exercise',
@@ -528,6 +533,7 @@ class TestpaperServiceTest extends BaseTestCase
         $exercise = $this->getTestpaperService()->buildTestpaper($fields3, 'exercise');
         $this->assertEquals($fields3['type'], $exercise['type']);
         $this->assertEquals($fields3['itemCount'], $exercise['itemCount']);
+
         $this->assertArrayEquals($fields3['questionTypes'], $exercise['metas']['questionTypes']);
     }
 
@@ -539,14 +545,15 @@ class TestpaperServiceTest extends BaseTestCase
         $essayQuestions     = $this->generateEssayQuestions(1, 2);
 
         $options1 = array(
-            'ranges'      => array('course'),
-            'counts'      => array('choice' => 2, 'fill' => 2, 'determine' => 1),
-            'scores'      => array('choice' => 2, 'fill' => 2, 'determine' => 2),
-            'missScores'  => array('choice' => 1, 'uncertain_choice' => 1),
-            'courseSetId' => 1,
-            'courseId'    => 0
+            'mode'       => 'range',
+            'ranges'     => array('course'),
+            'counts'     => array('choice' => 2, 'fill' => 2, 'determine' => 1),
+            'scores'     => array('choice' => 2, 'fill' => 2, 'determine' => 2),
+            'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
+            'courseId'   => 1
         );
-        $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $options);
+        $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $options1);
+
         $this->assertEquals('yes', $result['status']);
 
         $options2 = array(
@@ -554,10 +561,9 @@ class TestpaperServiceTest extends BaseTestCase
             'questionTypes' => array('choice', 'fill', 'determine', 'essay'),
             'difficulty'    => 'normal',
             'range'         => 'course',
-            'courseSetId'   => 1,
-            'courseId'      => 0
+            'courseId'      => 1
         );
-        $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $options);
+        $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $options2);
         $this->assertEquals('yes', $result['status']);
     }
 
@@ -565,7 +571,7 @@ class TestpaperServiceTest extends BaseTestCase
     {
         $testpaper = $this->createTestpaper1();
 
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['1'], 1);
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
 
         $this->assertNotNull($testpaperResult);
         $this->assertEquals($testpaper['id'], $testpaperResult['testId']);
@@ -581,6 +587,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2, 'determine' => 2),
@@ -615,6 +622,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2, 'determine' => 2),
@@ -640,7 +648,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $homework = $this->getTestpaperService()->buildTestpaper($fields2, 'homework');
         $items    = $this->getTestpaperService()->showTestpaperItems($homework['id']);
-        $this->assertEquals($fields3['itemCount'], count($items));
+        $this->assertEquals($fields2['itemCount'], count($items));
 
         $fields3 = array(
             'name'          => 'exercise',
@@ -669,6 +677,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2, 'determine' => 2),
@@ -692,7 +701,7 @@ class TestpaperServiceTest extends BaseTestCase
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
 
-        $this->assertArrayEquals(array_keys($fields['counts']), array_keys($accuracy));
+        $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($accuracy));
     }
 
     public function testCheckFinish()
@@ -705,6 +714,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2, 'essay' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2, 'essay' => 2),
@@ -736,7 +746,7 @@ class TestpaperServiceTest extends BaseTestCase
                 )
             ),
             'teacherSay'   => 'teacher say content',
-            'passedStatus' => 'pass'
+            'passedStatus' => 'passed'
         );
         $result = $this->getTestpaperService()->checkFinish($testpaperResult['id'], $fields);
 
@@ -754,6 +764,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2),
             'scores'      => array('choice' => 2, 'fill' => 2),
@@ -785,6 +796,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 2, 'fill' => 2),
             'scores'      => array('choice' => 2, 'fill' => 2),
@@ -818,7 +830,7 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaper   = $this->createTestpaper1();
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
-        $this->assertNull($attachments);
+        $this->assertEmpty($attachments);
     }
 
     //public function canLookTestpaper($resultId);
@@ -833,6 +845,7 @@ class TestpaperServiceTest extends BaseTestCase
         $fields1 = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
+            'mode'        => 'range',
             'ranges'      => array('course'),
             'counts'      => array('choice' => 1, 'fill' => 1),
             'scores'      => array('choice' => 2, 'fill' => 2),
@@ -845,13 +858,15 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
 
         $items = array(
-            array('id' => $choiceQuestions[0]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice'),
-            array('id' => $choiceQuestions[1]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice'),
-            array('id' => $choiceQuestions[2]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice')
+            'questions' => array(
+                array('id' => $choiceQuestions[0]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice'),
+                array('id' => $choiceQuestions[1]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice'),
+                array('id' => $choiceQuestions[2]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice')
+            )
         );
         $testpaper = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
 
-        $this->assertEquals(count($items), $testpaper['itemCount']);
+        $this->assertEquals(count($items['questions']), $testpaper['itemCount']);
     }
 
     protected function createTestpaper1()
@@ -859,12 +874,11 @@ class TestpaperServiceTest extends BaseTestCase
         $fields = array(
             'name'        => 'testpaper',
             'description' => 'testpaper description',
-            'ranges'      => array(),
             'courseSetId' => 1,
             'courseId'    => 0,
             'pattern'     => 'questionType',
             'metas'       => array(
-                'range' => array('course')
+                'ranges' => array('course')
             ),
             'type'        => 'testpaper'
         );
@@ -958,9 +972,9 @@ class TestpaperServiceTest extends BaseTestCase
             'beginTime'   => time(),
             'status'      => 'doing',
             'usedTime'    => 0,
-            'courseId'    => $testpaper['courseId'],
+            'courseId'    => 1,
             'courseSetId' => $testpaper['courseSetId'],
-            'lessonId'    => 0,
+            'lessonId'    => 1,
             'type'        => $testpaper['type']
         );
 
@@ -977,9 +991,9 @@ class TestpaperServiceTest extends BaseTestCase
             'beginTime'   => time(),
             'status'      => 'doing',
             'usedTime'    => 0,
-            'courseId'    => $testpaper['courseId'],
+            'courseId'    => 1,
             'courseSetId' => $testpaper['courseSetId'],
-            'lessonId'    => 0,
+            'lessonId'    => 1,
             'type'        => $testpaper['type']
         );
 
@@ -996,11 +1010,11 @@ class TestpaperServiceTest extends BaseTestCase
             'score'       => '5',
             'endTime'     => time(),
             'beginTime'   => time(),
-            'status'      => 'finish',
+            'status'      => 'finished',
             'usedTime'    => 0,
-            'courseId'    => $testpaper['courseId'],
+            'courseId'    => 1,
             'courseSetId' => $testpaper['courseSetId'],
-            'lessonId'    => 0,
+            'lessonId'    => 1,
             'type'        => $testpaper['type']
         );
 
@@ -1026,7 +1040,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty
             );
 
-            $questions[] = $this->getQuestionService()->createQuestion($question);
+            $questions[] = $this->getQuestionService()->create($question);
         }
         return $questions;
     }
@@ -1043,7 +1057,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty
             );
 
-            $questions[] = $this->getQuestionService()->createQuestion($question);
+            $questions[] = $this->getQuestionService()->create($question);
         }
         return $questions;
     }
@@ -1061,7 +1075,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty
             );
 
-            $questions[] = $this->getQuestionService()->createQuestion($question);
+            $questions[] = $this->getQuestionService()->create($question);
         }
         return $questions;
     }
@@ -1079,7 +1093,7 @@ class TestpaperServiceTest extends BaseTestCase
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty
             );
 
-            $questions[] = $this->getQuestionService()->createQuestion($question);
+            $questions[] = $this->getQuestionService()->create($question);
         }
         return $questions;
     }
@@ -1096,47 +1110,18 @@ class TestpaperServiceTest extends BaseTestCase
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty
             );
 
-            $questions[] = $this->getQuestionService()->createQuestion($question);
+            $questions[] = $this->getQuestionService()->create($question);
         }
         return $questions;
     }
 
-    /* 试卷同步
-     */
-
-    public function testFindTestpapersByCopyIdAndLockedTarget()
-    {
-        $question = array(
-            'type'       => 'single_choice',
-            'stem'       => 'question.',
-            'difficulty' => 'normal',
-            'answer'     => array('answer'),
-            'target'     => 'course-1',
-            '"stem"'     => $this->getServiceKernel()->trans('测试'),
-            "choices"    => array($this->getServiceKernel()->trans('爱'), $this->getServiceKernel()->trans('测'), $this->getServiceKernel()->trans('额'), $this->getServiceKernel()->trans('恶')),
-            'uncertain'  => 0,
-            "analysis"   => '',
-            "score"      => '2',
-            "submission" => 'submit',
-            "type"       => "choice",
-            "parentId"   => 0,
-            'copyId'     => 1,
-            "answer"     => "2"
-        );
-        $question  = $this->getQuestionService()->createQuestion($question);
-        $testpaper = array('name' => 'Test', "description" => $this->getServiceKernel()->trans('测试'), "limitedTime" => '0', "mode" => "rand", "range" => "course", "ranges" => array(), "counts" => array("single_choice" => "1", "choice" => "0", "uncertain_choice" => "0", "fill" => "0", "determine" => "0", "material" => "0"), 'CopyId' => 1, 'target' => 'course-1', "scores" => array("single_choice" => "2", "uncertain_choice" => "2", "choice" => "2", "uncertain_choice" => "2", "fill" => "2", "determine" => "2", "essay" => "2", "material" => "2"), "missScores" => array("choice" => 0, "uncertain_choice" => 0), "percentages" => array("simple" => "", "normal" => "", "difficulty" => ''), "target" => 'course-1', "pattern" => "QuestionType", "copyId" => "1");
-        $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
-        $testpaper = $this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget(1, "('course-1')");
-        $this->assertEquals('Test', $testpaper[0]['name']);
-    }
-
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 }

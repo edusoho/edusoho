@@ -723,7 +723,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return $this->createService('Sensitive.SensitiveService');
+        return $this->createService('Sensitive:SensitiveService');
     }
 
     protected function getUserService()

@@ -12,6 +12,6 @@ interface TestpaperResultDao extends GeneralDaoInterface
 
     public function findPaperResultsStatusNumGroupByStatus($testId);
 
-    public function searchTestpapersScore($conditions);
+    public function sumScoreByParames($conditions);
 
 }

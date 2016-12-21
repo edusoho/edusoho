@@ -101,8 +101,8 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         if (!empty($fields['mode'])) {
             $fields['metas']['mode'] = $fields['mode'];
         }
-        if (!empty($fields['range'])) {
-            $fields['metas']['range'] = $fields['range'];
+        if (!empty($fields['ranges'])) {
+            $fields['metas']['ranges'] = $fields['ranges'];
         }
         if (!empty($fields['counts'])) {
             $fields['metas']['counts'] = $fields['counts'];
@@ -113,7 +113,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         if (!empty($fields['missScores'])) {
             $fields['metas']['missScores'] = $fields['missScores'];
         }
-        if (!empty($fields['scores'])) {
+        if (!empty($fields['percentages'])) {
             $fields['metas']['percentages'] = $fields['percentages'];
         }
 
@@ -205,7 +205,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function canBuildWithQuestions($options, $questions)

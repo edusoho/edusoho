@@ -12,10 +12,6 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     public function declares()
     {
         return array(
-            'timestamps' => array(
-                'created_time',
-                'updated_time'
-            ),
             'serializes' => array(
                 'ats' => 'json'
             ),
