@@ -1,7 +1,8 @@
 <?php
 namespace Biz\Notification\Event;
 
-use Codeages\Biz\Framework\Event\EventSubscriber;
+
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
