@@ -37,7 +37,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         if (isset($org['parentId']) && $org['parentId'] > 0) {
             $parentOrg = $this->getOrgDao()->get($org['parentId']);
-            $this->getOrgDao()->wave($parentOrg['id'], array('childrenNum' => +1));
+            $this->getOrgDao()->wave(array($parentOrg['id']), array('childrenNum' => +1));
         }
 
         return $parentOrg;
@@ -77,7 +77,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org  = $this->checkBeforProccess($id);
         $that = $this;
 
-        $this->getOrgDao()->getConnection()->transactional(function () use ($org, $id, $that) {
+        $this->getOrgDao()->db()->transactional(function () use ($org, $id, $that) {
             if ($org['parentId']) {
                 $that->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
             }
@@ -208,6 +208,11 @@ class OrgServiceImpl extends BaseService implements OrgService
     public function getOrgDao()
     {
         return $this->createDao('Org:OrgDao');
+    }
+
+    public function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     protected function getModuleService($module)
