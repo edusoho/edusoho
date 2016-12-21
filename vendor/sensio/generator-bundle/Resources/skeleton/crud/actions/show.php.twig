@@ -1,0 +1,32 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Finds and displays a {{ entity_singularized }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/{id}", name="{{ route_name_prefix }}_show")
+     * @Method("GET")
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function showAction({{ entity_class }} ${{ entity_singularized }})
+{% endblock method_definition %}
+    {
+{% block method_body %}
+{% if 'delete' in actions %}
+        $deleteForm = $this->createDeleteForm(${{ entity_singularized }});
+{% endif %}
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->render('{{ entity|lower|replace({'\\': '/'}) }}/show.html.twig', array(
+            '{{ entity_singularized }}' => ${{ entity_singularized }},
+{% if 'delete' in actions %}
+            'delete_form' => $deleteForm->createView(),
+{% endif %}
+        ));
+{% endblock method_return %}
+    }
