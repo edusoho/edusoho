@@ -1,0 +1,14 @@
+title: Missing keys are asked interactively
+
+interactive: true
+
+requested_params:
+    boolean:
+        default: 'false'
+        input: 'true'
+    nested:
+        default: nested
+        input: '{foo: bar, bar: [foo, test, null]}'
+    another:
+        default: test
+        input: 'null'
