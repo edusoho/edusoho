@@ -91,8 +91,6 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $count        = ceil($return['count'] / 1000);
             try {
                 $api    = CloudAPIFactory::create('root');
-                var_dump($callbackUrls);
-                exit();
                 $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\RuntimeException $e) {
                 $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
