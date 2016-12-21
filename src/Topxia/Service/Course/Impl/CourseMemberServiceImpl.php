@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseMemberService;
 
 class CourseMemberServiceImpl extends BaseService implements CourseMemberService
@@ -94,7 +95,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getNotificationService()

@@ -1,0 +1,136 @@
+.es-footer {
+  position: relative;
+  // z-index: 1;
+  .copyright {
+    background: #212121;
+    border-top: 1px solid #444;
+    text-align: center;
+    padding: 20px 0;
+    line-height: 30px;
+    color: @gray-medium;
+    // text-shadow: 0 1px 3px #000;
+    @media (max-width: @screen-xs-max) {
+      padding: 10px 0;
+      line-height: 20px;
+    }
+    a {
+      color: @gray-medium;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.es-footer-link {
+  background: #2e2e2e;
+  padding: 55px 0;
+  border-bottom: 1px solid #111;
+  @media(max-width: @screen-xs-max) {
+    padding: 20px 0;
+  }
+}
+
+.footer-main {
+  .link-item {
+    width: 20%;
+    float: left;
+    padding: 0 10px;
+    // text-shadow: 0 1px 3px #000;
+    @media (max-width: @screen-xs-max) {
+      width: 33.33%;
+      padding: 0 5px;
+    }
+  }
+  h3 {
+    font-size: 16px;
+    color: #eee;
+    margin-top: 0;
+    margin-bottom: 30px;
+    @media (max-width: @screen-xs-max) {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  }
+  ul {
+    padding: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    li {
+      margin-top: 20px;
+      @media (max-width: @screen-xs-max) {
+        margin-top: 10px;
+      }
+    }
+  }
+  a {
+    color: @gray-medium;
+    .es-transition;
+    &:hover {
+      color: #fff;
+      .es-transition;
+    }
+  }
+}
+
+.footer-logo {
+  margin-top: 10px;
+  text-align: center;
+  >a>img {
+    height: 64px;
+  }
+  .footer-sns {
+    margin-top: 30px;
+    >a {
+      display: inline-block;
+    }
+    i {
+      display: block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 0 10px;
+      font-size: 24px;
+      vertical-align: middle;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      // box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+    }
+
+    i.es-icon-weibo {
+      background: #e6162d;
+      &:hover {
+        background: #e6162d - #222;
+      }
+    }
+
+    i.es-icon-weixin {
+      background: #1ec354;
+      &:hover {
+        background: #1ec354 - #222;
+      }
+    }
+
+    i.es-icon-apple {
+      background: #3793f1;
+      &:hover {
+        background: #3793f1 - #222;
+      }
+    }
+
+    i.es-icon-android {
+      background: #78c257;
+      &:hover {
+        background: #78c257 - #222;
+      }
+    }
+  }
+}
+    

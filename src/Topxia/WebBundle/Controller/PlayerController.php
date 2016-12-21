@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -306,6 +307,7 @@ class PlayerController extends BaseController
 
     public function localMediaAction(Request $request, $id, $token)
     {
+
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
@@ -321,6 +323,7 @@ class PlayerController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
@@ -329,7 +332,6 @@ class PlayerController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-
         return $response;
     }
 
@@ -357,7 +359,7 @@ class PlayerController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getMaterialLibService()

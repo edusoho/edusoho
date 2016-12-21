@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\PluginUtil;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
@@ -97,6 +98,6 @@ class UpgradeScriptsCommand extends BaseCommand
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

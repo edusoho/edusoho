@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -249,7 +250,7 @@ class CourseQuestionManageController extends BaseController
                 continue;
             }
 
-            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时') . "{$lesson['number']}：{$lesson['title']}";
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时')."{$lesson['number']}：{$lesson['title']}";
         }
 
         return $choices;
@@ -312,7 +313,7 @@ class CourseQuestionManageController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getSettingService()

@@ -6,6 +6,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseFileManageController extends BaseController
 {
@@ -191,7 +192,7 @@ class CourseFileManageController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getSettingService()

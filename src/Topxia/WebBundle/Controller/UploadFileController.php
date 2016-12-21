@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,13 @@ class UploadFileController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        if($request->isMethod('OPTIONS')){
+            // SDK 跨域认证
+            $response = $this->createJsonResponse(true);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            return $response;
+        }
+
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('fileupload', $token);
 
@@ -33,7 +41,9 @@ class UploadFileController extends BaseController
 
         $this->getUploadFileService()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
-        return $this->createJsonResponse($token['data']);
+        $response = $this->createJsonResponse($token['data']);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function downloadAction(Request $request, $fileId)
@@ -44,7 +54,7 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
+        ServiceKernel::instance()->getBiz()->service('System:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
             return $this->downloadCloudFile($file);
@@ -391,7 +401,7 @@ class UploadFileController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCourseService()

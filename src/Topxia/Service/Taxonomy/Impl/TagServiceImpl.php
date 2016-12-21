@@ -3,6 +3,7 @@ namespace Topxia\Service\Taxonomy\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\TagService;
 
 class TagServiceImpl extends BaseService implements TagService
@@ -364,7 +365,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

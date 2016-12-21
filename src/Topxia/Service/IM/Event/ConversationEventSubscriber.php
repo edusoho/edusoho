@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\IM\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +16,7 @@ class ConversationEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCourseDelete(ServiceEvent $event)
+    public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
 
@@ -25,7 +26,7 @@ class ConversationEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onClassroomDelete(ServiceEvent $event)
+    public function onClassroomDelete(Event $event)
     {
         $classroom = $event->getSubject();
 

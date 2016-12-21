@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Course\ThreadService;
 use Topxia\Service\Order\OrderService;
@@ -564,7 +565,7 @@ class DefaultController extends BaseController
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     /**

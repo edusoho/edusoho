@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     $(document).on('click.modal.data-api', '[data-toggle="modal"]', function(e) {
         var imgUrl = app.config.loading_img_path;
         var $this = $(this),

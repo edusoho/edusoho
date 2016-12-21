@@ -11,7 +11,8 @@
 		},
 
 		"psr-4": {
-			"Topxia\\Api\\" : "api/src/Topxia/Api"
+			"Topxia\\Api\\" : "api/src/Topxia/Api",
+			"Tests\\": "tests"
 		},
 		"files": [ "app/AppKernel.php" ]
 	},
@@ -70,7 +71,10 @@
 		]
 	},
 	"config" : {
-		"bin-dir" : "bin"
+		"bin-dir" : "bin",
+        "platform": {
+            "php": "5.3.9"
+        }
 	},
 	"extra" : {
 		"symfony-app-dir" : "app",

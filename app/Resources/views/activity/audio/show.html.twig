@@ -1,0 +1,12 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['app/js/task/audio/index.js']) %}
+
+
+{% block content %}
+  <div class="dashboard-body">
+    <div class="audio-content" id="audio-content" data-role="audio-content" >
+      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
+    </div>
+  </div>
+{% endblock %}

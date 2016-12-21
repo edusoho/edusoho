@@ -60,8 +60,11 @@ custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-_plugins:
-    resource: routing_plugins.yml
+app:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /
+#_plugins:
+#    resource: routing_plugins.yml
 
 # Internal routing configuration to handle ESI
 # _internal:

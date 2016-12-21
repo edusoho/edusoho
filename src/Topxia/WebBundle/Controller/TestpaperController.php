@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class TestpaperController extends BaseController
@@ -164,7 +165,7 @@ class TestpaperController extends BaseController
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
-        
+
         $total       = $this->makeTestpaperTotal($testpaper, $items);
         $attachments = $this->findAttachments($testpaper['id']);
 
@@ -532,7 +533,7 @@ class TestpaperController extends BaseController
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
             array(
                 'testIds' => $testpaperIds,
-                'status'  => 'reviewing',
+                'status'  => 'reviewing'
             ),
             array(
                 'checkedTime',
@@ -600,7 +601,7 @@ class TestpaperController extends BaseController
             array(
                 'checkedTime',
                 'DESC'
-            ),            
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -657,7 +658,7 @@ class TestpaperController extends BaseController
             array(
                 'checkedTime',
                 'DESC'
-            ), 
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -737,7 +738,7 @@ class TestpaperController extends BaseController
 
     protected function geUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getTaskProcessor($taskType)

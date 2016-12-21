@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudFileController extends BaseController
 {
@@ -45,7 +46,7 @@ class CloudFileController extends BaseController
         $conditions = $request->query->all();
         //云资源应该只显示resType为normal的
         $conditions['resourceType'] = 'normal';
-        $results    = $this->getCloudFileService()->search(
+        $results                    = $this->getCloudFileService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
             20
@@ -201,7 +202,7 @@ class CloudFileController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getMaterialLibService()

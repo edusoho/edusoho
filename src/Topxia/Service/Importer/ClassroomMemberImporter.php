@@ -5,6 +5,7 @@ namespace Topxia\Service\Importer;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomMemberImporter extends Importer
 {
@@ -441,6 +442,6 @@ class ClassroomMemberImporter extends Importer
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

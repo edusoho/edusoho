@@ -19,6 +19,7 @@
             <directory>../src/Topxia/Common/Tests</directory>
             <directory>../src/Topxia/Component/*/Tests</directory>
             <directory>../src/Topxia/Service/*/Tests</directory>
+            <directory>../tests</directory>
         </testsuite>
     </testsuites>
 

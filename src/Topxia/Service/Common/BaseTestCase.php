@@ -4,6 +4,7 @@ namespace Topxia\Service\Common;
 
 use Mockery;
 use Topxia\Service\User\CurrentUser;
+use Codeages\Biz\Framework\Context\Biz;
 use Permission\Common\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
@@ -27,7 +28,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     public function setUp()
     {
         parent::emptyDatabase();
-        $this->initServiceKernel()
+        $this
             ->flushPool()
             ->initDevelopSetting()
             ->initCurrentUser();
@@ -39,13 +40,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             'without_network' => '1'
         ));
 
-        return $this;
-    }
-
-    protected function initServiceKernel()
-    {
-        $serviceKernel = $this->getServiceKernel();
-        $serviceKernel->setBiz(self::$biz);
         return $this;
     }
 
@@ -82,6 +76,9 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->createService('Permission:Role.RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
+        $biz         = $this->getBiz();
+        $biz['user'] = $this->getCurrentUser();
+
         return $this;
     }
 
@@ -104,6 +101,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $pool              = array();
         $pool[$objectName] = $mockObject;
         $this->setPool($pool);
+    }
+
+    protected function mockBiz($alias, $className, $params = array())
+    {
+        $mockObj = Mockery::mock($className);
+
+        foreach ($params as $param) {
+            $mockObj->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+        }
+
+        $biz = $this->getBiz();
+        $biz['@' . $alias] = $mockObj;
     }
 
     protected function setPool($object)
@@ -130,6 +139,14 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     {
         global $kernel;
         return $kernel->getContainer();
+    }
+
+    /**
+     * @return Biz
+     */
+    protected function getBiz()
+    {
+        return self::$biz;
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())

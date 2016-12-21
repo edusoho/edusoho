@@ -1,0 +1,235 @@
+{% extends 'course-manage/layout.html.twig' %}
+{% do script(['app/js/course-manage/students/index.js']) %}
+
+{% set side_nav = 'plan' %}
+{% set active = 'students' %}
+
+{% block course %}
+<div class="panel-bar">
+  <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加学员'|trans}}</button>
+  {% if course.status == 'published' %}
+   {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% else %}
+    {# <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+  {% endif %}
+  {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
+</div>
+<ul class="nav nav-tabs mbl">
+  <li class="active">
+    <a href="javascript:;">{{ '正式学员'|trans }}</a>
+  </li>
+
+  <li class="">
+    <a href="{{path('course_set_manage_course_quit_records', {courseSetId: courseSet.id, courseId: course.id})}}">{{ '退出记录'|trans }}</a>
+  </li>
+</ul>
+<form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
+  <div class="form-group col-md-7">
+    <input class="form-control " type="text" style="width:45%" placeholder="{{'请输入用户名/邮箱/手机号'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+    <button type="submit" class="btn btn-primary">{{'搜索'|trans}}</button>
+  </div>
+  <div class="clearfix"></div>
+</form>
+<table class="table table-middle table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
+      {# <th width="20%">{{'服务期限'|trans}}</th> #}
+      <th width="20%">{{'学习进度'|trans}}</th>
+      <th width="30%%">{{'操作'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      <tr class="students-item js-students-item">
+        <td class="media media-middle" >
+          <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
+            {# <img class="avatar-sm" src="{{student.smallAvatar}}"> #}
+            {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
+          </a>
+          <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
+          <div class="text-muted text-sm">{{student.createdTime|date_format()}}</div>
+        </td>
+       {#  <td>
+        剩余：360天
+        </td> #}
+        <td>
+          <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#my-student"><span class="color-primary">20%</span><span class="text-xs">（查看详情）</span></a>
+        </td>
+        <td>
+          <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">发私信</a>
+          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/students/{{student.userId}}/show">查看资料</a>
+          <div class="btn-group">
+            <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
+              更多
+              <span class="caret mls"></span>
+            </a>
+            <ul class="dropdown-menu pull-right">
+             {#  <li>
+                <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/student/{{student.userId}}/remark">备注</a>
+              </li> #}
+              {# <li>
+                <a class="follow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/follow">关注</a>
+                <a class="unfollow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/unfollow" style="display:none;">已关注</a>
+              </li> #}
+             {#  <li>
+                <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
+              </li> #}
+              <li>
+                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="modal fade" id="my-student">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">进度详情</h4>
+      </div>
+      <div class="modal-body">
+        <div class="class-detail-content">
+          <div class="es-piece">
+            <div class="piece-header">学习进度</div>
+            <div class="study-process-list row">
+              <div class="col-md-4 col-sm-4">
+                <div class="study-process-item well">
+                  <div class="title">累计学习天数</div>
+                  <div class="content">
+                    <span class="current">1</span>
+                    /
+                    <span class="total">计划 7 天</span>
+                  </div> <i class="es-icon es-icon-column"></i>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <div class="study-process-item well">
+                  <div class="title">目标学习速率</div>
+                  <div class="content">
+                    <span class="current">2小时</span>
+                    /
+                    <span class="total">天</span>
+                  </div> <i class="es-icon es-icon-target"></i>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <div class="study-process-item well bg-success">
+                  <div class="title">当前学习速率</div>
+                  <div class="content">
+                    <span class="current">2小时</span>
+                    /
+                    <span class="total">天</span>
+                  </div>
+                  <i class="es-icon es-icon-speed" style="font-size:90px"></i>
+                </div>
+              </div>
+            </div>
+            <div class="well process-table">
+              <div class="reference">
+                <span class="reference-item item-one">
+                  <i class="color-lump lump-xs"></i>
+                  未完成
+                </span>
+                <span class="reference-item item-two">
+                  <i class="color-lump lump-xs lump-success"></i>
+                  准时完成
+                </span>
+                <span class="reference-item item-three">
+                  <i class="color-lump lump-xs lump-warning"></i>
+                  逾期
+                </span>
+                <span class="reference-item item-four">
+                  <i class="color-lump lump-xs lump-danger"></i>
+                  严重逾期
+                </span>
+              </div>
+              <div class="lump-list">
+                <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover">
+                  <div class="process-popover-title bg-danger"> <i class="es-icon es-icon-lesson mrs"></i>
+                    课时 :都睡觉
+                  </div>
+                  <div class="process-popover-score">1 天</div>
+                  <div class="process-popover-date">计划完成日期：2016-03-08</div>
+                  <div class="process-popover-date">实际完成日期：2016-11-29</div>
+                </div>'>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="es-piece" style="margin-bottom:0">
+            <div class="piece-header">成绩单</div>
+            <div class="report-card">
+              <div class="report-card-header">
+                <i class="es-icon es-icon-chevronright mrs"></i>
+                初级阶段
+                <span class="include">作业：1/2&nbsp;&nbsp;&nbsp;考试：0/3</span>
+              </div>
+              <div class="report-card-main">
+                <div class="card-main-title open">
+                  <i class="es-icon es-icon-homework mrs"></i>
+                  作业：课时＂2016＂的作业
+                  <span class="score hidden-xs">
+                    <span>不合格</span>
+                  </span>
+                  <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="暂无评语">评语</span>
+                </div>
+                <ul class="score-list" style="display: block;">
+                  <li>
+                    <span class="name">第 1 次作业</span>
+                    <span class="date">2016/11/29</span>
+                    <span class="score">不合格</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="es-piece" style="margin-bottom:-20px">
+            <div class="piece-header">学习数据</div>
+            <div class="study-data row">
+              <div class="col-md-3 col-sm-6">
+                <div class="well">
+                  <p>发起提问</p>
+                  <p class="number">0</p>
+                  <i class="es-icon es-icon-comment1"></i>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="well">
+                  <p>发起话题</p>
+                  <p class="number">0</p>
+                  <i class="es-icon es-icon-topic"></i>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="well">
+                  <p>回复话题</p>
+                  <p class="number">0</p>
+                  <i class="es-icon es-icon-answer"></i>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="well">
+                  <p>参与活动</p>
+                  <p class="number">0</p>
+                  <i class="es-icon es-icon-activity"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

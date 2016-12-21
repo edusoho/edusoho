@@ -4,12 +4,12 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -47,7 +47,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
-    {   
+    {
         $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'course');
 
         $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
@@ -311,7 +311,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
-                $info = ArrayToolkit::parts($member, array('levelId'));
+                $info   = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"], $info);
                 return $member;
             }
@@ -462,14 +462,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     public function updateCourse($id, $fields)
-    {   
+    {
         $user = $this->getCurrentUser();
 
         $argument = $fields;
 
-        $tagIds   = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
-        $course   = $this->getCourseDao()->getCourse($id);
+        $course = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
             throw $this->createServiceException($this->getKernel()->trans('课程不存在，更新失败！'));
@@ -479,14 +479,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         //非法提交直接报错,service应该有反馈
         if (!empty($fields['expiryMode']) &&
             $course['status'] == 'published' &&
-            $fields['expiryMode'] != $course['expiryMode']) {
+            $fields['expiryMode'] != $course['expiryMode']
+        ) {
             throw $this->createServiceException('已发布的课程不允许修改学员有效期');
         }
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields        = $this->fillOrgId($fields);
-        $fields        = CourseSerialize::serialize($fields);
+        $fields = $this->fillOrgId($fields);
+        $fields = CourseSerialize::serialize($fields);
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
@@ -2090,7 +2091,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         //查询出订单
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        $user = $this->getUserService()->getUser($userId);
+        $user  = $this->getUserService()->getUser($userId);
         if (!empty($order)) {
             $reason = array(
                 'type'     => 'other',
@@ -2099,17 +2100,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
-      
+
         $this->getMemberDao()->deleteMember($member['id']);
-		$this->dispatchEvent(
-			'learning.quit',
-			new ServiceEvent($course, array('userId' => $userId))
-		);
+        $this->dispatchEvent(
+            'learning.quit',
+            new ServiceEvent($course, array('userId' => $userId))
+        );
 
         $this->getCourseDao()->updateCourse($courseId, array(
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
-
 
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
     }
@@ -2152,7 +2152,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function isCourseStudent($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->isCourseMember($courseId, $userId);
 
         if (!$member) {
             return false;
@@ -2752,7 +2752,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['lessonId']    = $lessonId;
             $fields['title']       = '录播回放'.$index;
             $fields['replayId']    = $replay['id'];
-            $fields['globalId']    = empty($replay['resourceNo']) ? '':$replay['resourceNo'];
+            $fields['globalId']    = empty($replay['resourceNo']) ? '' : $replay['resourceNo'];
             $fields['userId']      = $this->getCurrentUser()->id;
             $fields['createdTime'] = time();
             $this->addCourseLessonReplay($fields);
@@ -2988,9 +2988,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.FavoriteDao');
     }
 
-    /**
-     * @return CourseMemberDaoImpl
-     */
     protected function getMemberDao()
     {
         return $this->createDao('Course.CourseMemberDao');
@@ -3053,12 +3050,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getMessageService()

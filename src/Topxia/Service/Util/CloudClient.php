@@ -10,9 +10,13 @@ interface CloudClient
 
     public function getPPTConvertCommands();
 
+    public function convertPPT($key, $notifyUrl = null);
+
     public function getAudioInfo($key);
 
     public function removeFile($key);
+
+    public function moveFiles(array $files);
 
     public function getFileUrl($key, $targetId, $targetType);
 

@@ -4,6 +4,7 @@ namespace Topxia\Service\Content\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Content\BlockService;
 
 class BlockServiceImpl extends BaseService implements BlockService
@@ -337,7 +338,7 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

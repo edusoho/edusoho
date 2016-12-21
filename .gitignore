@@ -40,7 +40,6 @@ src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 /web/themes/*
-/web/build/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
@@ -48,6 +47,7 @@ src/Topxia/WebBundle/Resources/views/Test/*
 !/web/themes/block.json
 edusoho.komodoproject
 .project
+/vendor
 .settings
 composer.sublime-workspace
 web/assets/img/default/video.png
@@ -61,4 +61,6 @@ web/assets/img/default/video.png
 *.codekit
 web/php-performance.php
 chunk-manifest.json
+.ac-php-conf.json
 .npminstall.done
+/web/static-dist/dev.lock

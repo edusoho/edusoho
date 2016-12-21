@@ -5,6 +5,7 @@ namespace Topxia\Service\CloudData\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudData\CloudDataService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class CloudDataServiceImpl extends BaseService implements CloudDataService
 {
@@ -52,6 +53,6 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

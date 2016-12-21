@@ -44,7 +44,7 @@ tr.placeholder:before {
     <div class="clearfix mbm">
       <button data-url="{{ path('course_manage_testpaper_item_picker',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="glyphicon glyphicon-plus"></span> {{'新增试题'|trans}}</button>
       <ul class="nav nav-pills nav-mini">
-        {% for type in testpaper['metas']['question_type_seq'] %}
+        {% for type,count in testpaper['metas']['counts'] if count > 0 %}
           <li><a href="javascript:" data-type="{{ type }}" data-name="{{ dict_text('questionType', type) }}" class="testpaper-nav-link">{{ dict_text('questionType', type) }}</a></li>
         {% endfor %}
       </ul>

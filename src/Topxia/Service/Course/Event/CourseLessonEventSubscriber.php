@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
@@ -33,7 +34,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCourseLessonCreate(ServiceEvent $event)
+    public function onCourseLessonCreate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -76,7 +77,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonDelete(ServiceEvent $event)
+    public function onCourseLessonDelete(Event $event)
     {
         $context  = $event->getSubject();
         $lesson   = $context["lesson"];
@@ -104,7 +105,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUpdate(ServiceEvent $event)
+    public function onCourseLessonUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -125,7 +126,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonPublish(ServiceEvent $event)
+    public function onCourseLessonPublish(Event $event)
     {
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
@@ -141,7 +142,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUnpublish(ServiceEvent $event)
+    public function onCourseLessonUnpublish(Event $event)
     {
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
@@ -157,7 +158,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLessonStart(ServiceEvent $event)
+    public function onLessonStart(Event $event)
     {
         $lesson  = $event->getSubject();
         $course  = $event->getArgument('course');
@@ -187,7 +188,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onLessonFinish(ServiceEvent $event)
+    public function onLessonFinish(Event $event)
     {
         $lesson  = $event->getSubject();
         $course  = $event->getArgument('course');
@@ -221,7 +222,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onMaterialCreate(ServiceEvent $event)
+    public function onMaterialCreate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -232,7 +233,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialUpdate(ServiceEvent $event)
+    public function onMaterialUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -250,7 +251,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialDelete(ServiceEvent $event)
+    public function onMaterialDelete(Event $event)
     {
         $material = $event->getSubject();
 
@@ -262,7 +263,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onChapterCreate(ServiceEvent $event)
+    public function onChapterCreate(Event $event)
     {
         $context   = $event->getSubject();
         $argument  = $context['argument'];
@@ -279,7 +280,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onChapterDelete(ServiceEvent $event)
+    public function onChapterDelete(Event $event)
     {
         $chapter   = $event->getSubject();
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($chapter['courseId'], 1), 'id');
@@ -293,7 +294,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onChapterUpdate(ServiceEvent $event)
+    public function onChapterUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -315,7 +316,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLiveLessonGenerateVideo(ServiceEvent $event)
+    public function onLiveLessonGenerateVideo(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -335,7 +336,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLiveLessonReplayCreate(ServiceEvent $event)
+    public function onLiveLessonReplayCreate(Event $event)
     {
         $context = $event->getSubject();
         $replay  = $context['replay'];
@@ -368,7 +369,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onLiveLessonReplayUpdate(ServiceEvent $event)
+    public function onLiveLessonReplayUpdate(Event $event)
     {
         $context = $event->getSubject();
         $replay  = $context['replay'];
@@ -399,7 +400,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onLiveLessonReplayDelete(ServiceEvent $event)
+    public function onLiveLessonReplayDelete(Event $event)
     {
         $context  = $event->getSubject();
         $lessonId = $context['lessonId'];
@@ -583,7 +584,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getCloudFileService()

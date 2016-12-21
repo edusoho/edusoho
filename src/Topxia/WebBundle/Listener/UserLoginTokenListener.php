@@ -7,7 +7,6 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserLoginTokenListener
@@ -27,7 +26,7 @@ class UserLoginTokenListener
         }
 
         $userLoginToken = $request->getSession()->getId();
-        $user           = $this->getUserService()->getCurrentUser();
+        $user           = ServiceKernel::instance()->getCurrentUser();
 
         if (isset($user['locked']) && $user['locked'] == 1) {
             $this->container->get("security.token_storage")->setToken(null);

@@ -1,0 +1,131 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','app/js/task-manage/create/index.js']) %}
+
+{% block title %}
+  {% if task|default(false) %}
+    {{ '修改任务'|trans }}
+  {% else %}
+    {{ '添加任务'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="task-create-editor" id="task-create-editor">
+    <ul class="es-step es-step-3 clearfix" id="task-create-step">
+      <li class="doing">
+        <span class="number">1</span>
+        选择教学手段
+      </li>
+      <li>
+        <span class="number">2</span>
+        设置内容
+      </li>
+      <li>
+        <span class="number">3</span>
+        设置完成条件
+      </li>
+    </ul>
+    <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}"
+        {% if mode == 'edit' %}
+      data-editor-type="{{ currentType }}"
+      data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
+      data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
+    {% elseif mode == 'create' %}
+      data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
+        {% endif %}>
+      {#
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-description"></i>
+            看文档
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-pptclass"></i>
+            看PPT
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-flashclass"></i>
+            看flash
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-videocam"></i>
+            参加直播
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-filedownload"></i>
+            下载资料
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-exam"></i>
+            做作业题
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-mylibrarybooks"></i>
+            做练习题
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-lesson"></i>
+            参加考试
+          </a>
+        </li>
+        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-comment"></i>
+            参加讨论
+          </a>
+        </li>#}
+      <form class="form-horizontal" id="step1-form">
+        <ul class="form-group task-create-type-list ">
+          {% set types = activity_metas() %}
+          {% for type, meta in types %}
+            <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if currentType|default(null)==  type %} active {% endif %}"
+                data-role="activityType" data-type="{{ type }}"
+                data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+              <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}> <i
+                    class="{{ meta.icon }}"></i>
+                {{ meta.name }}
+              </a>
+            </li>
+          {% endfor %}
+          <li class="col-xs-12">
+            <label for="mediaType" class="hidden">分类</label>
+            <input name="mediaType" id="mediaType" class="type-hidden">
+            <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
+            <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
+            <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
+            <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='{{ course.courseSetId }}'> <!--FIXME 临时赋值 -->
+            <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <div id="task-create-content" class="task-create-content hidden"></div>
+  </div>
+{% endblock %}
+{% block footer %}
+  {% if task|default(false) %}
+    <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
+            data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
+      <i class="es-icon es-icon-delete"></i>{{ '删除'|trans }}</button>
+  {% endif %}
+  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ '上一步'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-primary">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-submit" type="submit" class="btn btn-info hidden"
+          data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+{% endblock %}

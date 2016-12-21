@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -107,7 +108,6 @@ class AttachmentController extends BaseController
         ));
     }
 
-
     public function deleteAction(Request $request, $id)
     {
         $previewType = $request->query->get('type', 'attachment');
@@ -125,6 +125,6 @@ class AttachmentController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

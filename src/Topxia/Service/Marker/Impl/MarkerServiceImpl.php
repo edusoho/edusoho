@@ -4,6 +4,7 @@ namespace Topxia\Service\Marker\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Marker\MarkerService;
 
 class MarkerServiceImpl extends BaseService implements MarkerService
@@ -186,11 +187,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

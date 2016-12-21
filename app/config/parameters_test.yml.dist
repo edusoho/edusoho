@@ -1,7 +1,6 @@
 parameters:
-    biz_config:
-        debug: "%kernel.debug%"
-        db.options:
+    parameters:
+        biz_db_options:
             dbname: edusoho-test
             user: tester
             password: tester
@@ -10,6 +9,3 @@ parameters:
             driver: pdo_mysql
             charset: UTF8
             wrapperClass: Codeages\Biz\Framework\Dao\TestCaseConnection
-        cache_directory: "%kernel.root_dir%/../var/cache"
-        tmp_directory: "%kernel.root_dir%/../var/tmp"
-        log_directory: "%kernel.root_dir%/../var/logs"

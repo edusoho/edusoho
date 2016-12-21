@@ -4,6 +4,7 @@ namespace Topxia\Service\Marker\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Marker\QuestionMarkerService;
 
 class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerService
@@ -166,7 +167,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getQuestionService()

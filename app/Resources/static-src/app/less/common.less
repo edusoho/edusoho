@@ -1,0 +1,186 @@
+.type-hidden {
+  display: block !important;
+  height: 0px!important;
+  border:0;
+  .opacity(0);
+  padding: 0px!important;
+  margin: 0px!important;//用于隐藏又需要验证的的控件
+}
+
+.tab-content {
+  padding-bottom: 0.1px;
+}
+
+
+.multi-group {
+  position: relative;
+  .options {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 50px;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid @border-color;
+  }
+}
+//临时
+.animated.alert {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  .close {
+    top: 13px;
+  }
+}
+
+.input-with-suffix {
+  display: inline-block;
+  width: 200px;
+  margin-right: 10px;
+}
+
+// html,body {
+//   height: 100%;//导致任务创建的iframe样式问题
+// }
+
+.border-radius-none {
+  border-radius: 0!important;
+}
+
+.task-content-view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top:0;
+  overflow: auto;
+  background-color: #fff;
+}
+
+.text-activity-show {
+  padding: 15px;
+  background-color: #fff;
+  word-spacing: normal;
+  img {
+    max-width: 100%;
+  }
+}
+
+.testpaper-activity-show {
+  overflow: hidden;
+  height: 100%;
+}
+
+
+.testpaper-activity-show-body {
+  min-height: 100%;
+  background-color: #111;
+}
+
+.view-toggle {
+  >.view-hide {
+    display: none;
+  }
+  >.view-show {
+   display: inline;
+  }
+  &.active{
+    >.view-show {
+      display: none;
+    }
+    >.view-hide {
+      display: inline;
+    }
+  }
+}
+
+
+
+.download-activity-show {
+  background-color: #fff;
+  .download-activity-list {
+    padding-left: 0;
+    list-style: none;
+    >li {
+      &:nth-of-type(odd) {
+        background-color: @bg-color;
+      }
+      >a {
+        display: block;
+        padding: 20px;
+        .download-icon {
+          float: right;
+          color: @gray-medium;
+        }
+        &:hover {
+          .download-icon {
+            color: @brand-primary;
+          }
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+
+//before 2.0
+body { 
+  line-height: 1;
+  background: @bg-new-color;
+  word-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  &.bg-blank {
+    background-color: #fff;
+  }
+}
+
+html.nav-active,
+html.nav-active body {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.es-wrap {
+  &.nav-active {
+    .es-transition();
+    transform: translate3d(250px, 0, 0);
+    -webkit-transform: translate3d(250px, 0, 0);
+    -o-transform: translate3d(250px, 0, 0);
+    -moz-transform: translate3d(250px, 0, 0);
+  }
+}
+
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backface-visibility: hidden;
+}
+
+#content-container {
+  margin: 30px auto;
+  min-height: 400px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 250px;
+  }
+}
+
+// 富文本编辑器
+.cke_chrome {
+  .border-radius();
+  border-color: @gray-light !important;
+  .box-shadow(none) !important;
+}

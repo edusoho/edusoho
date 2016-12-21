@@ -1,0 +1,25 @@
+{
+  "name": "EduSoho",
+  "version": "1.0.0",
+  "description": "The theme of Bilig named Unipus",
+  "main": "index.js",
+  "scripts": {
+    "test": "EduSoho"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@gitlab.howzhi.net:4422/Kuozhi-ES-Customization/es-19040-unipus-theme.git"
+  },
+  "keywords": [
+    "EduSoho"
+  ],
+  "author": "EduSoho",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sourcemaps": "^1.6.0"
+  }
+}

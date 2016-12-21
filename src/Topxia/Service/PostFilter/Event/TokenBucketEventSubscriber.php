@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\PostFilter\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -30,7 +31,7 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function before(ServiceEvent $event)
+    public function before(Event $event)
     {
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
@@ -46,7 +47,7 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
 
     }
 
-    public function incrToken(ServiceEvent $event)
+    public function incrToken(Event $event)
     {
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();

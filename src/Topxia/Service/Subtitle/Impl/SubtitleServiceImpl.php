@@ -2,6 +2,7 @@
 namespace Topxia\Service\Subtitle\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Subtitle\SubtitleService;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Common\Exception\InvalidArgumentException;
@@ -118,6 +119,6 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

@@ -158,36 +158,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
-    public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
-    {
-        $that = $this;
-
-        $versionKey = "{$this->table}:version:userId:{$userId}";
-        $version    = $this->getCacheVersion($versionKey);
-
-        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:type:{$type}:isLearned:{$isLearned}", $userId, $role, $type, $isLearned, function ($userId, $role, $type, $isLearned) use ($that) {
-            $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
-            $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
-            $sql .= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
-
-            return $that->getConnection()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
-        }
-
-        );
-    }
-
-    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-
-        $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
-        $sql .= " AND c.type =  ? AND m.courseId = c.id AND m.isLearned = ? AND m.role = ?";
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array($userId, $type, $isLearned, $role));
-    }
-
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
     {
         $that = $this;
@@ -210,30 +180,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         }
 
         );
-    }
-
-    public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
-    {
-        $that = $this;
-
-        $versionKey = "{$this->table}:version:userId:{$userId}";
-        $version    = $this->getCacheVersion($versionKey);
-
-        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:isLearned:{$isLearned}:count", $userId, $role, $isLearned, function ($userId, $role, $isLearned) use ($that) {
-            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  userId = ? AND role = ? AND isLearned = ?";
-            return $that->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
-        }
-
-        );
-    }
-
-    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql
-        = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
-            ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)

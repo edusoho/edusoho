@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
@@ -42,6 +43,61 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse($data);
     }
 
+
+    public function materialChooseAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
+        }
+
+        $currentUserId              = $currentUser['id'];
+        $conditions                 = $request->request->all();
+
+
+        $source                     = $conditions['sourceFrom'];
+        $conditions['status']       = 'ok';
+        $conditions['noTargetType'] = 'attachment';
+        if (!empty($conditions['keyword'])) {
+            $conditions['filename'] = $conditions['keyword'];
+            unset($conditions['keyword']);
+        }
+
+        $conditions['currentUserId'] = $currentUserId;
+        $paginator = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
+        $files     = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+
+        $collections = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds(
+            ArrayToolkit::column($files, 'id'),
+            $currentUserId
+        );
+
+        $collections = ArrayToolkit::index($collections, 'fileId');
+
+        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
+        $createdUsers = ArrayToolkit::index($createdUsers, 'id');
+
+        return $this->render('MaterialLibBundle:Web/Widget:choose-table.html.twig', array(
+            'files'        => $files,
+            'collections'  => $collections,
+            'createdUsers' => $createdUsers,
+            'source'       => $source,
+            'paginator'    => $paginator
+        ));
+
+    }
+
     public function showMyMaterialLibFormAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -67,12 +123,13 @@ class MaterialLibController extends BaseController
             $this->getUploadFileService()->searchFileCount($conditions),
             20
         );
-        $files = $this->getUploadFileService()->searchFiles(
+        $files     = $this->getUploadFileService()->searchFiles(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
 
         $collections = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds(
             ArrayToolkit::column($files, 'id'),
@@ -530,12 +587,12 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getUploadFileTagService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileTagService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
     }
 
     protected function getUploadFileShareHistoryService()

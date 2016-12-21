@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
@@ -32,7 +33,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onRoleChange(ServiceEvent $event)
+    public function onRoleChange(Event $event)
     {
         $user = $event->getSubject();
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
@@ -40,7 +41,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseJoin(ServiceEvent $event)
+    public function onCourseJoin(Event $event)
     {
         $course  = $event->getSubject();
         $private = $course['status'] == 'published' ? 0 : 1;
@@ -70,7 +71,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onCourseFavorite(ServiceEvent $event)
+    public function onCourseFavorite(Event $event)
     {
         $course  = $event->getSubject();
         $private = $course['status'] == 'published' ? 0 : 1;
@@ -98,7 +99,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    public function onCourseNoteCreate(ServiceEvent $event)
+    public function onCourseNoteCreate(Event $event)
     {
         $note      = $event->getSubject();
         $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
@@ -113,7 +114,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseNoteUpdate(ServiceEvent $event)
+    public function onCourseNoteUpdate(Event $event)
     {
         $note      = $event->getSubject();
         $preStatus = $event->getArgument('preStatus');
@@ -137,7 +138,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseNoteDelete(ServiceEvent $event)
+    public function onCourseNoteDelete(Event $event)
     {
         $note      = $event->getSubject();
         $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
@@ -153,19 +154,19 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseNoteLike(ServiceEvent $event)
+    public function onCourseNoteLike(Event $event)
     {
         $note = $event->getSubject();
         $this->getNoteService()->count($note['id'], 'likeNum', +1);
     }
 
-    public function onCourseNoteCancelLike(ServiceEvent $event)
+    public function onCourseNoteCancelLike(Event $event)
     {
         $note = $event->getSubject();
         $this->getNoteService()->count($note['id'], 'likeNum', -1);
     }
 
-    public function onCourseTeacherUpdate(ServiceEvent $event)
+    public function onCourseTeacherUpdate(Event $event)
     {
         $context = $event->getSubject();
 
@@ -190,7 +191,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseUpdate(ServiceEvent $event)
+    public function onCourseUpdate(Event $event)
     {
         $context = $event->getSubject();
 
@@ -211,7 +212,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->update();
     }
 
-    public function onCoursePriceUpdate(ServiceEvent $event)
+    public function onCoursePriceUpdate(Event $event)
     {
         $context   = $event->getSubject();
         $currency  = $context['currency'];
@@ -225,7 +226,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCoursePictureUpdate(ServiceEvent $event)
+    public function onCoursePictureUpdate(Event $event)
     {
         $context   = $event->getSubject();
         $argument  = $context['argument'];
@@ -239,7 +240,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onAnnouncementCreate(ServiceEvent $event)
+    public function onAnnouncementCreate(Event $event)
     {
         $announcement = $event->getSubject();
 
@@ -269,7 +270,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onAnnouncementUpdate(ServiceEvent $event)
+    public function onAnnouncementUpdate(Event $event)
     {
         $announcement = $event->getSubject();
 
@@ -307,7 +308,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onAnnouncementDelete(ServiceEvent $event)
+    public function onAnnouncementDelete(Event $event)
     {
         $announcement = $event->getSubject();
 
@@ -341,7 +342,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function onCourseReviewCreate(ServiceEvent $event)
+    public function onCourseReviewCreate(Event $event)
     {
         $review = $event->getSubject();
 
@@ -411,7 +412,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getAnnouncementService()

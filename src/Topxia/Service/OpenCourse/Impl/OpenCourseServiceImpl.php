@@ -5,6 +5,7 @@ namespace Topxia\Service\OpenCourse\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\OpenCourse\OpenCourseService;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
@@ -989,7 +990,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getOpenCourseDao()
@@ -1019,7 +1020,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getUserService()

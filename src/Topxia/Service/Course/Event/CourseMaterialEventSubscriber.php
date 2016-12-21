@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
@@ -32,7 +33,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onCourseDelete(ServiceEvent $event)
+    public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
         $this->getMaterialService()->deleteMaterialsByCourseId($course['id']);
@@ -41,7 +42,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $tagOwnerManager->delete();
     }
 
-    public function onCourseLessonCreate(ServiceEvent $event)
+    public function onCourseLessonCreate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -72,7 +73,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonDelete(ServiceEvent $event)
+    public function onCourseLessonDelete(Event $event)
     {
         $context  = $event->getSubject();
         $lesson   = $context['lesson'];
@@ -102,7 +103,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUpdate(ServiceEvent $event)
+    public function onCourseLessonUpdate(Event $event)
     {
         $context      = $event->getSubject();
         $argument     = $context['argument'];
@@ -152,7 +153,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUploadFileDelete(ServiceEvent $event)
+    public function onUploadFileDelete(Event $event)
     {
         $file = $event->getSubject();
 
@@ -172,7 +173,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUploadFileFinish(ServiceEvent $event)
+    public function onUploadFileFinish(Event $event)
     {
         $context = $event->getSubject();
         $file    = $context['file'];
@@ -187,7 +188,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialCreate(ServiceEvent $event)
+    public function onMaterialCreate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -214,7 +215,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialUpdate(ServiceEvent $event)
+    public function onMaterialUpdate(Event $event)
     {
         $context  = $event->getSubject();
         $argument = $context['argument'];
@@ -242,7 +243,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onMaterialDelete(ServiceEvent $event)
+    public function onMaterialDelete(Event $event)
     {
         $material = $event->getSubject();
 
@@ -261,14 +262,14 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onOpenCourseDelete(ServiceEvent $event)
+    public function onOpenCourseDelete(Event $event)
     {
         $course = $event->getSubject();
 
         $this->getMaterialService()->deleteMaterialsByCourseId($course['id'], 'openCourse');
     }
 
-    public function onOpenCourseLessonCreate(ServiceEvent $event)
+    public function onOpenCourseLessonCreate(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -300,7 +301,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onOpenCourseLessonUpdate(ServiceEvent $event)
+    public function onOpenCourseLessonUpdate(Event $event)
     {
         $context      = $event->getSubject();
         $lesson       = $context['lesson'];
@@ -347,7 +348,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onOpenCourseLessonDelete(ServiceEvent $event)
+    public function onOpenCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -376,7 +377,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLiveFileReplay(ServiceEvent $event)
+    public function onLiveFileReplay(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -408,7 +409,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $this->getMaterialService()->uploadMaterial($fields);
     }
 
-    public function onLiveOpenFileReplay(ServiceEvent $event)
+    public function onLiveOpenFileReplay(Event $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
@@ -459,7 +460,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getMaterialService()

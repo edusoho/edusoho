@@ -11,10 +11,6 @@ interface ThreadService
     */
     public function getThread($threadId);
 
-    public function searchThreads($conditions, $sort, $start, $limit);
-
-    public function searchThreadCount($conditions);
-
     public function findThreadsByTargetAndUserId($target, $userId, $start, $limit);
 
     public function findZeroPostThreadsByTarget($target, $start, $limit);

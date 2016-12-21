@@ -5,6 +5,7 @@ use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Article\CategoryService;
+use Topxia\Service\Common\ServiceKernel;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -309,6 +310,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

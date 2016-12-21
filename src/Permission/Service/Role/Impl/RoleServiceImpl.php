@@ -8,6 +8,7 @@ use Permission\Service\Role\RoleService;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Common\Tree;
+use Topxia\Service\Common\ServiceKernel;
 
 class RoleServiceImpl extends BaseService implements RoleService
 {
@@ -234,7 +235,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getUserService()

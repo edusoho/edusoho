@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -380,7 +381,6 @@ class CourseController extends CourseBaseController
         } catch (Exception $e) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('抱歉，未发布课程不能学习！'));
         }
-
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
             'course'    => $course,
             'starttime' => $starttime
@@ -798,7 +798,7 @@ class CourseController extends CourseBaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getAppService()

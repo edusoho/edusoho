@@ -5,6 +5,7 @@ imports:
     - { resource: security.yml }
     - { resource: biz.yml }
     - { resource: services.xml }
+    - { resource: "@AppBundle/Resources/config/services.yml" }
 
 framework:
     # esi:             ~

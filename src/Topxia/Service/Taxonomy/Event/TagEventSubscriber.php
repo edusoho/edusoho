@@ -1,10 +1,9 @@
 <?php
 namespace Topxia\Service\Taxonomy\Event;
 
+use Biz\File\Service\UploadFileTagService;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagEventSubscriber implements EventSubscriberInterface
@@ -17,14 +16,17 @@ class TagEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onTagDelete(ServiceEvent $event)
+    public function onTagDelete(Event $event)
     {
       $content = $event->getSubject();
       $this->getUploadFileTagService()->deleteByTagId($content['tagId']);
     }
 
+    /**
+     * @return UploadFileTagService
+     */
     protected function getUploadFileTagService()
     {
-        return ServiceKernel::instance()->createService('File.UploadFileTagService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileTagService');
     }
 }

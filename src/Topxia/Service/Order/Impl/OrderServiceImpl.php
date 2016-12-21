@@ -4,6 +4,7 @@ namespace Topxia\Service\Order\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\Dao\OrderDao;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
@@ -709,7 +710,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -278,7 +279,7 @@ class EduCloudController extends BaseController
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

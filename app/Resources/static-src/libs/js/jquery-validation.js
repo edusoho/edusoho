@@ -1,54 +1,108 @@
+
 import 'jquery-validation';
 
 $.validator.setDefaults({
-  errorClass: 'help-block jq-validate-error',
+  errorClass: 'form-error-message jq-validate-error',
   errorElement: 'p',
+  onkeyup: false,
+  ignore: '',
+  ajax: false,
+  currentDom: null, 
   highlight: function(element, errorClass, validClass) {
-    let $row = $(element).parents('.form-group');
-    $row.addClass('has-error');
-    $row.find('.help-block').each(function() {
-      let $this = $(this);
-      if (!$this.hasClass('jq-validate-error')) {
-        $this.hide();
-      }
-    });
+    let $row = $(element).addClass('form-control-error').closest('.form-group').addClass('has-error');
+    $row.find('.help-block').hide();
   },
   unhighlight: function(element, errorClass, validClass) {
-    let $row = $(element).parents('.form-group');
+    let $row = $(element).removeClass('form-control-error').closest('.form-group');
     $row.removeClass('has-error');
-    $row.find('.help-block').each(function() {
-      let $this = $(this);
-      if (!$this.hasClass('jq-validate-error')) {
-        $this.show();
-      }
-    });
+    $row.find('.help-block').show();
   },
   errorPlacement: function(error, element) {
-    if (element.parent().hasClass('input-group')) {
+    if (element.parent().hasClass('controls')) {
+      element.parent('.controls').append(error);
+    } else if (element.parent().hasClass('input-group')) {
       element.parent().after(error);
     } else if (element.parent().is('label')) {
-      element.parent().after(error);
+      element.parent().parent().append(error);
     } else {
-      element.after(error);
+      element.parent().append(error);
     }
   },
+  submitSuccess: function(data) {
+    
+  },
   submitHandler: function(form) {
-    let $submitBtn = $(form).find('[type="submit"][data-loading-text]');
-    $submitBtn.attr('disabled', 'disabled');
-    $submitBtn.text($submitBtn.data('loadingText'));
-    form.submit();
+    let $form = $(form);
+    let settings = this.settings;
+
+    settings.currentDom ? settings.currentDom.button('loading'): '';
+
+    if(settings.ajax) {
+      $.post($form.attr('action'), $form.serializeArray(), (data) => {
+        settings.submitSuccess(data);
+
+      }).error(() => {
+        settings.currentDom ? settings.currentDom.button('reset'): '';
+      });
+      
+    } else {
+      form.submit();
+    }
   }
 });
 
+$.extend( $.validator.prototype, {
+  defaultMessage: function( element, rule ) {
+    if ( typeof rule === "string" ) {
+      rule = { method: rule };
+    }
+
+    var message = this.findDefined(
+        this.customMessage( element.name, rule.method ),
+        this.customDataMessage( element, rule.method ),
+
+        // 'title' is never undefined, so handle empty string as undefined
+        !this.settings.ignoreTitle && element.title || undefined,
+        $.validator.messages[ rule.method ],
+        "<strong>Warning: No message defined for " + element.name + "</strong>"
+      ),
+      theregex = /\$?\{(\d+)\}/g,
+      displayregex = /%display%/g;
+    if ( typeof message === "function" ) {
+      message = message.call( this, rule.parameters, element );
+    } else if ( theregex.test( message ) ) {
+      message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
+    }
+
+    if ( displayregex.test( message ) ) {
+      var labeltext, name;
+      var id = $(element).attr( "id" );
+      if ( id ) {
+        labeltext = $( "label[for=" + id + "]" ).text();
+        if ( labeltext ) {
+          labeltext = labeltext.replace(/^[\*\s\:\：]*/, "").replace(/[\*\s\:\：]*$/, "");
+        }
+      }
+
+      name = $(element).attr("name");
+      message = message.replace( displayregex,labeltext || name )
+    }
+
+    return message;
+  }
+
+}); 
+
+
 $.extend($.validator.messages, {
-  required: "这是必填字段",
+  required: "请输入%display%",
   remote: "请修正此字段",
   email: "请输入有效的电子邮件地址",
   url: "请输入有效的网址",
   date: "请输入有效的日期",
   dateISO: "请输入有效的日期 (YYYY-MM-DD)",
   number: "请输入有效的数字",
-  digits: "只能输入数字",
+  digits: "只能输入整数",
   creditcard: "请输入有效的信用卡号码",
   equalTo: "你的输入不相同",
   extension: "请输入有效的后缀",
@@ -101,3 +155,8 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
   }
   return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
+
+
+'positive_integer',
+            /^[1-9]\d*$/,
+            Translator.trans('%display%必须为正整数', {display: '{{display}}'})

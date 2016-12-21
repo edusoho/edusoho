@@ -4,6 +4,7 @@ namespace Topxia\Service\Crontab\Impl;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Crontab\CrontabService;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
@@ -244,7 +245,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getSettingService()

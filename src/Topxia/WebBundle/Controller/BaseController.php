@@ -1,18 +1,19 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Topxia\Common\Exception\InvalidArgumentException;
+//use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\Impl\UserServiceImpl;
 
 abstract class BaseController extends Controller
 {
@@ -91,7 +92,7 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
-        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
+        return ServiceKernel::instance()->getBiz()->service('System:LogService')->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
 
         $loginBind = $this->setting('login_bind', array());
 
@@ -186,6 +187,15 @@ abstract class BaseController extends Controller
         return new AccessDeniedException($message, 403, $previous);
     }
 
+    public function createInvalidArgumentException($message = null)
+    {
+        if ($message) {
+            return new InvalidArgumentException($message);
+        } else {
+            return new InvalidArgumentException();
+        }
+    }
+
     protected function agentInWhiteList($userAgent)
     {
         $whiteList = array("iPhone", "iPad", "Android", "HTC");
@@ -269,7 +279,7 @@ abstract class BaseController extends Controller
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function fillOrgCode($conditions)

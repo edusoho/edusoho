@@ -1,0 +1,47 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/activity-manage/flash/index.js']) %}
+
+{% set mediaType = 'flash' %}
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style">Flash</label>
+    </div>
+    <div class="col-sm-10">
+      {% include 'file-chooser/file-choose.html.twig' with {
+      mediaType: 'flash',
+      fileType:'flash',
+      file: flash.media|default(null)
+      } %}
+      <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-select">{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="condition-select" name="finishType">
+        <option value="click" {% if flash.finishType|default('click') == 'click' %}selected{% endif %}>点击看过了</option>
+        <option value="time" {% if flash.finishType|default('click') == 'time' %}selected{% endif %}>至少观看X分钟</option>
+      </select>
+    </div>
+  </div>
+  <div class=" form-group {% if flash.finishType|default('click') != 'time' %}hidden{% endif %}" id="condition-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-detail">{{ '至少观看'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail"
+             value="{{ flash.finishDetail|default(1) }}">
+    </div>
+
+    <div class="col-xs-4 controls">
+      <p class="form-control-static">分钟</p>
+    </div>
+  </div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace Topxia\Service\Announcement\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Announcement\AnnouncementService;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -133,6 +134,6 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }

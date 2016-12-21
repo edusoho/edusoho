@@ -73,7 +73,7 @@
       <div class="dashboard-body">
         <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" style="display:none;"
             {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-              data-watermark="{{ filepath(setting('storage.video_watermark_image'), null) }}"
+              data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
             {% endif %}
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ finger_print() }}"

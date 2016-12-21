@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
 use Topxia\MobileBundle\Alipay\MobileAlipayRequest;
+use Topxia\Service\Common\ServiceKernel;
 
 class MobileAlipayController extends MobileController
 {
@@ -155,7 +156,7 @@ class MobileAlipayController extends MobileController
 
     public function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getOrderService()

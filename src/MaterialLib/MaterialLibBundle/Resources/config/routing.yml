@@ -122,3 +122,7 @@ global_file_ppt:
 global_file_document:
     path:  /global_file/{globalId}/document
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:document }
+
+material_lib_choose:
+     path: /material/lib/choose
+     defaults: { _controller: MaterialLibBundle:MaterialLib:materialChoose }

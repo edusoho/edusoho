@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Media\Impl;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Media\MediaService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Util\CloudClientFactory;
@@ -77,7 +78,7 @@ class MediaServiceImpl extends BaseService implements MediaService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 
     protected function getSettingService()

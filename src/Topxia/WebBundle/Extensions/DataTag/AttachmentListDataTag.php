@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class AttachmentListDataTag extends BaseDataTag implements DataTag
 {
@@ -9,6 +11,7 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
      * 获取附件列表
      *
      * @param  array $arguments     参数
+     * @throws \Exception
      * @return array 附件列表
      */
     public function getData(array $arguments)
@@ -22,8 +25,11 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
         return $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

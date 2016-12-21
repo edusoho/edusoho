@@ -213,10 +213,6 @@ classroom_thread_members_quit:
     path: /classroom/{classroomId}/thread/{threadId}/member/{memberId}/quit
     defaults: { _controller: ClassroomBundle:Thread/Member:quit }
 
-my_classrooms:
-    path: /my/classrooms
-    defaults: { _controller: ClassroomBundle:Classroom:myClassroom }
-
 classroom_headteacher_match:
     path: /classroom/{classroomId}/headteacher/match
     defaults: { _controller: ClassroomBundle:Common/Utility:headteacherMatch }
@@ -236,10 +232,6 @@ classroom_course_search:
 my_teaching_classroom_threads:
     path: /my/teaching/classroom/threads/{type}
     defaults: { _controller: ClassroomBundle:Classroom:classroomThreads }
-
-my_classroom_discussions:
-    path: /my/classroom/discussions
-    defaults: { _controller: ClassroomBundle:Classroom:classroomDiscussions }
 
 classroom_course_notes_list:
     path: /classroom/{classroomId}/courses/notes

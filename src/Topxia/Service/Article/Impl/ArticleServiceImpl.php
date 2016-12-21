@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Article\ArticleService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ArticleServiceImpl extends BaseService implements ArticleService
 {
@@ -527,7 +528,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getFileService()

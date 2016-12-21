@@ -3,9 +3,9 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveCourseController extends BaseController
 {
@@ -369,33 +369,9 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
         }
 
-        $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
-
         $params['id']       = $user['id'];
         $params['nickname'] = $user['nickname'];
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
-
-        $params['liveId']   = $lesson['mediaId'];
-        $params['provider'] = $lesson['liveProvider'];
-        $params['user']     = $user['email'];
-        $params['nickname'] = $user['nickname'];
-
-        $client = new EdusohoLiveClient();
-        $result = $client->entryLive($params);
-
-        if (empty($result) || isset($result['error'])) {
-            return $this->createMessageResponse('info', $result['errorMsg']);
-        }
-
-        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-            'courseId' => $courseId,
-            'lessonId' => $lessonId,
-            'lesson'   => $lesson,
-            'url'      => $this->generateUrl('live_classroom_url', array(
-                'courseId' => $courseId,
-                'lessonId' => $lessonId
-            ))
-        ));
     }
 
     public function verifyAction(Request $request)
@@ -673,6 +649,6 @@ class LiveCourseController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
     }
 }

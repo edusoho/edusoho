@@ -60,22 +60,17 @@
 
 	 {% endif %}
 
-	<div class="panel-body ">
-		<div class="lesson-list-wrapper pbl">
-			<ul class="lesson-list sortable-list js-period-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
-				{% for id, item in items %}
-				  {% if 'chapter' in id %}
-				    {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
-				  {% elseif 'lesson' in id  %}
-				  	{% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-				  {#
-				  {% elseif  item.type == 'testpaper'  %}
-				      {% include 'TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-				  #}
-				  {% endif %}
-				{% endfor %}
-			</ul>
-		</div>
+	<div class="panel-body">
+		<ul class="lesson-list sortable-list js-period-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
+			{% for id, item in items %}
+			  {% if 'chapter' in id %}
+			    {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
+			  {% elseif 'lesson' in id  %}
+			  	{% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
+			  {% endif %}
+			{% endfor %}
+
+		</ul>
 	</div>
 </div>
 

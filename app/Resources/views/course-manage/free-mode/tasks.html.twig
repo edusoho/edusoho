@@ -1,0 +1,56 @@
+{% extends 'course-manage/layout.html.twig' %}
+{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'plan' %}
+{% set active = 'tasks' %}
+
+{% block course %}
+  {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
+  <div class="task-list-header clearfix">
+    任务总数：<span class="color-warning space">{{ tasks|length }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
+    <div class="pull-right">
+      <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal"
+              data-backdrop="static" data-keyboard="false"
+              data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson'}) }}"><i
+            class="es-icon es-icon-anonymous-iconfont"></i> 课时
+      </button>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+          <i class="es-icon es-icon-anonymous-iconfont"></i>
+          {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+               data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{ '添加%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)}) }}
+            </a>
+          </li>
+          <li>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+               data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+              <i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{ '添加%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节')}) }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <ul id="sortable-list" class="task-manage-list sortable-list"
+      data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+    {% for key, item in items %}
+      {% if item.type == 'lesson' %}
+        {% include 'task-manage/list-item.html.twig' with {task:item} %}
+      {% else %}
+        {% include 'course-manage/chapter/list-item.html.twig' with {chapter:item, course:course} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endblock %}
+
+
+

@@ -60,9 +60,6 @@
   </div>
 
   <div class="form-group for-text-type">
-
-
-
     <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">{{'内容'|trans}}</label></div>
     <div class="col-md-9 controls">
 
@@ -80,7 +77,6 @@
       >{{ lesson.content|default('') }}</textarea>
     </div>
   </div>
-
   <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode|default('local') == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %} ">
     <div class="col-md-2 control-label for-video-type"><label>{{'视频'|trans}}</label></div>
     <div class="col-md-2 control-label for-audio-type"><label>{{'音频'|trans}}</label></div>

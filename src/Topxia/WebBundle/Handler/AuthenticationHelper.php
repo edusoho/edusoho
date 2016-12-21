@@ -46,7 +46,7 @@ class AuthenticationHelper
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    protected static function getSettingService()
+    private static function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }

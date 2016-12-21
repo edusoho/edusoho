@@ -251,7 +251,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 
     protected function getLessonDao()

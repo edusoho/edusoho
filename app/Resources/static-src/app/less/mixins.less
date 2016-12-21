@@ -1,0 +1,114 @@
+@import "mixins/fadeinleft.less";           //css3效果
+@import "mixins/fadeinup.less";             //css3效果
+@import "mixins/fadeinright.less";          //css3效果
+@import "mixins/fadeindown.less";           //css3效果
+@import "mixins/scale.less";                //css3效果
+@import "mixins/loader-inner.less";         //css3效果
+@import "mixins/shake.less";                //css3效果-上下抖动
+@import "mixins/transup.less";              //css3效果-向上推动
+@import "mixins/spin.less";                 //css3效果-旋转
+
+@import "mixins/color.less";                //颜色
+@import "mixins/spacing.less";              //间距
+@import "mixins/text.less";                 //文字
+@import "mixins/link.less";                 //链接
+@import 'mixins/bg-color.less';             //bg颜色
+
+.es-icon {
+  line-height: 1;
+}
+
+
+.label {
+  .border-radius;
+}
+
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
+// 富文本编辑器样式统一处理
+.editor-text {
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+.table td {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.section-gray {
+  background-color: @bg-new-color !important;
+  .text-line h5 > span {
+    background-color: @bg-new-color !important;
+  }
+}
+
+.section-wihte {
+  background-color: #fff !important;
+  .text-line h5 > span {
+    background-color: #fff !important;
+  }
+}
+
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
+// table-cell引起的兼容问题 小图标发引起问题
+// .media-body .editor-text img {
+//   width: 100% \9;
+//   @media screen and (min--moz-device-pixel-ratio:0) {
+//     width: 100%;
+//   }
+// }
+
+.inline-block {
+  display: inline-block;
+}
+
+// 用于空数据
+.empty {
+  text-align: center;
+  color: @gray-medium;
+  padding: 20px 0;
+}
+
+
+
+// 动画效果
+a.transition {
+  .es-transition;
+  &:hover {
+    .es-transition;
+  }
+}
+
+// 元素下划线
+.underline {
+  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+// 字符串截取 推荐用text-overflow
+.ellipsis,
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+

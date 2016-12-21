@@ -5,9 +5,9 @@ use Monolog\Logger;
 use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Util\HTMLPurifierFactory;
-use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 abstract class BaseService
 {
@@ -84,7 +84,7 @@ abstract class BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, null, $code);
+        return new AccessDeniedException($message, $code);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class BaseService
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
-        return new NotFoundException($message, $code);
+        return new ResourceNotFoundException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -103,7 +103,7 @@ abstract class BaseService
             if (!empty($fields['orgCode'])) {
                 $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
-                    throw $this->createServiceException($this->getKernel()->trans('组织机构%orgCode%不存在,更新失败', array('%orgCode%' => $fields['orgCode'])));
+                    throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
                 }
                 $fields['orgId']   = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];
@@ -138,7 +138,7 @@ abstract class BaseService
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            throw new AccessDeniedException('未登录用户，无权操作！');
         }
 
         $permissions = $user->getPermissions();
@@ -159,7 +159,7 @@ abstract class BaseService
         return true;
     }
 
-    public function setting($name, $default) 
+    public function setting($name, $default)
     {
         $names = explode('.', $name);
         $setting = $this->createService('System.SettingService')->get($names[0]);

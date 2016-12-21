@@ -50,20 +50,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $classrooms ? $this->createSerializer()->unserializes($classrooms, $this->serializeFields) : array();
     }
 
-    public function findClassroomsByIds(array $ids)
-    {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-
-        $classrooms = $this->getConnection()->fetchAll($sql, $ids);
-
-        return $classrooms ? $this->createSerializer()->unserializes($classrooms, $this->serializeFields) : array();
-    }
-
     public function searchClassroomsCount($conditions)
     {
         if (isset($conditions['classroomIds']) && empty($conditions['classroomIds'])) {

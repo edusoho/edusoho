@@ -38,21 +38,23 @@ class UploaderExtension extends \Twig_Extension
     {
         $modes = array(
             'courselesson'   => 'auto',
-            'coursematerial' => 'none',
-            'materiallib'    => 'auto'
+            'coursematerial' => 'auto',
+            'materiallib'    => 'auto',
+            'course-activity' => 'auto'
         );
 
         if (isset($modes[$targetType])) {
             return $modes[$targetType];
         }
 
-        return 'none';
+        return 'auto';
     }
 
     public function getUploadFileAccept($targetType, $only = '')
     {
         $targetAcceptTypes = array(
             'courselesson'   => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
+            'course-activity' => array('video', 'audio', 'flash', 'ppt', 'document', 'all'),
             'coursematerial' => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'materiallib'    => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'attachment'     => array('video', 'audio', 'ppt', 'document', 'zip')

@@ -92,12 +92,7 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
-{% if script() is empty %}
-  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-{% else %}
-  {# webpack #}
-  {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
-{% endif %}
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
 </body>
 </html>

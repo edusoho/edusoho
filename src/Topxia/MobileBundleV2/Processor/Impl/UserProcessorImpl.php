@@ -532,7 +532,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
             if ($this->controller->setting('cloud_sms.sms_enabled') == '1') {
-                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                $requestInfo                 = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
                     $registTypeName = $auth['register_mode'] == "mobile" ? "mobile" : "emailOrMobile";
@@ -1106,7 +1106,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $messageConditions = array(
             'toId' => $user['id']
         );
-        $sort              = array();
+        $sort = array();
 
         $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
         $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);

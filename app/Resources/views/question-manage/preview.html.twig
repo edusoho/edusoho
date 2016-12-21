@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+  <style>
+    body {
+      background-color: #fff;
+    }
+  </style>
+  <div style="padding:20px;">
+
+    {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+    {% if questionTemplate %}
+      {% include questionTemplate %}
+    {% endif %}
+  
+  </div>
+  <div id="attachment-modal" class="modal"></div>
+{% endblock %}

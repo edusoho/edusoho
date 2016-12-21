@@ -40,52 +40,6 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function myClassroomAction()
-    {
-        $user       = $this->getCurrentUser();
-        $progresses = array();
-        $classrooms = array();
-
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role'   => 'student',
-            'userId' => $user->id
-        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role'   => 'auditor',
-            'userId' => $user->id
-        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-
-        $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
-
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
-
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-
-        foreach ($classrooms as $key => $classroom) {
-            $courses      = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-            $coursesCount = count($courses);
-
-            $classrooms[$key]['coursesCount'] = $coursesCount;
-
-            $classroomId = array($classroom['id']);
-            $member      = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomId);
-            $time        = time() - $member[$classroom['id']]['createdTime'];
-            $day         = intval($time / (3600 * 24));
-
-            $classrooms[$key]['day'] = $day;
-
-            $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
-        }
-
-        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-        return $this->render("ClassroomBundle:Classroom:my-classroom.html.twig", array(
-            'classrooms' => $classrooms,
-            'members'    => $members,
-            'progresses' => $progresses
-        ));
-    }
-
     public function headerAction($previewAs, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -912,40 +866,6 @@ class ClassroomController extends BaseController
             'classrooms' => $classrooms,
             'type'       => $type,
             'threadType' => 'classroom'
-        ));
-    }
-
-    public function classroomDiscussionsAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId'     => $user['id'],
-            'type'       => 'discussion',
-            'targetType' => 'classroom'
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchThreadCount($conditions),
-            20
-        );
-        $threads = $this->getThreadService()->searchThreads(
-            $conditions,
-            'createdNotStick',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
-        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
-
-        return $this->render('ClassroomBundle:Classroom:classroom-discussions.html.twig', array(
-            'threadType' => 'classroom',
-            'paginator'  => $paginator,
-            'threads'    => $threads,
-            'users'      => $users,
-            'classrooms' => $classrooms
         ));
     }
 

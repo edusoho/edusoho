@@ -6,8 +6,6 @@ interface GroupDao
 {
 	public function getGroup($id);
 
-	public function getGroupsByIds($ids);
-
 	public function getGroupByTitle($title);
 
     public function searchGroups($conditions, $orderBy, $start, $limit);

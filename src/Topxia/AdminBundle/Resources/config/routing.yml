@@ -1558,8 +1558,7 @@ admin_invite_set:
 
 admin_invite_coupon:
     path: /invite/{filter}/coupon/
-    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'}
-
+    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'} 
 
 admin_invite_coupon_query:
     path: /invite/coupon/query/

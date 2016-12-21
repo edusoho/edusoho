@@ -151,7 +151,12 @@ define(function(require, exports, module) {
             this.set('starttime', this.element.data('starttime'));
         },
 
+
+
         _initToolbar: function() {
+
+            console.log(app.arguments.plugins);
+            console.log(this.get('courseId'));
             this._toolbar = new Toolbar({
                 element: '#lesson-dashboard-toolbar',
                 activePlugins: app.arguments.plugins,

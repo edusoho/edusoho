@@ -182,6 +182,6 @@ class UpgradeCommand extends BaseCommand
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }
