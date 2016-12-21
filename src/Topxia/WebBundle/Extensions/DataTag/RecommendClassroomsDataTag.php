@@ -28,7 +28,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('recommendedSeq', 'ASC'),
+            array('recommendedSeq' => 'ASC'),
             0,
             $arguments['count']
         );
@@ -39,7 +39,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
             $classroomTemp = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0,
                 $arguments['count'] - $classroomCount
             );
