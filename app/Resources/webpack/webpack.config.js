@@ -30,6 +30,12 @@ const config = {
         '**/samples/**',
         '**/lang/!(zh-cn.js)',
       ]
+    },
+    {
+      name: 'bootstrap/dist/css/bootstrap.css'
+    },
+    {
+      name: 'font-awesome/css/font-awesome.css'
     }
   ],
 }
