@@ -1,4 +1,5 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
+// import postal from 'postal';
 
 class QuestionFormBase {
   constructor($form){
@@ -23,8 +24,32 @@ class QuestionFormBase {
   }
 
   submitForm(event) {
-    let submitType = $(event.currentTarget).data('submission');
-    this.$form.find('[name=submission]').val(submitType);
+    // console.log("postal");
+    
+    // // let submitType = $(event.currentTarget).data('submission');
+    // // this.$form.find('[name=submission]').val(submitType);
+    // postal.publish({
+    //   channel: "orders",
+    //   topic: "item.add",
+    //   data: {
+    //       sku: "AZDTF4346",
+    //       qty: 21
+    //   }
+    // });
+
+
+    // var subscription = postal.subscribe({
+    //   channel: "orders",
+    //   topic: "item.add",
+    //   callback: function(data, envelope) {
+    //     console.log(data);
+    //       // `data` is the data published by the publisher. 
+    //       // `envelope` is a wrapper around the data & contains 
+    //       // metadata about the message like the channel, topic, 
+    //       // timestamp and any other data which might have been 
+    //       // added by the sender. 
+    //   }
+    // });
   }
 
   _initValidate() {
@@ -52,7 +77,7 @@ class QuestionFormBase {
             difficulty : "请选择难度"
         },
         submitHandler(){
-          console.log('submitHandler111');
+          
         }
     });
     this.validator = validator;

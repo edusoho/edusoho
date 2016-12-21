@@ -73,6 +73,7 @@
     "jquery-sortable": "0.9.13",
     "jquery-validation": "1.15.1",
     "moment": "2.16.0",
+    "postal": "^2.0.5",
     "rc-select": "^6.6.9",
     "rc-steps": "2.2",
     "react": "0.14.8",

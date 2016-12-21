@@ -27,6 +27,7 @@ import QuestionOptions from '../../../common/widget/question-options';
 
 class SingleChoice extends QuestionFormBase {
   constructor($form) {
+    
     super($form);
     this.initTitleEditor();
     this.initAnalysisEditor();
