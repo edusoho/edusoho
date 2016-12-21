@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3410,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -11073,7 +11073,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -15497,6 +15497,136 @@ textarea {
   bottom: 60px;
   left: 120px;
   right: 120px;
+}
+.es-mobile body {
+  background-color: #fff;
+}
+.es-mobile .course-dashboard-page .breadcrumb-o,
+.es-mobile .course-dashboard-page .es-footer-link,
+.es-mobile .course-dashboard-page .es-footer,
+.es-mobile .course-dashboard-page .progress-sm {
+  display: none;
+}
+.es-mobile .course-dashboard-page .course-detail-header .es-section {
+  margin: 10px 0;
+}
+.es-mobile .course-dashboard-page #content-container {
+  margin: 10px auto;
+  min-height: auto;
+}
+.es-mobile .course-dashboard-page .course-sidebar {
+  display: none;
+}
+.es-mobile .course-dashboard-page .course-operation {
+  width: auto;
+  float: none;
+}
+.es-mobile .course-detail-header.after .course-info {
+  padding: 15px 0 0;
+}
+.es-mobile .course-detail-header.after .course-info .subtitle,
+.es-mobile .course-detail-header.after .course-info .metas {
+  display: none;
+}
+.es-mobile .course-detail-header.after .course-info .title {
+  font-size: 18px;
+  margin: 0 0 5px;
+}
+.es-mobile .course-detail-header.before .subtitle,
+.es-mobile .course-detail-header.before .score,
+.es-mobile .course-detail-header.before .discount-price label {
+  display: none;
+}
+.es-mobile .course-detail-header.before .discount-price .price {
+  font-size: 18px;
+}
+.es-mobile .course-detail-header .course-data {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  padding: 0;
+}
+.es-mobile .course-detail-header .course-data > li {
+  width: auto;
+  margin: 5px 0;
+  padding: 0 20px;
+  line-height: inherit;
+  position: relative;
+}
+.es-mobile .course-detail-header .course-data > li:last-child:after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 10px;
+  height: 15px;
+  width: 1px;
+  background-color: #C1C1C1;
+}
+.es-mobile .course-detail-header .course-data > li i {
+  font-size: 20px;
+}
+.es-mobile .course-detail-header .course-data > li p {
+  font-size: 12px;
+}
+.es-mobile .es-mobile-course-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 49px;
+  background-color: #F5F5F5;
+}
+.es-mobile .course-detail-header .course-header-bottom,
+.es-mobile .buy {
+  position: fixed;
+  bottom: 0;
+  z-index: 9999;
+  right: 0;
+  padding: 0;
+}
+.es-mobile .course-detail-header .course-header-bottom > span,
+.es-mobile .buy > span {
+  float: none !important;
+  vertical-align: sub;
+  padding-right: 15px;
+}
+.es-mobile .course-detail-header .course-header-bottom .btn,
+.es-mobile .buy .btn {
+  padding: 16px 30px 15px;
+  border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+.es-mobile .es-section {
+  padding: 10px;
+}
+.es-mobile .nav.nav-tabs > li > a:first-child {
+  padding: 2px 8px 12px 0;
+}
+.es-mobile .nav.nav-tabs > li.active a {
+  color: #313131;
+}
+.es-mobile .period-list .period {
+  padding: 10px 100px 10px 30px;
+}
+.es-mobile .period-list .period .es-icon-undone,
+.es-mobile .period-list .period .es-icon-doing,
+.es-mobile .period-list .period .es-icon-done1 {
+  left: 0;
+}
+.es-mobile .next-class,
+.es-mobile .es-piece .piece-header {
+  display: none;
+}
+.es-mobile .course-detail-header.before .course-operation .buy {
+  width: auto;
+  padding: 0;
+}
+.es-mobile .course-detail-header.before .course-operation .buy .btn {
+  padding: 15px 30px 16px;
 }
 html {
   height: 100%;

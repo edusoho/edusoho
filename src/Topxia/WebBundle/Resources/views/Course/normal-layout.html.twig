@@ -82,5 +82,7 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   } %}
-
+  {% block course_bar %}
+    {% include 'TopxiaWebBundle:Course:Mobile/course-bottom.html.twig' %}
+  {% endblock %}
 {% endblock %}

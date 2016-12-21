@@ -1,0 +1,138 @@
+.es-mobile {
+	body {
+		background-color: #fff;
+	}
+	.course-dashboard-page {
+		.breadcrumb-o, .es-footer-link, .es-footer, .progress-sm {
+			display: none;
+		}
+		.course-detail-header .es-section {
+			margin: 10px 0;
+		}
+		#content-container {
+			margin: 10px auto;
+			min-height: auto;
+		}
+		.course-sidebar {
+			display: none;
+		}
+		.course-operation {
+			width: auto;
+			float: none;
+		}
+	}
+	.course-detail-header.after {
+		.course-info {
+			padding: 15px 0 0;
+
+			.subtitle, .metas {
+				display: none;
+			}
+			.title {
+				font-size: 18px;
+				margin: 0 0 5px;
+			}
+		}
+	}
+	.course-detail-header.before {
+		.subtitle, .score, .discount-price label {
+			display: none;
+		}
+		.discount-price .price {
+			font-size: 18px;
+		}
+	}
+	.course-detail-header .course-data {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		z-index: 9999;
+		padding: 0;
+
+		>li {
+			width: auto;
+			margin: 5px 0;
+			padding: 0 20px;
+			line-height: inherit;
+			position: relative;
+
+			&:last-child {
+				&:after {
+					content: '';
+					display: inline-block;
+					position: absolute;
+					left: 0;
+					top: 10px;
+					height: 15px;
+					width: 1px;
+					background-color: #C1C1C1;
+				}
+			}
+			i {
+				font-size: 20px;
+			}
+			p {
+				font-size: 12px;
+			}
+		}
+	}
+	.es-mobile-course-bottom {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 49px;
+		background-color: #F5F5F5;
+	}
+	.course-detail-header .course-header-bottom, .buy {
+		position: fixed;
+		bottom: 0;
+		z-index: 9999;
+		right: 0;
+		padding: 0;
+
+		>span {
+			float: none !important;
+			vertical-align: sub;
+			padding-right: 15px;
+		}
+		.btn {
+			padding: 16px 30px 15px;
+			border: none;
+			.border-radius(0);
+		}
+	}
+	.es-section {
+		padding: 10px;
+	}
+	.nav.nav-tabs > li {
+		> a {
+			&:first-child {
+				padding: 2px 8px 12px 0;
+			}
+		}
+		&.active {
+			a {
+				color: @gray-darker;
+			}
+		}
+	}
+	.period-list .period {
+		padding: 10px 100px 10px 30px;
+
+		.es-icon-undone, .es-icon-doing, .es-icon-done1 {
+			left: 0;
+		}
+	}
+	.next-class,.es-piece .piece-header{
+		display: none;
+	}
+	.course-detail-header.before .course-operation .buy {
+		width: auto;
+		padding: 0;
+
+		.btn {
+			padding: 15px 30px 16px;
+		}
+	}
+}
