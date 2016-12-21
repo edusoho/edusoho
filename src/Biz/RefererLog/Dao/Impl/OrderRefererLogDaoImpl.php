@@ -11,6 +11,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime'),
             'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
                 "id IN ( :ids )",
