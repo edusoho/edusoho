@@ -722,7 +722,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sordtedCourses;
     }
 
-    public function git cgit sfindActiveCoursesByClassroomId($classroomId)
+    public function findActiveCoursesByClassroomId($classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
         $courseIds        = ArrayToolkit::column($classroomCourses, 'courseId');
@@ -1443,9 +1443,34 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->updateMember($classroomMember['id'], $fields);
     }
 
-    public function calculateUserLearnProgress($classroomId, $userId)
+    public function calculateClassroomCoursesLearnProgress($classroomId, $userId)
     {
+        $courses            = $this->findActiveCoursesByClassroomId($classroomId);
+        $courses = ArrayToolkit::index($courses, 'id');
+        $courseIds          = ArrayToolkit::column($courses, 'id');
+        $conditions = array(
+            'userId' => $userId,
+            'courseIds' => $courseIds
+        );
 
+        $count = $this->getCourseService()->searchMemberCount($conditions);
+
+        $courseMembers = $this->getCourseService()->searchMembers(
+            $conditions,
+            array('id', 'DESC'),
+            0,
+            $count
+        );
+
+        $coursesLearnProgress = array();
+        foreach ($courseMembers as $courseMember) {
+            $coursesLearnProgress[] = array(
+                'courseId' => $courseMember['courseId'],
+                'totalLesson' => $courses[$courseMember['courseId']]['lessonNum'],
+                'learnedNum' => $courseMember['learnedNum']
+            );
+        }
+        return $coursesLearnProgress;
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
