@@ -4,20 +4,20 @@
 namespace Topxia\Common;
 
 
-use Org\Service\Org\OrgService;
-use Permission\Service\Role\RoleService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\ContentService;
+use Biz\Content\Service\FileService;
+use Biz\Content\Service\NavigationService;
+use Biz\Crontab\Service\CrontabService;
+use Biz\Dictionary\Service\DictionaryService;
+use Biz\Org\Service\OrgService;
+use Biz\Role\Service\RoleService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Content\BlockService;
-use Topxia\Service\Content\ContentService;
-use Topxia\Service\Content\FileService;
-use Topxia\Service\Content\NavigationService;
-use Topxia\Service\Crontab\CrontabService;
-use Topxia\Service\Dictionary\DictionaryService;
 use Biz\System\Service\SettingService;
-use Topxia\Service\Taxonomy\CategoryService;
-use Topxia\Service\Taxonomy\TagService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 
@@ -702,7 +702,7 @@ EOD;
      */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy:TagService');
+        return ServiceKernel::instance()->getBiz()->service('Taxonomy:TagService');
     }
 
     /**
@@ -710,7 +710,7 @@ EOD;
      */
     protected function getCategoryService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy:CategoryService');
+        return ServiceKernel::instance()->getBiz()->service('Taxonomy:CategoryService');
     }
 
     /**
@@ -718,7 +718,7 @@ EOD;
      */
     private function getCrontabService()
     {
-        return ServiceKernel::instance()->createService('Crontab:CrontabService');
+        return ServiceKernel::instance()->getBiz()->service('Crontab:CrontabService');
     }
 
     /**
@@ -726,7 +726,7 @@ EOD;
      */
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     /**
@@ -734,7 +734,7 @@ EOD;
      */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 
     /**
@@ -742,7 +742,7 @@ EOD;
      */
     private function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content:FileService');
+        return ServiceKernel::instance()->getBiz()->service('Content:FileService');
     }
 
     /**
@@ -750,7 +750,7 @@ EOD;
      */
     protected function getContentService()
     {
-        return ServiceKernel::instance()->createService('Content:ContentService');
+        return ServiceKernel::instance()->getBiz()->service('Content:ContentService');
     }
 
     /**
@@ -758,7 +758,7 @@ EOD;
      */
     protected function getBlockService()
     {
-        return ServiceKernel::instance()->createService('Content:BlockService');
+        return ServiceKernel::instance()->getBiz()->service('Content:BlockService');
     }
 
     /**
@@ -766,7 +766,7 @@ EOD;
      */
     protected function getNavigationService()
     {
-        return ServiceKernel::instance()->createService('Content:NavigationService');
+        return ServiceKernel::instance()->getBiz()->service('Content:NavigationService');
     }
 
     /**
@@ -774,7 +774,7 @@ EOD;
      */
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org:OrgService');
+        return ServiceKernel::instance()->getBiz()->service('Org:OrgService');
     }
 
     /**
@@ -782,7 +782,7 @@ EOD;
      */
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Role:RoleService');
+        return ServiceKernel::instance()->getBiz()->service('Role:RoleService');
     }
 
     /**
@@ -790,6 +790,6 @@ EOD;
      */
     protected function getDictionaryService()
     {
-        return ServiceKernel::instance()->createService('Dictionary:DictionaryService');
+        return ServiceKernel::instance()->getBiz()->service('Dictionary:DictionaryService');
     }
 }

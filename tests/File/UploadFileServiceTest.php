@@ -831,7 +831,7 @@ class UploadFileServiceTest extends BaseTestCase
      */
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     /**

@@ -4,8 +4,8 @@
 namespace Biz\Common;
 
 
+use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Service\Util\HTMLPurifierFactory;
 
 class HTMLHelper
 {

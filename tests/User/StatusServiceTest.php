@@ -15,6 +15,6 @@ class StatusServiceTest extends BaseTestCase
 
     protected function getStatusService()
     {
-        return $this->createService('User:StatusService');
+        return $this->getBiz()->service('User:StatusService');
     }
 }

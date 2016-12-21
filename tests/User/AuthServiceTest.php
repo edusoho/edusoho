@@ -382,16 +382,16 @@ class AuthServiceTest extends BaseTestCase
 
     protected function getAuthService()
     {
-        return $this->createService('User:AuthService');
+        return $this->getBiz()->service('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

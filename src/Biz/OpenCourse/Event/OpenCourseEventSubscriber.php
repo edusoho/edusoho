@@ -1,12 +1,11 @@
 <?php
-namespace Biz\OpenCourse\Service\Event;
+namespace Biz\OpenCourse\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\Taxonomy\TagOwnerManager;
+use Codeages\PluginBundle\Event\EventSubscriber;
+use Biz\Taxonomy\TagOwnerManager;
 
-class OpenCourseEventSubscriber implements EventSubscriberInterface
+class OpenCourseEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
@@ -145,16 +144,16 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
 
     protected function getNoteService()
     {
-        return ServiceKernel::instance()->createService('Course:NoteService');
+        return $this->getBiz()->service('Course:NoteService');
     }
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course:MaterialService');
+        return $this->getBiz()->service('Course:MaterialService');
     }
 }

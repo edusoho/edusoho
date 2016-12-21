@@ -46,7 +46,9 @@ class SystemUtilServiceImplTest extends BaseTestCase
         $test = $this->getSystemUtilService()->removeUnusedUploadFiles();
 
         $this->assertEquals(1, $test);
-
+        $biz = $this->getBiz();
+        unset($biz['@File:LocalFileImplementor']);
+        unset($biz['@File:UploadFileDao']);
     }
 
     protected function getUploadFileService()

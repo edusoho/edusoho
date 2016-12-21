@@ -53,7 +53,7 @@ interface OrderService
      */
     public function countRefunds($conditions);
 
-    public function findRefundByOrderId($orderId);
+    public function getRefundByOrderId($orderId);
 
     /**
      * 申请退款

@@ -3,7 +3,6 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
 class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
 {
@@ -37,7 +36,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         array_multisort($promotedSeq, SORT_ASC, $promotedTime, SORT_DESC, $users);
 
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
-        $user     = $this->getUserService()->getCurrentUser();
+        $user     = $this->getCurrentUser();
 
         if ($user->isLogin()) {
             $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], ArrayToolkit::column($users, 'id'));

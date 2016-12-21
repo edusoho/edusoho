@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Classroom\Dao\Impl;
-
 
 use Biz\Classroom\Dao\ClassroomMemberDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -33,25 +31,25 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function countStudents($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->getTable()} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function countAuditors($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->getTable()} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function findAssistantsByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
     public function findTeachersByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
@@ -69,7 +67,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function getByClassroomIdAndUserId($classroomId, $userId)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE userId = ? AND classroomId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
     }
 
@@ -153,5 +151,4 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
         return parent::_createQueryBuilder($conditions);
     }
-
 }

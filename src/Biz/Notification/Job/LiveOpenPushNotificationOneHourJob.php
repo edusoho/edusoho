@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Service\Notification\Job;
+namespace Biz\Notification\Job;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 
