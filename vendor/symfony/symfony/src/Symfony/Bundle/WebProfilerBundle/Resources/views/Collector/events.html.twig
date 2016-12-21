@@ -1,0 +1,117 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% import _self as helper %}
+
+{% block menu %}
+<span class="label">
+    <span class="icon">{{ include('@WebProfiler/Icon/event.svg') }}</span>
+    <strong>Events</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Event Dispatcher</h2>
+
+    {% if collector.calledlisteners is empty %}
+        <div class="empty">
+            <p>No events have been recorded. Check that debugging is enabled in the kernel.</p>
+        </div>
+    {% else %}
+        <div class="sf-tabs">
+            <div class="tab">
+                <h3 class="tab-title">Called Listeners <span class="badge">{{ collector.calledlisteners|length }}</span></h3>
+
+                <div class="tab-content">
+                    {{ helper.render_table(collector.calledlisteners) }}
+                </div>
+            </div>
+
+            <div class="tab">
+                <h3 class="tab-title">Not Called Listeners <span class="badge">{{ collector.notcalledlisteners|length }}</span></h3>
+                <div class="tab-content">
+                    {% if collector.notcalledlisteners is empty %}
+                        <div class="empty">
+                            <p>
+                                <strong>There are no uncalled listeners</strong>.
+                            </p>
+                            <p>
+                                All listeners were called for this request or an error occurred
+                                when trying to collect uncalled listeners (in which case check the
+                                logs to get more information).
+                            </p>
+                        </div>
+                    {% else %}
+                        {{ helper.render_table(collector.notcalledlisteners) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% macro render_table(listeners) %}
+    <table>
+        <thead>
+            <tr>
+                <th class="text-right">Priority</th>
+                <th>Listener</th>
+            </tr>
+        </thead>
+
+        {% set previous_event = (listeners|first).event %}
+        {% for listener in listeners %}
+            {% if loop.first or listener.event != previous_event %}
+                {% if not loop.first %}
+                    </tbody>
+                {% endif %}
+
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="colored font-normal">{{ listener.event }}</th>
+                    </tr>
+
+                {% set previous_event = listener.event %}
+            {% endif %}
+
+            <tr>
+                <td class="text-right">{{ listener.priority|default('-') }}</td>
+                <td class="font-normal">
+                    {% if listener.type == 'Closure' %}
+
+                        Closure
+                        <span class="text-muted text-small">(there is no class or file information)</span>
+
+                    {% elseif listener.type == 'Function' %}
+
+                        {% set link = listener.file|file_link(listener.line) %}
+                        {% if link %}
+                            <a href="{{ link }}">{{ listener.function }}()</a>
+                            <span class="text-muted text-small">({{ listener.file }})</span>
+                        {% else %}
+                            {{ listener.function }}()
+                            <span class="text-muted newline text-small">{{ listener.file }} (line {{ listener.line }})</span>
+                        {% endif %}
+
+                    {% elseif listener.type == "Method" %}
+
+                        {% set link = listener.file|file_link(listener.line) %}
+                        {% set class_namespace = listener.class|split('\\', -1)|join('\\') %}
+
+                        {% if link %}
+                            <a href="{{ link }}"><strong>{{ listener.class|abbr_class|striptags }}</strong>::{{ listener.method }}()</a>
+                            <span class="text-muted text-small">({{ listener.class }})</span>
+                        {% else %}
+                            <span>{{ class_namespace }}\</span><strong>{{ listener.class|abbr_class|striptags }}</strong>::{{ listener.method }}()
+                            <span class="text-muted newline text-small">{{ listener.file }} (line {{ listener.line }})</span>
+                        {% endif %}
+
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% if loop.last %}
+                </tbody>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endmacro %}
