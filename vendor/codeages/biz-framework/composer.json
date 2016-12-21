@@ -1,0 +1,24 @@
+{
+    "name": "codeages/biz-framework",
+    "description": "A service layer framework.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": { 
+            "Codeages\\Biz\\Framework\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { 
+            "TestProject\\": "tests/TestProject/src/"
+        }
+    },
+    "require": {
+        "php": "^5.3.3 || ^7.0",
+        "pimple/pimple": "^3.0.2",
+        "doctrine/dbal": "^2.4.5",
+        "davedevelopment/phpmig": "^1.2.0",
+        "psr/log": "^1.0.0",
+        "symfony/event-dispatcher": "^2.8.9"
+    }
+}

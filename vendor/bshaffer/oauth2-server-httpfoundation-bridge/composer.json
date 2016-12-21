@@ -1,0 +1,23 @@
+{
+    "name": "bshaffer/oauth2-server-httpfoundation-bridge",
+    "description":"A bridge to HttpFoundation for oauth2-server-php",
+    "keywords":["oauth","oauth2","auth","httpfoundation"],
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Brent Shaffer",
+            "email": "bshafs@gmail.com",
+            "homepage":"http://brentertainment.com"
+        }
+    ],
+    "homepage": "http://github.com/bshaffer/oauth2-server-httpfoundation-bridge",
+    "require":{
+        "php":">=5.3.0",
+        "symfony/http-foundation": ">=2.1",
+        "bshaffer/oauth2-server-php": ">=0.9"
+    },
+    "autoload": {
+        "psr-0": { "OAuth2\\HttpFoundationBridge": "src/" }
+    }
+}

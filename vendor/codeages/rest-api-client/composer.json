@@ -1,0 +1,25 @@
+{
+    "name" : "codeages/rest-api-client",
+    "type" : "library",
+    "description" : "A PHP REST API Client.",
+    "authors": [
+        {
+            "name": "Codeages Team",
+            "email": "team@codeages.com",
+            "homepage": "http://www.codeages.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "psr/log": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload" : {
+        "psr-4": {
+            "Codeages\\RestApiClient\\" : "src",
+            "Codeages\\RestApiClient\\Tests\\" : "tests"
+        }
+    }
+}
