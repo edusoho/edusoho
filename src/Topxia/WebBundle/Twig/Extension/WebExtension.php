@@ -14,6 +14,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Common\DeviceToolkit;
 
 class WebExtension extends \Twig_Extension
 {
@@ -123,7 +124,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
-            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal'))
+            new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
+            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
         );
     }
 
@@ -1387,6 +1389,15 @@ class WebExtension extends \Twig_Extension
     public function arrayColumn($array, $column)
     {
         return ArrayToolkit::column($array, $column);
+    }
+
+    public function isShowMobilePage()
+    {
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion",0);
+        if($pcVersion){
+            return false;
+        }
+        return DeviceToolkit::isMobileClient();
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)
