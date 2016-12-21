@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Codeages\Biz\Framework\Event\Event;
@@ -322,7 +324,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function addCourseLessonReplay($courseLessonReplay)
     {
-        $replay = $this->getCourseLessonReplayDao()->addCourseLessonReplay($courseLessonReplay);
+        $replay = $this->getCourseLessonReplayDao()->create($courseLessonReplay);
 
         $this->dispatchEvent("course.lesson.replay.create", array('replay' => $replay));
 
@@ -331,7 +333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
-        $result = $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, $lessonType);
+        $result = $this->getCourseLessonReplayDao()->deleteByLessonId($lessonId, $lessonType);
         $this->dispatchEvent("course.lesson.review.delete", array('lessonId' => $lessonId));
 
         return $result;
@@ -414,19 +416,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserFavoritedCourseCount($userId)
     {
-        return $this->getFavoriteDao()->getFavoriteCourseCountByUserId($userId);
+        return $this->getFavoriteDao()->countByUserId($userId);
     }
 
     public function findUserFavoritedCourses($userId, $start, $limit)
     {
-        $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
+        $courseFavorites = $this->getFavoriteDao()->findByUserId($userId, $start, $limit);
         $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
         return CourseSerialize::unserializes($favoriteCourses);
     }
 
     public function findFavoritesCountByCourseId($courseId)
     {
-        return $this->getFavoriteDao()->findFavoritesCountByCourseId($courseId);
+        return $this->getFavoriteDao()->countByUserId($courseId);
     }
 
     public function createCourse($course)
@@ -682,7 +684,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->deleteCourse($id);
 
         if ($course["type"] == "live") {
-            $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
+            $this->getCourseLessonReplayDao()->deleteByCourseId($id);
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
@@ -744,7 +746,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('该课程不存在,收藏失败!'));
         }
 
-        $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'course');
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
 
         if ($favorite) {
             throw $this->createServiceException($this->getKernel()->trans('该收藏已经存在，请不要重复收藏!'));
@@ -756,7 +758,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             new Event($course)
         );
 
-        $this->getFavoriteDao()->addFavorite(array(
+        $this->getFavoriteDao()->create(array(
             'courseId'    => $course['id'],
             'userId'      => $user['id'],
             'createdTime' => time()
@@ -779,13 +781,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('该课程不存在,收藏失败!'));
         }
 
-        $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'course');
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
 
         if (empty($favorite)) {
             throw $this->createServiceException($this->getKernel()->trans('你未收藏本课程，取消收藏失败!'));
         }
 
-        $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+        $this->getFavoriteDao()->delete($favorite['id']);
 
         return true;
     }
@@ -804,19 +806,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('课程%courseId%不存在', array('%courseId%' => $courseId)));
         }
 
-        $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'course');
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
 
         return $favorite ? true : false;
     }
 
     public function searchCourseFavoriteCount($conditions)
     {
-        return $this->getFavoriteDao()->searchCourseFavoriteCount($conditions);
+        return $this->getFavoriteDao()->count($conditions);
     }
 
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
-        return $this->getFavoriteDao()->searchCourseFavorites($conditions, $orderBy, $start, $limit);
+        return $this->getFavoriteDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function analysisCourseDataByTime($startTime, $endTime)
@@ -2821,7 +2823,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson                = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
-        $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
+        $courseLessonReplay = $this->getCourseLessonReplayDao()->get($courseLessonReplayId);
         $user               = $this->getCurrentUser();
 
         $args = array(
@@ -2839,22 +2841,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getCourseLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId, $lessonType);
+        return $this->getCourseLessonReplayDao()->findByLessonId($lessonId, $lessonType);
     }
 
     public function deleteCourseLessonReplayByLessonId($lessonId)
     {
-        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+        $this->getCourseLessonReplayDao()->deleteByLessonId($lessonId);
     }
 
     public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
     {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
+        return $this->getCourseLessonReplayDao()->getByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
     }
 
     public function getCourseLessonReplay($id)
     {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+        return $this->getCourseLessonReplayDao()->get($id);
     }
 
     public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
@@ -2869,7 +2871,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseLessonReplay($id, $fields)
     {
-        $lessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+        $lessonReplay = $this->getCourseLessonReplayDao()->get($id);
 
         if (empty($lessonReplay)) {
             throw $this->createServiceException($this->getKernel()->trans('录播回放不存在，更新失败！'));
@@ -2877,7 +2879,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
 
-        $lessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
+        $lessonReplay = $this->getCourseLessonReplayDao()->update($id, $fields);
 
         $this->dispatchEvent("course.lesson.replay.update", array('replay' => $lessonReplay));
 
@@ -2888,22 +2890,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $fields = ArrayToolkit::parts($fields, array('hidden'));
 
-        return $this->getCourseLessonReplayDao()->updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
+        return $this->getCourseLessonReplayDao()->updateByLessonId($lessonId, $fields, $lessonType);
     }
 
     public function searchCourseLessonReplayCount($conditions)
     {
-        return $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount($conditions);
+        return $this->getCourseLessonReplayDao()->count($conditions);
     }
 
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
     {
-        return $this->getCourseLessonReplayDao()->searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
+        return $this->getCourseLessonReplayDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
     {
-        return $this->getCourseLessonReplayDao()->findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
+        return $this->getCourseLessonReplayDao()->findByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
     }
 
     protected function isClassroomMember($course, $userId)
@@ -2921,6 +2923,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    /**
+     * @return CourseLessonReplayDao
+     */
     protected function getCourseLessonReplayDao()
     {
         return $this->createDao('Course:CourseLessonReplayDao');
@@ -2983,6 +2988,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:CourseDao');
     }
 
+    /**
+     * @return FavoriteDao
+     */
     protected function getFavoriteDao()
     {
         return $this->createDao('Course:FavoriteDao');

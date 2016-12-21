@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
+use Biz\Course\Dao\FavoriteDao;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
@@ -137,11 +138,11 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->assertEquals(0, $lessonCount);
         $lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $lessonLearnCount);
-        $lessonReplayCount = $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount(array('courseId' => $createCourse['id']));
+        $lessonReplayCount = $this->getCourseLessonReplayDao()->count(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $lessonReplayCount);
         $lessonViewCount = $this->getLessonViewDao()->searchLessonViewCount(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $lessonViewCount);
-        $favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId' => $createCourse['id']));
+        $favoriteCount = $this->getFavoriteDao()->count(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $favoriteCount);
         $noteCount = $this->getCourseNoteDao()->countCourseNotes(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $noteCount);
@@ -254,6 +255,9 @@ class CourseDeleteServiceTest extends BaseTestCase
         return $this->getServiceKernel()->createDao('Course:CourseDao');
     }
 
+    /**
+     * @return FavoriteDao
+     */
     protected function getFavoriteDao()
     {
         return $this->getServiceKernel()->createDao('Course:FavoriteDao');
