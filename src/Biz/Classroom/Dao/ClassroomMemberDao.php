@@ -8,9 +8,9 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ClassroomMemberDao extends GeneralDaoInterface
 {
-    public function countStudent($classroomId);
+    public function countStudents($classroomId);
 
-    public function countAuditor($classroomId);
+    public function countAuditors($classroomId);
 
     public function getByClassroomIdAndUserId($classroomId, $userId);
 

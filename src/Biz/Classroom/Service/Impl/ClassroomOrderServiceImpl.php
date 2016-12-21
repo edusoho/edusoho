@@ -1,11 +1,11 @@
 <?php
-namespace Classroom\Service\Classroom\Impl;
+namespace Biz\Classroom\Service\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
-use Classroom\Service\Classroom\ClassroomOrderService;
+use Biz\Classroom\Service\ClassroomOrderService;
 
 class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderService
 {
@@ -189,6 +189,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->unlockStudent($order['targetId'], $order['userId']);
         }
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     protected function getOrderService()
