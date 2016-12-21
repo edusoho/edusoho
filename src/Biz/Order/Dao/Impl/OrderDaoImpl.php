@@ -12,7 +12,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function declares()
     {
         return array(
-            'timestamps' => array(),
+            'timestamps' => array('createdTime','updatedTime'),
             'serializes' => array('data' => 'json'),
             'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
@@ -55,8 +55,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
         $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1 {$forUpdate}";
 
-        $order = $this->db()->fetchAssoc($sql, array($sn));
-        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+        return $this->db()->fetchAssoc($sql, array($sn));
     }
 
     public function getByToken($token)

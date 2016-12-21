@@ -5,10 +5,10 @@ use Biz\Order\Dao\OrderLogDao;
 use Biz\Order\Dao\OrderRefundDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\Dao\OrderDao;
-use Topxia\Service\Order\OrderService;
+use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Event\Event;
 
 class OrderServiceImpl extends BaseService implements OrderService
@@ -103,7 +103,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrderDao()->create($order);
 
         $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
-        $this->getDispatcher()->dispatch('order.service.created', new Event($order));
+        $this->dispatchEvent('order.service.created', new Event($order));
         return $order;
     }
 
@@ -146,7 +146,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($order['id']);
 
         if ($success) {
-            $this->getDispatcher()->dispatch('order.service.paid', new Event($order));
+            $this->dispatchEvent('order.service.paid', new Event($order));
         }
 
         return array($success, $order);
@@ -712,17 +712,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getCardService()
     {
-        return ServiceKernel::instance()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -756,7 +756,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->createService('User:InviteRecordService');
+        return $this->createService('User:InviteRecordService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     protected function getPayCenterService()

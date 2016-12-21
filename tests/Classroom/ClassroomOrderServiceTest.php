@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom\Tests;
+namespace Tests\Classroom;
 
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
@@ -33,7 +33,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyInfo()
     {
@@ -42,7 +42,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithIsStudent()
     {
@@ -58,7 +58,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyClassroom()
     {
@@ -73,7 +73,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyCantBuyClassroom()
     {
@@ -121,7 +121,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testDoSuccessPayOrderNotClassroomOrder()
     {
@@ -178,7 +178,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testApplyRefundOrderWithEmptyOrder()
     {
@@ -201,12 +201,12 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     private function getClassroomOrderService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomOrderService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomOrderService');
     }
 
     protected function getSettingService()
@@ -221,6 +221,6 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
