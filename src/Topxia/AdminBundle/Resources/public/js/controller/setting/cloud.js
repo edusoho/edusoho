@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
+    require('echarts');
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');

@@ -2,6 +2,6 @@
   {% if path starts with 'http://' %}
     <link href="{{ path }}" rel="stylesheet" />
   {% else %}
-    <link href="{{ asset('static-dist/' ~ path, 'webpack') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/' ~ path) }}" rel="stylesheet" />
   {% endif %}
 {% endfor %}

@@ -83,11 +83,11 @@ class CourseSetServiceTest extends BaseTestCase
 
     protected function getCourseSetService()
     {
-        return $this->createService('Course:CourseSetService');
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

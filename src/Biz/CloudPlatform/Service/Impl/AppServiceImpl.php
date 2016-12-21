@@ -665,12 +665,20 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
+        $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
+        $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return array();
         }
 
         include_once $packageDir . '/Upgrade.php';
-        $upgrade = new \EduSohoUpgrade(ServiceKernel::instance());
+
+        if ($protocol == 3) {
+            $upgrade = new \EduSohoUpgrade($this->biz);
+        } else {
+            $upgrade = new \EduSohoUpgrade(ServiceKernel::instance());
+        }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
@@ -818,6 +826,12 @@ class AppServiceImpl extends BaseService implements AppService
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
+            $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
+            if (!empty($meta['protocol'])) {
+                $newApp['protocol'] = $meta['protocol'];
+            } else {
+                $newApp['protocol'] = 2;
+            }
         }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);

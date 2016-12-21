@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
+    require('echarts');
     exports.run = function() {
         var spaceItemChart = echarts.init(document.getElementById('spaceItemChart'));
         var spaceItems = app.arguments.spaceItems;

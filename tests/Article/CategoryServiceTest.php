@@ -95,6 +95,6 @@ class CategoryServiceTest extends BaseTestCase
      */
     protected function getCategoryService()
     {
-        return $this->createService('Article:CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 }

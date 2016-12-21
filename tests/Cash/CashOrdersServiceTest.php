@@ -299,7 +299,7 @@ class CashOrdersServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**
@@ -307,7 +307,7 @@ class CashOrdersServiceTest extends BaseTestCase
      */
     protected function getCashOrdersService()
     {
-        return $this->createService('Cash:CashOrdersService');
+        return $this->getBiz()->service('Cash:CashOrdersService');
     }
 
     /**

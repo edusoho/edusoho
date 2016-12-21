@@ -155,7 +155,7 @@ class CashAccountServiceTest extends BaseTestCase
      */
     protected function getCashAccountService()
     {
-        return $this->createService('Cash:CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
     /**
@@ -163,7 +163,7 @@ class CashAccountServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**
@@ -171,7 +171,7 @@ class CashAccountServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function createUser()

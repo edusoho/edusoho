@@ -2,10 +2,6 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-webpack_test:
-    path:  /webpack_test
-    defaults: { _controller: TopxiaWebBundle:Default:webpackTest }
-
 switch_language:
     path: /switch/language
     defaults: { _controller: TopxiaWebBundle:Default:translate }
