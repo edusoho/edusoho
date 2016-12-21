@@ -239,72 +239,67 @@ course_set_manage_cover_crop:
 
 #file chooser
 media_materiallib_choose:
-    path: /media/materiallib/choose
-    defaults: { _controller: AppBundle:FileChooser:materialChoose }
+  path: /media/materiallib/choose
+  defaults: { _controller: AppBundle:FileChooser:materialChoose }
 
 media_materiallib_contacts:
-    path: /media/materiallib/contacts
-    defaults: { _controller: AppBundle:FileChooser:findMySharingContacts }
+  path: /media/materiallib/contacts
+  defaults: { _controller: AppBundle:FileChooser:findMySharingContacts }
 
 media_course_file_choose:
-    path: /media/coursefile/{courseId}/choose
-    defaults: { _controller: AppBundle:FileChooser:courseFileChoose }
+  path: /media/coursefile/{courseId}/choose
+  defaults: { _controller: AppBundle:FileChooser:courseFileChoose }
 
 media_video_import:
-    path: /media/course/{courseId}/import
-    defaults: { _controller: AppBundle:FileChooser:import }
+  path: /media/course/{courseId}/import
+  defaults: { _controller: AppBundle:FileChooser:import }
 
 #Uploader
 uploader_auth_v2:
-    path:  /uploader/v2/auth
-    defaults: { _controller: AppBundle:Uploader:auth }
-    methods: [GET]
+  path:  /uploader/v2/auth
+  defaults: { _controller: AppBundle:Uploader:auth }
+  methods: [GET]
 
 uploader_init_v2:
-    path:  /uploader/v2/init
-    defaults: { _controller: AppBundle:Uploader:init }
-    methods: [GET]
+  path:  /uploader/v2/init
+  defaults: { _controller: AppBundle:Uploader:init }
+  methods: [GET]
 
 uploader_finished_v2:
-    path:  /uploader/v2/finished
-    defaults: { _controller: AppBundle:Uploader:finished }
-    methods: [GET]
+  path:  /uploader/v2/finished
+  defaults: { _controller: AppBundle:Uploader:finished }
+  methods: [GET]
 
 #question
 course_set_manage_question:
-    path: /course_set/{id}/manage/question
-    defaults: { _controller: AppBundle:Question/Manage:index }
+  path: /course_set/{id}/manage/question
+  defaults: { _controller: AppBundle:Question/Manage:index }
 
 course_set_manage_question_create:
-    path: /course_set/{id}/manage/question/{type}/create
-    defaults: { _controller: AppBundle:Question/Manage:create }
+  path: /course_set/{id}/manage/question/{type}/create
+  defaults: { _controller: AppBundle:Question/Manage:create }
 
 course_set_manage_question_update:
-    path: /course_set/{courseSetId}/manage/question/{questionId}/update
-    defaults: { _controller: AppBundle:Question/Manage:update }
+  path: /course_set/{courseSetId}/manage/question/{questionId}/update
+  defaults: { _controller: AppBundle:Question/Manage:update }
 
 course_set_manage_question_delete:
-    path: /course_set/{courseSetId}/manage/question/delete/{questionId}
-    defaults: { _controller: AppBundle:Question/Manage:delete }
-    methods: [POST]
+  path: /course_set/{courseSetId}/manage/question/delete/{questionId}
+  defaults: { _controller: AppBundle:Question/Manage:delete }
+  methods: [POST]
 
 course_set_manage_question_deletes:
-    path: /course_set/{courseSetId}/manage/question/deletes
-    defaults: { _controller: AppBundle:Question/Manage:deletes }
-    methods: [POST]
+  path: /course_set/{courseSetId}/manage/question/deletes
+  defaults: { _controller: AppBundle:Question/Manage:deletes }
+  methods: [POST]
 
 course_set_manage_question_preview:
-    path: /course_set/{courseSetId}/manage/question/{questionId}/preview
-    defaults: { _controller: AppBundle:Question/Manage:preview }
+  path: /course_set/{courseSetId}/manage/question/{questionId}/preview
+  defaults: { _controller: AppBundle:Question/Manage:preview }
 
 course_set_manage_question_picker:
-<<<<<<< Updated upstream
-    path: /course_set/{id}/manage/question/picker
-    defaults: { _controller: AppBundle:Question/Manage:questionPicker }
-=======
   path: /course_set/{id}/manage/question/picker
   defaults: { _controller: AppBundle:Question/Manage:questionPicker }
->>>>>>> Stashed changes
 
 course_set_manage_question_picked:
   path:  /course_set/{courseSetId}/manage/question/{questionId}/picked

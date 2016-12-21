@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Question;
 
-use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -261,11 +261,7 @@ class ManageController extends BaseController
 
         //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
-<<<<<<< Updated upstream
         return $this->render('question-manage/question-picked.html.twig', array(
-=======
-        return $this->render('question-manage/question-picked-tr.html.twig', array(
->>>>>>> Stashed changes
             'courseSet'    => $courseSet,
             'question'     => $question,
             'subQuestions' => $subQuestions,

@@ -146,6 +146,44 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemDao()->count($conditions);
     }
 
+    public function publishTestpaper($id)
+    {
+        $testpaper = $this->getTestpaper($id);
+
+        if (empty($testpaper)) {
+            throw new ResourceNotFoundException('testpaper', $id);
+        }
+
+        if (!in_array($testpaper['status'], array('closed', 'draft'))) {
+            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
+        }
+
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
+
+        $this->dispatchEvent('testpaper.publish', new Event($testpaper));
+
+        return $testpaper;
+    }
+
+    public function closeTestpaper($id)
+    {
+        $testpaper = $this->getTestpaper($id);
+
+        if (empty($testpaper)) {
+            throw new ResourceNotFoundException('testpaper', $id);
+        }
+
+        if (!in_array($testpaper['status'], array('open'))) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
+        }
+
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
+
+        $this->dispatchEvent('testpaper.close', new Event($testpaper));
+
+        return $testpaper;
+    }
+
     /**
      * testpaper_item_result
      */
@@ -256,44 +294,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->dispatchEvent('testpaper.finish', new Event($paperResult));
 
         return $paperResult;
-    }
-
-    public function publishTestpaper($id)
-    {
-        $testpaper = $this->getTestpaper($id);
-
-        if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
-        }
-
-        if (!in_array($testpaper['status'], array('closed', 'draft'))) {
-            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
-        }
-
-        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
-
-        $this->dispatchEvent('testpaper.publish', new Event($testpaper));
-
-        return $testpaper;
-    }
-
-    public function closeTestpaper($id)
-    {
-        $testpaper = $this->getTestpaper($id);
-
-        if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
-        }
-
-        if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
-        }
-
-        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
-
-        $this->dispatchEvent('testpaper.close', new Event($testpaper));
-
-        return $testpaper;
     }
 
     public function countQuestionTypes($testpaper, $items)

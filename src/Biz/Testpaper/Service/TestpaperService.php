@@ -19,6 +19,10 @@ interface TestpaperService
 
     public function searchTestpaperCount($conditions);
 
+    public function publishTestpaper($id);
+
+    public function closeTestpaper($id);
+
     /**
      * testpaper_item
      */
@@ -75,11 +79,7 @@ interface TestpaperService
 
     public function buildTestpaper($fields, $type);
 
-    public function publishTestpaper($id);
-
-    public function closeTestpaper($id);
-
-    public function canBuildTestpaper($builder, $options);
+    public function canBuildTestpaper($type, $options);
 
     /**
      * 开始做试卷

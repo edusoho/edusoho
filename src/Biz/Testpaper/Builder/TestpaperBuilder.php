@@ -98,25 +98,22 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
     public function filterFields($fields, $mode = 'create')
     {
-        if (isset($fields['mode'])) {
+        if (!empty($fields['mode'])) {
             $fields['metas']['mode'] = $fields['mode'];
         }
-        if (isset($fields['range'])) {
+        if (!empty($fields['range'])) {
             $fields['metas']['range'] = $fields['range'];
         }
-        if (isset($fields['ranges'])) {
-            $fields['metas']['ranges'] = $fields['ranges'];
-        }
-        if (isset($fields['counts'])) {
+        if (!empty($fields['counts'])) {
             $fields['metas']['counts'] = $fields['counts'];
         }
-        if (isset($fields['scores'])) {
+        if (!empty($fields['scores'])) {
             $fields['metas']['scores'] = $fields['scores'];
         }
-        if (isset($fields['missScores'])) {
+        if (!empty($fields['missScores'])) {
             $fields['metas']['missScores'] = $fields['missScores'];
         }
-        if (isset($fields['scores'])) {
+        if (!empty($fields['scores'])) {
             $fields['metas']['percentages'] = $fields['percentages'];
         }
 
