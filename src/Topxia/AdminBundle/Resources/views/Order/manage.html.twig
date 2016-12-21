@@ -41,7 +41,7 @@
         {% if targetType == 'vip' %}
           {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, title: dict_text('targetName', targetType) ~ '名'|trans} %}
         {% else %}
-          {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, targetId: dict_text('targetName', targetType) ~ '编号'|trans, title: dict_text('targetName', targetType) ~ '名'|trans, mobile:'购买者手机号'|trans, email:'购买者邮箱'|trans} %}
+          {% set options = {sn: '订单号'|trans, buyer:'购买者用户名'|trans, targetId: dict_text('targetName', targetType) ~ '编号'|trans, title: dict_text('targetName', targetType) ~ '名'|trans, mobile:'购买者绑定手机号'|trans, email:'购买者邮箱'|trans} %}
         {% endif %}
         {{ select_options(options, request.get('keywordType')) }}
       </select>
