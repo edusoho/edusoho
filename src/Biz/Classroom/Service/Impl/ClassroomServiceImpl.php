@@ -162,7 +162,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
-        $this->getClassroomDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             $allExistingCourses = $this->findCoursesByClassroomId($classroomId);
 
@@ -198,9 +198,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->refreshCoursesSeq($classroomId, $courseIds);
 
-            $this->getClassroomDao()->getConnection()->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $this->getClassroomDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
@@ -643,7 +643,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroomCourses($classroomId, $activeCourseIds)
     {
         $this->tryManageClassroom($classroomId);
-        $this->getClassroomDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             $courses        = $this->findActiveCoursesByClassroomId($classroomId);
             $courses        = ArrayToolkit::index($courses, 'id');
@@ -678,14 +678,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->refreshCoursesSeq($classroomId, $activeCourseIds);
 
-            $this->getClassroomDao()->getConnection()->commit();
+            $this->commit();
 
             $this->dispatchEvent(
                 'classroom.course.delete',
                 new Event($activeCourseIds, array('classroomId' => $classroomId))
             );
         } catch (\Exception $e) {
-            $this->getClassroomDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
