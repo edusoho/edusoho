@@ -94,20 +94,16 @@ class SmsToolkit
                 }
             }
 
+            if ($response['status'] != 0) {
+                continue;
+            }
+
             if ($key == 'baidu') {
-                if ($response['status'] != 0) {
-                    continue;
-                } else {
-                    return $response['tinyurl'];
-                }
+                return $response['tinyurl'];
             }
 
             if ($key == 'qq') {
-                if ($response['status'] != 0) {
-                    continue;
-                } else {
-                    return $response['short_url'];
-                }
+                return $response['short_url'];
             }
         }
 
