@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import Option from './option';
+import notify from 'common/notify'
 
-//id ,和字，和答案。
+
+function convert(num){
+  return num <= 26 ? String.fromCharCode(num + 64) : convert(~~((num - 1) / 26)) + convert(num % 26 || 26);
+}
+
 function InitOptionData(dataSourceUi,props,datas,seq) {
   var obj = {
     optionId:`question-option-${seq}`,
-    optionLabel: '选项'+ seq,
+    optionLabel: '选项'+ convert(seq),
     inputValue:datas ? datas[props.inputValueName] : '',
     checked: datas ? datas[props.checkedName] : false,
     editor: null,
   }
-
   dataSourceUi.push(obj);
-  console.log(dataSourceUi);
 }
 
 function deleteOption(dataSourceUi,optionId) {
@@ -21,27 +24,25 @@ function deleteOption(dataSourceUi,optionId) {
       dataSourceUi.splice(i, 1);
       i--;
     }else {
-      dataSourceUi[i].optionLabel = '选项'+ (i+1);
+      dataSourceUi[i].optionLabel = '选项'+ convert(i+1);
     }
   }
-  console.log(dataSourceUi);
 }
 
 function changeOption(dataSourceUi,value,isRadio,checkedId) {
   let objValue = JSON.parse(value);
   dataSourceUi.map((item,index)=> {
-    console.log(objValue.id);
-    console.log(item.optionId);
     if(item.optionId == objValue.id) {
+      //如果是单选，
       if(isRadio && objValue.checked){
         return;
       }
       dataSourceUi[index].checked= !objValue.checked;
     }else if(isRadio && !objValue.checked){
+      //如果是单选;
       dataSourceUi[index].checked = false;
     }
   })
-  console.log(dataSourceUi);
 }
 
 export default class QuestionOptions extends Component {
@@ -69,7 +70,7 @@ export default class QuestionOptions extends Component {
 
   addOption() {
     if(this.state.dataSourceUi.length >= this.props.maxNum) {
-      console.log(`不大于${this.props.maxNum}`);
+      notify('danger', `选项最多${this.props.maxNum}个!`);
       return;
     }
     InitOptionData(this.state.dataSourceUi,this.props,null,this.state.dataSourceUi.length+1);
@@ -87,7 +88,7 @@ export default class QuestionOptions extends Component {
 
   deleteOption(id) {
     if(this.state.dataSourceUi.length <= this.props.minNum) {
-      console.log(`不少于${this.props.minNum}`);
+      notify('danger', `选项最少${this.props.maxNum}个!`);
       return;
     }
     deleteOption(this.state.dataSourceUi,id);
@@ -124,13 +125,12 @@ export default class QuestionOptions extends Component {
       outputSets.push(obj);   
     });
 
-
     return(
       <div className="question-options-group">
         {
           this.state.dataSourceUi.map((item,index)=>{
             return (
-              <Option item = {item} key = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOption= {(id)=>this.changeOption(id)} updateInputValue = {(id,inputValue)=>this.updateInputValue(id,inputValue)}></Option>
+              <Option isRadio = {this.props.isRadio} item = {item} key = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOption= {(id)=>this.changeOption(id)} updateInputValue = {(id,inputValue)=>this.updateInputValue(id,inputValue)}></Option>
             )
           })
         }

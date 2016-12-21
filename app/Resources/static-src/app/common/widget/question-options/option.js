@@ -3,6 +3,10 @@ import React,{ Component } from 'react';
 export default class Options extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      value: this.props.item.value,
+      checked: this.props.item.checked,
+    }
   }
 
   componentDidMount() {
@@ -38,19 +42,29 @@ export default class Options extends Component {
   }
 
   updateInputValue(id,inputValue) {
-    this.props.updateInputValue(id,inputValue);
+    this.setState({
+      value: inputValue,
+    })
   }
 
   render() {
     let item = this.props.item;
+    let type = 'checkbox';
+    if(this.props.isRadio) {
+      type= 'radio';
+    }
     return (
       <div className="form-group">
         <div className="col-sm-2 control-label">
           <label className="choice-label">{item.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control item-input col-md-8" id={item.optionId}  value={item.inputValue} name={item.optionId}></textarea>
-          <div className="mtm"><label><input type="radio" name={item.checked}  checked={item.checked} className="answer-checkbox" value={JSON.stringify({id:item.optionId,checked:item.checked})} onChange = {(event)=>this.onChange(event)}/>正确答案</label></div>
+          <textarea className="form-control item-input col-md-8" id={item.optionId}  value={this.state.value} name={item.optionId}></textarea>
+          <div className="mtm">
+            <label>
+              <input type={type} name={item.checked}  checked={item.checked} className="answer-checkbox" value={JSON.stringify({id:item.optionId,checked:item.checked})} onChange = {(event)=>this.onChange(event)}/>正确答案 
+            </label>
+          </div>
         </div>
         <div className="col-sm-2">
           <a className="btn btn-default btn-sm"  href="javascript:;" id={`${item.optionId}`} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>

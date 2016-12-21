@@ -9,7 +9,6 @@ import Material from '../type/question-material';
 
 class QuestionCreator {
   constructor() {
-
   }
 
   static getCreator(type, $form) {
