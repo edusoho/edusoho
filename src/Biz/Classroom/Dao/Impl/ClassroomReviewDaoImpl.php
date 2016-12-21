@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Classroom\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Classroom\Dao\ClassroomReviewDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDao
 {
@@ -10,52 +10,50 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
 
     public function declares()
     {
-        $declares['serializes'] = array(
-            'meta' => 'json',
+        return array(
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime'
+            ),
+            'serializes' => array(
+                'meta' => 'json'
+            ),
+            'orderbys'   => array(
+                'createdTime',
+                'updatedTime'
+            ),
+            'conditions' => array(
+                'classroomId = :classroomId',
+                'parentId = :parentId',
+                'userId = :userId',
+                'rating = :rating',
+                'content LIKE :content',
+                'classroomId IN (:classroomIds)'
+            )
         );
-
-        $declares['orderbys'] = array(
-            'createdTime',
-            'updatedTime'
-        );
-
-        return $declares;
     }
 
     public function sumReviewRatingByClassroomId($classroomId)
     {
         $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function countReviewByClassroomId($classroomId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->count(array('classroomId' => $classroomId, 'parentId' => 0));
     }
 
     public function getByUserIdAndClassroomId($userId, $classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
-        $review = $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
-        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
+        return $this->getByFields(array('userId' => $userId, 'classroomId' => $classroomId, 'parentId' => 0));
     }
 
-
-    private function _createQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('userId = :userId')
-            ->andWhere('classroomId = :classroomId')
-            ->andWhere('rating = :rating')
-            ->andWhere('content LIKE :content')
-            ->andWhere('parentId = :parentId')
-            ->andWhere('classroomId IN (:classroomIds)');
-
-        return $builder;
+        return parent::_createQueryBuilder($conditions);
     }
 }

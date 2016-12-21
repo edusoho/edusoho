@@ -2,9 +2,8 @@
 
 namespace Classroom\Service\Classroom\Tests;
 
+use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
-use Biz\BaseTestCase;;
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -63,16 +62,16 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getUserService()->changeMobile($currentUser['id'], '13456520930');
         $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 0);
+        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 0);
         $this->assertEquals(1, $result);
         $this->getUserService()->lockUser($currentUser['id']);
-        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
         $this->assertEquals(0, $result);
         $this->getUserService()->unlockUser($currentUser['id']);
-        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
         $this->assertEquals(1, $result);
         $this->getClassroomService()->lockStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $result = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroom['id'], 1);
         $this->assertEquals(0, $result);
 
     }
@@ -191,7 +190,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom2['id'], array($course2['id']));
 
-        $classroom  = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
+        $classroom = $this->getClassroomService()->updateClassroom(1, $textClassroom1);
 
         $this->assertEquals('test12333', $classroom['title']);
     }
@@ -1315,17 +1314,17 @@ class ClassroomServiceTest extends BaseTestCase
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     private function createStudent()

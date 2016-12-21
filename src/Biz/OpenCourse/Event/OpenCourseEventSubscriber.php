@@ -2,8 +2,8 @@
 namespace Biz\OpenCourse\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Event\EventSubscriber;
 use Biz\Taxonomy\TagOwnerManager;
+use Codeages\Biz\Framework\Event\EventSubscriber;
 
 class OpenCourseEventSubscriber extends EventSubscriber
 {

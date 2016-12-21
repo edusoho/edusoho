@@ -1,11 +1,11 @@
 <?php
-namespace Topxia\Service\CloudPlatform\Impl;
+namespace Biz\CloudPlatform\Service\Impl;
 
+use Biz\CloudPlatform\Service\EduCloudService;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\EduCloudService;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService

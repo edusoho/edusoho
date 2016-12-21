@@ -3,6 +3,7 @@
 namespace Biz\Org\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Org\Dao\OrgDao;
 use Biz\Org\Service\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Org\Service\OrgBatchUpdateFactory;
@@ -17,7 +18,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($org, array('name', 'code'))) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
+            throw $this->createServiceException('缺少必要字段,添加失败');
         }
 
         $org['createdUserId'] = $user['id'];
@@ -203,7 +204,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     }
 
     /**
-     * @return OrgDaoImpl
+     * @return OrgDao
      */
     public function getOrgDao()
     {

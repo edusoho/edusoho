@@ -2,9 +2,10 @@
 namespace Biz\RefererLog\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Event\EventSubscriber;
+use Codeages\PluginBundle\Event\EventSubscriber;
 
-class OrderRefererLogEventSubscriber extends  EventSubscriber
+
+class OrderRefererLogEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
