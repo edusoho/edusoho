@@ -1,5 +1,9 @@
 import fs from 'fs';
-fs.unlink('web/static-dist/dev.lock');
+fs.exists("dirName", function(exists) {
+  if (exists) {
+    fs.unlink('web/static-dist/dev.lock');
+  }
+});
 
 import esWebpackEngine from 'es-webpack-engine/dist/build';
 
