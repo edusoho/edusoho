@@ -97,6 +97,13 @@
             rewrite ^(.*)$ /app_dev.php/$1 last;
         }
 
+        location ~ ^/static-dist {
+            if (-f $document_root/static-dist/dev.lock)
+            {
+                rewrite ^(.*)$ http://127.0.0.1:3030$1 last;
+            }
+        }
+
         location ~ ^/udisk {
             internal;
             root  /Users/ketu/Sites/edusoho/app/data/;
