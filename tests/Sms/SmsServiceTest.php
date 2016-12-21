@@ -3,11 +3,7 @@
 namespace Tests\Sms;
 
 use Mockery;
-<<<<<<< HEAD
 use Biz\BaseTestCase;
-=======
-use Biz\BaseTestCase;;
->>>>>>> feature/x8-migrate
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsServiceTest extends BaseTestCase
