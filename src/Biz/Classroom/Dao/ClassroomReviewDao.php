@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom\Dao;
+namespace Biz\Classroom\Dao;
 
 interface ClassroomReviewDao
 {

@@ -14,7 +14,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return array(
             'timestamps' => array(),
             'serializes' => array(),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
             'conditions' => array(
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',

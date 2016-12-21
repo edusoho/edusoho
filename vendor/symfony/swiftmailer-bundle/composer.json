@@ -1,0 +1,40 @@
+{
+    "name": "symfony/swiftmailer-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SwiftmailerBundle",
+    "keywords": [],
+    "homepage": "http://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "http://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "swiftmailer/swiftmailer": ">=4.2.0,~5.0",
+        "symfony/dependency-injection": "~2.3|~3.0",
+        "symfony/http-kernel": "~2.3|~3.0",
+        "symfony/config": "~2.3|~3.0",
+        "symfony/yaml": "~2.3|~3.0"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.7|~3.0"
+    },
+    "suggest": {
+        "psr/log": "Allows logging"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Bundle\\SwiftmailerBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
+    }
+}

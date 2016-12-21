@@ -3,7 +3,6 @@ namespace Topxia\Service\Order\Tests;
 
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class ClassroomOrderProcessorTest extends BaseTestCase
@@ -283,32 +282,32 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash:CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getClassroomOrderService()
     {
-        return ServiceKernel::instance()->createService("Classroom:Classroom.ClassroomOrderService");
+        return $this->getBiz()->service("Classroom:ClassroomOrderService");
     }
 
     private function createUser()

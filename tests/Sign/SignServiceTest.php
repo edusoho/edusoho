@@ -2,6 +2,7 @@
 namespace Topxia\Service\Sign\Tests;
 
 use Biz\BaseTestCase;;
+use Biz\Sign\Service\SignService;
 use Topxia\Service\Common\ServiceKernel;
 
 class SignServiceTest extends BaseTestCase
@@ -41,9 +42,9 @@ class SignServiceTest extends BaseTestCase
         $user1    = $this->createUser('user1');
         $user2    = $this->createUser('user2');
         $this->getSignService()->userSign($user2['id'], 'classroom_sign', 1);
-        $getSign1 = $this->getSignService()->getSignRecordsByPeriod($user1['id'], 'classroom_sign', 1, $yestoday, $today);
-        $getSign2 = $this->getSignService()->getSignRecordsByPeriod($user2['id'], 'classroom_sign', 1, $yestoday, $today);
-        $this->assertNull($getSign1);
+        $getSign1 = $this->getSignService()->findSignRecordsByPeriod($user1['id'], 'classroom_sign', 1, $yestoday, $today);
+        $getSign2 = $this->getSignService()->findSignRecordsByPeriod($user2['id'], 'classroom_sign', 1, $yestoday, $today);
+        $this->assertEmpty($getSign1);
         $this->assertEquals($user2['id'], $getSign2[0]['userId']);
         $this->assertEquals('classroom_sign', $getSign2[0]['targetType']);
         $this->assertEquals('1', $getSign2[0]['targetId']);
@@ -97,11 +98,14 @@ class SignServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return SignService
+     */
     protected function getSignService()
     {
-        return $this->getServiceKernel()->createService('Sign:SignService');
+        return $this->getBiz()->service('Sign:SignService');
     }
 }

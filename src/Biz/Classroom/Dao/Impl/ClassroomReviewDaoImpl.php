@@ -10,26 +10,28 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
 
     public function declares()
     {
-        return array(
-            'timestamps' => array(
-                'createdTime',
-                'updatedTime'
-            ),
-            'serializes' => array(
-                'meta' => 'json'
-            ),
-            'orderbys'   => array(
-                'createdTime',
-                'updatedTime'
-            ),
-            'conditions' => array(
-                'classroomId = :classroomId',
-                'parentId = :parentId',
-                'userId = :userId',
-                'rating = :rating',
-                'content LIKE :content',
-                'classroomId IN (:classroomIds)'
-            )
+        $declares['serializes'] = array(
+            'meta' => 'json',
+        );
+
+        $declares['orderbys'] = array(
+            'createdTime',
+            'updatedTime',
+            'rating'
+        );
+
+        $declares['timestamps'] = array(
+            'createdTime',
+            'updatedTime'
+        );
+
+        $declares['conditions'] = array(
+            'userId = :userId',
+            'classroomId = :classroomId',
+            'rating = :rating',
+            'content LIKE :content',
+            'parentId = :parentId',
+            'classroomId IN (:classroomIds)'
         );
     }
 

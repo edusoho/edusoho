@@ -1,10 +1,11 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\FavoriteDao;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseDeleteService;
-use Codeages\Biz\Framework\Event\Event;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -195,14 +196,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteLessonReplays($course)
     {
-        $lessonReplayCount = $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount(array('courseId' => $course['id']));
+        $lessonReplayCount = $this->getCourseLessonReplayDao()->count(array('courseId' => $course['id']));
         $count             = 0;
 
         if ($lessonReplayCount > 0) {
-            $LessonReplays = $this->getCourseLessonReplayDao()->searchCourseLessonReplays(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $LessonReplays = $this->getCourseLessonReplayDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($LessonReplays as $LessonReplay) {
-                $result = $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']);
+                $result = $this->getCourseLessonReplayDao()->delete($LessonReplay['id']);
                 $count += $result;
             }
 
@@ -301,14 +302,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteFavorites($course)
     {
-        $favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId' => $course['id']));
+        $favoriteCount = $this->getFavoriteDao()->count(array('courseId' => $course['id']));
         $count         = 0;
 
         if ($favoriteCount > 0) {
-            $favorites = $this->getFavoriteDao()->searchCourseFavorites(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $favorites = $this->getFavoriteDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($favorites as $favorite) {
-                $result = $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+                $result = $this->getFavoriteDao()->delete($favorite['id']);
                 $count += $result;
             }
 
@@ -527,6 +528,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createDao('Course:LessonLearnDao');
     }
 
+    /**
+     * @return CourseLessonReplayDao
+     */
     protected function getCourseLessonReplayDao()
     {
         return $this->createDao('Course:CourseLessonReplayDao');
@@ -617,6 +621,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createDao('Homework:Homework.ExerciseResultDao');
     }
 
+    /**
+     * @return FavoriteDao
+     */
     protected function getFavoriteDao()
     {
         return $this->createDao('Course:FavoriteDao');

@@ -97,7 +97,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function findRefererLogsGroupByDate($conditions)
     {
         $timeRangeRefererLogCount = $this->countRefererLogs($conditions);
-        $timeRangeRefererLogs     = $this->searchRefererLogs($conditions, array('createdTime', 'ASC'), 0, $timeRangeRefererLogCount);
+
+        $timeRangeRefererLogs     = $this->searchRefererLogs($conditions, array('createdTime'=>'ASC'), 0, $timeRangeRefererLogCount);
         $timeRangeRefererLogs     = array_map(function ($log) {
             $log['createdTime'] = date("Y-m-d", $log['createdTime']);
             return $log;
@@ -168,7 +169,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function prepareRefererUrl($refererlog)
     {
-        $host = $this->getKernel()->getEnvVariable('schemeAndHost');
+        $host = ServiceKernel::instance()->getEnvVariable('schemeAndHost');
 
         $refererMap = $this->getRefererMap();
         //微信访问url

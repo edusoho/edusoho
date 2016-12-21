@@ -15,7 +15,7 @@ class SignUserLogDaoImpl extends GeneralDaoImpl implements SignUserLogDao
 
     public function findSignLogByPeriod($userId, $targetType, $targetId, $startTime, $endTime)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND targetType = ? AND targetId = ? AND createdTime > ? AND createdTime < ? ORDER BY createdTime ASC;";
-        return $this->db()->fetchAll($sql, array($userId, $targetType, $targetId, $startTime, $endTime)) ?: null;
+        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND targetType = ? AND targetId = ? AND createdTime > ? AND createdTime < ? ORDER BY createdTime ASC;";
+        return $this->db()->fetchAll($sql, array($userId, $targetType, $targetId, $startTime, $endTime)) ?: array();
     }
 }

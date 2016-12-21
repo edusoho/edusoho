@@ -1,6 +1,6 @@
 <?php
 
-namespace SensitiveWord\Service\Tests;
+namespace Tests\Sensitive;
 
 use Biz\BaseTestCase;;
 
@@ -15,6 +15,6 @@ class  SensitiveServiceTest extends BaseTestCase{
 
 	private function getSensitiveService()
 	{
-		return $this->getServiceKernel()->createService('Sensitive:Sensitive.SensitiveService');
+		return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
 	}
 }

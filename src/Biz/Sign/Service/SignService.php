@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Sign\Service;
+namespace Biz\Sign\Service;
 
 interface SignService
 {
@@ -9,7 +9,7 @@ interface SignService
 
     public function isYestodaySigned($userId, $targetType, $targetId);
 
-    public function getSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay);
+    public function findSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay);
 
     public function getSignUserStatistics($userId, $targetType, $targetId);
 

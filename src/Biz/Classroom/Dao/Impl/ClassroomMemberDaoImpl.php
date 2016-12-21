@@ -13,7 +13,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
     {
         return array(
             'timestamps' => array('createdTime'),
-            'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
+            'serializes' => array('role'=>'delimiter', 'assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
             'orderbys'   => array('name', 'createdTime'),
             'conditions' => array(
                 'userId = :userId',
@@ -31,25 +31,25 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function countStudents($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table()} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function countAuditors($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table()} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function findAssistantsByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+        $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
     public function findTeachersByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
+        $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
@@ -67,7 +67,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function getByClassroomIdAndUserId($classroomId, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND classroomId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
     }
 
@@ -97,13 +97,13 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
         $sql .= " JOIN  `user` As c ON m.classroomId = ?";
 
-        if ($locked) {
+        if ($userLocked) {
             $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1";
         } else {
             $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
         }
 
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
     public function findByClassroomIdAndRole($classroomId, $role, $start, $limit)

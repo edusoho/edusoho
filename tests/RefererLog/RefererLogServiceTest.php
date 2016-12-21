@@ -1,7 +1,10 @@
 <?php
 namespace Topxia\Service\RefererLog\Tests;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
+use Biz\RefererLog\Service\RefererLogService;
+
+;
 
 class RefererLogServiceTest extends BaseTestCase
 {
@@ -111,7 +114,7 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog2       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $refererLogs = $this->getRefererLogService()->searchRefererLogs(array(), array('createdTime', 'DESC'), 0, 2);
+        $refererLogs = $this->getRefererLogService()->searchRefererLogs(array(), array('createdTime' => 'DESC'), 0, 2);
 
         $this->assertArrayEquals(array($createRefererLog1, $createRefererLog2), $refererLogs);
     }
@@ -131,13 +134,16 @@ class RefererLogServiceTest extends BaseTestCase
 
     public function testFindRefererLogsGroupByDate()
     {
-        $course            = $this->createCourse();
-        $date              = date('Y-m-d', time());
-        $refererlog1       = $this->moocReferelog();
-        $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
-        $refererlog2       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
-        $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
-        $groupedLogs       = $this->getRefererLogService()->findRefererLogsGroupByDate(array());
+        $course = $this->createCourse();
+        $date   = date('Y-m-d', time());
+
+        $refererlog1 = $this->moocReferelog();
+        $this->getRefererLogService()->addRefererLog($refererlog1);
+
+        $refererlog2 = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
+        $this->getRefererLogService()->addRefererLog($refererlog2);
+
+        $groupedLogs = $this->getRefererLogService()->findRefererLogsGroupByDate(array());
 
         $this->assertEquals(2, count($groupedLogs[$date]));
     }
@@ -147,7 +153,8 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog1       = $this->moocReferelog();
         $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
 
-        $refererLog = $this->getRefererLogService()->waveRefererLog($createRefererLog1['id'], 'orderCount', 1);
+        $this->getRefererLogService()->waveRefererLog($createRefererLog1['id'], 'orderCount', 1);
+        $refererLog = $this->getRefererLogService()->getRefererLogById($createRefererLog1['id']);
 
         $this->assertEquals($createRefererLog1['orderCount'] + 1, $refererLog['orderCount']);
     }
@@ -179,7 +186,7 @@ class RefererLogServiceTest extends BaseTestCase
         $createRefererLog3 = $this->getRefererLogService()->addRefererLog($refererlog3);
 
         $startTime   = strtotime(date('Y-m-d', strtotime('-1 day', time())));
-        $endTime     = strtotime(date('Y-m-d', time()) . ' 23:59:59');
+        $endTime     = strtotime(date('Y-m-d', time()).' 23:59:59');
         $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId('openCourse', array('hitNum', 'DESC'), $startTime, $endTime, 0, 10);
 
         $this->assertEquals(1, count($refererLogs));
@@ -189,7 +196,11 @@ class RefererLogServiceTest extends BaseTestCase
     private function createCourse()
     {
         $course = array(
-            'title' => 'online test course 1'
+            'title'       => 'online test course 1',
+            'type'        => 'normal',
+            'courseSetId' => '1',
+            'expiryMode'  => 'days',
+            'learnMode'   => 'freeMode'
         );
         return $this->getCourseService()->createCourse($course);
     }
@@ -212,13 +223,16 @@ class RefererLogServiceTest extends BaseTestCase
         return array('startTime' => strtotime(date("Y-m-d", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)));
     }
 
+    /**
+     * @return RefererLogService
+     */
     protected function getRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog:RefererLogService');
+        return $this->getBiz()->service('RefererLog:RefererLogService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

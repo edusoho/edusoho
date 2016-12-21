@@ -25,19 +25,24 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
             'updatedTime'
         );
 
+        $declares['timestamps'] = array(
+            'createdTime',
+            'updateTime'
+        );
+
         return $declares;
     }
 
     public function deleteByPrefixOrgCode($orgCode)
     {
         $likeOrgCode = $orgCode."%";
-        $sql         = "DELETE  FROM {$this->getTable()} where orgCode like ? ";
+        $sql         = "DELETE  FROM {$this->table()} where orgCode like ? ";
         return $this->db()->executeUpdate($sql, array($likeOrgCode));
     }
 
     public function findByPrefixOrgCode($orgCode)
     {
-        $sql   = "SELECT * FROM {$this->getTable()}";
+        $sql   = "SELECT * FROM {$this->table()}";
         $query = array();
 
         if (!empty($orgCode)) {
