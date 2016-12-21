@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    require('echarts-debug');
+    require('echarts');
 
     exports.run = function() {
         var liveTopChart = echarts.init(document.getElementById('liveTopChart'));

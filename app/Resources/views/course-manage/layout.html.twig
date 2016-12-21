@@ -3,7 +3,7 @@
 {% set active = active | default(null) %}
 
 {% block main %}
-  <div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <a href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a> | {{course.title}}
       {% if course.status == 'published' %}
@@ -13,7 +13,8 @@
       {% endif %}
     </div>
     <div class="panel-body">
-      <ul class="nav nav-pills mbl">
+      <!-- @TODO 还是将要此处删除，移动到左边的菜单 -->
+      <ul class="nav nav-pills nav-pills-sm nav-pills-gray mbl">
         <li class="{% if active == 'tasks' %}active{% endif %}">
         	<a href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划任务'|trans}}</a>
         </li>

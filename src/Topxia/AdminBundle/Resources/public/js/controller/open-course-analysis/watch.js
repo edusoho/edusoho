@@ -1,6 +1,6 @@
 define(function (require, exports, module) {
     "use strict";
-    require('echarts-debug');
+    require('echarts');
 
     var initEcharts = function (el, options) {
         var obj = echarts.init(el);

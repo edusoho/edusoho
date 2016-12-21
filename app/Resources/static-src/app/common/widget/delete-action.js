@@ -14,6 +14,7 @@ class DeleteAction {
 
   _itemDelete(event) {
     let $btn = $(event.currentTarget);
+
     let name = $btn.data('name');
     let message = $btn.data('message');
     let self = this;
@@ -62,3 +63,5 @@ class DeleteAction {
     });
   }
 }
+
+export default DeleteAction;

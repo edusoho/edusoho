@@ -103,7 +103,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         $this->getLogService()->info('sms', $smsType, $description, array($to));
 
-        return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
+        return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
     }
 
     protected function getLogService()
