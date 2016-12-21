@@ -1,35 +1,4 @@
 // webpack配置文件
-/* 默认值,可在config中重写，但一般不推荐修改
-  let defaultOptions = {
-    commonsChunkFilename: 'common',
-    entryMainname: 'main',
-    entryFileName: 'index',
-
-    libsName: 'libs',
-    
-    pluginAssetsDir: 'Resources/static-src',
-
-    appName: 'app',
-    appIgnores: ['admin'],
-    appAssetsDir: 'app',
-
-    adminName: 'admin',
-    adminAssetsDir: 'app/js/admin',
-
-    globalDir: 'app/Resources/static-src',
-    libsDir: 'app/Resources/static-src/libs',
-    commonDir: 'app/Resources/static-src/common',
-    nodeModulesDir: 'node_modules',
-
-    fontlimit: 20480,
-    imglimit: 10240,
-    fontName: 'fonts',
-    imgName: 'img',
-
-    onlyCopys: [],
-  }
-*/
-
 const config = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录

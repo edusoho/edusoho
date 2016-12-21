@@ -1,5 +1,5 @@
 // import './vendor.less';
-
+import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
 
