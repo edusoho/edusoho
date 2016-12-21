@@ -43,8 +43,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
     /**
      * RedisSessionHandler constructor.
      * List of available options:
-     *  * prefix: The prefix to use for the redis keys in order to avoid collision
-     *  * expiretime: The time to live in seconds
+     *  prefix: The prefix to use for the redis keys in order to avoid collision
+     *  expiretime: The time to live in seconds
      *
      * @param              $redisFactory
      * @param TokenStorage $storage

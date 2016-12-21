@@ -23,7 +23,7 @@ class RedisFactory
      */
     private $redisPool;
 
-    private function __construct(ContainerInterface $container)
+    private function __construct($container)
     {
         $this->container = $container;
     }
