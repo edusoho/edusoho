@@ -3,6 +3,7 @@
 namespace Topxia\Service\RefererLog\Tests;
 
 use Biz\BaseTestCase;
+use Biz\RefererLog\Service\OrderRefererLogService;
 
 class OrderRefererLogServiceTest extends BaseTestCase
 {
@@ -93,7 +94,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
         $conditions = array(
             'targetType' => 'openCourse'
         );
-        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, array('createdTime', 'DESC'), 0, 1);
+        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, array('createdTime'=> 'DESC'), 0, 1);
 
         $this->assertEquals(1, count($logs));
         $this->assertEquals($log2['orderId'], $logs[0]['orderId']);
@@ -182,6 +183,9 @@ class OrderRefererLogServiceTest extends BaseTestCase
         return $this->getOrderRefererLogService()->addOrderRefererLog($fields);
     }
 
+    /**
+     * @return OrderRefererLogService
+     */
     protected function getOrderRefererLogService()
     {
         return $this->getBiz()->service('RefererLog:OrderRefererLogService');
