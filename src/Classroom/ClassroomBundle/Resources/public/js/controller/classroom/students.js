@@ -59,8 +59,9 @@ define(function(require, exports, module) {
     }
 
     function exportStudents(start, fileName) {
-        var start = start || 0;
-        var fileName = fileName || '';
+        var start = start || 0,
+            fileName = fileName || '';
+
         $.get($('#export-students-btn').data('datasUrl'), {start:start, fileName:fileName}, function(response) {
             if (response.status === 'getData') {
                 exportStudents(response.start, response.fileName);
