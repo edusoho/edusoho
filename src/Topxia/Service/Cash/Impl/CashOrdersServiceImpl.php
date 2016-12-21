@@ -146,12 +146,16 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
         $this->closeOrders();
+        
+        $conditions = $this->_prepareSearchConditions($conditions);
 
         return $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
     }
 
     public function searchOrdersCount($conditions)
     {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->searchOrdersCount($conditions);
     }
 
@@ -215,9 +219,28 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return in_array($order['status'], array('created'));
     }
 
+    protected function _prepareSearchConditions($conditions)
+    {
+        if (isset($conditions['mobile'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
+    }
+
     protected function getOrderDao()
     {
         return $this->createDao('Cash.CashOrdersDao');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 
     protected function getOrderLogDao()

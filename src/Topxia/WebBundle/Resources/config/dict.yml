@@ -242,6 +242,8 @@ coinRecordType:
 coinOrderType:
     userName: 用户名
     sn: 订单号
+    mobile: 购买者手机号
+    email: 购买者邮箱
 
 discountType:
     discount: 限时打折
