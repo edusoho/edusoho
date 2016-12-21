@@ -3,10 +3,11 @@
 namespace Biz\Thread\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Thread\Dao\ThreadDao;
+use Biz\Util\TextHelper;
 use Topxia\Common\ArrayToolkit;
 use Biz\Thread\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -351,7 +352,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 'lastPostTime'   => $post['createdTime']
             ));
 
-            $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
+            $this->waveThread($thread['id'], 'postNum', +1);
         }
 
         $notifyData = $this->getPostNotifyData($post, $thread, $user);
@@ -408,7 +409,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->wavePost($post['parentId'], 'subposts', -1);
         }
 
-        $this->getThreadDao()->waveThread($post['threadId'], 'postNum', 0 - $totalDeleted);
+        $this->waveThread($post['threadId'], 'postNum', 0 - $totalDeleted);
 
         $this->dispatchEvent('thread.post.delete', new Event($post, array('deleted' => $totalDeleted)));
 
@@ -479,7 +480,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
 
         if (empty($member)) {
-            $thread = $this->getThreadDao()->getThread($fields['threadId']);
+            $thread = $this->getThread($fields['threadId']);
 
             if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
                 throw $this->createAccessDeniedException('limit on the number of people');
@@ -487,7 +488,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
             $fields['createdTime'] = time();
             $member                = $this->getThreadMemberDao()->create($fields);
-            $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);
+            $this->waveThread($fields['threadId'], 'memberNum', +1);
 
             return $member;
         } else {
@@ -498,7 +499,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMember($memberId)
     {
         $member               = $this->getMember($memberId);
-        $thread               = $this->getThreadDao()->getThread($member['threadId']);
+        $thread               = $this->getThread($member['threadId']);
         $member['targetType'] = $thread['targetType'];
         $member['targetId']   = $thread['targetId'];
         $this->tryAccess('thread.member.delete', $member);
@@ -508,7 +509,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->getThreadMemberDao()->delete($memberId);
-        $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
+        $this->waveThread($member['threadId'], 'memberNum', -1);
     }
 
     public function deleteMembersByThreadId($threadId)
@@ -594,7 +595,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         );
 
         if (!array_key_exists($permision, $permisions)) {
-            throw new InvalidArgumentException("Permision `{$permision}` is invalide.");
+            throw $this->createInvalidArgumentException("Permision `{$permision}` is invalide.");
         }
 
         $firewall = $this->getTargetFirewall($resource);
@@ -723,7 +724,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return $this->createService('Sensitive.SensitiveService');
+        return $this->createService('Sensitive:SensitiveService');
     }
 
     protected function getUserService()
@@ -739,5 +740,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

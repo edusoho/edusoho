@@ -2,9 +2,9 @@
 
 namespace Biz;
 
-use Biz\Util\HTMLPurifierFactory;
 use Monolog\Logger;
 use Biz\User\CurrentUser;
+use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

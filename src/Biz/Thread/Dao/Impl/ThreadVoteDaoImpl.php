@@ -2,7 +2,7 @@
 
 namespace Biz\Thread\Dao\Impl;
 
-use Topxia\Service\Thread\Dao\ThreadVoteDao;
+use Biz\Thread\Dao\ThreadVoteDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ThreadVoteDaoImpl extends GeneralDaoImpl implements ThreadVoteDao
@@ -13,5 +13,10 @@ class ThreadVoteDaoImpl extends GeneralDaoImpl implements ThreadVoteDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE threadId = ? AND postId =? AND userId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($threadId, $postId, $userId)) ?: null;
+    }
+
+    public function declares()
+    {
+        return array();
     }
 }
