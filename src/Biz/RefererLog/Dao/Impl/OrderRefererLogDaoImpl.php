@@ -11,6 +11,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime'),
             'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
                 "id IN ( :ids )",
@@ -28,49 +29,38 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
 
     public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
     {
-        $this->filterStartLimit($start, $limit);
-
         $seachFields = '*';
         if (!empty($groupBy)) {
             $seachFields = 'id,orderId,targetId,targetType,COUNT(id) AS buyNum';
         }
 
-        $builder = $this->_createSearchQueryBuilder($conditions, $orderBy, $groupBy)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select($seachFields)
             ->setFirstResult($start)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+            ->addGroupBy($groupBy);
+
+        foreach ($orderBy ?: array() as $field => $direction) {
+            $builder->addOrderBy($field, $direction);
+        }
 
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function countOrderRefererLogs($conditions, $groupBy)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions, array('createdTime', 'DESC'), $groupBy)
-            ->select('COUNT(id)');
+        $builder = $this->_createQueryBuilder($conditions)
+            ->select('COUNT(id)')
+            ->addGroupBy($groupBy);
 
         return $builder->execute()->fetchColumn(0);
     }
 
     public function countDistinctOrderRefererLogs($conditions, $distinctField)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions, array('createdTime', 'DESC'), array())
+        $builder = $this->_createQueryBuilder($conditions, array())
             ->select("COUNT(DISTINCT({$distinctField}))");
 
         return $builder->execute()->fetchColumn(0);
-    }
-
-    protected function _createSearchQueryBuilder($conditions, $orderBy, $groupBy)
-    {
-        $builder = parent::_createQueryBuilder($conditions);
-
-        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
-            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
-        };
-
-        if (!empty($groupBy)) {
-            $builder->groupBy($groupBy);
-        }
-
-        return $builder;
     }
 }

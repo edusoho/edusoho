@@ -16,7 +16,7 @@ class SignUserStatisticsDaoImpl extends GeneralDaoImpl implements SignUserStatis
     public function getStatisticsByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ?  AND targetType = ? AND targetId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $targetType, $targetId)) ?: null;
+        return $this->db()->fetchAssoc($sql, array($userId, $targetType, $targetId)) ?: null;
     }
 
 }

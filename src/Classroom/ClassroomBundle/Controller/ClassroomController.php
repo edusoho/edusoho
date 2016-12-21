@@ -391,7 +391,7 @@ class ClassroomController extends BaseController
 
         $day = date('d', time());
 
-        $signDay = $this->getSignService()->getSignRecordsByPeriod($user->id, 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time() + 3600));
+        $signDay = $this->getSignService()->findSignRecordsByPeriod($user->id, 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time() + 3600));
         $notSign = $day - count($signDay);
 
         return $this->render("ClassroomBundle:Classroom:sign.html.twig", array(
@@ -428,7 +428,7 @@ class ClassroomController extends BaseController
         $startDay = $request->query->get('startDay');
         $endDay   = $request->query->get('endDay');
 
-        $userSigns         = $this->getSignService()->getSignRecordsByPeriod($userId, 'classroom_sign', $classroomId, $startDay, $endDay);
+        $userSigns         = $this->getSignService()->findSignRecordsByPeriod($userId, 'classroom_sign', $classroomId, $startDay, $endDay);
         $result            = array();
         $result['records'] = array();
 
