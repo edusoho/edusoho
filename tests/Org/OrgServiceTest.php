@@ -114,8 +114,8 @@ class OrgServiceTest extends BaseTestCase
 
     public function testSortOrg()
     {
-        $org  = $this->mookOrg($name = "edusoho");
-        $org1 = $this->mookOrg($name = "edusoho1");
+        $org  = $this->mookOrg("edusoho");
+        $org1 = $this->mookOrg("edusoho1");
         $org  = $this->getOrgService()->createOrg($org);
         $org  = $this->getOrgService()->createOrg($org1);
 
@@ -142,7 +142,8 @@ class OrgServiceTest extends BaseTestCase
 
         $course = array(
             'title'   => 'online test course 1',
-            'orgCode' => $org['orgCode']
+            'orgCode' => $org['orgCode'],
+            'courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
 
@@ -168,7 +169,8 @@ class OrgServiceTest extends BaseTestCase
 
         $course = array(
             'title'   => 'online test course 1',
-            'orgCode' => $org['orgCode']
+            'orgCode' => $org['orgCode'],
+            'courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
 
@@ -213,7 +215,7 @@ class OrgServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getOrgService()
