@@ -279,6 +279,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }
