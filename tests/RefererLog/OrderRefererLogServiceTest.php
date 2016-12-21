@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\RefererLog\Tests;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class OrderRefererLogServiceTest extends BaseTestCase
 {
@@ -184,6 +184,6 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     protected function getOrderRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog:OrderRefererLogService');
+        return $this->getBiz()->service('RefererLog:OrderRefererLogService');
     }
 }
