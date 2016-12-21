@@ -42,7 +42,7 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
     }
 
 
-    private function _createQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

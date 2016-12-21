@@ -2,7 +2,6 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserDao;
 use Biz\User\Dao\TokenDao;
 use Biz\User\Dao\FriendDao;
@@ -11,6 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\Dao\UserProfileDao;
 use Topxia\Common\StringToolkit;
+use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserApprovalDao;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
@@ -19,6 +19,7 @@ use Biz\User\Dao\UserPayAgreementDao;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\BlacklistService;
 use Biz\User\Dao\UserSecureQuestionDao;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
@@ -27,7 +28,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Codeages\Biz\Framework\Event\Event;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -1018,9 +1018,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
 
-
         $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
 
         return UserSerialize::unserialize($user);
     }

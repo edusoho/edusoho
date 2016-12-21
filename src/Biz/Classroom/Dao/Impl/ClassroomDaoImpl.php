@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Classroom\Dao\Impl;
-
 
 use Biz\Classroom\Dao\ClassroomDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -14,7 +12,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
     public function declares()
     {
         return array(
-            'timestamps' => array('created_time', 'updated_time'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
             'orderbys'   => array('name', 'createdTime', 'recommendedSeq'),
             'conditions' => array(
@@ -37,7 +35,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'orgCode LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE'
-            ),
+            )
         );
     }
 
@@ -62,6 +60,4 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
     {
         return $this->findInField('id', $ids);
     }
-
-
 }
