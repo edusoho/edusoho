@@ -133,9 +133,20 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         $marks = str_repeat('?,', count($values) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE {$field} IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE {$field} IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $values);
+    }
+
+    protected function findByFields($fields)
+    {
+        $placeholders = array_map(function ($name) {
+            return "{$name} = ?";
+        }, array_keys($fields));
+
+        $sql = "SELECT * FROM {$this->table()} WHERE ".implode(' AND ', $placeholders);
+
+        return $this->db()->fetchAll($sql, array_values($fields));
     }
 
     protected function _createQueryBuilder($conditions)
@@ -148,10 +159,10 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             return true;
         });
 
-        $builder = new DynamicQueryBuilder($this->db(), $conditions);
+        $builder = $this->_getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
 
-        $declares = $this->declares();
+        $declares               = $this->declares();
         $declares['conditions'] = isset($declares['conditions']) ? $declares['conditions'] : array();
 
         foreach ($declares['conditions'] as $condition) {
@@ -159,6 +170,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         return $builder;
+    }
+
+    protected function _getQueryBuilder($conditions)
+    {
+        return new DynamicQueryBuilder($this->db(), $conditions);
     }
 
     private function _getTimestampField($mode = null)

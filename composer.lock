@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da24b763f85ae68826e228c7799151e6",
-    "content-hash": "09bef09b86190263ad0a69f425f9feb3",
+    "hash": "9dac838094afe11ab6fb0a199ec1b69c",
+    "content-hash": "eae9bb2bd9f7c366cbab5be3dd1a61c2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -207,16 +207,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.7",
+            "version": "v0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6"
+                "reference": "e19e959627156dd0f6b4e034dc8a085539b107da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/69eb16e1bf90b80567d88aa88aab697ee292a5a6",
-                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/e19e959627156dd0f6b4e034dc8a085539b107da.zip",
+                "reference": "e19e959627156dd0f6b4e034dc8a085539b107da",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2016-11-22 08:31:24"
+            "time": "2016-12-15 06:24:17"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -250,7 +250,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-rate-limiter/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019.zip",
                 "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
                 "shasum": ""
             },
@@ -281,7 +281,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/bd7915aa65a0663664441beea3278769c45b6785",
+                "url": "https://packagist.phpcomposer.com/files/codeages/plugin-bundle/bd7915aa65a0663664441beea3278769c45b6785.zip",
                 "reference": "bd7915aa65a0663664441beea3278769c45b6785",
                 "shasum": ""
             },
@@ -328,7 +328,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rate-limiter/zipball/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
+                "url": "https://packagist.phpcomposer.com/files/codeages/rate-limiter/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120.zip",
                 "reference": "5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "shasum": ""
             },
@@ -370,7 +370,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
+                "url": "https://packagist.phpcomposer.com/files/codeages/rest-api-client/660aafdec2287a82bf208e17407ae62c0172e21c.zip",
                 "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
                 "shasum": ""
             },
@@ -1236,7 +1236,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/EndroidQrCodeBundle/zipball/691ba76fc4c22e31a79ffa75647630212432b6b2",
+                "url": "https://packagist.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
                 "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "shasum": ""
             },
@@ -1794,7 +1794,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
+                "url": "https://packagist.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
                 "reference": "c0125896dbb151380ab47e96c621741e79623beb",
                 "shasum": ""
             },
@@ -3184,7 +3184,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/2d449d345ec0f83f9479358c1d37111d0cf3df9a",
+                "url": "https://packagist.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/2d449d345ec0f83f9479358c1d37111d0cf3df9a.zip",
                 "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "shasum": ""
             },
@@ -3509,7 +3509,10 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.10"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "5.3.10"
+    }
 }
