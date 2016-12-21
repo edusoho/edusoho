@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\MoneyCard\Dao\Impl;
+namespace Biz\MoneyCard\Dao\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;

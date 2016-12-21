@@ -599,7 +599,7 @@ class CoinController extends BaseController
 
         $cashes = $this->getCashService()->searchFlows(
             $conditions,
-            array('ID' => 'DESC'),
+            array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
