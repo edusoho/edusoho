@@ -1,13 +1,12 @@
 <?php
-namespace Topxia\Sign\Service\Impl;
+namespace Biz\Sign\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Sign\Dao\SignTargetStatisticsDao;
 use Biz\Sign\Dao\SignUserLogDao;
 use Biz\Sign\Dao\SignUserStatisticsDao;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Sign\Service\SignService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Sign\Service\SignService;
 
 class SignServiceImpl extends BaseService implements SignService
 {
@@ -61,7 +60,7 @@ class SignServiceImpl extends BaseService implements SignService
         return empty($signs) ? false : true;
     }
 
-    public function getSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay)
+    public function findSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay)
     {
         $startTime = strtotime(date('y-n-d 0:0:0', strtotime($startDay)));
         $endTime   = strtotime(date('y-n-d 23:59:59', strtotime($endDay)));
@@ -82,7 +81,7 @@ class SignServiceImpl extends BaseService implements SignService
 
     public function getTodayRank($userId, $targetType, $targetId)
     {
-        $todaySign = $this->getSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
+        $todaySign = $this->findSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
         return $todaySign ? $todaySign['0']['rank'] : -1;
     }
 
@@ -155,6 +154,6 @@ class SignServiceImpl extends BaseService implements SignService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }
