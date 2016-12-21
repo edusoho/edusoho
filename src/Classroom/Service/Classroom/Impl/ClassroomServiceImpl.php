@@ -722,7 +722,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sordtedCourses;
     }
 
-    public function findActiveCoursesByClassroomId($classroomId)
+    public function git cgit sfindActiveCoursesByClassroomId($classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
         $courseIds        = ArrayToolkit::column($classroomCourses, 'courseId');
