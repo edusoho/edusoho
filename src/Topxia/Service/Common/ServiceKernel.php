@@ -2,12 +2,12 @@
 namespace Topxia\Service\Common;
 
 use Biz\User\CurrentUser;
+use Biz\Common\Redis\RedisFactory;
+use Symfony\Component\Finder\Finder;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Finder\Finder;
-use Biz\Common\Redis\RedisFactory;
 
 class ServiceKernel
 {

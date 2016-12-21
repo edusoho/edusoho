@@ -1,60 +1,59 @@
 <?php
 namespace Biz\Notification\Event;
 
-
-use Codeages\PluginBundle\Event\EventSubscriber;
-use Topxia\Api\Util\MobileSchoolUtil;
-use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\TagOwnerManager;
+use Topxia\Api\Util\MobileSchoolUtil;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'user.registered'      => 'onUserCreate',
-            'user.unlock'          => 'onUserCreate',
-            'user.lock'            => 'onUserDelete',
-            'user.update'          => 'onUserUpdate',
-            'user.change_nickname' => 'onUserUpdate',
-            'user.follow'          => 'onUserFollow',
-            'user.unfollow'        => 'onUserUnFollow',
+            'user.registered'           => 'onUserCreate',
+            'user.unlock'               => 'onUserCreate',
+            'user.lock'                 => 'onUserDelete',
+            'user.update'               => 'onUserUpdate',
+            'user.change_nickname'      => 'onUserUpdate',
+            'user.follow'               => 'onUserFollow',
+            'user.unfollow'             => 'onUserUnFollow',
 
-            'course.publish' => 'onCourseCreate',
-            'course.update'  => 'onCourseUpdate',
-            'course.delete'  => 'onCourseDelete',
-            'course.close'   => 'onCourseDelete',
-            'course.join'    => 'onCourseJoin',
-            'course.quit'    => 'onCourseQuit',
-            'course.create'  => 'onCourseCreate',
+            'course.publish'            => 'onCourseCreate',
+            'course.update'             => 'onCourseUpdate',
+            'course.delete'             => 'onCourseDelete',
+            'course.close'              => 'onCourseDelete',
+            'course.join'               => 'onCourseJoin',
+            'course.quit'               => 'onCourseQuit',
+            'course.create'             => 'onCourseCreate',
 
-            'course.lesson.publish'   => 'onCourseLessonCreate',
-            'course.lesson.unpublish' => 'onCourseLessonDelete',
-            'course.lesson.update'    => 'onCourseLessonUpdate',
-            'course.lesson.delete'    => 'onCourseLessonDelete',
+            'course.lesson.publish'     => 'onCourseLessonCreate',
+            'course.lesson.unpublish'   => 'onCourseLessonDelete',
+            'course.lesson.update'      => 'onCourseLessonUpdate',
+            'course.lesson.delete'      => 'onCourseLessonDelete',
 
-            'classroom.join' => 'onClassroomJoin',
-            'classroom.quit' => 'onClassroomQuit',
+            'classroom.join'            => 'onClassroomJoin',
+            'classroom.quit'            => 'onClassroomQuit',
 
-            'article.create'       => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
-            'article.publish'      => 'onArticleCreate',
-            'article.update'       => 'onArticleUpdate',
-            'article.trash'        => 'onArticleDelete',
-            'article.unpublish'    => 'onArticleDelete',
-            'article.delete'       => 'onArticleDelete',
+            'article.create'            => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
+            'article.publish'           => 'onArticleCreate',
+            'article.update'            => 'onArticleUpdate',
+            'article.trash'             => 'onArticleDelete',
+            'article.unpublish'         => 'onArticleDelete',
+            'article.delete'            => 'onArticleDelete',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'        => 'onThreadCreate',
-            'thread.update'        => 'onThreadUpdate',
-            'thread.delete'        => 'onThreadDelete',
-            'course.thread.create' => 'onCourseThreadCreate',
-            'course.thread.update' => 'onCourseThreadUpdate',
-            'course.thread.delete' => 'onCourseThreadDelete',
-            'group.thread.create'  => 'onGroupThreadCreate',
-            'group.thread.open'    => 'onGroupThreadOpen',
-            'group.thread.update'  => 'onGroupThreadUpdate',
-            'group.thread.delete'  => 'onGroupThreadDelete',
+            'thread.create'             => 'onThreadCreate',
+            'thread.update'             => 'onThreadUpdate',
+            'thread.delete'             => 'onThreadDelete',
+            'course.thread.create'      => 'onCourseThreadCreate',
+            'course.thread.update'      => 'onCourseThreadUpdate',
+            'course.thread.delete'      => 'onCourseThreadDelete',
+            'group.thread.create'       => 'onGroupThreadCreate',
+            'group.thread.open'         => 'onGroupThreadOpen',
+            'group.thread.update'       => 'onGroupThreadUpdate',
+            'group.thread.delete'       => 'onGroupThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
@@ -64,7 +63,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'group.thread.post.create'  => 'onGroupThreadPostCreate',
             'group.thread.post.delete'  => 'onGroupThreadPostDelete',
 
-            'announcement.create' => 'onAnnouncementCreate'
+            'announcement.create'       => 'onAnnouncementCreate'
 
             //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
@@ -905,7 +904,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function getClassroomService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getUserService()

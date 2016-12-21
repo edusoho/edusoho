@@ -3,10 +3,9 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Dao\ClassroomDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\Classroom\Dao\ClassroomDao;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
@@ -581,7 +580,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'orderId'     => empty($order) ? 0 : $order['id'],
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => array('student'),
-            'remark'      => empty($order['note']) ? '' : $order['note'],
+            'remark'      => empty($order['note']) ? '' : $order['note']
         );
 
         if (empty($fields['remark'])) {

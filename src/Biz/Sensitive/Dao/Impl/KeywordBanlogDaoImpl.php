@@ -2,8 +2,8 @@
 
 namespace Biz\Sensitive\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Sensitive\Dao\KeywordBanlogDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
 {
@@ -18,6 +18,23 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
         $marks = str_repeat('?,', count($userIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
         return $this->db()->fetchAll($sql, $userIds);
+    }
+
+    public function declares()
+    {
+        $declares['orderbys'] = array(
+            'createdTime'
+        );
+
+        $declares['conditions'] = array(
+            'id = :id',
+            'userId = :userId',
+            'state = :state',
+            'keywordId = :keywordId',
+            'UPPER(keywordName) LIKE :keywordName'
+        );
+
+        return $declares;
     }
 
     protected function _createQueryBuilder($conditions)

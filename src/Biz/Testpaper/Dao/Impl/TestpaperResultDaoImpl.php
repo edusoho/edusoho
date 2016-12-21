@@ -11,13 +11,13 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finished' ORDER BY id DESC ";
-        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId));
+        return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId)) ?: null;
     }
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseSetId = ? AND lessonId = ? AND type = ? ORDER BY endTime DESC ";
-        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type));
+        return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type)) ?: null;
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId)
@@ -26,9 +26,9 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAll($sql, array($testId)) ?: array();
     }
 
-    public function searchTestpapersScore($conditions)
+    public function sumScoreByParames($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(score)');
 
         return $builder->execute()->fetchColumn(0);
