@@ -3,7 +3,7 @@ namespace Biz\OpenCourse\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\TagOwnerManager;
-use Codeages\Biz\Framework\Event\EventSubscriber;
+use Codeages\PluginBundle\Event\EventSubscriber;
 
 class OpenCourseEventSubscriber extends EventSubscriber
 {

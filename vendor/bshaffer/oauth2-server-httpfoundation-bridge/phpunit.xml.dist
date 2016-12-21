@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./test/bootstrap.php">
+  <testsuites>
+    <testsuite name="OAuth2 Server HttpFoundation Bridge Test Suite">
+      <directory suffix="Test.php">./test</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory>./</directory>
+      <exclude>
+        <directory>./test</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+</phpunit>

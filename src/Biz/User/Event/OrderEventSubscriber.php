@@ -2,9 +2,10 @@
 namespace Biz\User\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class OrderEventSubscriber implements EventSubscriberInterface
+class OrderEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {

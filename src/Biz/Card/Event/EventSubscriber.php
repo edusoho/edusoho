@@ -105,4 +105,9 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber
     {
         return $this->getBiz()->service('User:UserService');
     }
+
+    protected function createService($name)
+    {
+        return $this->getBiz()->service($name);
+    }
 }

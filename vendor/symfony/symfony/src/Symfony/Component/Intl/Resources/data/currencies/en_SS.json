@@ -1,0 +1,13 @@
+{
+    "Version": "2.1.19.14",
+    "Names": {
+        "GBP": [
+            "GB£",
+            "British Pound"
+        ],
+        "SSP": [
+            "£",
+            "South Sudanese Pound"
+        ]
+    }
+}

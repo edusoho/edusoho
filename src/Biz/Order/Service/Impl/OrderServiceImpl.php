@@ -102,7 +102,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->create($order);
 
-        $this->_createLog($order['id'], 'created', '创建订单');
+        $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
         $this->dispatchEvent('order.service.created', new Event($order));
         return $order;
     }
@@ -709,17 +709,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getCardService()
     {
-        return ServiceKernel::instance()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -753,7 +753,17 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->createService('User:InviteRecordService');
+        return $this->createService('User:InviteRecordService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     protected function getPayCenterService()
@@ -761,8 +771,4 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createService('PayCenter:PayCenterService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
 }

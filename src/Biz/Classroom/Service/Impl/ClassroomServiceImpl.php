@@ -580,8 +580,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
-            'role'        => '|student|',
-            'remark'      => empty($order['note']) ? '' : $order['note']
+            'role'        => array('student'),
+            'remark'      => empty($order['note']) ? '' : $order['note'],
         );
 
         if (empty($fields['remark'])) {
@@ -765,7 +765,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'userId'      => $userId,
                 'orderId'     => 0,
                 'levelId'     => 0,
-                'role'        => '|headTeacher|',
+                'role'        => array('headTeacher'),
                 'remark'      => '',
                 'createdTime' => time()
             );
@@ -852,7 +852,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId'      => $userId,
             'orderId'     => 0,
             'levelId'     => 0,
-            'role'        => '|auditor|',
+            'role'        => array('auditor'),
             'remark'      => '',
             'createdTime' => time()
         );
@@ -887,7 +887,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId'      => $userId,
             'orderId'     => 0,
             'levelId'     => 0,
-            'role'        => '|assistant|',
+            'role'        => array('assistant'),
             'remark'      => '',
             'createdTime' => time()
         );
@@ -921,7 +921,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId'      => $userId,
             'orderId'     => 0,
             'levelId'     => 0,
-            'role'        => '|teacher|',
+            'role'        => array('teacher'),
             'remark'      => '',
             'createdTime' => time()
         );
@@ -1488,7 +1488,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     /**
@@ -1526,7 +1526,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getOrderService()
@@ -1546,7 +1546,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User:StatusService');
+        return $this->createService('User:StatusService');
     }
 
     protected function getCategoryService()

@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\Service\Classroom\Tests;
+namespace Tests\Classroom;
 
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
@@ -45,7 +45,7 @@ class ClassroomServiceTest extends BaseTestCase
     {
     }
 
-    public function testFindMobileVerifiedMemberCountByClassroomId()
+    public function testCountMobileVerifiedMembersByClassroomId()
     {
         $textClassroom = array(
             'title' => 'test1'
