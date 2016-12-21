@@ -6,7 +6,7 @@ const config = {
   },
   libs: {
     vendor: ['libs/vendor.js'], //可以是一个js文件
-    "fix-ie": ['fetch-ie8','console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
+    "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
     "jquery-validation": ['libs/js/jquery-validation.js'],
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
