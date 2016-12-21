@@ -16,6 +16,10 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
             'depth = :depth',
         );
 
+        $declares['timestamps'] = array(
+            'createdTime'
+        );
+
         $declares['orderbys'] = array(
             'createdTime',
             'updatedTime'

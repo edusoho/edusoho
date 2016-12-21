@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
@@ -12,9 +13,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCategoryService()
