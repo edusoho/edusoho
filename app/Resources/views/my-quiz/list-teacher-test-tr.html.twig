@@ -1,0 +1,26 @@
+<tr>
+	<td>
+		<a href="{% if status == 'reviewing' %}{{ path('course_manage_test_teacher_check', {id:paperResult.id}) }}{% endif %}{% if status == 'finished' %}{{ path('course_manage_test_results', {id:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
+		<br>
+		<small class="text-muted">{{'来自课程《%title%》'|trans({'%title%':course.title})}}</small>
+		<small class="text-muted mhs">•</small>
+		<small class="text-muted">{{'共%score%分 / %itemCount%道题'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
+	</td>
+	<td>
+		{{ web_macro.user_link(student) }} <br>
+		<small class="text-muted">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'交卷'|trans}}</small>
+	</td>
+	<td>
+		{% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
+			<a href="{{ path('course_manage_test_teacher_check', {id:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" class="btn btn-default btn-sm pull-right" target="_blank">{{'批阅'|trans}}</a>
+		{% endif %}
+
+		{% if status == 'finished' %}
+		  <div>
+		  	<div class="text-warning">{{'总分'|trans}} <strong>{{ paperResult.score }}</strong> {{'分'|trans}}</div>
+				<div class="text-muted"><small>{{'客观题%objectiveScore%分 / 主观题%subjectiveScore%分'|trans({'%objectiveScore%':paperResult.objectiveScore,'%subjectiveScore%':paperResult.subjectiveScore})}}</small></div>
+				<div class="text-success"><small>{{ teacher.nickname|default('系统'|trans) }} {{'批于'|trans}}{{ paperResult.checkedTime|date('Y年n月d日 H:i'|trans) }}</small></div>
+		  </div>
+		{% endif %}
+	</td>
+</tr>

@@ -1,0 +1,55 @@
+<div class="pane-question-content js-pane-question-content show-introhelp"
+	data-marker-metas-url="
+	{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}"
+	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-queston-marker-delete-url="{{path('course_lesson_question_marker_delete',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-marker-merge-url="{{path('course_lesson_marker_merge',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-marker-update-url="{{path('course_lesson_marker_update',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-queston-marker-sort-url="{{path('course_lesson_question_marker_sort',{'courseId':course.id,'lessonId':lesson.id})}}"
+	>
+		<form class="form-horizontal js-mark-from mrl" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+			<div class="form-group">
+				<div class="col-xs-5">
+					<select class="form-control" name="target" >
+						{{ select_options(targetChoices, app.request.request.get('target'))}}
+					</select>
+				</div>
+				<div class="col-xs-7">
+					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'请输入搜索关键词...'|trans}}"  >
+					<button class="es-icon es-icon-search btn-search"></button>
+				</div>
+			</div>
+		</form>
+		<div class="question-difficulty hidden">
+			学习过程控制强度：
+			<ul class="nav nav-pills nav-pills-difficulty  " >
+				<li class="active">
+					<a data-toggle="tab">弱</a>
+				</li>
+				<li >
+					<a data-toggle="tab">中</a>
+				</li>
+				<li >
+					<a data-toggle="tab">强</a>
+				</li>
+			</ul>
+		</div>
+		<div class="question-remask ">
+			<i class="es-icon es-icon-xinxi remask-icon"></i>仅支持选择题、填空、判断题三类题型。
+		</div>
+		<div class="popover left">
+			<div class="arrow"></div>
+			<div class="popover-content clearfix">
+				<p class="title">添加随堂练习，只需一步操作</p>
+				<p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
+				<span class="close-introhelp js-close-introhelp">知道了</span>
+				<div class="introhelp-img js-introhelp-img">
+					<img src="{{ asset('assets/v2/img/marksintro_1.png') }}" class="">
+					「视频编辑区域」
+				</div>
+			</div>
+		</div>
+		<ul class="lesson-list gruop-lesson-list " id="subject-lesson-list" data-intro-img=  ></ul>
+</div>
+{% do load_script('marker/question') %}

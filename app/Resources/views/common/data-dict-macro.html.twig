@@ -1,0 +1,99 @@
+{% macro courseStatus(status) %}
+    {% if status == 'draft' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif  status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'closed' %}
+        <span class="text-danger">{{ '已关闭'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro fileType(type) %}
+    {% if type == 'video' %}
+        <span class="glyphicon glyphicon-facetime-video text-success">{{ '视频'|trans }}</span>
+    {% elseif type == 'audio' %}
+        <span class="glyphicon glyphicon-music text-success">{{ '音频'|trans }}</span>
+    {% elseif type == 'document' %}
+        <span class="glyphicon glyphicon-briefcase text-success">{{ '文档'|trans }}</span>
+    {% elseif type == 'image' %}
+        <span class="glyphicon glyphicon-picture text-success">{{ '图片'|trans }}</span>
+    {% elseif type == 'other' %}
+        <span class="glyphicon glyphicon-question-sign text-success">{{ '其他'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro  orderStatus(status) %}
+    {% if status == 'created' %}
+        <span class="label label-danger">{{ '未付款'|trans }}</span>
+    {% elseif status == 'paid' %}
+        <span class="label label-success">{{ '已付款'|trans }}</span>
+    {% elseif status == 'refunding' %}
+        <span class="text-warning">{{ '退款中'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="text-danger">{{ '已退款'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="text-muted">{{ '已关闭'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro refundStatus(status) %}
+    {% if status == 'created' %}
+        <span class="text-warning">{{ '已申请'|trans }}</span>
+    {% elseif status == 'success' %}
+        <span class="text-success">{{ '退款成功'|trans }}</span>
+    {% elseif status == 'failed' %}
+        <span class="text-danger">{{ '退款失败'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="text-muted">{{ '已取消'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro logLevel(level) %}
+    {% if level == 'info' %}
+        <span>{{ '提示'|trans }}</span>
+    {% elseif level == 'warning' %}
+        <span class="text-warning">{{ '警告'|trans }}</span>
+    {% elseif level == 'error' %}
+        <span class="text-danger">{{ '错误'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro contentStatus(status) %}
+    {% if status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ '回收站'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro articleStatus(status) %}
+    {% if status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ '回收站'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro discountStatus(status) %}
+    {% if status == 'unstart' %}
+        <span class="text-muted">{{ '未开始'|trans }}</span>
+    {% elseif status == 'running' %}
+        <span class="text-success">{{ '进行中'|trans }}</span>
+    {% elseif status == 'finished' %}
+        <span class="text-muted">{{ '已结束'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro  video_quality(option) %}
+     {% if option == 'low' %}
+       {{'流畅'|trans}} <span class="text-muted">({{'适合PPT讲解'|trans}})</span>
+    {% elseif option == 'normal' %}
+      {{'标准'|trans}} <span class="text-muted">({{'适合屏幕录制、摄像头拍摄'|trans}})</span>
+    {% elseif option == 'high' %}
+      {{'精细'|trans}} <span class="text-muted">({{'适合动态电影'|trans}})</span>
+    {% endif %}
+{% endmacro %}

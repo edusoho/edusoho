@@ -1,5 +1,5 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "macro.html.twig" as web_macro %}
+{% import "admin/macro.html.twig" as admin_macro %}
 {% include 'css_loader.html.twig' %}
 
 <div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">

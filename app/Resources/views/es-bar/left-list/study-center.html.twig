@@ -1,0 +1,14 @@
+{% if app.user and app.user.isLogin() %}
+  {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id, count:2}) %}
+  <li data-id="#bar-user-center" class="bar-user">
+    <a href="javascript:;" data-url="{{ path('esbar_my_study_center') }}">{{'学<br>习<br>中<br>心'|trans|raw}}
+      {% if recentLiveLessons %}
+        <span class="dot"></span>
+      {% endif %}
+    </a>
+  </li>
+{% else %}
+  <li data-id="#bar-user-center" class="bar-user">
+    <a href="javascript:;" data-url="{{ path('esbar_my_study_center') }}">{{'学<br>习<br>中<br>心'|trans|raw}}</a>
+  </li>
+{% endif %}

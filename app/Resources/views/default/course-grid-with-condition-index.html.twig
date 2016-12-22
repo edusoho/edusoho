@@ -1,0 +1,70 @@
+<section class="course-list-section {{config.background|default("")}}" id="course-list-section">
+
+  {% set count = config.count|default(12) %}
+  {% set categoryId = config.categoryId|default(0) %}
+  {% set orderBy = config.orderBy|default('latest')%}
+  {% if orderBy == 'latest'%}
+    {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
+  {% elseif orderBy == 'recommendedSeq'%}
+    {% set courses = data('RecommendCourses',{'count':count, 'categoryId':categoryId}) %}
+  {% elseif orderBy == 'studentNum'%}
+    {% set courses = data('PopularCourses',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
+  {% endif %}
+  {% set categoriesFirst = data('Categories',{'group':'course'})%}
+  <div class="container">
+    <div class="text-line">
+      <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
+      <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+    </div>
+    <div class="course-filter" id="course-filter">
+      <ul class="nav nav-pills hidden-xs" role="tablist">
+        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{'全部课程'|trans}}</a></li>
+        {% if categoriesFirst%}
+          {% for category in categoriesFirst  if (category.parentId == 0) %}
+            {% if ( loop.index0 < config.categoryCount|default(4) ) %}
+              <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+      <div class="btn-group visible-xs">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'全部课程'|trans}} <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}" data-url="{{path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{'全部课程'|trans}}</a></li>
+          {% if categoriesFirst%}
+            {% for category in categoriesFirst  if (category.parentId == 0) %}
+              {% if ( loop.index0 < config.categoryCount|default(4) ) %}
+                <li role="presentation" class = "js-course-filter {% if (categoryId|default(0) == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+      <div class="course-sort btn-group">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}" data-type='course'>
+          {{'最新'|trans}}
+        </a>
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}" data-type='course'>
+          {{'最热'|trans}}
+        </a>
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}" data-type='course'>
+          {{'推荐'|trans}}
+        </a>
+      </div>
+    </div>
+    <div class="course-list">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-xs-6">
+            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="section-more-btn">
+      <a href="{{ path('course_explore') }}" class="btn btn-default btn-lg">
+        {{'更多课程'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
+      </a>
+    </div>
+  </div>
+</section>

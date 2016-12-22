@@ -1,0 +1,6 @@
+{% set consult = setting('consult') %}
+{% if consult.qq[0].name is not empty or consult.qqgroup[0].name is not empty %}
+  <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="{{'QQ客服及QQ群'|trans}}" data-content-element="#bar-qq-content">
+    <a><i class="es-icon es-icon-qq"></i></a>
+  </li>
+{% endif %}

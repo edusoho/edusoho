@@ -1,0 +1,100 @@
+{% set consult = setting('consult') %}
+<div id="float-consult" class="float-consult hidden-xs">
+  <div class="btn-group-vertical">
+
+    {% set break = 0 %}
+    {% for qq in consult.qq if qq.name is not empty and qq.number is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="{{'QQ客服'|trans}}" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% set break = 0 %}
+    {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="{{'QQ群'|trans}}" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% set break = 0 %}
+    {% for phone in consult.phone if phone.name is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="{{'电话客服'|trans}}" data-content-element="#consult-phone-content"><span class="icon icon-phone"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% if consult.webchatURI is not empty %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="{{'微信公众号'|trans}}" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
+    {% endif %}
+
+    {% if consult.email is not empty %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'电子邮箱'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
+    {% endif %}
+  </div>
+
+  <div class="consult-contents">
+    <div id="consult-qq-content">
+      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
+        {% if not qq.url|default(false) %}
+        <p>
+
+          <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+
+            {{ qq.name }}
+          </a>
+        </p>
+        {% else %}
+          <p>
+            <a href="{{ qq.url|raw }}" target="_blank">
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+              {{ qq.name }}
+            </a>
+          </p>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div id="consult-qqgroup-content">
+      {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
+        <p>
+          <span class="icon icon-qqgroup text-muted" style="font-size:14px;"></span>
+          {{qqgroup.name}}
+           <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
+
+            {% if  qqgroup.url|default('') %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% else %}
+              <p class="text-overflow">
+                {{ qqgroup.number }}
+              </p>
+            {% endif %}
+
+        </p>
+      {% endfor %}
+    </div>
+    <div id="consult-phone-content">
+      <p>
+        <strong>{{'服务时间：'|trans}}</strong> {{ consult.worktime }}
+      </p>
+
+      {% for phone in consult.phone if phone.name is not empty %}
+        <p>
+          {{ phone.name }}： {{ phone.number }}
+        </p>
+      {% endfor %}
+    </div>
+
+
+    <div id="consult-weixin-content">
+      <img src="{{ asset(consult.webchatURI) }}" class="qrcode center-block">
+    </div>
+
+    <div id="consult-email-content">
+     <a href="mailto:{{consult.email}}">{{ consult.email }}</a>
+    </div>
+
+  </div>
+</div>
+
+{% do load_script('topxiawebbundle/util/float-consult') %}
+  

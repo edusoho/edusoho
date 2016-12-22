@@ -1,0 +1,46 @@
+<div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
+  <div class="container clearfix">
+    <div class="user-avatar">
+      <div class="avatar-wrap">
+        <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+        {% if 'ROLE_TEACHER' in user.roles %}
+          <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span>
+        {% endif %}
+      </div>
+      <div class="name">
+        {{user.nickname}}
+      </div>
+      <div class="position">
+        <span class="mrm">{% if user.title %}{{ user.title }}{% else %}{{'暂无头衔'|trans}}{% endif %}</span>
+        {% if user.weibo and user.isWeiboPublic %}
+          <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
+        {% endif %}
+        {% if user.site %}
+          <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>
+        {% endif %}
+        {% if user.qq and user.isQQPublic %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.qq }}"><i class="es-icon es-icon-qq"></i></a>
+        {% endif %}
+        {% if user.weixin and user.isWeixinPublic %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.weixin }}"><i class="es-icon es-icon-weixin"></i></a>
+        {% endif %}
+      </div>
+      <div class="mates">
+        <span class="mrm">{{follower|default(0)}}</span>{{'粉丝'|trans}}<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>{{'关注'|trans}}
+      </div>
+      {% if (not app.user) or (app.user.id != user.id) %}
+        <div class="actions">
+          <a class="btn btn-primary follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>{{'关注'|trans}}</a>
+          <a class="btn btn-default unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'已关注'|trans}}</a>
+          <button class="btn btn-ghost-white" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'私信'|trans}}</button>
+        </div>
+      {% endif %}
+    </div>
+    <div class="user-about hidden-sm hidden-xs">
+      <div class="user-about-content">
+        {% if user.signature %}{{ user.signature}}{% else %}{{'暂无签名'|trans}}{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="mask"></div>
+</div>
