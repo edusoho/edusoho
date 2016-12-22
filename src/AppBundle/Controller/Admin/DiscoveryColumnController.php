@@ -67,7 +67,7 @@ class DiscoveryColumnController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array(
+        return $this->render('DiscoveryColumn:index.html.twig', array(
             'discoveryColumns' => $discoveryColumns
         ));
     }
@@ -105,7 +105,7 @@ class DiscoveryColumnController extends BaseController
             $discoveryColumn = array();
         }
 
-        return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column-modal.html.twig', array(
+        return $this->render('DiscoveryColumn:discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $categoryId
         ));
@@ -134,7 +134,7 @@ class DiscoveryColumnController extends BaseController
             return $this->redirect($this->generateUrl('admin_discovery_column_index'));
         }
 
-        return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column-modal.html.twig', array(
+        return $this->render('DiscoveryColumn:discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
         ));

@@ -35,7 +35,7 @@ class AnnouncementController extends BaseController
 
         $now = time();
 
-        return $this->render('TopxiaAdminBundle:Announcement:index.html.twig', array(
+        return $this->render('Announcement:index.html.twig', array(
             'paginator'     => $paginator,
             'announcements' => $announcements,
             'users'         => $users,
@@ -56,7 +56,7 @@ class AnnouncementController extends BaseController
             $this->getAnnouncementService()->createAnnouncement($announcement);
         }
 
-        return $this->render('TopxiaAdminBundle:Announcement:create.html.twig');
+        return $this->render('Announcement:create.html.twig');
     }
 
     public function editAction(Request $request, $id)
@@ -71,7 +71,7 @@ class AnnouncementController extends BaseController
             $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
         }
 
-        return $this->render('TopxiaAdminBundle:Announcement:create.html.twig', array(
+        return $this->render('Announcement:create.html.twig', array(
             'announcement' => $announcement));
     }
 

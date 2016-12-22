@@ -23,11 +23,11 @@ class AppController extends BaseController
         $apps = $this->getAppService()->getCenterApps();
 
         if (isset($apps['error'])) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error', 'type' => $postStatus));
+            return $this->render('App:center.html.twig', array('status' => 'error', 'type' => $postStatus));
         }
 
         if (!$apps) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink', 'type' => $postStatus));
+            return $this->render('App:center.html.twig', array('status' => 'unlink', 'type' => $postStatus));
         }
 
         $theme = array();
@@ -57,7 +57,7 @@ class AppController extends BaseController
 
         $showType = $request->query->get("showType");
 
-        return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
+        return $this->render('App:center.html.twig', array(
             'apps'           => $apps,
             'theme'          => $theme,
             'allApp'         => $app,
@@ -127,7 +127,7 @@ class AppController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
+        return $this->render('App:installed.html.twig', array(
             'apps'    => $apps,
             'theme'   => $theme,
             'plugin'  => $plugin,
@@ -149,11 +149,11 @@ class AppController extends BaseController
         $apps = $this->getAppService()->checkAppUpgrades();
 
         if (isset($apps['error'])) {
-            return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
+            return $this->render('App:upgrades.html.twig', array('status' => 'error'));
         }
 
         $version = $this->getAppService()->getMainVersion();
-        return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
+        return $this->render('App:upgrades.html.twig', array(
             'apps'    => $apps,
             'version' => $version
         ));
@@ -180,7 +180,7 @@ class AppController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-        return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
+        return $this->render('App:logs.html.twig', array(
             'logs'      => $logs,
             'users'     => $users,
             'paginator' => $paginator

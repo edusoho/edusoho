@@ -14,7 +14,7 @@ class CourseQuestionController extends BaseController
             $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             if (count($conditions['courseIds']) == 0) {
-                return $this->render('TopxiaAdminBundle:CourseQuestion:index.html.twig', array(
+                return $this->render('CourseQuestion:index.html.twig', array(
                     'paginator' => new Paginator($request, 0, 20),
                     'questions' => array(),
                     'users'     => array(),
@@ -46,7 +46,7 @@ class CourseQuestionController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($questions, 'lessonId'));
 
-        return $this->render('TopxiaAdminBundle:CourseQuestion:index.html.twig', array(
+        return $this->render('CourseQuestion:index.html.twig', array(
             'paginator' => $paginator,
             'questions' => $questions,
             'users'     => $users,

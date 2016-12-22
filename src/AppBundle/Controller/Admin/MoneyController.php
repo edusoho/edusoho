@@ -38,7 +38,7 @@ class MoneyController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-		return $this->render('TopxiaAdminBundle:Money:records.html.twig', array(
+		return $this->render('Money:records.html.twig', array(
 			'records' => $records,
             'paginator' => $paginator,
             'users' => $users

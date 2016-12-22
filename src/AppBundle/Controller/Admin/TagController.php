@@ -25,7 +25,7 @@ class TagController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
+        return $this->render('Tag:index.html.twig', array(
             'tags'         => $tags,
             'paginator'    => $paginator,
         ));
@@ -38,13 +38,13 @@ class TagController extends BaseController
 
             $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
 
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+            return $this->render('Tag:list-tr.html.twig', array(
                 'tag'          => $tag,
                 'tagRelations' => $tagRelation,
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
+        return $this->render('Tag:tag-modal.html.twig', array(
             'tag' => array('id' => 0, 'name' => '')
         ));
     }
@@ -59,12 +59,12 @@ class TagController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->updateTag($id, $request->request->all());
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+            return $this->render('Tag:list-tr.html.twig', array(
                 'tag' => $tag
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
+        return $this->render('Tag:tag-modal.html.twig', array(
             'tag' => $tag
         ));
     }

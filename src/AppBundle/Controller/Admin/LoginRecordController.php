@@ -31,7 +31,7 @@ class LoginRecordController extends BaseController
                 0,
                 20
             );
-            return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
+            return $this->render('LoginRecord:index.html.twig', array(
                 'logRecords' => array(),
                 'users'      => array(),
                 'paginator'  => $paginator
@@ -59,7 +59,7 @@ class LoginRecordController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
+        return $this->render('LoginRecord:index.html.twig', array(
             'logRecords' => $logRecords,
             'users'      => $users,
             'paginator'  => $paginator
@@ -91,7 +91,7 @@ class LoginRecordController extends BaseController
 
         $loginRecords = ConvertIpToolkit::ConvertIps($loginRecords);
 
-        return $this->render('TopxiaAdminBundle:LoginRecord:login-record-details.html.twig', array(
+        return $this->render('LoginRecord:login-record-details.html.twig', array(
             'user'                 => $user,
             'loginRecords'         => $loginRecords,
             'loginRecordPaginator' => $paginator

@@ -45,7 +45,7 @@ class SystemDefaultSettingController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
-        return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig', array(
+        return $this->render('System:default-avatar-crop.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
@@ -89,7 +89,7 @@ class SystemDefaultSettingController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
-        return $this->render('TopxiaAdminBundle:System:default-course-picture-crop.html.twig', array(
+        return $this->render('System:default-course-picture-crop.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize

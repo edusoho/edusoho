@@ -41,7 +41,7 @@ class BlockController extends BaseController
         $userIds         = ArrayToolkit::column($latestHistories, 'userId');
         $users           = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
+        return $this->render('Block:index.html.twig', array(
             'blockTemplates'  => $blockTemplates,
             'users'           => $users,
             'latestHistories' => $latestHistories,
@@ -79,7 +79,7 @@ class BlockController extends BaseController
     {
         $blockHistory = $this->getBlockService()->getBlockHistory($id);
 
-        return $this->render('TopxiaAdminBundle:Block:blockhistory-preview.html.twig', array(
+        return $this->render('Block:blockhistory-preview.html.twig', array(
             'blockHistory' => $blockHistory
         ));
     }
@@ -99,7 +99,7 @@ class BlockController extends BaseController
             }
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
             $latestUpdateUser   = $this->getUserService()->getUser($latestBlockHistory['userId']);
-            $html               = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
+            $html               = $this->renderView('Block:list-tr.html.twig', array(
                 'blockTemplate'    => $block,
                 'latestUpdateUser' => $latestUpdateUser,
                 'latestHistory'    => $latestBlockHistory
@@ -110,7 +110,7 @@ class BlockController extends BaseController
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
-        return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
+        return $this->render('Block:block-update-modal.html.twig', array(
             'block' => $block
         ));
     }
@@ -145,7 +145,7 @@ class BlockController extends BaseController
             $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
         }
 
-        return $this->render('TopxiaAdminBundle:Block:block-history-table.html.twig', array(
+        return $this->render('Block:block-history-table.html.twig', array(
             'block'         => $block,
             'blockHistorys' => $blockHistorys,
             'historyUsers'  => $historyUsers,
@@ -161,14 +161,14 @@ class BlockController extends BaseController
             $fields = $request->request->all();
             $block  = $this->getBlockService()->updateBlockTemplate($block['id'], $fields);
             $user   = $this->getCurrentUser();
-            $html   = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
+            $html   = $this->renderView('Block:list-tr.html.twig', array(
                 'blockTemplate' => $block, 'latestUpdateUser' => $user
             ));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
-        return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
+        return $this->render('Block:block-modal.html.twig', array(
             'editBlock' => $block
         ));
     }
@@ -201,7 +201,7 @@ class BlockController extends BaseController
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
-        return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
+        return $this->render('Block:block-visual-edit.html.twig', array(
             'block'  => $block,
             'action' => 'edit'
         ));
@@ -246,7 +246,7 @@ class BlockController extends BaseController
             $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
         }
 
-        return $this->render('TopxiaAdminBundle:Block:block-visual-history.html.twig', array(
+        return $this->render('Block:block-visual-history.html.twig', array(
             'block'         => $block,
             'paginator'     => $paginator,
             'blockHistorys' => $blockHistorys,
@@ -259,7 +259,7 @@ class BlockController extends BaseController
         if ('POST' == $request->getMethod()) {
             $block = $this->getBlockService()->createBlock($request->request->all());
             $user  = $this->getCurrentUser();
-            $html  = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('blockTemplate' => $block, 'latestUpdateUser' => $user));
+            $html  = $this->renderView('Block:list-tr.html.twig', array('blockTemplate' => $block, 'latestUpdateUser' => $user));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
@@ -272,7 +272,7 @@ class BlockController extends BaseController
             'template' => ''
         );
 
-        return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
+        return $this->render('Block:block-modal.html.twig', array(
             'editBlock' => $editBlock
         ));
     }
@@ -340,7 +340,7 @@ class BlockController extends BaseController
     {
         $url = $request->query->get('url', '');
 
-        return $this->render('TopxiaAdminBundle:Block:picture-preview-modal.html.twig', array(
+        return $this->render('Block:picture-preview-modal.html.twig', array(
             'url' => $url
         ));
     }

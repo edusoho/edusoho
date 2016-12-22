@@ -38,7 +38,7 @@ class LiveCourseController extends BaseController
         $courses   = $this->getCourseService()->searchCourses($courseCondition, $sort = 'latest', 0, 1000);
         $courseIds = ArrayToolkit::column($courses, 'id');
         if (empty($courseIds)) {
-            return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
+            return $this->render('LiveCourse:index.html.twig', array(
                 'status'    => $status,
                 'lessons'   => array(),
                 'courses'   => array(),
@@ -95,7 +95,7 @@ class LiveCourseController extends BaseController
             );
         }
 
-        return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
+        return $this->render('LiveCourse:index.html.twig', array(
             'status'    => $status,
             'lessons'   => $lessons,
             'courses'   => ArrayToolkit::index($courses, 'id'),

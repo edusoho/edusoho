@@ -74,7 +74,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('课程设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
+        return $this->render('System:course-setting.html.twig', array(
             'courseSetting'   => $courseSetting,
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
@@ -101,7 +101,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('课程默认图片设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:course-avatar.html.twig', array(
+        return $this->render('System:course-avatar.html.twig', array(
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
         ));
@@ -146,7 +146,7 @@ class CourseSettingController extends BaseController
         }
 
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-        return $this->render('TopxiaAdminBundle:System:live-course-setting.html.twig', array(
+        return $this->render('System:live-course-setting.html.twig', array(
             'courseSetting' => $setting,
             'capacity'      => $capacity
         ));
@@ -170,7 +170,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('题库设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
+        return $this->render('System:questions-setting.html.twig');
     }
 
     protected function getCourseDefaultSet()

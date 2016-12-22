@@ -23,7 +23,7 @@ class CourseDiskController extends BaseController
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'userId'));
-		return $this->render('TopxiaAdminBundle:CourseDisk:index.html.twig',array(
+		return $this->render('CourseDisk:index.html.twig',array(
             'files' => $files,
             'paginator' => $paginator,
             'users'=>$users,

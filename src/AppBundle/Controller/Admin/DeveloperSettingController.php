@@ -47,7 +47,7 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('开发者已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:index.html.twig', array(
+        return $this->render('DeveloperSetting:index.html.twig', array(
             'developerSetting' => $developerSetting
         ));
     }
@@ -76,7 +76,7 @@ class DeveloperSettingController extends BaseController
         $appCount = $this->getAppservice()->findAppCount();
         $apps     = $this->getAppservice()->findApps(0, $appCount);
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:version.html.twig', array(
+        return $this->render('DeveloperSetting:version.html.twig', array(
             'apps' => $apps
         ));
     }
@@ -99,7 +99,7 @@ class DeveloperSettingController extends BaseController
         $setting = $this->getSettingService()->get('magic', array());
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:magic.html.twig', array(
+        return $this->render('DeveloperSetting:magic.html.twig', array(
             'setting' => $setting
         ));
     }
@@ -134,7 +134,7 @@ class DeveloperSettingController extends BaseController
             $redis['setting'] = '{}';
         }
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:redis.html.twig', array(
+        return $this->render('DeveloperSetting:redis.html.twig', array(
             'redis' => $redis
         ));
     }
@@ -153,7 +153,7 @@ class DeveloperSettingController extends BaseController
 
         $fileCount = $this->getUploadFileService()->searchFileCount($conditions);
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:cloud-file-sync.html.twig', array(
+        return $this->render('DeveloperSetting:cloud-file-sync.html.twig', array(
             'fileCount' => $fileCount
         ));
     }

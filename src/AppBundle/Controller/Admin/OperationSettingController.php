@@ -27,7 +27,7 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('资讯频道设置已保存！'));
         };
 
-        return $this->render('TopxiaAdminBundle:Article:setting.html.twig', array(
+        return $this->render('Article:setting.html.twig', array(
             'articleSetting' => $articleSetting
         ));
     }
@@ -41,7 +41,7 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('小组设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:Group:set.html.twig', array(
+        return $this->render('Group:set.html.twig', array(
         ));
     }
 
@@ -83,7 +83,7 @@ class OperationSettingController extends BaseController
         $inviteSetting = array_merge($default, $inviteSetting);
 
         response:
-        return $this->render('TopxiaAdminBundle:Invite:set.html.twig', array(
+        return $this->render('Invite:set.html.twig', array(
             'inviteSetting'             => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template']
         ));

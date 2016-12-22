@@ -94,7 +94,7 @@ class UserSettingController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
+        return $this->render('System:auth.html.twig', array(
             'auth'            => $auth,
             'userFields'      => $userFields,
             'defaultSetting'  => $defaultSetting,
@@ -121,7 +121,7 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('头像设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:user-avatar.html.twig', array(
+        return $this->render('System:user-avatar.html.twig', array(
             'defaultSetting' => $defaultSetting
         ));
     }
@@ -165,7 +165,7 @@ class UserSettingController extends BaseController
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
-        return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
+        return $this->render('System:login-connect.html.twig', array(
             'loginConnect' => $loginConnect,
             'clients'      => $clients
         ));
@@ -222,7 +222,7 @@ class UserSettingController extends BaseController
         $discuzConfig = $setting['partner_config']['discuz'];
         $phpwindConfig  = empty($setting['partner_config']['phpwind'])? '' : $setting['partner_config']['phpwind'];
 
-        return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
+        return $this->render('System:user-center.html.twig', array(
             'setting'       => $setting,
             'discuzConfig'  => $discuzConfig,
             'phpwindConfig' => $phpwindConfig
@@ -299,7 +299,7 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('用户信息设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
+        return $this->render('System:user-fields.html.twig', array(
             'textCount'     => $textCount,
             'intCount'      => $intCount,
             'floatCount'    => $floatCount,
@@ -355,7 +355,7 @@ class UserSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:user-fields.modal.edit.html.twig', array(
+        return $this->render('System:user-fields.modal.edit.html.twig', array(
             'field' => $field
         ));
     }
@@ -376,7 +376,7 @@ class UserSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:user-fields.modal.delete.html.twig', array(
+        return $this->render('System:user-fields.modal.delete.html.twig', array(
             'field' => $field
         ));
     }

@@ -10,7 +10,7 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryStructureTree();
 
-        return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
+        return $this->render('ArticleCategory:index.html.twig', array(
             'categories' => $categories
         ));
     }
@@ -35,7 +35,7 @@ class ArticleCategoryController extends BaseController
         );
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
+        return $this->render('ArticleCategory:modal.html.twig', array(
             'category'     => $category,
             'categoryTree' => $categoryTree
         ));
@@ -65,7 +65,7 @@ class ArticleCategoryController extends BaseController
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
+        return $this->render('ArticleCategory:modal.html.twig', array(
             'category'     => $category,
             'categoryTree' => $categoryTree
         ));
@@ -127,7 +127,7 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
+        return $this->render('ArticleCategory:tbody.html.twig', array(
             'categories'   => $categories,
             'categoryTree' => $categories
         ));

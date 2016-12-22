@@ -30,7 +30,7 @@ class JobController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaAdminBundle:System:jobs.html.twig', array(
+        return $this->render('System:jobs.html.twig', array(
             'jobs'      => $jobs,
             'paginator' => $paginator
         ));

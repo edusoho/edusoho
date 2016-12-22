@@ -12,7 +12,7 @@ class StatisticController extends BaseController
 
     public function indexAction(Request $request)
     { 
-        return $this->render('TopxiaAdminBundle:Statistic:index.html.twig');
+        return $this->render('Statistic:index.html.twig');
     }
 
 }

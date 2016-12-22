@@ -16,7 +16,7 @@ class NavigationController extends BaseController
 
         $navigations = $this->getNavigationService()->getNavigationsListByType($type);
 
-        return $this->render('TopxiaAdminBundle:Navigation:index.html.twig', array(
+        return $this->render('Navigation:index.html.twig', array(
             'type' => $type,
             'navigations' => $navigations,
         ));
@@ -53,7 +53,7 @@ class NavigationController extends BaseController
         );
         $parentNavigation = $navigation['parentId'] ? $this->getNavigationService()->getNavigation($navigation['parentId']) : null;
 
-        return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
+        return $this->render('Navigation:navigation-modal.html.twig', array(
             'navigation'=>$navigation,
             'parentNavigation' => $parentNavigation
         ));
@@ -69,7 +69,7 @@ class NavigationController extends BaseController
                 return $this->renderTbody($navigation['type']);
         }
 
-        return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
+        return $this->render('Navigation:navigation-modal.html.twig', array(
             'navigation'=>$navigation,
             'parentNavigation' => $parentNavigation
         ));
@@ -86,7 +86,7 @@ class NavigationController extends BaseController
     protected function renderTbody($type)
     {
         $footNavigations = $this->getNavigationService()->findNavigationsByType($type, 0 ,20);
-        return $this->render('TopxiaAdminBundle:Navigation:tbody.html.twig', array(
+        return $this->render('Navigation:tbody.html.twig', array(
             'navigations'=>$footNavigations
         ));
     }

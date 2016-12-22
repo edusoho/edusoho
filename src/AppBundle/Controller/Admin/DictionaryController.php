@@ -11,7 +11,7 @@ class DictionaryController extends BaseController
 	{
 		$dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
         $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-		return $this->render('TopxiaAdminBundle:Dictionary:index.html.twig',array(
+		return $this->render('Dictionary:index.html.twig',array(
 			'dictionaryItems' => $dictionaryItems,
             'dictionaries' => $dictionaries
 			));
@@ -26,13 +26,13 @@ class DictionaryController extends BaseController
             $dictionaryItem = $this->getDictionaryService()->addDictionaryItem($conditions);
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
+            return $this->render('Dictionary:tbody.html.twig',array(
             	'dictionaryItems' => $dictionaryItems,
                 'dictionaries' => $dictionaries
             	));
         }
 
-        return $this->render('TopxiaAdminBundle:Dictionary:modal.html.twig',array('type'=>$type));
+        return $this->render('Dictionary:modal.html.twig',array('type'=>$type));
     }
 
     public function checkNameAction(Request $request, $id)
@@ -72,13 +72,13 @@ class DictionaryController extends BaseController
             $dictionaryItem = $this->getDictionaryService()->updateDictionaryItem($id, $request->request->all());
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
+            return $this->render('Dictionary:tbody.html.twig',array(
             	'dictionaryItems' => $dictionaryItems,
                 'dictionaries' => $dictionaries
             	));
         }
 
-        return $this->render('TopxiaAdminBundle:Dictionary:modal.html.twig', array(
+        return $this->render('Dictionary:modal.html.twig', array(
             'dictionaryItem' => $dictionaryItem
         ));
     }

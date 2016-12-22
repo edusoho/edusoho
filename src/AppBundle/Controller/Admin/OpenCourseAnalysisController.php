@@ -21,7 +21,7 @@ class OpenCourseAnalysisController extends BaseController
         //根据refererHost分组统计数据总数
         $refererlogDatas   = $this->getRefererLogService()->analysisSummary($conditions);
         $analysisDataNames = json_encode(ArrayToolkit::column($refererlogDatas, 'refererName'));
-        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:summary.html.twig', array(
+        return $this->render('OpenCourseAnalysis/Referer:summary.html.twig', array(
             'dateRange'               => $this->getDataInfo($timeRange),
             'refererlogAnalysisList'  => $refererlogDatas,
             'refererlogAnalysisDatas' => json_encode($refererlogDatas),
@@ -39,7 +39,7 @@ class OpenCourseAnalysisController extends BaseController
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
         $openCourses = ArrayToolkit::index($openCourses, 'id');
 
-        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:list.html.twig', array(
+        return $this->render('OpenCourseAnalysis/Referer:list.html.twig', array(
             'dateRange'       => $this->getDataInfo($timeRange),
             'refererlogDatas' => $refererlogDatas,
             'openCourses'     => $openCourses,
@@ -61,7 +61,7 @@ class OpenCourseAnalysisController extends BaseController
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
-        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
+        return $this->render("OpenCourseAnalysis/Referer:detail.html.twig", array(
             'paginator'      => $paginator,
             'refererloglist' => $refererloglist,
             'course'         => $course
@@ -80,7 +80,7 @@ class OpenCourseAnalysisController extends BaseController
         $refererlogsDetail = $this->getRefererLogService()->analysisSummary($conditions);
         $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererName'));
 
-        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail-graph.html.twig", array(
+        return $this->render("OpenCourseAnalysis/Referer:detail-graph.html.twig", array(
             'refererlogsDetail'     => $refererlogsDetail,
             'refererlogDetailDatas' => json_encode($refererlogsDetail),
             'refererlogNames'       => $refererlogNames,
@@ -100,7 +100,7 @@ class OpenCourseAnalysisController extends BaseController
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
-        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Parts:referer-detail-list.html.twig", array(
+        return $this->render("OpenCourseAnalysis/Parts:referer-detail-list.html.twig", array(
             'paginator'      => $paginator,
             'refererloglist' => $refererloglist,
             'targetId'       => $id
@@ -139,7 +139,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $averageWatchNum = empty($watchData['watchNum']) ? 0 : number_format(array_sum($watchData['watchNum']) / count($watchData['watchNum']));
 
-        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:watch.html.twig", array(
+        return $this->render("OpenCourseAnalysis/Referer:watch.html.twig", array(
             'dateRange'          => $this->getDataInfo($timeRange),
             'totalOpenCourseNum' => $totalOpenCourseNum,
             'totalWatchNum'      => $totalWatchNum,
@@ -238,7 +238,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $totalData = $this->getTotalConversionData();
 
-        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Conversion:index.html.twig', array(
+        return $this->render('OpenCourseAnalysis/Conversion:index.html.twig', array(
             'courses'     => $courses,
             'paginator'   => $paginator,
             'refererLogs' => $refererLogs,
@@ -256,7 +256,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $orderLogs = $this->getConversionOrderData($conditions);
 
-        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Conversion:result-modal.html.twig', array(
+        return $this->render('OpenCourseAnalysis/Conversion:result-modal.html.twig', array(
             'orderLogs' => $orderLogs,
             'course'    => $course
         ));

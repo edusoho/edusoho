@@ -13,7 +13,7 @@ class ThemeController extends BaseController
 
         $themes = $this->getThemes();
 
-        return $this->render('TopxiaAdminBundle:Theme:index.html.twig', array(
+        return $this->render('Theme:index.html.twig', array(
             'themes'       => $themes,
             'currentTheme' => $currentTheme
         ));
@@ -67,7 +67,7 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetCurrentConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
+        return $this->render('Theme:edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
             'themeUri'    => $uri
@@ -82,7 +82,7 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
+        return $this->render('Theme:edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
             'themeUri'    => $uri
@@ -205,7 +205,7 @@ class ThemeController extends BaseController
         if ($currentTheme['uri'] == 'graceful') {
             $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
         } else {
-            $template = 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig';
+            $template = 'Theme:theme-edit-config-li.html.twig';
         }
 
         return $template;

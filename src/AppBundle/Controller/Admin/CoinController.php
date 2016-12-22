@@ -105,7 +105,7 @@ class CoinController extends BaseController
             }
 
             $courses = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
-            return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig', array(
+            return $this->render('Coin:coin-course-set.html.twig', array(
                 'set'   => $set,
                 'items' => $courses
             ));
@@ -116,7 +116,7 @@ class CoinController extends BaseController
         }
 
         response:
-        return $this->render('TopxiaAdminBundle:Coin:coin-model.html.twig', array(
+        return $this->render('Coin:coin-model.html.twig', array(
             'coinSettings' => $coinSettings
         ));
     }
@@ -135,7 +135,7 @@ class CoinController extends BaseController
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
         }
 
-        return $this->render('TopxiaAdminBundle:Coin:coin-table-setting.html.twig', array(
+        return $this->render('Coin:coin-table-setting.html.twig', array(
             'type'  => $conditions['type'],
             'items' => $items,
             'set'   => $set
@@ -321,7 +321,7 @@ class CoinController extends BaseController
 
         $userIds = ArrayToolkit::column($cashes, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig', array(
+        return $this->render('Coin:coin-records.html.twig', array(
             'users'     => $users,
             'cashes'    => $cashes,
             'outflow'   => $outflow,
@@ -362,7 +362,7 @@ class CoinController extends BaseController
             $users   = array($condition['userId'] => $user);
 
             response:
-            return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig', array(
+            return $this->render('Coin:coin-user-records.html.twig', array(
                 'condition' => $condition,
                 'userIds'   => $userIds,
                 'users'     => $users
@@ -385,7 +385,7 @@ class CoinController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig', array(
+        return $this->render('Coin:coin-user-records.html.twig', array(
             'paginator' => $paginator,
             'condition' => $condition,
             'userIds'   => $userIds,
@@ -424,7 +424,7 @@ class CoinController extends BaseController
 
         $user = $this->getUserService()->getUser($userId);
 
-        return $this->render('TopxiaAdminBundle:Coin:flow-deatil-modal.html.twig', array(
+        return $this->render('Coin:flow-deatil-modal.html.twig', array(
             'user'      => $user,
             'cashes'    => $cashes,
             'paginator' => $paginator,
@@ -434,7 +434,7 @@ class CoinController extends BaseController
 
     protected function settingsRenderedPage($coinSettings)
     {
-        return $this->render('TopxiaAdminBundle:Coin:coin-settings.html.twig', array(
+        return $this->render('Coin:coin-settings.html.twig', array(
             'coin_settings_posted' => $coinSettings
         ));
     }
@@ -461,7 +461,7 @@ class CoinController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Coin:order-create-modal.html.twig', array());
+        return $this->render('Coin:order-create-modal.html.twig', array());
     }
 
     public function editAction(Request $request, $id)
@@ -485,7 +485,7 @@ class CoinController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Coin:order-edit-modal.html.twig', array(
+        return $this->render('Coin:order-edit-modal.html.twig', array(
             'id' => $id
         ));
     }
@@ -612,7 +612,7 @@ class CoinController extends BaseController
 
         $conditions['type'] = 'outflow';
         $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
-        return $this->render('TopxiaAdminBundle:Coin:cash-bill.html.twig', array(
+        return $this->render('Coin:cash-bill.html.twig', array(
             'cashes'        => $cashes,
             'paginator'     => $paginator,
             'users'         => $users,

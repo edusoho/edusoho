@@ -72,7 +72,7 @@ class UserApprovalController extends BaseController
         //最终结果
         $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
         $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
-        return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
+        return $this->render('User:approvals.html.twig', array(
             'users'          => $users,
             'paginator'      => $paginator,
             'userProfiles'   => $userProfiles,
@@ -104,7 +104,7 @@ class UserApprovalController extends BaseController
             return $this->createJsonResponse(array('status' => 'ok'));
         }
 
-        return $this->render("TopxiaAdminBundle:User:user-approve-modal.html.twig",
+        return $this->render("User:user-approve-modal.html.twig",
             array(
                 'user'             => $user,
                 'userApprovalInfo' => $userApprovalInfo
@@ -116,7 +116,7 @@ class UserApprovalController extends BaseController
     {
         list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
 
-        return $this->render("TopxiaAdminBundle:User:user-approve-info-modal.html.twig",
+        return $this->render("User:user-approve-info-modal.html.twig",
             array(
                 'user'             => $user,
                 'userApprovalInfo' => $userApprovalInfo

@@ -34,7 +34,7 @@ class ContentController extends BaseController
         $categoryIds = ArrayToolkit::column($contents, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('TopxiaAdminBundle:Content:index.html.twig',array(
+        return $this->render('Content:index.html.twig',array(
         	   'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
@@ -60,14 +60,14 @@ class ContentController extends BaseController
             $content = $this->filterEditorField($content);
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
-            return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
+            return $this->render('Content:content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:Content:content-modal.html.twig',array(
+        return $this->render('Content:content-modal.html.twig',array(
             'type' => $type,
         ));
     }
@@ -91,14 +91,14 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
-            return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
+            return $this->render('Content:content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:Content:content-modal.html.twig',array(
+        return $this->render('Content:content-modal.html.twig',array(
             'type' => $type,
             'content' => $content,
         ));

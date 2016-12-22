@@ -41,7 +41,7 @@ class LogController extends BaseController
         $moduleDicts = $this->getLogService()->getLogModuleDicts();
         $actions     = $this->getLogService()->findLogActionDictsyModule($conditions['module']);
 
-        return $this->render('TopxiaAdminBundle:System/Log:logs.html.twig', array(
+        return $this->render('System/Log:logs.html.twig', array(
             'logs'        => $logs,
             'paginator'   => $paginator,
             'users'       => $users,
@@ -58,7 +58,7 @@ class LogController extends BaseController
             $actions = $this->getLogService()->findLogActionDictsyModule($module);
         }
 
-        return $this->render('TopxiaAdminBundle:System/Log:log-action-options.html.twig', array(
+        return $this->render('System/Log:log-action-options.html.twig', array(
             'actions' => $actions
         ));
     }
@@ -72,7 +72,7 @@ class LogController extends BaseController
             $logs = '';
         }
 
-        return $this->render('TopxiaAdminBundle:System/Log:logs-prod.html.twig', array(
+        return $this->render('System/Log:logs-prod.html.twig', array(
             'logs' => $logs
         ));
     }

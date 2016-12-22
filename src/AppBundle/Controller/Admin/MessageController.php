@@ -46,7 +46,7 @@ class MessageController extends BaseController
         $usersToId   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
         $users       = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
 
-        return $this->render('TopxiaAdminBundle:Message:index.html.twig', array(
+        return $this->render('Message:index.html.twig', array(
             'users'     => $users,
             'messages'  => $messages,
             'paginator' => $paginator));
@@ -100,7 +100,7 @@ class MessageController extends BaseController
 
     public function uploadAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:File:upload-modal.html.twig');
+        return $this->render('File:upload-modal.html.twig');
     }
 
     protected function getMessageService()

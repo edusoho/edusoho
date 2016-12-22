@@ -12,7 +12,7 @@ class OrderController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array());
+        return $this->render('Order:index.html.twig', array());
     }
 
     public function manageAction(Request $request, $targetType)
@@ -50,7 +50,7 @@ class OrderController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Order:manage.html.twig', array(
+        return $this->render('Order:manage.html.twig', array(
             'request'    => $request,
             'targetType' => $targetType,
             'orders'     => $orders,
@@ -93,7 +93,7 @@ class OrderController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('TopxiaAdminBundle:CourseOrder:refund-confirm-modal.html.twig', array(
+        return $this->render('CourseOrder:refund-confirm-modal.html.twig', array(
             'order' => $order
         ));
     }

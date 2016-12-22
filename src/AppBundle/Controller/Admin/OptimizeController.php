@@ -11,7 +11,7 @@ class OptimizeController extends BaseController
 {
     public function indexAction()
     {
-       return $this->render('TopxiaAdminBundle:System:optimize.html.twig', array());
+       return $this->render('System:optimize.html.twig', array());
     }
 
     public function removeCacheAction()
@@ -54,7 +54,7 @@ class OptimizeController extends BaseController
 
     public function showProgressbarAction()
     {
-        return $this->render('TopxiaAdminBundle:System:progressBar.html.twig');     
+        return $this->render('System:progressBar.html.twig');
     }
 
     protected function isDisabledUpgrade()

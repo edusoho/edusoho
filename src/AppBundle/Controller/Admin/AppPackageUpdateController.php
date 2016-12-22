@@ -12,7 +12,7 @@ class AppPackageUpdateController extends BaseController
     {
         $package = $this->getAppService()->getCenterPackageInfo($id);
 
-        return $this->render('TopxiaAdminBundle:AppPackageUpdate:modal.html.twig', array(
+        return $this->render('AppPackageUpdate:modal.html.twig', array(
             'package' => $package
         ));
     }

@@ -13,7 +13,7 @@ class FileController extends BaseController
     	$conditions = $form->getData();
     	$group = empty($conditions['group']) ? null : $conditions['group'];
     	$files = $this->getFileService()->getFiles($group, 0, 30);
-        return $this->render('TopxiaAdminBundle:File:index.html.twig', array(
+        return $this->render('File:index.html.twig', array(
         	'files' => $files,
         	'form' => $form->createView()
         ));

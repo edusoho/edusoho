@@ -32,7 +32,7 @@ class CdnSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('CDN设置已保存！'));
         }
 
-        return $this->render('TopxiaAdminBundle:System:cdn-setting.html.twig', array(
+        return $this->render('System:cdn-setting.html.twig', array(
             'cdn'=>$cdn
         ));
 

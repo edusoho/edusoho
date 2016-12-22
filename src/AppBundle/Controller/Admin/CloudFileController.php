@@ -16,7 +16,7 @@ class CloudFileController extends BaseController
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->get("/me");
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:CloudFile:api-error.html.twig', array());
+            return $this->render('CloudFile:api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
@@ -25,7 +25,7 @@ class CloudFileController extends BaseController
             return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
         }
 
-        return $this->render('TopxiaAdminBundle:CloudFile:error.html.twig', array());
+        return $this->render('CloudFile:error.html.twig', array());
     }
 
     public function manageAction(Request $request)
@@ -36,7 +36,7 @@ class CloudFileController extends BaseController
             return $this->redirect($this->generateUrl('admin_cloud_file'));
         }
 
-        return $this->render('TopxiaAdminBundle:CloudFile:manage.html.twig', array(
+        return $this->render('CloudFile:manage.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
@@ -58,7 +58,7 @@ class CloudFileController extends BaseController
             20
         );
         $pageType = (isset($conditions['resType']) && $conditions['resType'] == 'attachment') ? 'attachment' : 'file';
-        return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
+        return $this->render('CloudFile:tbody.html.twig', array(
             'pageType'     => $pageType,
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
@@ -71,7 +71,7 @@ class CloudFileController extends BaseController
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
-        return $this->render('TopxiaAdminBundle:CloudFile:preview-modal.html.twig', array(
+        return $this->render('CloudFile:preview-modal.html.twig', array(
             'file' => $file
         ));
     }
@@ -80,12 +80,12 @@ class CloudFileController extends BaseController
     {
         try {
             if (!$globalId) {
-                return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
+                return $this->render('CloudFile:detail-not-found.html.twig', array());
             }
 
             $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
+            return $this->render('CloudFile:detail-not-found.html.twig', array());
         }
 
         try {
@@ -96,7 +96,7 @@ class CloudFileController extends BaseController
             $thumbnails = array();
         }
 
-        return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
+        return $this->render('CloudFile:detail.html.twig', array(
             'material'   => $cloudFile,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
             'params'     => $reqeust->query->all(),
@@ -122,7 +122,7 @@ class CloudFileController extends BaseController
             $createdUser = $this->getUserService()->getUser($cloudFile['createdUserId']);
         }
 
-        return $this->render('TopxiaAdminBundle:CloudFile:table-tr.html.twig', array(
+        return $this->render('CloudFile:table-tr.html.twig', array(
             'cloudFile'   => $cloudFile,
             'createdUser' => isset($createdUser) ? $createdUser : array()
         ));

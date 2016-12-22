@@ -62,7 +62,7 @@ class CoinOrderController extends BaseController
 
         $userIds = ArrayToolkit::column($orders, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('TopxiaAdminBundle:Coin:coin-orders.html.twig', array(
+        return $this->render('Coin:coin-orders.html.twig', array(
             'request'   => $request,
             'users'     => $users,
             'orders'    => $orders,
@@ -79,7 +79,7 @@ class CoinOrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Coin:order-log-modal.html.twig', array(
+        return $this->render('Coin:order-log-modal.html.twig', array(
             'order'     => $order,
             'user'      => $user,
             'orderLogs' => $orderLogs,

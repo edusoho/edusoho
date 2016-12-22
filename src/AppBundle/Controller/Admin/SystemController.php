@@ -13,7 +13,7 @@ class SystemController extends BaseController
 {
     public function reportAction()
     {
-        return $this->render('TopxiaAdminBundle:System:Report/status.html.twig', array(
+        return $this->render('System:Report/status.html.twig', array(
             'env'             => $this->getSystemStatus(),
             'systemDiskUsage' => $this->getSystemDiskUsage()
         ));
@@ -120,7 +120,7 @@ class SystemController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:System:Report/dir-permission.html.twig', array(
+        return $this->render('System:Report/dir-permission.html.twig', array(
             'errorPaths' => $errorPaths
         ));
     }

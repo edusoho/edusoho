@@ -49,7 +49,7 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     {
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
+        return $this->render('Default:index.html.twig', array(
             'dates' => $weekAndMonthDate
         ));
     }
@@ -71,7 +71,7 @@ class DefaultController extends BaseController
             $this->addInspectRole('host', $this->domainInspect($request))
         );
         $inspectList = array_filter($inspectList);
-        return $this->render('TopxiaAdminBundle:Default:domain.html.twig', array(
+        return $this->render('Default:domain.html.twig', array(
             'inspectList' => $inspectList
         ));
     }
@@ -114,7 +114,7 @@ class DefaultController extends BaseController
             $api    = CloudAPIFactory::create('root');
             $result = $api->get('/trial/remainDays', array('domain' => $domain));
 
-            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig', array(
+            return $this->render('Default:cloud-notice.html.twig', array(
                 "trialTime" => (isset($result)) ? $result : null
             ));
         } elseif ($this->getWebExtension()->isWithoutNetwork()) {
@@ -123,7 +123,7 @@ class DefaultController extends BaseController
             $notices = $this->getNoticesFromOpen();
         }
 
-        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig', array(
+        return $this->render('Default:cloud-notice.html.twig', array(
             "notices" => $notices
         ));
     }
@@ -147,7 +147,7 @@ class DefaultController extends BaseController
             $upgradeAppCount = $upgradeAppCount - 1;
         }
 
-        return $this->render('TopxiaAdminBundle:Default:system-status.html.twig', array(
+        return $this->render('Default:system-status.html.twig', array(
             "mainAppUpgrade"            => $mainAppUpgrade,
             "upgradeAppCount"           => $upgradeAppCount,
             'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount()
@@ -205,7 +205,7 @@ class DefaultController extends BaseController
         $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
         $totalThreadNum         = $this->getThreadService()->searchThreadCount(array('postNum' => 0, 'type' => 'question'));
 
-        return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+        return $this->render('Default:operation-analysis-dashbord.html.twig', array(
             'onlineCount' => $onlineCount,
             'loginCount'  => $loginCount,
 
@@ -328,7 +328,7 @@ class DefaultController extends BaseController
         $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses      = ArrayToolkit::index($courses, 'id');
 
-        return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig', array(
+        return $this->render('Default/Parts:course-explore-table.html.twig', array(
             'memberCounts' => $memberCounts,
             'courses'      => $courses
         ));
@@ -342,7 +342,7 @@ class DefaultController extends BaseController
             0,
             10
         );
-        return $this->render('TopxiaAdminBundle:Default/Parts:course-review-table.html.twig', array(
+        return $this->render('Default/Parts:course-review-table.html.twig', array(
             'reviews' => $reviews
         ));
     }
@@ -353,7 +353,7 @@ class DefaultController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
 
-        return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
+        return $this->render('Default:unsolved-questions-block.html.twig', array(
             'questions' => $questions,
             'courses'   => $courses
         ));
@@ -383,7 +383,7 @@ class DefaultController extends BaseController
         $api           = CloudAPIFactory::create('root');
         $result        = $api->get('/search/words/ranking', array());
         $searchRanking = isset($result['items']) ? $result['items'] : array();
-        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('searchRankings' => $searchRanking));
+        return $this->render('Default:cloud-search-ranking.html.twig', array('searchRankings' => $searchRanking));
     }
 
 

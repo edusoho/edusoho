@@ -87,7 +87,7 @@ class UserController extends BaseController
 
         $allRoles = $this->getAllRoles();
 
-        return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
+        return $this->render('User:index.html.twig', array(
             'users'          => $users,
             'allRoles'       => $allRoles,
             'userCount'      => $userCount,
@@ -205,11 +205,11 @@ class UserController extends BaseController
         $auth = $this->getSettingService()->get('auth');
 
         if (isset($auth['register_mode']) && $auth['register_mode'] == 'email_or_mobile') {
-            return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
+            return 'User:create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && $auth['register_mode'] == 'mobile') {
-            return 'TopxiaAdminBundle:User:create-by-mobile-modal.html.twig';
+            return 'User:create-by-mobile-modal.html.twig';
         } else {
-            return 'TopxiaAdminBundle:User:create-modal.html.twig';
+            return 'User:create-modal.html.twig';
         }
     }
 
@@ -235,7 +235,7 @@ class UserController extends BaseController
 
         $fields = $this->getFields();
 
-        return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
+        return $this->render('User:edit-modal.html.twig', array(
             'user'    => $user,
             'profile' => $profile,
             'fields'  => $fields
@@ -252,7 +252,7 @@ class UserController extends BaseController
         }
 
         $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
-        return $this->render('TopxiaAdminBundle:User:update-org-modal.html.twig', array(
+        return $this->render('User:update-org-modal.html.twig', array(
             'user' => $user,
             'org'  => $org
         ));
@@ -265,7 +265,7 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
-        return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
+        return $this->render('User:show-modal.html.twig', array(
             'user'    => $user,
             'profile' => $profile,
             'fields'  => $fields
@@ -296,13 +296,13 @@ class UserController extends BaseController
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
             $user = $this->getUserService()->getUser($id);
-            return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
+            return $this->render('User:user-table-tr.html.twig', array(
                 'user'    => $user,
                 'profile' => $this->getUserService()->getUserProfile($id)
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
+        return $this->render('User:roles-modal.html.twig', array(
             'user' => $user
         ));
     }
@@ -342,7 +342,7 @@ class UserController extends BaseController
             $partnerAvatar = null;
         }
 
-        return $this->render('TopxiaAdminBundle:User:user-avatar-modal.html.twig', array(
+        return $this->render('User:user-avatar-modal.html.twig', array(
             'user'          => $user,
             'partnerAvatar' => $partnerAvatar
         ));
@@ -391,7 +391,7 @@ class UserController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
-        return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
+        return $this->render('User:user-avatar-crop-modal.html.twig', array(
             'user'        => $user,
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
@@ -403,7 +403,7 @@ class UserController extends BaseController
     {
         $this->getUserService()->lockUser($id);
         $this->kickUserLogout($id);
-        return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
+        return $this->render('User:user-table-tr.html.twig', array(
             'user'    => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id)
         ));
@@ -413,7 +413,7 @@ class UserController extends BaseController
     {
         $this->getUserService()->unlockUser($id);
 
-        return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
+        return $this->render('User:user-table-tr.html.twig', array(
             'user'    => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id)
         ));
@@ -498,7 +498,7 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
+        return $this->render('User:change-password-modal.html.twig', array(
             'user' => $user
         ));
     }
