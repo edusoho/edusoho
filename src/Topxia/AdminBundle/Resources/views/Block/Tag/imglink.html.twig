@@ -19,7 +19,7 @@
  <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'图片链接'|trans}}</label>
   <div class="col-md-8 col-xs-8">
-    <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="http://">
+    <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="{{ app.request.getScheme() }}://">
   </div>
  </div>
 
