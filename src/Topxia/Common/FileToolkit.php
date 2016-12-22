@@ -74,15 +74,15 @@ class FileToolkit
             return  $errors;
         }
 
-        if (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $file);
-            if (!in_array($mimeType, $secureFileMimeTypes)) {
-                $errors[] = "请上传合法的文件。";
+        // if (function_exists('finfo_open')) {
+        //     $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        //     $mimeType = finfo_file($finfo, $file);
+        //     if (!in_array($mimeType, $secureFileMimeTypes)) {
+        //         $errors[] = "请上传合法的文件。";
 
-                return  $errors;
-            }
-        }
+        //         return  $errors;
+        //     }
+        // }
     }
 
     public static function isImageFile(File $file)
