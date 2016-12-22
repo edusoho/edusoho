@@ -1,0 +1,13 @@
+
+admin_cloud_file_manage:
+    name: 云资源
+    visable: (cloudStatus())
+    parent: admin_app
+    after: admin_app_center_show
+    children:
+        admin_cloud_file:
+            name: 云资源
+            disable: true
+# admin_material_lib_stats:
+#     name: 数据统计
+#     parent: admin_material_lib

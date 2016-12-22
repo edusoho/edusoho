@@ -1,4 +1,4 @@
-{% extends 'MaterialLibBundle:Web:layout.html.twig' %}
+{% extends 'material-lib/web/layout.html.twig' %}
 
 {% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
 
@@ -25,10 +25,10 @@
       </div>
     </div>
     <div class="col-sm-8 btn-group">
-    {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
+    {% include 'material-lib/web/form/head.html.twig' %}
     </div>
   </div>
-  {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
+  {% include 'material-lib/web/form/nav.html.twig' %}
   <div class="material-search-list material-tag js-material-tag">
     <span  class="all">{{'标签：'|trans}}</span>
       <div class="right-content">
