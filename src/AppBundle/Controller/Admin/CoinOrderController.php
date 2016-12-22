@@ -6,7 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\AdminBundle\Controller\BaseController;
+
 
 class CoinOrderController extends BaseController
 {

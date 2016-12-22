@@ -3,7 +3,7 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
+
 use Topxia\Common\ArrayToolkit;
 
 class TagController extends BaseController
