@@ -878,3 +878,13 @@ global_file_document:
 material_lib_choose:
   path: /material/lib/choose
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:materialChoose }
+
+#org
+switch_org:
+    path: /swithOrg/{id}
+    defaults: { _controller: AppBundle:Org:switchOrg }
+
+org_tree:
+    path: /org-tree.json
+    defaults: { _controller: AppBundle:Org:orgTreeJson }
+    methods: [GET]
