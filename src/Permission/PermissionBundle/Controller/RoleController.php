@@ -1,11 +1,11 @@
 <?php
 namespace Permission\PermissionBundle\Controller;
 
+use AppBundle\Controller\Admin\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 
 class RoleController extends BaseController

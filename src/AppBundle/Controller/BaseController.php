@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class BaseController extends Controller
 {
