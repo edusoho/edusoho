@@ -35,7 +35,7 @@
 	<tbody>
 	  {% for classroom in classrooms %}
 	    {% set category = categories[classroom.categoryId]|default(null) %}
-		{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+		{% import "admin/macro.html.twig" as admin_macro %}
 		<tr id="course-tr-{{ classroom.id }}">
 		  <td>{{ classroom.id }}</td>
 		  <td>

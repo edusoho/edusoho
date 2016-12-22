@@ -197,7 +197,7 @@ class CloudFileController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->createService('admin/cloud-file/CloudFileService');
+        return $this->createService('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()

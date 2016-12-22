@@ -154,7 +154,7 @@ class MaterialLibController extends BaseController
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
         if ($file['storage'] == 'cloud') {
-            return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+            return $this->forward('AppBundle:Admin/CloudFile:preview', array(
                 'request'  => $request,
                 'globalId' => $file['globalId']
             ));
