@@ -15746,6 +15746,7 @@ textarea {
 }
 .es-mobile .course-detail-header.after .es-mobile-nav li {
   width: auto;
+  padding: 0 10%;
 }
 .es-mobile .course-detail-header.after .es-mobile-nav li.active {
   border: none;

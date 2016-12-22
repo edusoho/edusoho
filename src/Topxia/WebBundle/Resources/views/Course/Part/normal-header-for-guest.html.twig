@@ -19,11 +19,13 @@
   {{ header_macro.picture(course, previewLesson) }}
   {{ header_macro.info(course, member, userVipStatus) }}
   <div class="course-operation clearfix">
+    {% if mobile %}
     <span class="text-sm es-mobile-teacher">
     {% set teacherId = course.teacherIds[0]|default(0) %}
     {% set teacher = data('User',{userId:teacherId}) %}
     {{teacher.nickname|default('暂无老师')}}
     </span>
+    {% endif %}
     {{ header_macro.student_num(course) }}
     <ul class="course-data clearfix {% if courseVip and course.parentId == '0' %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
