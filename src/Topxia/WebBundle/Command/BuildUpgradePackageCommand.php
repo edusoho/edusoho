@@ -53,13 +53,13 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->generateDiffFile();
 
-        $vendorDiff = $this->generateSubmoduleDiffFile('vendor');
+        $submoduleDiffs = $this->generateSubmodulesDiffFile(array());
 
-        $this->diffFilePrompt($diffFile, array('vendor' => $vendorDiff));
+        $this->diffFilePrompt($diffFile, $submoduleDiffs);
 
         $packageDirectory = $this->createDirectory();
 
-        $this->generateFiles($diffFile, array('vendor' => $vendorDiff), $packageDirectory);
+        $this->generateFiles($diffFile, $submoduleDiffs, $packageDirectory);
 
         $this->copyUpgradeScript($packageDirectory);
 
@@ -114,10 +114,6 @@ class BuildUpgradePackageCommand extends BaseCommand
                 if(!empty($module)){
                     $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
                     $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
-                }
-
-                if (empty($module) && strpos($opFile, 'vendor') === 0){
-                    continue;
                 }
 
                 if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
@@ -350,33 +346,28 @@ class BuildUpgradePackageCommand extends BaseCommand
         exec($command);
     }
 
-    private function generateSubmoduleDiffFile($submodule)
+    private function generateSubmodulesDiffFile(array $submodules)
     {
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
 
-        $submoduleDir = $rootDir . $submodule;
+        $submoduleDiffs = array();
 
-        chdir($rootDir);
-        $currentCommitHash = exec("git submodule status {$submodule}");
-        list($_, $currentCommitHash) = preg_split('/\s+/', $currentCommitHash);
-        exec("git checkout v{$this->fromVersion}");
-        exec("git submodule update");
-        $lastCommitHash = exec("git submodule status {$submodule}");
+        foreach ($submodules as $submodule){
+            $lastCommitHash = exec("git ls-tree v{$this->fromVersion} {$submodule} | awk '{print $3}'");
+            if(empty($lastCommitHash)){
+                $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
+            }
 
-        if(empty($lastCommitHash)){
-            $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
-        }else{
-            list($_, $lastCommitHash) = preg_split('/\s+/', $lastCommitHash);
+            $currentCommitHash = exec("git ls-tree release/{$this->version} {$submodule} | awk '{print $3}'");
+
+            $submoduleDir = $rootDir . $submodule;
+            chdir($submoduleDir);
+            $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
+            exec($command);
+            $submoduleDiffs[$submodule] = $rootDir . "build/diff-{$submodule}-{$this->version}";
         }
 
-        exec("git checkout release/{$this->version}");
-        exec("git submodule update");
-        
-        chdir($submoduleDir);
-        $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
-        exec($command);
-
-        return $rootDir . "build/diff-{$submodule}-{$this->version}";
+        return $submoduleDiffs;
     }
 
     private function diffFilePrompt($diffFile, $submoduleDiffFiles)
@@ -444,23 +435,27 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
         fclose($file);
 
+
+        $submoduleDiffFiles = array_merge(array('' => $rootDir . $diffFile), $submoduleDiffFiles);
         $askSqlUpgrade = false;
-        $this->output->writeln("<info>准备制作升级脚本</info>");
-        $file = @fopen($rootDir . $diffFile, "r");
-        while (!feof($file)) {
-            $line   = fgets($file);
-            $opFile = trim(substr($line, 1));
-            if (strpos($opFile, 'migrations') !== false) {
-                $askSqlUpgrade = true;
-                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
+        foreach ($submoduleDiffFiles as $submodule => $diffFilePath){
+            $file = @fopen($diffFilePath, "r");
+            while (!feof($file)) {
+                $line   = fgets($file);
+                $opFile = trim(substr($line, 1));
+                if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
+                    $askSqlUpgrade = true;
+                    $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
+                }
             }
+            $question = "请根据以上sql脚本完成 scripts/upgrade-{$this->version}.php,完成后输入y (y/n)";
+            fclose($file);
         }
-        $question = "请根据以上sql脚本完成 scripts/upgrade-{$this->version}.php,完成后输入y (y/n)";
+
         if ($askSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
-        fclose($file);
     }
 
     /**

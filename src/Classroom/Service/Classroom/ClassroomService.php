@@ -98,6 +98,8 @@ interface ClassroomService
 
     public function isClassroomHeadTeacher($classroomId, $userId);
 
+    public function updateMember($id, $member);
+
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
@@ -156,4 +158,6 @@ interface ClassroomService
     public function getClassroomMembersByCourseId($courseId, $userId);
 
     public function findUserJoinedClassroomIds($userId);
+
+    public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
 }

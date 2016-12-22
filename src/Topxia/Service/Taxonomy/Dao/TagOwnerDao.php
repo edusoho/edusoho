@@ -7,6 +7,8 @@ interface TagOwnerDao
 
     public function findByOwnerTypeAndOwnerId($ownerType, $ownerId);
 
+    public function findByOwnerTypeAndOwnerIds($ownerType, $ownerIds);
+
     public function findByTagIdsAndOwnerType($tagIds, $ownerType);
 
     public function add($fields);

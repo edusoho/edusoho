@@ -1,0 +1,25 @@
+{
+    "name": "codeages/plugin-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony PluginBundle",
+    "keywords": ["Plugin", "Extendsion", "Theme"],
+    "homepage": "https://github.com/codeages/plugin-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "codeages team",
+            "email": "team@codeages.com"
+        }
+    ],
+    "require": {
+        "php": "^5.3.3 || ^7.0",
+        "symfony/framework-bundle": "^2.8 || ^3.0",
+        "codeages/biz-framework": "^0.1.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8|~5.0"
+    },
+    "autoload": {
+        "psr-4": { "Codeages\\PluginBundle\\": "" }
+    }
+}

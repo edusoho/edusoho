@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\EncryptionToolkit;
 use Topxia\Service\Common\Mail\MailFactory;
 use Topxia\Common\SimpleValidator;
 
@@ -26,7 +27,8 @@ class Emails extends BaseResource
             return $this->error('500', 'email不符合要求');
         }
 
-        if (!SimpleValidator::password($data['password'])) {
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($data['password']), $request->getHost());
+        if (!SimpleValidator::password($password)) {
             return $this->error('500', '密码不符合要求');
         }
         $user = $this->getUserService()->getUserByEmail($data['email']);
@@ -37,7 +39,7 @@ class Emails extends BaseResource
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $data['rawPassword'] = array(
             'salt'     => $salt,
-            'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
+            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
         );
 
         $tokenType = 'email_password_reset';
@@ -49,7 +51,7 @@ class Emails extends BaseResource
                 'userId' => $user['id'],
                 'rawPassword' => array(
                     'salt'     => $salt,
-                    'password' => $this->getPasswordEncoder()->encodePassword($data['password'], $salt)
+                    'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
                 )
             )
         ));

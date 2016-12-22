@@ -2,6 +2,7 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
@@ -93,6 +94,8 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
         if (!isset($overview['error'])) {
+            $paidService = array();
+            $unPaidService = array();
             $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
             foreach ($overview['services'] as $key => $value) {
                 if ($value == true) {
@@ -101,7 +104,23 @@ class EduCloudController extends BaseController
                     $unPaidService[] = $key;
                 }
             }
+                //暂时去掉email
+            foreach ($paidService as $key => $value) {
+                if ($value == 'email') {
+                    unset($paidService[$key]);
+                }
+            }
+            foreach ($unPaidService as $key => $value) {
+                if ($value == 'email') {
+                    unset($unPaidService[$key]);
+                }
+
+                if ($value == 'search') {
+                    unset($unPaidService[$key]);
+                }
+            }
         }
+        
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
@@ -343,11 +362,19 @@ class EduCloudController extends BaseController
     {
         $dataUserPosted = $request->request->all();
         $settings       = $this->getSettingService()->get('cloud_sms', array());
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $overview    = $api->get("/me/sms/overview");
+            $cloudInfo = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
+        }
 
+        if (isset($overview['isBuy'])) {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+        }
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
-        $api       = CloudAPIFactory::create('root');
 
-        $cloudInfo = $api->get('/me');
         if (empty($cloudInfo['accessCloud'])) {
             return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_my_cloud_overview'));
         }
@@ -393,6 +420,7 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $overview  = $api->get("/me/sms/overview");
             $smsInfo = $api->get('/me/sms_account');
+            $this->checkSmsSign($smsInfo);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
@@ -435,6 +463,7 @@ class EduCloudController extends BaseController
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
             }
             $smsInfo   = $api->get('/me/sms_account');
+            $this->checkSmsSign($smsInfo);
             $isBinded = $this->getAppService()->getBinded();
             return $this->render('TopxiaAdminBundle:EduCloud/Sms:setting.html.twig', array(
                 'isBinded' => $isBinded,
@@ -442,6 +471,22 @@ class EduCloudController extends BaseController
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());            
+        }
+    }
+
+    protected function checkSmsSign($smsInfo)
+    {
+        if (empty($smsInfo)) {
+            $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+        } else {
+            if (empty($smsInfo['name']) && empty($smsInfo['isExistSmsSign'])) {
+                $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            }
+            if (empty($smsInfo['name']) && !empty($smsInfo['isExistSmsSign']) && $smsInfo['usedSmsSign'] == null) {
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+            }
         }
     }
 
@@ -501,7 +546,7 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
         }
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
         if ($isEmailWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
@@ -535,7 +580,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $emailSettings = $this->getSettingService()->get('cloud_email', array());
+        $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         if ((isset($emailSettings['status']) && $emailSettings['status'] == 'disable') || !isset($emailSettings['status'])) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
@@ -560,15 +605,25 @@ class EduCloudController extends BaseController
     public function emailSwitchAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
+            try {
+                $api         = CloudAPIFactory::create('root');
+                $overview    = $api->get("/me/email/overview");
+            } catch (\RuntimeException $e) {
+                return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
+            }
+
+            if (isset($overview['isBuy'])) {
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+            }
             $status = $request->request->all();
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
 
             if (isset($status['email-close'])) {
                 $emailStatus['status'] = 'disable';
-                $this->getSettingService()->set('cloud_email', $emailStatus);
+                $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
@@ -776,10 +831,35 @@ class EduCloudController extends BaseController
         }
 
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if (!$cloud_search_settting['search_enabled'] || $cloud_search_settting['status'] != 'ok') {
+        if (!$cloud_search_settting['search_enabled']) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
-        }        
-        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig');
+        }
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $searchInitStatus = $this->checkCloudSearchStatus($cloud_search_setting);
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Search:setting.html.twig', array(
+            'searchInitStatus' => $searchInitStatus
+        ));
+    }
+
+    protected function checkCloudSearchStatus($cloud_search_setting )
+    {
+        if ($cloud_search_setting['status'] == 'waiting') {
+            $api         = CloudAPIFactory::create('root');
+            $search_account = $api->get("/me/search_account");
+            if ($search_account['isInit'] == 'yes') {
+                $searchInitStatus = 'init';
+            } else {
+                $searchInitStatus = 'notInit';
+            }
+        }
+
+        if ($cloud_search_setting['status'] == 'ok') {
+            $searchInitStatus = 'init';
+        }
+
+        return isset($searchInitStatus) ? $searchInitStatus : '';
     }
 
     public function searchOverviewAction(Request $request)
@@ -792,13 +872,13 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
         try {
             $api = CloudAPIFactory::create('root');
 
             $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
             $searchOverview = $api->get("/me/search/overview");
-            $data = $this->isSearchInited($api, $cloud_search_settting);
+            $data = $this->isSearchInited($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -814,7 +894,7 @@ class EduCloudController extends BaseController
                 $data['status'] = 'binded_error';
             }
         }
-        if ($data['search_enabled'] == 1 && ($data['status'] == 'ok'||$data['status'] == 'waiting')) {
+        if ($data['search_enabled'] == 1 && ($data['status'] == 'ok'||$data['status'] == 'waiting') && !isset($searchOverview['isBuy'])) {
             $chartData = $this->dealChartData($searchOverview['data']);
             return $this->render('TopxiaAdminBundle:EduCloud/Search:overview.html.twig', array(
                 'searchOverview' => $searchOverview,
@@ -822,7 +902,7 @@ class EduCloudController extends BaseController
             ));
         } else {
             return $this->render('TopxiaAdminBundle:EduCloud/Search:without-enable.html.twig', array(
-            'data' => $data
+                'data' => $data
             ));
         }
     }
@@ -853,7 +933,7 @@ class EduCloudController extends BaseController
     public function searchOpenAction()
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if ($cloud_search_settting['status'] == 'ok') {
+        if ($cloud_search_settting['status'] == 'ok' || $cloud_search_settting['status'] == 'waiting') {
             $this->getSettingService()->set('cloud_search', array(
                 'search_enabled' => 1,
                 'status'         => $cloud_search_settting['status']
@@ -1458,6 +1538,16 @@ class EduCloudController extends BaseController
         $capacity          = $client->getCapacity();
 
         if ($request->getMethod() == 'POST') {
+            try {
+                $api         = CloudAPIFactory::create('root');
+                $overview    = $api->get("/me/live/overview");
+            } catch (\RuntimeException $e) {
+                return $this->render('TopxiaAdminBundle:EduCloud:live-error.html.twig', array());
+            }
+
+            if (isset($overview['isBuy'])) {
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+            }
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
             $courseSetting = $this->getSettingService()->get('course', array());

@@ -29,20 +29,22 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
 
     public function getOldSmsUserStatus()
     {
+        /*
+         * @accessCloud->false: 没有云平台帐号或者未接入教育云
+         */
         try {
             $api  = CloudAPIFactory::create('root');
-            $cloudOverview = $api->get("/cloud/{$api->getAccessKey()}/overview");
-            $smsOverview  = $api->get("/me/sms/overview");
+            $smsAccount  = $api->get("/me/sms_account");
         } catch (\RuntimeException $e) {
             $logger = new Logger('CloudAPI');
             $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
             $logger->addInfo($e->getMessage());
             return false;
         }
-        $smsStatus = isset($smsOverview['account']['status']) && $smsOverview['account']['status'] == 'used';
-        $cloudStatus = isset($cloudOverview['accessCloud']) && $cloudOverview['accessCloud'] == false;
-        if ($smsStatus && $cloudStatus) {
-            $smsInfo['remainCount'] = $smsOverview['account']['remainCount'];
+        $smsAccountStatus = isset($smsAccount['status']) && 'used' == $smsAccount['status'];
+        $accessCloud = isset($smsAccount['accessCloud']) && false == $smsAccount['accessCloud'];
+        if ($smsAccountStatus && $accessCloud) {
+            $smsInfo['remainCount'] = $smsAccount['remainCount'];
             return $smsInfo;
         }
         return false;
