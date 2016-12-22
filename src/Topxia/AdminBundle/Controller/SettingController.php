@@ -476,7 +476,8 @@ class SettingController extends BaseController
             $data = $request->request->all();
 
             $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['blackListIps']));
-            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['whiteListIps']));
+            $purifiedWhiteIps = isset($data['whiteListIps']) ? $data['whiteListIps'] : null;
+            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $purifiedWhiteIps));
 
             $logService = $this->getLogService();
 
