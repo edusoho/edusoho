@@ -1,5 +1,4 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
-// import postal from 'postal';
 
 class QuestionFormBase {
   constructor($form){
@@ -8,9 +7,7 @@ class QuestionFormBase {
     this.analysisFieldId = 'question-analysis-field';
     this.validator = null;
     this.titleEditorToolBarName = 'Minimal';
-
     this._init();
-
     this.attachmentActions = new AttachmentActions($form);
   }
 
@@ -24,32 +21,10 @@ class QuestionFormBase {
   }
 
   submitForm(event) {
-    // console.log("postal");
-    
-    // // let submitType = $(event.currentTarget).data('submission');
-    // // this.$form.find('[name=submission]').val(submitType);
-    // postal.publish({
-    //   channel: "orders",
-    //   topic: "item.add",
-    //   data: {
-    //       sku: "AZDTF4346",
-    //       qty: 21
-    //   }
-    // });
-
-
-    // var subscription = postal.subscribe({
-    //   channel: "orders",
-    //   topic: "item.add",
-    //   callback: function(data, envelope) {
-    //     console.log(data);
-    //       // `data` is the data published by the publisher. 
-    //       // `envelope` is a wrapper around the data & contains 
-    //       // metadata about the message like the channel, topic, 
-    //       // timestamp and any other data which might have been 
-    //       // added by the sender. 
-    //   }
-    // });
+    if(this.validator.form()){
+      $(event.currentTarget).button('loading');
+      $form.submit();
+    }
   }
 
   _initValidate() {
@@ -73,11 +48,8 @@ class QuestionFormBase {
           }
         },
         messages: {
-            '[data-role="target"]': "请选择从属",
-            difficulty : "请选择难度"
-        },
-        submitHandler(){
-          
+          '[data-role="target"]': "请选择从属",
+          difficulty : "请选择难度"
         }
     });
     this.validator = validator;

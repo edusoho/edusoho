@@ -1,5 +1,4 @@
 import React,{ Component } from 'react';
-import { trim } from '../../unit';
 
 
 export default class Options extends Component {
@@ -43,6 +42,11 @@ export default class Options extends Component {
   }
 
   updateInputValue(inputValue) {
+    console.log(this.props.validatorDatas);
+    this.props.validatorDatas.Options[this.props.datas.optionId] = inputValue.length > 0 ? 1 : 0;
+    if(inputValue.length <=0 ) {
+      this.props.publishMessage(false);
+    }
     this.state.datas.inputValue = inputValue;
     this.setState({
       datas: this.state.datas,
@@ -51,7 +55,7 @@ export default class Options extends Component {
 
   render() {
     let isValidator = this.props.isValidator;
-    let showDanger = this.props.isValidator && trim(this.state.datas.inputValue).length <= 0;
+    let showDanger = this.props.isValidator && this.state.datas.inputValue.length <= 0;
     let type = 'checkbox';
     if(this.props.isRadio) {
       type= 'radio';

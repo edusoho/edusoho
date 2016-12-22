@@ -29,10 +29,10 @@ $.validator.setDefaults({
     }
   },
   submitSuccess: function(data) {
-    console.log('submitSuccess');
   },
   submitHandler: function(form) {
-    // console.log('submitHandler');
+    //规定全局不要用submit默认提交；
+    console.log('submitHandler');
     let $form = $(form);
     let settings = this.settings;
 
