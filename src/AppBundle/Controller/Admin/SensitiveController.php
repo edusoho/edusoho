@@ -1,10 +1,10 @@
 <?php
-namespace SensitiveWord\SensitiveWordBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
 
 class SensitiveController extends BaseController
 {
@@ -25,7 +25,7 @@ class SensitiveController extends BaseController
         $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        return $this->render('SensitiveWordBundle:SensitiveAdmin:index.html.twig', array(
+        return $this->render('admin/sensitive/index.html.twig', array(
             'keywords'  => $keywords,
             'paginator' => $paginator
         ));
@@ -54,7 +54,7 @@ class SensitiveController extends BaseController
             return $this->redirect($this->generateUrl('admin_keyword'));
         }
 
-        return $this->render('SensitiveWordBundle:SensitiveAdmin:keyword-add.html.twig');
+        return $this->render('admin/sensitive/keyword-add.html.twig');
     }
 
     public function deleteAction(Request $request, $id)
@@ -118,16 +118,16 @@ class SensitiveController extends BaseController
             }
             foreach ($userIds as $value) {
                 $conditions['userId'] = $value;
-                $countTemp = $this->getSensitiveService()->searchBanlogsCount($conditions);
+                $countTemp            = $this->getSensitiveService()->searchBanlogsCount($conditions);
                 $count += $countTemp;
             }
             $paginator = new Paginator($this->get('request'), $count, 20);
-            $banlogs = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
+            $banlogs   = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
                 'id',
                 'DESC'
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         } else {
-            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
+            $count     = $this->getSensitiveService()->searchBanlogsCount($conditions);
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
@@ -142,7 +142,7 @@ class SensitiveController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));
-        return $this->render('SensitiveWordBundle:SensitiveAdmin:banlogs.html.twig', array(
+        return $this->render('admin/sensitive/banlogs.html.twig', array(
             'banlogs'   => $banlogs,
             'users'     => $users,
             'paginator' => $paginator
@@ -151,6 +151,6 @@ class SensitiveController extends BaseController
 
     protected function getSensitiveService()
     {
-        return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
+        return $this->createService('Sensitive:SensitiveService');
     }
 }

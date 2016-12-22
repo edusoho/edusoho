@@ -2065,6 +2065,30 @@ admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:Admin/EduCloud:liveSetting }
 
+#sensitive
+admin_keyword:
+    pattern:  /keyword/
+    defaults: { _controller: AppBundle:Admin/Sensitive:index }
+
+admin_keyword_create:
+    pattern:  /keyword/create
+    defaults: { _controller: AppBundle:Admin/Sensitive:create }
+
+admin_keyword_delete:
+    pattern:  /keyword/{id}/delete
+    defaults: { _controller: AppBundle:Admin/Sensitive:delete }
+    methods:  [POST]
+    permissions: [admin_keyword]
+
+admin_keyword_change:
+    pattern:  /keyword/{id}/change
+    defaults: { _controller: AppBundle:Admin/Sensitive:change }
+    permissions: [admin_keyword]
+
+admin_keyword_banlogs:
+    pattern:  /keyword/banlogs
+    defaults: { _controller: AppBundle:Admin/Sensitive:banlogs }
+
 
 #classroom 
 admin_classroom:
