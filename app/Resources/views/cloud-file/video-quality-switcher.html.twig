@@ -1,0 +1,28 @@
+{% if setting('storage.upload_mode', 'local') == 'cloud'  %}
+<div class="video-quality-switcher">
+  <div>
+    <label>{{'视频转码类型：'|trans}}</label>
+    <span class="quality-switcher-bar">
+      <span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+    </span>
+  </div>
+
+  <div class="quality-switcher-control" style='display:none'>
+    <div class="video-quality radios">
+      {{'画质：'|trans}}
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans}, setting('storage.video_quality', 'normal')) }}
+    </div>
+
+    <div class="audio-quality radios">
+      {{'音质：'|trans}}
+        {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, setting('storage.video_audio_quality', 'normal')) }}
+    </div>
+    <input type="hidden" name="support_mobile" value="{{ setting('storage.support_mobile', 0) }}" />
+    <div class="quality-actions">
+      <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">{{'确定'|trans}}</a>
+      <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">{{'取消'|trans}}</a>
+    </div>
+  </div>
+</div>
+<script>app.load('topxiawebbundle/controller/cloud-file/cloud-video-quality-switcher')</script>
+{% endif %}

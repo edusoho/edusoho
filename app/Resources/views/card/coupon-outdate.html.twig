@@ -1,0 +1,33 @@
+<div class="card-pack-item coupon-item useless">
+  {% if cardDetail.targetType == "course" %}
+    {% if cardDetail.targetId == 0 %}
+      <p class="title">{{'可用于抵扣全站课程'|trans}}</p>
+    {% else %}
+      <p class="title">{{'用于抵扣指定课程'|trans}}</p>
+    {% endif %}
+  {% endif %}
+
+  {% if cardDetail.targetType == "classroom" or cardDetail.targetType == "fullDiscount" %}
+    <p class="title">{{'可用于抵扣全站班级'|trans}}</p>
+  {% endif %}
+
+  {% if cardDetail.targetType == "vip" %}
+    {% if cardDetail.targetId == 0 %}
+      <p class="title">{{'可用于抵扣全站会员'|trans}}</p>
+    {% else %}
+      <p class="title">{{'用于抵扣指定会员'|trans}}</p>
+    {% endif %}
+  {% endif %}
+  {% if cardDetail.targetType == "all" %}
+    <p class="title">{{'可用于抵扣全站所有类型消费'|trans}}</p>
+  {% endif %}
+  <p class="price">
+    {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'折'|trans}}{% endif %}
+  </p>
+  <p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
+  {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
+    <p>{{'使用条件：'|trans}}<span>{{'满%fullDiscountPrice%'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('可用'|trans)})}}</span></p>
+  {% endif %}
+  <div class="stamp stamp-outdate"></div>
+</div>
+                                                      

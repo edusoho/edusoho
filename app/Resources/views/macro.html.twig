@@ -1,0 +1,138 @@
+{# user_avater 已废弃，请勿使用 #}
+{%- macro user_avatar(user, class, imgClass, card = true) -%}
+  {% if user %}
+  <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+    {% if imgClass == 'avatar-md' %}
+      {% set userAvatar = user.mediumAvatar %}
+    {% elseif imgClass == 'avatar-lg' %}
+      {% set userAvatar = user.largeAvatar %}
+    {% else %}
+      {% set userAvatar = user.smallAvatar %}
+    {% endif %}
+    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ filepath(userAvatar, 'avatar.png') }}">
+
+  </a>
+  {% else %}
+    <a class="{{ class }}" href="javascript:;">
+      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ filepath('', 'avatar.png') }}">
+    </a>
+  {% endif %}
+{%- endmacro -%}
+
+{# options 可以传card(显示卡片), _blank(新开窗口), null_link(空链接) #}
+{%- macro user_avatar_link(user, size, options = []) -%}
+  {% if user %}
+    <a
+      class="avatar-link-{size} {% if 'card' in options %}js-user-card{% endif %}"
+      {% if '_blank' in options %}
+        target="_blank"
+      {% endif %}
+      href="{% if 'null_link' in options %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}{% endif %}"
+      data-card-url="{{ path('user_card_show', {userId:user.id}) }}"
+      data-user-id="{{ user.id }}">
+      {{ _self.user_avater_img(user, size) }}
+    </a>
+  {% else %}
+    <a class="avatar-link-{size}" href="javascript:;">
+      {{ _self.user_avater_img(user, size) }}
+    </a>
+  {% endif %}
+{%- endmacro -%}
+
+{%- macro user_avater_img(user, size) -%}
+  {% set userAvatar = user[size~'Avatar']|default('') %}
+  <img class="avatar-{size}"  src="{{ filepath(userAvatar, 'avatar.png', 'user') }}">
+{%- endmacro -%}
+
+
+{# {%- macro user_link(user, class, options = []) -%}
+  {% if user %}
+    <a
+      class="{{ class }} {% if 'card' in options %}js-user-card{% endif %}" {% if '_blank' in options %} target="_blank" {% endif %}href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}
+    </a>
+  {% else %}
+    <a class="{{ class }}" href="javascript:;"><del>用户不存在</del></a>
+  {% endif %}
+{%- endmacro -%} #}
+
+{%- macro user_link(user, class, card = true) -%}
+  {% if user %}
+    <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+  {% else %}
+    <a class="link-dark {{ class }}" href="javascript:;"><del>{{'用户不存在'|trans}}</del></a>
+  {% endif %}
+{%- endmacro -%}
+
+{% macro flash_messages() %}
+  {% for type, flashMessages in app.session.flashbag.all() %}
+    {% for flashMessage in flashMessages %}
+      <div class="alert alert-{{ type }}">{{ flashMessage|raw }}</div>
+    {% endfor %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro bytesToSize(bytes) %}
+  {% spaceless %}
+      
+      {% set kilobyte = 1024 %}
+      {% set megabyte = kilobyte * 1024 %}
+      {% set gigabyte = megabyte * 1024 %}
+      {% set terabyte = gigabyte * 1024 %}
+
+      {% if bytes < kilobyte %}
+          {{ bytes ~ ' B' }}
+      {% elseif bytes < megabyte %}
+          {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+      {% elseif bytes < gigabyte %}
+          {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+      {% elseif bytes < terabyte %}
+          {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+      {% else %}
+          {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+      {% endif %}
+
+  {% endspaceless %}
+{% endmacro %}
+
+{% macro paginator(paginator, class) %}
+  {% if paginator.lastPage > 1 %}
+    <nav class=" {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">{{'首页'|trans}}</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'尾页'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
+{% macro star(score) %}
+  {% set floorScore = score|round(0, 'floor') %}
+  {% set emptyNum = 5 - floorScore %}
+
+  {% if floorScore > 0 %}
+    {% for i in range(1, floorScore) %}
+      <i class="es-icon es-icon-star color-warning"></i>
+    {% endfor %}
+  {% endif %}
+
+  {% if (score - floorScore) >= 0.5 %}
+    {% set emptyNum = emptyNum - 1 %}
+    <i class="es-icon es-icon-starhalf color-warning"></i>
+  {% endif %}
+
+  {% if emptyNum > 0 %}
+    {% for i in range(1, emptyNum) %}
+      <i class="es-icon es-icon-star"></i>
+    {% endfor %}
+  {% endif %}
+{% endmacro %}

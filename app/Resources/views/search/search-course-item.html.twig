@@ -1,0 +1,54 @@
+<div class="course-item clearfix">
+  {% set is_open_course = 'public_' in course.type %}
+
+  {% if is_open_course %}
+    {% set course_show_url = path('open_course_show', { courseId: course.id }) %}
+  {% else %}
+    {% set course_show_url = path('course_show',{id : course.courseId}) %}
+  {% endif %}
+
+  <div class="course-img">
+    <a href="{{ course_show_url }}" target="_blank">
+      {% if course.type == 'live' or course.type == 'public_liveOpen' %}
+        <span class="tags-left">
+          <span class="tag-live"></span>
+        </span>
+      {% endif %}
+      {% if is_open_course %}
+        <span class="tags-right">
+          <span class="tag-public"></span>
+        </span>
+      {% endif %}
+      <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="">
+    </a>
+  </div>
+  <div class="course-info">
+    <h3 class="title">
+      <a href="{{ course_show_url }}" target="_blank">
+        {{ course.title|raw }}
+        {% if course.learning|default(false) %}
+          <small class="label label-primary label-xs">{{ '正在学'|trans }}</small>
+        {% endif %}
+      </a>
+    </h3>
+    <div class="score">
+      {% if not is_open_course %}
+        {{ web_macro.star(course.rating|default(0)) }}
+        <span>{{ course.ratingNum|default(0) }}人评价({{ course.studentNum|default(0) }}{{ '人学习'|trans }})</span>
+      {% endif %}
+    </div>
+    <div class="content">{{ course.about|raw }}</div>
+    {% if not is_open_course and course.lessons|default(null) %}
+      <ul class="ul-lesson">
+        {% for lesson in course.lessons|slice(0, 3) %}
+          <li>
+            <i class="es-icon es-icon-arrowdropleft"></i>
+            <a class="link-light" href="{{ course_show_url }}" target="_blank">
+              {{ '课时'|trans }} {{ lesson.number }}: {{ lesson.title|raw }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>

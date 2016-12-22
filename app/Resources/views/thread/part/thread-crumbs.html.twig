@@ -1,0 +1,22 @@
+{% set isUpdate = isUpdate|default(false) %}
+{% set thread = thread|default(null) %}
+{% set type = type|default('discussion') %}
+<ul class="breadcrumb">
+  <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'):target.id}) }}">
+    {% if target.type == "classroom" %}
+    {{'%classroom.name%话题'|trans({'%classroom.name%': setting('classroom.name')|default('班级'|trans)})}}
+    {% else %}
+    {{'讨论区'|trans}}
+    {% endif %}
+  </a></li>
+  {% if thread and isUpdate %}
+    <li>
+        <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'):target.id, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|sub_text(10) }}</a>
+    </li>
+    <li class="active">{{'编辑'|trans}}{{ dict_text('threadType',thread.type) }}</li>
+  {% elseif thread and not isUpdate%}
+  	<li class="active">{{ dict_text('threadType',thread.type) }}</li>
+  {% else %}
+    <li class="active">{{'发'|trans}}{{ dict_text('threadType',type) }}</li>
+  {% endif %}
+</ul>

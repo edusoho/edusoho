@@ -1,0 +1,25 @@
+<li class="media" data-url="{{ path('message_conversation_show', {conversationId:conversation.id })}}">
+  {{ web_macro.user_avatar(fromUser, 'pull-left media-object') }}
+  <div class="media-body">
+    <h4 class="media-heading">
+      {% if conversation.latestMessageUserId == app.user.id %}
+        {{'发给'|trans}}
+      {% endif  %}
+      {{ web_macro.user_link(fromUser) }}:
+      {{conversation.latestMessageContent|plain_text(40)}}
+
+      {% if conversation.unreadNum > 0 %}
+        <span class="text-warning">({{'%unreadNum%条未读'|trans({'%unreadNum%':conversation.unreadNum})}})</span>
+      {% endif %}
+    </h4>
+
+    <div class="conversation-footer clearfix">
+      <span class="pull-left">{{ conversation.latestMessageTime|smart_time }}</span>
+      <span class="pull-right">{{'共%messageNum%条'|trans({'%messageNum%':conversation.messageNum})}}</span>
+      <div class="actions pull-right">
+        <a class="delete-conversation-btn text-muted" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{'删除'|trans}}</a>
+        <span class="text-muted mhm">|</span>
+      </div>
+    </div>
+  </div>
+</li>

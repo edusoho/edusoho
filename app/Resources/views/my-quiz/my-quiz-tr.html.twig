@@ -1,0 +1,47 @@
+{% if myTestpaper %}
+<tr>
+  <td width="55%">
+    {{ myTestpaper.name|plain_text(60) }}
+    <div>
+      <small class="text-muted">{{'来自课程'|trans}}《{{ course.title }}》</small>
+      <small class="text-muted mhs">•</small>
+      <small class="text-muted" title="{{'开始考试时间'|trans}}">{{ myTestpaperResult.beginTime|date('Y年n月d日 H:i'|trans) }}</small>
+    </div>
+  </td>
+
+	<td>
+		{% if myTestpaperResult.status == 'reviewing' %}
+		  <span class="text-warning">{{'正在批阅'|trans}}</span>
+		{% elseif myTestpaperResult.status == 'finished' %}
+			<span class="text-muted">{{'得分'|trans}}<strong class="text-warning">{{ myTestpaperResult.score }}</strong>{{'分'|trans}}</span><br>
+			<small class="text-muted">{{'做对'|trans}}<strong>{{ myTestpaperResult.rightItemCount }}</strong>{{'题 / 共'|trans}}<strong>{{ myTestpaper.itemCount }}</strong>{{'题'|trans}}</small>
+		{% else %}
+		  <span class="text-muted">{{'未交卷'|trans}}</span>
+		{% endif %}
+	</td>
+	<td>
+		{% if myTestpaperResult.status in ['doing', 'paused'] %}
+			<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">{{'继续考试'|trans}}</a>
+		{% elseif myTestpaperResult.status == 'finished' %}
+			
+      {% if lesson|default(null) and lesson.redoInterval|default(0) and ("now"|date("U")) < (myTestpaperResult.checkedTime + lesson.redoInterval * 3600)%}
+      	<span class="text-success text-sm">{{ (myTestpaperResult.checkedTime + lesson.redoInterval * 3600)|date('m-d H:i:s') }} 后可重考</span>
+      {% elseif lesson|default(null) and not lesson.doTimes|default(0) %}
+      	<a href="{{ path('course_lesson_redo_test',{lessonId:myTestpaperResult.lessonId,testId:myTestpaper.id}) }}" class="btn btn-default btn-sm">{{'再做一次'|trans}}</a>
+      {% endif %}
+			<a href="{{ path('course_manage_test_results', {id:myTestpaperResult.id}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+		{% endif %}
+	</td>
+
+</tr>
+{% else %}
+
+<tr>
+    <td colspan="3">
+        <a href="javascript:;">{{ myTestpaperResult.paperName }}</a>
+        <br>
+        <small>{{'该试卷已删除'|trans}}</small>
+    </td>
+</tr>
+
+{% endif %}

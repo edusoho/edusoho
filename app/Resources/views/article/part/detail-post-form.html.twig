@@ -1,0 +1,18 @@
+{% if app.user %}
+	<form class="es-commet" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
+	  <div class="es-commet-header">
+	    {{'文章评论'|trans}}<span class="badge badge-primary thread-post-num">{{ article.postNum }}</span>
+	  </div>
+	  
+	  <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" name="content"></textarea>
+		 	
+	  <div class="form-group clearfix">
+	    <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="{{'正在评论'|trans}}">{{'发表评论'|trans}}</button>
+	  </div>
+	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% else %}
+	<div class="empty">
+    你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+  </div>
+{% endif %}

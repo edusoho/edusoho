@@ -1,0 +1,19 @@
+<ul class="nav nav-tabs">
+{% if setting('coin.coin_enabled') %}
+    {% if setting('coin.coin_enabled') %}
+    <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
+      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("虚拟币"|trans)} %}我的%coin_name%{% endtrans %}</a>
+    </li>
+    {% endif %}
+{% endif %}
+  <li class="{% if side_nav == 'my-bill' %}active{% endif %}">
+    <a href="{{ url('my_bill') }}">{{'我的现金账单'|trans}}
+    </a>
+  </li>
+{% if setting('invite.invite_code_setting') == 1 %}
+  <li class="{% if side_nav == 'my-invite-code' %}active{% endif %}">
+    <a href="{{ url('my_invite_code') }}">{{'我的邀请码'|trans}}
+    </a>
+  </li>
+{% endif %}
+</ul>
