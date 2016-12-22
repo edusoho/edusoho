@@ -29,8 +29,9 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $api                = CloudAPIFactory::create('root');
 
         global $kernel;
+        $router = $kernel->getContainer()->get('router');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true);
+            $urls[$i] = $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), 0);
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
@@ -49,7 +50,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         global $kernel;
-        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']),true);
+        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), 0);
         $originUrl .= '#lesson/'.$lesson['id'];
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);

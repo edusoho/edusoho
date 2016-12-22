@@ -22,7 +22,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $api                = CloudAPIFactory::create('root');
 
         for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId));
+            $urls[$i] = $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId), 0);
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
@@ -42,7 +42,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         global $kernel;
-        $originUrl = $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
+        $originUrl = $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']), 0);
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
         $url      = empty($shortUrl) ? $originUrl : $shortUrl;
