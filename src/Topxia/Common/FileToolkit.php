@@ -65,13 +65,16 @@ class FileToolkit
 
             return  $errors;
         }
-        $secureFileMimeTypes = self::getSecureFileMimeTypes();
 
-        $fileMimeType = $file->getClientMimeType();
-        if (!in_array($fileMimeType, $secureFileMimeTypes)) {
-            $errors[] = "请上传合法的文件。";
+        if ($file instanceof UploadedFile) {
+            $secureFileMimeTypes = self::getSecureFileMimeTypes();
 
-            return  $errors;
+            $fileMimeType = $file->getClientMimeType();
+            if (!in_array($fileMimeType, $secureFileMimeTypes)) {
+                $errors[] = "请上传合法的文件。";
+
+                return  $errors;
+            }
         }
 
         // if (function_exists('finfo_open')) {
