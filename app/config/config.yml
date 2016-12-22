@@ -68,9 +68,12 @@ parameters:
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
     topxia.upload.public_url_path: "/files"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
-    templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
 
 services:
+
+    assets.path_package:
+        class: Topxia\WebBundle\Twig\Asset\PathPackage
+        arguments: ["", "", "@assets.context"]
 
     app.locale_listener:
         class: Topxia\WebBundle\Listener\LocaleListener
