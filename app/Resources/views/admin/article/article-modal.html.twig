@@ -1,0 +1,153 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_article_manage' %}
+
+{% set script_controller = 'article/article-modal' %}
+
+{% set article = article|default(null) %}
+
+{% block page_title %}{% if article %}{{'编辑资讯'|trans}}{% else %}{{parent()}}{% endif %}{% endblock %}
+
+{% block main %}
+
+<style>
+  #article-form .popover {
+    max-width: 400px;
+    width: 400px;
+  }
+</style>
+
+
+<form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
+  {% if article %}
+    action="{{ path('admin_article_edit', {id:article.id}) }}"
+  {% else %}
+    action="{{ path('admin_article_create') }}"
+  {% endif %}
+  >
+  <div class="row">
+    <div class="col-md-8">
+      <div class="form-group">
+        <label for="article-title-field" class="control-label">{{'资讯标题'|trans}}</label>
+        <div class="controls">
+          <input class="form-control" id="article-title-field" type="text" name="title" value="{{ article.title|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryId" class="control-label">{{'所属栏目'|trans}}</label>
+        <div class="controls">
+          <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
+            {% if not article|default(false) %}
+              <option value="0">--{{'选择所属栏目'|trans}}--</option>
+            {% endif %}
+          {% for tree in categoryTree %}
+            <option value={{ tree.id }} {% if tree.id == category.id|default()  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+          {% endfor %}
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="article-tagIds"　class="control-label">{{'TAG标签'|trans}}</label>
+        <div class="controls">
+          <input type="form-control" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tagNames|default([])|join(',') }}" data-match-url="{{ path('tag_match') }}">
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+      {% include 'org/org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true} %}
+
+      <div class="form-group">
+        <label for="richeditor-body-field" class="control-label">{{'正文'|trans}}</label>
+        <div class="controls">
+          <textarea class="form-control" id="richeditor-body-field" rows="16" name="body"
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+            data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+           >{{ article.body|default('') }}</textarea>
+        </div>
+      </div>
+
+      {{ render(controller('AppBundle:Attachment:formFields', {targetType: 'article', targetId: article.id|default(0)}, {'showLabel':false})) }}
+
+      <div class="form-group">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'正在保存...'|trans}}">{{'确定'|trans}}</button>
+        <a class="btn btn-link" href="{{ path('admin_article') }}">{{'返回'|trans}}</a>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'资讯属性'|trans}}</div>
+        <div class="panel-body">
+            <label class="checkbox-inline">
+            <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> {{'置顶'|trans}}
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> {{'头条'|trans}}  
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> {{'推荐'|trans}}
+          </label>
+          <a class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">
+          </a>
+          <div id="article-property-tips-html" style="display:none;">
+            {{ '资讯属性Tooltip'|trans|raw }}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'来源设置'|trans}}</div>
+        <div class="panel-body">
+            <div class="form-group">
+              <label for="article-source-field">{{'来源名称'|trans}}</label>
+              <div class="controls">
+                <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label for="article-sourceUrl-field">{{'来源地址'|trans}}</label>
+              <div class="controls">
+                  <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'设置缩略图'|trans}}</div>
+        <div class="panel-body">
+          <div id="article-thumb-container">
+              {% if article.thumb|default(null) %}
+                <img class="img-responsive" src='{{ filepath(article.thumb) }}'>
+              {% endif %}
+            </div>
+            <br>
+            <a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-default">{{'上传'|trans}}</a>
+          <a id="article_thumb_remove"  class="btn btn-default" data-url="{{ path('admin_article_thumb_remove',{id:article.id|default(0)}) }}" {% if not article.thumb|default(null) %}style="display:none;" {% endif %}>{{'删除'|trans}}</a>
+          <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
+          <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
+          <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
+          <p class="help-block mbs">{{'请推荐尺寸754*424px。'|trans}}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'发布时间'|trans}}</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="controls">
+              <input class="form-control" type="text" name="publishedTime" value=" {{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+              <div class="help-block">{{'内容条目默认按发布时间的倒序显示'|trans}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
