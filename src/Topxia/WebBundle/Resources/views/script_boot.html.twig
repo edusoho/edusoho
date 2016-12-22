@@ -3,7 +3,7 @@
   app.debug = {% if app.debug %}true{% else %}false{% endif %};
   app.version = '{{ assets_version() }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
-  app.basePath = '{{ app.request.getBasePath() }}';
+  app.basePath = '{{ cdn() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};

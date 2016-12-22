@@ -107,6 +107,8 @@ seajs.config({
 
     debug: app.debug,
 
+    base: app.basePath+'/assets/libs',
+
     plugins: ['text']
 });
 
@@ -134,9 +136,7 @@ seajs.on('fetch', function(data) {
         data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
         return ;
     }
-    
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
-
 });
 
 seajs.on('define', function(data) {
