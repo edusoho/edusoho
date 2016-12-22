@@ -2,6 +2,7 @@
 namespace Topxia\Service\Common;
 
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Event\Event;
 use Monolog\Logger;
 use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;

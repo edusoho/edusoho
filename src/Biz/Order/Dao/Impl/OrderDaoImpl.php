@@ -12,7 +12,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime','updatedTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array('data' => 'json'),
             'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
