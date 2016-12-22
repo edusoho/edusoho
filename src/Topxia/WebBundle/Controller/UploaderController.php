@@ -34,6 +34,7 @@ class UploaderController extends BaseController
             $result                    = $this->getUploadFileService()->initUpload($params);
 
             $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
+
             return $this->createJsonResponse($result);
         }
     }

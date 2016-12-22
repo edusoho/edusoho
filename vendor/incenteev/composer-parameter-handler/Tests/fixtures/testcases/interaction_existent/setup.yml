@@ -1,0 +1,11 @@
+title: Existing values are not asked interactively again
+
+interactive: true
+
+requested_params:
+    boolean:
+        default: 'false'
+        input: 'false'
+    another:
+        default: 'null'
+        input: '"null"'

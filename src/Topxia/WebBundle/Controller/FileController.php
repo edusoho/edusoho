@@ -20,6 +20,7 @@ class FileController extends BaseController
         }
         
         $file = $request->files->get('file');
+
         if ($type == 'image') {
             if (!FileToolkit::isImageFile($file)) {
                 throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是图片文件，请重新上传。'));
@@ -27,7 +28,6 @@ class FileController extends BaseController
         } else {
             throw new \RuntimeException($this->getServiceKernel()->trans('上传类型不正确！'));
         }
-
         $record = $this->getFileService()->uploadFile($groupCode, $file);
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
