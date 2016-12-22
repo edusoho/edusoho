@@ -198,7 +198,7 @@ abstract class BaseResource
 
     protected function getHttpHost()
     {
-        return "//{$_SERVER['HTTP_HOST']}";
+        return "http://{$_SERVER['HTTP_HOST']}";
     }
 
     protected function generateUrl($route, $parameters = array())
