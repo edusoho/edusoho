@@ -1,5 +1,5 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller\Common;
+namespace AppBundle\Controller\Classroom;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;

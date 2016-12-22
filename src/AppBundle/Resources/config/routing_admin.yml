@@ -2064,3 +2064,86 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:Admin/EduCloud:liveSetting }
+
+
+#classroom 
+admin_classroom:
+    path:     /classroom/index
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:index }
+
+admin_classroom_setting:
+    path:     /setting/classroom
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:set }
+
+admin_classroom_create:
+    pattern:  /classroom/create
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:addClassroom }
+
+admin_classroom_close:
+    pattern:  /classroom/{id}/close
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:closeClassroom }
+    methods: [POST]
+
+admin_classroom_open:
+    pattern:  /classroom/{id}/open
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:openClassroom }
+    methods: [POST]
+
+admin_classroom_delete:
+    pattern:  /classroom/{id}/delete
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:deleteClassroom }
+    methods: [POST]
+
+admin_classroom_category:
+    pattern: /classroom/category
+    defaults: { _controller: AppBundle:Admin/ClassroomCategory:index }
+
+admin_classroom_order:
+    path:     /classroom/order
+    defaults: { _controller: AppBundle:Admin/ClassroomOrderAdmin:manage }
+
+admin_classroom_thread:
+    path:     /classroom/thread
+    defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:index }
+
+admin_classroom_thread_delete:
+    path:     /classroom/thread/{threadId}/delete
+    defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:delete }
+    methods: [POST]
+
+admin_classroom_thread_batch_delete:
+    path:     /classroom/thread/batch_delete
+    defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:batchDelete }
+
+admin_classroom_set_recommend:
+    path:   /classroom/{id}/recommend
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:recommend }
+    permissions: [admin_classroom_manage]
+
+admin_classroom_cancel_recommend:
+    path:   /classroom/{id}/recommend/cancel
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:cancelRecommend }
+    permissions: [admin_classroom_manage]
+
+admin_classroom_recommend_list:
+    path:   /classroom/recommend/list
+    defaults : { _controller: AppBundle:Admin/ClassroomAdmin:recommendList}
+
+admin_classroom_review:
+    pattern:  /classroom/review
+    defaults: { _controller: AppBundle:Admin/ClassroomReview:index }
+
+admin_classroom_review_delete:
+    pattern:  /classroom/review/{id}/delete
+    defaults: { _controller: AppBundle:Admin/ClassroomReview:delete }
+    methods: [POST]
+
+admin_classroom_review_batch_delete:
+    pattern:  /classroom/review/batch_delete
+    defaults: { _controller: AppBundle:Admin/ClassroomReview:batchDelete }
+    methods: [POST]
+
+admin_classroom_chooser:
+    pattern: /classroom/chooser
+    defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }    
+ 

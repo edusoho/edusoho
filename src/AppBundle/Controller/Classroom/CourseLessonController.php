@@ -1,10 +1,10 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller\Course;
+namespace AppBundle\Controller\Classroom;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
-class LessonController extends BaseController
+class CourseLessonController extends BaseController
 {
     public function previewAction(Request $request, $classroomId, $courseId)
     {

@@ -1,12 +1,9 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller\Classroom;
+namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
-class CategoryController extends BaseController
+class ClassroomCategoryController extends BaseController
 {
     public function indexAction()
     {

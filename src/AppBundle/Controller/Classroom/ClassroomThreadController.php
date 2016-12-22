@@ -1,6 +1,6 @@
 <?php
 
-namespace Classroom\ClassroomBundle\Controller;
+namespace AppBundle\Controller\Classroom;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;

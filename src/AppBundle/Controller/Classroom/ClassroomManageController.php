@@ -1,5 +1,5 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller;
+namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;

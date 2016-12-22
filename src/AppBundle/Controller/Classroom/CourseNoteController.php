@@ -1,11 +1,11 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller\Course;
+namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
-class NoteController extends BaseController
+class CourseNoteController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {

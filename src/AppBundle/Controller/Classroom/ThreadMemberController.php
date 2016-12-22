@@ -1,10 +1,10 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller\Thread;
+namespace AppBundle\Controller\Classroom;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
-class MemberController extends BaseController
+class ThreadMemberController extends BaseController
 {
     public function becomeAction(Request $request, $classroomId, $threadId)
     {

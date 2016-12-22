@@ -1,5 +1,5 @@
 <?php
-namespace Classroom\ClassroomBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
