@@ -1,10 +1,16 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -13,7 +19,7 @@ class UploadFileController extends BaseController
 {
     public function uploadAction(Request $request)
     {
-        if($request->isMethod('OPTIONS')){
+        if ($request->isMethod('OPTIONS')) {
             // SDK 跨域认证
             $response = $this->createJsonResponse(true);
             $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -24,13 +30,13 @@ class UploadFileController extends BaseController
         $token = $this->getUserService()->getToken('fileupload', $token);
 
         if (empty($token)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN已过期或不存在。'));
+            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN非法。'));
+            throw $this->createAccessDeniedException('上传TOKEN非法。');
         }
         $this->getServiceKernel()->getCurrentUser()->fromArray($user);
 
@@ -54,7 +60,7 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        ServiceKernel::instance()->createService('System:LogService')->info('upload_file', 'download', "文件Id #{$fileId}");
+        $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
             return $this->downloadCloudFile($file);
@@ -91,7 +97,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看此页面！'));
+            throw $this->createAccessDeniedException('您无权查看此页面！');
         }
 
         $conditions = $request->query->all();
@@ -102,7 +108,7 @@ class UploadFileController extends BaseController
             $conditions['createdUserId'] = $user['id'];
         }
 
-        $conditions['noTargetType']  = 'attachment';
+        $conditions['noTargetType'] = 'attachment';
         if (isset($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
@@ -129,7 +135,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看此页面！'));
+            throw $this->createAccessDeniedException('您无权查看此页面！');
         }
 
         $conditions = $request->query->all();
@@ -225,7 +231,7 @@ class UploadFileController extends BaseController
 
         if (empty($file)) {
             $result = array(
-                "error" => $this->getServiceKernel()->trans('文件不存在')
+                "error" => '文件不存在'
             );
 
             return $this->createJsonResponse($result);
@@ -250,7 +256,7 @@ class UploadFileController extends BaseController
         $result = array_merge($request->query->all(), $result);
 
         if (empty($result['id'])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
+            throw new \RuntimeException('数据中id不能为空');
         }
 
         if (!empty($result['convertHash'])) {
@@ -296,7 +302,7 @@ class UploadFileController extends BaseController
         $result = array_merge($request->query->all(), $result);
 
         if (empty($result['id'])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
+            throw new \RuntimeException('数据中id不能为空');
         }
 
         if ($result['code'] != 0) {
@@ -310,7 +316,7 @@ class UploadFileController extends BaseController
         if (empty($file)) {
             $this->getLogService()->error('upload_file', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
             $result = array(
-                "error" => $this->getServiceKernel()->trans('文件不存在')
+                "error" => '文件不存在'
             );
 
             return $this->createJsonResponse($result);
@@ -331,13 +337,13 @@ class UploadFileController extends BaseController
         $fullKey = $request->query->get('fullKey');
 
         if (empty($key)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('key不能为空'));
+            throw new \RuntimeException('key不能为空');
         }
 
         $data = json_decode($data, true);
 
         if (empty($data['id'])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
+            throw new \RuntimeException('数据中id不能为空');
         }
 
         if ($fullKey) {
@@ -349,12 +355,12 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
 
         if (empty($file)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('文件不存在'));
+            throw new \RuntimeException('文件不存在');
         }
 
         if ($data['code'] != 0) {
             $this->getUploadFileService()->convertFile($file['id'], 'error');
-            throw new \RuntimeException($this->getServiceKernel()->trans('转换失败'));
+            throw new \RuntimeException('转换失败');
         }
 
         $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
@@ -394,41 +400,6 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($info['format']['duration']);
     }
 
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
-    }
-
-    protected function getNotificationService()
-    {
-        return ServiceKernel::instance()->createService('User:NotificationService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
-    }
-
-    protected function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content:FileService');
-    }
-
-    protected function getMaterialService()
-    {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
-    }
-
     protected function createFilesJsonResponse($files, $paginator = null)
     {
         foreach ($files as &$file) {
@@ -454,5 +425,74 @@ class UploadFileController extends BaseController
         } else {
             return $this->createJsonResponse($files);
         }
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->getBiz()->service('User:NotificationService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->getBiz()->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->getBiz()->service('Content:FileService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->getBiz()->service('Course:MaterialService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 }

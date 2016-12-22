@@ -1,10 +1,16 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Group\Service\GroupService;
+use Biz\System\Service\SettingService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserFieldService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class UserController extends BaseController
 {
@@ -24,7 +30,7 @@ class UserController extends BaseController
         // 粉丝数
         $follower = $this->getUserService()->findUserFollowerCount($user['id']);
 
-        return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
+        return $this->render('user/header-block.html.twig', array(
             'user'       => $user,
             'isFollowed' => $isFollowed,
             'following'  => $following,
@@ -52,7 +58,7 @@ class UserController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
         } else {
             return $this->redirect($this->generateUrl('user_show', array('id' => $user['id'])));
         }
@@ -130,7 +136,6 @@ class UserController extends BaseController
                 $teachers                     = $this->getUserService()->findUsersByIds($classroomTeacherIds);
                 $classrooms[$key]['teachers'] = $teachers;
             }
-
         } else {
             $paginator = new Paginator(
                 $this->get('request'),
@@ -139,7 +144,7 @@ class UserController extends BaseController
             );
         }
 
-        return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
+        return $this->render("user/classroom-learning.html.twig", array(
             'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'user'       => $user
@@ -182,11 +187,10 @@ class UserController extends BaseController
 
             $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-
 
             foreach ($classrooms as $key => $classroom) {
                 if (empty($classroom['teacherIds'])) {
@@ -199,7 +203,7 @@ class UserController extends BaseController
                 $classrooms[$key]['teachers'] = $teachers;
             }
         }
-        return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
+        return $this->render('user/classroom-teaching.html.twig', array(
             'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'user'       => $user
@@ -230,7 +234,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:User:courses_favorited.html.twig', array(
+        return $this->render('user/courses_favorited.html.twig', array(
             'user'            => $user,
             'courseFavorites' => $courseFavorites,
             'paginator'       => $paginator,
@@ -257,7 +261,7 @@ class UserController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getGroupService()->searchMembersCount(array('userId' => $user['id'], 'role' => 'member')),
+            $this->getGroupService()->countMembers(array('userId' => $user['id'], 'role' => 'member')),
             20
         );
 
@@ -267,7 +271,7 @@ class UserController extends BaseController
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups   = $this->getGroupService()->getGroupsByids($groupIds);
 
-        return $this->render('TopxiaWebBundle:User:group.html.twig', array(
+        return $this->render('user/group.html.twig', array(
             'user'        => $user,
             'type'        => 'group',
             'adminGroups' => $adminGroups,
@@ -299,7 +303,7 @@ class UserController extends BaseController
 
         $myfollowings = $this->_getUserFollowing();
 
-        return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
+        return $this->render('user/friend.html.twig', array(
             'user'           => $user,
             'paginator'      => $paginator,
             'friends'        => $followings,
@@ -332,7 +336,7 @@ class UserController extends BaseController
             $followerUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followerIds), array('id', 'ASC'), 0, count($followerIds)), 'id');
         }
 
-        return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
+        return $this->render('user/friend.html.twig', array(
             'user'           => $user,
             'paginator'      => $paginator,
             'friends'        => $followers,
@@ -388,11 +392,11 @@ class UserController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请先登入'));
+            $response = array('success' => false, 'message' => '请先登入');
         }
 
         if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('输入的密码不正确'));
+            $response = array('success' => false, 'message' => '输入的密码不正确');
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -420,7 +424,7 @@ class UserController extends BaseController
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
         }
 
-        return $this->render('TopxiaWebBundle:User:card-show.html.twig', array(
+        return $this->render('user/card-show.html.twig', array(
             'user'       => $user,
             'profile'    => $profile,
             'isFollowed' => $isFollowed,
@@ -439,7 +443,7 @@ class UserController extends BaseController
         }
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('请先登录！'));
+            return $this->createMessageResponse('error', '请先登录！');
         }
 
         $goto = $this->getTargetPath($request);
@@ -466,8 +470,10 @@ class UserController extends BaseController
 
             if (isset($formData['email']) && !empty($formData['email'])) {
                 $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-                $this->authenticateUser($this->getUserService()->getUser($user['id']));
 
+                $currentUser = new CurrentUser();
+                $currentUser->fromArray($this->getUserService()->getUser($user['id']));
+                $this->switchUser($request, $currentUser);
                 if (!$user['setup']) {
                     $this->getUserService()->setupAccount($user['id']);
                 }
@@ -478,36 +484,18 @@ class UserController extends BaseController
             return $this->redirect($goto);
         }
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields, 'fieldName');
         $userInfo   = $this->getUserService()->getUserProfile($user['id']);
 
-        return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
+        return $this->render('user/fill-userinfo-fields.html.twig', array(
             'userFields' => $userFields,
             'user'       => $userInfo,
             'goto'       => $goto
         ));
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
-    }
 
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
-    }
-
-    protected function getNoteService()
-    {
-        return $this->getServiceKernel()->createService('Course:NoteService');
-    }
-
-    protected function getNotificationService()
-    {
-        return ServiceKernel::instance()->createService('User:NotificationService');
-    }
 
     protected function tryGetUser($id)
     {
@@ -523,7 +511,7 @@ class UserController extends BaseController
     protected function _aboutAction($user)
     {
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        return $this->render('TopxiaWebBundle:User:about.html.twig', array(
+        return $this->render('user/about.html.twig', array(
             'user'        => $user,
             'userProfile' => $userProfile,
             'type'        => 'about'
@@ -544,7 +532,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
+        return $this->render('user/courses.html.twig', array(
             'user'      => $user,
             'courses'   => $courses,
             'paginator' => $paginator,
@@ -570,7 +558,7 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
+        return $this->render('user/courses.html.twig', array(
             'user'      => $user,
             'courses'   => $courses,
             'paginator' => $paginator,
@@ -587,38 +575,81 @@ class UserController extends BaseController
         return $myfollowings;
     }
 
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return GroupService
+     */
     protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group:GroupService');
+        return $this->getBiz()->service('Group:GroupService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->getBiz()->service('User:UserFieldService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->getBiz()->service('User:AuthService');
     }
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getBiz()->service('Vip:Vip.LevelService');
     }
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip.VipService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getBiz()->service('Course:ThreadService');
+    }
+
+    protected function getNoteService()
+    {
+        return $this->getBiz()->service('Course:NoteService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getBiz()->service('User:NotificationService');
     }
 }

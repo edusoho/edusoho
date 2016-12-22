@@ -1,0 +1,109 @@
+<?php
+namespace Topxia\WebBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\ResourceNotFoundException;
+
+class SubtitleController extends BaseController
+{
+    public function manageAction(Request $request, $mediaId)
+    {
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException('没有权限管理资源');
+        }
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+
+        $media = $this->getUploadFileService()->getFile($mediaId);
+        if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
+            throw new ResourceNotFoundException('uploadFile', $mediaId);
+        }
+
+        return $this->render('media-manage/subtitle/manage.html.twig', array(
+            'media'     => $media,
+            'goto'      => $request->query->get('goto'),
+            'subtitles' => $subtitles
+        ));
+    }
+
+    /**
+     * 获取某一视频下所有的字幕
+     */
+    public function listAction($mediaId)
+    {
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException('没有权限管理资源');
+        }
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+
+        return $this->createJsonResponse(array(
+            'subtitles' => $subtitles
+        ));
+    }
+
+    public function createAction(Request $request, $mediaId)
+    {
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException('没有权限管理资源');
+        }
+
+        $fileds = $request->request->all();
+
+        $subtitle = $this->getSubtitleService()->addSubtitle($fileds);
+
+        return $this->createJsonResponse($subtitle);
+    }
+
+    public function deleteAction($mediaId, $id)
+    {
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException('没有权限管理资源');
+        }
+
+        $this->getSubtitleService()->deleteSubtitle($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function previewAction($mediaId)
+    {
+        return $this->render('media-manage/preview.html.twig', array(
+            'mediaId' => $mediaId,
+            'context' => array(
+                'hideQuestion'  => 1,
+                'hideBeginning' => true
+            )
+        ));
+    }
+
+    public function manageDialogAction(Request $request)
+    {
+        $mediaId = $request->query->get('mediaId');
+        if (!$this->getUploadFileService()->canManageFile($mediaId)) {
+            throw $this->createAccessDeniedException('没有权限管理资源');
+        }
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $media     = $this->getUploadFileService()->getFile($mediaId);
+        return $this->render('media-manage/subtitle/dialog.html.twig', array(
+            'subtitles' => $subtitles,
+            'media'     => $media
+        ));
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
+
+    protected function getSubtitleService()
+    {
+        return $this->getBiz()->service('Subtitle:SubtitleService');
+    }
+}
