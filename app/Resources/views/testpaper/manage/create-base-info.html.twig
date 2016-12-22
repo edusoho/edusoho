@@ -15,7 +15,7 @@
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="limitedTime-field">{{'时间限制'|trans}}</label></div>
   <div class="col-md-8 controls">
-      <input class="form-control width-input width-input-large" name="limitedTime" id="limitedTime-field" value="{% if testpaper.limitedTime | default(null)%}{{testpaper.limitedTime }}{%else%}0{% endif %}" /> {{'分钟'|trans}}
+      <input class="form-control inline-block inline-block-large" name="limitedTime" id="limitedTime-field" value="{% if testpaper.limitedTime | default(null)%}{{testpaper.limitedTime }}{%else%}0{% endif %}" /> {{'分钟'|trans}}
       <div class="help-block">{{'0分钟，表示无限制'|trans}}</div>
   </div>
 </div>

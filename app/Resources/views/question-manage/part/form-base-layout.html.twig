@@ -6,7 +6,7 @@
     <div class="form-group">
       <div class="col-md-2 control-label"><label>{{'从属'|trans}}</label></div>
       <div class="col-md-8 controls">
-        <select class="form-control width-input width-input-large" name="target" data-role="target">
+        <select class="form-control inline-block inline-block-large" name="target" data-role="target">
           {{ select_options(courseTasks|default([]), question.lessonId|default(0),'本课程'|trans) }}
         </select>
         <div class="help-block">{{'可以针对本课程或者某个课时出题'|trans}}</div>
