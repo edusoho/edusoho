@@ -196,6 +196,7 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
+        $ssl = $request->isSecure() ? true : false;
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -286,7 +287,12 @@ class CourseLessonController extends BaseController
                         ));
                     } elseif (!in_array($file['type'], array('video', 'audio'))) {
                         $api              = CloudAPIFactory::create("leaf");
-                        $result           = $api->get("/resources/{$file['globalId']}/player");
+
+                        $params = array();
+                        if ($ssl) {
+                            $params['protocol'] = 'https';
+                        }
+                        $result           = $api->get("/resources/{$file['globalId']}/player", $params);
                         $json['mediaUri'] = $result['url'];
                     }
                 } else {
