@@ -16,7 +16,7 @@ class AccountController extends BaseController
             'seasonDate' => $this->getStartTime('quarter'),
             'yearDate' => $this->getStartTime('year'),
         );
-        return $this->render('account-center/index.html.twig', array(
+        return $this->render('admin/operation-analysis/index.html.twig', array(
             'dates' => $weekAndMonthDate
         ));
     }
@@ -31,7 +31,7 @@ class AccountController extends BaseController
         $monthTimeEnd   = strtotime(date("Y-m-d", time()));
         $monthTotalPrice = $this->getAccountAnalysisData($monthTimeStart, $monthTimeEnd);
 
-        return $this->render('account-center/account-analysis-dashbord.html.twig', array(
+        return $this->render('admin/operation-analysis/account-analysis-dashbord.html.twig', array(
             'weekTotalPrice' => $weekTotalPrice,
             'monthTotalPrice' => $monthTotalPrice,
         ));
@@ -85,7 +85,7 @@ class AccountController extends BaseController
             $analysisAmounts[$key]['title'] = preg_replace('/个月([\x{4e00}-\x{9fa5}])*/u', '个月', $analysisAmounts[$key]['title']);
         }
 
-        return $this->render('account-center/account-analysis-rank-tr.html.twig', array(
+        return $this->render('admin/operation-analysis/account-analysis-rank-tr.html.twig', array(
             'analysisAmounts' => $analysisAmounts
         ));
     }
@@ -118,7 +118,7 @@ class AccountController extends BaseController
         $userIds = ArrayToolkit::column($amounts, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('account-center/account-analysis-payment-rank-table.html.twig', array(
+        return $this->render('admin/operation-analysis/account-analysis-payment-rank-table.html.twig', array(
             'amounts' => $amounts,
             'users' => $users
         ));
