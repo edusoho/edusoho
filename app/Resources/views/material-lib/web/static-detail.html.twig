@@ -11,9 +11,9 @@
     <div class="tab-content">
       <div class="tab-pane active" id="info-tab">
         {% if app.user.id == material.createdUserId %}
-          {% include 'MaterialLibBundle:Web:edit-detail-form.html.twig' %}
+          {% include 'material-lib/web/edit-detail-form.html.twig' %}
         {% else %}
-          {% include 'MaterialLibBundle:Web:file-detail-static.html.twig' %}
+          {% include 'material-lib/web/file-detail-static.html.twig' %}
         {% endif %}
       </div>
 
