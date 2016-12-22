@@ -18,7 +18,7 @@ class NoteController extends BaseController
         if ($request->isMethod('POST')) {
             $note           = $request->request->all();
             $note['status'] = isset($note['status']) && $note['status'] === 'on' ? 1 : 0;
-            $note           = $this->getNoteService()->createCourseNote($note);
+            $note           = $this->getNoteService()->saveNote($note);
             return $this->createJsonResponse($note);
         }
     }

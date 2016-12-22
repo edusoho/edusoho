@@ -33,6 +33,7 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
             'parentId = :parentId',
             'classroomId IN (:classroomIds)'
         );
+        return $declares;
     }
 
     public function sumReviewRatingByClassroomId($classroomId)

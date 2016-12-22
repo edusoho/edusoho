@@ -27,7 +27,7 @@ class NoteServiceTest extends BaseTestCase
     {
         $note = $this->createNote();
 
-        $foundNote = $this->getNoteService()->getUserTaskNote($note['userId'], $note['taskId']);
+        $foundNote = $this->getNoteService()->getCourseNoteByUserIdAndTaskId($note['userId'], $note['taskId']);
 
         $this->assertEquals($note['id'], $foundNote['id']);
         $this->assertEquals($note['userId'], $foundNote['userId']);
@@ -73,9 +73,9 @@ class NoteServiceTest extends BaseTestCase
             'courseId' => $task2['courseId']
         ));
 
-        $resultCount = $this->getNoteService()->searchNoteCount(array('courseId' => $task1['courseId'], 'taskId' => $task2['id']));
+        $resultCount = $this->getNoteService()->countCourseNotes(array('courseId' => $task1['courseId'], 'taskId' => $task2['id']));
         $this->assertEquals(1, $resultCount);
-        $resultCount = $this->getNoteService()->searchNoteCount(array('courseId' => $course['id']));
+        $resultCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
         $this->assertEquals(2, $resultCount);
     }
 
@@ -229,7 +229,7 @@ class NoteServiceTest extends BaseTestCase
     protected function createNote()
     {
         $task = $this->createTask();
-        $note = $this->getNoteService()->createCourseNote(array(
+        $note = $this->getNoteService()->saveNote(array(
             'content'  => 'note content',
             'taskId'   => $task['id'],
             'courseId' => $task['courseId']

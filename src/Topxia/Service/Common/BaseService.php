@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Event\Event;
 use Monolog\Logger;
 use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -152,8 +152,8 @@ abstract class BaseService
     public function isPluginInstalled($code)
     {
         $appService = $this->createService('CloudPlatform.AppService');
-        $plugin = $appService->getAppByCode($code);
-        if(empty($plugin)) {
+        $plugin     = $appService->getAppByCode($code);
+        if (empty($plugin)) {
             return false;
         }
 
@@ -162,14 +162,13 @@ abstract class BaseService
 
     public function setting($name, $default)
     {
-        $names = explode('.', $name);
+        $names   = explode('.', $name);
         $setting = $this->getSettingService()->get($names[0]);
-        if(empty($names[1])) {
+        if (empty($names[1])) {
             return empty($setting) ? $default : $setting;
-        } 
+        }
 
         return empty($setting[$names[1]]) ? $default : $setting[$names[1]];
-
     }
 
     protected function getLock()

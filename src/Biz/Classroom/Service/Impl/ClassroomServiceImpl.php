@@ -3,10 +3,9 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Dao\ClassroomDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\Classroom\Dao\ClassroomDao;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
@@ -162,7 +161,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
-        $this->getClassroomDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             $allExistingCourses = $this->findCoursesByClassroomId($classroomId);
 
@@ -198,9 +197,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->refreshCoursesSeq($classroomId, $courseIds);
 
-            $this->getClassroomDao()->getConnection()->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $this->getClassroomDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
@@ -581,7 +580,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'orderId'     => empty($order) ? 0 : $order['id'],
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => array('student'),
-            'remark'      => empty($order['note']) ? '' : $order['note'],
+            'remark'      => empty($order['note']) ? '' : $order['note']
         );
 
         if (empty($fields['remark'])) {
@@ -643,7 +642,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroomCourses($classroomId, $activeCourseIds)
     {
         $this->tryManageClassroom($classroomId);
-        $this->getClassroomDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             $courses        = $this->findActiveCoursesByClassroomId($classroomId);
             $courses        = ArrayToolkit::index($courses, 'id');
@@ -678,14 +677,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->refreshCoursesSeq($classroomId, $activeCourseIds);
 
-            $this->getClassroomDao()->getConnection()->commit();
+            $this->commit();
 
             $this->dispatchEvent(
                 'classroom.course.delete',
                 new Event($activeCourseIds, array('classroomId' => $classroomId))
             );
         } catch (\Exception $e) {
-            $this->getClassroomDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }

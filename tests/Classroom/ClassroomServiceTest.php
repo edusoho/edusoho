@@ -112,8 +112,8 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'test19878'
         );
 
-        $course1 = array('title' => 'Test Course 1');
-        $course2 = array('title' => 'Test Course 2');
+        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
 
@@ -132,8 +132,8 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'testwe'
         );
 
-        $course1 = array('title' => 'estCourse1');
-        $course2 = array('title' => 'estCourse2');
+        $course1 = array('title' => 'estCourse1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course2 = array('title' => 'estCourse2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
 
@@ -1185,9 +1185,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1');
-        $course2 = array('title' => 'Test Course 2');
-        $course3 = array('title' => 'Test Course 3');
+        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course3 = array('title' => 'Test Course 3','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
 
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
@@ -1224,9 +1224,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1');
-        $course2 = array('title' => 'Test Course 2');
-        $course3 = array('title' => 'Test Course 3');
+        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course3 = array('title' => 'Test Course 3','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
 
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);

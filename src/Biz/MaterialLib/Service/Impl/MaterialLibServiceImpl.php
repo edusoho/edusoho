@@ -5,7 +5,6 @@ namespace Biz\MaterialLib\Service\Impl;
 use Biz\BaseService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
@@ -150,7 +149,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getCloudFileService()
     {
-        return $this->getKernel()->createService('CloudFile:CloudFileService');
+        return $this->biz->service('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileTagService()
