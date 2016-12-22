@@ -74,7 +74,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**

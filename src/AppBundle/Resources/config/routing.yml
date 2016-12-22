@@ -490,6 +490,268 @@ attachment_download:
   methods: [GET]
 
 
+<<<<<<< HEAD
+#classroom 
+
+
+classroom_manage:
+    path: /classroom/{id}/manage
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:index }
+
+classroom_manage_courses:
+    path: /classroom/{id}/manage/courses
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
+
+classroom_courses_select:
+    path: /classroom/{id}/courses/select
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
+
+classroom_manage_set_info:
+    path: /classroom/{id}/manage/set_info
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setInfo }
+
+classroom_manage_set_picture:
+    path: /classroom/{id}/manage/set_picture
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPicture }
+
+classroom_manage_picture_crop:
+    path: /classroom/{id}/manage/picture_crop
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:pictureCrop }
+
+classroom_manage_set_price:
+    path: /classroom/{id}/manage/price/set
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPrice }
+
+classroom_manage_students:
+    path: /classroom/{id}/manage/students
+    defaults: { _controller:AppBundle:Classroom/ClassroomManage:students }
+
+classroom_manage_aduitor:
+    path: /classroom/{id}/manage/aduitor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+
+classroom_manage_record:
+    path: /classroom/{id}/manage/refund_record
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+
+classroom_manage_service:
+    path: /classroom/{id}/manage/service
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:service}
+
+classroom_manage_teachers:
+    path: /classroom/{id}/manage/teachers
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:teachers }
+
+classroom_manage_headteacher:
+    path: /classroom/{id}/manage/headteacher
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:headteacher }
+
+classroom_manage_assistants:
+    path: /classroom/{id}/manage/assistants
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:assistants }
+
+classroom_manage_publish:
+    path: /classroom/{id}/manage/publish
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:publish }
+    methods: [POST]
+
+classroom_manage_close:
+    path: /classroom/{id}/manage/close
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:close }
+    methods: [POST]
+
+classroom_manage_checkName:
+    path: /classroom/manage/checkName
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkName }
+
+classroom_manage_student_remark:
+    path:  /classroom/{classroomId}/manage/student/{userId}/remark
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:remark }
+
+classroom_manage_student_remove:
+    path:  /classroom/{classroomId}/manage/student/{userId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:remove }
+    methods: [POST]
+
+classroom_manage_student_create:
+    path:  /classroom/{id}/manage/student/create
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:create }
+
+classroom_manage_student_check:
+    path:  /classroom/{id}/manage/student_check
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkStudent }
+
+classroom_manage_student_export_datas:
+    path:  /classroom/{id}/manage/student/export/{role}/datas
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exportDatas }
+
+classroom_manage_student_export_csv:
+    path:  /classroom/{id}/manage/student/export
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exportCsv }
+
+classroom_manage_student_import:
+    path:  /classroom/{id}/manage/student/import
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:importUsers }
+
+classroom_manage_student_to_base:
+    path:  /classroom/{id}/manage/student/importing
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:excelDataImport }
+    methods: [POST]
+
+classroom_manage_testpaper:
+    path:  /classroom/{id}/manage/testpaper/{status}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
+
+classroom_manage_homework:
+    path:  /classroom/{id}/manage/homework/{status}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
+
+classroom_explore:
+    path:  /classroom/explore/{category}
+    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
+
+classroom_show:
+    path:  /classroom/{id}
+    defaults: { _controller: AppBundle:Classroom/Classroom:show }
+
+classroom_qrcode:
+    path:  /classroom/{id}/qrcode
+    defaults: { _controller: AppBundle:Classroom/Classroom:qrcode }
+
+classroom_reviews:
+    path:  /classroom/{id}/review
+    defaults: { _controller: AppBundle:Classroom/Review:list }
+
+classroom_review_create:
+    path:  /classroom/{id}/review/create
+    defaults: { _controller: AppBundle:Classroom/Review:create }
+
+classroom_review_post:
+    path:  /classroom/{id}/review/{reviewId}/post
+    defaults: { _controller: AppBundle:Classroom/Review:post }
+
+classroom_review_delete:
+    path:  /classroom/review/{reviewId}/delete
+    defaults: { _controller: AppBundle:Classroom/Review:delete }
+
+classroom_introductions:
+    path:  /classroom/{id}/introduction
+    defaults: { _controller: AppBundle:Classroom/Classroom:introduction }
+
+# classroom_review_create:
+#     path:  /classroom/{id}/review/create
+#     defaults: { _controller: AppBundle:Classroom/Classroom:create }
+
+classroom_buy:
+    path: /classroom/{id}/buy
+    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+
+classroom_buy_modify_user_info:
+    path: /classroom/buy/modify_user_info
+    defaults: { _controller: AppBundle:Classroom/Classroom:modifyUserInfo }
+
+classroom_sign:
+    path:  classroom/sign/{classroomId}
+    defaults: { _controller: AppBundle:Classroom/Classroom:sign }
+
+classroom_signed_records:
+    path:  classroom/sign/{classroomId}/records
+    defaults: { _controller: AppBundle:Classroom/Classroom:getSignedRecordsByPeriod }
+
+classroom_become_auditor:
+    path: /classroom/{id}/becomeAuditor
+    defaults: { _controller: AppBundle:Classroom/Classroom:becomeAuditor }
+
+classroom_exit:
+    path: /classroom/{id}/exit
+    defaults: { _controller: AppBundle:Classroom/Classroom:exit }
+
+classroom_canview:
+    path: /classroom/{classroomId}/canview
+    defaults: { _controller: AppBundle:Classroom/Classroom:canview }
+
+classroom_courses:
+    path: /classroom/{classroomId}/courses
+    defaults: { _controller: AppBundle:Classroom/Course:list }
+#
+# 讨论区
+#
+classroom_threads:
+    path: /classroom/{classroomId}/threads
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:list }
+
+classroom_thread_create:
+    path: /classroom/{classroomId}/thread/{type}/create
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:create, type:'discussion' }
+
+classroom_thread_show:
+    path: /classroom/{classroomId}/thread/{threadId}
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:show }
+
+classroom_thread_update:
+    path: /classroom/{classroomId}/thread/{threadId}/update
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:update }
+
+classroom_vip_buy:
+    path: /classroom/{id}/vip_buy
+    defaults: { _controller: AppBundle:Classroom/Classroom:becomeStudent }
+
+classroom_member_ids:
+    path: /classroom/{id}/member_ids
+    defaults: { _controller: AppBundle:Classroom/Classroom:memberIds }
+
+classroom_thread_members_become:
+    path: /classroom/{classroomId}/thread/{threadId}/members/become
+    defaults: { _controller: AppBundle:Classroom/ThreadMember:become }
+
+classroom_thread_members_quit:
+    path: /classroom/{classroomId}/thread/{threadId}/member/{memberId}/quit
+    defaults: { _controller: AppBundle:Classroom/ThreadMember:quit }
+
+classroom_headteacher_match:
+    path: /classroom/{classroomId}/headteacher/match
+    defaults: { _controller: AppBundle:Classroom/Utility:headteacherMatch }
+
+classroom_assistants_match:
+    path: /classroom/{classroomId}/assistants/match
+    defaults: { _controller: AppBundle:Classroom/Utility:assistantsMatch }
+
+classroom_courses_pick:
+    path: /classroom/{classroomId}/course/pick
+    defaults: { _controller: AppBundle:Classroom/Course:pick }
+
+classroom_course_search:
+    path: /classroom/{classroomId}/course/search
+    defaults: { _controller: AppBundle:Classroom/Course:search }
+
+my_teaching_classroom_threads:
+    path: /my/teaching/classroom/threads/{type}
+    defaults: { _controller: AppBundle:Classroom/Classroom:classroomThreads }
+
+classroom_course_notes_list:
+    path: /classroom/{classroomId}/courses/notes
+    defaults: { _controller: AppBundle:Classroom/CourseNote:list }
+
+classroom_teachers:
+    path: /classroom/{classroomId}/teachers/list
+    defaults: { _controller: AppBundle:Classroom/Teacher:list }
+
+classroom_teacherIds_catch:
+    path: /classroom/{classroomId}/teacherIds/catch
+    defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
+
+classroom_course_lessons_preview:
+    path: /classroom/{classroomId}/course/{courseId}/lessons/preview
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:preview }
+
+classroom_buy_hint:
+    path: /classroom/courses/{courseId}/buy/hint
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:buyHint }
+
+classrom_course_lessons_list:
+    path: /classroom/{classroomId}/course/{courseId}/lessons/list
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+
 #material_lib
 material_lib_browsing:
   path: /material/lib/browse

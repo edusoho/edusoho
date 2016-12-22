@@ -48,7 +48,7 @@ class CourseController extends BaseController
     // TODO old
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**

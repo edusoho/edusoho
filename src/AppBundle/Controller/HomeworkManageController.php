@@ -168,7 +168,7 @@ class HomeworkManageController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getServiceKernel()

@@ -112,7 +112,7 @@
 {% macro bottom(courseSet) %}
   <div class="course-detail-bottom">
   {% if source|default("") == "classroom" %}
-    {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: courseSet.id})) }}
+    {{ render(controller('AppBundle:Part/Course:classroomInfo',{courseId: courseSet.id})) }}
   {% else %}
     <a class="btn btn-default btn-lg mrm">会员</a>
     <a class="btn btn-primary btn-lg">购买课程</a>
