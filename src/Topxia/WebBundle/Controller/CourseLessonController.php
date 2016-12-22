@@ -465,7 +465,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result['images']);
     }
 
@@ -510,7 +512,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result);
     }
 
@@ -536,8 +540,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $ssl = $request->isSecure() ? true : false;
+
         if ($file['storage'] == 'cloud') {
-            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result             = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $result['mediaUri'] = $result['url'];
         }
 
