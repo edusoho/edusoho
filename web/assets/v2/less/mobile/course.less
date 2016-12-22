@@ -21,25 +21,102 @@
 			float: none;
 		}
 	}
-	.course-detail-header.after {
-		.course-info {
+	.course-detail-header.after,.course-detail-header.before{
+		.course-info{
 			padding: 15px 0 0;
-
-			.subtitle, .metas {
-				display: none;
-			}
-			.title {
-				font-size: 18px;
-				margin: 0 0 5px;
-			}
 		}
-	}
-	.course-detail-header.before {
-		.subtitle, .score, .discount-price label {
+		.subtitle{
 			display: none;
 		}
-		.discount-price .price {
+		.title {
 			font-size: 18px;
+		}
+		.course-operation{
+			background-color: transparent;
+		} 
+	}	
+	.course-detail-header.before {
+		.score, .discount-price label,.old-price label	{
+			display: none;
+		}
+		.discount-price .price{
+			font-size: 18px;
+			color: @brand-danger;
+			margin:0 0 0 6px;
+		}
+		.course-data.active > li{
+			width: auto;
+		}
+		.buyer-btn{
+			position: fixed;
+    	right: 92px;
+			.btn{
+				border:none;
+				.border-radius(0);
+				padding: 15px 14px 14px
+			}
+		}
+		.activity{
+			display: none;
+		}
+		.discount{
+			margin-left: 0;
+			float: left;
+			background-color: @brand-warning;
+			font-size: 12px;
+			height: 18px;
+			line-height: 20px;
+			.border-radius(4px);
+			padding: 0 6px;
+			top:3px;
+			&:before{
+				border-color: transparent;
+				border-width:0;
+			}
+			&:after{
+				background: transparent;
+				width: 0;
+				height: 0;
+			}
+		}
+		.title{
+			margin: 0 0 10px;
+		}
+		.discount-price,.old-price{
+			display: inline-block;
+			margin-right: 3px;
+		}
+		.student-num{
+			display: inline-block!important;
+			width: auto;
+			padding: 0;
+			float: right;
+			margin-top: 0;
+			font-size: 12px;
+			i{
+				font-size: 16px;
+			}
+		}
+		.course-operation{
+			padding: 0;
+		}
+		.es-mobile-teacher{
+			vertical-align: super;
+		}
+		.metas p{
+			margin:0 0 5px;
+		}
+	
+	}
+	.course-detail-header.after{
+		.metas{
+			display: none;
+		}
+		.title{
+			margin: 0 0 5px;
+		}
+		.es-mobile-nav  a{
+			font-weight: normal;
 		}
 	}
 	.course-detail-header .course-data {
@@ -97,7 +174,7 @@
 			padding-right: 15px;
 		}
 		.btn {
-			padding: 16px 30px 15px;
+			padding: 16px 13px 15px;
 			border: none;
 			.border-radius(0);
 		}
@@ -132,7 +209,20 @@
 		padding: 0;
 
 		.btn {
-			padding: 15px 30px 16px;
+			padding: 15px 18px 16px;
+		}
+	}
+	.es-mobile-nav li{
+		width: 33.33%;
+		text-align: center;
+		a{
+			font-weight: normal;
+		}
+		&.active{
+			border-bottom: 1px solid @brand-primary;
+			a{
+				color:  @brand-primary;
+			}
 		}
 	}
 }

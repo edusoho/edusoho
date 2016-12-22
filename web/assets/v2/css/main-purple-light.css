@@ -3001,6 +3001,12 @@ select:-webkit-autofill {
 .es-icon {
   line-height: 1;
 }
+.red body {
+  background: red!important;
+}
+.black body {
+  background: black!important;
+}
 .p-lg {
   line-height: 30px;
   margin-bottom: 30px;
@@ -15498,7 +15504,6 @@ textarea {
   left: 120px;
   right: 120px;
 }
-<<<<<<< HEAD
 .es-mobile body {
   background-color: #fff;
 }
@@ -15522,24 +15527,107 @@ textarea {
   width: auto;
   float: none;
 }
-.es-mobile .course-detail-header.after .course-info {
+.es-mobile .course-detail-header.after .course-info,
+.es-mobile .course-detail-header.before .course-info {
   padding: 15px 0 0;
 }
-.es-mobile .course-detail-header.after .course-info .subtitle,
-.es-mobile .course-detail-header.after .course-info .metas {
+.es-mobile .course-detail-header.after .subtitle,
+.es-mobile .course-detail-header.before .subtitle {
   display: none;
 }
-.es-mobile .course-detail-header.after .course-info .title {
+.es-mobile .course-detail-header.after .title,
+.es-mobile .course-detail-header.before .title {
   font-size: 18px;
-  margin: 0 0 5px;
 }
-.es-mobile .course-detail-header.before .subtitle,
+.es-mobile .course-detail-header.after .course-operation,
+.es-mobile .course-detail-header.before .course-operation {
+  background-color: transparent;
+}
 .es-mobile .course-detail-header.before .score,
-.es-mobile .course-detail-header.before .discount-price label {
+.es-mobile .course-detail-header.before .discount-price label,
+.es-mobile .course-detail-header.before .old-price label {
   display: none;
 }
 .es-mobile .course-detail-header.before .discount-price .price {
   font-size: 18px;
+  color: #e83d2c;
+  margin: 0 0 0 6px;
+}
+.es-mobile .course-detail-header.before .course-data.active > li {
+  width: auto;
+}
+.es-mobile .course-detail-header.before .buyer-btn {
+  position: fixed;
+  right: 92px;
+}
+.es-mobile .course-detail-header.before .buyer-btn .btn {
+  border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  padding: 15px 14px 14px;
+}
+.es-mobile .course-detail-header.before .activity {
+  display: none;
+}
+.es-mobile .course-detail-header.before .discount {
+  margin-left: 0;
+  float: left;
+  background-color: #ff8a0c;
+  font-size: 12px;
+  height: 18px;
+  line-height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 0 6px;
+  top: 3px;
+}
+.es-mobile .course-detail-header.before .discount:before {
+  border-color: transparent;
+  border-width: 0;
+}
+.es-mobile .course-detail-header.before .discount:after {
+  background: transparent;
+  width: 0;
+  height: 0;
+}
+.es-mobile .course-detail-header.before .title {
+  margin: 0 0 10px;
+}
+.es-mobile .course-detail-header.before .discount-price,
+.es-mobile .course-detail-header.before .old-price {
+  display: inline-block;
+  margin-right: 3px;
+}
+.es-mobile .course-detail-header.before .student-num {
+  display: inline-block !important;
+  width: auto;
+  padding: 0;
+  float: right;
+  margin-top: 0;
+  font-size: 12px;
+}
+.es-mobile .course-detail-header.before .student-num i {
+  font-size: 16px;
+}
+.es-mobile .course-detail-header.before .course-operation {
+  padding: 0;
+}
+.es-mobile .course-detail-header.before .es-mobile-teacher {
+  vertical-align: super;
+}
+.es-mobile .course-detail-header.before .metas p {
+  margin: 0 0 5px;
+}
+.es-mobile .course-detail-header.after .metas {
+  display: none;
+}
+.es-mobile .course-detail-header.after .title {
+  margin: 0 0 5px;
+}
+.es-mobile .course-detail-header.after .es-mobile-nav a {
+  font-weight: normal;
 }
 .es-mobile .course-detail-header .course-data {
   position: fixed;
@@ -15595,7 +15683,7 @@ textarea {
 }
 .es-mobile .course-detail-header .course-header-bottom .btn,
 .es-mobile .buy .btn {
-  padding: 16px 30px 15px;
+  padding: 16px 13px 15px;
   border: none;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -15627,23 +15715,43 @@ textarea {
   padding: 0;
 }
 .es-mobile .course-detail-header.before .course-operation .buy .btn {
-  padding: 15px 30px 16px;
-=======
+  padding: 15px 18px 16px;
+}
+.es-mobile .es-mobile-nav li {
+  width: 33.33%;
+  text-align: center;
+}
+.es-mobile .es-mobile-nav li a {
+  font-weight: normal;
+}
+.es-mobile .es-mobile-nav li.active {
+  border-bottom: 1px solid #9e9abd;
+}
+.es-mobile .es-mobile-nav li.active a {
+  color: #9e9abd;
+}
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
 .es-mobile body.open-course-list.has-app .es-wrap,
+.es-mobile body.login.has-app .es-wrap,
+.es-mobile body.register.has-app .es-wrap,
 .es-mobile body.my-course.has-app .es-wrap {
   padding-top: 110px;
 }
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
 .es-mobile body.open-course-list .es-wrap,
+.es-mobile body.login .es-wrap,
+.es-mobile body.register .es-wrap,
 .es-mobile body.my-course .es-wrap {
   padding-top: 60px;
+  padding-bottom: 50px;
 }
 .es-mobile body.homepage .es-header,
 .es-mobile body.course-list-page .es-header,
 .es-mobile body.open-course-list .es-header,
+.es-mobile body.login .es-header,
+.es-mobile body.register .es-header,
 .es-mobile body.my-course .es-header {
   position: fixed;
   top: 0;
@@ -15653,34 +15761,40 @@ textarea {
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
 .es-mobile body.open-course-list .footer-tool-bar,
+.es-mobile body.login .footer-tool-bar,
+.es-mobile body.register .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar,
 .es-mobile body.homepage .es-footer-mobile,
 .es-mobile body.course-list-page .es-footer-mobile,
 .es-mobile body.open-course-list .es-footer-mobile,
+.es-mobile body.login .es-footer-mobile,
+.es-mobile body.register .es-footer-mobile,
 .es-mobile body.my-course .es-footer-mobile {
   display: block;
-}
-.es-mobile body.homepage .footer-tool-bar,
-.es-mobile body.course-list-page .footer-tool-bar,
-.es-mobile body.open-course-list .footer-tool-bar,
-.es-mobile body.my-course .footer-tool-bar {
-  z-index: 10;
 }
 .es-mobile body.homepage .course-list-section .course-filter,
 .es-mobile body.course-list-page .course-list-section .course-filter,
 .es-mobile body.open-course-list .course-list-section .course-filter,
+.es-mobile body.login .course-list-section .course-filter,
+.es-mobile body.register .course-list-section .course-filter,
 .es-mobile body.my-course .course-list-section .course-filter,
 .es-mobile body.homepage .dynamic-section,
 .es-mobile body.course-list-page .dynamic-section,
 .es-mobile body.open-course-list .dynamic-section,
+.es-mobile body.login .dynamic-section,
+.es-mobile body.register .dynamic-section,
 .es-mobile body.my-course .dynamic-section,
 .es-mobile body.homepage .es-footer-link,
 .es-mobile body.course-list-page .es-footer-link,
 .es-mobile body.open-course-list .es-footer-link,
+.es-mobile body.login .es-footer-link,
+.es-mobile body.register .es-footer-link,
 .es-mobile body.my-course .es-footer-link,
 .es-mobile body.homepage .es-footer,
 .es-mobile body.course-list-page .es-footer,
 .es-mobile body.open-course-list .es-footer,
+.es-mobile body.login .es-footer,
+.es-mobile body.register .es-footer,
 .es-mobile body.my-course .es-footer {
   display: none;
 }
@@ -15726,6 +15840,13 @@ textarea {
   margin-top: 0;
   margin-bottom: 0;
 }
+.es-mobile body.login .es-footer-mobile,
+.es-mobile body.register .es-footer-mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 .footer-tool-bar {
   display: none;
   position: fixed;
@@ -15735,6 +15856,7 @@ textarea {
   bottom: 0px;
   background-color: #f5f5f5;
   overflow: hidden;
+  z-index: 10;
 }
 .footer-tool-bar > div {
   display: inline-block;
@@ -15744,16 +15866,27 @@ textarea {
   font-size: 10px;
   line-height: 1;
 }
+.footer-tool-bar > div a {
+  color: #919191;
+}
 .footer-tool-bar > div i {
   font-size: 24px;
 }
-.footer-tool-bar > div.active {
+.footer-tool-bar > div.active a {
   color: #9e9abd;
+}
+.footer-tool-bar > div.active a .es-icon-home1::before {
+  content: "\e6d1";
+}
+.footer-tool-bar > div.active a .es-icon-newshot::before {
+  content: "\e7c4";
+}
+.footer-tool-bar > div.active a .es-icon-write::before {
+  content: "\e760";
 }
 .es-footer-mobile {
   display: none;
   height: 40px;
-  margin-bottom: 50px;
   background-color: #212121;
   position: relative;
   color: #919191;
@@ -15788,6 +15921,7 @@ textarea {
   left: 7px;
   font-size: 26px;
   color: #d9d9d9;
+  z-index: 2;
 }
 .app-download .slogan {
   position: absolute;
@@ -15812,6 +15946,7 @@ textarea {
   position: absolute;
   top: 0px;
   right: 0px;
+  bottom: 0px;
   line-height: 50px;
   width: 116px;
   background-color: #9e9abd;
@@ -15843,7 +15978,6 @@ textarea {
   margin-top: 10px;
   color: #919191;
   background-color: transparent;
->>>>>>> feature/18222-edusoho-mobile
 }
 html {
   height: 100%;
