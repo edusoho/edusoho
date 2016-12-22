@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\Common\ServiceKernel;
 
 class AnalysisController extends BaseController
@@ -12,7 +11,7 @@ class AnalysisController extends BaseController
     public function rountByanalysisDateTypeAction(Request $request, $tab)
     {
         $analysisDateType = $request->query->get("analysisDateType");
-        return $this->forward('TopxiaAdminBundle:Analysis:'.$analysisDateType, array(
+        return $this->forward('AppBundle:Admin/Analysis:'.$analysisDateType, array(
             'request' => $request,
             'tab'     => $tab
         ));

@@ -25,10 +25,10 @@ class DefaultController extends BaseController
 
     //     $permissionNames = ArrayToolkit::column($permissions, 'code');
     //     if (in_array('admin_homepage', $permissionNames)) {
-    //         return $this->forward('TopxiaAdminBundle:Default:homepage');
+    //         return $this->forward('AppBundle:Admin/Default:homepage');
     //     }
 
-    //     return $this->forward('TopxiaAdminBundle:Default:renderCurrentAdminHomepage', array(
+    //     return $this->forward('AppBundle:Admin/Default:renderCurrentAdminHomepage', array(
     //         'permission' => $permissions[0]
     //     ));
     // }

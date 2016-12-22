@@ -344,7 +344,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
-            return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
+            return $this->forward('AppBundle:Admin/Course:recommendList', array(
                 'request' => $request
             ));
         }
@@ -389,7 +389,7 @@ class CourseController extends BaseController
 
     public function categoryAction(Request $request)
     {
-        return $this->forward('TopxiaAdminBundle:Category:embed', array(
+        return $this->forward('AppBundle:Admin/Category:embed', array(
             'group'  => 'course',
             'layout' => 'TopxiaAdminBundle::layout.html.twig'
         ));

@@ -182,7 +182,7 @@ class OpenCourseController extends BaseController
         $course = $this->getOpenCourseService()->updateCourse($id, array('recommended' => 0, 'recommendedSeq' => 0));
 
         if ($target == 'recommend_list') {
-            return $this->forward('TopxiaAdminBundle:OpenCourse:recommendList', array(
+            return $this->forward('AppBundle:Admin/OpenCourse:recommendList', array(
                 'request' => $request
             ));
         }
