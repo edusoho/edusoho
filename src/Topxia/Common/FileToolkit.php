@@ -66,16 +66,17 @@ class FileToolkit
             return  $errors;
         }
 
-        if ($file instanceof UploadedFile) {
-            $secureFileMimeTypes = self::getSecureFileMimeTypes();
+        // if ($file instanceof UploadedFile) {
+        //     $secureFileMimeTypes = self::getSecureFileMimeTypes();
 
-            $fileMimeType = $file->getClientMimeType();
-            if (!in_array($fileMimeType, $secureFileMimeTypes)) {
-                $errors[] = "请上传合法的文件。";
+        //     $fileMimeType = $file->getClientMimeType();
+        //     var_dump($fileMimeType);
+        //     if (!in_array($fileMimeType, $secureFileMimeTypes)) {
+        //         $errors[] = "请上传合法的文件。";
 
-                return  $errors;
-            }
-        }
+        //         return  $errors;
+        //     }
+        // }
 
         // if (function_exists('finfo_open')) {
         //     $finfo = finfo_open(FILEINFO_MIME_TYPE);
