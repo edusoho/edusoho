@@ -6,6 +6,6 @@
   
   {% include 'classroom/course:note-nav.html.twig' %}
 
-  {{ render(controller('AppBundle:Course/Note:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
+  {{ render(controller('AppBundle:Classroom/CourseNote:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
 
 {% endblock %}

@@ -145,6 +145,6 @@ class ReviewController extends BaseController
 
     private function getClassroomReviewService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 }

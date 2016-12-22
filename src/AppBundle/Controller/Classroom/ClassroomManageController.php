@@ -1126,7 +1126,7 @@ class ClassroomManageController extends BaseController
 
     protected function getClassroomReviewService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     protected function getLevelService()

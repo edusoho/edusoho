@@ -145,16 +145,6 @@ class ClassroomController extends BaseController
             }
         }
 
-        if ($this->isPluginInstalled('ClassroomPlan')) {
-            $plan = $this->getClassroomPlanService()->getPlanByClassroomId($id);
-
-            if ($plan && $plan['status'] == 'published') {
-                return $this->redirect($this->generateUrl('classroom_plan_tab', array(
-                    'classroomId' => $id
-                )));
-            }
-        }
-
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         if ($member && $member["locked"] == "0") {
@@ -966,7 +956,7 @@ class ClassroomController extends BaseController
 
     protected function getClassroomReviewService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     protected function getStatusService()
@@ -1007,11 +997,6 @@ class ClassroomController extends BaseController
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
-    }
-
-    protected function getClassroomPlanService()
-    {
-        return $this->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
     }
 
     protected function getAuthService()

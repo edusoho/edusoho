@@ -181,7 +181,7 @@ class CourseController extends BaseController
 
     protected function getClassroomReviewService()
     {
-        return $this->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     private function getTagService()
