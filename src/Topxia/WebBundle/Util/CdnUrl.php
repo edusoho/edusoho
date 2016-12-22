@@ -20,4 +20,15 @@ class CdnUrl
 
         return '';
     }
+
+    private function url($url)
+    {
+        if(strpos($url, 'https://') === 0) {
+            $url = substr($url, 8);
+        } elseif(strpos($url, 'http://') === 0) {
+            $url = substr($url, 7);
+        }
+        $url = '//'.$url;
+        return rtrim($url, " \/");
+    }
 }
