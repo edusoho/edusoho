@@ -32,6 +32,8 @@ const config = {
       ignore: [
         '**/samples/**',
         '**/lang/!(zh-cn.js)',
+        '**/kityformula/libs/**',
+        '**/kityformula/kityformula/src/**'
       ]
     },
     {
