@@ -15729,7 +15729,7 @@ textarea {
   font-size: 16px;
 }
 .es-mobile .course-detail-header.before .course-operation {
-  padding: 10px;
+  padding: 4px 10px 10px;
   line-height: 1;
 }
 .es-mobile .course-detail-header.before .es-mobile-teacher {
