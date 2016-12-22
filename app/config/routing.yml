@@ -36,21 +36,21 @@ topxia_mobile_v2:
 #    resource: "@MaterialLibBundle/Resources/config/routing_admin.yml"
 #    prefix:   /admin
 
-sensitive_web:
-    resource: "@SensitiveWordBundle/Resources/config/routing.yml"
-    prefix:   /
+#sensitive_web:
+#    resource: "@SensitiveWordBundle/Resources/config/routing.yml"
+#    prefix:   /
+#
+#sensitive_admin:
+#    resource: "@SensitiveWordBundle/Resources/config/routing_admin.yml"
+#    prefix:   /admin
 
-sensitive_admin:
-    resource: "@SensitiveWordBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
-
-org_web:
-    resource: "@OrgBundle/Resources/config/routing.yml"
-    prefix:   /
-
-org_admin:
-    resource: "@OrgBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
+#org_web:
+#    resource: "@OrgBundle/Resources/config/routing.yml"
+#    prefix:   /
+#
+#org_admin:
+#    resource: "@OrgBundle/Resources/config/routing_admin.yml"
+#    prefix:   /admin
 
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
