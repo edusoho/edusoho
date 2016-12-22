@@ -32,7 +32,7 @@ class SubtitleController extends BaseController
     /**
      * 获取某一视频下所有的字幕
      */
-    public function listAction($mediaId)
+    public function listAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
