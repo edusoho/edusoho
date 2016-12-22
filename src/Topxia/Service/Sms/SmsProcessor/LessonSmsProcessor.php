@@ -50,7 +50,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         global $kernel;
-        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), 0);
+        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), true);
         $originUrl .= '#lesson/'.$lesson['id'];
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
