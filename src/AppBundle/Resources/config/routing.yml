@@ -490,6 +490,7 @@ attachment_download:
   methods: [GET]
 
 
+<<<<<<< HEAD
 #classroom 
 
 
@@ -750,3 +751,133 @@ classroom_buy_hint:
 classrom_course_lessons_list:
     path: /classroom/{classroomId}/course/{courseId}/lessons/list
     defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+
+#material_lib
+material_lib_browsing:
+  path: /material/lib/browse
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:index}
+
+material_lib_show_browsing:
+  path: /material/lib/show/browse
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showMyMaterialLibForm}
+
+material_lib_my_sharing:
+  path: /material/lib/my/sharing/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showShareForm }
+
+material_lib_my_sharing_detail:
+  path: /material/lib/my/sharing_detail/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:historyDetailShow }
+
+material_lib_my_sharing_users:
+  path: /material/lib/my/sharing_users/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:historyUserShow }
+
+material_lib_my_sharing_contacts:
+  path: /material/lib/recent/contacts
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:findMySharingContacts }
+
+material_lib_save_sharing:
+  path: /material/lib/my/sharing/save
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:saveShare }
+
+material_tag_show_match:
+  path: /material/lib/tag/match
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:match }
+
+material_lib_show_sharing_history:
+  path: /material/lib/my/sharing/history
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showShareHistory }
+
+material_lib_cancel_sharing:
+  path: /material/lib/my/sharing/cancel
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:cancelShare }
+
+material_lib_save_collection:
+  path: /material/lib/my/collection/save
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:collect }
+
+material_lib_file_preview:
+  path:  /material/lib/file/{fileId}/preview
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:preview }
+
+material_edit:
+  path:  /materiallib/{fileId}/edit
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:edit }
+  methods: [POST]
+
+material_lib_file_player:
+  path:  /material/lib/{fileId}/player
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:player }
+
+material_reconvert:
+  path:  /material/lib/{globalId}/reconvert
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:reconvert }
+
+material_thumbnail_generate:
+  path:  /material/lib/{globalId}/thumbnail/generate
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:generateThumbnail }
+
+material_lib_file_detail:
+  path:  /material/lib/{fileId}/detail
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:detail }
+
+material_download:
+  path:  /materiallib/{fileId}/download
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:download }
+
+material_delete:
+  path:  /materiallib/{fileId}/delete
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:delete }
+  methods: [POST]
+
+material_batch_delete:
+  path: /materials/batch/delete
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchDelete }
+  methods: [POST]
+
+material_delete_modal_show:
+  path: /materials/delete/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:deleteModalShow }
+  methods: [POST]
+
+material_batch_share:
+  path: /materials/batch/share
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchShare }
+  methods: [POST]
+
+material_unshare:
+  path: /materiallib/{fileId}/unshare
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:unshare }
+
+material_batch_tag_show:
+  path: /materials/batch/tag/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
+
+global_file_player:
+  path:  /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
+
+global_file_hls_playlist:
+  path:  /global_file/{globalId}/playlist/{token}.m3u8
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
+
+global_file_hls_stream:
+  path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:stream }
+
+global_file_hls_clef:
+  path:  /global_file/{globalId}/clef/{token}
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:clef }
+
+global_file_ppt:
+  path:  /global_file/{globalId}/ppt
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:ppt }
+
+global_file_document:
+  path:  /global_file/{globalId}/document
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:document }
+
+material_lib_choose:
+  path: /material/lib/choose
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:materialChoose }

@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class BaseController extends Controller
 {
@@ -60,6 +62,16 @@ class BaseController extends Controller
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
     {
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
+    }
+
+    protected function createNotFoundException($message = '')
+    {
+        return new NotFoundException($message);
+    }
+
+    protected function createAccessDeniedException($message = '')
+    {
+        return new AccessDeniedException($message);
     }
 
     protected function setFlashMessage($level, $message)
