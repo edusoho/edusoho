@@ -483,6 +483,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
+
         if ($lesson['type'] != 'document' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
