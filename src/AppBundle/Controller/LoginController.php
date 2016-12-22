@@ -1,8 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
+
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 
 class LoginController extends BaseController
@@ -12,13 +13,13 @@ class LoginController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你已经登录了'), null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
         } else {
-            $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
         }
 
         if ($this->getWebExtension()->isMicroMessenger() && $this->setting('login_bind.enabled', 0) && $this->setting('login_bind.weixinmob_enabled', 0)) {
@@ -26,8 +27,8 @@ class LoginController extends BaseController
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request), 'inviteCode' => $inviteCode)));
         }
 
-        return $this->render('TopxiaWebBundle:Login:index.html.twig', array(
-            'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
+        return $this->render('login/index.html.twig', array(
+            'last_username' => $request->getSession()->get(Security::LAST_USERNAME),
             'error'         => $error,
             '_target_path'  => $this->getTargetPath($request)
         ));
@@ -35,7 +36,7 @@ class LoginController extends BaseController
 
     public function ajaxAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Login:ajax.html.twig', array(
+        return $this->render('login/ajax.html.twig', array(
             '_target_path' => $this->getTargetPath($request)
         ));
     }
@@ -46,9 +47,9 @@ class LoginController extends BaseController
         $user  = $this->getUserService()->getUserByEmail($email);
 
         if ($user) {
-            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('该Email地址可以登录'));
+            $response = array('success' => true, 'message' => '该Email地址可以登录');
         } else {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该Email地址尚未注册'));
+            $response = array('success' => false, 'message' => '该Email地址尚未注册');
         }
 
         return $this->createJsonResponse($response);
@@ -57,14 +58,14 @@ class LoginController extends BaseController
     public function oauth2LoginsBlockAction($targetPath, $displayName = true)
     {
         $clients = OAuthClientFactory::clients();
-        return $this->render('TopxiaWebBundle:Login:oauth2-logins-block.html.twig', array(
+        return $this->render('login/oauth2-logins-block.html.twig', array(
             'clients'     => $clients,
             'targetPath'  => $targetPath,
             'displayName' => $displayName
         ));
     }
 
-    protected function getTargetPath($request)
+    protected function getTargetPath(Request $request)
     {
         if ($request->query->get('goto')) {
             $targetPath = $request->query->get('goto');

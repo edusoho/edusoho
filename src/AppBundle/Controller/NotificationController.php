@@ -1,9 +1,12 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\User\Service\BatchNotificationService;
+use Biz\User\Service\NotificationService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
+
 
 class NotificationController extends BaseController
 {
@@ -17,11 +20,11 @@ class NotificationController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getNotificationService()->getUserNotificationCount($user->id),
+            $this->getNotificationService()->countNotificationsByUserId($user->id),
             20
         );
 
-        $notifications = $this->getNotificationService()->findUserNotifications(
+        $notifications = $this->getNotificationService()->searchNotificationsByUserId(
             $user->id,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -29,7 +32,7 @@ class NotificationController extends BaseController
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
 
-        return $this->render('TopxiaWebBundle:Notification:index.html.twig', array(
+        return $this->render('notification/index.html.twig', array(
             'notifications' => $notifications,
             'paginator'     => $paginator
         ));
@@ -38,23 +41,32 @@ class NotificationController extends BaseController
     public function showAction(Request $request, $id)
     {
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
-        return $this->render('TopxiaWebBundle:Notification:batch-notification-show.html.twig', array(
+        return $this->render('notification/batch-notification-show.html.twig', array(
             'batchnotification' => $batchnotification
         ));
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 
+    /**
+     * @return BatchNotificationService
+     */
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User:BatchNotificationService');
+        return  $this->getBiz()->service('User:BatchNotificationService');
     }
 }

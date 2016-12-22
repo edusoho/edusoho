@@ -1,15 +1,14 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
 
 class LiveAuthController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $email = $request->get('email');
         $k = $request->get('k');
 
         $matched = preg_match('/^c(\d+)u(\d+)t(\d+)s(\w+)$/', $k, $matches);
@@ -47,9 +46,12 @@ class LiveAuthController extends BaseController
         return md5($string . $secret);
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
 }

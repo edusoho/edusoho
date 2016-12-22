@@ -1,20 +1,18 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
 use Biz\CloudPlatform\Client\CloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Common\ServiceKernel;
 
 class MobileController extends BaseController
 {    
     protected function createAPIClient()
     {
-        $settings = ServiceKernel::instance()->createService('System:SettingService')->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', array());
         return new CloudAPI(array(
             'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
             'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
@@ -27,14 +25,14 @@ class MobileController extends BaseController
         $mobile = $this->setting('mobile', array());
 
         if (empty($mobile['enabled'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('客户端尚未开启！'));
+            return $this->createMessageResponse('info', '客户端尚未开启！');
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
         $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
         
-        return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
+        return $this->render('mobile/index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => $mobileCode,
             'mobile' => $mobile
@@ -63,4 +61,11 @@ class MobileController extends BaseController
         return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?" . http_build_query($params));
     }
 
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
+    }
 }

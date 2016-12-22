@@ -1,9 +1,13 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Course\LiveCourseService;
 
 class LiveOpenCourseController extends BaseOpenCourseController
 {
@@ -27,7 +31,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params['isLogin'] =$user->isLogin() ;
         $this->createRefererLog($request, $course);
 
-        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+        return $this->forward('AppBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
     protected function getMillisecond()
@@ -36,7 +40,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return (float) sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
     }
 
-    protected function getRandomNickname($request, $courseId, $lessonId)
+    protected function getRandomNickname(Request $request, $courseId, $lessonId)
     {
         $key          = "live-open-course-nickname-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
@@ -47,7 +51,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $sessionValue;
     }
 
-    protected function getRandomUserId($request, $courseId, $lessonId)
+    protected function getRandomUserId(Request $request, $courseId, $lessonId)
     {
         $key          = "live-open-course-user-id-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
@@ -106,7 +110,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
         $lesson['canRecord'] = $client->isAvailableRecord($lesson['mediaId']);
 
-        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
+        return $this->render('live-course-replay-manage/list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson
         ));
@@ -134,7 +138,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $replayLessons = $this->getCourseService()->searchCourseLessonReplays(array('lessonId' => $lessonId, 'type' => 'liveOpen'), array('replayId', 'ASC'), 0, PHP_INT_MAX);
 
-        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
+        return $this->render('live-course-replay-manage/replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
             'lessonId'      => $lessonId,
             'courseId'      => $courseId,
@@ -170,7 +174,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         $default = $this->getSettingService()->get('default', array());
-        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:index.html.twig', array(
+        return $this->render('live-course-replay-manage/index.html.twig', array(
             'course'  => $course,
             'items'   => $lessons,
             'default' => $default
@@ -182,7 +186,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
         $this->createRefererLog($request, $course);
-        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+        return $this->render("live-course/classroom.html.twig", array(
             'lesson' => $lesson,
             'url'    => $this->generateUrl('live_open_course_live_replay_url', array(
                 'courseId' => $courseId,
@@ -194,7 +198,6 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $replayId)
     {
-        $course = $this->getOpenCourseService()->getCourse($courseId);
         $result = $this->getLiveCourseService()->entryReplay($replayId);
 
         return $this->createJsonResponse(array(
@@ -208,7 +211,6 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $file = array();
         if ($lesson['replayStatus'] == 'videoGenerated') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!empty($file)) {
@@ -229,7 +231,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fileId);
         }
 
-        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
+        return $this->render('live-course-replay-manage/upload-modal.html.twig', array(
             'course'     => $course,
             'lesson'     => $lesson,
             'targetType' => 'opencourselesson'
@@ -262,28 +264,43 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return null;
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return LiveCourseService
+     */
     protected function getLiveCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:LiveCourseService');
+        return $this->getBiz()->service('Course:LiveCourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

@@ -1,14 +1,13 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Order\Service\MoneyService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 
 class MoneyRecordController extends BaseController
 {
-
-	public function indexAction(Request $request)
+    public function indexAction(Request $request)
 	{	
 		$user = $this->getCurrentUser();
 
@@ -30,7 +29,7 @@ class MoneyRecordController extends BaseController
         	$paginator->getPerPageCount()
     	);
 
-		return $this->render('TopxiaWebBundle:MoneyRecord:index.html.twig',array(
+		return $this->render('money-record/index.html.twig',array(
         	'incomeRecords' => $incomeRecords,
             'paginator' => $paginator
         ));
@@ -58,14 +57,17 @@ class MoneyRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-		return $this->render('TopxiaWebBundle:MoneyRecord:payout.html.twig',array(
+		return $this->render('money-record/payout.html.twig',array(
             'payoutRecords' => $payoutRecords,
             'paginator' => $paginator
         ));
 	}
 
+    /**
+     * @return MoneyService
+     */
 	protected function getMoneyService()
     {
-        return $this->getServiceKernel()->createService('Order:MoneyService');
+        return $this->getBiz()->service('Order:MoneyService');
     }
 }

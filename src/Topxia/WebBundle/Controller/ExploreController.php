@@ -1,11 +1,10 @@
 <?php
-namespace AppBundle\Controller;
+namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\CourseBaseController;
 
 class ExploreController extends CourseBaseController
 {

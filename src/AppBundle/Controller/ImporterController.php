@@ -1,11 +1,10 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Importer\ImporterFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Importer\ImporterFactory;
-use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Service\Importer\ImporterProcessorFactory;
+
 
 class ImporterController extends BaseController
 {
@@ -35,7 +34,7 @@ class ImporterController extends BaseController
 
     public function importModalAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Importer:userimport.modal.html.twig');
+        return $this->render('importer/userimport.modal.html.twig');
     }
 
 }

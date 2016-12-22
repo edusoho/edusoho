@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -102,7 +103,7 @@ class HLSController extends BaseController
         ));
 
         if (empty($playlist['playlist'])) {
-            return $this->createMessageResponse('error', $this->trans('生成视频播放列表失败！'));
+            return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
         return $this->responseEnhanced($playlist['playlist'], array(
@@ -195,7 +196,7 @@ class HLSController extends BaseController
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', $this->trans('生成视频播放地址失败！'));
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
         return $this->responseEnhanced($stream['stream'], array(
@@ -253,7 +254,7 @@ class HLSController extends BaseController
             return $this->responseEnhanced($stream['key']);
         }
 
-        $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
+        $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
 
         return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
     }
@@ -349,6 +350,14 @@ class HLSController extends BaseController
     protected function getTokenService()
     {
         return $this->getBiz()->service('User:TokenService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**

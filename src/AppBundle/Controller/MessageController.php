@@ -1,9 +1,10 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\User\Service\MessageService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Form\MessageType;
 use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ class MessageController extends BaseController
         $user      = $this->getCurrentUser();
         $paginator = new Paginator(
             $request,
-            $this->getMessageService()->getUserConversationCount($user->id),
+            $this->getMessageService()->countUserConversations($user->id),
             10
         );
         $conversations = $this->getMessageService()->findUserConversations(
@@ -29,7 +30,7 @@ class MessageController extends BaseController
 
         $this->getMessageService()->clearUserNewMessageCounter($user['id']);
         $user->clearMessageNum();
-        return $this->render('TopxiaWebBundle:Message:index.html.twig', array(
+        return $this->render('message/index.html.twig', array(
             'conversations' => $conversations,
             'users'         => $users,
             'paginator'     => $paginator
@@ -42,9 +43,9 @@ class MessageController extends BaseController
         $nickname    = $request->query->get('value');
         $result      = $this->getUserService()->isNicknameAvaliable($nickname);
         if ($result) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该收件人不存在'));
+            $response = array('success' => false, 'message' => '该收件人不存在');
         } elseif ($currentUser['nickname'] == $nickname) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('不能给自己发私信哦！'));
+            $response = array('success' => false, 'message' => '不能给自己发私信哦！');
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -56,11 +57,11 @@ class MessageController extends BaseController
         $user         = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('私信会话不存在！'));
+            throw $this->createNotFoundException('私信会话不存在！');
         }
         $paginator = new Paginator(
             $request,
-            $this->getMessageService()->getConversationMessageCount($conversationId),
+            $this->getMessageService()->countConversationMessages($conversationId),
             10
         );
 
@@ -97,19 +98,19 @@ class MessageController extends BaseController
         $receiver = $this->getUserService()->getUser($toId);
         $form     = $this->createForm(new MessageType(), array('receiver' => $receiver['nickname']));
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $message  = $form->getData();
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname);
                 if (empty($receiver)) {
-                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
+                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
                 return $this->redirect($this->generateUrl('message'));
             }
         }
-        return $this->render('TopxiaWebBundle:Message:send-message-modal.html.twig', array(
+        return $this->render('message/send-message-modal.html.twig', array(
             'form'   => $form->createView(),
             'userId' => $toId));
     }
@@ -117,22 +118,21 @@ class MessageController extends BaseController
     public function sendAction(Request $request)
     {
         $user     = $this->getCurrentUser();
-        $receiver = array();
         $form     = $this->createForm(new MessageType());
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $message  = $form->getData();
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname);
                 if (empty($receiver)) {
-                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
+                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             }
             return $this->redirect($this->generateUrl('message'));
         }
-        return $this->render('TopxiaWebBundle:Message:create.html.twig', array(
+        return $this->render('message/create.html.twig', array(
             'form' => $form->createView()));
     }
 
@@ -142,19 +142,19 @@ class MessageController extends BaseController
         $user     = $this->getCurrentUser();
         $form     = $this->createForm(new MessageType(), array('receiver' => $receiver['nickname']));
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $message  = $form->getData();
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname);
                 if (empty($receiver)) {
-                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
+                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             }
             return $this->redirect($this->generateUrl('message'));
         }
-        return $this->render('TopxiaWebBundle:Message:create.html.twig', array(
+        return $this->render('message/create.html.twig', array(
             'form' => $form->createView()));
     }
 
@@ -163,7 +163,7 @@ class MessageController extends BaseController
         $user         = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权删除此私信！'));
+            throw $this->createAccessDeniedException('您无权删除此私信！');
         }
 
         $this->getMessageService()->deleteConversation($conversationId);
@@ -175,11 +175,11 @@ class MessageController extends BaseController
         $user         = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权删除此私信！'));
+            throw $this->createAccessDeniedException('您无权删除此私信！');
         }
 
         $this->getMessageService()->deleteConversationMessage($conversationId, $messageId);
-        $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationId);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationId);
         if ($messagesCount > 0) {
             return $this->redirect($this->generateUrl('message_conversation_show', array('conversationId' => $conversationId)));
         } else {
@@ -192,10 +192,9 @@ class MessageController extends BaseController
         $currentUser           = $this->getCurrentUser();
         $data                  = array();
         $queryString           = $request->query->get('q');
-        $callback              = $request->query->get('callback');
         $findedUsersByNickname = $this->getUserService()->searchUsers(
             array('nickname' => $queryString),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             10);
         $findedFollowingIds = $this->getUserService()->filterFollowingIds($currentUser['id'],
@@ -218,8 +217,20 @@ class MessageController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    /**
+     * @return MessageService
+     */
     protected function getMessageService()
     {
-        return ServiceKernel::instance()->createService('User:MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
 }

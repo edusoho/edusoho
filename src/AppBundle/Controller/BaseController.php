@@ -75,6 +75,48 @@ class BaseController extends Controller
         return $biz['user'];
     }
 
+    protected function getTargetPath(Request $request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } elseif ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if (strpos($url[0], $request->getPathInfo()) > -1) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if (strpos($url[0], 'callback') !== false
+            || strpos($url[0], '/login/bind') !== false
+            || strpos($url[0], 'crontab') !== false
+        ) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if (empty($targetPath)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        return $targetPath;
+    }
+
     protected function createJsonResponse($data = null, $status = 200, $headers = array())
     {
         return new JsonResponse($data, $status, $headers);
