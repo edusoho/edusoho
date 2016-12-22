@@ -2,7 +2,7 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
+
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 

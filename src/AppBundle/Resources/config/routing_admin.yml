@@ -2076,26 +2076,26 @@ admin_classroom_setting:
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:set }
 
 admin_classroom_create:
-    pattern:  /classroom/create
+    path:  /classroom/create
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:addClassroom }
 
 admin_classroom_close:
-    pattern:  /classroom/{id}/close
+    path:  /classroom/{id}/close
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:closeClassroom }
     methods: [POST]
 
 admin_classroom_open:
-    pattern:  /classroom/{id}/open
+    path:  /classroom/{id}/open
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:openClassroom }
     methods: [POST]
 
 admin_classroom_delete:
-    pattern:  /classroom/{id}/delete
+    path:  /classroom/{id}/delete
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:deleteClassroom }
     methods: [POST]
 
 admin_classroom_category:
-    pattern: /classroom/category
+    path: /classroom/category
     defaults: { _controller: AppBundle:Admin/ClassroomCategory:index }
 
 admin_classroom_order:
@@ -2130,20 +2130,20 @@ admin_classroom_recommend_list:
     defaults : { _controller: AppBundle:Admin/ClassroomAdmin:recommendList}
 
 admin_classroom_review:
-    pattern:  /classroom/review
+    path:  /classroom/review
     defaults: { _controller: AppBundle:Admin/ClassroomReview:index }
 
 admin_classroom_review_delete:
-    pattern:  /classroom/review/{id}/delete
+    path:  /classroom/review/{id}/delete
     defaults: { _controller: AppBundle:Admin/ClassroomReview:delete }
     methods: [POST]
 
 admin_classroom_review_batch_delete:
-    pattern:  /classroom/review/batch_delete
+    path:  /classroom/review/batch_delete
     defaults: { _controller: AppBundle:Admin/ClassroomReview:batchDelete }
     methods: [POST]
 
 admin_classroom_chooser:
-    pattern: /classroom/chooser
+    path: /classroom/chooser
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }    
  

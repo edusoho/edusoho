@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
+
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewController extends BaseController

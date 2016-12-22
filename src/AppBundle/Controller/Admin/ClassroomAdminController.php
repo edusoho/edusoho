@@ -1,8 +1,6 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\AdminBundle\Controller\BaseController;
-
 class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)

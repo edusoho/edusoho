@@ -4,9 +4,9 @@ bazinga_jstranslation:
 __web:
     resource: "@TopxiaWebBundle/Resources/config/routing.yml"
 
-topxia_admin:
-    resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
-    prefix:   /admin
+#topxia_admin:
+#    resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
+#    prefix:   /admin
 
 permission_admin:
     resource: "@PermissionBundle/Resources/config/routing_admin.yml"
@@ -20,21 +20,21 @@ topxia_mobile_v2:
     resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
     prefix:   /mapi_v2
 
-classroom_web:
-    resource: "@ClassroomBundle/Resources/config/routing.yml"
-    prefix:   /
+#classroom_web:
+#    resource: "@ClassroomBundle/Resources/config/routing.yml"
+#    prefix:   /
 
-classroom_admin:
-    resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
+#classroom_admin:
+#    resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
+#    prefix:   /admin
 
-materiallib_web:
-    resource: "@MaterialLibBundle/Resources/config/routing.yml"
-    prefix:   /
+#materiallib_web:
+#    resource: "@MaterialLibBundle/Resources/config/routing.yml"
+#    prefix:   /
 
-materiallib_admin:
-    resource: "@MaterialLibBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
+#materiallib_admin:
+#    resource: "@MaterialLibBundle/Resources/config/routing_admin.yml"
+#    prefix:   /admin
 
 sensitive_web:
     resource: "@SensitiveWordBundle/Resources/config/routing.yml"

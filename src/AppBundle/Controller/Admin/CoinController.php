@@ -9,7 +9,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\AdminBundle\Controller\BaseController;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\Common\ServiceKernel;
 

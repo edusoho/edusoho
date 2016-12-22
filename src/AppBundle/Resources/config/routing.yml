@@ -489,10 +489,7 @@ attachment_download:
   defaults: { _controller: AppBundle:File/Attachment:download }
   methods: [GET]
 
-
-<<<<<<< HEAD
-#classroom 
-
+#classroom
 
 classroom_manage:
     path: /classroom/{id}/manage
