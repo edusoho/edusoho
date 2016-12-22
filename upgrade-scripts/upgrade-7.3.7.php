@@ -29,8 +29,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting          = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
-        ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
-        ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
+        $this->getSettingService()->set('developer', $developerSetting);
+        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     protected function batchUpdate($index)
