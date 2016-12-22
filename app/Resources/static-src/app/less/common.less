@@ -11,7 +11,6 @@
   padding-bottom: 0.1px;
 }
 
-
 .multi-group {
   position: relative;
   .options {
@@ -95,8 +94,6 @@
   }
 }
 
-
-
 .download-activity-show {
   background-color: #fff;
   .download-activity-list {
@@ -127,7 +124,6 @@
 
 //before 2.0
 body { 
-  line-height: 1;
   background: @bg-new-color;
   word-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -176,6 +172,25 @@ html.nav-active body {
   @media(max-width:@screen-xs-max) {
     min-height: 250px;
   }
+}
+
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px @bg-color inset;
+}
+
+.caret {
+  border-top: 4px solid;
+}
+
+.tooltip {
+  min-width: 40px;
+}
+
+.affix,
+.affix-bottom {
+  z-index: 1;
 }
 
 // 富文本编辑器

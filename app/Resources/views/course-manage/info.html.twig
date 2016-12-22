@@ -17,20 +17,20 @@
     </div>
     <div class="form-group">
       <label for="" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
-      <div class="col-sm-8 radios">
+      <div class="col-sm-8 radios"> 
+        {% if course.learnMode|default('freeMode') == 'freeMode' %}
         <label>
-          <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode"
-          {% if course.learnMode|default('freeMode') == 'freeMode' %}checked{% endif %}
-          disabled data-role="tab" data-tab-content="#learnFreeModeHelp" >{{'自由模式'|trans}}
+          <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode" checked data-role="tab" data-tab-content="#learnFreeModeHelp" >{{'自由模式'|trans}}
         </label>
+        {% endif %}
+        {% if course.learnMode|default('freeMode') == 'lockMode' %}
         <label>
-          <input type="radio" name="learnMode" value="lockMode"
-          {% if course.learnMode|default('freeMode') == 'lockMode' %}checked{% endif %}
-          disabled data-role="tab" data-tab-content="#learnLockModeHelp">
-          {{'任务式学习'|trans}}
+          <input type="radio" name="learnMode" value="lockMode" checked data-role="tab" data-tab-content="#learnLockModeHelp">
+          {{'解锁式学习'|trans}}
         </label>
-        <p class="help-block {% if course.learnMode|default('freeMode') == 'lockMode' %}hidden{% endif %}"  id="learnFreeModeHelp" data-role="tab-content">{{'学习过程自由安排'|trans}}</p>
-        <p class="help-block {% if course.learnMode|default('freeMode') == 'freeMode' %}hidden{% endif %}" id="learnLockModeHelp" data-role="tab-content" >{{'根据计划预定的顺序学习'|trans}}</p>
+        {% endif %}
+        {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'学习过程自由安排'|trans}}</p>{% endif %}
+        {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
       </div>
     </div>
     <div class="form-group">
@@ -49,16 +49,13 @@
           {{'指定日期学习'|trans}}
         </label>
         <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days" data-role="tab-content">
-        {{'学习有效期'|trans}}
-          <input class="form-control mhm" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
+          {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
           <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
         </div>
         <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date" data-role="tab-content">
-         {{'开始日期'|trans}}
-          <input class="form-control" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
+          {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
           {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
-         {{'结束日期'|trans}}
-          <input class="form-control" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px"
+         {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px"
           {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
         </div>
         <p class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</p>
@@ -70,7 +67,7 @@
         <label>{{'计划简介'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-        <textarea class="form-control" name="summary" rows="10" id="summary" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'summary') }}</textarea>
+        <textarea class="form-control invisible" name="summary" rows="10" id="summary" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'summary') }}</textarea>
       </div>
     </div>
     <div class="form-group dynamic-collection" id="course-goals-form-group">
@@ -79,24 +76,6 @@
       </div>
       <div class="col-md-8 controls">
         <div id="course-goals" data-field-name="goals" data-init-value="{{course.goals|default([])|json_encode()}}"></div>
-        {#<ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
-        <div class="input-group">
-          <input class="form-control" id="goals" name="goals" type="text" data-role="item-input" value="{{course.goals|default([])|json_encode}}">          
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
-          </span>
-        </div>
-        <script type="text/plain" data-role="model">{{ course.goals|json_encode|raw }}</script>
-        <script type="text/x-handlebars-template" data-role="item-template">
-          {% verbatim %}
-            <li class="list-group-item clearfix" data-role="item">
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              {{ this }}
-              <input type="hidden" name="goals[]" value="{{ this }}">
-              <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
-            </li>
-          {% endverbatim %}
-        </script>#}
       </div>
     </div>
     <div class="form-group" id="course-audiences-form-group">
@@ -105,25 +84,6 @@
       </div>
       <div class="col-md-8 controls">
         <div id="intended-students" data-field-name="audiences" data-init-value="{{course.audiences|default([])|json_encode()}}"></div>
-        {#<ul class="list-group sortable-list dynamic-collection" data-role="list" style="margin-bottom:10px;display:none;"></ul>
-        <div class="input-group">
-          <input class="form-control" id="audiences" name="audiences" type="text" data-role="item-input" value="{{course.audiences|default([])|json_encode}}">          
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
-          </span>
-        </div>
-
-        <script type="text/plain" data-role="model">{{ course.audiences|json_encode|raw }}</script>
-        <script type="text/x-handlebars-template" data-role="item-template">
-          {% verbatim %}
-            <li class="list-group-item clearfix" data-role="item">
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              {{ this }}
-              <input type="hidden" name="audiences[]" value="{{ this }}">
-              <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
-            </li>
-          {% endverbatim %}
-        </script>#}
       </div>
     </div>
     <div class="form-group">
@@ -134,6 +94,3 @@
     </div>
   </form>
 {% endblock %}
-
-
-
