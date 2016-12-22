@@ -1,25 +1,25 @@
 <?php
-namespace Topxia\WebBundle\Controller\EsBar;
+namespace AppBundle\Controller\EsBar;
 
-use Topxia\Common\ArrayToolkit;
+
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ArrayToolkit;
 
 class EsBarController extends BaseController
 {
     public function studyCenterAction(Request $request)
     {
-        return $this->render("TopxiaWebBundle:EsBar:ListContent/study-center.html.twig", array(
+        return $this->render("es-bar/list-content/study-center.html.twig", array(
         ));
     }
 
     public function courseAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
+            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
         $conditions = array(
@@ -57,17 +57,17 @@ class EsBarController extends BaseController
             }
         }
 
-        return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-course.html.twig", array(
+        return $this->render("es-bar/list-content/study-place/my-course.html.twig", array(
             'courses' => $sortedCourses
         ));
     }
 
     public function classroomAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
+            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
         $memberConditions = array(
@@ -97,7 +97,7 @@ class EsBarController extends BaseController
             $sortedClassrooms[] = $classroom;
         }
 
-        return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-classroom.html.twig", array(
+        return $this->render("es-bar/list-content/study-place/my-classroom.html.twig", array(
             'classrooms' => $sortedClassrooms
         ));
     }
@@ -107,7 +107,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
+            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
         $notifications = $this->getNotificationService()->findUserNotifications(
@@ -117,7 +117,7 @@ class EsBarController extends BaseController
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
 
-        return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
+        return $this->render('es-bar/list-content/notification/notify.html.twig', array(
             'notifications' => $notifications
         ));
     }
@@ -127,7 +127,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
+            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
         $homeworkResults  = array();
@@ -164,7 +164,7 @@ class EsBarController extends BaseController
             10
         );
 
-        return $this->render('TopxiaWebBundle:EsBar:ListContent/Practice/practice.html.twig', array(
+        return $this->render('es-bar/list-content/practice/practice.html.twig', array(
             'testPaperResults' => $testPaperResults,
             'courses'          => $courses,
             'lessons'          => $lessons,
@@ -175,26 +175,26 @@ class EsBarController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 
     protected function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->getBiz()->service('Homework:Homework.HomeworkService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 }

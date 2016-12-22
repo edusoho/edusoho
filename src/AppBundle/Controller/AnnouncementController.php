@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Biz\Announcement\Processor\AnnouncementProcessor;
 use Biz\Announcement\Service\AnnouncementService;
@@ -15,7 +15,7 @@ class AnnouncementController extends BaseController
         $processor    = $this->getAnnouncementProcessor($announcement['targetType']);
         $targetObject = $processor->getTargetObject($targetId);
 
-        return $this->render('TopxiaWebBundle:Announcement:announcement-show-modal.html.twig', array(
+        return $this->render('announcement/announcement-show-modal.html.twig', array(
             'announcement' => $announcement,
             'targetObject' => $targetObject
         ));
@@ -33,7 +33,7 @@ class AnnouncementController extends BaseController
 
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
 
-        return $this->render('TopxiaWebBundle:Announcement:announcement-list-modal.html.twig', array(
+        return $this->render('announcement/nnouncement-list-modal.html.twig', array(
             'announcements' => $announcements,
             'targetType'    => $targetType,
             'targetId'      => $targetId,
@@ -51,7 +51,7 @@ class AnnouncementController extends BaseController
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10000);
         $users         = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
-        return $this->render('TopxiaWebBundle:Announcement:announcement-show-all-modal.html.twig', array(
+        return $this->render('announcement/announcement-show-all-modal.html.twig', array(
             'announcements' => $announcements,
             'users'         => $users
         ));
@@ -59,7 +59,7 @@ class AnnouncementController extends BaseController
 
     public function manageAction(Request $request, $targetType, $targetId)
     {
-        return $this->render('TopxiaWebBundle:Announcement:announcement-manage-modal.html.twig', array(
+        return $this->render('announcement/announcement-manage-modal.html.twig', array(
             'targetId'   => $targetId,
             'targetType' => $targetType
         ));
@@ -90,7 +90,7 @@ class AnnouncementController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('TopxiaWebBundle:Announcement:announcement-write-modal.html.twig', array(
+        return $this->render('announcement/announcement-write-modal.html.twig', array(
             'announcement' => array('id' => '', 'content' => ''),
             'targetObject' => $targetObject,
             'targetType'   => $targetType,
@@ -116,7 +116,7 @@ class AnnouncementController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('TopxiaWebBundle:Announcement:announcement-write-modal.html.twig', array(
+        return $this->render('announcement/announcement-write-modal.html.twig', array(
             'targetObject' => $targetObject,
             'announcement' => $announcement,
             'targetType'   => $targetType,

@@ -2,14 +2,68 @@
 
 namespace AppBundle\Controller;
 
+use Biz\CloudPlatform\Service\AppService;
+use Biz\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
 class BaseController extends Controller
 {
+    /**
+     * @return CurrentUser
+     */
+    protected function getCurrentUser()
+    {
+        return $this->getUser();
+    }
+
+    /**
+     * switch current user
+     *
+     * @param Request       $request
+     * @param UserInterface $user
+     *
+     * @return UserInterface
+     */
+    protected function switchUser(Request $request, UserInterface $user)
+    {
+        $user['currentIp'] = $request->getClientIp();
+        $biz = $this->getBiz();
+        $biz['user'] = $user;
+        $token = new UsernamePasswordToken($user, null, 'main', $user['roles']);
+        $this->container->get('security.token_storage')->setToken($token);
+
+        $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
+        $biz->service('System:LogService')->info('user', 'login_success', '登录成功');
+        return $user;
+    }
+
+    /**
+     *
+     * @param $pluginName
+     *
+     * @return bool
+     */
+    protected function isPluginInstalled($pluginName)
+    {
+        /**
+         * @var $appService AppService
+         */
+        $appService = $this->getBiz()->service('CloudPlatform:AppService');
+        $app = $appService->getAppByCode($pluginName);
+        return !empty($app);
+    }
+
     protected function getBiz()
     {
         return $this->get('biz');
@@ -48,7 +102,7 @@ class BaseController extends Controller
             throw new \RuntimeException('type error');
         }
 
-        return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
+        return $this->render('default/message.html.twig', array(
             'type'     => $type,
             'message'  => $message,
             'title'    => $title,
@@ -65,6 +119,15 @@ class BaseController extends Controller
     protected function setFlashMessage($level, $message)
     {
         $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
+            return strpos($userAgent, $agent) > -1;
+        });
     }
 
     protected function setting($name, $default = null)

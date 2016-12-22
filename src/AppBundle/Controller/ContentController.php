@@ -1,6 +1,8 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Article\Service\CategoryService;
+use Biz\Content\Service\ContentService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
@@ -11,7 +13,7 @@ class ContentController extends BaseController
     public function articleShowAction(Request $request, $alias)
     {
         $content = $this->getContentByAlias('article', $alias);
-        return $this->render('TopxiaWebBundle:Content:show.html.twig', array(
+        return $this->render('content/show.html.twig', array(
             'type' => 'article',
             'content' => $content,
         ));
@@ -45,7 +47,7 @@ class ContentController extends BaseController
         $group = $this->getCategoryService()->getGroupByCode('default');
         $categoryTree = $this->getCategoryService()->getCategoryTree($group['id']);
 
-        return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
+        return $this->render('content/list.html.twig', array(
             'type' => 'article',
             'contents' => $contents,
             'categories' => $categories,
@@ -57,7 +59,7 @@ class ContentController extends BaseController
     public function activityShowAction(Request $request, $alias)
     {
         $content = $this->getContentByAlias('activity', $alias);
-        return $this->render('TopxiaWebBundle:Content:show.html.twig', array(
+        return $this->render('content/show.html.twig', array(
             'type' => 'activity',
             'content' => $content,
         ));
@@ -65,7 +67,7 @@ class ContentController extends BaseController
 
     public function activityListAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
+        return $this->render('content/list.html.twig', array(
             'type' => 'activity',
         ));
     }
@@ -75,9 +77,9 @@ class ContentController extends BaseController
         $content = $this->getContentByAlias('page', $alias);
 
         if ($content['template'] == 'default') {
-            $template = 'TopxiaWebBundle:Content:page-show.html.twig';
+            $template = 'content/page-show.html.twig';
         } elseif ($content['template'] == 'blank') {
-            $template = 'TopxiaWebBundle:Content:blank.html.twig';
+            $template = 'content/blank.html.twig';
         } else{
             $alias = $content['alias'] ? : $content['id'];
             $template = "@customize/content/page/{$alias}/index.html.twig";
@@ -88,7 +90,7 @@ class ContentController extends BaseController
 
     public function pageListAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
+        return $this->render('content/list.html.twig', array(
             'type' => 'page',
         ));
     }
@@ -108,14 +110,20 @@ class ContentController extends BaseController
         return $content;
     }
 
+    /**
+     * @return ContentService
+     */
     protected function getContentService()
     {
-        return $this->getServiceKernel()->createService('Content:ContentService');
+        return $this->getBiz()->service('Content:ContentService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Taxonomy:CategoryService');
     }
 
 }

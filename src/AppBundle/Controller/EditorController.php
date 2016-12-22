@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Content\Service\FileService;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\WebBundle\Util\UploadToken;
@@ -20,7 +21,7 @@ class EditorController extends BaseController
             $token = $maker->parse($token);
 
             if (empty($token)) {
-                throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
+                throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
             }
 
             $isWebuploader = $request->query->get('isWebuploader', 0);
@@ -33,16 +34,16 @@ class EditorController extends BaseController
 
             if ($token['type'] == 'image') {
                 if (!FileToolkit::isImageFile($file)) {
-                    throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是图片文件，请重新上传。'));
+                    throw $this->createAccessDeniedException('您上传的不是图片文件，请重新上传。');
                 }
             } elseif ($token['type'] == 'flash') {
                 $errors = FileToolkit::validateFileExtension($file, 'swf');
 
                 if (!empty($errors)) {
-                    throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是Flash文件，请重新上传。'));
+                    throw $this->createAccessDeniedException('您上传的不是Flash文件，请重新上传。');
                 }
             } else {
-                throw new \RuntimeException($this->getServiceKernel()->trans('上传类型不正确！'));
+                throw $this->createAccessDeniedException('上传类型不正确！');
             }
 
             $record = $this->getFileService()->uploadFile($token['group'], $file);
@@ -51,7 +52,7 @@ class EditorController extends BaseController
             FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
 
             //$url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$parsed['path'];
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').DIRECTORY_SEPARATOR.$parsed['path'];
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('url' => $url));
@@ -90,11 +91,11 @@ class EditorController extends BaseController
         $token = $maker->parse($token);
 
         if (empty($token)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
+            throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
         }
 
         $name = date("Ymdhis")."_formula.jpg";
-        $path = $this->getServiceKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
+        $path = $this->get('service_container')->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
 
         $imageData = CurlToolkit::request('POST', $url, array(), array('contentType' => 'plain'));
 
@@ -106,8 +107,11 @@ class EditorController extends BaseController
         return new Response($url);
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->getBiz()->service('Content:FileService');
     }
 }

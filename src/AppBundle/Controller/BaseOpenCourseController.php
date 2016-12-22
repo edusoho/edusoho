@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\RefererLog\Service\RefererLogService;
 use Symfony\Component\HttpFoundation\Request;
 
 class BaseOpenCourseController extends BaseController
@@ -48,8 +49,11 @@ class BaseOpenCourseController extends BaseController
         }
     }
 
+    /**
+     * @return RefererLogService
+     */
     protected function getRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog:RefererLogService');
+        return $this->getBiz()->service('RefererLog:RefererLogService');
     }
 }

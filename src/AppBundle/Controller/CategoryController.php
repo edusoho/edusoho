@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -84,7 +84,7 @@ class CategoryController extends BaseController
 
         $thirdLevelCategories = $this->makeThirdCategories($category);
 
-        return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
+        return $this->render("category/explore-nav.html.twig", array(
             'selectedCategory'           => $category['category'],
             'selectedSubCategory'        => $category['subCategory'],
             'selectedthirdLevelCategory' => $category['thirdLevelCategory'],
@@ -102,11 +102,11 @@ class CategoryController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Taxonomy:CategoryService');
     }
 }

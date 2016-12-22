@@ -1,12 +1,11 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Card\Service\CardService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CardController extends BaseController
 {
@@ -16,12 +15,12 @@ class CardController extends BaseController
         $cardType = $request->query->get('cardType');
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
         if ($cardType == 'moneyCard') {
             if (!$this->isPluginInstalled('moneyCard') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
-                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                return $this->render('card/index.html.twig', array(
                     'cards' => null
                 ));
             }
@@ -51,7 +50,7 @@ class CardController extends BaseController
         }
 
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType, $cardIds);
-        return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+        return $this->render('card/index.html.twig', array(
             'cards'       => empty($cards) ? null : $cards,
             'cardDetails' => ArrayToolkit::index($cardsDetail, 'id')
         ));
@@ -106,7 +105,7 @@ class CardController extends BaseController
             $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
         }
 
-        return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig', array(
+        return $this->render('order/order-item-coupon.html.twig', array(
             'targetType' => $targetType,
             'targetId'   => $targetId,
             'totalPrice' => $totalPrice,
@@ -133,7 +132,7 @@ class CardController extends BaseController
         $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
-        $response   = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+        $response   = $this->render('card/receive-show.html.twig', array(
             'cardType'   => $cardType,
             'cardId'     => $cardId,
             'cardDetail' => $cardDetail
@@ -172,9 +171,12 @@ class CardController extends BaseController
         return $sortedCards;
     }
 
+    /**
+     * @return CardService
+     */
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card:CardService');
+        return $this->getBiz()->service('Card:CardService');
     }
 
     private function getWebExtension()

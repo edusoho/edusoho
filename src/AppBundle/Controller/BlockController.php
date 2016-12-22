@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Content\Service\BlockService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,14 +13,18 @@ class BlockController extends BaseController
         if (empty($block) || empty($block['templateName'])) {
             return new Response('');
         }
-        $templateName = $this->getFullBlockTemplateName($block['category'], $block['templateName'], false);
+
+        $templateName = $this->getBlockService()->getFullBlockTemplateName($block['category'], $block['templateName'], false);
         return $this->render($templateName, array(
             'block' => $block
         ));
     }
 
+    /**
+     * @return BlockService
+     */
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content:BlockService');
+        return $this->getBiz()->service('Content:BlockService');
     }
 }

@@ -1,8 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller\Thread;
+namespace AppBundle\Controller\Thread;
 
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+
 
 class EventController extends BaseController
 {
@@ -12,7 +13,7 @@ class EventController extends BaseController
         $user = $this->getCurrentUser();
         $member = $this->getThreadService()->getMemberByThreadIdAndUserId($thread['id'], $user['id']);
 
-        return $this->render('TopxiaWebBundle:Thread/Event:title-bar.html.twig', array(
+        return $this->render('thread/event/title-bar.html.twig', array(
             'thread' => $thread,
             'member' => $member,
             'author' => $this->getUserService()->getUser($thread['userId']),
@@ -29,13 +30,18 @@ class EventController extends BaseController
         );
         $threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 5);
 
-        return $this->render('TopxiaWebBundle:Thread/Event:other-events-block.html.twig', array(
+        return $this->render('thread/event/other-events-block.html.twig', array(
             'threads' => $threads,
         ));
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 }

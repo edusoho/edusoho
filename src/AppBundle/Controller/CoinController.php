@@ -1,15 +1,22 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Card\Service\CardService;
+use Biz\Cash\Service\CashAccountService;
+use Biz\Cash\Service\CashOrdersService;
+use Biz\Cash\Service\CashService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Coupon\Service\CouponService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\InviteRecordService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CoinController extends BaseController
 {
@@ -18,13 +25,13 @@ class CoinController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
         $coinEnabled = $this->setting("coin.coin_enabled");
 
         if (empty($coinEnabled) || $coinEnabled == 0) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('网校虚拟币未开启！'));
+            return $this->createMessageResponse('error', '网校虚拟币未开启！');
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
@@ -87,7 +94,7 @@ class CoinController extends BaseController
 
 // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
+        return $this->render('coin/index.html.twig', array(
             'account'       => $account,
             'cashes'        => $cashes,
             'paginator'     => $paginator,
@@ -146,7 +153,7 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
 
-        return $this->render('TopxiaWebBundle:Coin:cash_bill.html.twig', array(
+        return $this->render('coin/cash_bill.html.twig', array(
             'cashes'        => $cashes,
             'paginator'     => $paginator,
             'amountInflow'  => $amountInflow ?: 0,
@@ -162,7 +169,7 @@ class CoinController extends BaseController
         $promote      = array();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
@@ -226,7 +233,7 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:invite-code.html.twig', array(
+        return $this->render('coin/invite-code.html.twig', array(
             'inviteInfomation_template' => $message,
             'code'                      => $user['inviteCode'],
             'record'                    => $record,
@@ -255,7 +262,7 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:promote-link-modal.html.twig',
+        return $this->render('coin/promote-link-modal.html.twig',
             array(
                 'code'                      => $user['inviteCode'],
                 'inviteInfomation_template' => $message
@@ -285,13 +292,13 @@ class CoinController extends BaseController
             $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
 
             if ($record) {
-                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('您已经填过邀请码'));
+                $response = array('success' => false, 'message' => '您已经填过邀请码');
             } else {
                 $promoteUser = $this->getUserservice()->getUserByInviteCode($inviteCode);
 
                 if ($promoteUser) {
                     if ($promoteUser['id'] == $user['id']) {
-                        $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('不能填写自己的邀请码'));
+                        $response = array('success' => false, 'message' => '不能填写自己的邀请码');
                     } else {
                         $this->getInviteRecordService()->createInviteRecord($promoteUser['id'], $user['id']);
                         $response     = array('success' => true);
@@ -304,7 +311,7 @@ class CoinController extends BaseController
                         }
                     }
                 } else {
-                    $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('邀请码不正确'));
+                    $response = array('success' => false, 'message' => '邀请码不正确');
                 }
             }
 
@@ -351,7 +358,7 @@ class CoinController extends BaseController
             return $this->redirect($this->generateUrl('my_coin'));
         }
 
-        return $this->render('TopxiaWebBundle:Coin:coin-change-modal.html.twig', array(
+        return $this->render('coin/coin-change-modal.html.twig', array(
             'amount'       => $amount,
             'changeAmount' => $changeAmount,
             'canChange'    => $canChange,
@@ -370,7 +377,7 @@ class CoinController extends BaseController
             $content = '';
         }
 
-        return $this->render('TopxiaWebBundle:Coin:coin-content-show.html.twig', array(
+        return $this->render('coin/coin-content-show.html.twig', array(
             'content'     => $content,
             'coinSetting' => $coinSetting
         ));
@@ -437,8 +444,7 @@ class CoinController extends BaseController
 
         if ($send > 0) {
             $data[] = array(
-                'send'       => $this->getServiceKernel()->trans('消费满%rangessend0%元送%rangessend1%', 
-                    array('%rangessend0%' => $ranges[$send][0] ,'%rangessend1%' => $ranges[$send][1])),
+                'send'       => sprintf('消费满%s元送%s', $ranges[$send][0], $ranges[$send][1]),
                 'sendAmount' => "{$ranges[$send][1]}");
         }
 
@@ -464,51 +470,86 @@ class CoinController extends BaseController
 
     public function resultNoticeAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
+        return $this->render('coin/retrun-notice.html.twig');
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:CouponService');
+        return $this->getBiz()->service('Coupon:CouponService');
     }
 
+    /**
+     * @return CardService
+     */
     protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('Card:CardService');
+        return $this->getBiz()->service('Card:CardService');
     }
 
+    /**
+     * @return InviteRecordService
+     */
     protected function getInviteRecordService()
     {
-        return ServiceKernel::instance()->createService('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
+    /**
+     * @return CashService
+     */
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashService');
+        return $this->getBiz()->service('Cash:CashService');
     }
 
+    /**
+     * @return CashAccountService
+     */
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
+    /**
+     * @return CashOrdersService
+     */
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
+        return $this->getBiz()->service('Cash:CashOrdersService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->getBiz()->service('CloudPlatform:AppService');
     }
 }

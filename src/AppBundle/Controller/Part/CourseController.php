@@ -1,8 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller\Part;
+namespace AppBundle\Controller\Part;
 
+use AppBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Controller\BaseController;
+
 
 class CourseController extends BaseController
 {
@@ -36,7 +37,7 @@ class CourseController extends BaseController
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
 
-        return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
+        return $this->render('course/part/normal-header.html.twig', array(
             'course'          => $course,
             'member'          => $member,
             'hasFavorited'    => $hasFavorited,
@@ -53,7 +54,7 @@ class CourseController extends BaseController
     {
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
 
-        return $this->render('TopxiaWebBundle:Course:Part/open-course-header.html.twig', array(
+        return $this->render('course/part/open-course-header.html.twig', array(
             'course'      => $course,
             'breadcrumbs' => $breadcrumbs
         ));
@@ -70,7 +71,7 @@ class CourseController extends BaseController
             $teachers[$teacherId] = $teachersNoSort[$teacherId];
         }
 
-        return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
+        return $this->render('course/part/normal-sidebar-teachers.html.twig', array(
             'course'   => $course,
             'teachers' => $teachers
         ));
@@ -82,7 +83,7 @@ class CourseController extends BaseController
         $members  = $this->getCourseService()->findCourseStudents($course['id'], 0, 15);
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
-        return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
+        return $this->render('course/part/normal-sidebar-students.html.twig', array(
             'course'   => $course,
             'students' => $students,
             'members'  => $members
@@ -93,7 +94,7 @@ class CourseController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
-        return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
+        return $this->render('course/part/normal-sidebar-belong-classrooms.html.twig', array(
             'course'     => $course,
             'classrooms' => !empty($classroom) && $classroom["status"] == "published" ? array($classroom) : array()
         ));
@@ -103,7 +104,7 @@ class CourseController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
         $classroom = $this->getClassroomService()->getClassroom($classroom["classroomId"]);
-        return $this->render('TopxiaWebBundle:Course/Part:normal-header-classroom-info.html.twig', array(
+        return $this->render('course/part/normal-header-classroom-info.html.twig', array(
             'classroom' => $classroom
         ));
     }
@@ -150,7 +151,7 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
+        return $this->render('course/part/normal-header-recommend-classrooms.html.twig', array(
             'classrooms' => $recommends
         ));
     }
@@ -167,32 +168,37 @@ class CourseController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getDiscountService()
     {
-        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+        return $this->getBiz()->service('Discount:Discount.DiscountService');
     }
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getBiz()->service('Vip:Vip.LevelService');
     }
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip.VipService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Taxonomy:CategoryService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function calculateUserLearnProgress($course, $member)

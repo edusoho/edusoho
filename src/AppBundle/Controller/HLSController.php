@@ -1,10 +1,12 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Common\ServiceKernel;
 
 class HLSController extends BaseController
 {
@@ -333,18 +335,27 @@ class HLSController extends BaseController
         return $beginning;
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

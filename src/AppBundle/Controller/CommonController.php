@@ -1,10 +1,13 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\System\Service\SettingService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class CommonController extends BaseController
 {
@@ -29,7 +32,7 @@ class CommonController extends BaseController
         $token = $this->getTokenService()->verifyToken('qrcode', $token);
 
         if (empty($token) || !isset($token['data']['url'])) {
-            $content = $this->renderView('TopxiaWebBundle:Default:message.html.twig', array(
+            $content = $this->renderView('default/message.html.twig', array(
                 'type'     => 'error',
                 'goto'     => $this->generateUrl('homepage', array(), true),
                 'duration' => 1,
@@ -46,7 +49,9 @@ class CommonController extends BaseController
 
         if (!empty($token['userId']) && !$currentUser->isLogin() && $currentUser['id'] != $token['userId']) {
             $user = $this->getUserService()->getUser($token['userId']);
-            $this->authenticateUser($user);
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray($user);
+            $this->switchUser($request, $currentUser);
         }
 
         return $this->redirect($token['data']['url']);
@@ -57,19 +62,33 @@ class CommonController extends BaseController
         $setting = $this->getSettingService()->get('magic', array());
 
         if (empty($setting['disable_web_crontab'])) {
-            $this->getServiceKernel()->createService('Crontab:CrontabService')->scheduleJobs();
+            $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
         }
 
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

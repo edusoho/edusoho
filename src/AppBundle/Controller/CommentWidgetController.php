@@ -1,6 +1,8 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Content\Service\CommentService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 use Topxia\Common\ArrayToolkit;
@@ -8,7 +10,6 @@ use Topxia\WebBundle\Form\CommentType;
 
 class CommentWidgetController extends BaseController
 {
- 
 	public function initAction(Request $request)
 	{
 		$objectType = $request->query->get('objectType');
@@ -21,7 +22,7 @@ class CommentWidgetController extends BaseController
 
 		$comments = $this->getCommentService()->findComments($objectType, $objectId, 0, 1000);
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($comments, 'userId'));
-		return $this->render('TopxiaWebBundle:CommentWidget:init.html.twig', array(
+		return $this->render('comment-widget/init.html.twig', array(
 			'form' => $form->createView(),
 			'comments' => $comments,
 			'users' => $users,
@@ -32,11 +33,11 @@ class CommentWidgetController extends BaseController
 	{
 		$form = $this->createForm(new CommentType());
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $comment = $form->getData();
                 $comment = $this->getCommentService()->createComment($comment);
-				return $this->render('TopxiaWebBundle:CommentWidget:item.html.twig', array(
+				return $this->render('comment-widget/item.html.twig', array(
 					'comment' => $comment,
 					'user' => $this->getCurrentUser(),
 				));
@@ -51,9 +52,20 @@ class CommentWidgetController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+    /**
+     * @return CommentService
+     */
     protected function getCommentService()
     {
-        return $this->getServiceKernel()->createService('Content:CommentService');
+        return $this->getBiz()->service('Content:CommentService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
 }

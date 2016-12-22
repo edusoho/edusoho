@@ -1,9 +1,8 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;

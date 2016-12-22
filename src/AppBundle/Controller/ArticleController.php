@@ -1,9 +1,13 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Article\Service\ArticleService;
+use Biz\Article\Service\CategoryService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Thread\Service\ThreadService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController
@@ -68,7 +72,7 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
+        return $this->render('article/index.html.twig', array(
             'categoryTree'       => $categoryTree,
             'latestArticles'     => $latestArticles,
             'featuredArticles'   => $featuredArticles,
@@ -83,7 +87,7 @@ class ArticleController extends BaseController
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
-        return $this->render('TopxiaWebBundle:Article/Part:category.html.twig', array(
+        return $this->render('article/part/category.html.twig', array(
             'rootCategories' => $rootCategories,
             'categories'     => $categories,
             'categoryCode'   => $categoryCode,
@@ -96,7 +100,7 @@ class ArticleController extends BaseController
         $category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
         if (empty($category)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('资讯栏目页面不存在'));
+            throw $this->createNotFoundException('资讯栏目页面不存在');
         }
 
         $conditions = array(
@@ -121,7 +125,7 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-        return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
+        return $this->render('article/list.html.twig', array(
             'categoryCode' => $categoryCode,
             'category'     => $category,
             'articles'     => $articles,
@@ -135,11 +139,11 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($id);
 
         if (empty($article)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('文章已删除或者未发布！'));
+            throw $this->createNotFoundException('文章已删除或者未发布！');
         }
 
         if ($article['status'] != 'published') {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('文章不是发布状态，请查看！'));
+            return $this->createMessageResponse('error', '文章不是发布状态，请查看！');
         }
 
         $this->getArticleService()->viewArticle($id);
@@ -217,7 +221,7 @@ class ArticleController extends BaseController
 
         $articleBody = preg_replace("/ /", "", $articleBody);
 
-        return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
+        return $this->render('article/detail.html.twig', array(
             'categoryTree'    => $categoryTree,
             'articleSetting'  => $articleSetting,
             'articlePrevious' => $articlePrevious,
@@ -253,11 +257,11 @@ class ArticleController extends BaseController
             $user = $this->getCurrentUser();
 
             if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能评论!'));
+                throw $this->createAccessDeniedException('用户没有登录,不能评论!');
             }
 
             $post = $this->getThreadService()->createPost($post);
-            return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
+            return $this->render('thread/part/post-item.html.twig', array(
                 'post'         => $post,
                 'author'       => $user,
                 'service'      => $this->getThreadService(),
@@ -276,7 +280,7 @@ class ArticleController extends BaseController
 
         $post = $this->getThreadService()->createPost($fields);
 
-        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
+        return $this->render('thread/subpost-item.html.twig', array(
             'post'    => $post,
             'author'  => $this->getCurrentUser(),
             'service' => $this->getThreadService()
@@ -341,7 +345,7 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
+        return $this->render('thread/subposts.html.twig', array(
             'parentId'  => $postId,
             'targetId'  => $targetId,
             'posts'     => $posts,
@@ -361,7 +365,7 @@ class ArticleController extends BaseController
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0, 6);
 
-        return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
+        return $this->render('article/popular-articles-block.html.twig', array(
             'articles' => $articles
         ));
     }
@@ -376,7 +380,7 @@ class ArticleController extends BaseController
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 6);
 
-        return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
+        return $this->render('article/recommend-articles-block.html.twig', array(
             'articles' => $articles
         ));
     }
@@ -386,7 +390,7 @@ class ArticleController extends BaseController
         $tag = $this->getTagService()->getTagByName($name);
 
         if (empty($tag)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('标签不存在!'));
+            throw $this->createAccessDeniedException('标签不存在!');
         }
 
         $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'article');
@@ -413,7 +417,7 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('TopxiaWebBundle:Article:list-articles-by-tag.html.twig', array(
+        return $this->render('article/list-articles-by-tag.html.twig', array(
             'articles'   => $articles,
             'tag'        => $tag,
             'categories' => $categories,
@@ -453,7 +457,7 @@ class ArticleController extends BaseController
             }
         }
 
-        return;
+        return array();
     }
 
     protected function getSubCategories($categoryTree, $rootCategory)
@@ -495,28 +499,43 @@ class ArticleController extends BaseController
         return $this->createJsonResponse($article);
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article:CategoryService');
+        return $this->getBiz()->service('Article:CategoryService');
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->getBiz()->service('Article:ArticleService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 }

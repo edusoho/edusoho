@@ -1,7 +1,8 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
-use Topxia\Service\Common\ServiceKernel;
+
+use Biz\File\Service\UploadFileService;
 use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +18,7 @@ class AttachmentController extends BaseController
             return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
         }
 
-        return $this->render('TopxiaWebBundle:Attachment:upload-modal.html.twig', array(
+        return $this->render('attachment/upload-modal.html.twig', array(
             'token'      => $query['token'],
             'idsClass'   => $query['idsClass'],
             'listClass'  => $query['listClass'],
@@ -31,7 +32,7 @@ class AttachmentController extends BaseController
         $type        = 'attachment';
         $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 
-        return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
+        return $this->render('attachment/form-fields.html.twig', array(
             'target'      => array_shift($targets),
             'targetType'  => $targetType,
             'fileType'    => array_pop($targets),
@@ -45,7 +46,7 @@ class AttachmentController extends BaseController
     public function listAction(Request $request, $targetType, $targetId)
     {
         $type = 'attachment';
-        return $this->render('TopxiaWebBundle:Attachment:list.html.twig', array(
+        return $this->render('attachment/list.html.twig', array(
             'attachments' => $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
         ));
     }
@@ -65,13 +66,13 @@ class AttachmentController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-            return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+            return $this->forward('AppBundle:CloudFile:preview', array(
                 'request'  => $request,
                 'globalId' => $file['globalId']
             ));
         }
 
-        return $this->render('MaterialLibBundle:Web:preview.html.twig', array(
+        return $this->render('material-lib/preview.html.twig', array(
             'file' => $file
         ));
     }
@@ -93,7 +94,7 @@ class AttachmentController extends BaseController
         }
 
         $file = $this->getUploadFileService()->getFile($attachment['fileId']);
-        return $this->forward('TopxiaWebBundle:UploadFile:download', array(
+        return $this->forward('AppBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $file['id']
         ));
@@ -103,7 +104,7 @@ class AttachmentController extends BaseController
     {
         $file       = $this->getUploadFileService()->getFile($fileId);
         $attachment = array('file' => $file);
-        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
+        return $this->render('attachment/file-item.html.twig', array(
             'attachment' => $attachment
         ));
     }
@@ -123,8 +124,11 @@ class AttachmentController extends BaseController
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

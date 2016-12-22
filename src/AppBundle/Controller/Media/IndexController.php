@@ -1,10 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller\Media;
+namespace AppBundle\Controller\Media;
 
+use AppBundle\Controller\BaseController;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
 
 class IndexController extends BaseController
 {
@@ -13,10 +12,10 @@ class IndexController extends BaseController
         $context = $request->query->get('context');
 
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
-            throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
+            throw $this->createAccessDeniedException('没有权限管理资源');
         }
 
-        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $mediaId, 'context' => $context));
+        return $this->forward('player/show', array('id' => $mediaId, 'context' => $context));
     }
 
     /**
@@ -24,6 +23,6 @@ class IndexController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

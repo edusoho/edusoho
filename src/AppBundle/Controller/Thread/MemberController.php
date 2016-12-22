@@ -1,10 +1,11 @@
 <?php
-namespace Topxia\WebBundle\Controller\Thread;
+namespace AppBundle\Controller\Thread;
 
+use AppBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\PHPExcelToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+
 
 class MemberController extends BaseController
 {
@@ -13,7 +14,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录!不能加入活动!'));
+            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -33,7 +34,7 @@ class MemberController extends BaseController
 
         $thread      = $this->getThreadService()->getThread($threadId);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        return $this->render('TopxiaWebBundle:Thread/Widget:user-info-modal.html.twig', array(
+        return $this->render('thread/widget/user-info-modal.html.twig', array(
             'thread'      => $thread,
             'userProfile' => $userProfile
         ));
@@ -60,7 +61,7 @@ class MemberController extends BaseController
         $conditions   = array('threadId' => $thread['id']);
         $membersCount = $this->getThreadService()->searchMemberCount($conditions);
 
-        return $this->render('TopxiaWebBundle:Thread/Event:user-grids.html.twig', array(
+        return $this->render('thread/event/user-grids.html.twig', array(
             'members'      => $members,
             'myFriends'    => $myFriends,
             'threadId'     => $thread['id'],
@@ -72,7 +73,7 @@ class MemberController extends BaseController
     {
         $members = $this->_findPageMembers($request, $threadId);
 
-        return $this->render('TopxiaWebBundle:Thread/Event:user-grids-li.html.twig', array(
+        return $this->render('thread/event/user-grids-li.html.twig', array(
             'members' => $members
         ));
     }
@@ -82,20 +83,20 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户还未登录!'));
+            throw $this->createAccessDeniedException('用户还未登录!');
         }
 
         $thread = $this->getThreadService()->getThread($threadId);
 
         if (empty($thread)) {
-            return $this->createMessageResponse('warning', $this->getServiceKernel()->trans('帖子不存在!'));
+            return $this->createMessageResponse('warning', '帖子不存在!');
         }
 
         if (!$this->getThreadService()->canAccess('thread.update', $thread)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权限操作!'));
+            throw $this->createAccessDeniedException('无权限操作!');
         }
 
-        $filename   = $this->getServiceKernel()->trans('%threadtitle%-成员.xls', array('%threadtitle%' => $thread['title']));
+        $filename   = $thread['title'] . '-成员.xls';
         $members    = $this->_findMembersByThreadId($threadId);
         $execelInfo = $this->_makeInfo($user);
         $objWriter  = PHPExcelToolkit::export($members, $execelInfo);
@@ -106,15 +107,15 @@ class MemberController extends BaseController
     protected function _makeInfo($user)
     {
         $title = array(
-            'nickname'    => $this->getServiceKernel()->trans('用户名'),
-            'truename'    => $this->getServiceKernel()->trans('真实姓名'),
-            'mobile'      => $this->getServiceKernel()->trans('手机号码'),
-            'createdTime' => $this->getServiceKernel()->trans('报名时间')
+            'nickname'    => '用户名',
+            'truename'    => '真实姓名',
+            'mobile'      => '手机号码',
+            'createdTime' => '报名时间'
         );
         $info              = array();
         $info['title']     = $title;
         $info['creator']   = $user['nickname'];
-        $info['sheetName'] = $this->getServiceKernel()->trans('成员');
+        $info['sheetName'] = '成员';
         return $info;
     }
 
@@ -184,6 +185,11 @@ class MemberController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 }

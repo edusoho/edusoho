@@ -1,9 +1,17 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\NavigationService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Theme\Service\ThemeService;
+use Biz\User\Service\BatchNotificationService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +26,7 @@ class DefaultController extends BaseController
         }
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
+        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks));
     }
 
     public function userlearningAction()
@@ -44,7 +52,7 @@ class DefaultController extends BaseController
             $teachers        = array();
         }
 
-        return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
+        return $this->render('default/user-learning.html.twig', array(
             'user'            => $user,
             'course'          => $course,
             'nextLearnLesson' => $nextLearnLesson,
@@ -69,7 +77,7 @@ class DefaultController extends BaseController
             $teacher = null;
         }
 
-        return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
+        return $this->render('default/promoted-teacher-block.html.twig', array(
             'teacher' => $teacher
         ));
     }
@@ -79,7 +87,7 @@ class DefaultController extends BaseController
         $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
-        return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(
+        return $this->render('default/latest-reviews-block.html.twig', array(
             'reviews' => $reviews,
             'users'   => $users,
             'courses' => $courses
@@ -90,7 +98,7 @@ class DefaultController extends BaseController
     {
         $navigations = $this->getNavigationService()->getOpenedNavigationsTreeByType('top');
 
-        return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
+        return $this->render('default/top-navigation.html.twig', array(
             'navigations' => $navigations,
             'siteNav'     => $siteNav,
             'isMobile'    => $isMobile
@@ -101,7 +109,7 @@ class DefaultController extends BaseController
     {
         $navigations = $this->getNavigationService()->findNavigationsByType('foot', 0, 100);
 
-        return $this->render('TopxiaWebBundle:Default:foot-navigation.html.twig', array(
+        return $this->render('default/foot-navigation.html.twig', array(
             'navigations' => $navigations
         ));
     }
@@ -110,7 +118,7 @@ class DefaultController extends BaseController
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
+        return $this->render('default/friend-link.html.twig', array(
             'friendlyLinks' => $friendlyLinks
         ));
     }
@@ -119,7 +127,7 @@ class DefaultController extends BaseController
     {
         $customerServiceSetting = $this->getSettingService()->get('customerService', array());
 
-        return $this->render('TopxiaWebBundle:Default:customer-service-online.html.twig', array(
+        return $this->render('default/customer-service-online.html.twig', array(
             'customerServiceSetting' => $customerServiceSetting
         ));
     }
@@ -162,11 +170,11 @@ class DefaultController extends BaseController
             $config['orderBy']    = $orderBy;
             $config['categoryId'] = $categoryId;
 
-            return $this->render('TopxiaWebBundle:Default:'.$config['code'].'.html.twig', array(
+            return $this->render('default/'.$config['code'].'.html.twig', array(
                 'config' => $config
             ));
         } else {
-            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+            return $this->render('default/course-grid-with-condition-index.html.twig', array(
                 'categoryId' => $categoryId,
                 'orderBy'    => $orderBy
             ));
@@ -204,58 +212,80 @@ class DefaultController extends BaseController
         return $this->redirect($targetPath);
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return NavigationService
+     */
     protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content:NavigationService');
+        return $this->getBiz()->service('Content:NavigationService');
     }
 
+    /**
+     * @return BlockService
+     */
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content:BlockService');
+        return $this->getBiz()->service('Content:BlockService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course:ReviewService');
+        return $this->getBiz()->service('Course:ReviewService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->getBiz()->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->getBiz()->service('CloudPlatform:AppService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return BatchNotificationService
+     */
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User:BatchNotificationService');
+        return $this->getBiz()->service('User:BatchNotificationService');
     }
 
+    /**
+     * @return ThemeService
+     */
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->createService('Theme:ThemeService');
-    }
-
-    private function getBlacklistService()
-    {
-        return $this->getServiceKernel()->createService('User:BlacklistService');
+        return $this->getBiz()->service('Theme:ThemeService');
     }
 }
