@@ -1,8 +1,7 @@
 <?php
-namespace Org\OrgBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class OrgController extends BaseController
 {
@@ -14,7 +13,7 @@ class OrgController extends BaseController
 
     public function orgTreeJsonAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         if ($user->isSuperAdmin()) {
             $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
@@ -27,6 +26,6 @@ class OrgController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 }

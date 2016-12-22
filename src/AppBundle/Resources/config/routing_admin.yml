@@ -2171,3 +2171,37 @@ admin_classroom_chooser:
     path: /classroom/chooser
     defaults: { _controller: AppBundle:Admin/ClassroomAdmin:chooser }    
  
+#org
+admin_org:
+    path: /org
+    defaults: { _controller: AppBundle:Admin/OrgManage:index }
+
+admin_org_create:
+    path: /org/create
+    defaults: { _controller: AppBundle:Admin/OrgManage:create }
+
+admin_org_update:
+    path: /org/{id}/update
+    defaults: { _controller: AppBundle:Admin/OrgManage:update }
+
+admin_org_delete:
+    path: /org/{id}/delete
+    defaults: { _controller: AppBundle:Admin/OrgManage:delete }
+    methods: [POST]
+
+admin_org_checkcode:
+    path: /org/checkcode
+    defaults: { _controller: AppBundle:Admin/OrgManage:checkCode }
+
+admin_org_checkname:
+    path: /org/checkname
+    defaults: { _controller:AppBundle:Admin/OrgManage:checkName }
+
+admin_org_sort:
+    path:  /org/sort
+    defaults: { _controller: AppBundle:Admin/OrgManage:sort }
+    methods: [POST]
+
+admin_batch_update_org:
+    path:  batch/update/{module}/org
+    defaults: { _controller: AppBundle:Admin/OrgManage:batchUpdate }

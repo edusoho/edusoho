@@ -12,7 +12,7 @@
   <form id="batch-setting-org-form" class="form-horizontal" method="post"
         action="{{ path('admin_batch_update_org',{module: module}) }}">
 
-    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {colmd:7} %}
+    {% include 'org/org-tree-select.html.twig' with {colmd:7} %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="ids" id="batch-ids">
 

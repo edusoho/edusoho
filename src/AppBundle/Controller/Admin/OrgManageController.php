@@ -1,11 +1,9 @@
 <?php
-namespace Org\OrgBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
-use Org\Service\Org\Impl\OrgServiceImpl;
 use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
 
 class OrgManageController extends BaseController
 {
@@ -19,7 +17,7 @@ class OrgManageController extends BaseController
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('OrgBundle:OrgManage:index.html.twig', array(
+        return $this->render('org-manage/index.html.twig', array(
             'orgs'         => $treeOrgs,
             'createdUsers' => $createdUsers
         ));
@@ -35,7 +33,7 @@ class OrgManageController extends BaseController
 
         $parentId = $request->query->get('parentId', 0);
         $org      = array('parentId' => $parentId);
-        return $this->render('OrgBundle:OrgManage:modal.html.twig', array('org' => $org));
+        return $this->render('org-manage/modal.html.twig', array('org' => $org));
     }
 
     public function updateAction(Request $request, $id)
@@ -47,7 +45,7 @@ class OrgManageController extends BaseController
         }
 
         $org = $this->getOrgService()->getOrg($id);
-        return $this->render('OrgBundle:OrgManage:modal.html.twig', array(
+        return $this->render('org-manage/modal.html.twig', array(
             'org' => $org
         ));
     }
@@ -113,7 +111,7 @@ class OrgManageController extends BaseController
             $this->getOrgService()->batchUpdateOrg($module, $ids, $orgCode);
             return $this->createJsonResponse(true);
         }
-        return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module' => $module));
+        return $this->render('org/batch-update-org-modal.html.twig', array('module' => $module));
     }
 
 
