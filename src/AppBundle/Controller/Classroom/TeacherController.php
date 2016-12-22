@@ -45,9 +45,9 @@ class TeacherController extends BaseController
         if (!$canLook) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
             $classroomDescription = array();
@@ -56,7 +56,7 @@ class TeacherController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
-        return $this->render('ClassroomBundle:Classroom\Teacher:list.html.twig', array(
+        return $this->render('classroom/teacher/list.html.twig', array(
             'layout'               => $layout,
             'canLook'              => $canLook,
             'classroom'            => $classroom,

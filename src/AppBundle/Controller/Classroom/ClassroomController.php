@@ -17,7 +17,7 @@ class ClassroomController extends BaseController
     {
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom["id"]);
 
-        return $this->render("ClassroomBundle:Classroom:dashboard-nav.html.twig", array(
+        return $this->render("classroom/dashboard-nav.html.twig", array(
             'canManageClassroom' => $canManageClassroom,
             'classroom'          => $classroom,
             'nav'                => $nav,
@@ -34,7 +34,7 @@ class ClassroomController extends BaseController
             $parentCategory = $this->getCategoryService()->getCategory($category['parentId']);
         }
 
-        return $this->render('ClassroomBundle:Classroom:keywords.html.twig', array(
+        return $this->render('classroom/keywords.html.twig', array(
             'category'       => $category,
             'parentCategory' => $parentCategory,
             'classroom'      => $classroom
@@ -91,7 +91,7 @@ class ClassroomController extends BaseController
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
             $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
-            return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
+            return $this->render("classroom/classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
                 'lessonNum'              => $lessonNum,
@@ -108,7 +108,7 @@ class ClassroomController extends BaseController
             ));
         }
 
-        return $this->render("ClassroomBundle:Classroom:classroom-header.html.twig", array(
+        return $this->render("classroom/classroom-header.html.twig", array(
             'classroom'              => $classroom,
             'courses'                => $courses,
             'checkMemberLevelResult' => $checkMemberLevelResult,
@@ -224,16 +224,16 @@ class ClassroomController extends BaseController
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
 
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
 
         $this->dispatchEvent('classroom.view',
             new Event($classroom, array('userId' =>$user['id']))
         );
-        return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
+        return $this->render("classroom/introduction.html.twig", array(
             'introduction'         => $introduction,
             'layout'               => $layout,
             'classroom'            => $classroom,
@@ -263,7 +263,7 @@ class ClassroomController extends BaseController
             $teachersCount = count($users);
         }
 
-        return $this->render('ClassroomBundle:Classroom:teachers-block.html.twig', array(
+        return $this->render('classroom/teachers-block.html.twig', array(
             'classroom'           => $classroom,
             'users'               => $users,
             'profiles'            => $profiles,
@@ -313,7 +313,7 @@ class ClassroomController extends BaseController
         }
 
         if ($member && $member["locked"] == "0") {
-            return $this->render("ClassroomBundle:Classroom:role.html.twig", array(
+            return $this->render("classroom/role.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
                 'coinPrice'              => $coinPrice,
@@ -332,7 +332,7 @@ class ClassroomController extends BaseController
         $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 20);
         $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
-        return $this->render('ClassroomBundle:Classroom:latest-members-block.html.twig', array(
+        return $this->render('classroom/latest-members-block.html.twig', array(
             'students' => $students,
             'users'    => $users
         ));
@@ -372,7 +372,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Status:status-block.html.twig', array(
+        return $this->render('status/status-block.html.twig', array(
             'learns' => $learns
         ));
     }
@@ -394,7 +394,7 @@ class ClassroomController extends BaseController
         $signDay = $this->getSignService()->findSignRecordsByPeriod($user->id, 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time() + 3600));
         $notSign = $day - count($signDay);
 
-        return $this->render("ClassroomBundle:Classroom:sign.html.twig", array(
+        return $this->render("classroom/sign.html.twig", array(
             'classroom'          => $classroom,
             'isSignedToday'      => $isSignedToday,
             'userSignStatistics' => $userSignStatistics,
@@ -552,7 +552,7 @@ class ClassroomController extends BaseController
 
         $classroom = empty($classroomIds) || count($classroomIds) == 0 ? null : $this->getClassroomService()->getClassroom($classroomIds[0]);
 
-        return $this->render("ClassroomBundle:Classroom:classroom-block.html.twig", array(
+        return $this->render("classroom/classroom-block.html.twig", array(
             'classroom' => $classroom
         ));
     }
@@ -603,7 +603,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        return $this->render('ClassroomBundle:Classroom:buy-modal.html.twig', array(
+        return $this->render('classroom/buy-modal.html.twig', array(
             'classroom'        => $classroom,
             'payments'         => $this->getEnabledPayments(),
             'user'             => $userInfo,
@@ -669,7 +669,7 @@ class ClassroomController extends BaseController
             && $this->setting('vip.enabled') 
             && !empty($classroom['vipLevelId'])
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
-            return $this->forward("ClassroomBundle:Classroom:becomeStudent", array(
+            return $this->forward("classroom/becomeStudent", array(
                 'request' => $request, 
                 'id' => $classroom['id']
             ));
@@ -833,7 +833,7 @@ class ClassroomController extends BaseController
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         if (empty($classrooms)) {
-            return $this->render('ClassroomBundle:Classroom:my-teaching-threads.html.twig', array(
+            return $this->render('classroom/my-teaching-threads.html.twig', array(
                 'type'       => $type,
                 'threadType' => 'classroom',
                 'threads'    => array()
@@ -860,7 +860,7 @@ class ClassroomController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
 
-        return $this->render('ClassroomBundle:Classroom:my-teaching-threads.html.twig', array(
+        return $this->render('classroom/my-teaching-threads.html.twig', array(
             'paginator'  => $paginator,
             'threads'    => $threads,
             'users'      => $users,
@@ -892,7 +892,7 @@ class ClassroomController extends BaseController
             throw $this->createNotFoundException($this->getServiceKernel()->trans('找不到要购买的班级!'));
         }
 
-        return $this->render('ClassroomBundle:Classroom:classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
+        return $this->render('classroom/classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
     }
 
     protected function getEnabledPayments()

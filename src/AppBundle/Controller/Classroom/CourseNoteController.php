@@ -26,9 +26,9 @@ class CourseNoteController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
             $classroomDescription = array();
@@ -37,7 +37,7 @@ class CourseNoteController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
-        return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
+        return $this->render('classroom/course/notes-list.html.twig', array(
             'layout'               => $layout,
             'filters'              => $this->getNoteSearchFilters($request),
             'canLook'              => $canLook,

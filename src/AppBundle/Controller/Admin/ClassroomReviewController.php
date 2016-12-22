@@ -17,7 +17,7 @@ class ClassroomReviewController extends BaseController
             $classrooms                 = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
             $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');
             if (count($conditions['classroomIds']) == 0) {
-                return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
+                return $this->render('classroom-review/index.html.twig', array(
                     'reviews'    => array(),
                     'users'      => array(),
                     'classrooms' => array(),
@@ -43,7 +43,7 @@ class ClassroomReviewController extends BaseController
         $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
+        return $this->render('classroom-Review/index.html.twig', array(
             'reviews'    => $reviews,
             'users'      => $users,
             'classrooms' => $classrooms,

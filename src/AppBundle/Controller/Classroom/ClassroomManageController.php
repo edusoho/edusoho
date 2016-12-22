@@ -60,7 +60,7 @@ class ClassroomManageController extends BaseController
 
         $userIds     = ArrayToolkit::column($reviews, 'userId');
         $reviewUsers = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render("ClassroomBundle:ClassroomManage:index.html.twig", array(
+        return $this->render("classroom-manage/index.html.twig", array(
             'classroom'                  => $classroom,
             'studentCount'               => $studentCount,
             'yestodayStudentCount'       => $yestodayStudentCount,
@@ -75,7 +75,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function menuAction($classroom, $sideNav, $context)
+    public function menuAction(Request $request, $classroom, $sideNav, $context)
     {
         $user = $this->getCurrentUser();
 
@@ -86,7 +86,7 @@ class ClassroomManageController extends BaseController
         $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroom['id']);
 
-        return $this->render('ClassroomBundle:ClassroomManage:menu.html.twig', array(
+        return $this->render('classroom-manage/menu.html.twig', array(
             'canManage' => $canManage,
             'canHandle' => $canHandle,
             'side_nav'  => $sideNav,
@@ -131,7 +131,7 @@ class ClassroomManageController extends BaseController
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student);
         }
 
-        return $this->render("ClassroomBundle:ClassroomManage:student.html.twig", array(
+        return $this->render("classroom-manage/student.html.twig", array(
             'classroom'  => $classroom,
             'students'   => $students,
             'users'      => $users,
@@ -171,7 +171,7 @@ class ClassroomManageController extends BaseController
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users          = $this->getUserService()->findUsersByIds($studentUserIds);
 
-        return $this->render("ClassroomBundle:ClassroomManage:auditor.html.twig", array(
+        return $this->render("classroom-manage/auditor.html.twig", array(
             'classroom' => $classroom,
             'students'  => $students,
             'users'     => $users,
@@ -228,7 +228,7 @@ class ClassroomManageController extends BaseController
             }
         }
 
-        return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
+        return $this->render("classroom-manage/quit-record.html.twig", array(
             'classroom' => $classroom,
             'paginator' => $paginator,
             'refunds'   => $refunds
@@ -250,7 +250,7 @@ class ClassroomManageController extends BaseController
             return $this->createStudentTrResponse($classroom, $member);
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:remark-modal.html.twig', array(
+        return $this->render('classroom-manage/remark-modal.html.twig', array(
             'member'    => $member,
             'user'      => $user,
             'classroom' => $classroom
@@ -264,7 +264,7 @@ class ClassroomManageController extends BaseController
         $user     = $this->getUserService()->getUser($student['userId']);
         $progress = $this->calculateUserLearnProgress($classroom, $student);
 
-        return $this->render('ClassroomBundle:ClassroomManage:tr.html.twig', array(
+        return $this->render('classroom-manage/tr.html.twig', array(
             'classroom' => $classroom,
             'student'   => $student,
             'user'      => $user,
@@ -377,7 +377,7 @@ class ClassroomManageController extends BaseController
             return $this->createStudentTrResponse($classroom, $member);
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:create-modal.html.twig', array(
+        return $this->render('classroom-manage/create-modal.html.twig', array(
             'classroom' => $classroom
         ));
     }
@@ -544,7 +544,7 @@ class ClassroomManageController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:services.html.twig', array(
+        return $this->render('classroom-manage/services.html.twig', array(
             'classroom' => $classroom
         ));
     }
@@ -594,7 +594,7 @@ class ClassroomManageController extends BaseController
 
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
 
-        return $this->render("ClassroomBundle:ClassroomManage:teachers.html.twig", array(
+        return $this->render("classroom-manage/teachers.html.twig", array(
             'classroom'    => $classroom,
             'teachers'     => $teachers,
             'teacherIds'   => $teacherIds,
@@ -627,7 +627,7 @@ class ClassroomManageController extends BaseController
             );
         }
 
-        return $this->render("ClassroomBundle:ClassroomManage:headteacher.html.twig", array(
+        return $this->render("classroom-manage/headteacher.html.twig", array(
             'classroom'   => $classroom,
             'headTeacher' => $newheadTeacher
         ));
@@ -665,7 +665,7 @@ class ClassroomManageController extends BaseController
             );
         }
 
-        return $this->render("ClassroomBundle:ClassroomManage:assistants.html.twig", array(
+        return $this->render("classroom-manage/assistants.html.twig", array(
             'classroom'  => $classroom,
             'assistants' => $sortedAssistants
         ));
@@ -691,7 +691,7 @@ class ClassroomManageController extends BaseController
             'ownerId'   => $id
         ));
         
-        return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
+        return $this->render("classroom-manage/set-info.html.twig", array(
             'classroom' => $classroom,
             'tags'      => ArrayToolkit::column($tags, 'name')
         ));
@@ -734,7 +734,7 @@ class ClassroomManageController extends BaseController
 
         $courseNum = count($courses);
 
-        return $this->render("ClassroomBundle:ClassroomManage:set-price.html.twig", array(
+        return $this->render("classroom-manage/set-price.html.twig", array(
             'levels'    => $this->makeLevelChoices($levels),
             'price'     => $price,
             'coinPrice' => $coinPrice,
@@ -749,7 +749,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        return $this->render("ClassroomBundle:ClassroomManage:set-picture.html.twig", array(
+        return $this->render("classroom-manage/set-picture.html.twig", array(
             'classroom' => $classroom
         ));
     }
@@ -770,7 +770,7 @@ class ClassroomManageController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 525, 350);
 
-        return $this->render('ClassroomBundle:ClassroomManage:picture-crop.html.twig', array(
+        return $this->render('classroom-manage/picture-crop.html.twig', array(
             'classroom'   => $classroom,
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
@@ -817,7 +817,7 @@ class ClassroomManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("ClassroomBundle:ClassroomManage:courses.html.twig", array(
+        return $this->render("classroom-manage/courses.html.twig", array(
             'classroom' => $classroom,
             'courses'   => $courses,
             'price'     => $price,
@@ -867,7 +867,7 @@ class ClassroomManageController extends BaseController
 
         $user = $user ? $user[0] : array();
 
-        return $this->render('ClassroomBundle:ClassroomManage:teacher-info.html.twig', array(
+        return $this->render('classroom-manage/teacher-info.html.twig', array(
             'user' => $user));
     }
 
@@ -888,7 +888,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
+        return $this->render('classroom-manage/import.html.twig', array(
             'classroom' => $classroom
         ));
     }
@@ -954,7 +954,7 @@ class ClassroomManageController extends BaseController
         $teacherIds = ArrayToolkit::column($paperResults, 'checkTeacherId');
         $teachers   = $this->getUserService()->findUsersByIds($teacherIds);
 
-        return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig', array(
+        return $this->render('classroom-manage/testpaper/index.html.twig', array(
             'classroom'    => $classroom,
             'status'       => $status,
 
@@ -1018,7 +1018,7 @@ class ClassroomManageController extends BaseController
 
         $usersIds = ArrayToolkit::column($homeworksResults, 'userId');
         $users    = $this->getUserService()->findUsersByIds($usersIds);
-        return $this->render('ClassroomBundle:ClassroomManage/Homework:index.html.twig', array(
+        return $this->render('classroom-manage/homework/index.html.twig', array(
             'classroom'        => $classroom,
             'status'           => $status,
             'users'            => $users,

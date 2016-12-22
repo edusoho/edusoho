@@ -16,14 +16,14 @@ class CourseLessonController extends BaseController
         $member    = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$user->isLogin()) {
-            return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
+            return $this->forward('AppBundle:CourseLesson:preview', array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId
             ));
         }
 
         if ($lesson['free'] || $course['tryLookable'] || ($member && !$member['locked'])) {
-            return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
+            return $this->forward('AppBundle:CourseLesson:preview', array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId
             ));
@@ -36,7 +36,7 @@ class CourseLessonController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
-        return $this->render('ClassroomBundle:Classroom:hint-modal.html.twig', array(
+        return $this->render('classroom/hint-modal.html.twig', array(
             'classroom' => $classroom
         ));
     }
@@ -45,7 +45,7 @@ class CourseLessonController extends BaseController
     {
         $user   = $this->getCurrentUser();
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
-        return $this->render('ClassroomBundle:Classroom/Course:lessons-list.html.twig', array(
+        return $this->render('classroom/course/lessons-list.html.twig', array(
             'classroomId' => $classroomId,
             'courseId'    => $courseId,
             'member'      => $member

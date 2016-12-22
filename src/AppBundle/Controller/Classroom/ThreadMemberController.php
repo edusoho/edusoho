@@ -20,7 +20,7 @@ class ThreadMemberController extends BaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('不是本班成员!不能加入活动!'));
         }
 
-        return $this->forward('TopxiaWebBundle:Thread/Member:become', array(
+        return $this->forward('AppBundle:Thread/Member:become', array(
             'request'  => $request,
             'threadId' => $threadId
         ));
@@ -28,7 +28,7 @@ class ThreadMemberController extends BaseController
 
     public function quitAction(Request $request, $threadId, $memberId)
     {
-        return $this->forward('TopxiaWebBundle:Thread/Member:quit', array(
+        return $this->forward('AppBundle:Thread/Member:quit', array(
             'request'  => $request,
             'threadId' => $threadId,
             'memberId' => $memberId

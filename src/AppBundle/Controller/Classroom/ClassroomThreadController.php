@@ -31,7 +31,7 @@ class ClassroomThreadController extends BaseController
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
 
-        return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
+        return $this->render('classroom-thread/list.html.twig', array(
             'classroom'            => $classroom,
             'filters'              => $this->getThreadSearchFilters($request),
             'canLook'              => $canLook,
@@ -63,17 +63,17 @@ class ClassroomThreadController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            return $this->forward('TopxiaWebBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
+            return $this->forward('AppBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
 
-        return $this->render('ClassroomBundle:ClassroomThread:create.html.twig', array(
+        return $this->render('classroom-thread/create.html.twig', array(
             'classroom' => $classroom,
             'layout'    => $layout,
             'type'      => $type,
@@ -96,16 +96,11 @@ class ClassroomThreadController extends BaseController
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
-        if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
-        }
-
         if ($request->getMethod() == 'POST') {
-            return $this->forward('TopxiaWebBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
+            return $this->forward('Appbundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
         }
 
-        return $this->render('ClassroomBundle:ClassroomThread:create.html.twig', array(
+        return $this->render('classroom-thread/create.html.twig', array(
             'classroom' => $classroom,
             'thread'    => $thread,
             'type'      => $thread['type'],
@@ -136,12 +131,12 @@ class ClassroomThreadController extends BaseController
             return $this->createMessageResponse('error', $this->trans('帖子已不存在'));
         }
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
 
-        return $this->render('ClassroomBundle:ClassroomThread:show.html.twig', array(
+        return $this->render('classroom-thread/show.html.twig', array(
             'classroom' => $classroom,
             'thread'    => $thread,
             'author'    => $author,

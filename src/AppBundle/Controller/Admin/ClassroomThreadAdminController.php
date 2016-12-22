@@ -30,7 +30,7 @@ class ClassroomThreadAdminController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:thread-list.html.twig', array(
+        return $this->render('admin/classroom/thread-list.html.twig', array(
             'paginator' => $paginator,
             'threads' => $threads,
             'users' => $users,

@@ -49,10 +49,10 @@ class ReviewController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
         $review    = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
-        $layout    = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout    = 'classroom/layout.html.twig';
 
         if ($member && !$member['locked']) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
 
         if (!$classroom) {
@@ -63,7 +63,7 @@ class ReviewController extends BaseController
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
 
-        return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(
+        return $this->render("classroom/review/list.html.twig", array(
             'classroom'            => $classroom,
             'courses'              => $courses,
             'paginator'            => $paginator,
@@ -113,7 +113,7 @@ class ReviewController extends BaseController
 
         $post = $this->getClassroomReviewService()->saveReview($fields);
 
-        return $this->render("TopxiaWebBundle:Review/Widget:subpost-item.html.twig", array(
+        return $this->render("review/widget/subpost-item.html.twig", array(
             'post'      => $post,
             'author'    => $this->getCurrentUser(),
             'canAccess' => true

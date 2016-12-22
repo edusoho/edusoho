@@ -49,7 +49,7 @@ class ClassroomAdminController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:index.html.twig', array(
+        return $this->render('admin/classroom/index.html.twig', array(
             'classroomInfo'       => $classroomInfo,
             'paginator'           => $paginator,
             'classroomCoursesNum' => $classroomCoursesNum,
@@ -78,7 +78,7 @@ class ClassroomAdminController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('班级设置成功！'));
         }
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:set.html.twig', array(
+        return $this->render('admin/classroom/set.html.twig', array(
             'classroomSetting' => $classroomSetting
         ));
     }
@@ -103,7 +103,7 @@ class ClassroomAdminController extends BaseController
             if (empty($title)) {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级名称不能为空！'));
 
-                return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
+                return $this->render("admin/classroom/classroomadd.html.twig");
             }
 
             $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
@@ -111,7 +111,7 @@ class ClassroomAdminController extends BaseController
             if (!empty($isClassroomExisted)) {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级名称已被使用，创建班级失败！'));
 
-                return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
+                return $this->render("admin/classroom/classroomadd.html.twig");
             }
 
             if (!array_key_exists('buyable', $myClassroom)) {
@@ -135,7 +135,7 @@ class ClassroomAdminController extends BaseController
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }
 
-        return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
+        return $this->render("admin/classroom/classroomadd.html.twig");
     }
 
     public function closeClassroomAction($id)
@@ -174,7 +174,7 @@ class ClassroomAdminController extends BaseController
             $classroom = $this->getClassroomService()->recommendClassroom($id, $number);
 
             if ($ref == 'recommendList') {
-                return $this->render('ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig', array(
+                return $this->render('admin/classroom/recommend-tr.html.twig', array(
                     'classroom' => $classroom
                 ));
             }
@@ -182,7 +182,7 @@ class ClassroomAdminController extends BaseController
             return $this->renderClassroomTr($id, $classroom);
         }
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:recommend-modal.html.twig', array(
+        return $this->render('admin/classroom/recommend-modal.html.twig', array(
             'classroom' => $classroom,
             'ref'       => $ref
         ));
@@ -194,7 +194,7 @@ class ClassroomAdminController extends BaseController
         $ref       = $request->query->get('ref');
 
         if ($ref == 'recommendList') {
-            return $this->render('ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig', array(
+            return $this->render('admin/classroom/recommend-tr.html.twig', array(
                 'classroom' => $classroom
             ));
         }
@@ -224,7 +224,7 @@ class ClassroomAdminController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classrooms, 'userId'));
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:recommend-list.html.twig', array(
+        return $this->render('admin/classroom/recommend-list.html.twig', array(
             'classrooms' => $classrooms,
             'users'      => $users,
             'paginator'  => $paginator,
@@ -266,7 +266,7 @@ class ClassroomAdminController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:classroom-chooser.html.twig', array(
+        return $this->render('admin/classroom/classroom-chooser.html.twig', array(
             'conditions' => $conditions,
             'classrooms' => $classrooms,
             'categories' => $categories,
@@ -293,7 +293,7 @@ class ClassroomAdminController extends BaseController
         $coinPriceAll[$id] = $coinPrice;
         $priceAll[$id]     = $price;
 
-        return $this->render('ClassroomBundle:ClassroomAdmin:table-tr.html.twig', array(
+        return $this->render('admin/classroom/table-tr.html.twig', array(
             'classroom'           => $classroom,
             'classroomCoursesNum' => $classroomCoursesNum,
             'coinPriceAll'        => $coinPriceAll,

@@ -36,7 +36,7 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courses);
 
-        return $this->render("ClassroomBundle:ClassroomManage/Course:course-pick-modal.html.twig", array(
+        return $this->render("classroom-manage/course/course-pick-modal.html.twig", array(
             'users'       => $users,
             'courses'     => $courses,
             'classroomId' => $classroomId,
@@ -80,9 +80,9 @@ class CourseController extends BaseController
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
-        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = 'classroom/layout.html.twig';
         if ($member && !$member["locked"]) {
-            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+            $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
             $classroomDescription = array();
@@ -91,7 +91,7 @@ class CourseController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
-        return $this->render("ClassroomBundle:Classroom/Course:list.html.twig", array(
+        return $this->render("classroom/course/list.html.twig", array(
             'classroom'            => $classroom,
             'member'               => $member,
             'teachers'             => $teachers,
@@ -119,7 +119,7 @@ class CourseController extends BaseController
 
        $users = $this->getUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+        return $this->render('course/course-select-list.html.twig', array(
             'users'   => $users,
             'courses' => $courses
         ));
