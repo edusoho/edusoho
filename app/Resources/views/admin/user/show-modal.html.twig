@@ -1,0 +1,287 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'个人详细信息'|trans}}{% endblock %}
+
+{% block body %}
+
+<table class="table table-striped table-condenseda table-bordered">
+  <tr>
+    <th width="25%">{{'用户名'|trans}}</th>
+    <td width="75%">
+      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'个人主页'|trans}}</a>
+      {{ user.nickname }}
+    </td>
+  </tr>
+
+  <tr>
+    <th>Email</th>
+    <td>
+      {% set emailArr = user.email|split('@') %}
+      {% if emailArr[1] != 'edusoho.net' %}
+        {{ user.email }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+  {% if setting('magic.enable_org','0') %}
+    <tr>
+      <th>{{'所属组织机构'|trans}}</th>
+      <td>
+        {% set orgName = data('OrgDisplay',{id: user.orgId}) %}
+        {% if orgName %}
+          {{ orgName }}
+        {% else %}
+          暂无
+        {% endif %}
+      </td>
+    </tr>
+  {% endif  %}
+
+  <tr>
+    <th>{{'用户组'|trans}}</th>
+    <td>
+      {% for role in user.roles %}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'注册时间'|trans}}/IP</th>
+    <td>
+      {{ user.createdTime|date('Y-n-d H:i:s') }}
+      /
+      {{ user.createdIp }} {{convertIP(user.createdIp)}}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'最近登录时间/IP'|trans}}</th>
+    <td> 
+      {% if user.loginTime == 0 %}
+          --
+      {% else %}
+          {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+      {% if user.loginIp|default is not empty %}
+           / {{ user.loginIp }} {{convertIP(user.loginIp)}}
+      {% endif %}
+     </td>
+  </tr>
+
+  <tr>
+    <th>{{'姓名'|trans}}</th>
+    <td>
+      {% if profile.truename %}
+        {{ profile.truename }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'性别'|trans}}</th>
+    <td>
+      {% if profile.gender %}
+        {% if profile.gender == 'male' %}{{'男性'|trans}}{% endif %}
+        {% if profile.gender == 'female' %}{{'女性'|trans}}{% endif %}
+        {% if profile.gender == 'secret' %}{{'秘密'|trans}}{% endif %}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+{#   <tr>
+    <th>类型</th>
+    <td>
+      {% if profile.iam %}
+        {{ profile.iam }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+ 
+   <tr>
+    <th>{{'身份证号'|trans}}</th>
+    <td>
+      {% if profile.idcard %}
+        {{ profile.idcard }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'手机号码'|trans}}</th>
+    <td>
+      {% if user.verifiedMobile %}
+        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'已绑定'|trans}})</span> 
+      {% elseif profile.mobile %}
+        {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
+      {% else %}
+        {{ profile.mobile|default('暂无'|trans) }}
+      {% endif %}
+    </td>
+  </tr>
+
+{#   <tr>
+    <th>学校</th>
+    <td>
+      {% if profile.school %}
+        {{ profile.school }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>班级</th>
+    <td>
+      {% if profile.class %}
+        {{ profile.class }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+
+  <tr>
+    <th>{{'公司'|trans}}</th>
+    <td>
+      {% if profile.company %}
+        {{ profile.company }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'职业'|trans}}</th>
+    <td>
+      {% if profile.job %}
+        {{ profile.job }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+
+  <tr>
+    <th>{{'头衔'|trans}}</th>
+    <td>
+    {% if profile.title %}
+        {{ profile.title }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'个人签名'|trans}}</th>
+    <td>
+    {% if profile.signature %}
+        {{ profile.signature }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'自我介绍'|trans}}</th>
+    <td>
+    {% if profile.about %}
+      <div class="editor-text">
+        {{ profile.about | raw }}
+      </div>
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'个人网站'|trans}}</th>
+    <td>
+      {% if profile.site %}
+        {{ profile.site }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'微博'|trans}}</th>
+    <td>
+      {% if profile.weibo %}
+        {{ profile.weibo }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'微信'|trans}}</th>
+    <td>
+      {% if profile.weixin %}
+        {{ profile.weixin }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>QQ</th>
+    <td>
+      {% if profile.qq %}
+        {{ profile.qq }}
+      {% else %}
+        {{'暂无'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+</table>
+<hr>
+<table class="table table-striped table-condenseda table-bordered">
+    {% if fields %}
+  {% for field in fields %}
+    <tr>
+        <th width="25%">{{field.title}}</th>
+        <td>
+          {% if profile[field.fieldName] %}
+            {% if field.type=="date"%}
+            {{ profile[field.fieldName]|date("Y-m-d") }}
+            {% else %}
+            {{ profile[field.fieldName]|space2nbsp|raw|nl2br }}
+            {% endif %}
+          {% else %}
+            {{'暂无'|trans}}
+          {% endif %}
+        </td>
+    </tr>
+  {% endfor %}
+  {% endif %}
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
+{% endblock %}

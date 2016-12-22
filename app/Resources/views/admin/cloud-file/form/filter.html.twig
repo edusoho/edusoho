@@ -1,0 +1,33 @@
+<div class="materials-group bottom">
+  <li class="all"><span>{{ '筛选：'|trans }}</span></li>
+  <div class="form-inline">
+    <div class="form-group es-materials-filter">
+      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="{{ '起始时间'|trans }}">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="{{ '结束时间'|trans }}">
+    </div>
+    <div class="form-group" >
+      <select class="form-control js-process-status-select" name="processStatus">
+        <option value="">{{ '转码状态'|trans }}</option>
+        <option value="ok">{{ '转码成功'|trans }}</option>
+        <option value="waiting">{{ '转码中'|trans }}</option>
+        <option value="error">{{ '转码失败'|trans }}</option>
+      </select>
+    </div>
+    {% if pageType == 'file' %}
+      <div class="form-group" >
+        <select class="form-control js-use-status-select" name="useStatus">
+          <option value="">{{ '使用状态'|trans }}</option>
+          <option value="unused">{{ '未使用'|trans }}</option>
+          <option value="used">{{ '已使用'|trans }}</option>
+        </select>
+      </div>
+    {% endif %}
+  </div>
+
+ {#  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="processStatus" value="error"> 转码失败
+    </label>
+  </div> #}
+</div>

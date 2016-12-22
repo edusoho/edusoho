@@ -1,0 +1,57 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'设置用户头像'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="user-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ path('admin_user_avatar', {id:user.id}) }}">
+
+    {{ web_macro.flash_messages() }}
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><b>{{'当前头像'|trans}}</b></div>
+      <div class="controls col-md-8 controls">
+      	<img src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">{{'你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过'|trans}}<strong>2M</strong>。</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="upload-picture-btn" 
+        class="btn btn-primary"
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        data-goto-url="{{ path('admin_user_avatar_crop', {id:user.id}) }}"
+        >{{'上传新头像'|trans}}</a>
+        
+      </div>
+    </div>
+
+    {% if partnerAvatar %}
+      <div class="form-group">
+        <div class="col-md-2 control-label"><b>{{'论坛头像'|trans}}</b></div>
+        <div class="controls col-md-8 controls">
+          <img src="{{ partnerAvatar }}" class="mrm">
+          <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings_avatar') }}">{{'使用该头像'|trans}}</button>
+        </div>
+      </div>
+    {% endif %}
+
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
+  <script>app.load('user/avatar-modal')</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+
+<div class="col-md-6">
+  <input id="imUsedInfo"  type="hidden" value='{% if setting('app_im.enabled') %}{{chartInfo.imUsedInfo}}{% else %}{{"[]"}}{% endif %}'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {#<p class="pull-right"><a href="{{path('admin_cloud_sms_account')}}" target="_blank">明细</a></p>	#}
+      <h3 class="panel-title">即时聊天使用情况（最近7天）</h3>
+    </div>
+    <div class="panel-body" id="im-data-tab" style="height: 250px;">
+    {% if not setting('app_im.enabled') %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted">
+          <p class="text-danger">您的即时聊天服务未开启，去<a href="{{ path('admin_app_im') }}">开启</a></p>
+        </div>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</div>

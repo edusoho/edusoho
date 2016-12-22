@@ -1,0 +1,5 @@
+<div class="btn-group">
+<a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'unPosted'%} btn-primary{% endif %}">{{'未回复'|trans}}</a>
+
+<a href=" {{ url('admin_question', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%}btn-primary{% endif %}">{{'所有'|trans}}</a>
+</div>

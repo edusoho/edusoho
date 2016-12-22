@@ -1,0 +1,19 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/dictionary/index' %}
+
+{% block main %}
+
+<table class="table table-hover" id="discovery-table">
+  <thead>
+    <tr>
+      <th width="50%">{{ '名称'|trans }}</th>
+      <th width="15%">{{ '显示序号'|trans }}</th>
+      <th width="20%">{{ '操作'|trans }}</th>
+    </tr>
+  </thead>
+  {% include 'admin/dictionary/tbody.html.twig' %}
+</table>
+{% endblock %}

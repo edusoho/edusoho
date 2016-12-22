@@ -1,0 +1,47 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'system/payment' %}
+
+{% set menu = 'admin_payment' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="payment-form" novalidate >
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label >{{'支付功能'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, payment.enabled) }}
+      <div class="help-block">
+        {{ '开启后，网站收入将自动到达配置的支付宝、微信支付或网银账号中。'|trans }}
+      </div>
+    </div>
+  </div>
+    
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="disabled_message">{{'支付关闭时的提示信息'|trans}}</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
+    </div>
+  </div>
+
+  {% include 'admin/system/pay/alipay.html.twig'%}
+  {% include 'admin/system/pay/wxpay.html.twig'%}
+  {% include 'admin/system/pay/heepay.html.twig'%}
+  {% include 'admin/system/pay/quickly.html.twig'%}
+  {% include 'admin/system/pay/llpay.html.twig'%}
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}

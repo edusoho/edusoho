@@ -1,0 +1,14 @@
+<li data-course-id="{{course.id|default(null)}}" class="course-grid related-course-grid" role="course-item" 
+{% if not showDelBtn|default(false) %}
+style="cursor:pointer"
+{% endif %}>
+	<div class="grid-body" style="position:relative">
+		<img src="{{ filepath(course.largePicture|default(''), 'course.png') }}" class="img-responsive thumb"/>
+		<span class="title" style="max-height: 15px;overflow: hidden;line-height: 20px;">
+		{{course.title|default('还没有选择课程'|trans)}}
+		</span>
+		
+		<button type="button" role="course-item-delete" data-course-id="{{course.id|default(null)}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %} class="series-mode-label close"><i class="glyphicon glyphicon-remove"></i></button>
+
+	</div>
+</li>

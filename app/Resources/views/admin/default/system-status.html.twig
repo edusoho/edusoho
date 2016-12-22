@@ -1,0 +1,98 @@
+<ul class="subfield-list four-subfield clearfix">
+  <li>
+    <div class="title">系统版本</div>
+    <div class="info">
+      {% if mainAppUpgrade %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <span class="text-lg">{{ mainAppUpgrade.package.fromVersion }}</span>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> 有更新</a>
+      {% else %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">{{ constant('Topxia\\System::VERSION') }}</span>
+      {% endif %}
+    </div>
+  </li>
+  <li>
+    <div class="title">网校应用</div>
+    <div class="info">
+      {% if upgradeAppCount == 0 %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">已更新</span>
+      {% else %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ upgradeAppCount }} 个未更新</a>
+      {% endif %}
+    </div>
+  </li>
+  <li>
+    <div class="title">教育云服务</div>
+    <div class="info">
+
+      <span class="status-card-warp">
+        {% if   disabledCloudServiceCount > 0 %}
+          <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+          <a class="text-lg link-underline text-danger" href="{{path('admin_my_cloud_overview')}}">{{ disabledCloudServiceCount }}个未开启</a>
+        {% else %}
+          <span class="glyphicon glyphicon-ok-sign text-success"></span>
+          <span class="text-lg">已开启</span>
+        {% endif %}
+        <div class="status-card">
+          <ul class="open-serve-list">
+            <li>
+              <span class="key">云视频</span>
+              {% if setting('storage.upload_mode') == "cloud" %}
+                <span class="value value-success"><i class="dot"></i>已开启</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">云文档</span>
+              {% if setting('storage.upload_mode') == "cloud" %}
+                <span class="value value-success"><i class="dot"></i>已开启</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">云直播</span>
+              {% if setting('course.live_course_enabled') %}
+                <span class="value value-success"><i class="dot"></i>已开启</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_edulive_overview') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">云短信</span>
+              {% if  setting('cloud_sms.sms_enabled')|default('0') == "1" %}
+                <span class="value value-success"><i class="dot"></i>已开启</span>
+              {% else %}
+                <a href="{{ path('admin_edu_cloud_sms') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">云搜索</span>
+              {% if setting('cloud_search.search_enabled') %}
+                <span class="value value-success"><i class="dot"></i>已开启</span>
+              {% else %}
+                <a href="{{ path('admin_edu_cloud_search') }}" class="value value-danger"><i class="dot"></i>未开启</a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </span>
+    </div>
+  </li>
+  <li>
+    <div class="title">移动客户端</div>
+    <div class="info">
+      {% if setting("mobile").enabled|default(null) %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">已开启</span>
+      {% else %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <a href="{{ path('admin_setting_mobile') }}" class="text-lg link-underline text-danger"> 未开启</a>
+      {% endif %}
+    </div>
+  </li>
+</ul>

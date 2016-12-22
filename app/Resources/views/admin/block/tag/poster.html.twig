@@ -1,0 +1,98 @@
+{% set first = 1 %}
+{% for dataId,data in  block.data[code]|default(null) %}
+  <div role="tabpanel" class="tab-pane {% if first == 1 %}active{% endif %}" id="poster-{{ dataId }}">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'是否开启'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="status-input" type="radio" value="1" {% if data.status == 1 %}checked{% endif %}> {{'开启'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="status-input" type="radio" value="0" {% if data.status == 0 %}checked{% endif %}> {{'关闭'|trans}}
+      </label>
+      <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'布局模式'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="layout-input" type="radio" value="limitWide"
+               {% if data.layout == 'limitWide' %}checked{% endif %}> {{'限宽居中'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="layout-input" type="radio" value="tile" {% if data.layout == 'tile' %}checked{% endif %}> {{'平铺居中'|trans}}
+      </label>
+      <input class="layout-value" type="hidden" name="data[{{ code }}][{{ dataId }}][layout]" value="{{ data.layout }}">
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'编辑模式'|trans}}</label>
+      <label class="checkbox-inline">
+        <input class="imgMode" type="radio" value="option1"
+               {% if data.mode == 'img' %}checked="checked"{% endif %}> {{'图片模式'|trans}}
+      </label>
+      <label class="checkbox-inline">
+        <input class="htmlMode" type="radio" value="option2"
+               {% if data.mode == 'html' %}checked="checked"{% endif %}> {{'HTML模式'|trans}}
+      </label>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][mode]" class="mode-value" value="{{ data.mode }}">
+    </div>
+    <div class="edit-mode-img" {% if data.mode == 'html' %}style="display: none;"{% endif %}>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'选择图片'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <label class="control-label img-mrl">{{ data.src }}</label>
+          <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}"
+             data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</a>
+          <p class="text-success">
+            {% if block.code == 'live_top_banner' %}
+              {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px'|trans}}<br>
+              {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px'|trans}}<br>
+              {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% else %}
+              {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px'|trans}}<br>
+              {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px'|trans}}<br>
+              {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% endif %}
+          </p>
+          <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
+                 id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+          <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'背景色填充'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control colorpicker-input width-input-small"
+                 name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]"
+                 placeholder="{{ data.background }}" value="{{ data.background }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          {{'海报链接地址'|trans}}
+        </label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control width-input-large" name="data[{{ code }}][{{ dataId }}][href]"
+                 id="data[{{ code }}][{{ dataId }}][href]" placeholder="http://" value="{{ data.href }}">
+        </div>
+      </div>
+    </div>
+    <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <textarea class="form-control mbl" id="data[{{ code }}][{{ dataId }}][html]" rows="15"
+                    name="data[{{ code }}][{{ dataId }}][html]" data-role="editor-field">{{ data.html }}</textarea>
+          <label class="control-label html-mrl"></label><br>
+          <a class="btn btn-default btn-sm html-mode-upload" id="html-{{ code }}-uploadId-{{ dataId }}"
+             data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% set first = 0 %}
+{% endfor %}

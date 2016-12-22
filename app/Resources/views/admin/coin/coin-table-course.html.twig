@@ -1,0 +1,61 @@
+<div class="table-responsive" id = "table-responsive">
+  <table class="table" style="table-layout:fixed;word-break:break-all">
+    {% if set.cash_model =="deduction" %}
+    <tr>
+      <th width="40%">{{'课程'|trans}}</th>
+       <th>{{'人民币价格'|trans}}</th>
+      <th>{{'最大可抵扣比率'|trans}}</th>
+      <th>{{'最大可抵扣金额'|trans}}</th>
+      <th>{{'最大可用'|trans}}{{ setting('coin.coin_name')|default('虚拟币'|trans) }}</th>
+    </tr>
+    {% else %}
+    <tr>
+      <th width="60%">{{'课程'|trans}}</th>
+      <th>{{'人民币价格'|trans}}</th>
+      <th>{{ setting('coin.coin_name') }}{{'价格'|trans}}</th>
+    </tr> 
+    {% endif %}
+    {% if items %}
+      {% for item in items %}
+        <tr>
+          <td>
+            <div class="clearfix">
+              <img class="pull-left mrl" src="{{ filepath(item.smallPicture,'course.png') }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('course_show', {id:item.id}) }}" target="_blank" >{{item.title}}
+              </a>
+            </div>
+          </td>
+          <td>
+            {% if set.cash_model =="deduction" %}
+              <span id="rmb{{item.id}}" class="rmbPrice">{{item.originPrice}}</span>
+            {% else %}
+              <input type="hidden" class="rmb" value="{{item.originPrice}}" data-id="{{item.id}}"/>
+              {{item.originPrice}}
+            {% endif %}
+          </td>
+          {% if set.cash_model =="deduction" %}
+            <td>
+              <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+            </td>
+            <td>
+              <span id="deRmb{{item.id}}">{{ (item.maxRate * item.originPrice / 100)|number_format(2, '.') }}</span>
+            </td>
+          {% endif %}
+          <td>
+            {% if set.cash_model =="deduction" %}
+              <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.originPrice * set.cash_rate)|number_format(2, '.', ',') }}</span>
+            {% else %}
+              <div class="form-group">
+                <div class="controls">
+                    {% if item.originPrice > 0 %}
+                      {{ item.originPrice * set.cash_rate}}
+                    {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+</div>

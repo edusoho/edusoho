@@ -1,0 +1,37 @@
+<ul class="subfield-list 
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+    five-subfield 
+  {% else %}
+    four-subfield
+  {% endif %}
+  clearfix">
+  <li>
+    <div class="title">{{ '登录用户'|trans }}</div>
+    <span class="number">{{ loginCount| default('0') }}</span>
+    <p>{{ '在线总数'|trans }}: {{ onlineCount }}</p>
+  </li>
+  <li>
+    <div class="title">{{ '新增注册'|trans }}</div>
+    <span class="number">{{ todayRegisterNum }}</span>
+    <p>{{ '总数'|trans }}: {{ totalRegisterNum }}</p>
+  </li>
+  <li>
+    <div class="title">{{ '新增学员'|trans }}</div>
+    <span class="number"> {{ todayCourseMemberNum + todayClassroomMemberNum }}</span>
+    <p>{{ '总人次'|trans }}: {{ totalCourseMemberNum + totalClassroomMemberNum }}</p>
+  </li>
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+    <li>
+      <div class="title">{{ '新增会员'|trans }}</div>
+      <span class="number">{{ todayVipNum }}</span>
+      <p>{{ '总数'|trans }}: {{ totalVipNum }}</p>
+    </li>
+  {% endif %}
+  <li>
+    <div class="title">{{ '未回复回答'|trans }}</div>
+    <span class="number">
+      {{ todayThreadUnAnswerNum }}
+    </span>
+    <p>{{ '总数'|trans }}: {{ totalThreadNum }}</p>
+  </li>
+</ul>

@@ -1,0 +1,49 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'navigation/index' %}
+
+{% set menu = 'admin_'~type~'_navigation' %}
+{% set types = {top:'顶部'|trans, foot:'底部'|trans, friendlyLink:'友情链接'|trans} %}
+
+{% block page_buttons %} 
+    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">{% if types[type] == '友情链接' %}{{'新增%types[type]%'|trans({'%types[type]%': types[type] })}}{% else %}{{'新增%types[type]%导航'|trans({'%types[type]%': types[type] })}}{% endif %}</button>
+{% endblock %}
+
+{% block main %}
+
+{% if type == 'foot' %}
+<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> {{'清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往'|trans}} <a class="text-info" style="font-weight:bold;" href="{{ path('admin_block', {category:'theme'}) }}">{{'［运营］－［编辑区管理］'|trans}}</a> {{'中进行编辑。'|trans}}</div>
+{% elseif type == 'friendlyLink' %}
+<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> {{'如需在首页显示友情链接模块，请在对应'|trans}}<a class="text-info" style="font-weight:bold;" href="{{ path('admin_setting_theme') }}">{{'主题管理'|trans}}</a>{{'中添加相应模块，暂仅支持简墨主题。'|trans}}
+</div>
+{% endif %}
+
+<table id="navigation-table" class="table table-striped table-hover navigation-table sortable-list">
+  <thead>
+    <tr>
+      <th width="50%">{{'名称'|trans}}</th>
+      <th width="10%">{{'新开窗口'|trans}}</th>
+      <th width="10%">{{'状态'|trans}}</th>  
+      <th width="30%">{{'操作'|trans}}</th>
+    </tr>
+  </thead>
+    
+  {% include 'admin/navigation/tbody.html.twig' %}
+</table>
+    
+<div class="alert alert-info">
+  <p>会员专区：域名/vip</p>
+  <p>直播首页：域名/live</p>
+  <p>小组首页：域名/group</p>
+  <p>资讯首页：域名/article</p>
+  <p>师资力量：域名/teacher</p>
+  <p>移动端首页：域名/mobile</p>
+  <p>个人主页：域名/my/page/show</p>
+  <p>课程列表页：域名/course/explore</p>
+  <p>班级列表页：域名/classroom/explore</p>
+  <p>公开课列表页：域名/open/course/explore</p>
+  <p>课程分类：域名/course/explore/分类编码</p>
+  <p>资讯栏目：域名/article/栏目编码</p>
+</div>
+
+{% endblock %}

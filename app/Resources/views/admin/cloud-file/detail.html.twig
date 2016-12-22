@@ -1,0 +1,83 @@
+<div id="material-detail" class="material-detail-widget">
+  <div class="page-header clearfix">
+    <h1 class="pull-left">{{ '资源详情'|trans }}</h1>
+  </div>
+  <div class="content">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="javascript:;">{{ '基本信息'|trans }}</a></li>
+
+      {% if material.type == 'video' %}
+        <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="javascript:;">{{ '封面图片'|trans }}</a></li>
+      {% endif %}
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="info-tab">
+        {% include 'MaterialLibBundle:Web:edit-detail-form.html.twig' %}
+      </div>
+
+      {% if material.type == 'video' %}
+      <div class="tab-pane es-piece" id="cover-tab">
+        {% if material.processStatus == 'ok' %}
+        <form class="form-horizontal" id="cover-form" action="{{ editUrl }}">
+          <div class="piece-header">{{ '当前封面'|trans }}</div>
+          <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-2">
+              <div class="material-detail-img">
+                <div class="detail-img">
+                  <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}" width="100px"></div>
+                {% if material.thumbnail|default(0) %}
+                <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">{{ '还原'|trans }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="piece-header">{{ '封面设置'|trans }}</div>
+          <div class="form-group">
+            {% if material.thumbnail|default(0) %}
+            <div class="col-sm-8 col-sm-offset-2" id="thumbnail-set">
+              <div class="links nav nav-pills">
+                <li class="active js-set-default" data-target="#default-thumbnails">
+                  <a href="javascript:;">{{ '默认'|trans }}</a>
+                </li>
+                <li class="js-set-select" data-target="#self-select" >
+                  <a  href="javascript:;">{{ '自选'|trans }}</a>
+                </li>
+              </div>
+              <div class="tab-content-img">
+                <div class="tab-pane-img row active" id="default-thumbnails">
+                  {% for thumbnail in thumbnails %}
+                  <div class="col-sm-4 col-xs-6" style="padding-bottom:10px">
+                    <img class="js-img-set img-responsive" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}"></div>
+                  {% endfor %}
+                </div>
+                <div class="tab-pane-img material-detail-img" id="self-select">
+                  <div class="video-player-container detail-img">
+                    <iframe src="{{ path('material_lib_file_player', {fileId:material.id, watermarkOpened:'hidden', 'disableVolumeButton': 1, 'disablePlaybackButton':1, 'disableResolutionSwitcher': 1}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
+                  </div>
+                  <div class="btn-content">
+                    {% if material.thumbnail|default(0) %}
+                    <a class="btn btn-fat btn-info js-screenshot-btn" href="javascript:;" data-url="{{ path('material_thumbnail_generate', {globalId:material.no}) }}" data-loading-text="{{ '正在生成截图，请稍等...'|trans }}">{{ '截图'|trans }}</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          <input type="hidden" name="thumbNo" id="thumbNo">
+          <input type="hidden" id="orignalThumb" value="{{ asset(material.thumbnail) }}">
+          <div class="material-detail-save">
+            {% if material.thumbnail|default(0) %}
+            <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="{{ '正在保存...'|trans }}" type="submit">{{ '保存'|trans }}</button>
+            <a class="btn btn-link js-back">{{ '返回列表'|trans }}</a>
+            {% endif %}
+          </div>
+        </form>
+        {% else %}
+        <div class="empty text-muted">{{ '视频还没有转码完成，请等待转码完成......'|trans }}</div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

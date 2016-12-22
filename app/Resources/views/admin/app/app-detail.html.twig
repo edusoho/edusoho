@@ -1,0 +1,28 @@
+      <tr>
+        <td>
+          <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+          <div class="mtm">
+
+              <h4>
+                <a target="_blank" href="http://open.edusoho.com/app/{{ app.id }}">
+                  <strong class="text-primary">{{ app.name }}</strong>
+                  {% if app.licensed %}
+                  <span class="label label-success mls">{{'商业版'|trans}}</span>
+                  {% endif %}
+                  </a>
+              </h4>
+
+          </div>
+
+          <div class="info mtm mbm clearfix">
+            <div class="left-info pull-left">
+
+              <div class="text-muted">{{'作者：'|trans}} {{ app.developerName }}</div>
+              <div class="mts text-muted">{% if app.type == "theme" %}{{'主题'|trans}}{% else %}{{'应用'|trans}}{% endif %}
+              </div>
+            </div>
+
+            <div class="middle-info pull-left short-long-text">
+              <div class="short-text text-muted">{{ app.description|plain_text(80) }} <span class="trigger">({{'展开'|trans}})</span></div>
+              <div class="long-text text-muted">{{ app.description|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+            </div>

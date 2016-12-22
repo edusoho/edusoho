@@ -1,0 +1,11 @@
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4 class="eduyun-title">{{'授权信息'|trans}}</h4>
+                  <p class="text-muted">{% if user.hasLicense|default("0") == "0" %}{{'非商业授权'|trans}}{% else %}{{'商业授权'|trans}}{% endif %}</p>
+                  <p class="text-muted">{{'授权域名:'|trans}} {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains|default(1) }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
+        {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
+                </div>
+              </div>
+            </div>
+
