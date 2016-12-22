@@ -13,7 +13,9 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
 
         $media   = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
@@ -36,7 +38,9 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
         
         return $this->createJsonResponse(array(
             'subtitles' => $subtitles
@@ -85,7 +89,9 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException($this->trans('没有权限管理资源'));
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
         $media   = $this->getUploadFileService()->getFile($mediaId);
         return $this->render('TopxiaWebBundle:MediaManage/Subtitle:dialog.html.twig', array(
             'subtitles' => $subtitles,
