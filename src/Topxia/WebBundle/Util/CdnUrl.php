@@ -9,9 +9,9 @@ class CdnUrl
     {
         $cdn     = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
         $cdnUrls = (empty($cdn['enabled'])) ? array() : array(
-        	'defaultUrl' => rtrim($cdn['defaultUrl'], " \/"), 
-        	'userUrl' => rtrim($cdn['userUrl'], " \/"), 
-        	'contentUrl' => rtrim($cdn['contentUrl'], " \/")
+        	'defaultUrl' => $this->url($cdn['defaultUrl']), 
+        	'userUrl' => $this->url($cdn['userUrl']), 
+        	'contentUrl' => $this->url($cdn['contentUrl'])
         );
 
         if ($cdnUrls) {
