@@ -1,3 +1,5 @@
+{% set topxiaadminbundle = true %}
+{# todo layout modify#}
 <div  id="modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -45,4 +47,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript"> app.load('system/save-modal') </script>
+<script type="text/javascript"> app.lazyLoad = function() { app.load('system/save-modal') }; </script>

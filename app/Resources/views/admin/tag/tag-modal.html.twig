@@ -1,6 +1,8 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set tag = tag|default(null) %}
 
+{% set topxiaadminbundle = true %}
+
 {% block title %}
 {% if tag.id %}{{'编辑标签'|trans}}{% else %}{{'新增标签'|trans}}{% endif %}
 {% endblock %}
@@ -14,7 +16,7 @@
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  <script type="text/javascript">app.load('tag/save-modal')</script>
+  <script type="text/javascript">app.lazyLoad = function() { app.load('tag/save-modal') };</script>
 {% endblock %}
 
 {% block footer %}

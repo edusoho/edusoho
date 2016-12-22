@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'每周精品课程'|trans}}{% endblock %}
+
+{% set topxiaadminbundle = true %}
+
 {% block body %}
 <div>
 	<div>
@@ -32,5 +35,5 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
-  <script>app.load('course/search')</script>
+  <script>app.lazyLoad = function() { app.load('course/search') };</script>
 {% endblock %}

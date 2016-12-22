@@ -1,3 +1,5 @@
+{% set topxiaadminbundle = true %}
+{# todo layout modify#}
 <div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
@@ -28,7 +30,7 @@
     </form>
 </div>
           <div class="modal-footer">  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  <script>app.load('article/picture-crop-modal')</script>
+  <script>app.lazyLoad = function() { app.load('article/picture-crop-modal') };</script>
 </div>
       </div>
 </div>

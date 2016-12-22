@@ -1,3 +1,5 @@
-  <div id="block-history" data-url="{{ path('admin_block_history_data', {blockId: block.blockId}) }}">
-  </div>
-  <script type="text/javascript">app.load('block/block-history')</script>
+{% set topxiaadminbundle = true %}
+{# todo layout modify#}
+<div id="block-history" data-url="{{ path('admin_block_history_data', {blockId: block.blockId}) }}">
+</div>
+<script type="text/javascript">app.lazyLoad = function() { app.load('block/block-history') };</script>

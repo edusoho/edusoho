@@ -6,6 +6,8 @@
 {% endif %}
 {% endblock %}
 
+{% set topxiaadminbundle = true %}
+
 {% block body %}
 <div id="dictionary-creater-widget">
 
@@ -28,7 +30,7 @@
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 </div>
-<script type="text/javascript"> app.load('dictionary/save-modal') </script>
+<script type="text/javascript"> app.lazyLoad = function() { app.load('dictionary/save-modal') }; </script>
 {% endblock %}
 
 {% block footer %}

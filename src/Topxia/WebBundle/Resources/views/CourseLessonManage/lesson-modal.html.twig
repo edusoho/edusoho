@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
@@ -155,7 +156,7 @@
 </form>
 
 
-<script>app.load('course-manage/lesson-modal')</script>
+<script>app.lazyLoad = function() { app.load('course-manage/lesson-modal') };</script>
 
 
 {% endblock %}

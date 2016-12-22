@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% block title %}核实用户密码{% endblock %}
+
+{% set topxiaadminbundle = true %}
+
 {% block body %}
   <form id="delete-form" action="{{path('admin_check_password')}}">
     <div class="row form-group">
@@ -35,5 +38,5 @@
    <strong class="text text-danger" id="delete-hint" style="display:none;">正在删除，请不要关闭当前窗口...</strong>
 
   <button id="finish-delete-btn" data-loading-text="正在完成删除, 请稍等..." class="btn btn-primary" style="display:none;"data-dismiss="modal">完成删除</button>
-  <script>app.load('open-course/delete-modal')</script>
+  <script>app.lazyLoad = function() { app.load('open-course/delete-modal') };</script>
 {% endblock %}

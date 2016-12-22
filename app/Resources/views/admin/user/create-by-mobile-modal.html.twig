@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiaadminbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'添加新用户'|trans}}{% endblock %}
@@ -68,5 +69,5 @@
           data-toggle="form-submit" data-target="#user-create-form">{{'提交'|trans}}
   </button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  <script>app.load('user/create-modal-onlymobile')</script>
+  <script>app.lazyLoad = function() { app.load('user/create-modal-onlymobile') };</script>
 {% endblock %}

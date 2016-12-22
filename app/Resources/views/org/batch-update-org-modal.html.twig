@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}{{ '设置组织机构'|trans }}{% endblock %}
@@ -27,5 +28,5 @@
           data-toggle="form-submit" data-target="#batch-setting-org-form">{{ '提交'|trans }}
   </button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
-  <script>app.load('orgbundle/controller/org/batch-org-modal')</script>
+  <script>app.lazyLoad = function() { app.load('orgbundle/controller/org/batch-org-modal') };</script>
 {% endblock %}

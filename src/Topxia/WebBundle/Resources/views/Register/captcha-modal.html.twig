@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'请输入验证码'|trans}}{% endblock %}
@@ -26,5 +27,5 @@
 {% block footer %}
   <button type="submit" class="btn btn-primary pull-right captcha-btn" data-toggle="form-submit" data-target="#captcha-form">{{'确定'|trans}}</button>
 
-<script>app.load('auth/captcha-modal')</script>
+<script>app.lazyLoad = function() { app.load('auth/captcha-modal') };</script>
 {% endblock %}

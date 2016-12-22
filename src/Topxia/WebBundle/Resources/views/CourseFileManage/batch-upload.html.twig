@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
@@ -121,7 +122,7 @@
 {% endblock %}
 
 {% block script %}
-<script>app.load('course-manage-file/batch-upload-course-files')</script>
+<script>app.lazyLoad = function() { app.load('course-manage-file/batch-upload-course-files') };</script>
 {% endblock %}
 
 {% block footer %}

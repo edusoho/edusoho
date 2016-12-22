@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class= "modal-lg" %}
 
 {% block title %}{{'选择课程'|trans}}{% endblock %}
@@ -39,5 +40,5 @@
   <button id="sure" class="btn btn-primary pull-right" data-url="{{ path('classroom_courses_select', {id:classroomId})}}">{{'添加'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
 
-    <script>app.load('classroombundle/controller/classroom/manage/course/pick')</script>
+    <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom/manage/course/pick') };</script>
 {% endblock %}

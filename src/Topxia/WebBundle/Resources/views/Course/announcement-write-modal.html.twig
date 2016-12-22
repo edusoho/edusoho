@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+
 {% block title %}{% if announcement.id %}{{'编辑公告'|trans}}{% else %}{{'添加公告'|trans}}{% endif %}{% endblock %}
 
 {% block body %}
@@ -28,7 +30,7 @@
   </form>
 
   <script>
-    app.load('course/announcement-write');
+    app.lazyLoad = function() { app.load('course/announcement-write'); };
   </script>
 
 {% endblock %}

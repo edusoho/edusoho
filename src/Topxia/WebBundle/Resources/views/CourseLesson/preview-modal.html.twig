@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}<span class="text-muted">{{'课时预览'|trans}}:</span> {{lesson.title}}{% endblock %}
@@ -59,7 +60,7 @@
   {% else %}
     <div class="empty">{{'课时尚未发布，无法预览！'|trans}}</div>
   {% endif %}
-  <script>app.load('course/lesson-preview')</script>
+  <script>app.lazyLoad = function() { app.load('course/lesson-preview') };</script>
 {% endblock %}
 
 {% block footer %}

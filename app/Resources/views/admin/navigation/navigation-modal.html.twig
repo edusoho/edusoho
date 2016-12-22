@@ -18,6 +18,8 @@
 
 {% endblock %}
 
+{% set topxiaadminbundle = true %}
+
 {% block body %}
 
   <form class="form-horizontal" id="navigation-form"
@@ -91,9 +93,9 @@
 
   <script type="text/javascript">
   {% if navigation.id  == 0  %}
-    app.load('navigation/create-modal')
+    app.lazyLoad = function() { app.load('navigation/create-modal') };
   {% else %}
-    app.load('navigation/edit-modal')
+    app.lazyLoad = function() { app.load('navigation/edit-modal') };
   {% endif %}
   </script>
   

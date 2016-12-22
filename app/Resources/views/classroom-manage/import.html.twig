@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:Importer:importer-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+{# todo layout modify#}
 {% block form_data %}
 	<div class="form-group" id="teachers-form-group">
 		<label class="col-md-3 col-md-offset-1">
@@ -45,7 +47,7 @@
 {% endblock %}
 
 {% block load_import_js %}
-	app.load('classroombundle/controller/classroom/manage/student-import');
+	app.lazyLoad = function() { app.load('classroombundle/controller/classroom/manage/student-import'); };
 {% endblock %}
 
 {% block stylesheet %}
