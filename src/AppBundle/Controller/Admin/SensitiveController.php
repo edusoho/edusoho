@@ -3,7 +3,6 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class SensitiveController extends BaseController
