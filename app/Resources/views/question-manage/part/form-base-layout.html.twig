@@ -29,7 +29,7 @@
       {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
     </div>
   </div>
-  {{ render(controller('TopxiaWebBundle:Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
+  {{ render(controller('AppBundle:Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
 
 
   {% block question_extra_fields %}{% endblock %}
@@ -47,7 +47,7 @@
           <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
       </div>
     </div>
-     {{ render(controller('TopxiaWebBundle:Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
+     {{ render(controller('AppBundle:Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
 
     <div class="form-group">
       <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>

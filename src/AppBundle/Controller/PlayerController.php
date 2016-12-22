@@ -172,11 +172,11 @@ class PlayerController extends BaseController
      */
     protected function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 }
