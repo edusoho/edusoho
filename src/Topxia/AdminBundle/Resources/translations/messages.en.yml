@@ -1817,7 +1817,7 @@ Key生成失败，请检查服务器网络后，重试！: 'Key created failed,p
 '新用户添加失败': 'New user add failed'
 用户信息保存成功: 'User information saved successfully'
 '网站地址不正确，须以http://weibo.com开头。': 'The website address is not correct which should starts with http://weibo.com.'
-'网站地址不正确，须以http://开头。': 'The website address is not correct which should starts with http://.'
+'网站地址不正确，须以http://或者https://开头。': 'The website address is not correct which should starts with http://.'
 '已经导入：%progressNum%': '%progressNum% already imported'
 '%data%完成': '%data% completed'
 真的要%title%吗？: 'Are you sure want  %title%？'
