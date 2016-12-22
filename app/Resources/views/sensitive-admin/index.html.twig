@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
 {% set menu = 'admin_keyword' %}
 
@@ -37,7 +37,7 @@
       </thead>
       <tbody>
       {% for keyword in keywords %}
-        {% include 'SensitiveWordBundle:SensitiveAdmin:table-tr.html.twig' %}
+        {% include 'sensitive-admin/table-tr.html.twig' %}
       {% endfor %}
       </tbody>
 
