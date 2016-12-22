@@ -15755,15 +15755,8 @@ textarea {
 .es-mobile .course-detail-header.after .es-mobile-nav li a {
   font-weight: normal;
 }
-.es-mobile .course-detail-header.after #unfavorite-btn,
-.es-mobile .course-detail-header.after #favorite-btn {
-  display: none;
-}
 .es-mobile .course-detail-header.after .course-data.two-col > li {
   width: auto;
-}
-.es-mobile .course-detail-header.after .course-data > li:last-child:after {
-  background-color: transparent;
 }
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
