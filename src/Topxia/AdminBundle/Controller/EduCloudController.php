@@ -104,6 +104,11 @@ class EduCloudController extends BaseController
                     $unPaidService[] = $key;
                 }
             }
+            foreach ($unPaidService as $key => $value) {
+                if ($value == 'search') {
+                    unset($unPaidService[$key]);
+                }
+            }
         }
         
         return $this->render('TopxiaAdminBundle:EduCloud/Overview:index.html.twig', array(
