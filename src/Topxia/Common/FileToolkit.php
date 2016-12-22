@@ -62,9 +62,27 @@ class FileToolkit
         $regex  = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
             $errors[] = "只允许上传以下扩展名的文件：".$extensions;
+
+            return  $errors;
+        }
+        $secureFileMimeTypes = self::getSecureFileMimeTypes();
+
+        $fileMimeType = $file->getClientMimeType();
+        if (!in_array($fileMimeType, $secureFileMimeTypes)) {
+            $errors[] = "请上传合法的文件。";
+
+            return  $errors;
         }
 
-        return $errors;
+        // if (function_exists('finfo_open')) {
+        //     $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        //     $mimeType = finfo_file($finfo, $file);
+        //     if (!in_array($mimeType, $secureFileMimeTypes)) {
+        //         $errors[] = "请上传合法的文件。";
+
+        //         return  $errors;
+        //     }
+        // }
     }
 
     public static function isImageFile(File $file)
@@ -88,6 +106,18 @@ class FileToolkit
     public static function getFileExtension(File $file)
     {
         return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
+    }
+
+    public static function getSecureFileMimeTypes()
+    {
+        $extensions = self::getSecureFileExtensions();
+        $extensions = explode(' ', $extensions);
+        $mimeTypes = array();
+        foreach ($extensions as $key => $extension) {
+            $mimeTypes[] = self::getMimeTypeByExtension($extension);
+        }
+
+        return $mimeTypes;
     }
 
     public static function getSecureFileExtensions()
@@ -870,7 +900,11 @@ class FileToolkit
             'smv'         => 'video/x-smv',
             'ice'         => 'x-conference/x-cooltalk',
             'mpg'         => 'video/mpeg',
-            'mp3'         => 'audio/mpeg'
+            'mp3'         => 'audio/mpeg',
+            'gz'          => 'application/x-gzip',
+            'jpg'         => 'image/jpeg',
+            'pps'         => 'application/vnd.ms-powerpoint',
+            'mov'         => 'video/quicktime'
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }

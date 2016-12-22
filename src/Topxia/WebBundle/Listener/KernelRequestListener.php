@@ -21,12 +21,22 @@ class KernelRequestListener
             return;
         }
 
-        $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
-        if (isset($blacklistIps['ips'])) {
-            $blacklistIps = $blacklistIps['ips'];
+        $settingService = ServiceKernel::instance()->createService('System.SettingService');
 
-            if (in_array($request->getClientIp(), $blacklistIps)) {
+        $blacklistIps = $settingService->get('blacklist_ip');
+        $whitelistIps = $settingService->get('whitelist_ip');
+
+        $clientIp = $request->getClientIp();
+
+        if (isset($blacklistIps['ips'])) {
+            if ($this->matchIpConfigList($clientIp, $blacklistIps['ips'])) {
                 throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
+            }
+        }
+
+        if (isset($whitelistIps['ips'])) {
+            if ($this->matchIpConfigList($clientIp, $whitelistIps['ips']) == false) {
+                throw new AccessDeniedException('您的IP不在授权访问列表中，访问被拒绝，如有疑问请联系管理员！');
             }
         }
 
@@ -74,6 +84,32 @@ class KernelRequestListener
                     $event->setResponse($response);
                 }
             }
+        }
+    }
+
+    private function matchIpConfigList($clientIp, $ipConfigList)
+    {
+        foreach ($ipConfigList as $ipConfigEntry) {
+            if ($this->matchIp($clientIp, $ipConfigEntry)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function matchIp($clientIp, $ipConfigEntry)
+    {
+        $ipConfigEntry = trim($ipConfigEntry);
+
+        if(strlen($ipConfigEntry) > 0) {
+            $regex = str_replace(".", "\.", $ipConfigEntry);
+            $regex = str_replace("*", "\d{1,3}", $regex);
+            $regex = "/^" . $regex . "/";
+
+            return preg_match($regex, $clientIp);
+        } else {
+            return false;
         }
     }
 

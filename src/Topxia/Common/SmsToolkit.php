@@ -79,20 +79,31 @@ class SmsToolkit
     public static function getShortLink($url)
     {
         $apis = array(
+            'eduCloud' => 'http://kzedu.cc/app/shorturl',
             'baidu' => 'http://dwz.cn/create.php',
             'qq'    => 'http://qqurl.com/create/'
         );
 
         foreach ($apis as $key => $api) {
             $response = CurlToolkit::request('POST', $api, array('url' => $url));
+            if ($key == 'eduCloud') {
+                if (isset($response['short_url'])) {
+                    return $response['short_url'];
+                } else {
+                    continue;
+                }
+            }
+
             if ($response['status'] != 0) {
                 continue;
-            } else {
-                if ($key == 'baidu') {
-                    return $response['tinyurl'];
-                } else {
-                    return $response['short_url'];
-                }
+            }
+
+            if ($key == 'baidu') {
+                return $response['tinyurl'];
+            }
+
+            if ($key == 'qq') {
+                return $response['short_url'];
             }
         }
 

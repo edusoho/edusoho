@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.handlebars.class">Assetic\Filter\HandlebarsFilter</parameter>
+        <parameter key="assetic.filter.handlebars.bin">/usr/bin/handlebars</parameter>
+        <parameter key="assetic.filter.handlebars.node">%assetic.node.bin%</parameter>
+        <parameter key="assetic.filter.handlebars.timeout">null</parameter>
+        <parameter key="assetic.filter.handlebars.node_paths">%assetic.node.paths%</parameter>
+        <parameter key="assetic.filter.handlebars.minimize">false</parameter>
+        <parameter key="assetic.filter.handlebars.simple">false</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.handlebars" class="%assetic.filter.handlebars.class%">
+            <tag name="assetic.filter" alias="handlebars" />
+            <argument>%assetic.filter.handlebars.bin%</argument>
+            <argument>%assetic.filter.handlebars.node%</argument>
+            <call method="setTimeout"><argument>%assetic.filter.handlebars.timeout%</argument></call>
+            <call method="setNodePaths"><argument>%assetic.filter.handlebars.node_paths%</argument></call>
+            <call method="setMinimize"><argument>%assetic.filter.handlebars.minimize%</argument></call>
+            <call method="setSimple"><argument>%assetic.filter.handlebars.simple%</argument></call>
+        </service>
+    </services>
+</container>

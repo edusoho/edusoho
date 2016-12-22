@@ -34,6 +34,8 @@ class UploaderController extends BaseController
             $result                    = $this->getUploadFileService()->initUpload($params);
 
             $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
+            // @todo 临时添加，要去除。
+            $result['uploadUrl'] = 'https://up.qbox.me';
             return $this->createJsonResponse($result);
         }
     }
