@@ -111,26 +111,26 @@ class FinanceSettingController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 }

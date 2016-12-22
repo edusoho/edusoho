@@ -100,6 +100,6 @@ class LoginRecordController extends BaseController
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 }

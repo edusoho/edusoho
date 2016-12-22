@@ -31,6 +31,6 @@ class CloudAttachmentController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }

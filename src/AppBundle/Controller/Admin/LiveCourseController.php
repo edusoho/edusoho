@@ -125,12 +125,12 @@ class LiveCourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     private function getEduCloudStatus()
@@ -147,6 +147,6 @@ class LiveCourseController extends BaseController
 
     protected function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.EduCloudService');
+        return $this->createService('CloudPlatform.EduCloudService');
     }
 }

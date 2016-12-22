@@ -301,7 +301,7 @@ class SettingController extends BaseController
         }
 
         //浏览器图标覆盖默认图标
-        copy($this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/favicon.ico');
+        copy($this->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
         $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', array('favicon' => $site['favicon']));
 
@@ -667,32 +667,32 @@ class SettingController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     private function getWebExtension()

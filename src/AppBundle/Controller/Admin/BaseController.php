@@ -2,9 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\WebBundle\Controller\BaseController as WebBaseController;
 
-class BaseController extends WebBaseController
+class BaseController extends \AppBundle\Controller\BaseController
 {
     protected function getDisabledFeatures()
     {

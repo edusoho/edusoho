@@ -358,7 +358,7 @@ class BlockController extends BaseController
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content:BlockService');
+        return $this->createService('Content:BlockService');
     }
 
     /**
@@ -366,6 +366,6 @@ class BlockController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }

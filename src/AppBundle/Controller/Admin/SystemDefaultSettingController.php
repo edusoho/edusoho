@@ -98,11 +98,11 @@ class SystemDefaultSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 }

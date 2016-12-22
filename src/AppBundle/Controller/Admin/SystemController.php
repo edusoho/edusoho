@@ -33,12 +33,12 @@ class SystemController extends BaseController
             $discuzProvider = new DiscuzAuthProvider();
 
             if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('通信成功')));
+                return $this->createJsonResponse(array('status' => true, 'message' => $this->trans('通信成功')));
             } else {
-                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('通信失败')));
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->trans('通信失败')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('未开通Ucenter')));
+            return $this->createJsonResponse(array('status' => true, 'message' => $this->trans('未开通Ucenter')));
         }
     }
 
@@ -52,7 +52,7 @@ class SystemController extends BaseController
         if (!empty($mailer['enabled'])) {
             try {
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
-                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('已经使用云邮件')));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->trans('已经使用云邮件')));
                 } else {
                     $mailOptions = array(
                         'to'       => $user['email'],
@@ -65,14 +65,14 @@ class SystemController extends BaseController
                     $mail = MailFactory::create($mailOptions);
                     $mail->send();
 
-                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('邮件发送正常')));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->trans('邮件发送正常')));
                 }
             } catch (\Exception $e) {
                 $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
-                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送异常')));
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->trans('邮件发送异常')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送服务并没开通！')));
+            return $this->createJsonResponse(array('status' => false, 'message' => $this->trans('邮件发送服务并没开通！')));
         }
     }
 
@@ -153,21 +153,21 @@ class SystemController extends BaseController
         $logs    = array(
             'name'  => '/app/logs',
             'dir'   => $rootDir.'/logs',
-            'title' => $this->getServiceKernel()->trans('用户在站点进行操作的日志存放目录')
+            'title' => $this->trans('用户在站点进行操作的日志存放目录')
         );
 
         $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
         $webFiles   = array(
             'name'  => substr($webFileDir, strrpos($webFileDir, '/')),
             'dir'   => $webFileDir,
-            'title' => $this->getServiceKernel()->trans('用户在站点上传图片的存放目录')
+            'title' => $this->trans('用户在站点上传图片的存放目录')
         );
 
         $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $material    = array(
             'name'  => substr($materialDir, strrpos($materialDir, '/')),
             'dir'   => $materialDir,
-            'title' => $this->getServiceKernel()->trans('用户教学资料库中资源的所在目录(云文件除外)')
+            'title' => $this->trans('用户教学资料库中资源的所在目录(云文件除外)')
         );
 
         return array_map(function ($array) {
@@ -188,6 +188,6 @@ class SystemController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }

@@ -68,12 +68,12 @@ class CourseThreadController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
 }

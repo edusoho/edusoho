@@ -96,7 +96,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'warning',
-                'errorMessage' => $this->getServiceKernel()->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
+                'errorMessage' => $this->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl
@@ -389,7 +389,7 @@ class DefaultController extends BaseController
     public function weekday($time)
     {
         if (is_numeric($time)) {
-            $weekday = array($this->getServiceKernel()->trans('星期日'), $this->getServiceKernel()->trans('星期一'), $this->getServiceKernel()->trans('星期二'), $this->getServiceKernel()->trans('星期三'), $this->getServiceKernel()->trans('星期四'), $this->getServiceKernel()->trans('星期五'), $this->getServiceKernel()->trans('星期六'));
+            $weekday = array($this->trans('星期日'), $this->trans('星期一'), $this->trans('星期二'), $this->trans('星期三'), $this->trans('星期四'), $this->trans('星期五'), $this->trans('星期六'));
             return $weekday[date('w', $time)];
         }
 
@@ -525,12 +525,12 @@ class DefaultController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getStatisticsService()
     {
-        return $this->getServiceKernel()->createService('System:StatisticsService');
+        return $this->createService('System:StatisticsService');
     }
 
     /**
@@ -538,7 +538,7 @@ class DefaultController extends BaseController
      */
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     /**
@@ -546,7 +546,7 @@ class DefaultController extends BaseController
      */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -554,17 +554,17 @@ class DefaultController extends BaseController
      */
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     /**
@@ -572,12 +572,12 @@ class DefaultController extends BaseController
      */
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     private function getWebExtension()
@@ -587,17 +587,17 @@ class DefaultController extends BaseController
 
     protected function getUpgradeNoticeService()
     {
-        return ServiceKernel::instance()->createService('User:UpgradeNoticeService');
+        return $this->createService('User:UpgradeNoticeService');
     }
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     protected function getUserActiveService()
     {
-        return ServiceKernel::instance()->createService('User:UserActiveService');
+        return $this->createService('User:UserActiveService');
     }
 
     /**

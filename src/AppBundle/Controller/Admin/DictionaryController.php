@@ -39,9 +39,9 @@ class DictionaryController extends BaseController
         $dictionaryItem = $this->getDictionaryService()->findDictionaryItemByName($name);
 
         if (empty($name)) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请输入名称！'));
+            $response = array('success' => false, 'message' => $this->trans('请输入名称！'));
         } elseif ($dictionaryItem && $name && $dictionaryItem[0]['id'] != $id) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该名称已经存在！'));
+            $response = array('success' => false, 'message' => $this->trans('该名称已经存在！'));
         } else {
             $response = array('success' => true);
         }
@@ -83,6 +83,6 @@ class DictionaryController extends BaseController
 
     protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('admin/dictionary/DictionaryService');
+        return $this->createService('Dictionary:DictionaryService');
     }
 }

@@ -93,7 +93,7 @@ class ThemeController extends BaseController
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
+        return $this->render('default/index.html.twig', array(
             'isEditColor'   => true,
             'friendlyLinks' => $friendlyLinks
         ));
@@ -186,14 +186,14 @@ class ThemeController extends BaseController
 
     private function editRecommendTeacher($config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-recommend-teacher-modal.html.twig', array(
+        return $this->render('theme/edit-recommend-teacher-modal.html.twig', array(
             'config' => $config
         ));
     }
 
     private function editRecommendClassroom($config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-recommend-classroom-modal.html.twig', array(
+        return $this->render('theme/edit-recommend-classroom-modal.html.twig', array(
             'config' => $config
         ));
     }
@@ -205,7 +205,7 @@ class ThemeController extends BaseController
         if ($currentTheme['uri'] == 'graceful') {
             $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
         } else {
-            $template = 'Theme:theme-edit-config-li.html.twig';
+            $template = 'theme/theme-edit-config-li.html.twig';
         }
 
         return $template;
@@ -213,16 +213,16 @@ class ThemeController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getThemeService()
     {
-        return $this->getServiceKernel()->createService('Theme:ThemeService');
+        return $this->createService('Theme:ThemeService');
     }
 
     protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content:NavigationService');
+        return $this->createService('Content:NavigationService');
     }
 }

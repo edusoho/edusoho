@@ -40,7 +40,7 @@ class UploadFileController extends BaseController
      */
 	protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -48,6 +48,6 @@ class UploadFileController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }

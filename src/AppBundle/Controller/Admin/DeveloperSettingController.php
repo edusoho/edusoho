@@ -44,7 +44,7 @@ class DeveloperSettingController extends BaseController
 
             $this->dealServerConfigFile();
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('开发者已保存！'));
+            $this->setFlashMessage('success', $this->trans('开发者已保存！'));
         }
 
         return $this->render('admin/developer-setting/index.html.twig', array(
@@ -54,7 +54,7 @@ class DeveloperSettingController extends BaseController
 
     protected function dealServerConfigFile()
     {
-        $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/api_server.json';
+        $serverConfigFile = $this->getParameter('kernel.root_dir').'/data/api_server.json';
         $fileSystem       = new Filesystem();
         $fileSystem->remove($serverConfigFile);
     }
@@ -93,7 +93,7 @@ class DeveloperSettingController extends BaseController
 
             $this->getSettingService()->set('magic', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新Magic设置', $setting);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('设置已保存！'));
         }
 
         $setting = $this->getSettingService()->get('magic', array());
@@ -123,7 +123,7 @@ class DeveloperSettingController extends BaseController
             }
 
             $this->getLogService()->info('system', 'update_redis', '更新redis设置', $redis);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('设置已保存！'));
         }
 
         $redis = $this->getSettingService()->get('redis', array());
@@ -160,21 +160,21 @@ class DeveloperSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getCloudFileService()
     {
-        return $this->getServiceKernel()->createService('CloudFile:CloudFileService');
+        return $this->createService('CloudFile:CloudFileService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }

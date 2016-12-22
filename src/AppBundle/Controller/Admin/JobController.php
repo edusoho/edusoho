@@ -38,6 +38,6 @@ class JobController extends BaseController
 
     protected function getjobService()
     {
-        return $this->getServiceKernel()->createService('Crontab:CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 }

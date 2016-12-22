@@ -189,11 +189,11 @@ class AppController extends BaseController
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

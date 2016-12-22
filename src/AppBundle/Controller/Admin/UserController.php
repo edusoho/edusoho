@@ -227,7 +227,7 @@ class UserController extends BaseController
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
+                $this->setFlashMessage('danger', $this->trans('用户已绑定的手机不能修改。'));
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -516,12 +516,12 @@ class UserController extends BaseController
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     /**
@@ -529,7 +529,7 @@ class UserController extends BaseController
      */
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     /**
@@ -537,51 +537,51 @@ class UserController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getSessionService()
     {
-        return $this->getServiceKernel()->createService('System:SessionService');
+        return $this->createService('System:SessionService');
     }
 
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 }

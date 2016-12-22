@@ -145,9 +145,9 @@ class DiscoveryColumnController extends BaseController
         $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
 
         if (empty($title)) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请输入栏目名称！'));
+            $response = array('success' => false, 'message' => $this->trans('请输入栏目名称！'));
         } elseif ($discoveryColumn && $title && $discoveryColumn[0]['id'] != $id) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该栏目名称已经存在！'));
+            $response = array('success' => false, 'message' => $this->trans('该栏目名称已经存在！'));
         } else {
             $response = array('success' => true);
         }
@@ -169,21 +169,21 @@ class DiscoveryColumnController extends BaseController
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('admin/discovery-Column/DiscoveryColumnService');
+        return $this->createService('admin/discovery-Column/DiscoveryColumnService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

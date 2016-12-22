@@ -279,17 +279,17 @@ class GroupController extends BaseController
 
 	  protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group:GroupService');
+        return $this->createService('Group:GroupService');
     }
 
      protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group:ThreadService');
+        return $this->createService('Group:ThreadService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     protected function filterSort($sort)
@@ -320,14 +320,14 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException($this->getServiceKernel()->trans('参数sort不正确。'));
+                throw $this->createServiceException($this->trans('参数sort不正确。'));
         }
         return $orderBys;
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function prepareThreadConditions($conditions)

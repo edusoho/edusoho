@@ -202,7 +202,7 @@ class UserSettingController extends BaseController
             if($setting['mode'] == 'phpwind') {
                 $setting['partner_config']['phpwind'] = $data['phpwind_config'];
                 $phpwindConfig = $data['phpwind_config'];
-                $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
+                $configDirectory   = $this->getParameter('kernel.root_dir').'/config/';
                 $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', $this->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
@@ -464,12 +464,12 @@ class UserSettingController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     /**
@@ -477,16 +477,16 @@ class UserSettingController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 }

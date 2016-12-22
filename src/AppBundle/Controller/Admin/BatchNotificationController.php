@@ -41,7 +41,7 @@ class BatchNotificationController extends BaseController
             $batchnotification['title'] = empty($batchnotification['title']) ? '' : $batchnotification['title'];
             if(empty($batchnotification['title']))
             {
-                $this->createMessageResponse('error',$this->getServiceKernel()->trans('群发标题为空'));
+                $this->createMessageResponse('error',$this->trans('群发标题为空'));
             }
             $batchnotification['createdTime'] = time();
             if($batchnotification['mode'] == 'publish'){
@@ -64,7 +64,7 @@ class BatchNotificationController extends BaseController
         $user = $this->getCurrentUser();
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('通知已删除！'));
+            throw $this->createNotFoundException($this->trans('通知已删除！'));
         }
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -86,7 +86,7 @@ class BatchNotificationController extends BaseController
     {
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('通知已删除！'));
+            throw $this->createNotFoundException($this->trans('通知已删除！'));
         }
         $batchnotification['published'] = $batchnotification['published'] == 0 ? 1 : 0;
         if(!$batchnotification['published'])
@@ -116,7 +116,7 @@ class BatchNotificationController extends BaseController
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('通知已被管理员删除！'));
+            throw $this->createNotFoundException($this->trans('通知已被管理员删除！'));
         }
         return $this->render('admin/notification/notification-modal.html.twig',array(
             'batchnotification' => $batchnotification
@@ -124,6 +124,6 @@ class BatchNotificationController extends BaseController
     }
     protected function getBatchNotificationService()
     {
-        return $this->getServiceKernel()->createService('User:BatchNotificationService');
+        return $this->createService('User:BatchNotificationService');
     }
 }

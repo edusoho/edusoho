@@ -211,7 +211,7 @@ class OrderController extends BaseController
 
     private function genereateExportCsvFileName($targetType)
     {
-        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
+        $rootPath = $this->getParameter('topxia.upload.private_directory');
         $user     = $this->getCurrentUser();
         return $rootPath."/export_content".$targetType.$user['id'].time().".txt";
     }
@@ -249,7 +249,7 @@ class OrderController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
@@ -325,26 +325,26 @@ class OrderController extends BaseController
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
+        return $this->createService('Cash:CashOrdersService');
     }
 }

@@ -94,7 +94,7 @@ class UserApprovalController extends BaseController
                     $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
 
                     if (!empty($approval)) {
-                        $this->getTeacherAuditService()->rejectApproval($user['id'], $this->getServiceKernel()->trans('教师资格申请因实名认证未通过而失败'));
+                        $this->getTeacherAuditService()->rejectApproval($user['id'], $this->trans('教师资格申请因实名认证未通过而失败'));
                     }
                 }
 
@@ -154,13 +154,13 @@ class UserApprovalController extends BaseController
 
     public function cancelAction(Request $request, $id)
     {
-        $this->getUserService()->rejectApproval($id, $this->getServiceKernel()->trans('管理员撤销'));
+        $this->getUserService()->rejectApproval($id, $this->trans('管理员撤销'));
 
         if ($this->isPluginInstalled('TeacherAudit')) {
             $approval = $this->getTeacherAuditService()->getApprovalByUserId($id);
 
             if (!empty($approval)) {
-                $this->getTeacherAuditService()->rejectApproval($id, $this->getServiceKernel()->trans('管理员撤销'));
+                $this->getTeacherAuditService()->rejectApproval($id, $this->trans('管理员撤销'));
             }
         }
 
@@ -169,6 +169,6 @@ class UserApprovalController extends BaseController
 
     protected function getTeacherAuditService()
     {
-        return $this->getServiceKernel()->createService('TeacherAudit:TeacherAudit.TeacherAuditService');
+        return $this->createService('TeacherAudit:TeacherAudit.TeacherAuditService');
     }
 }

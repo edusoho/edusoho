@@ -367,31 +367,31 @@ class OpenCourseAnalysisController extends BaseController
 
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog:RefererLogService');
+        return $this->createService('RefererLog:RefererLogService');
     }
 
     protected function getOrderRefererLogService()
     {
-        return $this->getServiceKernel()->createService('RefererLog:OrderRefererLogService');
+        return $this->createService('RefererLog:OrderRefererLogService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getVipLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip.LevelService');
     }
 }

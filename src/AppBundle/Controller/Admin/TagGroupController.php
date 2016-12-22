@@ -70,7 +70,7 @@ class TagGroupController extends BaseController
         if ($avalieable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('标签组已存在'));
+            $response = array('success' => false, 'message' => $this->trans('标签组已存在'));
         }
 
         return $this->createJsonResponse($response);
@@ -100,6 +100,6 @@ class TagGroupController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 }

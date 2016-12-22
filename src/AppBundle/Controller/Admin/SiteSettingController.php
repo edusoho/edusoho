@@ -39,7 +39,7 @@ class SiteSettingController extends BaseController
             $site = $request->request->all();
             $this->getSettingService()->set('site', $site);
             $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('站点信息设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('站点信息设置已保存！'));
         }
 
         return $this->render('admin/system/site.html.twig', array(
@@ -79,7 +79,7 @@ class SiteSettingController extends BaseController
             }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('客服设置已保存！'));
         }
         return $this->render('admin/system/consult-setting.html.twig', array(
             'consult' => $consult,
@@ -100,7 +100,7 @@ class SiteSettingController extends BaseController
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
             $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('侧边栏设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('侧边栏设置已保存！'));
         }
         return $this->render('admin/system/esbar-setting.html.twig',array(
             'esBar' => $esBar
@@ -122,7 +122,7 @@ class SiteSettingController extends BaseController
         $fileId = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
         }
 
         $file = $this->getFileService()->getFile($fileId);
@@ -160,7 +160,7 @@ class SiteSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', '更新分享设置', $defaultSetting);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('分享设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('分享设置已保存！'));
         }
 
         return $this->render('admin/system/share.html.twig', array(
@@ -175,14 +175,14 @@ class SiteSettingController extends BaseController
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'inviteShareContent' => $this->getServiceKernel()->trans('我正在%sitename%网校学习，邀请你也来体验下。', array('%sitename%' => '{{sitename}}')),
-            'articleShareContent' => $this->getServiceKernel()->trans('我正在看%articletitle%，关注%sitename%，分享知识，成就未来。', array('%articletitle%' => '{{articletitle}}','%sitename%' => '{{sitename}}' )),
-            'courseShareContent' => $this->getServiceKernel()->trans('我正在学习%course%，收获巨大哦，一起来学习吧！', array('%course%' => '{{course}}' )),
-            'groupShareContent' => $this->getServiceKernel()->trans('我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!', array('%groupname%' =>'{{groupname}}','%threadname%' => '{{threadname}}' )),
-            'classroomShareContent' => $this->getServiceKernel()->trans('我正在学习%classroom%，收获巨大哦，一起来学习吧！', array('%classroom%' =>'{{classroom}}' )),
-            'user_name' => $this->getServiceKernel()->trans('学员'),
-            'chapter_name' => $this->getServiceKernel()->trans('章'),
-            'part_name' => $this->getServiceKernel()->trans('节'),
+            'inviteShareContent' => $this->trans('我正在%sitename%网校学习，邀请你也来体验下。', array('%sitename%' => '{{sitename}}')),
+            'articleShareContent' => $this->trans('我正在看%articletitle%，关注%sitename%，分享知识，成就未来。', array('%articletitle%' => '{{articletitle}}','%sitename%' => '{{sitename}}' )),
+            'courseShareContent' => $this->trans('我正在学习%course%，收获巨大哦，一起来学习吧！', array('%course%' => '{{course}}' )),
+            'groupShareContent' => $this->trans('我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!', array('%groupname%' =>'{{groupname}}','%threadname%' => '{{threadname}}' )),
+            'classroomShareContent' => $this->trans('我正在学习%classroom%，收获巨大哦，一起来学习吧！', array('%classroom%' =>'{{classroom}}' )),
+            'user_name' => $this->trans('学员'),
+            'chapter_name' => $this->trans('章'),
+            'part_name' => $this->trans('节'),
         );
 
         return $default;
@@ -190,32 +190,32 @@ class SiteSettingController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
 }

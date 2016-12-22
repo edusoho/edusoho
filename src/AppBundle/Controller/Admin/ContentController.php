@@ -34,7 +34,7 @@ class ContentController extends BaseController
         $categoryIds = ArrayToolkit::column($contents, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('admin/Content/index.html.twig',array(
+        return $this->render('admin/content/index.html.twig',array(
         	   'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
@@ -60,14 +60,14 @@ class ContentController extends BaseController
             $content = $this->filterEditorField($content);
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
-            return $this->render('admin/Content/content-tr.html.twig',array(
+            return $this->render('admin/content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('admin/Content/content-modal.html.twig',array(
+        return $this->render('admin/content/content-modal.html.twig',array(
             'type' => $type,
         ));
     }
@@ -91,14 +91,14 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
-            return $this->render('admin/Content/content-tr.html.twig',array(
+            return $this->render('admin/content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('admin/Content/content-modal.html.twig',array(
+        return $this->render('admin/content/content-modal.html.twig',array(
             'type' => $type,
             'content' => $content,
         ));
@@ -142,7 +142,7 @@ class ContentController extends BaseController
             return $this->createJsonResponse(array('success' => true, 'message' => ''));
         }
 
-        return $this->createJsonResponse(array('success' => false, 'message' => $this->getServiceKernel()->trans('该URL路径已存在')));
+        return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('该URL路径已存在')));
     }
 
     protected function filterEditorField($content)
@@ -179,22 +179,22 @@ class ContentController extends BaseController
 
     protected function getContentService()
     {
-        return $this->getServiceKernel()->createService('admin/Content/ContentService');
+        return $this->createService('Content:ContentService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('admin/Content/FileService');
+        return $this->createService('Content:FileService');
     }
 
 }

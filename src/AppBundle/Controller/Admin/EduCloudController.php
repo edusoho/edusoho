@@ -255,7 +255,7 @@ class EduCloudController extends BaseController
             $set = $request->request->all();
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('云视频设置已保存！'));
         } else {
             $storageSetting = array_merge($default, $storageSetting);
         }
@@ -293,7 +293,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
         }
 
         $filename = 'watermark_'.time().'.'.$file->getClientOriginalExtension();
@@ -315,7 +315,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
         }
 
         $filename = 'watermarkembed_'.time().'.'.$file->getClientOriginalExtension();
@@ -369,7 +369,7 @@ class EduCloudController extends BaseController
         }
 
         if (isset($overview['isBuy'])) {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+            $this->setFlashMessage('danger', $this->trans('您还未购买,非法请求！'));
         }
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
 
@@ -409,7 +409,7 @@ class EduCloudController extends BaseController
 
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            $this->setFlashMessage('warning', $this->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -458,7 +458,7 @@ class EduCloudController extends BaseController
 
             if ($request->getMethod() == 'POST') {
                 $this->handleSmsSetting($request, $api);
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('云短信设置已保存！'));
+                $this->setFlashMessage('success', $this->trans('云短信设置已保存！'));
             }
             $smsInfo   = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
@@ -476,14 +476,14 @@ class EduCloudController extends BaseController
     {
         if (empty($smsInfo)) {
             $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+            $this->setFlashMessage('danger', $this->trans("尚未开通云短信,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
         } else {
             if (empty($smsInfo['name']) && empty($smsInfo['isExistSmsSign'])) {
                 $smsSignUrl = $this->generateUrl('admin_cloud_sms_sign');
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
+                $this->setFlashMessage('danger', $this->trans("尚未设置短信签名,不能发送短信, <a href='{$smsSignUrl}' class='plm' target='_blank'>去设置</a>"));
             }
             if (empty($smsInfo['name']) && !empty($smsInfo['isExistSmsSign']) && $smsInfo['usedSmsSign'] == null) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans("短信签名正在审核中,不能发送短信。"));
+                $this->setFlashMessage('danger', $this->trans("短信签名正在审核中,不能发送短信。"));
             }
         }
     }
@@ -498,7 +498,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            $this->setFlashMessage('warning', $this->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -534,7 +534,7 @@ class EduCloudController extends BaseController
 
         $settings = $this->getSettingService()->get('storage', array());
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            $this->setFlashMessage('warning', $this->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -586,7 +586,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
+            $this->setFlashMessage('warning', $this->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
         try {
@@ -611,7 +611,7 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+                $this->setFlashMessage('danger', $this->trans('您还未购买,非法请求！'));
             }
             $status = $request->request->all();
             if (isset($status['email-open'])) {
@@ -768,9 +768,9 @@ class EduCloudController extends BaseController
         $result      = $api->post('/me/license-domain', array('domain' => $currentHost));
 
         if (!empty($result['licenseDomains'])) {
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权域名绑定成功！'));
+            $this->setFlashMessage('success', $this->trans('授权域名绑定成功！'));
         } else {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('授权域名绑定失败，请重试！'));
+            $this->setFlashMessage('danger', $this->trans('授权域名绑定失败，请重试！'));
         }
 
         return $this->createJsonResponse($result);
@@ -793,14 +793,14 @@ class EduCloudController extends BaseController
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
             if (isset($result['error'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！'));
+                $this->setFlashMessage('danger', $this->trans('AccessKey / SecretKey　不正确！'));
                 goto render;
             }
 
             $user = $api->get('/me');
 
             if ($user['edition'] != 'opensource') {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！！'));
+                $this->setFlashMessage('danger', $this->trans('AccessKey / SecretKey　不正确！！'));
                 goto render;
             }
 
@@ -810,7 +810,7 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('storage', $settings);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权码保存成功！'));
+            $this->setFlashMessage('success', $this->trans('授权码保存成功！'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
 
@@ -959,7 +959,7 @@ class EduCloudController extends BaseController
         $keys    = $applier->applyKey($this->getCurrentUser());
 
         if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('Key生成失败，请检查服务器网络后，重试！')));
+            return $this->createJsonResponse(array('error' => $this->trans('Key生成失败，请检查服务器网络后，重试！')));
         }
 
         $settings = $this->getSettingService()->get('storage', array());
@@ -979,7 +979,7 @@ class EduCloudController extends BaseController
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权操作!'));
+            throw $this->createAccessDeniedException($this->trans('您无权操作!'));
         }
 
         $name = $request->request->get('name');
@@ -1187,7 +1187,7 @@ class EduCloudController extends BaseController
 
             if (isset($status['error']) && $status['error']['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
-                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->getServiceKernel()->trans("我的网校")));
+                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->trans("我的网校")));
 
                 if (isset($result['status']) && $result['status'] == 'enable') {
                     $emailStatus['status'] = 'enable';
@@ -1201,7 +1201,7 @@ class EduCloudController extends BaseController
             }
 
             $result = $api->get("/me/email_account");
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('云邮件设置已保存！'));
             $mailer = $this->getSettingService()->get('mailer', array());
 
             if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == "1") {
@@ -1231,11 +1231,11 @@ class EduCloudController extends BaseController
                 $result = $api->post("/me/email_account", $params);
 
                 if (isset($result['nickname'])) {
-                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
+                    $this->setFlashMessage('success', $this->trans('云邮件设置已保存！'));
                     $emailStatus['status'] = $settings['status'];
                     $sign                  = array('sign' => $result['nickname']);
                 } else {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('云邮件设置保存失败！'));
+                    $this->setFlashMessage('danger', $this->trans('云邮件设置保存失败！'));
                 }
             } else {
                 $emailStatus['status'] = $settings['status'];
@@ -1246,7 +1246,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-close'])) {
             $emailStatus['status'] = 'disable';
             $emailStatus           = array_merge($settings, $emailStatus);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('云邮件设置已保存！'));
         }
 
         if (empty($operation)) {
@@ -1437,27 +1437,27 @@ class EduCloudController extends BaseController
 
     protected function getSearchService()
     {
-        return $this->getServiceKernel()->createService('Search:SearchService');
+        return $this->createService('Search:SearchService');
     }
 
     protected function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:EduCloudService');
+        return $this->createService('CloudPlatform:EduCloudService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     private function getWebExtension()
@@ -1472,7 +1472,7 @@ class EduCloudController extends BaseController
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->createService('IM.ConversationService');
     }
 
     // 添加云直播
@@ -1544,7 +1544,7 @@ class EduCloudController extends BaseController
             }
 
             if (isset($overview['isBuy'])) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
+                $this->setFlashMessage('danger', $this->trans('您还未购买,非法请求！'));
             }
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -1586,7 +1586,7 @@ class EduCloudController extends BaseController
 
             $courseSetting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('直播logo已保存！'));
+            $this->setFlashMessage('success', $this->trans('直播logo已保存！'));
 
             return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
         }

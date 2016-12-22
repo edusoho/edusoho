@@ -86,7 +86,7 @@ class TagController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('标签已存在'));
+            $response = array('success' => false, 'message' => $this->trans('标签已存在'));
         }
 
         return $this->createJsonResponse($response);
@@ -94,7 +94,7 @@ class TagController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getTagWithException($tagId)
@@ -102,7 +102,7 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTag($tagId);
 
         if (empty($tag)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('标签不存在!'));
+            throw $this->createNotFoundException($this->trans('标签不存在!'));
         }
 
         return $tag;

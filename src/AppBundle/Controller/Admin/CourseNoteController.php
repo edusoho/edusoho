@@ -70,7 +70,7 @@ class CourseNoteController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:NoteService');
+        return $this->createService('Course:NoteService');
     }
 
     /**
@@ -78,6 +78,6 @@ class CourseNoteController extends BaseController
      */
     protected function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course:CourseService');
+    	return $this->createService('Course:CourseService');
     }
 }

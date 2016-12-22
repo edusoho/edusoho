@@ -201,7 +201,7 @@ class CourseController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->hasPermission('admin_course_delete')) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您没有删除课程的权限！'));
+            throw $this->createAccessDeniedException($this->trans('您没有删除课程的权限！'));
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -214,19 +214,19 @@ class CourseController extends BaseController
         }
 
         if (!empty($subCourses)) {
-            return $this->createJsonResponse(array('code' => 2, 'message' => $this->getServiceKernel()->trans('请先删除班级课程')));
+            return $this->createJsonResponse(array('code' => 2, 'message' => $this->trans('请先删除班级课程')));
         }
 
         if ($course['status'] == 'draft') {
             $result = $this->getCourseService()->deleteCourse($courseId);
-            return $this->createJsonResponse(array('code' => 0, 'message' => $this->getServiceKernel()->trans('删除课程成功')));
+            return $this->createJsonResponse(array('code' => 0, 'message' => $this->trans('删除课程成功')));
         }
 
         if ($course['status'] == 'closed') {
             $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
             if ($classroomCourse) {
-                return $this->createJsonResponse(array('code' => 3, 'message' => $this->getServiceKernel()->trans('当前课程未移除,请先移除班级课程')));
+                return $this->createJsonResponse(array('code' => 3, 'message' => $this->trans('当前课程未移除,请先移除班级课程')));
             }
 
             //判断作业插件版本号
@@ -236,7 +236,7 @@ class CourseController extends BaseController
                 $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
 
                 if (!$isDeleteHomework) {
-                    return $this->createJsonResponse(array('code' => 1, 'message' => $this->getServiceKernel()->trans('作业插件未升级')));
+                    return $this->createJsonResponse(array('code' => 1, 'message' => $this->trans('作业插件未升级')));
                 }
             }
 
@@ -244,7 +244,7 @@ class CourseController extends BaseController
                 $isCheckPassword = $request->getSession()->get('checkPassword');
 
                 if (!$isCheckPassword) {
-                    throw $this->createAccessDeniedException($this->getServiceKernel()->trans('未输入正确的校验密码！'));
+                    throw $this->createAccessDeniedException($this->trans('未输入正确的校验密码！'));
                 }
 
                 $result = $this->getCourseDeleteService()->delete($courseId, $type);
@@ -263,10 +263,10 @@ class CourseController extends BaseController
             $password    = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
 
             if ($password == $currentUser->password) {
-                $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('密码正确'));
+                $response = array('success' => true, 'message' => $this->trans('密码正确'));
                 $request->getSession()->set('checkPassword', true);
             } else {
-                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('密码错误'));
+                $response = array('success' => false, 'message' => $this->trans('密码错误'));
             }
 
             return $this->createJsonResponse($response);
@@ -547,7 +547,7 @@ class CourseController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function renderCourseTr($courseId, $request)
@@ -589,17 +589,17 @@ class CourseController extends BaseController
         $dataDictionary = array('questions' => $this->trans('问题'), 'testpapers' => $this->trans('试卷'), 'materials' => $this->trans('课时资料'), 'chapters' => $this->trans('课时章节'), 'drafts' => $this->trans('课时草稿'), 'lessons' => $this->trans('课时'), 'lessonLearns' => $this->trans('课时时长'), 'lessonReplays' => $this->trans('课时录播'), 'lessonViews' => $this->trans('课时播放时长'), 'homeworks' => $this->trans('课时作业'), 'exercises' => $this->trans('课时练习'), 'favorites' => $this->trans('课时收藏'), 'notes' => $this->trans('课时笔记'), 'threads' => $this->trans('课程话题'), 'reviews' => $this->trans('课程评价'), 'announcements' => $this->trans('课程公告'), 'statuses' => $this->trans('课程动态'), 'members' => $this->trans('课程成员'), 'conversation' => $this->trans('会话'), 'course' => $this->trans('课程'));
 
         if ($result > 0) {
-            $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除');
+            $message = $dataDictionary[$type].$this->trans('数据删除');
             return array('success' => true, 'message' => $message);
         } else {
             if ($type == "homeworks" || $type == "exercises") {
-                $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除失败或插件未安装或插件未升级');
+                $message = $dataDictionary[$type].$this->trans('数据删除失败或插件未安装或插件未升级');
                 return array('success' => false, 'message' => $message);
             } elseif ($type == 'course') {
-                $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除');
+                $message = $dataDictionary[$type].$this->trans('数据删除');
                 return array('success' => false, 'message' => $message);
             } else {
-                $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除失败');
+                $message = $dataDictionary[$type].$this->trans('数据删除失败');
                 return array('success' => false, 'message' => $message);
             }
         }
@@ -607,37 +607,37 @@ class CourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('admin/course/CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseDeleteService()
     {
-        return $this->getServiceKernel()->createService('admin/course/CourseDeleteService');
+        return $this->createService('Course:CourseDeleteService');
     }
 
     protected function getCourseCopyService()
     {
-        return $this->getServiceKernel()->createService('admin/course/CourseCopyService');
+        return $this->createService('Course:CourseCopyService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getPasswordEncoder()
@@ -647,6 +647,6 @@ class CourseController extends BaseController
 
     protected function getVipLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip.LevelService');
     }
 }

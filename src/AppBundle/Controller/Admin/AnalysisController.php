@@ -26,7 +26,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
                 'tab' => "trend"
             )));
@@ -84,7 +84,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger",  $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger",  $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_user_sum', array(
                 'tab' => "trend"
             )));
@@ -141,7 +141,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_course_sum', array(
                 'tab' => "trend"
             )));
@@ -203,7 +203,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
                 'tab' => "trend"
             )));
@@ -261,7 +261,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_course', array(
                 'tab' => "trend"
             )));
@@ -322,7 +322,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_lesson', array(
                 'tab' => "trend"
             )));
@@ -385,7 +385,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_join', array(
                 'tab' => "trend"
             )));
@@ -448,7 +448,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_exit', array(
                 'tab' => "trend"
             )));
@@ -517,7 +517,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_paid', array(
                 'tab' => "trend"
             )));
@@ -586,7 +586,7 @@ class AnalysisController extends BaseController
         $paidClassroomStartDate = '';
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_Classroom_paid', array(
                 'tab' => "trend"
             )));
@@ -648,7 +648,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
                 'tab' => "trend"
             )));
@@ -721,7 +721,7 @@ class AnalysisController extends BaseController
         );
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
                 'tab' => "trend"
             )));
@@ -787,7 +787,7 @@ class AnalysisController extends BaseController
         );
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
                 'tab' => "trend"
             )));
@@ -853,7 +853,7 @@ class AnalysisController extends BaseController
         );
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
                 'tab' => "trend"
             )));
@@ -919,7 +919,7 @@ class AnalysisController extends BaseController
         );
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
                 'tab' => "trend"
             )));
@@ -979,7 +979,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_income', array(
                 'tab' => "trend"
             )));
@@ -1053,7 +1053,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_course_income', array(
                 'tab' => "trend"
             )));
@@ -1116,7 +1116,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_classroom_income', array(
                 'tab' => "trend"
             )));
@@ -1179,7 +1179,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
+            $this->setFlashMessage("danger", $this->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_vip_income', array(
                 'tab' => "trend"
             )));
@@ -1385,26 +1385,26 @@ class AnalysisController extends BaseController
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 }

@@ -76,7 +76,7 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($id);
 
         if (empty($article)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('文章已删除或者未发布！'));
+            throw $this->createNotFoundException($this->trans('文章已删除或者未发布！'));
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array(
@@ -195,22 +195,22 @@ class ArticleController extends BaseController
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('admin/article/ArticleService');
+        return $this->createService('admin/article/ArticleService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('admin/article/CategoryService');
+        return $this->createService('admin/article/CategoryService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     /**
@@ -218,7 +218,7 @@ class ArticleController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -226,6 +226,6 @@ class ArticleController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }

@@ -102,9 +102,9 @@ class OrderRefundController extends BaseController
                 $this->sendAuditRefundNotification($orderRefundProcessor,$order, $data);
             } else {
                 if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'],'default',$this->getServiceKernel()->trans('您的退款申请已通过管理员审核'));
+                    $this->getNotificationService()->notify($order['userId'],'default',$this->trans('您的退款申请已通过管理员审核'));
                 }else{  
-                    $this->getNotificationService()->notify($order['userId'],'default',$this->getServiceKernel()->trans('您的退款申请因%note%未通过审核',array('%note%'=>$data['note'])));
+                    $this->getNotificationService()->notify($order['userId'],'default',$this->trans('您的退款申请因%note%未通过审核',array('%note%'=>$data['note'])));
                 }
             }
 
@@ -153,11 +153,11 @@ class OrderRefundController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 }

@@ -45,7 +45,7 @@ class CourseDiskController extends BaseController
 
     protected function getCourseDiskService()
     {
-        return $this->getServiceKernel()->createService('User:DiskService');
+        return $this->createService('User:DiskService');
     }
 
 }

@@ -549,7 +549,7 @@ class CoinController extends BaseController
 
         $fromCourse = $request->query->get('fromCourse');
 
-        return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
+        return $this->render('settings/avatar.html.twig', array(
             'form'          => $form->createView(),
             'user'          => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
@@ -868,51 +868,51 @@ class CoinController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip.LevelService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashAccountService');
+        return $this->createService('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
+        return $this->createService('Cash:CashOrdersService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:VipService');
+        return $this->createService('Vip:VipService');
     }
 }

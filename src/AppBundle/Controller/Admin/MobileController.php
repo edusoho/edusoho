@@ -53,7 +53,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('移动客户端设置已保存！'));
         }
 
         $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
@@ -93,7 +93,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
+            $this->setFlashMessage('success', $this->trans('移动客户端设置已保存！'));
         }
 
         $courseIds = explode(",", $mobile['courseIds']);
@@ -116,7 +116,7 @@ class MobileController extends BaseController
     {
         $file = $request->files->get($type);
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
         }
 
         $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
@@ -157,7 +157,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('参数不正确'));
+            throw new \RuntimeException($this->trans('参数不正确'));
         }
 
         $api = CloudAPIFactory::create('root');
@@ -172,26 +172,26 @@ class MobileController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 }

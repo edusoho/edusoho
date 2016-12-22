@@ -16,7 +16,7 @@ class CloudController extends BaseController
 
         $result = $client->getBills();
         if (!empty($result['error'])) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败'));
+            return $this->createMessageResponse('error', $this->trans('获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败'));
         }
 
         return $this->render('admin/cloud/bill.html.twig', array(
@@ -210,7 +210,7 @@ class CloudController extends BaseController
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     /**
@@ -218,6 +218,6 @@ class CloudController extends BaseController
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }
