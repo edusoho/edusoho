@@ -1121,52 +1121,52 @@ class ClassroomManageController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getClassroomReviewService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:Classroom.ClassroomReviewService');
     }
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip.LevelService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     private function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     private function getWebExtension()
@@ -1176,16 +1176,16 @@ class ClassroomManageController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->createService('Homework:Homework.HomeworkService');
     }
 }

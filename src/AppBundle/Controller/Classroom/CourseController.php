@@ -171,26 +171,26 @@ class CourseController extends BaseController
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getClassroomReviewService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:Classroom.ClassroomReviewService');
     }
 
     private function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }

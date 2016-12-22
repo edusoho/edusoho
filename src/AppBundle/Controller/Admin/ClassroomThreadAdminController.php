@@ -56,11 +56,11 @@ class ClassroomThreadAdminController extends BaseController
     }
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 }

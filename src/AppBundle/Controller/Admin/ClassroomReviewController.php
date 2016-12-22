@@ -70,16 +70,16 @@ class ClassroomReviewController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getClassroomReviewService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->createService('Classroom:Classroom.ClassroomReviewService');
     }
 }

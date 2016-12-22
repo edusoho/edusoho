@@ -61,7 +61,7 @@ class UtilityController extends BaseController
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     private function getWebExtension()
