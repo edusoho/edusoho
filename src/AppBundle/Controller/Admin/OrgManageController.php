@@ -120,6 +120,6 @@ class OrgManageController extends BaseController
      */
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 }

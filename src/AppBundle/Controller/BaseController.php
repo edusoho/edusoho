@@ -64,16 +64,6 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
-    protected function createNotFoundException($message = '')
-    {
-        return new NotFoundException($message);
-    }
-
-    protected function createAccessDeniedException($message = '')
-    {
-        return new AccessDeniedException($message);
-    }
-
     protected function setFlashMessage($level, $message)
     {
         $this->get('session')->getFlashBag()->add($level, $message);
