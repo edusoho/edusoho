@@ -1,0 +1,38 @@
+{% if setting('magic.enable_org', '0') %} 
+  
+  {# formType: normal/horizontal/inline #}
+  {# isModal: true/false #}
+
+  {% set modal = modal|default(null) %}
+
+  {% if modal == 'modal' %}
+    <script>app.load('topxiawebbundle/controller/widget/category-select')</script>
+  {% else %}
+    {% do load_script('topxiawebbundle/controller/widget/category-select') %}
+  {% endif %}
+
+  {% set colmd = colmd|default(8) %}
+  {% set lablecolmd = lablecolmd|default(2) %}
+  {% set nocolmd = nocolmd|default(false) %}
+  {% set inputClass = inputClass|default('') %} 
+
+  {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
+  {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
+  
+    <div class="form-group {% if modal == 'list' %}controls{% endif %}">
+      {% if modal != 'list' %}
+      <label class="{% if not nocolmd %} col-md-{{lablecolmd}}{% endif %} control-label">{{'组织机构'|trans}}</label>
+      <div class="{% if not nocolmd %} col-md-{{colmd}} {% endif %}  controls">
+      {% endif %}
+      
+      <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
+        {% for org in currentOrgTree %}
+          <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
+        {% endfor %}
+      </select>
+
+      {% if modal != 'list' %}
+      </div>
+      {% endif %}
+    </div>
+ {% endif %}
