@@ -78,13 +78,6 @@
             <div class="panel-title">需要开通／购买的服务</div>
           </div>
           <div class="panel-body">
-          {% if 'video' in unPaidService %}
-            <div class="col-md-4">
-              <a href="{{path('admin_cloud_service_overview',{type:'storage'})}}" target="_blank" class="my-products-item">
-                <i class="es-icon es-icon-playcircleoutline"></i>
-                云视频
-              </a>
-            </div>
           {% endif %}
           {% if 'live' in unPaidService %}
             <div class="col-md-4">
