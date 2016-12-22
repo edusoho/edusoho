@@ -1,6 +1,8 @@
 {% extends 'TopxiaWebBundle:Course:Part/normal-header-layout.html.twig' %}
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% set layoutClass = 'before' %}
+{% set mobile = is_show_mobile_page() %}
 
 {% block before_content %}
   <ol class="breadcrumb breadcrumb-o">
@@ -15,18 +17,26 @@
 {% block content %}
 
   {{ header_macro.picture(course, previewLesson) }}
-
   {{ header_macro.info(course, member, userVipStatus) }}
   <div class="course-operation clearfix">
+    <span class="text-sm es-mobile-teacher">
+    {% set teacherId = course.teacherIds[0]|default(0) %}
+    {% set teacher = data('User',{userId:teacherId}) %}
+    {{teacher.nickname|default('暂无老师')}}
+    </span>
     {{ header_macro.student_num(course) }}
     <ul class="course-data clearfix {% if courseVip and course.parentId == '0' %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
       {% if courseVip and course.parentId == '0' %}
-        <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
-          <i class="es-icon es-icon-crown"></i><br>
-          {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
-        </li>
+      {% if mobile %}
+         {% include 'TopxiaWebBundle:Course:Mobile/normal-header-vip.html.twig' %}
+      {% else %}
+          <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+            <i class="es-icon es-icon-crown"></i><br>
+            {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
+          </li>
+      {% endif %}
       {% endif %}
     </ul>
     <div class="buy">
