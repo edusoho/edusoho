@@ -36,7 +36,7 @@
       </div>
       <div class="col-md-8 controls">
        <input type="text" id="url" name="url" class="form-control" value="{{site.url}}">
-        <p class="help-block">{{'以"' ~ app.request.getScheme() ~ '://"开头'|trans}}</p>
+        <p class="help-block">{{'以"%http%://"开头'|trans({'%http%':app.request.getScheme()})}}</p>
       </div>
     </div>
 
