@@ -654,6 +654,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $result;
     }
 
+    public function getAppStatusByCode($code)
+    {
+     return $this->createAppClient()->getAppStatusByCode($code);
+    }
+
     protected function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
