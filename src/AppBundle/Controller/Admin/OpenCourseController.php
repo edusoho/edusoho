@@ -42,7 +42,7 @@ class OpenCourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('OpenCourse:index.html.twig', array(
+        return $this->render('admin/open-course/index.html.twig', array(
             'tags'       => empty($tags) ? '' : $tags,
             'courses'    => $courses,
             'categories' => $categories,
@@ -110,7 +110,7 @@ class OpenCourseController extends BaseController
             }
         }
 
-        return $this->render('OpenCourse:delete.html.twig', array('course' => $course));
+        return $this->render('admin/open-course/delete.html.twig', array('course' => $course));
     }
 
     public function recommendListAction(Request $request)
@@ -136,7 +136,7 @@ class OpenCourseController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
-        return $this->render('OpenCourse:recommend-list.html.twig', array(
+        return $this->render('admin/open-course/recommend-list.html.twig', array(
             'courses'    => $courses,
             'users'      => $users,
             'paginator'  => $paginator,
@@ -198,7 +198,7 @@ class OpenCourseController extends BaseController
         $course  = $this->getOpenCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('OpenCourse:tr.html.twig', array(
+        return $this->render('admin/open-course/tr.html.twig', array(
             'user'     => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course'   => $course,

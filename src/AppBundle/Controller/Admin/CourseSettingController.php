@@ -70,11 +70,11 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $courseSetting);
+            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程设置', $courseSetting);
             $this->setFlashMessage('success', $this->trans('课程设置已保存！'));
         }
 
-        return $this->render('System:course-setting.html.twig', array(
+        return $this->render('admin/system/:course-setting.html.twig', array(
             'courseSetting'   => $courseSetting,
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
@@ -97,11 +97,11 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', '更新课程默认图片设置', $defaultSetting);
+            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程默认图片设置', $defaultSetting);
             $this->setFlashMessage('success', $this->trans('课程默认图片设置已保存！'));
         }
 
-        return $this->render('System:course-avatar.html.twig', array(
+        return $this->render('admin/system/:course-avatar.html.twig', array(
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
         ));
@@ -141,12 +141,12 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
-            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
+            $this->getLogService()->info('admin/system/', 'update_settings', '更新课程设置', $setting);
             $this->setFlashMessage('success', $this->trans('课程设置已保存！'));
         }
 
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-        return $this->render('System:live-course-setting.html.twig', array(
+        return $this->render('admin/system/:live-course-setting.html.twig', array(
             'courseSetting' => $setting,
             'capacity'      => $capacity
         ));
@@ -166,11 +166,11 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
+            $this->getLogService()->info('admin/system/', 'questions_settings', '更新题库设置', $questionsSetting);
             $this->setFlashMessage('success', $this->trans('题库设置已保存！'));
         }
 
-        return $this->render('System:questions-setting.html.twig');
+        return $this->render('admin/system/:questions-setting.html.twig');
     }
 
     protected function getCourseDefaultSet()
@@ -201,7 +201,7 @@ class CourseSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->createService('admin/system/:SettingService');
     }
 
     protected function getUserFieldService()

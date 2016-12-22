@@ -2,7 +2,6 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
 
 class CourseOrderController extends BaseController
 {
@@ -11,7 +10,7 @@ class CourseOrderController extends BaseController
         return $this->forward('AppBundle:Admin/Order:manage', array(
             'request' => $request,
             'targetType' => 'course',
-            'layout' => 'CourseOrder:order.html.twig',
+            'layout' => 'admin/course-order/order.html.twig',
         ));
     }
 

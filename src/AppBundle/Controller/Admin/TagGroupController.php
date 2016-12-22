@@ -12,7 +12,7 @@ class TagGroupController extends BaseController
     {   
         $tagGroups = $this->getTagService()->findTagGroups();
 
-        return $this->render('TagGroup:index.html.twig',array(
+        return $this->render('admin/tag-group/index.html.twig',array(
             'tagGroups' => $tagGroups
         ));
     }
@@ -28,12 +28,12 @@ class TagGroupController extends BaseController
 
             $tagGroup = $this->getTagService()->addTagGroup($fields);
 
-            return $this->render('TagGroup:list-tr.html.twig', array(
+            return $this->render('admin/tag-group/list-tr.html.twig', array(
                 'tagGroup' => $tagGroup
             ));
         }
 
-        return $this->render('TagGroup:tag-group-modal.html.twig');
+        return $this->render('admin/tag-group/tag-group-modal.html.twig');
     }
 
     public function updateAction(Request $request, $groupId)
@@ -47,14 +47,14 @@ class TagGroupController extends BaseController
 
             $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
             
-            return $this->render('TagGroup:list-tr.html.twig', array(
+            return $this->render('admin/tag-group/list-tr.html.twig', array(
                 'tagGroup' => $tagGroup
             ));
         }
 
         $tagGroup = $this->getTagService()->getTagGroup($groupId);
         $tags = $this->getTagService()->findTagsByGroupId($groupId);
-        return $this->render('TagGroup:tag-group-modal.html.twig', array(
+        return $this->render('admin/tag-group/tag-group-modal.html.twig', array(
             'tagGroup' => $tagGroup,
             'tags' => ArrayToolkit::column($tags, 'name')
         ));

@@ -26,7 +26,7 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get('post_num_rules', array());
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('System:post-num-rules.html.twig', array(
+        return $this->render('admin/system/post-num-rules.html.twig', array(
             'setting' => $setting
         ));
     }
@@ -75,7 +75,7 @@ class SettingController extends BaseController
 
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
-        return $this->render('System:mobile.setting.html.twig', array(
+        return $this->render('admin/system/mobile.setting.html.twig', array(
             'mobile'     => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile'  => $hasMobile
@@ -108,7 +108,7 @@ class SettingController extends BaseController
             
         }
 
-        return $this->render('System:mobile-iap-product.html.twig', array(
+        return $this->render('admin/system/mobile-iap-product.html.twig', array(
             'products'     => $products
         ));
     }
@@ -342,7 +342,7 @@ class SettingController extends BaseController
     public function mailerAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('System:mailer.html.twig', array());
+            return $this->render('admin/system/mailer.html.twig', array());
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
@@ -368,7 +368,7 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
-        return $this->render('System:mailer.html.twig', array(
+        return $this->render('admin/system/mailer.html.twig', array(
             'mailer' => $mailer,
             'status' => $status
         ));
@@ -444,7 +444,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('系统默认设置已保存！'));
         }
 
-        return $this->render('System:default.html.twig', array(
+        return $this->render('admin/system/default.html.twig', array(
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
         ));
@@ -490,7 +490,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }
 
-        return $this->render('System:ip-blacklist.html.twig', array(
+        return $this->render('admin/system/ip-blacklist.html.twig', array(
             'ips' => $ips
         ));
     }
@@ -515,7 +515,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('客服管理设置已保存！'));
         }
 
-        return $this->render('System:customer-service.html.twig', array(
+        return $this->render('admin/system/customer-service.html.twig', array(
             'customerServiceSetting' => $customerServiceSetting
         ));
     }
@@ -579,7 +579,7 @@ class SettingController extends BaseController
             }
         }
 
-        return $this->render('System:course-setting.html.twig', array(
+        return $this->render('admin/system/course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'capacity'      => $capacity,
             'userFields'    => $userFields,
@@ -605,7 +605,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('题库设置已保存！'));
         }
 
-        return $this->render('System:questions-setting.html.twig');
+        return $this->render('admin/system/questions-setting.html.twig');
     }
 
     public function adminSyncAction(Request $request)
@@ -647,7 +647,7 @@ class SettingController extends BaseController
         }
 
         response:
-        return $this->render('System:admin-sync.html.twig', array(
+        return $this->render('admin/system/admin-sync.html.twig', array(
             'mode' => $setting['mode'],
             'bind' => $bind
         ));
@@ -662,7 +662,7 @@ class SettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_performance'));
         }
 
-        return $this->render('System:performance-setting.html.twig');
+        return $this->render('admin/system/performance-setting.html.twig');
     }
 
     protected function getCourseService()

@@ -14,16 +14,16 @@ class CloudAttachmentController extends BaseController
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->get("/me");
         } catch (\RuntimeException $e) {
-            return $this->render('CloudAttachment:api-error.html.twig', array());
+            return $this->render('admin/cloud-attachment/api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         if (isset($result['hasStorage']) && $result['hasStorage'] == '1' && $storageSetting['upload_mode'] == "cloud") {
-            return $this->render('CloudAttachment:index.html.twig');
+            return $this->render('admin/cloud-attachment/index.html.twig');
         }
 
-        return $this->render('CloudAttachment:error.html.twig', array());
+        return $this->render('admin/cloud-attachment/error.html.twig', array());
     }
 
     /**

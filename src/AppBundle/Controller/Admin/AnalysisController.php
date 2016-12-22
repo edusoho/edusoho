@@ -63,7 +63,7 @@ class AnalysisController extends BaseController
         $registerIds      = ArrayToolkit::column($registerDetail, 'id');
         $registerProfiles = $this->getUserService()->findUserProfilesByIds($registerIds);
 
-        return $this->render("OperationAnalysis:register.html.twig", array(
+        return $this->render("admin/operation-analysis/register.html.twig", array(
             'registerDetail'    => $registerDetail,
             'paginator'         => $paginator,
             'tab'               => $tab,
@@ -129,7 +129,7 @@ class AnalysisController extends BaseController
         $userSumIds                = ArrayToolkit::column($userSumDetail, 'id');
         $userSumProfiles           = $this->getUserService()->findUserProfilesByIds($userSumIds);
         $result['userSumProfiles'] = $userSumProfiles;
-        return $this->render("OperationAnalysis:user-sum.html.twig", $result);
+        return $this->render("admin/operation-analysis/user-sum.html.twig", $result);
     }
 
     public function courseSumAction(Request $request, $tab)
@@ -182,7 +182,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:course-sum.html.twig", array(
+        return $this->render("admin/operation-analysis/course-sum.html.twig", array(
             'courseSumDetail'    => $courseSumDetail,
             'paginator'          => $paginator,
             'tab'                => $tab,
@@ -241,7 +241,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:login.html.twig", array(
+        return $this->render("admin/operation-analysis/login.html.twig", array(
             'loginDetail'    => $loginDetail,
             'paginator'      => $paginator,
             'tab'            => $tab,
@@ -301,7 +301,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:course.html.twig", array(
+        return $this->render("admin/operation-analysis/course.html.twig", array(
             'courseDetail'    => $courseDetail,
             'paginator'       => $paginator,
             'tab'             => $tab,
@@ -364,7 +364,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/lesson.html.twig", array(
             'lessonDetail'    => $lessonDetail,
             'paginator'       => $paginator,
             'tab'             => $tab,
@@ -427,7 +427,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:join-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/join-lesson.html.twig", array(
             'JoinLessonDetail'    => $joinLessonDetail,
             'paginator'           => $paginator,
             'tab'                 => $tab,
@@ -494,7 +494,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:exit-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/exit-lesson.html.twig", array(
             'exitLessonDetail'    => $exitLessonDetail,
             'paginator'           => $paginator,
             'tab'                 => $tab,
@@ -565,7 +565,7 @@ class AnalysisController extends BaseController
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
-        return $this->render("OperationAnalysis:paid-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/paid-lesson.html.twig", array(
             'paidCourseDetail'    => $paidCourseDetail,
             'paginator'           => $paginator,
             'tab'                 => $tab,
@@ -627,7 +627,7 @@ class AnalysisController extends BaseController
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
-        return $this->render("OperationAnalysis:paid-classroom.html.twig", array(
+        return $this->render("admin/operation-analysis/paid-classroom.html.twig", array(
             'paidClassroomDetail'    => $paidClassroomDetail,
             'paginator'              => $paginator,
             'tab'                    => $tab,
@@ -694,7 +694,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:finished-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/finished-lesson.html.twig", array(
             'finishedLessonDetail'    => $finishedLessonDetail,
             'paginator'               => $paginator,
             'tab'                     => $tab,
@@ -759,7 +759,7 @@ class AnalysisController extends BaseController
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:video-view.html.twig", array(
+        return $this->render("admin/operation-analysis/video-view.html.twig", array(
             'videoViewedDetail' => $videoViewedDetail,
             'paginator'         => $paginator,
             'tab'               => $tab,
@@ -825,7 +825,7 @@ class AnalysisController extends BaseController
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:cloud-video-view.html.twig", array(
+        return $this->render("admin/operation-analysis/cloud-video-view.html.twig", array(
             'videoViewedDetail' => $videoViewedDetail,
             'paginator'         => $paginator,
             'tab'               => $tab,
@@ -891,7 +891,7 @@ class AnalysisController extends BaseController
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:local-video-view.html.twig", array(
+        return $this->render("admin/operation-analysis/local-video-view.html.twig", array(
             'videoViewedDetail' => $videoViewedDetail,
             'paginator'         => $paginator,
             'tab'               => $tab,
@@ -957,7 +957,7 @@ class AnalysisController extends BaseController
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:net-video-view.html.twig", array(
+        return $this->render("admin/operation-analysis/net-video-view.html.twig", array(
             'videoViewedDetail' => $videoViewedDetail,
             'paginator'         => $paginator,
             'tab'               => $tab,
@@ -1031,7 +1031,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:income.html.twig", array(
+        return $this->render("admin/operation-analysis/income.html.twig", array(
             'incomeDetail'    => $incomeDetail,
             'paginator'       => $paginator,
             'tab'             => $tab,
@@ -1095,7 +1095,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:courseIncome.html.twig", array(
+        return $this->render("admin/operation-analysis/courseIncome.html.twig", array(
             'courseIncomeDetail'    => $courseIncomeDetail,
             'paginator'             => $paginator,
             'tab'                   => $tab,
@@ -1158,7 +1158,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:classroomIncome.html.twig", array(
+        return $this->render("admin/operation-analysis/classroomIncome.html.twig", array(
             'classroomIncomeDetail'    => $classroomIncomeDetail,
             'paginator'                => $paginator,
             'tab'                      => $tab,
@@ -1217,7 +1217,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("OperationAnalysis:vipIncome.html.twig", array(
+        return $this->render("admin/operation-analysis/vipIncome.html.twig", array(
             'vipIncomeDetail'    => $vipIncomeDetail,
             'paginator'          => $paginator,
             'tab'                => $tab,

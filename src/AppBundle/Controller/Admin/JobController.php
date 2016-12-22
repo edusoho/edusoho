@@ -30,7 +30,7 @@ class JobController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('System:jobs.html.twig', array(
+        return $this->render('admin/system/jobs.html.twig', array(
             'jobs'      => $jobs,
             'paginator' => $paginator
         ));

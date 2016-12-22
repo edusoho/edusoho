@@ -2,7 +2,6 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ArticleCategoryController extends BaseController
 {
@@ -10,7 +9,7 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryStructureTree();
 
-        return $this->render('ArticleCategory:index.html.twig', array(
+        return $this->render('admin/article-category/index.html.twig', array(
             'categories' => $categories
         ));
     }
@@ -35,7 +34,7 @@ class ArticleCategoryController extends BaseController
         );
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        return $this->render('ArticleCategory:modal.html.twig', array(
+        return $this->render('admin/article-category/modal.html.twig', array(
             'category'     => $category,
             'categoryTree' => $categoryTree
         ));
@@ -65,7 +64,7 @@ class ArticleCategoryController extends BaseController
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('ArticleCategory:modal.html.twig', array(
+        return $this->render('admin/article-category/modal.html.twig', array(
             'category'     => $category,
             'categoryTree' => $categoryTree
         ));
@@ -127,7 +126,7 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('ArticleCategory:tbody.html.twig', array(
+        return $this->render('admin/article-category/tbody.html.twig', array(
             'categories'   => $categories,
             'categoryTree' => $categories
         ));

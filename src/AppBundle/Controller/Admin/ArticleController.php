@@ -40,7 +40,7 @@ class ArticleController extends BaseController
         $categories   = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('Article:index.html.twig', array(
+        return $this->render('admin/article/index.html.twig', array(
             'articles'     => $articles,
             'categories'   => $categories,
             'paginator'    => $paginator,
@@ -65,7 +65,7 @@ class ArticleController extends BaseController
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('Article:article-modal.html.twig', array(
+        return $this->render('admin/article/article-modal.html.twig', array(
             'categoryTree' => $categoryTree,
             'category'     => array('id' => 0, 'parentId' => 0)
         ));
@@ -101,7 +101,7 @@ class ArticleController extends BaseController
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
-        return $this->render('Article:article-modal.html.twig', array(
+        return $this->render('admin/article/article-modal.html.twig', array(
             'article'      => $article,
             'categoryTree' => $categoryTree,
             'category'     => $category,
@@ -165,7 +165,7 @@ class ArticleController extends BaseController
 
     public function showUploadAction(Request $request)
     {
-        return $this->render('Article:aticle-picture-modal.html.twig', array(
+        return $this->render('admin/article/aticle-picture-modal.html.twig', array(
             'pictureUrl' => ""
         ));
     }
@@ -186,7 +186,7 @@ class ArticleController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
-        return $this->render('Article:article-picture-crop-modal.html.twig', array(
+        return $this->render('admin/article/article-picture-crop-modal.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
@@ -195,7 +195,7 @@ class ArticleController extends BaseController
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->getServiceKernel()->createService('admin/article/ArticleService');
     }
 
     protected function getTagService()
@@ -205,7 +205,7 @@ class ArticleController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article:CategoryService');
+        return $this->getServiceKernel()->createService('admin/article/CategoryService');
     }
 
     protected function getFileService()

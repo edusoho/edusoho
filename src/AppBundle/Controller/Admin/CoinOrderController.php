@@ -7,7 +7,6 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\AdminBundle\Controller\BaseController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CoinOrderController extends BaseController
 {
@@ -62,7 +61,7 @@ class CoinOrderController extends BaseController
 
         $userIds = ArrayToolkit::column($orders, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('Coin:coin-orders.html.twig', array(
+        return $this->render('admin/coin/coin-orders.html.twig', array(
             'request'   => $request,
             'users'     => $users,
             'orders'    => $orders,
@@ -79,7 +78,7 @@ class CoinOrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
-        return $this->render('Coin:order-log-modal.html.twig', array(
+        return $this->render('admin/coin/order-log-modal.html.twig', array(
             'order'     => $order,
             'user'      => $user,
             'orderLogs' => $orderLogs,

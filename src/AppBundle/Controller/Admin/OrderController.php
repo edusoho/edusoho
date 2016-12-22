@@ -12,7 +12,7 @@ class OrderController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('Order:index.html.twig', array());
+        return $this->render('admin/order/index.html.twig', array());
     }
 
     public function manageAction(Request $request, $targetType)
@@ -50,7 +50,7 @@ class OrderController extends BaseController
             }
         }
 
-        return $this->render('Order:manage.html.twig', array(
+        return $this->render('admin/order/manage.html.twig', array(
             'request'    => $request,
             'targetType' => $targetType,
             'orders'     => $orders,
@@ -93,7 +93,7 @@ class OrderController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('CourseOrder:refund-confirm-modal.html.twig', array(
+        return $this->render('admin/course-order/:refund-confirm-modal.html.twig', array(
             'order' => $order
         ));
     }
@@ -218,7 +218,7 @@ class OrderController extends BaseController
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $course = $this->getClassroomService()->getClassroom($order['targetId']);
+        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
 
         if (empty($course)) {
             return false;

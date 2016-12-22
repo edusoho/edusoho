@@ -13,7 +13,7 @@ class ThemeController extends BaseController
 
         $themes = $this->getThemes();
 
-        return $this->render('Theme:index.html.twig', array(
+        return $this->render('admin/theme/index.html.twig', array(
             'themes'       => $themes,
             'currentTheme' => $currentTheme
         ));
@@ -67,7 +67,7 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetCurrentConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('Theme:edit.html.twig', array(
+        return $this->render('admin/theme/edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
             'themeUri'    => $uri
@@ -82,7 +82,7 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('Theme:edit.html.twig', array(
+        return $this->render('admin/theme/edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
             'themeUri'    => $uri
@@ -165,21 +165,21 @@ class ThemeController extends BaseController
 
     private function edit($code, $config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-'.$code.'-modal.html.twig', array(
+        return $this->render('theme/edit-'.$code.'-modal.html.twig', array(
             'config' => $config
         ));
     }
 
     private function editGroups($config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-groups-modal.html.twig', array(
+        return $this->render('theme/edit-groups-modal.html.twig', array(
             'config' => $config
         ));
     }
 
     private function editLiveCourse($config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-live-course-modal.html.twig', array(
+        return $this->render('theme/edit-live-course-modal.html.twig', array(
             'config' => $config
         ));
     }

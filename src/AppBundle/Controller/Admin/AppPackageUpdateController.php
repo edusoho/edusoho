@@ -3,7 +3,6 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\Common\ServiceKernel;
 
 class AppPackageUpdateController extends BaseController
@@ -12,7 +11,7 @@ class AppPackageUpdateController extends BaseController
     {
         $package = $this->getAppService()->getCenterPackageInfo($id);
 
-        return $this->render('AppPackageUpdate:modal.html.twig', array(
+        return $this->render('admin/app-package-update/modal.html.twig', array(
             'package' => $package
         ));
     }

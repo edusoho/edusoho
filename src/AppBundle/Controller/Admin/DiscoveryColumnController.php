@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DiscoveryColumnController extends BaseController
 {
@@ -67,7 +66,7 @@ class DiscoveryColumnController extends BaseController
             }
         }
 
-        return $this->render('DiscoveryColumn:index.html.twig', array(
+        return $this->render('admin/discovery-Column/index.html.twig', array(
             'discoveryColumns' => $discoveryColumns
         ));
     }
@@ -105,7 +104,7 @@ class DiscoveryColumnController extends BaseController
             $discoveryColumn = array();
         }
 
-        return $this->render('DiscoveryColumn:discovery-column-modal.html.twig', array(
+        return $this->render('admin/discovery-Column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $categoryId
         ));
@@ -134,7 +133,7 @@ class DiscoveryColumnController extends BaseController
             return $this->redirect($this->generateUrl('admin_discovery_column_index'));
         }
 
-        return $this->render('DiscoveryColumn:discovery-column-modal.html.twig', array(
+        return $this->render('admin/discovery-Column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
         ));
@@ -170,7 +169,7 @@ class DiscoveryColumnController extends BaseController
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('DiscoveryColumn:DiscoveryColumnService');
+        return $this->getServiceKernel()->createService('admin/discovery-Column/DiscoveryColumnService');
     }
 
     protected function getCourseService()

@@ -16,7 +16,7 @@ class CourseReviewController extends BaseController
             $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             if (count($conditions['courseIds']) == 0) {
-                return $this->render('CourseReview:index.html.twig', array(
+                return $this->render('admin/course-review/index.html.twig', array(
                     'reviews'   => array(),
                     'users'     => array(),
                     'courses'   => array(),
@@ -43,7 +43,7 @@ class CourseReviewController extends BaseController
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
-        return $this->render('CourseReview:index.html.twig', array(
+        return $this->render('admin/course-review/index.html.twig', array(
             'reviews'   => $reviews,
             'users'     => $users,
             'courses'   => $courses,

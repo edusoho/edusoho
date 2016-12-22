@@ -34,7 +34,7 @@ class ContentController extends BaseController
         $categoryIds = ArrayToolkit::column($contents, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        return $this->render('Content:index.html.twig',array(
+        return $this->render('admin/Content/index.html.twig',array(
         	   'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
@@ -60,14 +60,14 @@ class ContentController extends BaseController
             $content = $this->filterEditorField($content);
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
-            return $this->render('Content:content-tr.html.twig',array(
+            return $this->render('admin/Content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('Content:content-modal.html.twig',array(
+        return $this->render('admin/Content/content-modal.html.twig',array(
             'type' => $type,
         ));
     }
@@ -91,14 +91,14 @@ class ContentController extends BaseController
 
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
-            return $this->render('Content:content-tr.html.twig',array(
+            return $this->render('admin/Content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
                 'user' => $this->getCurrentUser(),
             ));
         }
 
-        return $this->render('Content:content-modal.html.twig',array(
+        return $this->render('admin/Content/content-modal.html.twig',array(
             'type' => $type,
             'content' => $content,
         ));
@@ -179,7 +179,7 @@ class ContentController extends BaseController
 
     protected function getContentService()
     {
-        return $this->getServiceKernel()->createService('Content:ContentService');
+        return $this->getServiceKernel()->createService('admin/Content/ContentService');
     }
 
     protected function getTagService()
@@ -194,7 +194,7 @@ class ContentController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->getServiceKernel()->createService('admin/Content/FileService');
     }
 
 }

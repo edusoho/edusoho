@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Util\FileUtil;
 use Topxia\Service\Util\SystemUtil;
 
@@ -11,7 +9,7 @@ class OptimizeController extends BaseController
 {
     public function indexAction()
     {
-       return $this->render('System:optimize.html.twig', array());
+       return $this->render('admin/system/optimize.html.twig', array());
     }
 
     public function removeCacheAction()
@@ -54,7 +52,7 @@ class OptimizeController extends BaseController
 
     public function showProgressbarAction()
     {
-        return $this->render('System:progressBar.html.twig');
+        return $this->render('admin/system/progressBar.html.twig');
     }
 
     protected function isDisabledUpgrade()

@@ -24,7 +24,7 @@ class BatchNotificationController extends BaseController
             );
     	$userIds =  ArrayToolkit::column($batchnotifications, 'fromId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-    	return $this->render('Notification:index.html.twig',array(
+    	return $this->render('admin/notification/index.html.twig',array(
     		'paginator' => $paginator,
     		'batchnotifications' => $batchnotifications,
     		'users' => $users
@@ -55,7 +55,7 @@ class BatchNotificationController extends BaseController
             }
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
-        return $this->render('Notification:notification-modal.html.twig',array(
+        return $this->render('admin/notification/notification-modal.html.twig',array(
             'batchnotification' => $batchnotification
             ));
     }
@@ -78,7 +78,7 @@ class BatchNotificationController extends BaseController
             }
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
-        return $this->render('Notification:notification-modal.html.twig',array(
+        return $this->render('admin/notification/notification-modal.html.twig',array(
             'batchnotification' => $batchnotification
         ));
     }
@@ -118,7 +118,7 @@ class BatchNotificationController extends BaseController
             
             throw $this->createNotFoundException($this->getServiceKernel()->trans('通知已被管理员删除！'));
         }
-        return $this->render('Notification:notification-modal.html.twig',array(
+        return $this->render('admin/notification/notification-modal.html.twig',array(
             'batchnotification' => $batchnotification
         ));
     }

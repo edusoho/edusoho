@@ -62,7 +62,7 @@ class MobileController extends BaseController
         $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
         $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
 
-        return $this->render('System:mobile.html.twig', array(
+        return $this->render('admin/system/mobile.html.twig', array(
             'mobile' => $mobile,
             "bannerCourse1" => $bannerCourse1,
             "bannerCourse2" => $bannerCourse2,
@@ -106,7 +106,7 @@ class MobileController extends BaseController
             }
         }
 
-        return $this->render('System:course-select.html.twig', array(
+        return $this->render('admin/system/course-select.html.twig', array(
             'mobile' => $mobile,
             'courses' => $sortedCourses,
         ));

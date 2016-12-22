@@ -35,7 +35,7 @@ class CommonAdminController extends BaseController
             }
         }
 
-        return $this->render('CommonAdmin:li.html.twig', array(
+        return $this->render('admin/common-admin/li.html.twig', array(
             'admin' => $admin));
     }
 
@@ -52,7 +52,7 @@ class CommonAdminController extends BaseController
 
         $admins = $this->getUserCommonAdminService()->findCommonAdminByUserId($user['id']);
 
-        return $this->render('CommonAdmin:main.html.twig', array(
+        return $this->render('admin/common-admin/main.html.twig', array(
             'admins'    => $admins,
             'isCollect' => $isCollect));
     }
@@ -72,7 +72,7 @@ class CommonAdminController extends BaseController
 
         $admins = $this->getUserCommonAdminService()->findCommonAdminByUserId($user['id']);
 
-        return $this->render('CommonAdmin:main.html.twig', array(
+        return $this->render('admin/common-admin/main.html.twig', array(
             'admins'    => $admins,
             'isCollect' => $isCollect));
     }

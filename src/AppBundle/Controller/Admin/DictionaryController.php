@@ -2,8 +2,6 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 
 class DictionaryController extends BaseController
 {
@@ -11,7 +9,7 @@ class DictionaryController extends BaseController
 	{
 		$dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
         $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-		return $this->render('Dictionary:index.html.twig',array(
+		return $this->render('admin/dictionary/index.html.twig',array(
 			'dictionaryItems' => $dictionaryItems,
             'dictionaries' => $dictionaries
 			));
@@ -26,13 +24,13 @@ class DictionaryController extends BaseController
             $dictionaryItem = $this->getDictionaryService()->addDictionaryItem($conditions);
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('Dictionary:tbody.html.twig',array(
+            return $this->render('admin/dictionary/tbody.html.twig',array(
             	'dictionaryItems' => $dictionaryItems,
                 'dictionaries' => $dictionaries
             	));
         }
 
-        return $this->render('Dictionary:modal.html.twig',array('type'=>$type));
+        return $this->render('admin/dictionary/modal.html.twig',array('type'=>$type));
     }
 
     public function checkNameAction(Request $request, $id)
@@ -72,19 +70,19 @@ class DictionaryController extends BaseController
             $dictionaryItem = $this->getDictionaryService()->updateDictionaryItem($id, $request->request->all());
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('Dictionary:tbody.html.twig',array(
+            return $this->render('admin/dictionary/tbody.html.twig',array(
             	'dictionaryItems' => $dictionaryItems,
                 'dictionaries' => $dictionaries
             	));
         }
 
-        return $this->render('Dictionary:modal.html.twig', array(
+        return $this->render('admin/dictionary/modal.html.twig', array(
             'dictionaryItem' => $dictionaryItem
         ));
     }
 
     protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('Dictionary:DictionaryService');
+        return $this->getServiceKernel()->createService('admin/dictionary/DictionaryService');
     }
 }

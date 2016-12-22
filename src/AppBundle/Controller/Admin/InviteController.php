@@ -61,7 +61,7 @@ class InviteController extends BaseController
             );
         }
 
-        return $this->render('Invite:index.html.twig', array(
+        return $this->render('admin/invite/index.html.twig', array(
             'paginator'          => $paginator,
             'inviteInformations' => $inviteInformations
         ));
@@ -92,7 +92,7 @@ class InviteController extends BaseController
             }
         }
 
-        return $this->render('Invite:invite-modal.html.twig', array(
+        return $this->render('admin/invite/invite-modal.html.twig', array(
             'details' => $details
         ));
     }
@@ -119,7 +119,7 @@ class InviteController extends BaseController
 
         $cards                          = $this->getCardService()->findCardsByCardIds($cardIds);
         list($coupons, $orders, $users) = $this->getCardsData($cards);
-        return $this->render('Invite:coupon.html.twig', array(
+        return $this->render('admin/invite/coupon.html.twig', array(
             'paginator'        => $paginator,
             'cardInformations' => $cardInformations,
             'filter'           => $filter,
@@ -147,7 +147,7 @@ class InviteController extends BaseController
         $conditions                         = array();
         $conditions['inviteUserCardIds']    = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
         list($paginator, $cardInformations) = $this->getCardInformations($request, $conditions);
-        return $this->render('Invite:coupon.html.twig', array(
+        return $this->render('admin/invite/coupon.html.twig', array(
             'paginator'        => $paginator,
             'cardInformations' => $cardInformations,
             'filter'           => 'invite',

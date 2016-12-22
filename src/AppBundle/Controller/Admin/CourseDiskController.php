@@ -2,7 +2,6 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
@@ -23,7 +22,7 @@ class CourseDiskController extends BaseController
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'userId'));
-		return $this->render('CourseDisk:index.html.twig',array(
+		return $this->render('admin/course-disk/index.html.twig',array(
             'files' => $files,
             'paginator' => $paginator,
             'users'=>$users,

@@ -26,7 +26,7 @@ class TeacherController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('Teacher:index.html.twig', array(
+        return $this->render('admin/teacher/index.html.twig', array(
             'users'     => $users,
             'paginator' => $paginator
         ));
@@ -43,15 +43,15 @@ class TeacherController extends BaseController
             $type   = $request->request->get('type');
 
             if ($type == 'promoteList') {
-                return $this->render('Teacher:teacher-promote-tr.html.twig', array('user' => $user));
+                return $this->render('admin/teacher/teacher-promote-tr.html.twig', array('user' => $user));
             }
 
             if ($type == 'teacherList') {
-                return $this->render('Teacher:tr.html.twig', array('user' => $user));
+                return $this->render('admin/teacher/tr.html.twig', array('user' => $user));
             }
         }
 
-        return $this->render('Teacher:teacher-promote-modal.html.twig', array(
+        return $this->render('admin/teacher/teacher-promote-modal.html.twig', array(
             'user' => $user,
             'type' => $type
         ));
@@ -81,7 +81,7 @@ class TeacherController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('Teacher:teacher-promote-list.html.twig', array(
+        return $this->render('admin/teacher/teacher-promote-list.html.twig', array(
             'users'     => $users,
             'paginator' => $paginator
         ));
@@ -91,7 +91,7 @@ class TeacherController extends BaseController
     {
         $user = $this->getUserService()->cancelPromoteUser($id);
 
-        return $this->render('Teacher:tr.html.twig', array('user' => $user));
+        return $this->render('admin/teacher/tr.html.twig', array('user' => $user));
     }
 
     protected function getUserService()

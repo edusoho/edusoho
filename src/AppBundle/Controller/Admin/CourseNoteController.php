@@ -17,7 +17,7 @@ class CourseNoteController extends BaseController
             $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id'); 
             if (count($conditions['courseIds']) == 0){
-                return $this->render('CourseNote:index.html.twig', array(
+                return $this->render('admin/course-note/index.html.twig', array(
                     'notes' => array(),
                     'paginator' => new Paginator($request,0,20),
                     'users'=> array(),
@@ -41,7 +41,7 @@ class CourseNoteController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
-		return $this->render('CourseNote:index.html.twig',array(
+		return $this->render('admin/course-note/index.html.twig',array(
             'notes' => $notes,
             'paginator' => $paginator,
             'users'=>$users,

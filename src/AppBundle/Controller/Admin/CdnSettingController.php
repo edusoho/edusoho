@@ -32,7 +32,7 @@ class CdnSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('CDN设置已保存！'));
         }
 
-        return $this->render('System:cdn-setting.html.twig', array(
+        return $this->render('admin/system/cdn-setting.html.twig', array(
             'cdn'=>$cdn
         ));
 
@@ -40,7 +40,7 @@ class CdnSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->createService('admin/system/SettingService');
     }
 
 }

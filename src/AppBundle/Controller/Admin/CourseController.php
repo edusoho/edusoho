@@ -97,7 +97,7 @@ class CourseController extends BaseController
 
 
 
-        return $this->render('Course:index.html.twig', array(
+        return $this->render('admin/course/index.html.twig', array(
             'conditions'            => $conditions,
             'courses'               => $courses,
             'users'                 => $users,
@@ -182,12 +182,12 @@ class CourseController extends BaseController
 
     public function searchAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'Course:search.html.twig');
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'admin/course/search.html.twig');
     }
 
     public function searchToFillBannerAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'Course:search-to-fill-banner.html.twig');
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'admin/course/search-to-fill-banner.html.twig');
     }
 
     /*
@@ -252,7 +252,7 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('Course:delete.html.twig', array('course' => $course));
+        return $this->render('admin/course/delete.html.twig', array('course' => $course));
     }
 
     public function checkPasswordAction(Request $request)
@@ -291,7 +291,7 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('Course:copy.html.twig', array(
+        return $this->render('admin/course/copy.html.twig', array(
             'course' => $course
         ));
     }
@@ -323,7 +323,7 @@ class CourseController extends BaseController
             $user = $this->getUserService()->getUser($course['userId']);
 
             if ($ref == 'recommendList') {
-                return $this->render('Course:course-recommend-tr.html.twig', array(
+                return $this->render('admin/course/course-recommend-tr.html.twig', array(
                     'course' => $course,
                     'user'   => $user
                 ));
@@ -332,7 +332,7 @@ class CourseController extends BaseController
             return $this->renderCourseTr($id, $request);
         }
 
-        return $this->render('Course:course-recommend-modal.html.twig', array(
+        return $this->render('admin/course/course-recommend-modal.html.twig', array(
             'course' => $course,
             'ref'    => $ref,
             'filter' => $filter
@@ -344,7 +344,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
-            return $this->forward('AppBundle:Admin/Course:recommendList', array(
+            return $this->forward('AppBundle:Admin/admin/course/recommendList', array(
                 'request' => $request
             ));
         }
@@ -379,7 +379,7 @@ class CourseController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
-        return $this->render('Course:course-recommend-list.html.twig', array(
+        return $this->render('admin/course/course-recommend-list.html.twig', array(
             'courses'    => $courses,
             'users'      => $users,
             'paginator'  => $paginator,
@@ -451,7 +451,7 @@ class CourseController extends BaseController
             $courses[$key]['lessonCount']  = $lessonCount;
         }
 
-        return $this->render('Course:data.html.twig', array(
+        return $this->render('admin/course/data.html.twig', array(
             'courses'    => $courses,
             'paginator'  => $paginator,
             'filter'     => $filter,
@@ -491,7 +491,7 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('Course:lesson-data.html.twig', array(
+        return $this->render('admin/course/lesson-data.html.twig', array(
             'course'  => $course,
             'lessons' => $lessons
         ));
@@ -533,7 +533,7 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('Course:course-chooser.html.twig', array(
+        return $this->render('admin/course/course-chooser.html.twig', array(
             'conditions' => $conditions,
             'courses'    => $courses,
             'users'      => $users,
@@ -573,7 +573,7 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('Course:tr.html.twig', array(
+        return $this->render('admin/course/tr.html.twig', array(
             'user'       => $this->getUserService()->getUser($course['userId']),
             'category'   => $this->getCategoryService()->getCategory($course['categoryId']),
             'course'     => $course,
@@ -607,17 +607,17 @@ class CourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->createService('admin/course/CourseService');
     }
 
     protected function getCourseDeleteService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseDeleteService');
+        return $this->getServiceKernel()->createService('admin/course/CourseDeleteService');
     }
 
     protected function getCourseCopyService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseCopyService');
+        return $this->getServiceKernel()->createService('admin/course/CourseCopyService');
     }
 
     protected function getCategoryService()

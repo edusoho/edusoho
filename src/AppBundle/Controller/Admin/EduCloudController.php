@@ -41,10 +41,10 @@ class EduCloudController extends BaseController
                 }
             }
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:api-error.html.twig', array());
+            return $this->render('admin/edu-cloud/api-error.html.twig', array());
         }
 
-        return $this->render('EduCloud:edu-cloud.html.twig', array(
+        return $this->render('admin/edu-cloud/edu-cloud.html.twig', array(
             'account'   => $account,
             'token'     => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
             'smsStatus' => isset($smsStatus) ? $smsStatus : null
@@ -59,7 +59,7 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:cloud-error.html.twig', array());
+            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
         }
 
         if (isset($info['accessCloud']) && $info['accessCloud'] != 0) {
@@ -68,14 +68,14 @@ class EduCloudController extends BaseController
 
         if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 0) {
             $trialHtml = $this->getCloudCenterExperiencePage();
-            return $this->render('EduCloud:cloud.html.twig', array(
+            return $this->render('admin/edu-cloud/cloud.html.twig', array(
                 'content' => $trialHtml['content']
             ));
         }
 
         $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
         $unTrialHtml = json_decode($unTrial, true);
-        return $this->render('EduCloud:cloud.html.twig', array(
+        return $this->render('admin/edu-cloud/cloud.html.twig', array(
             'content' => $unTrialHtml['content']
         ));
     }
@@ -89,7 +89,7 @@ class EduCloudController extends BaseController
             $isBinded = $this->getAppService()->getBinded();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:cloud-error.html.twig', array());
+            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
         }
         if (!isset($overview['error'])) {
             $paidService = array();
@@ -119,7 +119,7 @@ class EduCloudController extends BaseController
             }
         }
         
-        return $this->render('EduCloud/Overview:index.html.twig', array(
+        return $this->render('admin/edu-cloud/overview/index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
             'paidService' => isset($paidService) ? $paidService : false,
@@ -145,10 +145,10 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:video-error.html.twig', array());
+            return $this->render('admin/edu-cloud/video-error.html.twig', array());
         }
 
-        return $this->render('EduCloud:cloud-attachment.html.twig', array(
+        return $this->render('admin/edu-cloud/cloud-attachment.html.twig', array(
             'attachment' => $attachment,
             'info'       => $info
         ));
@@ -158,7 +158,7 @@ class EduCloudController extends BaseController
     public function videoOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Video:trial.html.twig', array());
+            return $this->render('admin/edu-cloud/video/trial.html.twig', array());
         }
 
         if (!($this->isHiddenCloud())) {
@@ -171,10 +171,10 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/me/storage/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:video-error.html.twig', array());
+            return $this->render('admin/edu-cloud/video-error.html.twig', array());
         }
         if ((isset($storageSetting['upload_mode']) && $storageSetting['upload_mode'] == 'local') || !isset($storageSetting['upload_mode'])) {   
-            return $this->render('EduCloud/Video:without-enable.html.twig');
+            return $this->render('admin/edu-cloud/video/without-enable.html.twig');
         }
 
         $overview['video']['isBuy'] = isset($overview['video']['isBuy']) ? false : true;
@@ -182,7 +182,7 @@ class EduCloudController extends BaseController
 
         $spaceItems =  $this->dealItems($overview['video']['spaceItems']);
         $flowItems =  $this->dealItems($overview['video']['flowItems']);
-        return $this->render('EduCloud/Video:overview.html.twig', array(
+        return $this->render('admin/edu-cloud/video/overview.html.twig', array(
             'video'   => $overview['video'],
             'space'   => isset($overview['space']) ? $overview['space'] : null,
             'flow'    => isset($overview['flow']) ? $overview['flow'] : null,
@@ -223,7 +223,7 @@ class EduCloudController extends BaseController
     public function videoSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Video:trial.html.twig', array());
+            return $this->render('admin/edu-cloud/video/trial.html.twig', array());
         }
 
         if (!($this->isHiddenCloud())) {
@@ -264,11 +264,11 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $overview = $api->get("/me/storage/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:video-error.html.twig', array());
+            return $this->render('admin/edu-cloud/video-error.html.twig', array());
         }
 
         $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        return $this->render('EduCloud/Video:setting.html.twig', array(
+        return $this->render('admin/edu-cloud/video/setting.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
             'video'          => $overview['video']
@@ -365,7 +365,7 @@ class EduCloudController extends BaseController
             $overview    = $api->get("/me/sms/overview");
             $cloudInfo = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:sms-error.html.twig', array());
+            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
         }
 
         if (isset($overview['isBuy'])) {
@@ -400,7 +400,7 @@ class EduCloudController extends BaseController
     public function smsOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Sms:trial.html.twig');
+            return $this->render('admin/edu-cloud/sms/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -420,18 +420,18 @@ class EduCloudController extends BaseController
             $smsInfo = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:sms-error.html.twig', array());
+            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
         }
         $isSmsWithoutEnable = $this->isSmsWithoutEnable($overview, $cloudSmsSettings);
         if ($isSmsWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
-            return $this->render('EduCloud/Sms:without-enable.html.twig', array(
+            return $this->render('admin/edu-cloud/sms/without-enable.html.twig', array(
                 'overview' => $overview,
                 'cloudSmsSettings' => $cloudSmsSettings
             ));
         }
         $chartData = $this->dealChartData($overview['data']);
-        return $this->render('EduCloud/Sms:overview.html.twig', array(
+        return $this->render('admin/edu-cloud/sms/overview.html.twig', array(
             'account' => $overview['account'],
             'chartData'   => $chartData,
             'smsInfo' => $smsInfo
@@ -441,7 +441,7 @@ class EduCloudController extends BaseController
     public function smsSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Sms:trial.html.twig');
+            return $this->render('admin/edu-cloud/sms/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -463,12 +463,12 @@ class EduCloudController extends BaseController
             $smsInfo   = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
             $isBinded = $this->getAppService()->getBinded();
-            return $this->render('EduCloud/Sms:setting.html.twig', array(
+            return $this->render('admin/edu-cloud/sms/setting.html.twig', array(
                 'isBinded' => $isBinded,
                 'smsInfo'   => $smsInfo
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:sms-error.html.twig', array());
+            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
         }
     }
 
@@ -492,7 +492,7 @@ class EduCloudController extends BaseController
     public function emailAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud:email.html.twig');
+            return $this->render('admin/edu-cloud/email.html.twig');
         }
 
         $settings = $this->getSettingService()->get('storage', array());
@@ -509,7 +509,7 @@ class EduCloudController extends BaseController
             $emailStatus = $this->handleEmailSetting($request);
             $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
             $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
-            return $this->render('EduCloud/email:overview.html.twig', array(
+            return $this->render('admin/edu-cloud/email/overview.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
                 'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
@@ -518,14 +518,14 @@ class EduCloudController extends BaseController
                 'emailInfo'    => $emailInfo
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:email-error.html.twig', array());
+            return $this->render('admin/edu-cloud/email-error.html.twig', array());
         }
     }
 
     public function emailOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Email:trial.html.twig');
+            return $this->render('admin/edu-cloud/email/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -542,19 +542,19 @@ class EduCloudController extends BaseController
             $api         = CloudAPIFactory::create('root');
             $overview        = $api->get('/me/email/overview');
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:email-error.html.twig', array());
+            return $this->render('admin/edu-cloud/email-error.html.twig', array());
         }
         $emailSettings = $this->getSettingService()->get('cloud_email_crm', array());
         $isEmailWithoutEnable = $this->isEmailWithoutEnable($overview, $emailSettings);
         if ($isEmailWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? false : true;
-            return $this->render('EduCloud/Email:without-enable.html.twig', array(
+            return $this->render('admin/edu-cloud/email/without-enable.html.twig', array(
                 'overview' => $overview
             ));                
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('EduCloud/Email:overview.html.twig', array(
+        return $this->render('admin/edu-cloud/email/overview.html.twig', array(
             'account' => $overview['account'],
             'chartData'   => $chartData
         ));
@@ -571,7 +571,7 @@ class EduCloudController extends BaseController
     public function emailSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Email:trial.html.twig');
+            return $this->render('admin/edu-cloud/email/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -592,11 +592,11 @@ class EduCloudController extends BaseController
         try {
             $api         = CloudAPIFactory::create('root');
             $overview        = $api->get('/me/email/overview');
-            return $this->render('EduCloud/Email:setting.html.twig', array(
+            return $this->render('admin/edu-cloud/email/setting.html.twig', array(
                 'account' => $overview['account']
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:email-error.html.twig', array());
+            return $this->render('admin/edu-cloud/email-error.html.twig', array());
         }
     }
 
@@ -607,7 +607,7 @@ class EduCloudController extends BaseController
                 $api         = CloudAPIFactory::create('root');
                 $overview    = $api->get("/me/email/overview");
             } catch (\RuntimeException $e) {
-                return $this->render('EduCloud:email-error.html.twig', array());
+                return $this->render('admin/edu-cloud/email-error.html.twig', array());
             }
 
             if (isset($overview['isBuy'])) {
@@ -654,7 +654,7 @@ class EduCloudController extends BaseController
             ));
         }
 
-        return $this->render('EduCloud:apply-sms-form.html.twig', array());
+        return $this->render('admin/edu-cloud/apply-sms-form.html.twig', array());
     }
 
     public function smsNoMessageAction(Request $request)
@@ -687,10 +687,10 @@ class EduCloudController extends BaseController
 
             $bills = $result['items'];
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:sms-error.html.twig', array());
+            return $this->render('admin/edu-cloud/sms-error.html.twig', array());
         }
 
-        return $this->render('EduCloud:sms-bill.html.twig', array(
+        return $this->render('admin/edu-cloud/sms-bill.html.twig', array(
             'account'   => $account,
             'token'     => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
             'bills'     => $bills,
@@ -715,7 +715,7 @@ class EduCloudController extends BaseController
             $info['error'] = 'error';
         }
 
-        return $this->render('EduCloud:key.html.twig', array(
+        return $this->render('admin/edu-cloud/key.html.twig', array(
             'info' => $info
         ));
     }
@@ -754,7 +754,7 @@ class EduCloudController extends BaseController
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
         }
 
-        return $this->render('EduCloud:key-license-info.html.twig', array(
+        return $this->render('admin/edu-cloud/key-license-info.html.twig', array(
             'info'           => $info,
             'currentHost'    => $currentHost,
             'isLocalAddress' => $this->isLocalAddress($currentHost)
@@ -815,13 +815,13 @@ class EduCloudController extends BaseController
         }
 
         render:
-        return $this->render('EduCloud:key-update.html.twig', array());
+        return $this->render('admin/edu-cloud/key-update.html.twig', array());
     }
 
     public function searchSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Search:trial.html.twig');
+            return $this->render('admin/edu-cloud/search/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -836,7 +836,7 @@ class EduCloudController extends BaseController
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
         $searchInitStatus = $this->checkCloudSearchStatus($cloud_search_setting);
 
-        return $this->render('EduCloud/Search:setting.html.twig', array(
+        return $this->render('admin/edu-cloud/search/setting.html.twig', array(
             'searchInitStatus' => $searchInitStatus
         ));
     }
@@ -863,7 +863,7 @@ class EduCloudController extends BaseController
     public function searchOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Search:trial.html.twig');
+            return $this->render('admin/edu-cloud/search/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -878,7 +878,7 @@ class EduCloudController extends BaseController
             $searchOverview = $api->get("/me/search/overview");
             $data = $this->isSearchInited($api, $cloud_search_setting);
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud/Search:without-enable.html.twig', array(
+            return $this->render('admin/edu-cloud/search/without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
             ));
         }
@@ -894,12 +894,12 @@ class EduCloudController extends BaseController
         }
         if ($data['search_enabled'] == 1 && ($data['status'] == 'ok'||$data['status'] == 'waiting') && !isset($searchOverview['isBuy'])) {
             $chartData = $this->dealChartData($searchOverview['data']);
-            return $this->render('EduCloud/Search:overview.html.twig', array(
+            return $this->render('admin/edu-cloud/search/overview.html.twig', array(
                 'searchOverview' => $searchOverview,
                 'chartData'          => $chartData
             ));
         } else {
-            return $this->render('EduCloud/Search:without-enable.html.twig', array(
+            return $this->render('admin/edu-cloud/search/without-enable.html.twig', array(
                 'data' => $data
             ));
         }
@@ -914,7 +914,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
-        return $this->render('EduCloud:cloud-search-reapply-modal.html.twig');
+        return $this->render('admin/edu-cloud/cloud-search-reapply-modal.html.twig');
     }
 
     public function searchClauseAction(Request $request)
@@ -925,7 +925,7 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
-        return $this->render('EduCloud:cloud-search-clause-modal.html.twig');
+        return $this->render('admin/edu-cloud/cloud-search-clause-modal.html.twig');
     }
 
     public function searchOpenAction()
@@ -1009,7 +1009,7 @@ class EduCloudController extends BaseController
 
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:video-error.html.twig', array());
+            return $this->render('admin/edu-cloud/video-error.html.twig', array());
         }
 
         //是否接入教育云
@@ -1024,7 +1024,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('EduCloud:app-im-setting.html.twig', array(
+        return $this->render('admin/edu-cloud/app-im-setting.html.twig', array(
             'data' => $data
         ));
     }
@@ -1342,7 +1342,7 @@ class EduCloudController extends BaseController
             $info = $api->get('/me');
             return isset($info['accessCloud']) ? $info['accessCloud'] : 0;
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:cloud-error.html.twig', array());
+            return $this->render('admin/edu-cloud/cloud-error.html.twig', array());
         }
     }
 
@@ -1479,7 +1479,7 @@ class EduCloudController extends BaseController
     public function liveOverviewAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Live:trial.html.twig');
+            return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -1490,20 +1490,20 @@ class EduCloudController extends BaseController
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:live-error.html.twig', array());
+            return $this->render('admin/edu-cloud/live-error.html.twig', array());
         }
         $liveCourseSetting     = $this->getSettingService()->get('live-course', array());
         $liveEnabled = isset($liveCourseSetting['live_course_enabled']) ? $liveCourseSetting['live_course_enabled'] : 0;
         $isLiveWithoutEnable = $this->isLiveWithoutEnable($overview, $liveEnabled);
         if ($isLiveWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
-            return $this->render('EduCloud/Live:without-enable.html.twig', array(
+            return $this->render('admin/edu-cloud/live/without-enable.html.twig', array(
                 'overview'  => $overview
             ));
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('EduCloud/Live:overview.html.twig', array(
+        return $this->render('admin/edu-cloud/live/overview.html.twig', array(
             'account'  => $overview['account'],
             'chartData'  => $chartData
         ));
@@ -1524,7 +1524,7 @@ class EduCloudController extends BaseController
     public function liveSettingAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            return $this->render('EduCloud/Live:trial.html.twig');
+            return $this->render('admin/edu-cloud/live/trial.html.twig');
         }
 
         if (!($this->isHiddenCloud())) {
@@ -1540,7 +1540,7 @@ class EduCloudController extends BaseController
                 $api         = CloudAPIFactory::create('root');
                 $overview    = $api->get("/me/live/overview");
             } catch (\RuntimeException $e) {
-                return $this->render('EduCloud:live-error.html.twig', array());
+                return $this->render('admin/edu-cloud/live-error.html.twig', array());
             }
 
             if (isset($overview['isBuy'])) {
@@ -1565,9 +1565,9 @@ class EduCloudController extends BaseController
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
         } catch (\RuntimeException $e) {
-            return $this->render('EduCloud:live-error.html.twig', array());
+            return $this->render('admin/edu-cloud/live-error.html.twig', array());
         }
-        return $this->render('EduCloud/Live:setting.html.twig', array(
+        return $this->render('admin/edu-cloud/live/setting.html.twig', array(
             'account'  => $overview['account'],
             'liveCourseSetting' => $liveCourseSetting,
             'capacity' => $capacity

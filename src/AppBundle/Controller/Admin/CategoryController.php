@@ -16,7 +16,7 @@ class CategoryController extends BaseController
 
         $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
 
-        return $this->render('Category:embed.html.twig', array(
+        return $this->render('admin/category/embed.html.twig', array(
             'group'      => $group,
             'menu'       => $menu,
             'categories' => $categories,
@@ -42,7 +42,7 @@ class CategoryController extends BaseController
             'icon'        => ''
         );
 
-        return $this->render('Category:modal.html.twig', array(
+        return $this->render('admin/category/modal.html.twig', array(
             'category' => $category
         ));
     }
@@ -60,7 +60,7 @@ class CategoryController extends BaseController
             return $this->renderTbody($category['groupId']);
         }
 
-        return $this->render('Category:modal.html.twig', array(
+        return $this->render('admin/category/modal.html.twig', array(
             'category' => $category
         ));
     }
@@ -109,7 +109,7 @@ class CategoryController extends BaseController
     {
         $group      = $this->getCategoryService()->getGroup($groupId);
         $categories = $this->getCategoryService()->getCategoryStructureTree($groupId);
-        return $this->render('Category:tbody.html.twig', array(
+        return $this->render('admin/category/tbody.html.twig', array(
             'categories' => $categories,
             'group'      => $group
         ));

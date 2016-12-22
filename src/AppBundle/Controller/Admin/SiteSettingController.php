@@ -42,7 +42,7 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('站点信息设置已保存！'));
         }
 
-        return $this->render('System:site.html.twig', array(
+        return $this->render('admin/system/site.html.twig', array(
             'site' => $site,
         ));
     }
@@ -81,7 +81,7 @@ class SiteSettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服设置已保存！'));
         }
-        return $this->render('System:consult-setting.html.twig', array(
+        return $this->render('admin/system/consult-setting.html.twig', array(
             'consult' => $consult,
         ));
     }
@@ -102,7 +102,7 @@ class SiteSettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('侧边栏设置已保存！'));
         }
-        return $this->render('System:esbar-setting.html.twig',array(
+        return $this->render('admin/system/esbar-setting.html.twig',array(
             'esBar' => $esBar
         ));
     }
@@ -163,7 +163,7 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('分享设置已保存！'));
         }
 
-        return $this->render('System:share.html.twig', array(
+        return $this->render('admin/system/share.html.twig', array(
             'defaultSetting' => $defaultSetting,
         ));
     }

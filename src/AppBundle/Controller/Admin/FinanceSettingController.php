@@ -62,7 +62,7 @@ class FinanceSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('支付方式设置已保存！'));
         }
 
-        return $this->render('System:payment.html.twig', array(
+        return $this->render('admin/system/payment.html.twig', array(
             'payment' => $payment
         ));
     }
@@ -104,7 +104,7 @@ class FinanceSettingController extends BaseController
             $this->setFlashMessage('success', $this->trans('退款设置已保存！'));
         }
 
-        return $this->render('System:refund.html.twig', array(
+        return $this->render('admin/system/refund.html.twig', array(
             'refundSetting' => $refundSetting
         ));
     }

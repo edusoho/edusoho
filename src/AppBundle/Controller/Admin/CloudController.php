@@ -19,7 +19,7 @@ class CloudController extends BaseController
             return $this->createMessageResponse('error', $this->getServiceKernel()->trans('获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败'));
         }
 
-        return $this->render('Cloud:bill.html.twig', array(
+        return $this->render('admin/cloud/bill.html.twig', array(
             'money' => $result['money'],
             'bills' => $result['bills']
         ));

@@ -39,7 +39,7 @@ class GroupController extends BaseController
         $ownerIds =  ArrayToolkit::column($groupinfo, 'ownerId');
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
-		return $this->render('Group:index.html.twig',array(
+		return $this->render('admin/group/index.html.twig',array(
 			'groupinfo'=>$groupinfo,
             'owners'=>$owners,
 			'paginator' => $paginator));
@@ -72,7 +72,7 @@ class GroupController extends BaseController
 
         $group=$this->getGroupService()->getGroupsByIds($groupIds);
 
-        return $this->render('Group:thread.html.twig',array(
+        return $this->render('admin/group/thread.html.twig',array(
             'threadinfo'=>$threadinfo,
             'owners'=>$owners,
             'group'=>$group,
@@ -99,7 +99,7 @@ class GroupController extends BaseController
 
     public function threadPostAction()
     {
-        return $this->render('Group:threadPost.html.twig',array(
+        return $this->render('admin/group/threadPost.html.twig',array(
            ));
 
     }
@@ -111,7 +111,7 @@ class GroupController extends BaseController
 
         $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
 
-        return $this->render('Group:table-tr.html.twig', array(
+        return $this->render('admin/group/table-tr.html.twig', array(
             'group' => $groupinfo,
             'owners'=>$owners,
         ));
@@ -124,7 +124,7 @@ class GroupController extends BaseController
         
         $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
 
-        return $this->render('Group:table-tr.html.twig', array(
+        return $this->render('admin/group/table-tr.html.twig', array(
             'group' => $groupinfo,
             'owners'=>$owners,
         ));
@@ -269,7 +269,7 @@ class GroupController extends BaseController
         $group=$this->getGroupService()->getGroupsByIds(array('0'=>$thread['groupId']));
 
 
-        return $this->render('Group:thread-table-tr.html.twig', array(
+        return $this->render('admin/group/thread-table-tr.html.twig', array(
             'thread' => $thread,
             'owners'=>$owners,
             'group'=>$group,
