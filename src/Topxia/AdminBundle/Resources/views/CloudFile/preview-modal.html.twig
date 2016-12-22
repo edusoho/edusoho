@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}<span class="text-muted">{{ '资料预览'|trans }}</span>{% endblock %}
@@ -26,7 +27,11 @@
 
   {% endif %}
 
-  <script>app.load('materiallibbundle/controller/material-lib/preview')</script>
+  <script>
+  app.lasyLoad = function() {
+    app.load('materiallibbundle/controller/material-lib/preview')
+  };
+  </script>
 {% endblock %}
 
 {% block footer %}
