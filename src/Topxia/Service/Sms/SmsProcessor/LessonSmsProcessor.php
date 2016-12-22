@@ -26,17 +26,12 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $count = $this->getCourseService()->searchMemberCount(array('courseId' => $course['id']));
         }
 
-        global $kernel;
-        $container          = $kernel->getContainer();
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-        $hostName           = $siteSetting['url'];
         $api                = CloudAPIFactory::create('root');
 
+        global $kernel;
+        $router = $kernel->getContainer()->get('router');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = $hostName;
-            $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
+            $urls[$i] = $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true);
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
@@ -49,23 +44,17 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
     public function getSmsInfo($targetId, $index, $smsType)
     {
-        global $kernel;
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteSetting['url'] = rtrim($siteSetting['url']);
-        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-        $hostName           = $siteSetting['url'];
         $lesson             = $this->getCourseService()->getLesson($targetId);
-
         if (empty($lesson)) {
             throw new \RuntimeException($this->getKernel()->trans('课时不存在'));
         }
 
-        $originUrl = $hostName;
-        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
+        global $kernel;
+        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), 0);
         $originUrl .= '#lesson/'.$lesson['id'];
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
-        $url      = empty($shortUrl) ? $hostName.$kernel->getContainer()->get('router')->generate('course_show', array('id' => $lesson['courseId'])) : $shortUrl;
+        $url      = empty($shortUrl) ? $originUrl : $shortUrl;
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         $to     = '';
