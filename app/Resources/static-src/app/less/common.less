@@ -184,3 +184,19 @@ html.nav-active body {
   border-color: @gray-light !important;
   .box-shadow(none) !important;
 }
+
+//a链接颜色变化
+a {
+  cursor: pointer;
+  color: @brand-primary;
+  .es-transition;
+  &:hover {
+    color: @brand-primary-darker;
+    .es-transition;
+  }
+}
+
+//上传文件
+input[type=file] {
+    display: none;
+}
