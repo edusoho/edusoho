@@ -28,7 +28,6 @@
 		left: 0;
 		z-index: 9999;
 		padding: 0;
-
 		>li {
 			width: auto;
 			margin: 5px 0;
@@ -166,6 +165,7 @@
 		}
 		.course-data.active > li{
 			width: auto;
+			padding: 0 10%;
 		}
 		.course-info{
 			padding: 15px 10px 0;
@@ -252,8 +252,14 @@
 				font-weight: normal;
 			}
 		} 
+		#unfavorite-btn,#favorite-btn{
+			display: none;
+		}
 		.course-data.two-col > li{
 			width: auto;
+		}
+		.course-data > li:last-child:after{
+			background-color: transparent;
 		}
 	}
 
