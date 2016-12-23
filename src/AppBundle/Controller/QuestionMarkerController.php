@@ -1,6 +1,12 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\Marker\Service\MarkerService;
+use Biz\Marker\Service\QuestionMarkerResultService;
+use Biz\Marker\Service\QuestionMarkerService;
+use Biz\Question\Service\QuestionService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -303,31 +309,49 @@ class QuestionMarkerController extends BaseController
         return $html;
     }
 
+    /**
+     * @return QuestionMarkerService
+     */
     protected function getQuestionMarkerService()
     {
         return $this->getBiz()->service('Marker:QuestionMarkerService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->getBiz()->service('Question:QuestionService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return MarkerService
+     */
     protected function getMarkerService()
     {
         return $this->getBiz()->service('Marker:MarkerService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return QuestionMarkerResultService
+     */
     protected function getQuestionMarkerResultService()
     {
         return $this->getBiz()->service('Marker:QuestionMarkerResultService');

@@ -1,16 +1,22 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Group\Service\GroupService;
-use Biz\System\Service\SettingService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\ThreadService;
+use Biz\Note\Service\CourseNoteService;
 use Biz\User\CurrentUser;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\UserFieldService;
-use Biz\User\Service\UserService;
+use Biz\User\Service\NotificationService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
+use Biz\Group\Service\GroupService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use Vip\Service\Vip\LevelService;
+use Vip\Service\Vip\VipService;
 
 class UserController extends BaseController
 {
@@ -257,7 +263,7 @@ class UserController extends BaseController
         );
         $members     = array_merge($admins, $owners);
         $groupIds    = ArrayToolkit::column($members, 'groupId');
-        $adminGroups = $this->getGroupService()->getGroupsByids($groupIds);
+        $adminGroups = $this->getGroupService()->getGroupsByIds($groupIds);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -495,8 +501,6 @@ class UserController extends BaseController
         ));
     }
 
-
-
     protected function tryGetUser($id)
     {
         $user = $this->getUserService()->getUser($id);
@@ -623,31 +627,49 @@ class UserController extends BaseController
         return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getLevelService()
     {
         return $this->getBiz()->service('Vip:Vip.LevelService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
         return $this->getBiz()->service('Vip:Vip.VipService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->getBiz()->service('Course:ThreadService');
     }
 
+    /**
+     * @return CourseNoteService
+     */
     protected function getNoteService()
     {
         return $this->getBiz()->service('Course:NoteService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');

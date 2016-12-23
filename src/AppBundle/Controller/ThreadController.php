@@ -1,6 +1,10 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\PostFilter\Service\TokenBucketService;
+use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\NotificationService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -373,7 +377,7 @@ class ThreadController extends BaseController
         );
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
-        $page = ceil($position / 20);
+        $page = ceil($count / 20);
 
         return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
             "{$thread['targetType']}Id" => $thread['targetId'],
@@ -406,11 +410,6 @@ class ThreadController extends BaseController
             'currentThread' => $thread,
             'threads'       => $threads
         ));
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getBiz()->service('Thread:ThreadService');
     }
 
     protected function convertFiltersToConditions($id, $filters)
@@ -452,16 +451,33 @@ class ThreadController extends BaseController
         return $text;
     }
 
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->getBiz()->service('Thread:ThreadService');
+    }
+
+    /**
+     * @return TokenBucketService
+     */
     protected function getTokenBucketService()
     {
         return $this->getBiz()->service('PostFilter:TokenBucketService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotifiactionService()
     {
         return $this->getBiz()->service('User:NotificationService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');

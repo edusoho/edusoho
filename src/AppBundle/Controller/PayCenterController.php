@@ -1,12 +1,19 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Cash\Service\CashOrdersService;
+use Biz\Coupon\Service\CouponService;
+use Biz\Order\Service\OrderService;
+use Biz\PayCenter\Service\PayCenterService;
+use Biz\System\Service\LogService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
 {
@@ -563,28 +570,51 @@ class PayCenterController extends BaseController
         return $enableds;
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
         return $this->getBiz()->service('Coupon:CouponService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
     }
 
+    /**
+     * @return PayCenterService
+     */
     protected function getPayCenterService()
     {
         return $this->getBiz()->service('PayCenter:PayCenterService');
     }
 
+    /**
+     * @return CashOrdersService
+     */
     protected function getCashOrdersService()
     {
         return $this->getBiz()->service('Cash:CashOrdersService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected  function  getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }

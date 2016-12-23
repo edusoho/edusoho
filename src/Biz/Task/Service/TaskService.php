@@ -36,6 +36,8 @@ interface TaskService
 
     public function tryTakeTask($taskId);
 
+    public function trigger($id, $eventName, $data = array());
+
     /**
      * return next Task that can be learned of the  course plan, or return empty array()
      * @param  $taskId

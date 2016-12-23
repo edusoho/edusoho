@@ -1,8 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
+use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class OrderRefundController extends BaseController
 {
@@ -90,6 +91,9 @@ class OrderRefundController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');

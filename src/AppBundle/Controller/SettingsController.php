@@ -1,14 +1,20 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Content\Service\FileService;
+use Biz\Sensitive\Service\SensitiveService;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserFieldService;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
 use Biz\Common\Mail\MailFactory;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class SettingsController extends BaseController
 {
@@ -36,7 +42,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings'));
         }
 
-        $fields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         if (array_key_exists('idcard', $profile) && $profile['idcard'] == "0") {
             $profile['idcard'] = "";
@@ -673,7 +679,7 @@ class SettingsController extends BaseController
                 'securityAnswer3'   => $request->request->get('answer-3')
             );
             $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('安全问题设置成功。'));
+            $this->setFlashMessage('success', '安全问题设置成功。');
             $hasSecurityQuestions = true;
             $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         }
@@ -859,7 +865,7 @@ class SettingsController extends BaseController
                     $mail->send();
                     $this->setFlashMessage('success', '请到邮箱'.$data['email'].'中接收确认邮件，并点击确认邮件中的链接完成修改。');
                 } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败，请联系管理员。');
+                    $this->setFlashMessage('danger', '邮箱变更确认邮件发送失败，请联系管理员。');
                     $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
                 return $this->redirect($this->generateUrl('settings_email'));
@@ -1052,13 +1058,8 @@ class SettingsController extends BaseController
         $types = array_keys(OAuthClientFactory::clients());
 
         if (!in_array($type, $types)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundException('Type Not Found');
         }
-    }
-
-    protected function getFileService()
-    {
-        return $this->getBiz()->service('Content:FileService');
     }
 
     public function fetchAvatar($url)
@@ -1079,7 +1080,7 @@ class SettingsController extends BaseController
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException('第三方登录('.$type.')未开启'));
+            throw new \RuntimeException('第三方登录('.$type.')未开启');
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
@@ -1088,24 +1089,52 @@ class SettingsController extends BaseController
         return $client;
     }
 
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->getBiz()->service('Content:FileService');
+    }
+
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->getBiz()->service('User:UserFieldService');
     }
 
+    /**
+     * @return SensitiveService
+     */
     protected function getSensitiveService()
     {
-        return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
+        return $this->getBiz()->service('Sensitive:SensitiveService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 
     private function getWebExtension()
@@ -1116,13 +1145,13 @@ class SettingsController extends BaseController
     protected function downloadImg($url)
     {
         $currentUser = $this->getCurrentUser();
-        $filename    = md5($url).'_'.time();
+//        $filename    = md5($url).'_'.time();
         $filePath    = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
 
         $fp  = fopen($filePath, 'w');
         $img = fopen($url, 'r');
         stream_get_meta_data($img);
-
+        $result = '';
         while (!feof($img)) {
             $result .= fgets($img, 1024);
         }

@@ -1,7 +1,11 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Sms\Service\SmsService;
+use Biz\System\Service\SettingService;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
@@ -56,6 +60,8 @@ class SmsController extends BaseController
         $count              = $request->query->get('count');
         $parameters         = array();
         $mobileNeedVerified = false;
+        $description = '';
+        $course = array();
 
         if ($targetType == 'classroom') {
             $classroom                     = $this->getClassroomService()->getClassroom($id);
@@ -116,21 +122,33 @@ class SmsController extends BaseController
         return $this->createJsonResponse(array('url' => $url.' '));
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return SmsService
+     */
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');

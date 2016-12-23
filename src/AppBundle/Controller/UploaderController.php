@@ -1,15 +1,13 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
-
+use Topxia\Common\ArrayToolkit;
 use Biz\File\Service\UploadFileService;
+use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Util\UploaderToken;
 
 class UploaderController extends BaseController
 {
@@ -141,7 +139,7 @@ class UploaderController extends BaseController
         return new Response($result);
     }
 
-    protected function parseToken($request)
+    protected function parseToken(Request $request)
     {
         $token  = $request->query->get('token');
         $parser = new UploaderToken();
@@ -192,5 +190,4 @@ class UploaderController extends BaseController
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
-
 }

@@ -1,6 +1,10 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\System\Service\LogService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Topxia\Common\SmsToolkit;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -189,13 +193,27 @@ class PasswordResetController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->getBiz()->service('User:TokenService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }
