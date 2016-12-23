@@ -40,9 +40,9 @@ class NotificationController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
+        $batchNotification = $this->getBatchNotificationService()->getBatchNotification($id);
         return $this->render('notification/batch-notification-show.html.twig', array(
-            'batchnotification' => $batchnotification
+            'batchnotification' => $batchNotification
         ));
     }
 

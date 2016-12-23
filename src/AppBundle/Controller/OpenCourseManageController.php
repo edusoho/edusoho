@@ -1,14 +1,23 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ExportHelp;
+use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\User\Service\UserService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
+use Biz\File\Service\UploadFileService;
+use Topxia\Service\Course\LiveCourseService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
+use Biz\OpenCourse\Processor\CourseProcessorFactory;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseManageController extends BaseController
 {
@@ -21,7 +30,7 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $courseSetting = $this->getSettingService()->get('course', array());
+        //$courseSetting = $this->getSettingService()->get('course', array());
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -396,7 +405,7 @@ class OpenCourseManageController extends BaseController
             $limit = $courseMemberCount - $start;
         }
         $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
-        $userFields    = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = "微博";
 
@@ -555,24 +564,37 @@ class OpenCourseManageController extends BaseController
         return $type;
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->createService('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return OpenCourseRecommendedService
+     */
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseRecommendedService');
+        return $this->getBiz()->createService('OpenCourse:OpenCourseRecommendedService');
     }
 
+    /**
+     * @param  $type
+     * @return mixed
+     */
     protected function getTypeCourseService($type)
     {
         return CourseProcessorFactory::create($type);
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->getBiz()->createService('Taxonomy:TagService');
     }
 
     protected function getWebExtension()
@@ -580,33 +602,52 @@ class OpenCourseManageController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->getBiz()->service('Content:FileService');
     }
 
+    /**
+     * @return LiveCourseService
+     */
     protected function getLiveCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:LiveCourseService');
+        return $this->getBiz()->service('Course:LiveCourseService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
-        return ServiceKernel::instance()->createService('User:UserFieldService');
+        return $this->getBiz()->service('User:UserFieldService');
     }
+
 }

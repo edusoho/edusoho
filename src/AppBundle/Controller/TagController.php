@@ -1,6 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,16 +89,25 @@ class TagController extends BaseController
         return new JsonResponse($data);
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->getBiz()->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');

@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -54,6 +55,9 @@ class PartnerController extends BaseController
         ));
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');

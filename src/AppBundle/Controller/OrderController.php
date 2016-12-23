@@ -1,12 +1,20 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Biz\Cash\Service\CashService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Coupon\Service\CouponService;
+use Biz\Course\Service\CourseService;
+use Biz\Order\Service\OrderService;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use Vip\Service\Vip\Impl\LevelServiceImpl;
+use Vip\Service\Vip\VipService;
 
 class OrderController extends BaseController
 {
@@ -308,43 +316,67 @@ class OrderController extends BaseController
         return $couponInfo;
     }
 
+    /**
+     * @return LevelServiceImpl
+     */
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getBiz()->service('Vip:Vip:LevelService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->getBiz()->service('CloudPlatform:AppService');
     }
 
+    /**
+     * @return CashService
+     */
     protected function getCashService()
     {
         return $this->getBiz()->service('Cash:CashService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:CouponService');
+        return $this->getBiz()->service('Coupon:CouponService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip.VipService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

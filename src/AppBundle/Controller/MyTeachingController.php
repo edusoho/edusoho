@@ -1,9 +1,15 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Course\CourseService;
+use Topxia\Service\Course\ThreadService;
 
 class MyTeachingController extends BaseController
 {
@@ -53,7 +59,7 @@ class MyTeachingController extends BaseController
             }
         }
 
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $this->getSettingService()->get('course', array());
 
         return $this->render('my-teaching/teaching.html.twig', array(
             'courses'    => $courses,
@@ -101,8 +107,8 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-        $classrooms   = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX));
+        $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $classrooms   = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), array('createdTime', 'desc'), 0, PHP_INT_MAX));
         $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
@@ -221,31 +227,49 @@ class MyTeachingController extends BaseController
         return $conditions;
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->getBiz()->createService('Course:ThreadService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->createService('Course:CourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return \Biz\Thread\Service\ThreadService
+     */
     protected function getThreadService()
     {
         return $this->getBiz()->service('Thread:ThreadService');
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
         return $this->getBiz()->service('OpenCourse:OpenCourseService');

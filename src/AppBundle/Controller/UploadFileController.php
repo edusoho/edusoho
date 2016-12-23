@@ -38,7 +38,7 @@ class UploadFileController extends BaseController
         if (empty($user)) {
             throw $this->createAccessDeniedException('上传TOKEN非法。');
         }
-        $this->getServiceKernel()->getCurrentUser()->fromArray($user);
+        $this->getCurrentUser()->fromArray($user);
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
@@ -270,7 +270,7 @@ class UploadFileController extends BaseController
         }
 
         if (empty($file)) {
-            return;
+            return null;
         }
 
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
@@ -483,6 +483,9 @@ class UploadFileController extends BaseController
         return $this->getBiz()->service('Content:FileService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');

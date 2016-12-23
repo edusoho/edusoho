@@ -1,9 +1,17 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\ThreadService;
+use Biz\Search\Service\SearchService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Vip\Service\Vip\LevelService;
+use Vip\Service\Vip\VipService;
 
 class SearchController extends BaseController
 {
@@ -154,41 +162,65 @@ class SearchController extends BaseController
         return $keyword;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->getBiz()->service('Course:ThreadService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->getBiz()->service('CloudPlatform:AppService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getBiz()->service('Vip:Vip.LevelService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip.VipService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->getBiz()->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return SearchService
+     */
     protected function getSearchService()
     {
         return $this->getBiz()->service('Search:SearchService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');

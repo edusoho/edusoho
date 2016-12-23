@@ -1,6 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -274,13 +277,20 @@ class PartnerDiscuzController extends BaseController
         return $string;
     }
 
+    /**
+     * @return AuthService
+     */
     private function getAuthService()
     {
         return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
     }
+
 }

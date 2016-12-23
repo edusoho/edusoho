@@ -1,20 +1,18 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
-
+use Topxia\Common\ArrayToolkit;
 use Biz\File\Service\UploadFileService;
+use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Util\UploaderToken;
 
 class UploaderController extends BaseController
 {
     public function initAction(Request $request)
     {
-        $token = $request->query->get('token');
+        $token  = $request->query->get('token');
         $params = $this->parseToken($token);
 
         if (!$params) {
@@ -25,8 +23,8 @@ class UploaderController extends BaseController
 
         $params = array_merge($request->query->all(), $params);
 
-        $result                    = $this->getUploadFileService()->initUpload($params);
-        $result['authUrl']  = $this->generateUrl('uploader_auth_v2', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result            = $this->getUploadFileService()->initUpload($params);
+        $result['authUrl'] = $this->generateUrl('uploader_auth_v2', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         return $this->createJsonpResponse($result, $request->query->get('callback'));
     }
 
@@ -73,5 +71,4 @@ class UploaderController extends BaseController
     {
         return $this->createService('File:UploadFileService');
     }
-
 }

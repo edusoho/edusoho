@@ -1,6 +1,12 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\MessageService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserFieldService;
 use Topxia\Common\SmsToolkit;
 use Biz\Common\Mail\MailFactory;
 use Topxia\Common\SimpleValidator;
@@ -248,7 +254,7 @@ class RegisterController extends BaseController
             $user = $this->getUserService()->getUserByEmail($email);
 
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('输入的密码不正确'));
+                $this->setFlashMessage('danger', '输入的密码不正确');
             } else {
                 $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'), array(
                     'password' => $password
@@ -409,11 +415,6 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    protected function getUserFieldService()
-    {
-        return $this->getBiz()->service('User:UserFieldService');
-    }
-
     public function getEmailLoginUrl($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
@@ -452,25 +453,6 @@ class RegisterController extends BaseController
         return new Response($str, 200, $headers);
     }
 
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
-    }
-
-    protected function getMessageService()
-    {
-        return $this->getBiz()->service('User:MessageService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getBiz()->service('User:NotificationService');
-    }
-
-    protected function getAuthService()
-    {
-        return $this->getBiz()->service('User:AuthService');
-    }
 
     protected function sendRegisterMessage($user)
     {
@@ -478,21 +460,21 @@ class RegisterController extends BaseController
         $auth       = $this->getSettingService()->get('auth', array());
 
         if (empty($auth['welcome_enabled'])) {
-            return;
+            return false;
         }
 
         if ($auth['welcome_enabled'] != 'opened') {
-            return;
+            return false;
         }
 
         if (empty($auth['welcome_sender'])) {
-            return;
+            return false;
         }
 
         $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
 
         if (empty($senderUser)) {
-            return;
+            return false;
         }
 
         $welcomeBody = $this->getWelcomeBody($user);
@@ -547,23 +529,23 @@ class RegisterController extends BaseController
     }
 
     //validate captcha
-    protected function captchaEnabledValidator($authSettings, $registration, $request)
+    protected function captchaEnabledValidator($authSettings, $registration, Request $request)
     {
         if (array_key_exists('captcha_enabled', $authSettings) && ($authSettings['captcha_enabled'] == 1) && !isset($registration['mobile'])) {
             $captchaCodePostedByUser = strtolower($registration['captcha_code']);
             $captchaCode             = $request->getSession()->get('captcha_code');
 
             if (!isset($captchaCodePostedByUser) || strlen($captchaCodePostedByUser) < 5) {
-                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
+                throw new \RuntimeException('验证码错误。');
             }
 
             if (!isset($captchaCode) || strlen($captchaCode) < 5) {
-                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
+                throw new \RuntimeException('验证码错误。');
             }
 
             if ($captchaCode != $captchaCodePostedByUser) {
                 $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
-                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
+                throw new \RuntimeException('验证码错误。');
             }
 
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
@@ -579,5 +561,53 @@ class RegisterController extends BaseController
         ) {
             return true;
         }
+    }
+
+    /**
+     * @return UserFieldService
+     */
+    protected function getUserFieldService()
+    {
+        return $this->getBiz()->service('User:UserFieldService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return MessageService
+     */
+    protected function getMessageService()
+    {
+        return $this->getBiz()->service('User:MessageService');
+    }
+
+    /**
+     * @return NotificationService
+     */
+    protected function getNotificationService()
+    {
+        return $this->getBiz()->service('User:NotificationService');
+    }
+
+    /**
+     * @return AuthService
+     */
+    protected function getAuthService()
+    {
+        return $this->getBiz()->service('User:AuthService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }

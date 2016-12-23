@@ -1,6 +1,9 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\Subtitle\Service\SubtitleService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
@@ -92,16 +95,25 @@ class SubtitleController extends BaseController
         ));
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return SubtitleService
+     */
     protected function getSubtitleService()
     {
         return $this->getBiz()->service('Subtitle:SubtitleService');

@@ -4,11 +4,11 @@ namespace AppBundle\Controller;
 
 
 use Biz\File\Service\UploadFileService;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 
 class PlayerController extends BaseController
 {
@@ -154,17 +154,12 @@ class PlayerController extends BaseController
         });
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     /**
      * @return UploadFileService
      */
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     /**
@@ -172,11 +167,14 @@ class PlayerController extends BaseController
      */
     protected function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
+        return $this->getBiz()->service('MaterialLib:MaterialLibService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 }
