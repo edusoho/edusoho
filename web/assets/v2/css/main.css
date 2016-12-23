@@ -15875,6 +15875,19 @@ textarea {
   left: 0;
   right: 0;
 }
+.es-mobile body.homepage .app-download {
+  display: block;
+}
+.es-mobile .navbar-user .user-avatar-li ul li {
+  display: none;
+}
+.es-mobile .navbar-user .user-avatar-li ul li.user-nav-li-my,
+.es-mobile .navbar-user .user-avatar-li ul li.mobile-switch,
+.es-mobile .navbar-user .user-avatar-li ul li.user-nav-li-logout,
+.es-mobile .navbar-user .user-avatar-li ul li.user-nav-li-login,
+.es-mobile .navbar-user .user-avatar-li ul li.user-nav-li-register {
+  display: block;
+}
 .footer-tool-bar {
   display: none;
   position: fixed;
@@ -15935,6 +15948,7 @@ textarea {
   background-color: #313131;
 }
 .app-download {
+  display: none;
   position: fixed;
   top: 60px;
   width: 100%;

@@ -91,5 +91,25 @@
       right: 0;
     }
   }
-  
+  body.homepage{
+    .app-download{
+      display: block;
+    }
+  }
+
+  .navbar-user {
+    .user-avatar-li{
+      ul li {
+        display: none;
+        &.user-nav-li-my,
+        &.mobile-switch,
+        &.user-nav-li-logout,
+        &.user-nav-li-login,
+        &.user-nav-li-register,
+        {
+          display: block;
+        }
+      }
+    }
+  }
 }
