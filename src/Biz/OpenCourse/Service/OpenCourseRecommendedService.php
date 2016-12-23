@@ -9,6 +9,11 @@ interface OpenCourseRecommendedService
 
     public function updateOpenCourseRecommendedCourses($openCourseId, $activeCourseIds);
 
+    /**
+     * @param $conditions
+     * @return mixed
+     * @before searchRecommendCount
+     */
     public function countRecommends($conditions);
 
     public function searchRecommends($conditions, $orderBy, $start, $limit);

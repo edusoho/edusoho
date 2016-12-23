@@ -16,7 +16,7 @@ interface OpenCourseService
     /**
      * @param $conditions
      * @return mixed
-     * @deprecated  countCourses
+     * @before  searchCourseCount
      */
     public function countCourses($conditions);
 
@@ -58,7 +58,7 @@ interface OpenCourseService
     /**
      * @param $conditions
      * @return mixed
-     * @deprecated  searchLessonCount
+     * @before  searchLessonCount
      */
     public function countLessons($conditions);
 
@@ -102,7 +102,7 @@ interface OpenCourseService
     /**
      * @param $conditions
      * @return mixed
-     * @deprecated  searchMemberCount
+     * @before  searchMemberCount
      */
     public function countMembers($conditions);
 
