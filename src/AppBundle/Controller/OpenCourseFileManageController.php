@@ -1,11 +1,12 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class OpenCourseFileManageController extends BaseController
 {
@@ -69,7 +70,7 @@ class OpenCourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $file['id']));
+        return $this->forward('AppBundle:UploadFile:download', array('fileId' => $file['id']));
     }
 
     public function convertAction(Request $request, $id, $fileId)
@@ -170,12 +171,12 @@ class OpenCourseFileManageController extends BaseController
 
     public function lessonMaterialModalAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getOpenCourseService()->tryManageCourse($courseId);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         $materials = $this->getMaterialService()->searchMaterials(
             array('lessonId' => $lesson['id'], 'type' => 'openCourse'),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, 100
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
@@ -188,18 +189,24 @@ class OpenCourseFileManageController extends BaseController
         ));
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->getBiz()->service('Course:MaterialService');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\System;
@@ -23,7 +22,7 @@ class SysteminfoController extends BaseController
         return $this->createJson($request, $info);
     }
 
-    protected function getParam($request, $name, $default = null)
+    protected function getParam(Request $request, $name, $default = null)
     {
         if ($request->getMethod() == "POST") {
             $result = $request->request->get($name);

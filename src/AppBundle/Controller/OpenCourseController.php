@@ -1,12 +1,22 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Course\MaterialService;
 
 class OpenCourseController extends BaseOpenCourseController
 {
@@ -26,7 +36,7 @@ class OpenCourseController extends BaseOpenCourseController
         $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
         $teachers = $this->findCourseTeachers($courses);
 
-        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig', array(
+        return $this->render('open-course/explore.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator,
             'teachers'  => $teachers
@@ -53,9 +63,9 @@ class OpenCourseController extends BaseOpenCourseController
         $tagIds = ArrayToolkit::column($tags, 'id');
 
         if ($isWxPreview || $this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
+            $template = 'open-course/mobile/open-course-show.html.twig';
         } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-show.html.twig';
+            $template = 'open-course/open-course-show.html.twig';
         }
 
         if ($preview === 'preview') {
@@ -131,9 +141,9 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
         if ($isWxPreview || $this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig';
+            $template = 'open-course/mobile/open-course-header.html.twig';
         } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-header.html.twig';
+            $template = 'open-course/open-course-header.html.twig';
         }
 
         if ($lessonId) {
@@ -179,7 +189,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-teacher-block.html.twig', array(
+        return $this->render('open-course/open-course-teacher-block.html.twig', array(
             'course'   => $course,
             'teachers' => $teachers,
             'profiles' => $profiles
@@ -196,7 +206,7 @@ class OpenCourseController extends BaseOpenCourseController
         $user           = $this->getCurrentUser();
         $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-info-bar-block.html.twig', array(
+        return $this->render('open-course/open-course-info-bar-block.html.twig', array(
             'course'         => $course,
             'member'         => $member,
             'memberFavorite' => $memberFavorite
@@ -274,12 +284,7 @@ class OpenCourseController extends BaseOpenCourseController
     public function commentAction(Request $request, $courseId)
     {
         $course      = $this->getOpenCourseService()->getCourse($courseId);
-        $isWxpreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
-        if ($isWxpreview || $this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
-        } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
-        }
+
         if (!$course) {
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
@@ -305,10 +310,11 @@ class OpenCourseController extends BaseOpenCourseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($isWxpreview || $this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
+        $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
+        if ($isWxPreview || $this->isWxClient()) {
+            $template = 'open-course/mobile/open-course-comment.html.twig';
         } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
+            $template = 'open-course/open-course-comment.html.twig';
         }
 
         return $this->render($template, array(
@@ -327,7 +333,7 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
-        return $this->forward('TopxiaWebBundle:Thread:postSave', array(
+        return $this->forward('thread/postSave', array(
             'request'    => $request,
             'targetType' => 'openCourse',
             'targetId'   => $id
@@ -348,7 +354,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $post = $this->getThreadService()->createPost($fields);
 
-        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
+        return $this->render('thread/subpost-item.html.twig', array(
             'post'    => $post,
             'author'  => $this->getCurrentUser(),
             'service' => $this->getThreadService()
@@ -384,7 +390,7 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
 
-        return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(
+        return $this->render('open-course/member-sms-modal.html.twig', array(
             'course' => $course
         ));
     }
@@ -422,7 +428,7 @@ class OpenCourseController extends BaseOpenCourseController
             $this->createRefererLog($request, $course);
         }
 
-        return $this->forward('TopxiaWebBundle:Player:show', array(
+        return $this->forward('AppBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
             'context' => array('hideBeginning' => 1, 'hideQuestion' => 1)
         ));
@@ -461,7 +467,7 @@ class OpenCourseController extends BaseOpenCourseController
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
         $lessons = ArrayToolkit::index($lessons, 'id');
 
-        return $this->render("TopxiaWebBundle:OpenCourse:open-course-material-block.html.twig", array(
+        return $this->render("open-course/open-course-material-block.html.twig", array(
             'course'    => $course,
             'lessons'   => $lessons,
             'materials' => $materials
@@ -479,10 +485,10 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if ($material['source'] == 'opencourselesson' || !$material['lessonId']) {
-            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+            return $this->createMessageResponse('error', '无权下载该资料');
         }
 
-        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
+        return $this->forward('AppBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
     public function mobileCheckAction(Request $request, $courseId)
@@ -700,7 +706,7 @@ class OpenCourseController extends BaseOpenCourseController
                 'lessonId' => $lesson['id'],
                 'hidden'   => 0,
                 'type'     => 'liveOpen'
-            ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            ), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         }
 
         return $replays;
@@ -781,53 +787,91 @@ class OpenCourseController extends BaseOpenCourseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getBiz()->createService('Course:CourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->getBiz()->service('Course:MaterialService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->getBiz()->service('User:AuthService');
     }
 
+    /**
+     * @return OpenCourseRecommendedService
+     */
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseRecommendedService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseRecommendedService');
     }
 }

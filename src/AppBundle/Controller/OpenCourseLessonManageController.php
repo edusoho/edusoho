@@ -1,10 +1,14 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\CloudPlatform\Service\AppService;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\SettingService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Course\MaterialService;
 
 class OpenCourseLessonManageController extends BaseController
 {
@@ -42,7 +46,7 @@ class OpenCourseLessonManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:index.html.twig', array(
+        return $this->render('open-course-lesson-manage/index.html.twig', array(
             'course' => $course,
             'items'  => $courseItems,
             'files'  => ArrayToolkit::index($files, 'id')
@@ -91,7 +95,7 @@ class OpenCourseLessonManageController extends BaseController
 
             $lessonId = 0;
 
-            return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
+            return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -106,7 +110,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:lesson-modal.html.twig', array(
+        return $this->render('open-course-lesson-manage/lesson-modal.html.twig', array(
             'course'         => $course,
             'targetType'     => 'opencourselesson',
             'targetId'       => $course['id'],
@@ -158,7 +162,7 @@ class OpenCourseLessonManageController extends BaseController
                 }
             }
 
-            return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
+            return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -204,7 +208,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:lesson-modal.html.twig', array(
+        return $this->render('open-course-lesson-manage/lesson-modal.html.twig', array(
             'course'         => $course,
             'lesson'         => $lesson,
             'file'           => $file,
@@ -232,7 +236,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
+        return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
@@ -252,7 +256,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
+        return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
@@ -384,28 +388,43 @@ class OpenCourseLessonManageController extends BaseController
         return false;
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->getBiz()->service('CloudPlatform:AppService');
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->getBiz()->service('Course:MaterialService');
     }
 }
