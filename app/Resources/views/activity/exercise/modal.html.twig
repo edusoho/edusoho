@@ -8,7 +8,7 @@
     <div class="form-group">
       <label for="questionCount" class="col-xs-2 control-label">{{'题目个数'|trans}}</label>
       <div class="col-xs-8 controls">
-        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control inline-block inline-block-large" value="{{ activity.itemCount|default(0) }}">
+        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ activity.itemCount|default(0) }}">
       </div>
     </div>
 
@@ -22,7 +22,7 @@
     <div class="form-group">
       <div class="col-xs-2 control-label"><label>{{'难度'|trans}}</label></div>
       <div class="col-xs-8 controls">
-        <select id="course_categoryId" class="form-control inline-block inline-block-large" name="difficulty">
+        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty">
           {{ select_options(dict('difficulty'), activity.metas.difficulty|default(''),'不限'|trans) }}
         </select>
       </div>

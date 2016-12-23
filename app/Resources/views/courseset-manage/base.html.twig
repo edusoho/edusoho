@@ -39,7 +39,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="categoryId">{{ '分类'|trans }}</label>
           <div class="col-md-8 controls">
-            <select id="categoryId" name="categoryId" class="form-control inline-block inline-block-large">
+            <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
               {{ select_options(category_choices('course'), courseSet.categoryId, '分类'|trans) }}
             </select>
             <div class="help-block" style="display:none;"></div>
