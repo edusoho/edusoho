@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -249,5 +250,13 @@ class BaseController extends Controller
     {
         $biz = $this->getBiz();
         return $biz->service($alias);
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 }
