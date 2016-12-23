@@ -47,7 +47,11 @@
           <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
       </div>
     </div>
+<<<<<<< HEAD
+     {{ render(controller('attachment/form-fields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
+=======
      {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
+>>>>>>> feature/x8-migrate
 
     <div class="form-group">
       <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>

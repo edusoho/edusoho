@@ -1,6 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -151,21 +155,33 @@ class TaskController extends BaseController
         return $task;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');

@@ -3,6 +3,10 @@
 namespace AppBundle\Controller;
 
 
+
+use Biz\File\Service\UploadFileService;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -150,7 +154,7 @@ class PlayerController extends BaseController
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('生成视频播放地址失败！'));
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
         return new Response($stream['stream'], 200, array(
@@ -323,19 +327,27 @@ class PlayerController extends BaseController
         }
     }
 
-
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLibService');
+        return $this->getBiz()->service('MaterialLib:MaterialLibService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
-        return $this->createService('User:TokenService');
+        return $this->getBiz()->service('User:TokenService');
     }
 }

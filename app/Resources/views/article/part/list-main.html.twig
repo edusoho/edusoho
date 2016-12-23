@@ -1,0 +1,13 @@
+<section class="es-section">
+  <div class="article-list">
+    {% for article in articles %}
+      {% set category = categories[article.categoryId]|default() %}
+      {% if category is not empty %}
+      	{% include 'article/widget/list-item.html.twig' %}
+  	  {% endif %}
+    {% else %}
+       <div class="empty tac text-muted mvl">{{'还没有任何资讯'|trans}}</div>
+    {% endfor %}
+  </div>
+  {% include 'article/part/paginator.html.twig' %}
+</section>

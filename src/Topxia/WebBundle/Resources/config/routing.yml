@@ -1,2334 +1,2334 @@
-homepage:
-    path:  /
-    defaults: { _controller: TopxiaWebBundle:Default:index }
-
-switch_language:
-    path: /switch/language
-    defaults: { _controller: TopxiaWebBundle:Default:translate }
-
-homepage_category:
-    path: /course/search
-    defaults: { _controller: TopxiaWebBundle:Default:coursesCategory }
-
-live_jump:
-    path: /live/jump
-    defaults: { _controller: TopxiaWebBundle:Default:jump }
-
-login:
-    path:  /login
-    defaults: { _controller: TopxiaWebBundle:Login:index }
-
-login_check:
-    path:  /login_check
-
-logout:
-    path:  /logout
-
-login_ajax:
-    path:  /login/ajax
-    defaults: { _controller: TopxiaWebBundle:Login:ajax }
-
-login_bind:
-    path:  /login/bind/{type}
-    defaults: { _controller: TopxiaWebBundle:LoginBind:index }
-
-login_bind_callback:
-    path:  /login/bind/{type}/callback
-    defaults: { _controller: TopxiaWebBundle:LoginBind:callback }
-
-login_bind_choose:
-    path:  /login/bind/{type}/choose
-    defaults: { _controller: TopxiaWebBundle:LoginBind:choose }
-
-login_bind_new:
-    path:  /login/bind/{type}/new
-    defaults: { _controller: TopxiaWebBundle:LoginBind:new }
-    methods: [POST]
-
-login_bind_newset:
-    path:  /login/bind/{type}/newset
-    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
-    methods: [POST]
-
-login_bind_exist:
-    path:  /login/bind/{type}/exist
-    defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
-    methods: [POST]
-
-login_bind_existbind:
-    path:  /login/bind/weixinmob/existbind
-    defaults: { _controller: TopxiaWebBundle:LoginBind:existBind }
-    methods: [POST]
-
-login_bind_weixin:
-    path:  /login/weixinmob
-    defaults: { _controller: TopxiaWebBundle:LoginBind:weixinIndex }
-
-login_check_email:
-    path:  /login/check/email
-    defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
-
-login_bind_change:
-    path: /login/bind/{type}/changetoexist
-    defaults: { _controller: TopxiaWebBundle:LoginBind:changeToExist }
-
-common_qrcode:
-    path:  /common/qrcode
-    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
-
-common_crontab:
-    path:  /common/crontab
-    defaults: { _controller: TopxiaWebBundle:Common:crontab }
-
-user_terms:
-    path:  /userterms
-    defaults: { _controller: TopxiaWebBundle:Register:userTerms }
-
-register:
-    path:  /register
-    defaults: { _controller: TopxiaWebBundle:Register:index }
-
-register_success:
-    path:  /register/success
-    defaults: { _controller: TopxiaWebBundle:Register:success }
-
-register_submited:
-    path:  /register/submited/{id}/{hash}
-    defaults: { _controller: TopxiaWebBundle:Register:submited }
-
-register_reset_email:
-    path: /register/email/reset/{id}/{hash}
-    defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
-
-register_reset_email_check:
-    path: /register/email/reset/check
-    defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
-
-register_reset_email_verify:
-    path: /register/email/reset/verify
-    defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
-    methods: [POST]
-
-register_email_send:
-    path:  /register/email/send/{id}/{hash}
-    defaults: { _controller: TopxiaWebBundle:Register:emailSend }
-    methods: [POST]
-
-register_email_verify:
-    path:  /register/email/verify/{token}
-    defaults: { _controller: TopxiaWebBundle:Register:emailVerify }
-
-register_email_check:
-    path:  /register/email/check
-    defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
-
-register_mobile_check:
-    path:  /register/mobile/check
-    defaults: { _controller: TopxiaWebBundle:Register:mobileCheck }
-
-register_email_or_mobile_check:
-    path:  /register/email_or_mobile/check
-    defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
-
-register_nickname_check:
-    path:  /register/nickname/check
-    defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
-
-invitecode_check:
-    path:  /register/invitecode/check
-    defaults: { _controller: TopxiaWebBundle:Register:invitecodeCheck }
-
-register_captcha_check:
-    path:  /register/captcha/check
-    defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
-
-register_captcha_modal:
-    path:  /register/captcha/modal
-    defaults: { _controller: TopxiaWebBundle:Register:captchaModal }
-
-register_analysis:
-    path:  /register/analysis
-    defaults: { _controller: TopxiaWebBundle:Register:analysis }
-
-register_captcha_num:
-    path:     /captcha_num
-    defaults: { _controller: TopxiaWebBundle:Register:captcha }
-
-file_upload:
-    path:  /file/upload
-    defaults: { _controller: TopxiaWebBundle:File:upload }
-    methods: [POST]
-
-file_img_crop:
-    path:  /file/img/crop
-    defaults: { _controller: TopxiaWebBundle:File:cropImg }
-    methods: [POST]
-
-attachment_list:
-    path: /attachments/{targetType}/{targetId}
-    defaults: { _controller: TopxiaWebBundle:Attachment:list }
-    methods: [GET]
-
-attachment_form_fields:
-    path: /attachment/{targetType}/{targetId}/formFields
-    defaults: { _controller: TopxiaWebBundle:Attachment:formFields , targetId:0}
-    methods: [GET]
-
-uploader_entry:
-    path:  /uploader
-    defaults: { _controller: TopxiaWebBundle:Uploader:entry }
-
-uploader_init:
-    path:  /uploader/init
-    defaults: { _controller: TopxiaWebBundle:Uploader:init }
-    methods: [GET, POST]
-
-uploader_auth:
-    path:  /uploader/auth
-    defaults: { _controller: TopxiaWebBundle:Uploader:uploadAuth }
-    methods: [POST]
-
-uploader_batch_uplod:
-    path:  /uploader/batch_upload
-    defaults: { _controller: TopxiaWebBundle:Uploader:batchUpload }
-
-uploader_finished:
-    path:  /uploader/finished
-    defaults: { _controller: TopxiaWebBundle:Uploader:finished }
-    methods: [GET, POST]
-
-uploader_upload_callback:
-    path:  /uploader/upload_callback
-    defaults: { _controller: TopxiaWebBundle:Uploader:uploadCallback }
-    methods: [GET, POST]
-
-uploader_process_callback:
-    path:  /uploader/process_callback
-    defaults: { _controller: TopxiaWebBundle:Uploader:processCallback }
-    methods: [POST]
-
-uploader_chunks_start:
-    path:  /uploader/chunks/start
-    defaults: { _controller: TopxiaWebBundle:Uploader:chunksStart }
-
-uploader_chunks_finish:
-    path:  /uploader/chunks/finish
-    defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
-
-uploadfile_upload:
-    path:  /uploadfile/upload
-    defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
-    methods: [POST, OPTIONS]
-
-uploadfile_browser:
-    path:  /uploadfile/browser
-    defaults: { _controller: TopxiaWebBundle:UploadFile:browser }
-
-uploadfile_params:
-    path:  /uploadfile/params
-    defaults: { _controller: TopxiaWebBundle:UploadFile:params }
-
-uploadfile_browsers:
-    path:  /uploadfile/browsers
-    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
-
-uploadfile_cloud_callback:
-    path:  /uploadfile/cloud_callback
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
-
-uploadfile_cloud_convert_callback:
-    path:  /uploadfile/cloud_convertcallback
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
-
-uploadfile_cloud_convert_callback2:
-    path:  /uploadfile/cloud_convertcallback2
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback2 }
-
-uploadfile_cloud_convert_callback3:
-    path:  /uploadfile/cloud_convertcallback3
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback3 }
-
-uploadfile_cloud_get_media_info:
-    path:  /uploadfile/get_media_info/{type}
-    defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
-
-hls_playlist:
-    path: /hls/{id}/playlist/{token}.m3u8
-    defaults: { _controller: TopxiaWebBundle:HLS:playlist}
-
-player_local_media:
-    path: /player/{id}/file/{token}
-    defaults: { _controller: TopxiaWebBundle:Player:localMedia}
-
-hls_stream:
-    path: /hls/{id}/stream/{level}/{token}.m3u8
-    defaults: { _controller: TopxiaWebBundle:HLS:stream}
-
-hls_clef:
-    path: /hls/{id}/clef/{token}
-    defaults: { _controller: TopxiaWebBundle:HLS:clef}
-
-editor_upload:
-    path:  /editor/upload
-    defaults: { _controller: TopxiaWebBundle:Editor:upload }
-    methods: [POST]
-
-editor_download:
-    path:  /editor/download
-    defaults: { _controller: TopxiaWebBundle:Editor:download }
-    methods: [POST]
-
-liveroom_ticket:
-    path:  /liveroom/{id}/ticket
-    defaults: { _controller: TopxiaWebBundle:Liveroom:ticket }
-
-live_auth:
-    path:  /live/auth
-    defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
-
-live_verify:
-    path:  /live/verify
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:verify }
-
-live_course_explore:
-    path:  /live
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
-
-live_course_play:
-    path:  /course/{courseId}/lesson/{lessonId}/live_entry
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:entry }
-
-live_classroom_url:
-    path:  /course/{courseId}/lesson/{lessonId}/get_classroom_url
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
-
-live_classroom_es_replay_play_url:
-    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
-
-live_classroom_replay_url:
-    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
-
-live_course_manage_replay:
-    path:  /livecourse/{id}/manage/replay
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayManage }
-
-live_course_lesson_replay_create:
-    path:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
-
-live_course_lesson_replay_upload:
-    path:  /livecourse/{courseId}/lesson/{lessonId}/replay/upload
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:uploadModal }
-
-live_course_lesson_replay_entry:
-    path: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
-
-live_capacity:
-    path: /live_capacity/{id}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:liveCapacity }
-
-course_explore:
-    path:  /course/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
-
-course_archive:
-    path:  /archive/course
-    defaults: { _controller: TopxiaWebBundle:Course:archive }
-
-course_archive_show:
-    path:  /archive/course/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:archiveCourse }
-
-course_archive_lesson:
-    path:  /archive/course/{id}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:Course:archiveLesson, lessonId:''}
-
-course_create:
-    path:  /course/create
-    defaults: { _controller: TopxiaWebBundle:Course:create }
-
-course_select:
-    path:  /course/select
-    defaults: { _controller: TopxiaWebBundle:Course:select }
-
-course_show:
-    path:  /course/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:show }
-
-course_qrcode:
-    path:  /course/{id}/qrcode
-    defaults: { _controller: TopxiaWebBundle:Course:qrcode }
-
-course_info:
-    path:  /course/{id}/info
-    defaults: { _controller: TopxiaWebBundle:Course:info }
-
-course_lesson_list:
-    path:  /course/{id}/lesson/list
-    defaults: { _controller: TopxiaWebBundle:Course:lessonList }
-
-course_notes:
-    path:  /course/{courseId}/notes
-    defaults: { _controller: TopxiaWebBundle:Course\Note:showList }
-
-course_exit:
-    path:  /course/{id}/exit
-    defaults: { _controller: TopxiaWebBundle:Course:exit }
-    methods: [POST]
-
-course_become_use_member:
-    path:  /course/{id}/become_use_member
-    defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
-    methods: [POST]
-
-course_member_ids:
-    path:  /course/{id}/member_ids
-    defaults: { _controller: TopxiaWebBundle:Course:memberIds }
-
-course_member_deadline_reach:
-    path:  /course/{courseId}/member/deadline/reach
-    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
-
-coupon_check:
-    path:  /{type}/{id}/coupon/check
-    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
-
-course_order_buy:
-    path:  /course/{id}/order/buy
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
-
-course_order_repay:
-    path:  /course/order/repay
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
-
-course_order_detail:
-    path:  /course/order/{id}/detail
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:orderDetail }
-
-order_refund:
-    path:  /target/{id}/order/refund
-    defaults: { _controller: TopxiaWebBundle:OrderRefund:refund }
-
-order_cancel_refund:
-    path:  /target/{id}/order/cancel_refund
-    defaults: { _controller: TopxiaWebBundle:OrderRefund:cancelRefund }
-    methods: [POST]
-
-course_set_expiryday:
-    path:  /course/{courseId}/set_expiryday/{userId}
-    defaults: { _controller: TopxiaWebBundle:Course:addMemberExpiryDays }
-
-course_learn:
-    path:  /course/{id}/learn
-    defaults: { _controller: TopxiaWebBundle:Course:learn }
-
-course_learn_time:
-    path:  /course/{lessonId}/learn/time/{time}
-    defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
-
-course_watch_time:
-    path:  /course/{lessonId}/watch/time/{time}
-    defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
-
-course_detail_data:
-    path:  /course/detail/data/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:detailData }
-
-course_lesson_detail_data:
-    path:  /course/lesson/detail/data/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
-
-course_lesson_show:
-    path:  /course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
-
-course_lesson_qrcode:
-    path:  /course/{courseId}/lesson/{lessonId}/qrcode
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:qrcode }
-
-course_lesson_player:
-    path:  /course/{courseId}/lesson/{lessonId}/player
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:player }
-
-course_lesson_preview:
-    path:  /course/{courseId}/lesson/{lessonId}/preview
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
-
-course_lessons_preview:
-    path:  /course/{courseId}/lessons/preview
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
-
-course_lesson_media:
-    path:  /course/{courseId}/lesson/{lessonId}/media
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:media }
-
-course_lesson_media_download:
-    path:  /course/{courseId}/lesson/{lessonId}/media_download
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
-
-course_lesson_ppt:
-    path:  /course/{courseId}/lesson/{lessonId}/ppt
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
-
-course_lesson_document:
-    path:  /course/{courseId}/lesson/{lessonId}/document
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
-
-course_lesson_flash:
-    path:  /course/{courseId}/lesson/{lessonId}/flash
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:flash }
-
-course_lesson_learn_status:
-    path:  /course/{courseId}/lesson/{lessonId}/learn/status
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
-
-course_lesson_learn_start:
-    path:  /course/{courseId}/lesson/{lessonId}/learn/start
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStart }
-    methods: [POST]
-
-course_lesson_learn_finish:
-    path:  /course/{courseId}/lesson/{lessonId}/learn/finish
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnFinish }
-    methods: [POST]
-
-course_lesson_learn_cancel:
-    path:  /course/{courseId}/lesson/{lessonId}/learn/cancel
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
-    methods: [POST]
-
-course_lesson_plugin_lesson_list:
-    path:  /lessonplugin/lesson/list
-    defaults: { _controller: TopxiaWebBundle:LessonLessonPlugin:list }
-
-course_lesson_plugin_question_init:
-    path:  /lessonplugin/question/init
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:init }
-
-course_lesson_plugin_question_list:
-    path:  /lessonplugin/question/list
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:list }
-
-course_lesson_plugin_question_show:
-    path:  /lessonplugin/question/show
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:show }
-
-course_lesson_plugin_question_ask:
-    path:  /lessonplugin/question/ask
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:ask }
-
-course_lesson_plugin_question_create:
-    path:  /lessonplugin/question/create
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:create }
-
-course_lesson_plugin_question_answer:
-    path:  /lessonplugin/question/answer
-    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:answer }
-
-course_lesson_plugin_material_init:
-    path:  /lessonplugin/material/init
-    defaults: { _controller: TopxiaWebBundle:LessonMaterialPlugin:init }
-
-course_lesson_plugin_note_init:
-    path:  /lessonplugin/note/init
-    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:init }
-
-course_lesson_plugin_note_save:
-    path:  /lessonplugin/note/save
-    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
-    methods: [POST]
-
-course_review_create:
-    path:  /course/{id}/review/create
-    defaults: { _controller: TopxiaWebBundle:CourseReview:create }
-    methods: [POST]
-
-course_review_list:
-    path:  /course/{id}/reviews/
-    defaults: { _controller: TopxiaWebBundle:CourseReview:list }
-
-course_review_post:
-    path:  /course/{id}/review/{reviewId}/post
-    defaults: { _controller: TopxiaWebBundle:CourseReview:post }
-
-course_review_delete:
-    path:  /course/review/{reviewId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseReview:delete }
-
-course_members:
-   path: /course/{id}/members
-   defaults: { _controller: TopxiaWebBundle:Course:members }
-
-course_favorite:
-    path: /course/{id}/favorite
-    defaults: { _controller: TopxiaWebBundle:Course:favorite }
-    methods: [POST]
-
-course_unfavorite:
-    path: /course/{id}/unfavorite
-    defaults: { _controller: TopxiaWebBundle:Course:unfavorite }
-    methods: [POST]
-
-course_materials:
-    path:  /course/{id}/material/
-    defaults: { _controller: TopxiaWebBundle:CourseMaterial:index }
-
-course_material_download:
-    path:  /course/{courseId}/material/{materialId}/download
-    defaults: { _controller: TopxiaWebBundle:CourseMaterial:download }
-
-course_material_delete:
-    path:  /course/{id}/material/{materialId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseMaterial:delete }
-    methods: [POST]
-
-course_threads:
-    path:  /course/{id}/thread
-    defaults: { _controller: TopxiaWebBundle:CourseThread:index }
-
-course_thread_create:
-    path:  /course/{id}/thread/create
-    defaults: { _controller: TopxiaWebBundle:CourseThread:create }
-
-course_thread_show:
-    path:  /course/{courseId}/thread/{threadId}
-    defaults: { _controller: TopxiaWebBundle:CourseThread:show }
-
-course_thread_post:
-    path:  /course/{courseId}/thread/{id}/post
-    defaults: { _controller: TopxiaWebBundle:CourseThread:post }
-
-course_thread_edit:
-    path:  /course/{courseId}/thread/{id}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
-
-course_thread_post_delete:
-    path:  /course/{courseId}/thread/{threadId}/post/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
-    methods: [POST]
-
-course_thread_post_edit:
-    path:  /course/{courseId}/thread/{threadId}/post/{id}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseThread:editPost }
-
-course_thread_stick:
-    path:  /course/{courseId}/thread/{id}/stick
-    defaults: { _controller: TopxiaWebBundle:CourseThread:stick }
-    methods: [POST]
-
-course_thread_unstick:
-    path:  /course/{courseId}/thread/{id}/unstick
-    defaults: { _controller: TopxiaWebBundle:CourseThread:unstick }
-    methods: [POST]
-
-course_thread_elite:
-    path:  /course/{courseId}/thread/{id}/elite
-    defaults: { _controller: TopxiaWebBundle:CourseThread:elite }
-    methods: [POST]
-
-course_thread_unelite:
-    path:  /course/{courseId}/thread/{id}/unelite
-    defaults: { _controller: TopxiaWebBundle:CourseThread:unelite }
-    methods: [POST]
-
-course_thread_delete:
-    path:  /course/{courseId}/thread/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
-    methods: [POST]
-
-course_manage:
-    path:  /course/{id}/manage
-    defaults: { _controller: TopxiaWebBundle:CourseManage:index }
-
-course_manage_info:
-    path: /course/{id}/manage/info
-    defaults: { _controller: TopxiaWebBundle:CourseManage:info }
-
-course_manage_base:
-    path:  /course/{id}/manage/base
-    defaults: { _controller: TopxiaWebBundle:CourseManage:base }
-
-course_manage_detail:
-    path:  /course/{id}/manage/detail
-    defaults: { _controller: TopxiaWebBundle:CourseManage:detail }
-
-course_manage_picture:
-    path:  /course/{id}/manage/picture
-    defaults: { _controller: TopxiaWebBundle:CourseManage:picture }
-
-course_manage_picture_crop:
-    path:  /course/{id}/manage/picture/crop
-    defaults: { _controller: TopxiaWebBundle:CourseManage:pictureCrop }
-
-course_manage_price:
-    path:  /course/{id}/manage/price
-    defaults: { _controller: TopxiaWebBundle:CourseManage:price }
-
-course_manage_teachers:
-    path:  /course/{id}/manage/teachers
-    defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
-
-course_manage_course_dashboard:
-    path:  /course/{id}/manage/course/dashboard
-    defaults: { _controller: TopxiaWebBundle:CourseManage:courseDashboard }
-
-course_manage_lesson_dashboard:
-    path:  /course/{id}/manage/lesson/dashboard
-    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonDashboard }
-
-course_manage_lesson_learn_dashboard:
-    path:  /course/{id}/manage/lessonlearn/dashboard
-    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonlearnDashboard }
-
-#课程同步
-course_manage_course_sync:
-    path:  /course/manage/course/sync/{id}/{type}
-    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSync}
-
-course_manage_course_sync_edit:
-    path:  /course/manage/course/sync/edit
-    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSyncEdit}
-
-
-course_manage_order:
-    path:  /course/{id}/manage/order
-    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
-
-course_manage_order_export_csv:
-    path:  /course/{id}/manage/order/export
-    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
-
-
-course_manage_files:
-    path:  /course/{id}/manage/files
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
-
-course_manage_file_show:
-    path:  /course/{id}/manage/file/{fileId}
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
-
-course_manage_file_convert:
-    path:  /course/{id}/manage/file/{fileId}/convert
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:convert }
-    methods: [POST]
-
-course_manage_file_status:
-    path:  /course/manage/file/status
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
-
-course_manage_delete_materials:
-    path:  /course/{id}/manage/delete/materials
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
-    methods: [POST]
-
-course_manage_delete_materials_show:
-    path:  /course/{id}/manage/show/delete/materials
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteMaterialShow }
-    methods: [POST]
-
-course_manage_upload_course_files:
-    path:  /course/{id}/manage/upload/course/files/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
-
-course_manage_students:
-    path:  /course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
-
-course_manage_record:
-    path:  /course/{id}/manage/refund_record
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:refundRecord }
-
-course_manage_students_show:
-    path:  /course/{courseId}/manage/students/{userId}/show
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
-
-course_manage_students_defined_show:
-    path:  /course/{courseId}/manage/students/{userId}/defined_show
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
-
-course_manage_student_create:
-    path:  /course/{id}/manage/student/create
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
-
-course_manage_student_export_csv:
-    path:  /course/{id}/manage/student/export
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
-
-course_manage_student_export_datas:
-    path:  /course/{id}/manage/student/export/datas
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportDatas }
-
-course_manage_student_remove:
-    path:  /course/{courseId}/manage/student/{userId}/remove
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
-    methods: [POST]
-
-course_manage_student_remark:
-    path:  /course/{courseId}/manage/student/{userId}/remark
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
-
-course_manage_student_check:
-    path:  /course/{id}/manage/student_check
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
-
-course_manage_student_import:
-    path:  /course/{id}/manage/student/import
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
-
-course_manage_student_to_base:
-    path:  /course/{id}/manage/student/importing
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
-    methods: [POST]
-
-course_manage_teachers_match:
-    path: /course/{id}/manage/teachersMatch
-    defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
-
-
-course_manage_live_open_time_set:
-    path:  /course/{id}/manage/live/open/time
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
-
-course_manage_lesson:
-    path:  /course/{id}/manage/lesson
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }
-
-course_manage_lesson_create:
-    path:  /course/{id}/manage/lesson/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
-
-course_manage_lesson_file_status:
-    path:  /course/{id}/manage/lesson/fileStatus
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
-
-course_manage_lesson_batch_modal:
-    path:  /course/{id}/manage/lesson/batch/modal
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
-
-course_manage_lesson_create_from_file:
-    path:  /course/{id}/manage/lesson/create/from/file
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
-
-course_draft_create:
-    path:  /course/draft/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
-
-course_draft_view:
-    path:  /course/draft/view
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
-
-live_course_manage_lesson_create:
-    path:  /course/{id}/manage/live/lesson/create
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }
-
-live_course_manage_lesson_edit:
-    path:  /course/{courseId}/manage/live/lesson/{lessonId}/edit
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:edit }
-
-live_lesson_time_check:
-    path:  /course/{id}/manage/live/lesson/time/check
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
-
-live_lesson_calculate_left_capacity:
-    path:  /course/{courseId}/manage/livelesson/calculateLeftCapacity
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:calculateLeftCapacity }
-
-course_manage_lesson_create_testpaper:
-    path:  /course/{id}/manage/lesson/create/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestpaper }
-
-course_manage_lesson_sort:
-    path:  /course/{id}/manage/lesson/sort
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
-    methods: [POST]
-
-course_manage_lesson_edit:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
-
-course_manage_lesson_edit_testpaper:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestpaper }
-
-course_manage_lesson_delete:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:delete }
-    methods: [POST]
-
-course_manage_lesson_publish:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:publish }
-    methods: [POST]
-
-course_manage_lesson_unpublish:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
-    methods: [POST]
-
-question_file_url:
-    path: /question_ajax/file_url
-    defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
-
-course_manage_upload_question_attachment:
-    path:  /course/{id}/manage/upload/question/attachment/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
-
-course_manage_question_attachment_download:
-    path: /course/{id}/manage/question/attachment/{fileId}/download
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:attachmentDownload }
-
-course_manage_question_category:
-    path: /course/{courseId}/manage/question/category
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:index }
-
-course_manage_question_category_create:
-    path: /course/{courseId}/manage/question/category/create
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:create }
-
-course_manage_question_category_update:
-    path: /course/{courseId}/manage/question/category/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:update }
-
-course_manage_question_category_delete:
-    path: /course/{courseId}/manage/question/category/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:delete }
-    methods: [POST]
-
-course_manage_question_category_sort:
-    path: /course/{courseId}/manage/question/category/sort
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
-    methods: [POST]
-
-course_manage_real_time_testpaper_check:
-    path:  /testpaper/real-time/check
-    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
-
-course_lesson_do_test:
-    path: /lesson/{lessonId}/test/{testId}/do
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:doTestpaper }
-
-course_lesson_redo_test:
-    path: /lesson/{lessonId}/test/{testId}/redo
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:reDoTestpaper }
-
-course_manage_show_test:
-    path: /test/{id}/show
-    defaults: { _controller: TopxiaWebBundle:Testpaper:showTest }
-
-course_manage_preview_test:
-    path: /test/{testId}/preview
-    defaults: { _controller: TopxiaWebBundle:Testpaper:previewTest }
-
-course_manage_do_test_pause:
-    path: /test/pause
-    defaults: { _controller: TopxiaWebBundle:Testpaper:pauseTest }
-
-course_manage_do_test_suspend:
-    path: /test/{id}/suspend
-    defaults: { _controller: TopxiaWebBundle:Testpaper:testSuspend }
-
-course_manage_submit_test:
-    path: /test/{id}/submit
-    defaults: { _controller: TopxiaWebBundle:Testpaper:submitTest }
-
-course_manage_finish_test:
-    path: /test/{id}/finish
-    defaults: { _controller: TopxiaWebBundle:Testpaper:finishTest }
-
-course_manage_test_results:
-    path: /test/{id}/result
-    defaults: { _controller: TopxiaWebBundle:Testpaper:testResult }
-
-course_manage_test_teacher_check:
-    path: /test/{id}/teacher/check
-    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
-
-course_manage_list_teacher_test_reviewing:
-    path: /my/teacher/reviewing/test/list
-    defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
-
-course_manage_list_teacher_test_finished:
-    path: /my/teacher/finished/test/list
-    defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
-
-course_manage_test_check:
-    path: /course/check/{id}/{status}/list
-    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
-
-course_manage_testpaper_build_check:
-    path: /course/{courseId}/manage/testpaper/build_check
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
-
-course_manage_testpaper_items_reset:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsReset }
-
-course_manage_testpaper_item_picker:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/item_picker
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicker }
-
-course_manage_testpaper_item_picked:
-    path: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
-
-course_manage_testpaper_get_question_num:
-    path: /course/{courseId}/manage/testpaper/get_question_num
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
-
-course_manage_material:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/material
-    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:index }
-
-course_manage_material_upload:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/material/upload
-    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:upload }
-    methods: [POST]
-
-course_manage_material_delete:
-    path:  /course/{courseId}/manage/lesson/{lessonId}/material/{materialId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
-    methods: [POST]
-
-course_manage_material_browser:
-    path:  /course/{courseId}/manage/material/browser
-    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:browser }
-
-course_manage_material_create:
-    path:  /course/{courseId}/manage/material/create
-    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
-
-course_manage_media_library:
-    path:  /course/{id}/manage/media/library
-    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
-
-course_manage_media_import:
-    path:  /course/{id}/manage/media/import
-    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:import }
-
-course_manage_publish:
-    path:  /course/{id}/manage/publish
-    defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
-    methods: [POST]
-
-course_lesson_marker_manage:
-    path:  /course/{courseId}/lesson/{lessonId}/marker/manage
-    defaults: { _controller: TopxiaWebBundle:Marker:manage }
-
-course_lesson_marker_manage_preview:
-    path:  /course/{courseId}/lesson/{lessonId}/marker/preview
-    defaults: { _controller: TopxiaWebBundle:Marker:preview }
-
-course_lesson_marker_show:
-    path:  /course/lesson/{lessonId}/marker/show
-    defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
-
-course_lesson_marker_metas:
-    path:  /course/lesson/{mediaId}/marker/metas
-    defaults: { _controller: TopxiaWebBundle:Marker:markerMetas }
-
-course_lesson_marker_merge:
-    path:  /course/{courseId}/lesson/{lessonId}/marker/merge
-    defaults: { _controller: TopxiaWebBundle:Marker:merge }
-    methods: [POST]
-
-course_lesson_marker_update:
-    path:  /course/{courseId}/lesson/{lessonId}/marker/update
-    defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
-    methods: [POST]
-
-course_question_marker_preview:
-    path: /course/{courseId}/question/{id}/marker/preview
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:questionMakerPreview }
-
-course_lesson_question_markers_show:
-    path:  /course/lesson/media/{mediaId}/question_markers/show
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionMakers }
-
-course_lesson_question_marker_finish:
-    path:  /course/lesson/marker/{markerId}/question_marker/{questionMarkerId}/finish
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:finishQuestionMarker }
-    methods: [POST]
-
-course_lesson_question_marker_add:
-    path:  /course/{courseId}/lesson/{lessonId}/question_marker/add
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:addQuestionMarker }
-    methods: [POST]
-
-course_lesson_question_marker_delete:
-    path:  /course/{courseId}/lesson/{lessonId}/question_marker/delete
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:deleteQuestionMarker }
-    methods: [POST]
-
-course_lesson_question_marker_sort:
-    path:  /course/{courseId}/lesson/{lessonId}/question_marker/sort
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:sortQuestionMarker }
-    methods: [POST]
-
-course_lesson_question_marker_list:
-    path:  /course/{courseId}/lesson/{lessonId}/question_marker/list
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:question }
-
-course_lesson_question_marker_search:
-    path:  /course/{courseId}/lesson/{lessonId}/question_marker/search
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
-
-media_play:
-    path:  /media/{mediaId}/play
-    defaults: { _controller: TopxiaWebBundle:Media/Index:play }
-
-media_subtitle_preview:
-    path:  /media/{mediaId}/subtitles/preview
-    defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
-
-media_subtitle_manage:
-    path:  /media/{mediaId}/subtitles/manage
-    defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
-
-media_subtitle_list:
-    path:  /media/{mediaId}/subtitles
-    defaults: { _controller: TopxiaWebBundle:Subtitle:list }
-
-media_subtitle_create:
-    path:  /media/{mediaId}/subtitle/create
-    defaults: { _controller: TopxiaWebBundle:Subtitle:create }
-    methods: [POST]
-
-media_subtitle_delete:
-    path:  /media/{mediaId}/subtitle/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
-    methods: [POST]
-
-media_subtitle_manage_dialog:
-    path:  /media/subtitles/manage/dialog
-    defaults: { _controller: TopxiaWebBundle:Subtitle:manageDialog }
-
-announcement_list:
-    path: /announcement/{targetType}/{targetId}/list
-    defaults: {_controller:TopxiaWebBundle:Announcement:list }
-
-announcement_show_all:
-    path:  /announcement/{targetType}/{targetId}/all
-    defaults: { _controller: TopxiaWebBundle:Announcement:showAll }
-
-announcement_add:
-    path:  /announcement/{targetType}/{targetId}/create
-    defaults: { _controller: TopxiaWebBundle:Announcement:create }
-
-announcement_show:
-    path:  /announcement/{id}/{targetId}/show
-    defaults: { _controller: TopxiaWebBundle:Announcement:show }
-
-announcement_manage:
-    path:  /announcement/{targetType}/{targetId}/manage
-    defaults: { _controller: TopxiaWebBundle:Announcement:manage }
-
-announcement_update:
-    path:  /announcement/{id}/{targetType}/{targetId}/update
-    defaults: { _controller: TopxiaWebBundle:Announcement:update }
-
-announcement_delete:
-    path:  /announcement/{id}/{targetType}/{targetId}/delete
-    defaults: { _controller: TopxiaWebBundle:Announcement:delete }
-    methods: [POST]
-
-testpaper_user_result_json:
-    path:  /testpaper/{id}/user_result/json
-    defaults: { _controller: TopxiaWebBundle:Testpaper:userResultJson }
-
-search:
-    path:  /search
-    defaults: { _controller: TopxiaWebBundle:Search:index }
-
-cloud_search:
-    path:  /cloud/search
-    defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
-
-settings:
-    path:  /settings/
-    defaults: { _controller: TopxiaWebBundle:Settings:profile }
-
-settings_avatar:
-    path:  /settings/avatar
-    defaults: { _controller: TopxiaWebBundle:Settings:avatar }
-
-settings_avatar_crop:
-    path:  /settings/avatar/crop
-    defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
-
-settings_avatar_crop_modal:
-    path:  /settings/avatar/crop/modal
-    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
-
-settings_avatar_fetch_partner:
-    path:  /settings/avatar/fetch_partner
-    defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
-    methods: [POST]
-
-settings_security:
-    path:  /settings/security
-    defaults: { _controller: TopxiaWebBundle:Settings:security }
-
-settings_set_pay_password:
-    path:  /settings/set_pay_password
-    defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
-
-settings_set_password:
-    path:  /settings/set_password
-    defaults: { _controller: TopxiaWebBundle:Settings:setPassword }
-
-settings_pay_password:
-    path:  /settings/pay_password
-    defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
-
-settings_reset_pay_password:
-    path:  /settings/reset_pay_password
-    defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
-
-settings_find_pay_password:
-    path:  /settings/find_pay_password
-    defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
-
-settings_update_pay_password:
-    path:  /settings/update_pay_password
-    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
-
-settings_security_questions:
-    path:  /settings/security_questions
-    defaults: { _controller: TopxiaWebBundle:Settings:securityQuestions }
-
-setting_nickname:
-    path: /settings/nickname
-    defaults: { _controller: TopxiaWebBundle:Settings:nickname }
-
-update_nickname_check:
-    path:  /settings/nickname/check
-    defaults: { _controller: TopxiaWebBundle:Settings:nicknameCheck }
-
-settings_password:
-    path:  /settings/password
-    defaults: { _controller: TopxiaWebBundle:Settings:password }
-
-settings_email:
-    path:  /settings/email
-    defaults: { _controller: TopxiaWebBundle:Settings:email }
-
-settings_email_verify:
-    path:  /settings/email/verify
-    defaults: { _controller: TopxiaWebBundle:Settings:emailVerify }
-    methods: [POST]
-
-settings_binds:
-    path:  /settings/binds
-    defaults: { _controller: TopxiaWebBundle:Settings:binds }
-
-settings_binds_unbind:
-    path: /settings/unbind/{type}
-    defaults: { _controller: TopxiaWebBundle:Settings:unBind  }
-
-settings_binds_bind:
-    path: /settings/bind/{type}
-    defaults: { _controller: TopxiaWebBundle:Settings:bind }
-
-settings_binds_bind_callback:
-    path: /settings/bind/{type}/callback
-    defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
-
-settings_setup:
-    path: /settings/setup
-    defaults: { _controller: TopxiaWebBundle:Settings:setup }
-
-settings_setup_password:
-    path: /settings/setup_password
-    defaults: { _controller: TopxiaWebBundle:Settings:setupPassword }
-
-settings_setup_check_nickname:
-    path: /settings/setup/check_nickname
-    defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }
-
-auth_email_confirm:
-    path:  /auth/email/confirm
-    defaults: { _controller: TopxiaWebBundle:Auth:emailConfirm }
-
-password_reset:
-    path:  /password/reset
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:index }
-
-password_reset_update:
-    path:  /password/reset/update
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
-
-raw_password_update:
-    pattern: /raw/password/update
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:changeRawPassword }
-
-password_reset_check_mobile:
-    path:  /password/reset/check/mobile
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
-
-browser_upgrade:
-    path:  /browser/upgrade
-    defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
-
-category_all:
-    path: /category/all
-    defaults: { _controller: TopxiaWebBundle:Category:all }
-
-location_all:
-    path: /location/all
-    defaults: { _controller: TopxiaWebBundle:Location:all }
-
-tag:
-    path: /tag
-    defaults: { _controller: TopxiaWebBundle:Tag:index }
-
-tag_all:
-    path: /tag/all_jsonm
-    defaults: { _controller: TopxiaWebBundle:Tag:all }
-
-tag_match:
-    path: /tag/match_jsonp
-    defaults: { _controller: TopxiaWebBundle:Tag:match }
-
-tag_show:
-    path: /tag/{name}
-    defaults: { _controller: TopxiaWebBundle:Tag:show }
-
-following_match_bynickname:
-    path: /following/bynickname/match_jsonp
-    defaults: { _controller: TopxiaWebBundle:Message:match }
-
-comment_widget_init:
-    path:  /comment-widget/init
-    defaults: { _controller: TopxiaWebBundle:CommentWidget:init }
-
-comment_widget_create:
-    path:  /comment-widget/create
-    defaults: { _controller: TopxiaWebBundle:CommentWidget:create }
-
-comment_widget_delete:
-    path:  /comment-widget/delete
-    defaults: { _controller: TopxiaWebBundle:CommentWidget:delete }
-    methods: [POST]
-
-notification:
-    path: /notification
-    defaults: { _controller: TopxiaWebBundle:Notification:index }
-
-batch_notification_show:
-    path: /notification/{id}
-    defaults: { _controller:TopxiaWebBundle:Notification:show }
-
-my:
-    path: /my
-    defaults: { _controller: TopxiaWebBundle:MyCourse:index }
-
-my_task_calendar:
-   path: /my/task
-   defaults: { _controller: TopxiaWebBundle:MyTask:index }
-
-my_teaching_courses:
-    path: /my/teaching/courses/{filter}
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses, filter:'normal' }
-
-my_teaching_open_courses:
-    path: /my/teaching/open/courses/{filter}
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:openCourses, filter:'open'}
-
-my_teaching_threads:
-    path: /my/teaching/threads/{type}
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
-
-my_teaching_classrooms:
-    path: /my/teaching/classrooms
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
-
-my_live_courses_learning:
-    path: /my/livecourses/learing
-    defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
-
-my_courses_learned:
-    path: /my/courses/learned
-    defaults: { _controller: TopxiaWebBundle:MyCourse:learned }
-
-my_courses_favorited:
-    path: /my/courses/favorited
-    defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
-
-my_notebook_show:
-    path: /my/notebook/{courseId}
-    defaults: { _controller: TopxiaWebBundle:MyNotebook:show }
-
-my_note_delete:
-    path: /my/note/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:MyNotebook:noteDelete }
-    methods: [POST]
-
-my_orders:
-    path: /my/orders
-    defaults: { _controller: TopxiaWebBundle:MyOrder:index }
-
-my_order_cancel:
-    path: /my/order/{id}/cancel
-    defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
-    methods: [POST]
-
-web_user_order_detail:
-    path: /my/order/{id}/detail
-    defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
-
-my_order_cancel_refund:
-    path: /my/order/{id}/cancel_refund
-    defaults: { _controller: TopxiaWebBundle:MyOrder:cancelRefund }
-    methods: [POST]
-
-my_refunds:
-    path: /my/refunds
-    defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
-
-income_records:
-    path: /my/income_records
-    defaults: { _controller: TopxiaWebBundle:MoneyRecord:index }
-
-payout_records:
-    path: /my/payout_records
-    defaults: { _controller: TopxiaWebBundle:MoneyRecord:payout }
-
-my_quiz:
-    path: /my/quiz
-    defaults: { _controller: TopxiaWebBundle:Testpaper:index }
-
-my_favorite_question:
-    path: /question/{id}/favorite
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
-
-my_unfavorite_question:
-    path: /question/{id}/unfavorite
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
-
-my_show_favorite_question:
-    path: /my/favorite/question/show
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
-
-my_favorite_question_preview:
-    path: /my/favorite/question/{id}/preview
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
-
-user_show:
-    path:  /user/{id}
-    defaults: { _controller: TopxiaWebBundle:User:show }
-
-my_page_show:
-    path:  /my/page/show
-    defaults: { _controller: TopxiaWebBundle:User:pageShow }
-
-user_about:
-    path:  /user/{id}/about
-    defaults: { _controller: TopxiaWebBundle:User:about }
-
-user_teach:
-    path:  /user/{id}/teach
-    defaults: { _controller: TopxiaWebBundle:User:teach }
-
-user_learn:
-    path:  /user/{id}/learn
-    defaults: { _controller: TopxiaWebBundle:User:learn }
-
-user_favorited:
-    path:  /user/{id}/favorited
-    defaults: { _controller: TopxiaWebBundle:User:favorited }
-
-user_group:
-    path:  /user/{id}/group
-    defaults: { _controller: TopxiaWebBundle:User:group }
-
-user_following:
-    path:  /user/{id}/following
-    defaults: { _controller: TopxiaWebBundle:User:following }
-
-user_follower:
-    path:  /user/{id}/follower
-    defaults: { _controller: TopxiaWebBundle:User:follower }
-
-user_follow:
-    path:  /user/{id}/follow
-    defaults: { _controller: TopxiaWebBundle:User:follow }
-    methods: [POST]
-
-user_unfollow:
-    path:  /user/{id}/unfollow
-    defaults: { _controller: TopxiaWebBundle:User:unfollow }
-    methods: [POST]
-
-user_remind_counter:
-    path:  /user_remind_counter
-    defaults: { _controller: TopxiaWebBundle:User:remindCounter }
-
-user_teaching_classrooms:
-    path:  /user/{id}/teaching/classrooms
-    defaults: { _controller: TopxiaWebBundle:User:teaching }
-
-user_learning_classrooms:
-    path:  /user/{id}/learning/classrooms
-    defaults: { _controller: TopxiaWebBundle:User:learning }
-
-user_card_show:
-    path:  /user/{userId}/card/show
-    defaults: { _controller: TopxiaWebBundle:User:cardShow }
-
-login_after_fill_userinfo:
-    path:  /fill/userinfo
-    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
-
-message_create:
-    path: /message/create/{toId}
-    defaults: { _controller: TopxiaWebBundle:Message:create }
-
-message:
-    path: /message/
-    defaults: { _controller: TopxiaWebBundle:Message:index }
-
-message_check_receiver:
-    path: /message/check/receiver
-    defaults: { _controller: TopxiaWebBundle:Message:checkReceiver }
-
-message_send:
-    path: /message/send/
-    defaults: { _controller: TopxiaWebBundle:Message:send }
-
-message_send_to_receiver:
-    path: /message/send/{receiverId}/to/receiver/
-    defaults: { _controller: TopxiaWebBundle:Message:sendTo }
-
-message_conversation_show:
-    path: /message/conversation/{conversationId}
-    defaults: { _controller: TopxiaWebBundle:Message:showConversation }
-
-message_conversation_delete:
-    path: /message/conversation/{conversationId}/delete
-    defaults: { _controller: TopxiaWebBundle:Message:deleteConversation }
-    methods: [POST]
-
-message_delete:
-    path: /message/conversation/{conversationId}/message/{messageId}/delete
-    defaults: { _controller: TopxiaWebBundle:Message:deleteConversationMessage }
-    methods: [POST]
-
-content_article_show:
-    path: /carticle/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:articleShow }
-
-content_article_list:
-    path: /carticle
-    defaults: {_controller: TopxiaWebBundle:Content:articleList }
-
-content_activity_show:
-    path: /activity/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:activityShow }
-
-content_activity_list:
-    path: /activity
-    defaults: {_controller: TopxiaWebBundle:Content:activityList }
-
-content_page_show:
-    path: /page/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:pageShow }
-
-content_course_rule:
-    path: /courserule
-    defaults: {_controller: TopxiaWebBundle:CourseManage:courseRule }
-
-content_page_list:
-    path: /page
-    defaults: {_controller: TopxiaWebBundle:Content:pageList }
-
-teacher:
-    path: /teacher
-    defaults: {_controller: TopxiaWebBundle:Teacher:index }
-
-teacher_search:
-    path: /teacher/search
-    defaults: {_controller: TopxiaWebBundle:Teacher:search }
-
-partner_login:
-    path: /partner/login
-    defaults: {_controller: TopxiaWebBundle:Partner:login }
-
-partner_logout:
-    path: /partner/logout
-    defaults: {_controller: TopxiaWebBundle:Partner:logout }
-
-partner_discuz_notify:
-    path:  /partner/discuz/api/notify
-    defaults: {_controller: TopxiaWebBundle:PartnerDiscuz:notify }
-
-partner_phpwind_notify:
-    path: /partner/phpwind/api/notify
-    defaults: {_controller: TopxiaWebBundle:PartnerPhpwind:notify }
-
-cloud_set_server:
-    path: /cloud/set-server
-    defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
-
-cloud_oldkeys:
-    path: /cloud/oldkeys
-    defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
-
-cloud_reconvert_old_file:
-    path: /cloud/reconvert_old_file
-    defaults: {_controller: TopxiaWebBundle:Cloud:reconvertOldFile }
-
-cloud_video_fingerprint:
-    path: /cloud/video_fingerprint
-    defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
-
-cloud_ppt_watermark:
-    path: /cloud/ppt_watermark
-    defaults: {_controller: TopxiaWebBundle:Cloud:pptWatermark }
-
-cloud_doc_watermark:
-    path: /cloud/doc_watermark
-    defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
-
-cloud_testpaper_watermark:
-    path: /cloud/testpaper_watermark
-    defaults: {_controller: TopxiaWebBundle:Cloud:testpaperWatermark }
-
-systeminfo:
-    path: /systeminfo
-    defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
-
-setting_approval_submit:
-    path: /settings/approval/submit
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
-
-article_show:
-    path: /article
-    defaults: { _controller: TopxiaWebBundle:Article:index }
-
-article_detail:
-    path: /article/{id}
-    defaults: { _controller: TopxiaWebBundle:Article:detail }
-
-article_category:
-    path: /article/category/{categoryCode}
-    defaults: { _controller: TopxiaWebBundle:Article:category, category:'' }
-
-article_post:
-    path: /article/{id}/post
-    defaults: { _controller: TopxiaWebBundle:Article:post }
-    methods: [POST]
-
-article_post_reply:
-    path:  /article/{articleId}/post/{postId}/
-    defaults: { _controller: TopxiaWebBundle:Article:postReply }
-    methods: [POST]
-
-article_like:
-    path: /article/{articleId}/like
-    defaults: { _controller: TopxiaWebBundle:Article:like }
-    methods: [POST]
-
-article_cancel_like:
-    path: /article/{articleId}/canceLike
-    defaults: { _controller: TopxiaWebBundle:Article:cancelLike }
-    methods: [POST]
-
-article_post_jump:
-    path: /article/{articleId}/post/{postId}/jump
-    defaults: { _controller: TopxiaWebBundle:Article:postJump }
-
-article_tag_show:
-    path: /article/tag/{name}
-    defaults: { _controller: TopxiaWebBundle:Article:tag }
-
-
-mobile:
-    path: /mobile/
-    defaults: { _controller: TopxiaWebBundle:Mobile:index }
-
-mobile_download_qrcode:
-    path: /mobile/downloadQrcode
-    defaults: { _controller: TopxiaWebBundle:Mobile:downloadQrcode }
-
-mobile_download:
-    path: /mobile/download
-    defaults: { _controller: TopxiaWebBundle:Mobile:download }
-
-group:
-    path:  /group
-    defaults: { _controller: TopxiaWebBundle:Group:index }
-group_search_group:
-    path:  /group/search_group
-    defaults: { _controller: TopxiaWebBundle:Group:search }
-group_add:
-    path:  /group/add
-    defaults: { _controller: TopxiaWebBundle:Group:addGroup }
-
-group_show:
-    path:  /group/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
-group_join:
-    path:  /group/{id}/join
-    defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
-group_exit:
-    path:  /group/{id}/exit
-    defaults: { _controller: TopxiaWebBundle:Group:groupExit }
-group_member:
-    path:  /group/member/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:groupMember }
-group_member_delete:
-    path:  /group/member/delete/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
-    methods: [POST]
-group_set_admin:
-    path:  /group/set/admin/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
-group_remove_admin:
-    path:  /group/remove/admin/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:removeAdmin }
-group_set:
-    path:  /group/{id}/setting/info
-    defaults: { _controller: TopxiaWebBundle:Group:groupSet }
-group_setLogoCrop:
-    path:  /group/{id}/setting/logoCrop
-    defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
-group_logo_set:
-    path:  /group/{id}/setting/logo
-    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
-group_edit:
-    path:  /group/info/edit/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
-group_backgroundlogo_set:
-    path:  /group/set/backgroundlogo/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:setGroupBackgroundLogo }
-group_search:
-    path:  /group/{id}/serach
-    defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
-group_thread_post:
-    path:  /group/thread/{groupId}/{threadId}/post
-    defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
-group_thread_add:
-    path:  /group/{id}/thread/create
-    defaults: { _controller: TopxiaWebBundle:GroupThread:addThread }
-group_thread_update:
-    path:  /group/{id}/thread/{threadId}/update
-    defaults: { _controller: TopxiaWebBundle:GroupThread:updateThread }
-group_thread_check_user:
-    path:  /mygroup/checkuser
-    defaults: { _controller: TopxiaWebBundle:GroupThread:checkUser }
-group_thread_show:
-    path:  /group/{id}/thread/{threadId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
-group_thread_collect:
-    path:  /group/thread/{threadId}/collect
-    defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
-    methods: [POST]
-group_thread_uncollect:
-    path:  /group/thread/{threadId}/uncollect
-    defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
-    methods: [POST]
-group_thread_setElite:
-    path:  /group/thread/{threadId}/setElite
-    defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
-group_thread_removeElite:
-    path:  /group/thread/{threadId}/removeElite
-    defaults: { _controller: TopxiaWebBundle:GroupThread:removeElite }
-group_thread_setStick:
-    path:  /group/thread/{threadId}/setStick
-    defaults: { _controller: TopxiaWebBundle:GroupThread:setStick }
-group_thread_removeStick:
-    path:  /group/thread/{threadId}/removeStick
-    defaults: { _controller: TopxiaWebBundle:GroupThread:removeStick }
-group_thread_closeThread:
-    path:  /group/thread/{threadId}/closeThread/{memberId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:closeThread }
-group_thread_deletePost:
-    path:  /group/thread/deletePost/{postId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
-    methods: [POST]
-group_thread_post_reply:
-    path:  /group/post/{postId}/reply
-    defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
-group_thread_reward:
-    path:  /thread/{threadId}/reward
-    defaults: { _controller: TopxiaWebBundle:GroupThread:reward }
-group_thread_cancel_reward:
-    path:  /thread/{threadId}/reward/cancel
-    defaults: { _controller: TopxiaWebBundle:GroupThread:cancelReward }
-group_thread_adopt:
-    path:  /thread/{postId}/adopt
-    defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
-group_thread_hide:
-    path:  /thread/{threadId}/hide
-    defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
-group_upload:
-    path:  /group/thread/upload
-    defaults: { _controller: TopxiaWebBundle:GroupThread:upload }
-group_attach_download:
-    path:  /group/attach/download/{fileId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:download }
-group_thread_buy_attach:
-    path:  /group/attach/buy/{attachId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:buyAttach }
-group_thread_delete_attach:
-    path:  /group/attach/delete/{goodsId}
-    defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
-    methods: [POST]
-
-my_bill:
-    path: /my/bill
-    defaults: { _controller: TopxiaWebBundle:Coin:cashBill }
-my_coin:
-    path:     /my/coin
-    defaults: { _controller: TopxiaWebBundle:Coin:index }
-my_invite_code:
-    path:     /my/invitecode
-    defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
-
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
-
-write_invitecode:
-    path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
-receive_coupon:
-    path:     /my/invitecode/receivecoupon
-    defaults: { _controller: TopxiaWebBundle:Coin:receiveCoupon }
-
-coin_pay:
-    path:     /coin/pay
-    defaults: { _controller: TopxiaWebBundle:Coin:pay }
-coin_change:
-    path:     /coin/change
-    defaults: { _controller: TopxiaWebBundle:Coin:change }
-coin_show:
-    path:     /coin/show
-    defaults: { _controller: TopxiaWebBundle:Coin:show }
-
-user_password_check:
-    path:   /user/password/check
-    defaults: { _controller: TopxiaWebBundle:User:checkPassword }
-
-pay_center_show:
-    path:   /pay/center
-    defaults: { _controller: TopxiaWebBundle:PayCenter:show }
-
-pay_center_pay:
-    path:   /pay/center/pay
-    defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
-    methods: [POST]
-
-pay_center_auth_unbind:
-    path:   /pay/center/auth_unbind
-    defaults: { _controller: TopxiaWebBundle:PayCenter:unbindAuth}
-    methods: [POST]
-
-auth_unbind_mobile_show:
-    path:   /pay/center/mobile_show
-    defaults: { _controller: TopxiaWebBundle:PayCenter:showMobile }
-
-pay_return:
-    path:  /pay/center/pay/{name}/return
-    defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
-
-pay_notify:
-    path:  /pay/center/pay/{name}/notify
-    defaults: { _controller: TopxiaWebBundle:PayCenter:payNotify }
-
-pay_success_show:
-    path:  /pay/center/success/show
-    defaults: { _controller: TopxiaWebBundle:PayCenter:showTarget }
-
-pay_password_check:
-    path:  /pay/password/check
-    defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
-
-pay_error:
-    path:  /pay/error
-    defaults: { _controller: TopxiaWebBundle:PayCenter:payError }
-
-pay_result_notice:
-    path: /pay/result/notice
-    defaults: { _controller: TopxiaWebBundle:PayCenter:resultNotice }
-
-wxpay_roll:
-    path: /pay/wxpay/roll
-    defaults: {_controller: TopxiaWebBundle:PayCenter:wxpayRoll }
-
-order_show:
-    path:  /order/show
-    defaults: { _controller: TopxiaWebBundle:Order:show }
-
-order_create:
-    path:  /order/create
-    defaults: { _controller: TopxiaWebBundle:Order:create }
-    methods: [POST]
-
-course_buy:
-    path: /course/{id}/buy
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
-
-course_buy_modify_user_info:
-    path: /course/buy/modify_user_info
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
-
-thread_jump:
-    path:  /thread/{threadId}/jump
-    defaults: { _controller: TopxiaWebBundle:Thread:jump }
-
-thread_post_jump:
-    path:  /thread/{threadId}/post/{postId}/jump
-    defaults: { _controller: TopxiaWebBundle:Thread:postJump }
-
-thread_post:
-    path:  /thread/{threadId}/post
-    defaults: { _controller: TopxiaWebBundle:Thread:post }
-
-thread_post_reply:
-    path:  /thread/{threadId}/post/{postId}/
-    defaults: { _controller: TopxiaWebBundle:Thread:postReply }
-    methods: [POST]
-
-thread_post_subposts:
-    path:  /thread/{threadId}/post/{postId}/subposts
-    defaults: { _controller: TopxiaWebBundle:Thread:subposts, threadId:0 }
-
-article_post_subposts:
-    path:  /article/{targetId}/post/{postId}/subposts
-    defaults: { _controller: TopxiaWebBundle:Article:subposts }
-
-thread_post_delete:
-    path:  /thread/{threadId}/post/{postId}/delete
-    defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
-    methods: [POST]
-
-thread_post_up:
-    path:  /thread/{threadId}/post/{postId}/up
-    defaults: { _controller: TopxiaWebBundle:Thread:postUp }
-    methods: [POST]
-
-thread_delete:
-    path: /thread/{threadId}/delete
-    defaults: { _controller: TopxiaWebBundle:Thread:delete }
-    methods: [POST]
-
-thread_set_sticky:
-    path: /thread/{threadId}/set_sticky
-    defaults: { _controller: TopxiaWebBundle:Thread:setSticky }
-    methods: [POST]
-
-thread_cancel_sticky:
-    path: /thread/{threadId}/cancel_sticky
-    defaults: { _controller: TopxiaWebBundle:Thread:cancelSticky }
-    methods: [POST]
-
-thread_set_nice:
-    path: /thread/{threadId}/set_nice
-    defaults: { _controller: TopxiaWebBundle:Thread:setNice }
-    methods: [POST]
-
-thread_cancel_nice:
-    path: /thread/{threadId}/cancel_nice
-    defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
-    methods: [POST]
-
-thread_export_members:
-    path: /thread/{threadId}/export/members
-    defaults: { _controller: TopxiaWebBundle:Thread\Member:export }
-
-ajax_thread_member_show:
-    path: /ajax/thread/{threadId}/members
-    defaults: { _controller: TopxiaWebBundle:Thread\Member:ajaxFindMembers }
-    methods: [GET]
-
-#占位
-vip:
-    path: /vip/
-
-vip_buy:
-    path: /vip/buy
-
-vip_renew:
-    path: /vip/renew
-
-vip_upgrade:
-    path: /vip/upgrade
-
-edu_cloud_sms_send:
-    path:  /edu_cloud/sms_send
-    defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
-    methods: [POST]
-
-edu_cloud_sms_check:
-    path:  /edu_cloud/sms_check/{type}
-    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
-
-edu_cloud_sms_send_callback:
-    path:  /edu_cloud/sms/callback/{targetType}/{targetId}
-    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
-
-edu_cloud_search_callback:
-    path:  /edu_cloud/search/callback
-    defaults: { _controller: TopxiaWebBundle:EduCloud:searchCallBack }
-
-settings_bind_mobile:
-    path:  /settings/bind_mobile
-    defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
-
-settings_check_login_password:
-    path:  /settings/check_login_password
-    defaults: { _controller: TopxiaWebBundle:Settings:passwordCheck }
-    methods: [POST]
-
-password_reset_by_sms:
-    path:  /password/reset/by_sms
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
-    methods: [POST]
-
-settings_find_pay_password_by_sms:
-    path:  /settings/find_pay_password_by_sms
-    defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
-
-order_pay_sms_verification:
-    path:  /order/sms_verification
-    defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
-
-edu_cloud_sms_callback:
-    path:  /edu_cloud/sms_callback
-    defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
-    methods: [POST]
-
-course_note_like:
-    path:  /course/note/{noteId}/like
-    defaults: { _controller: TopxiaWebBundle:Course/Note:like }
-    methods: [POST]
-
-course_note_cancel_like:
-    path:  /course/note/{noteId}/cancel_like
-    defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
-    methods: [POST]
-
-common_parse_qrcode:
-    path: /qrcode/parse/{token}
-    defaults: {_controller: TopxiaWebBundle:Common:parseQrcode}
-
-esbar_my_classroom:
-    path:  /esbar/my/classroom
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
-
-esbar_my_course:
-    path:  /esbar/my/course
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:course }
-
-esbar_my_notify:
-    path:  /esbar/my/notify
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
-
-esbar_my_practice:
-    path:  /esbar/my/practice/{status}
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
-
-esbar_my_study_center:
-    path:  /esbar/my/study_center
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
-
-my_cards:
-    path:  /my/cards
-    defaults: { _controller: TopxiaWebBundle:Card:index }
-
-my_useable_coupons:
-    path: /my/useable_coupons
-    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
-
-card_info:
-    path:  /card/info
-    defaults: { _controller: TopxiaWebBundle:Card:cardInfo }
-
-sms_prepare:
-    path:  /sms/prepare/{targetType}/{id}
-    defaults: { _controller: TopxiaWebBundle:Sms:prepare }
-
-publish_sms_send:
-    path:  /publish/sms_send/{targetType}/{id}
-    defaults: { _controller: TopxiaWebBundle:Sms:send }
-
-generate_short_link:
-    path:  /generate/short/link
-    defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
-
-live_course_manage_lesson_replay_edit:
-    path:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/edit
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:editLessonReplay }
-
-live_course_manage_lesson_replay_title_update:
-    path:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
-    methods: [POST]
-
-open_course_explore:
-    path:  /open/course/explore
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:explore }
-
-open_course_manage:
-    path:  /open/course/{id}/manage
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:index }
-
-open_course_manage_publish:
-    path:  /open/course/{id}/manage/publish
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:publish }
-
-open_course_manage_base:
-    path:  /open/course/{id}/manage/base
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:base }
-
-open_course_manage_lesson:
-    path:  /open/course/{id}/manage/lesson
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:lesson }
-
-open_course_manage_lesson_create:
-    path:  /open/course/{id}/manage/lesson/create
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:create }
-
-open_course_manage_lesson_edit:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:edit }
-
-open_course_manage_lesson_publish:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/publish
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:publish }
-
-open_course_manage_lesson_delete:
-    path: /open/course/{courseId}/manage/lesson/{lessonId}/delete
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:delete}
-
-open_course_manage_lesson_unpublish:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/unpublish
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:unpublish }
-
-open_course_manage_lesson_sort:
-    path:  /open/course/{id}/manage/lesson/sort
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:sort }
-    methods: [POST]
-
-open_course_manage_picture:
-    path:  /open/course/{id}/manage/picture
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:picture }
-
-open_course_manage_picture_crop:
-    path:  /open/course/{id}/manage/picture/crop
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pictureCrop }
-
-open_course_manage_teachers:
-    path:  /open/course/{id}/manage/teachers
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:teachers }
-
-open_course_manage_live_time_set:
-    path:  /open/course/{id}/manage/live/time
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
-
-open_course_manage_marketing:
-    path:  /open/course/{id}/manage/marketing
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
-
-open_course_manage_students:
-    path:  /open/course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:students }
-
-open_course_manage_files:
-    path:  /open/course/{id}/manage/files
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:index }
-
-open_course_manage_file_show:
-    path:  /open/course/{id}/manage/file/{fileId}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:show }
-
-open_course_manage_file_convert:
-    path:  /open/course/{id}/manage/file/{fileId}/convert
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:convert }
-    methods: [POST]
-
-open_course_manage_files_batch_upload:
-    path:  /open/course/{id}/manage/files/batch/upload/{targetType}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:batchUploadCourseFiles }
-
-open_course_manage_files_upload:
-    path:  /open/course/{id}/manage/files/upload/{targetType}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles }
-
-open_course_manage_delete_materials_show:
-    path:  /open/course/{id}/manage/show/delete/materials
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteMaterialShow }
-    methods: [POST]
-
-open_course_manage_files_delete:
-    path:  /open/course/{id}/manage/materials/delete
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
-    methods: [POST]
-
-open_course_manage_course_pick:
-    path: /open/course/{id}/manage/recommend/pick/{filter}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
-
-open_course_manage_recommend_course_delete:
-    path: /open/course/{id}/manage/recommend/{recommendId}/delete
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:deleteRecommendCourse}
-    methods: [POST]
-
-open_course_manage_lesson_replays_edit:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replays/edit
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:editLessonReplay }
-
-open_course_manage_replay_title_update:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:updateReplayTitle }
-    methods: [POST]
-
-open_course_manage_student_export_csv:
-    path:  /open/course/{id}/manage/student/export
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
-
-open_course_manage_student_export_datas:
-    path:  /open/course/{id}/manage/student/export/datas
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExportDatas }
-
-open_course_manage_material:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialModal }
-
-open_course_manage_material_upload:
-    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material/upload
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialUpload }
-    methods: [POST]
-
-open_course_manage_material_delete:
-    path:  /open/course/{courseId}/manage/material/{materialId}/delete
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialDelete }
-    methods: [POST]
-
-open_course_material_download:
-    path:  /open/course/{courseId}/material/{materialId}/download
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:materialDownload }
-
-open_course_manage_material_browser:
-    path:  /open/course/{courseId}/manage/material/browser
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialBrowser }
-
-open_course_course_search:
-    path: /open/course/{id}/recommended/search/{filter}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
-
-open_course_recommended_course_select:
-    path: /open/course/{id}/recommended/select
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendedCoursesSelect}
-
-open_course_show:
-    path:  /open/course/{courseId}
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
-
-open_course_lesson_learn:
-    path:  /open/course/{courseId}/lesson/{lessonId}/learn
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
-
-open_course_lesson_show:
-    path:  /open/course/{courseId}/lesson/{lessonId}/show
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:lessonShow }
-
-open_course_favorite:
-    path: /open/course/{id}/favorite
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:favorite }
-    methods: [POST]
-
-open_course_unfavorite:
-    path: /open/course/{id}/unfavorite
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:unfavorite }
-    methods: [POST]
-
-open_course_like:
-    path: /open/course/{id}/like
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:like }
-    methods: [POST]
-
-open_course_unlike:
-    path: /open/course/{id}/unlike
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:unlike }
-    methods: [POST]
-
-open_course_post:
-    path:  /open/course/{id}/post
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:post }
-
-open_course_post_reply:
-    path:  /open/course/{id}/post/{postId}
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:postReply }
-    methods: [POST]
-
-live_open_course_play:
-    path:  /open/course/{courseId}/lesson/{lessonId}/live_entry
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entry }
-
-live_open_course_manage_replay:
-    path:  /open/course/{id}/manage/replay
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:replayManage }
-
-live_open_course_lesson_replay_create:
-    path:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
-
-live_open_course_lesson_replay_upload:
-    path:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:uploadModal }
-
-live_open_course_live_replay_entry:
-    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entryReplay }
-
-live_open_course_live_replay_url:
-    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url
-    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:getReplayUrl }
-
-live_open_lesson_time_check:
-    path:  /open/course/{courseId}/manage/live/time/check
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:lessonTimeCheck }
-
-open_course_member_sms:
-    path:  /open/course/{id}/member/sms
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:memberSms }
-
-open_course_member_create:
-    path:  /open/course/{id}/member/create
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:createMember }
-
-open_course_lesson_player:
-    path:  /open/course/{courseId}/lesson/{lessonId}/player
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:player }
-
-open_course_mobile_check:
-    path:  /open/course/{courseId}/mobile/check
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:mobileCheck }
-
-open_course_ad_modal_recommend_course:
-    path: /open/course/{id}/ad-modal/recommend/course
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:adModalRecommendCourse}
-    methods: [GET]
-
-importer_check:
-    path: /importer/{type}/check
-    defaults: { _controller: TopxiaWebBundle:Importer:check}
-    methods: [POST]
-
-importer_import:
-    path: /importer/{type}/import
-    defaults: { _controller: TopxiaWebBundle:Importer:import}
-    methods: [POST]
-
-importer_index:
-    path: /importer/{type}/index
-    defaults: { _controller: TopxiaWebBundle:Importer:template}
-
-#esbar_my_history:
-#    path:  /esbar/my/history
-#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+#homepage:
+#    path:  /
+#    defaults: { _controller: TopxiaWebBundle:Default:index }
+#
+#switch_language:
+#    path: /switch/language
+#    defaults: { _controller: TopxiaWebBundle:Default:translate }
+#
+#homepage_category:
+#    path: /course/search
+#    defaults: { _controller: TopxiaWebBundle:Default:coursesCategory }
+#
+#live_jump:
+#    path: /live/jump
+#    defaults: { _controller: TopxiaWebBundle:Default:jump }
+#
+#login:
+#    path:  /login
+#    defaults: { _controller: TopxiaWebBundle:Login:index }
+#
+#login_check:
+#    path:  /login_check
+#
+#logout:
+#    path:  /logout
+#
+#login_ajax:
+#    path:  /login/ajax
+#    defaults: { _controller: TopxiaWebBundle:Login:ajax }
+#
+#login_bind:
+#    path:  /login/bind/{type}
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:index }
+#
+#login_bind_callback:
+#    path:  /login/bind/{type}/callback
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:callback }
+#
+#login_bind_choose:
+#    path:  /login/bind/{type}/choose
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:choose }
+#
+#login_bind_new:
+#    path:  /login/bind/{type}/new
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:new }
+#    methods: [POST]
+#
+#login_bind_newset:
+#    path:  /login/bind/{type}/newset
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
+#    methods: [POST]
+#
+#login_bind_exist:
+#    path:  /login/bind/{type}/exist
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
+#    methods: [POST]
+#
+#login_bind_existbind:
+#    path:  /login/bind/weixinmob/existbind
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:existBind }
+#    methods: [POST]
+#
+#login_bind_weixin:
+#    path:  /login/weixinmob
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:weixinIndex }
+#
+#login_check_email:
+#    path:  /login/check/email
+#    defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
+#
+#login_bind_change:
+#    path: /login/bind/{type}/changetoexist
+#    defaults: { _controller: TopxiaWebBundle:LoginBind:changeToExist }
+#
+#common_qrcode:
+#    path:  /common/qrcode
+#    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
+#
+#common_crontab:
+#    path:  /common/crontab
+#    defaults: { _controller: TopxiaWebBundle:Common:crontab }
+#
+#user_terms:
+#    path:  /userterms
+#    defaults: { _controller: TopxiaWebBundle:Register:userTerms }
+#
+#register:
+#    path:  /register
+#    defaults: { _controller: TopxiaWebBundle:Register:index }
+#
+#register_success:
+#    path:  /register/success
+#    defaults: { _controller: TopxiaWebBundle:Register:success }
+#
+#register_submited:
+#    path:  /register/submited/{id}/{hash}
+#    defaults: { _controller: TopxiaWebBundle:Register:submited }
+#
+#register_reset_email:
+#    path: /register/email/reset/{id}/{hash}
+#    defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
+#
+#register_reset_email_check:
+#    path: /register/email/reset/check
+#    defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
+#
+#register_reset_email_verify:
+#    path: /register/email/reset/verify
+#    defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
+#    methods: [POST]
+#
+#register_email_send:
+#    path:  /register/email/send/{id}/{hash}
+#    defaults: { _controller: TopxiaWebBundle:Register:emailSend }
+#    methods: [POST]
+#
+#register_email_verify:
+#    path:  /register/email/verify/{token}
+#    defaults: { _controller: TopxiaWebBundle:Register:emailVerify }
+#
+#register_email_check:
+#    path:  /register/email/check
+#    defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
+#
+#register_mobile_check:
+#    path:  /register/mobile/check
+#    defaults: { _controller: TopxiaWebBundle:Register:mobileCheck }
+#
+#register_email_or_mobile_check:
+#    path:  /register/email_or_mobile/check
+#    defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
+#
+#register_nickname_check:
+#    path:  /register/nickname/check
+#    defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
+#
+#invitecode_check:
+#    path:  /register/invitecode/check
+#    defaults: { _controller: TopxiaWebBundle:Register:invitecodeCheck }
+#
+#register_captcha_check:
+#    path:  /register/captcha/check
+#    defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
+#
+#register_captcha_modal:
+#    path:  /register/captcha/modal
+#    defaults: { _controller: TopxiaWebBundle:Register:captchaModal }
+#
+#register_analysis:
+#    path:  /register/analysis
+#    defaults: { _controller: TopxiaWebBundle:Register:analysis }
+#
+#register_captcha_num:
+#    path:     /captcha_num
+#    defaults: { _controller: TopxiaWebBundle:Register:captcha }
+#
+#file_upload:
+#    path:  /file/upload
+#    defaults: { _controller: TopxiaWebBundle:File:upload }
+#    methods: [POST]
+#
+#file_img_crop:
+#    path:  /file/img/crop
+#    defaults: { _controller: TopxiaWebBundle:File:cropImg }
+#    methods: [POST]
+#
+#attachment_list:
+#    path: /attachments/{targetType}/{targetId}
+#    defaults: { _controller: TopxiaWebBundle:Attachment:list }
+#    methods: [GET]
+#
+#attachment_form_fields:
+#    path: /attachment/{targetType}/{targetId}/formFields
+#    defaults: { _controller: TopxiaWebBundle:Attachment:formFields , targetId:0}
+#    methods: [GET]
+#
+#uploader_entry:
+#    path:  /uploader
+#    defaults: { _controller: TopxiaWebBundle:Uploader:entry }
+#
+#uploader_init:
+#    path:  /uploader/init
+#    defaults: { _controller: TopxiaWebBundle:Uploader:init }
+#    methods: [GET, POST]
+#
+#uploader_auth:
+#    path:  /uploader/auth
+#    defaults: { _controller: TopxiaWebBundle:Uploader:uploadAuth }
+#    methods: [POST]
+#
+#uploader_batch_uplod:
+#    path:  /uploader/batch_upload
+#    defaults: { _controller: TopxiaWebBundle:Uploader:batchUpload }
+#
+#uploader_finished:
+#    path:  /uploader/finished
+#    defaults: { _controller: TopxiaWebBundle:Uploader:finished }
+#    methods: [GET, POST]
+#
+#uploader_upload_callback:
+#    path:  /uploader/upload_callback
+#    defaults: { _controller: TopxiaWebBundle:Uploader:uploadCallback }
+#    methods: [GET, POST]
+#
+#uploader_process_callback:
+#    path:  /uploader/process_callback
+#    defaults: { _controller: TopxiaWebBundle:Uploader:processCallback }
+#    methods: [POST]
+#
+#uploader_chunks_start:
+#    path:  /uploader/chunks/start
+#    defaults: { _controller: TopxiaWebBundle:Uploader:chunksStart }
+#
+#uploader_chunks_finish:
+#    path:  /uploader/chunks/finish
+#    defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
+#
+#uploadfile_upload:
+#    path:  /uploadfile/upload
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
+#    methods: [POST, OPTIONS]
+#
+#uploadfile_browser:
+#    path:  /uploadfile/browser
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:browser }
+#
+#uploadfile_params:
+#    path:  /uploadfile/params
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:params }
+#
+#uploadfile_browsers:
+#    path:  /uploadfile/browsers
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
+#
+#uploadfile_cloud_callback:
+#    path:  /uploadfile/cloud_callback
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
+#
+#uploadfile_cloud_convert_callback:
+#    path:  /uploadfile/cloud_convertcallback
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
+#
+#uploadfile_cloud_convert_callback2:
+#    path:  /uploadfile/cloud_convertcallback2
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback2 }
+#
+#uploadfile_cloud_convert_callback3:
+#    path:  /uploadfile/cloud_convertcallback3
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback3 }
+#
+#uploadfile_cloud_get_media_info:
+#    path:  /uploadfile/get_media_info/{type}
+#    defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
+#
+#hls_playlist:
+#    path: /hls/{id}/playlist/{token}.m3u8
+#    defaults: { _controller: TopxiaWebBundle:HLS:playlist}
+#
+#player_local_media:
+#    path: /player/{id}/file/{token}
+#    defaults: { _controller: TopxiaWebBundle:Player:localMedia}
+#
+#hls_stream:
+#    path: /hls/{id}/stream/{level}/{token}.m3u8
+#    defaults: { _controller: TopxiaWebBundle:HLS:stream}
+#
+#hls_clef:
+#    path: /hls/{id}/clef/{token}
+#    defaults: { _controller: TopxiaWebBundle:HLS:clef}
+#
+#editor_upload:
+#    path:  /editor/upload
+#    defaults: { _controller: TopxiaWebBundle:Editor:upload }
+#    methods: [POST]
+#
+#editor_download:
+#    path:  /editor/download
+#    defaults: { _controller: TopxiaWebBundle:Editor:download }
+#    methods: [POST]
+#
+#liveroom_ticket:
+#    path:  /liveroom/{id}/ticket
+#    defaults: { _controller: TopxiaWebBundle:Liveroom:ticket }
+#
+#live_auth:
+#    path:  /live/auth
+#    defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
+#
+#live_verify:
+#    path:  /live/verify
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:verify }
+#
+#live_course_explore:
+#    path:  /live
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
+#
+#live_course_play:
+#    path:  /course/{courseId}/lesson/{lessonId}/live_entry
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:entry }
+#
+#live_classroom_url:
+#    path:  /course/{courseId}/lesson/{lessonId}/get_classroom_url
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
+#
+#live_classroom_es_replay_play_url:
+#    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/play_es_live_replay
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:playESLiveReplay }
+#
+#live_classroom_replay_url:
+#    path: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
+#
+#live_course_manage_replay:
+#    path:  /livecourse/{id}/manage/replay
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayManage }
+#
+#live_course_lesson_replay_create:
+#    path:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
+#
+#live_course_lesson_replay_upload:
+#    path:  /livecourse/{courseId}/lesson/{lessonId}/replay/upload
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:uploadModal }
+#
+#live_course_lesson_replay_entry:
+#    path: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
+#
+#live_capacity:
+#    path: /live_capacity/{id}
+#    defaults: { _controller: TopxiaWebBundle:LiveCourse:liveCapacity }
+#
+#course_explore:
+#    path:  /course/explore/{category}
+#    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
+#
+#course_archive:
+#    path:  /archive/course
+#    defaults: { _controller: TopxiaWebBundle:Course:archive }
+#
+#course_archive_show:
+#    path:  /archive/course/{id}
+#    defaults: { _controller: TopxiaWebBundle:Course:archiveCourse }
+#
+#course_archive_lesson:
+#    path:  /archive/course/{id}/lesson/{lessonId}
+#    defaults: { _controller: TopxiaWebBundle:Course:archiveLesson, lessonId:''}
+#
+#course_create:
+#    path:  /course/create
+#    defaults: { _controller: TopxiaWebBundle:Course:create }
+#
+#course_select:
+#    path:  /course/select
+#    defaults: { _controller: TopxiaWebBundle:Course:select }
+#
+#course_show:
+#    path:  /course/{id}
+#    defaults: { _controller: TopxiaWebBundle:Course:show }
+#
+#course_qrcode:
+#    path:  /course/{id}/qrcode
+#    defaults: { _controller: TopxiaWebBundle:Course:qrcode }
+#
+#course_info:
+#    path:  /course/{id}/info
+#    defaults: { _controller: TopxiaWebBundle:Course:info }
+#
+#course_lesson_list:
+#    path:  /course/{id}/lesson/list
+#    defaults: { _controller: TopxiaWebBundle:Course:lessonList }
+#
+#course_notes:
+#    path:  /course/{courseId}/notes
+#    defaults: { _controller: TopxiaWebBundle:Course\Note:showList }
+#
+#course_exit:
+#    path:  /course/{id}/exit
+#    defaults: { _controller: TopxiaWebBundle:Course:exit }
+#    methods: [POST]
+#
+#course_become_use_member:
+#    path:  /course/{id}/become_use_member
+#    defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
+#    methods: [POST]
+#
+#course_member_ids:
+#    path:  /course/{id}/member_ids
+#    defaults: { _controller: TopxiaWebBundle:Course:memberIds }
+#
+#course_member_deadline_reach:
+#    path:  /course/{courseId}/member/deadline/reach
+#    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
+#
+#coupon_check:
+#    path:  /{type}/{id}/coupon/check
+#    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
+#
+#course_order_buy:
+#    path:  /course/{id}/order/buy
+#    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+#
+#course_order_repay:
+#    path:  /course/order/repay
+#    defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+#
+#course_order_detail:
+#    path:  /course/order/{id}/detail
+#    defaults: { _controller: TopxiaWebBundle:CourseOrder:orderDetail }
+#
+#order_refund:
+#    path:  /target/{id}/order/refund
+#    defaults: { _controller: TopxiaWebBundle:OrderRefund:refund }
+#
+#order_cancel_refund:
+#    path:  /target/{id}/order/cancel_refund
+#    defaults: { _controller: TopxiaWebBundle:OrderRefund:cancelRefund }
+#    methods: [POST]
+#
+#course_set_expiryday:
+#    path:  /course/{courseId}/set_expiryday/{userId}
+#    defaults: { _controller: TopxiaWebBundle:Course:addMemberExpiryDays }
+#
+#course_learn:
+#    path:  /course/{id}/learn
+#    defaults: { _controller: TopxiaWebBundle:Course:learn }
+#
+#course_learn_time:
+#    path:  /course/{lessonId}/learn/time/{time}
+#    defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
+#
+#course_watch_time:
+#    path:  /course/{lessonId}/watch/time/{time}
+#    defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
+#
+#course_detail_data:
+#    path:  /course/detail/data/{id}
+#    defaults: { _controller: TopxiaWebBundle:Course:detailData }
+#
+#course_lesson_detail_data:
+#    path:  /course/lesson/detail/data/{courseId}/{lessonId}
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
+#
+#course_lesson_show:
+#    path:  /course/{courseId}/lesson/{lessonId}
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
+#
+#course_lesson_qrcode:
+#    path:  /course/{courseId}/lesson/{lessonId}/qrcode
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:qrcode }
+#
+#course_lesson_player:
+#    path:  /course/{courseId}/lesson/{lessonId}/player
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:player }
+#
+#course_lesson_preview:
+#    path:  /course/{courseId}/lesson/{lessonId}/preview
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
+#
+#course_lessons_preview:
+#    path:  /course/{courseId}/lessons/preview
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
+#
+#course_lesson_media:
+#    path:  /course/{courseId}/lesson/{lessonId}/media
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:media }
+#
+#course_lesson_media_download:
+#    path:  /course/{courseId}/lesson/{lessonId}/media_download
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
+#
+#course_lesson_ppt:
+#    path:  /course/{courseId}/lesson/{lessonId}/ppt
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
+#
+#course_lesson_document:
+#    path:  /course/{courseId}/lesson/{lessonId}/document
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
+#
+#course_lesson_flash:
+#    path:  /course/{courseId}/lesson/{lessonId}/flash
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:flash }
+#
+#course_lesson_learn_status:
+#    path:  /course/{courseId}/lesson/{lessonId}/learn/status
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
+#
+#course_lesson_learn_start:
+#    path:  /course/{courseId}/lesson/{lessonId}/learn/start
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStart }
+#    methods: [POST]
+#
+#course_lesson_learn_finish:
+#    path:  /course/{courseId}/lesson/{lessonId}/learn/finish
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnFinish }
+#    methods: [POST]
+#
+#course_lesson_learn_cancel:
+#    path:  /course/{courseId}/lesson/{lessonId}/learn/cancel
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
+#    methods: [POST]
+#
+#course_lesson_plugin_lesson_list:
+#    path:  /lessonplugin/lesson/list
+#    defaults: { _controller: TopxiaWebBundle:LessonLessonPlugin:list }
+#
+#course_lesson_plugin_question_init:
+#    path:  /lessonplugin/question/init
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:init }
+#
+#course_lesson_plugin_question_list:
+#    path:  /lessonplugin/question/list
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:list }
+#
+#course_lesson_plugin_question_show:
+#    path:  /lessonplugin/question/show
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:show }
+#
+#course_lesson_plugin_question_ask:
+#    path:  /lessonplugin/question/ask
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:ask }
+#
+#course_lesson_plugin_question_create:
+#    path:  /lessonplugin/question/create
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:create }
+#
+#course_lesson_plugin_question_answer:
+#    path:  /lessonplugin/question/answer
+#    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:answer }
+#
+#course_lesson_plugin_material_init:
+#    path:  /lessonplugin/material/init
+#    defaults: { _controller: TopxiaWebBundle:LessonMaterialPlugin:init }
+#
+#course_lesson_plugin_note_init:
+#    path:  /lessonplugin/note/init
+#    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:init }
+#
+#course_lesson_plugin_note_save:
+#    path:  /lessonplugin/note/save
+#    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
+#    methods: [POST]
+#
+#course_review_create:
+#    path:  /course/{id}/review/create
+#    defaults: { _controller: TopxiaWebBundle:CourseReview:create }
+#    methods: [POST]
+#
+#course_review_list:
+#    path:  /course/{id}/reviews/
+#    defaults: { _controller: TopxiaWebBundle:CourseReview:list }
+#
+#course_review_post:
+#    path:  /course/{id}/review/{reviewId}/post
+#    defaults: { _controller: TopxiaWebBundle:CourseReview:post }
+#
+#course_review_delete:
+#    path:  /course/review/{reviewId}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseReview:delete }
+#
+#course_members:
+#   path: /course/{id}/members
+#   defaults: { _controller: TopxiaWebBundle:Course:members }
+#
+#course_favorite:
+#    path: /course/{id}/favorite
+#    defaults: { _controller: TopxiaWebBundle:Course:favorite }
+#    methods: [POST]
+#
+#course_unfavorite:
+#    path: /course/{id}/unfavorite
+#    defaults: { _controller: TopxiaWebBundle:Course:unfavorite }
+#    methods: [POST]
+#
+#course_materials:
+#    path:  /course/{id}/material/
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:index }
+#
+#course_material_download:
+#    path:  /course/{courseId}/material/{materialId}/download
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:download }
+#
+#course_material_delete:
+#    path:  /course/{id}/material/{materialId}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:delete }
+#    methods: [POST]
+#
+#course_threads:
+#    path:  /course/{id}/thread
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:index }
+#
+#course_thread_create:
+#    path:  /course/{id}/thread/create
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:create }
+#
+#course_thread_show:
+#    path:  /course/{courseId}/thread/{threadId}
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:show }
+#
+#course_thread_post:
+#    path:  /course/{courseId}/thread/{id}/post
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:post }
+#
+#course_thread_edit:
+#    path:  /course/{courseId}/thread/{id}/edit
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
+#
+#course_thread_post_delete:
+#    path:  /course/{courseId}/thread/{threadId}/post/{id}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
+#    methods: [POST]
+#
+#course_thread_post_edit:
+#    path:  /course/{courseId}/thread/{threadId}/post/{id}/edit
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:editPost }
+#
+#course_thread_stick:
+#    path:  /course/{courseId}/thread/{id}/stick
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:stick }
+#    methods: [POST]
+#
+#course_thread_unstick:
+#    path:  /course/{courseId}/thread/{id}/unstick
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:unstick }
+#    methods: [POST]
+#
+#course_thread_elite:
+#    path:  /course/{courseId}/thread/{id}/elite
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:elite }
+#    methods: [POST]
+#
+#course_thread_unelite:
+#    path:  /course/{courseId}/thread/{id}/unelite
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:unelite }
+#    methods: [POST]
+#
+#course_thread_delete:
+#    path:  /course/{courseId}/thread/{id}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
+#    methods: [POST]
+#
+#course_manage:
+#    path:  /course/{id}/manage
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:index }
+#
+#course_manage_info:
+#    path: /course/{id}/manage/info
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:info }
+#
+#course_manage_base:
+#    path:  /course/{id}/manage/base
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:base }
+#
+#course_manage_detail:
+#    path:  /course/{id}/manage/detail
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:detail }
+#
+#course_manage_picture:
+#    path:  /course/{id}/manage/picture
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:picture }
+#
+#course_manage_picture_crop:
+#    path:  /course/{id}/manage/picture/crop
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:pictureCrop }
+#
+#course_manage_price:
+#    path:  /course/{id}/manage/price
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:price }
+#
+#course_manage_teachers:
+#    path:  /course/{id}/manage/teachers
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
+#
+#course_manage_course_dashboard:
+#    path:  /course/{id}/manage/course/dashboard
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:courseDashboard }
+#
+#course_manage_lesson_dashboard:
+#    path:  /course/{id}/manage/lesson/dashboard
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonDashboard }
+#
+#course_manage_lesson_learn_dashboard:
+#    path:  /course/{id}/manage/lessonlearn/dashboard
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:lessonlearnDashboard }
+#
+##课程同步
+#course_manage_course_sync:
+#    path:  /course/manage/course/sync/{id}/{type}
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSync}
+#
+#course_manage_course_sync_edit:
+#    path:  /course/manage/course/sync/edit
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSyncEdit}
+#
+#
+#course_manage_order:
+#    path:  /course/{id}/manage/order
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
+#
+#course_manage_order_export_csv:
+#    path:  /course/{id}/manage/order/export
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
+#
+#
+#course_manage_files:
+#    path:  /course/{id}/manage/files
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
+#
+#course_manage_file_show:
+#    path:  /course/{id}/manage/file/{fileId}
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
+#
+#course_manage_file_convert:
+#    path:  /course/{id}/manage/file/{fileId}/convert
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:convert }
+#    methods: [POST]
+#
+#course_manage_file_status:
+#    path:  /course/manage/file/status
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
+#
+#course_manage_delete_materials:
+#    path:  /course/{id}/manage/delete/materials
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
+#    methods: [POST]
+#
+#course_manage_delete_materials_show:
+#    path:  /course/{id}/manage/show/delete/materials
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteMaterialShow }
+#    methods: [POST]
+#
+#course_manage_upload_course_files:
+#    path:  /course/{id}/manage/upload/course/files/{targetType}
+#    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
+#
+#course_manage_students:
+#    path:  /course/{id}/manage/students
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
+#
+#course_manage_record:
+#    path:  /course/{id}/manage/refund_record
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:refundRecord }
+#
+#course_manage_students_show:
+#    path:  /course/{courseId}/manage/students/{userId}/show
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
+#
+#course_manage_students_defined_show:
+#    path:  /course/{courseId}/manage/students/{userId}/defined_show
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
+#
+#course_manage_student_create:
+#    path:  /course/{id}/manage/student/create
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
+#
+#course_manage_student_export_csv:
+#    path:  /course/{id}/manage/student/export
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
+#
+#course_manage_student_export_datas:
+#    path:  /course/{id}/manage/student/export/datas
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportDatas }
+#
+#course_manage_student_remove:
+#    path:  /course/{courseId}/manage/student/{userId}/remove
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
+#    methods: [POST]
+#
+#course_manage_student_remark:
+#    path:  /course/{courseId}/manage/student/{userId}/remark
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
+#
+#course_manage_student_check:
+#    path:  /course/{id}/manage/student_check
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
+#
+#course_manage_student_import:
+#    path:  /course/{id}/manage/student/import
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
+#
+#course_manage_student_to_base:
+#    path:  /course/{id}/manage/student/importing
+#    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
+#    methods: [POST]
+#
+#course_manage_teachers_match:
+#    path: /course/{id}/manage/teachersMatch
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
+#
+#
+#course_manage_live_open_time_set:
+#    path:  /course/{id}/manage/live/open/time
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
+#
+#course_manage_lesson:
+#    path:  /course/{id}/manage/lesson
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }
+#
+#course_manage_lesson_create:
+#    path:  /course/{id}/manage/lesson/create
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+#
+#course_manage_lesson_file_status:
+#    path:  /course/{id}/manage/lesson/fileStatus
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+#
+#course_manage_lesson_batch_modal:
+#    path:  /course/{id}/manage/lesson/batch/modal
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
+#
+#course_manage_lesson_create_from_file:
+#    path:  /course/{id}/manage/lesson/create/from/file
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
+#
+#course_draft_create:
+#    path:  /course/draft/create
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
+#
+#course_draft_view:
+#    path:  /course/draft/view
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
+#
+#live_course_manage_lesson_create:
+#    path:  /course/{id}/manage/live/lesson/create
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }
+#
+#live_course_manage_lesson_edit:
+#    path:  /course/{courseId}/manage/live/lesson/{lessonId}/edit
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:edit }
+#
+#live_lesson_time_check:
+#    path:  /course/{id}/manage/live/lesson/time/check
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
+#
+#live_lesson_calculate_left_capacity:
+#    path:  /course/{courseId}/manage/livelesson/calculateLeftCapacity
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:calculateLeftCapacity }
+#
+#course_manage_lesson_create_testpaper:
+#    path:  /course/{id}/manage/lesson/create/testpaper
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestpaper }
+#
+#course_manage_lesson_sort:
+#    path:  /course/{id}/manage/lesson/sort
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
+#    methods: [POST]
+#
+#course_manage_lesson_edit:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/edit
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
+#
+#course_manage_lesson_edit_testpaper:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestpaper }
+#
+#course_manage_lesson_delete:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:delete }
+#    methods: [POST]
+#
+#course_manage_lesson_publish:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/publish
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:publish }
+#    methods: [POST]
+#
+#course_manage_lesson_unpublish:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
+#    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
+#    methods: [POST]
+#
+#question_file_url:
+#    path: /question_ajax/file_url
+#    defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
+#
+#course_manage_upload_question_attachment:
+#    path:  /course/{id}/manage/upload/question/attachment/{targetType}
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
+#
+#course_manage_question_attachment_download:
+#    path: /course/{id}/manage/question/attachment/{fileId}/download
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:attachmentDownload }
+#
+#course_manage_question_category:
+#    path: /course/{courseId}/manage/question/category
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:index }
+#
+#course_manage_question_category_create:
+#    path: /course/{courseId}/manage/question/category/create
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:create }
+#
+#course_manage_question_category_update:
+#    path: /course/{courseId}/manage/question/category/{id}/update
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:update }
+#
+#course_manage_question_category_delete:
+#    path: /course/{courseId}/manage/question/category/{id}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:delete }
+#    methods: [POST]
+#
+#course_manage_question_category_sort:
+#    path: /course/{courseId}/manage/question/category/sort
+#    defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
+#    methods: [POST]
+#
+#course_manage_real_time_testpaper_check:
+#    path:  /testpaper/real-time/check
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
+#
+#course_lesson_do_test:
+#    path: /lesson/{lessonId}/test/{testId}/do
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:doTestpaper }
+#
+#course_lesson_redo_test:
+#    path: /lesson/{lessonId}/test/{testId}/redo
+#    defaults: { _controller: TopxiaWebBundle:CourseLesson:reDoTestpaper }
+#
+#course_manage_show_test:
+#    path: /test/{id}/show
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:showTest }
+#
+#course_manage_preview_test:
+#    path: /test/{testId}/preview
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:previewTest }
+#
+#course_manage_do_test_pause:
+#    path: /test/pause
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:pauseTest }
+#
+#course_manage_do_test_suspend:
+#    path: /test/{id}/suspend
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:testSuspend }
+#
+#course_manage_submit_test:
+#    path: /test/{id}/submit
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:submitTest }
+#
+#course_manage_finish_test:
+#    path: /test/{id}/finish
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:finishTest }
+#
+#course_manage_test_results:
+#    path: /test/{id}/result
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:testResult }
+#
+#course_manage_test_teacher_check:
+#    path: /test/{id}/teacher/check
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
+#
+#course_manage_list_teacher_test_reviewing:
+#    path: /my/teacher/reviewing/test/list
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
+#
+#course_manage_list_teacher_test_finished:
+#    path: /my/teacher/finished/test/list
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
+#
+#course_manage_test_check:
+#    path: /course/check/{id}/{status}/list
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
+#
+#course_manage_testpaper_build_check:
+#    path: /course/{courseId}/manage/testpaper/build_check
+#    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
+#
+#course_manage_testpaper_items_reset:
+#    path: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
+#    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsReset }
+#
+#course_manage_testpaper_item_picker:
+#    path: /course/{courseId}/manage/testpaper/{testpaperId}/item_picker
+#    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicker }
+#
+#course_manage_testpaper_item_picked:
+#    path: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
+#    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
+#
+#course_manage_testpaper_get_question_num:
+#    path: /course/{courseId}/manage/testpaper/get_question_num
+#    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
+#
+#course_manage_material:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/material
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:index }
+#
+#course_manage_material_upload:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/material/upload
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:upload }
+#    methods: [POST]
+#
+#course_manage_material_delete:
+#    path:  /course/{courseId}/manage/lesson/{lessonId}/material/{materialId}/delete
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
+#    methods: [POST]
+#
+#course_manage_material_browser:
+#    path:  /course/{courseId}/manage/material/browser
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:browser }
+#
+#course_manage_material_create:
+#    path:  /course/{courseId}/manage/material/create
+#    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
+#
+#course_manage_media_library:
+#    path:  /course/{id}/manage/media/library
+#    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
+#
+#course_manage_media_import:
+#    path:  /course/{id}/manage/media/import
+#    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:import }
+#
+#course_manage_publish:
+#    path:  /course/{id}/manage/publish
+#    defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
+#    methods: [POST]
+#
+#course_lesson_marker_manage:
+#    path:  /course/{courseId}/lesson/{lessonId}/marker/manage
+#    defaults: { _controller: TopxiaWebBundle:Marker:manage }
+#
+#course_lesson_marker_manage_preview:
+#    path:  /course/{courseId}/lesson/{lessonId}/marker/preview
+#    defaults: { _controller: TopxiaWebBundle:Marker:preview }
+#
+#course_lesson_marker_show:
+#    path:  /course/lesson/{lessonId}/marker/show
+#    defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
+#
+#course_lesson_marker_metas:
+#    path:  /course/lesson/{mediaId}/marker/metas
+#    defaults: { _controller: TopxiaWebBundle:Marker:markerMetas }
+#
+#course_lesson_marker_merge:
+#    path:  /course/{courseId}/lesson/{lessonId}/marker/merge
+#    defaults: { _controller: TopxiaWebBundle:Marker:merge }
+#    methods: [POST]
+#
+#course_lesson_marker_update:
+#    path:  /course/{courseId}/lesson/{lessonId}/marker/update
+#    defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
+#    methods: [POST]
+#
+#course_question_marker_preview:
+#    path: /course/{courseId}/question/{id}/marker/preview
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:questionMakerPreview }
+#
+#course_lesson_question_markers_show:
+#    path:  /course/lesson/media/{mediaId}/question_markers/show
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionMakers }
+#
+#course_lesson_question_marker_finish:
+#    path:  /course/lesson/marker/{markerId}/question_marker/{questionMarkerId}/finish
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:finishQuestionMarker }
+#    methods: [POST]
+#
+#course_lesson_question_marker_add:
+#    path:  /course/{courseId}/lesson/{lessonId}/question_marker/add
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:addQuestionMarker }
+#    methods: [POST]
+#
+#course_lesson_question_marker_delete:
+#    path:  /course/{courseId}/lesson/{lessonId}/question_marker/delete
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:deleteQuestionMarker }
+#    methods: [POST]
+#
+#course_lesson_question_marker_sort:
+#    path:  /course/{courseId}/lesson/{lessonId}/question_marker/sort
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:sortQuestionMarker }
+#    methods: [POST]
+#
+#course_lesson_question_marker_list:
+#    path:  /course/{courseId}/lesson/{lessonId}/question_marker/list
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:question }
+#
+#course_lesson_question_marker_search:
+#    path:  /course/{courseId}/lesson/{lessonId}/question_marker/search
+#    defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
+#
+#media_play:
+#    path:  /media/{mediaId}/play
+#    defaults: { _controller: TopxiaWebBundle:Media/Index:play }
+#
+#media_subtitle_preview:
+#    path:  /media/{mediaId}/subtitles/preview
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:preview }
+#
+#media_subtitle_manage:
+#    path:  /media/{mediaId}/subtitles/manage
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:manage }
+#
+#media_subtitle_list:
+#    path:  /media/{mediaId}/subtitles
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:list }
+#
+#media_subtitle_create:
+#    path:  /media/{mediaId}/subtitle/create
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:create }
+#    methods: [POST]
+#
+#media_subtitle_delete:
+#    path:  /media/{mediaId}/subtitle/{id}/delete
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:delete }
+#    methods: [POST]
+#
+#media_subtitle_manage_dialog:
+#    path:  /media/subtitles/manage/dialog
+#    defaults: { _controller: TopxiaWebBundle:Subtitle:manageDialog }
+#
+#announcement_list:
+#    path: /announcement/{targetType}/{targetId}/list
+#    defaults: {_controller:TopxiaWebBundle:Announcement:list }
+#
+#announcement_show_all:
+#    path:  /announcement/{targetType}/{targetId}/all
+#    defaults: { _controller: TopxiaWebBundle:Announcement:showAll }
+#
+#announcement_add:
+#    path:  /announcement/{targetType}/{targetId}/create
+#    defaults: { _controller: TopxiaWebBundle:Announcement:create }
+#
+#announcement_show:
+#    path:  /announcement/{id}/{targetId}/show
+#    defaults: { _controller: TopxiaWebBundle:Announcement:show }
+#
+#announcement_manage:
+#    path:  /announcement/{targetType}/{targetId}/manage
+#    defaults: { _controller: TopxiaWebBundle:Announcement:manage }
+#
+#announcement_update:
+#    path:  /announcement/{id}/{targetType}/{targetId}/update
+#    defaults: { _controller: TopxiaWebBundle:Announcement:update }
+#
+#announcement_delete:
+#    path:  /announcement/{id}/{targetType}/{targetId}/delete
+#    defaults: { _controller: TopxiaWebBundle:Announcement:delete }
+#    methods: [POST]
+#
+#testpaper_user_result_json:
+#    path:  /testpaper/{id}/user_result/json
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:userResultJson }
+#
+#search:
+#    path:  /search
+#    defaults: { _controller: TopxiaWebBundle:Search:index }
+#
+#cloud_search:
+#    path:  /cloud/search
+#    defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
+#
+#settings:
+#    path:  /settings/
+#    defaults: { _controller: TopxiaWebBundle:Settings:profile }
+#
+#settings_avatar:
+#    path:  /settings/avatar
+#    defaults: { _controller: TopxiaWebBundle:Settings:avatar }
+#
+#settings_avatar_crop:
+#    path:  /settings/avatar/crop
+#    defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+#
+#settings_avatar_crop_modal:
+#    path:  /settings/avatar/crop/modal
+#    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
+#
+#settings_avatar_fetch_partner:
+#    path:  /settings/avatar/fetch_partner
+#    defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
+#    methods: [POST]
+#
+#settings_security:
+#    path:  /settings/security
+#    defaults: { _controller: TopxiaWebBundle:Settings:security }
+#
+#settings_set_pay_password:
+#    path:  /settings/set_pay_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
+#
+#settings_set_password:
+#    path:  /settings/set_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:setPassword }
+#
+#settings_pay_password:
+#    path:  /settings/pay_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
+#
+#settings_reset_pay_password:
+#    path:  /settings/reset_pay_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
+#
+#settings_find_pay_password:
+#    path:  /settings/find_pay_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
+#
+#settings_update_pay_password:
+#    path:  /settings/update_pay_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
+#
+#settings_security_questions:
+#    path:  /settings/security_questions
+#    defaults: { _controller: TopxiaWebBundle:Settings:securityQuestions }
+#
+#setting_nickname:
+#    path: /settings/nickname
+#    defaults: { _controller: TopxiaWebBundle:Settings:nickname }
+#
+#update_nickname_check:
+#    path:  /settings/nickname/check
+#    defaults: { _controller: TopxiaWebBundle:Settings:nicknameCheck }
+#
+#settings_password:
+#    path:  /settings/password
+#    defaults: { _controller: TopxiaWebBundle:Settings:password }
+#
+#settings_email:
+#    path:  /settings/email
+#    defaults: { _controller: TopxiaWebBundle:Settings:email }
+#
+#settings_email_verify:
+#    path:  /settings/email/verify
+#    defaults: { _controller: TopxiaWebBundle:Settings:emailVerify }
+#    methods: [POST]
+#
+#settings_binds:
+#    path:  /settings/binds
+#    defaults: { _controller: TopxiaWebBundle:Settings:binds }
+#
+#settings_binds_unbind:
+#    path: /settings/unbind/{type}
+#    defaults: { _controller: TopxiaWebBundle:Settings:unBind  }
+#
+#settings_binds_bind:
+#    path: /settings/bind/{type}
+#    defaults: { _controller: TopxiaWebBundle:Settings:bind }
+#
+#settings_binds_bind_callback:
+#    path: /settings/bind/{type}/callback
+#    defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
+#
+#settings_setup:
+#    path: /settings/setup
+#    defaults: { _controller: TopxiaWebBundle:Settings:setup }
+#
+#settings_setup_password:
+#    path: /settings/setup_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:setupPassword }
+#
+#settings_setup_check_nickname:
+#    path: /settings/setup/check_nickname
+#    defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }
+#
+#auth_email_confirm:
+#    path:  /auth/email/confirm
+#    defaults: { _controller: TopxiaWebBundle:Auth:emailConfirm }
+#
+#password_reset:
+#    path:  /password/reset
+#    defaults: { _controller: TopxiaWebBundle:PasswordReset:index }
+#
+#password_reset_update:
+#    path:  /password/reset/update
+#    defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
+#
+#raw_password_update:
+#    pattern: /raw/password/update
+#    defaults: { _controller: TopxiaWebBundle:PasswordReset:changeRawPassword }
+#
+#password_reset_check_mobile:
+#    path:  /password/reset/check/mobile
+#    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
+#
+#browser_upgrade:
+#    path:  /browser/upgrade
+#    defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
+#
+#category_all:
+#    path: /category/all
+#    defaults: { _controller: TopxiaWebBundle:Category:all }
+#
+#location_all:
+#    path: /location/all
+#    defaults: { _controller: TopxiaWebBundle:Location:all }
+#
+#tag:
+#    path: /tag
+#    defaults: { _controller: TopxiaWebBundle:Tag:index }
+#
+#tag_all:
+#    path: /tag/all_jsonm
+#    defaults: { _controller: TopxiaWebBundle:Tag:all }
+#
+#tag_match:
+#    path: /tag/match_jsonp
+#    defaults: { _controller: TopxiaWebBundle:Tag:match }
+#
+#tag_show:
+#    path: /tag/{name}
+#    defaults: { _controller: TopxiaWebBundle:Tag:show }
+#
+#following_match_bynickname:
+#    path: /following/bynickname/match_jsonp
+#    defaults: { _controller: TopxiaWebBundle:Message:match }
+#
+#comment_widget_init:
+#    path:  /comment-widget/init
+#    defaults: { _controller: TopxiaWebBundle:CommentWidget:init }
+#
+#comment_widget_create:
+#    path:  /comment-widget/create
+#    defaults: { _controller: TopxiaWebBundle:CommentWidget:create }
+#
+#comment_widget_delete:
+#    path:  /comment-widget/delete
+#    defaults: { _controller: TopxiaWebBundle:CommentWidget:delete }
+#    methods: [POST]
+#
+#notification:
+#    path: /notification
+#    defaults: { _controller: TopxiaWebBundle:Notification:index }
+#
+#batch_notification_show:
+#    path: /notification/{id}
+#    defaults: { _controller:TopxiaWebBundle:Notification:show }
+#
+#my:
+#    path: /my
+#    defaults: { _controller: TopxiaWebBundle:MyCourse:index }
+#
+#my_task_calendar:
+#   path: /my/task
+#   defaults: { _controller: TopxiaWebBundle:MyTask:index }
+#
+#my_teaching_courses:
+#    path: /my/teaching/courses/{filter}
+#    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses, filter:'normal' }
+#
+#my_teaching_open_courses:
+#    path: /my/teaching/open/courses/{filter}
+#    defaults: { _controller: TopxiaWebBundle:MyTeaching:openCourses, filter:'open'}
+#
+#my_teaching_threads:
+#    path: /my/teaching/threads/{type}
+#    defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
+#
+#my_teaching_classrooms:
+#    path: /my/teaching/classrooms
+#    defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
+#
+#my_live_courses_learning:
+#    path: /my/livecourses/learing
+#    defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
+#
+#my_courses_learned:
+#    path: /my/courses/learned
+#    defaults: { _controller: TopxiaWebBundle:MyCourse:learned }
+#
+#my_courses_favorited:
+#    path: /my/courses/favorited
+#    defaults: { _controller: TopxiaWebBundle:MyCourse:favorited }
+#
+#my_notebook_show:
+#    path: /my/notebook/{courseId}
+#    defaults: { _controller: TopxiaWebBundle:MyNotebook:show }
+#
+#my_note_delete:
+#    path: /my/note/{id}/delete
+#    defaults: { _controller: TopxiaWebBundle:MyNotebook:noteDelete }
+#    methods: [POST]
+#
+#my_orders:
+#    path: /my/orders
+#    defaults: { _controller: TopxiaWebBundle:MyOrder:index }
+#
+#my_order_cancel:
+#    path: /my/order/{id}/cancel
+#    defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
+#    methods: [POST]
+#
+#web_user_order_detail:
+#    path: /my/order/{id}/detail
+#    defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
+#
+#my_order_cancel_refund:
+#    path: /my/order/{id}/cancel_refund
+#    defaults: { _controller: TopxiaWebBundle:MyOrder:cancelRefund }
+#    methods: [POST]
+#
+#my_refunds:
+#    path: /my/refunds
+#    defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
+#
+#income_records:
+#    path: /my/income_records
+#    defaults: { _controller: TopxiaWebBundle:MoneyRecord:index }
+#
+#payout_records:
+#    path: /my/payout_records
+#    defaults: { _controller: TopxiaWebBundle:MoneyRecord:payout }
+#
+#my_quiz:
+#    path: /my/quiz
+#    defaults: { _controller: TopxiaWebBundle:Testpaper:index }
+#
+#my_favorite_question:
+#    path: /question/{id}/favorite
+#    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
+#
+#my_unfavorite_question:
+#    path: /question/{id}/unfavorite
+#    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
+#
+#my_show_favorite_question:
+#    path: /my/favorite/question/show
+#    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
+#
+#my_favorite_question_preview:
+#    path: /my/favorite/question/{id}/preview
+#    defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
+#
+#user_show:
+#    path:  /user/{id}
+#    defaults: { _controller: TopxiaWebBundle:User:show }
+#
+#my_page_show:
+#    path:  /my/page/show
+#    defaults: { _controller: TopxiaWebBundle:User:pageShow }
+#
+#user_about:
+#    path:  /user/{id}/about
+#    defaults: { _controller: TopxiaWebBundle:User:about }
+#
+#user_teach:
+#    path:  /user/{id}/teach
+#    defaults: { _controller: TopxiaWebBundle:User:teach }
+#
+#user_learn:
+#    path:  /user/{id}/learn
+#    defaults: { _controller: TopxiaWebBundle:User:learn }
+#
+#user_favorited:
+#    path:  /user/{id}/favorited
+#    defaults: { _controller: TopxiaWebBundle:User:favorited }
+#
+#user_group:
+#    path:  /user/{id}/group
+#    defaults: { _controller: TopxiaWebBundle:User:group }
+#
+#user_following:
+#    path:  /user/{id}/following
+#    defaults: { _controller: TopxiaWebBundle:User:following }
+#
+#user_follower:
+#    path:  /user/{id}/follower
+#    defaults: { _controller: TopxiaWebBundle:User:follower }
+#
+#user_follow:
+#    path:  /user/{id}/follow
+#    defaults: { _controller: TopxiaWebBundle:User:follow }
+#    methods: [POST]
+#
+#user_unfollow:
+#    path:  /user/{id}/unfollow
+#    defaults: { _controller: TopxiaWebBundle:User:unfollow }
+#    methods: [POST]
+#
+#user_remind_counter:
+#    path:  /user_remind_counter
+#    defaults: { _controller: TopxiaWebBundle:User:remindCounter }
+#
+#user_teaching_classrooms:
+#    path:  /user/{id}/teaching/classrooms
+#    defaults: { _controller: TopxiaWebBundle:User:teaching }
+#
+#user_learning_classrooms:
+#    path:  /user/{id}/learning/classrooms
+#    defaults: { _controller: TopxiaWebBundle:User:learning }
+#
+#user_card_show:
+#    path:  /user/{userId}/card/show
+#    defaults: { _controller: TopxiaWebBundle:User:cardShow }
+#
+#login_after_fill_userinfo:
+#    path:  /fill/userinfo
+#    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
+#
+#message_create:
+#    path: /message/create/{toId}
+#    defaults: { _controller: TopxiaWebBundle:Message:create }
+#
+#message:
+#    path: /message/
+#    defaults: { _controller: TopxiaWebBundle:Message:index }
+#
+#message_check_receiver:
+#    path: /message/check/receiver
+#    defaults: { _controller: TopxiaWebBundle:Message:checkReceiver }
+#
+#message_send:
+#    path: /message/send/
+#    defaults: { _controller: TopxiaWebBundle:Message:send }
+#
+#message_send_to_receiver:
+#    path: /message/send/{receiverId}/to/receiver/
+#    defaults: { _controller: TopxiaWebBundle:Message:sendTo }
+#
+#message_conversation_show:
+#    path: /message/conversation/{conversationId}
+#    defaults: { _controller: TopxiaWebBundle:Message:showConversation }
+#
+#message_conversation_delete:
+#    path: /message/conversation/{conversationId}/delete
+#    defaults: { _controller: TopxiaWebBundle:Message:deleteConversation }
+#    methods: [POST]
+#
+#message_delete:
+#    path: /message/conversation/{conversationId}/message/{messageId}/delete
+#    defaults: { _controller: TopxiaWebBundle:Message:deleteConversationMessage }
+#    methods: [POST]
+#
+#content_article_show:
+#    path: /carticle/{alias}
+#    defaults: {_controller: TopxiaWebBundle:Content:articleShow }
+#
+#content_article_list:
+#    path: /carticle
+#    defaults: {_controller: TopxiaWebBundle:Content:articleList }
+#
+#content_activity_show:
+#    path: /activity/{alias}
+#    defaults: {_controller: TopxiaWebBundle:Content:activityShow }
+#
+#content_activity_list:
+#    path: /activity
+#    defaults: {_controller: TopxiaWebBundle:Content:activityList }
+#
+#content_page_show:
+#    path: /page/{alias}
+#    defaults: {_controller: TopxiaWebBundle:Content:pageShow }
+#
+#content_course_rule:
+#    path: /courserule
+#    defaults: {_controller: TopxiaWebBundle:CourseManage:courseRule }
+#
+#content_page_list:
+#    path: /page
+#    defaults: {_controller: TopxiaWebBundle:Content:pageList }
+#
+#teacher:
+#    path: /teacher
+#    defaults: {_controller: TopxiaWebBundle:Teacher:index }
+#
+#teacher_search:
+#    path: /teacher/search
+#    defaults: {_controller: TopxiaWebBundle:Teacher:search }
+#
+#partner_login:
+#    path: /partner/login
+#    defaults: {_controller: TopxiaWebBundle:Partner:login }
+#
+#partner_logout:
+#    path: /partner/logout
+#    defaults: {_controller: TopxiaWebBundle:Partner:logout }
+#
+#partner_discuz_notify:
+#    path:  /partner/discuz/api/notify
+#    defaults: {_controller: TopxiaWebBundle:PartnerDiscuz:notify }
+#
+#partner_phpwind_notify:
+#    path: /partner/phpwind/api/notify
+#    defaults: {_controller: TopxiaWebBundle:PartnerPhpwind:notify }
+#
+#cloud_set_server:
+#    path: /cloud/set-server
+#    defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
+#
+#cloud_oldkeys:
+#    path: /cloud/oldkeys
+#    defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
+#
+#cloud_reconvert_old_file:
+#    path: /cloud/reconvert_old_file
+#    defaults: {_controller: TopxiaWebBundle:Cloud:reconvertOldFile }
+#
+#cloud_video_fingerprint:
+#    path: /cloud/video_fingerprint
+#    defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
+#
+#cloud_ppt_watermark:
+#    path: /cloud/ppt_watermark
+#    defaults: {_controller: TopxiaWebBundle:Cloud:pptWatermark }
+#
+#cloud_doc_watermark:
+#    path: /cloud/doc_watermark
+#    defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
+#
+#cloud_testpaper_watermark:
+#    path: /cloud/testpaper_watermark
+#    defaults: {_controller: TopxiaWebBundle:Cloud:testpaperWatermark }
+#
+#systeminfo:
+#    path: /systeminfo
+#    defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
+#
+#setting_approval_submit:
+#    path: /settings/approval/submit
+#    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
+#
+#article_show:
+#    path: /article
+#    defaults: { _controller: TopxiaWebBundle:Article:index }
+#
+#article_detail:
+#    path: /article/{id}
+#    defaults: { _controller: TopxiaWebBundle:Article:detail }
+#
+#article_category:
+#    path: /article/category/{categoryCode}
+#    defaults: { _controller: TopxiaWebBundle:Article:category, category:'' }
+#
+#article_post:
+#    path: /article/{id}/post
+#    defaults: { _controller: TopxiaWebBundle:Article:post }
+#    methods: [POST]
+#
+#article_post_reply:
+#    path:  /article/{articleId}/post/{postId}/
+#    defaults: { _controller: TopxiaWebBundle:Article:postReply }
+#    methods: [POST]
+#
+#article_like:
+#    path: /article/{articleId}/like
+#    defaults: { _controller: TopxiaWebBundle:Article:like }
+#    methods: [POST]
+#
+#article_cancel_like:
+#    path: /article/{articleId}/canceLike
+#    defaults: { _controller: TopxiaWebBundle:Article:cancelLike }
+#    methods: [POST]
+#
+#article_post_jump:
+#    path: /article/{articleId}/post/{postId}/jump
+#    defaults: { _controller: TopxiaWebBundle:Article:postJump }
+#
+#article_tag_show:
+#    path: /article/tag/{name}
+#    defaults: { _controller: TopxiaWebBundle:Article:tag }
+#
+#
+#mobile:
+#    path: /mobile/
+#    defaults: { _controller: TopxiaWebBundle:Mobile:index }
+#
+#mobile_download_qrcode:
+#    path: /mobile/downloadQrcode
+#    defaults: { _controller: TopxiaWebBundle:Mobile:downloadQrcode }
+#
+#mobile_download:
+#    path: /mobile/download
+#    defaults: { _controller: TopxiaWebBundle:Mobile:download }
+#
+#group:
+#    path:  /group
+#    defaults: { _controller: TopxiaWebBundle:Group:index }
+#group_search_group:
+#    path:  /group/search_group
+#    defaults: { _controller: TopxiaWebBundle:Group:search }
+#group_add:
+#    path:  /group/add
+#    defaults: { _controller: TopxiaWebBundle:Group:addGroup }
+#
+#group_show:
+#    path:  /group/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
+#group_join:
+#    path:  /group/{id}/join
+#    defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
+#group_exit:
+#    path:  /group/{id}/exit
+#    defaults: { _controller: TopxiaWebBundle:Group:groupExit }
+#group_member:
+#    path:  /group/member/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:groupMember }
+#group_member_delete:
+#    path:  /group/member/delete/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
+#    methods: [POST]
+#group_set_admin:
+#    path:  /group/set/admin/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
+#group_remove_admin:
+#    path:  /group/remove/admin/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:removeAdmin }
+#group_set:
+#    path:  /group/{id}/setting/info
+#    defaults: { _controller: TopxiaWebBundle:Group:groupSet }
+#group_setLogoCrop:
+#    path:  /group/{id}/setting/logoCrop
+#    defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
+#group_logo_set:
+#    path:  /group/{id}/setting/logo
+#    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
+#group_edit:
+#    path:  /group/info/edit/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
+#group_backgroundlogo_set:
+#    path:  /group/set/backgroundlogo/{id}
+#    defaults: { _controller: TopxiaWebBundle:Group:setGroupBackgroundLogo }
+#group_search:
+#    path:  /group/{id}/serach
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
+#group_thread_post:
+#    path:  /group/thread/{groupId}/{threadId}/post
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
+#group_thread_add:
+#    path:  /group/{id}/thread/create
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:addThread }
+#group_thread_update:
+#    path:  /group/{id}/thread/{threadId}/update
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:updateThread }
+#group_thread_check_user:
+#    path:  /mygroup/checkuser
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:checkUser }
+#group_thread_show:
+#    path:  /group/{id}/thread/{threadId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+#group_thread_collect:
+#    path:  /group/thread/{threadId}/collect
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
+#    methods: [POST]
+#group_thread_uncollect:
+#    path:  /group/thread/{threadId}/uncollect
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
+#    methods: [POST]
+#group_thread_setElite:
+#    path:  /group/thread/{threadId}/setElite
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
+#group_thread_removeElite:
+#    path:  /group/thread/{threadId}/removeElite
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:removeElite }
+#group_thread_setStick:
+#    path:  /group/thread/{threadId}/setStick
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:setStick }
+#group_thread_removeStick:
+#    path:  /group/thread/{threadId}/removeStick
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:removeStick }
+#group_thread_closeThread:
+#    path:  /group/thread/{threadId}/closeThread/{memberId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:closeThread }
+#group_thread_deletePost:
+#    path:  /group/thread/deletePost/{postId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+#    methods: [POST]
+#group_thread_post_reply:
+#    path:  /group/post/{postId}/reply
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+#group_thread_reward:
+#    path:  /thread/{threadId}/reward
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:reward }
+#group_thread_cancel_reward:
+#    path:  /thread/{threadId}/reward/cancel
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:cancelReward }
+#group_thread_adopt:
+#    path:  /thread/{postId}/adopt
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
+#group_thread_hide:
+#    path:  /thread/{threadId}/hide
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
+#group_upload:
+#    path:  /group/thread/upload
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:upload }
+#group_attach_download:
+#    path:  /group/attach/download/{fileId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:download }
+#group_thread_buy_attach:
+#    path:  /group/attach/buy/{attachId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:buyAttach }
+#group_thread_delete_attach:
+#    path:  /group/attach/delete/{goodsId}
+#    defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
+#    methods: [POST]
+#
+#my_bill:
+#    path: /my/bill
+#    defaults: { _controller: TopxiaWebBundle:Coin:cashBill }
+#my_coin:
+#    path:     /my/coin
+#    defaults: { _controller: TopxiaWebBundle:Coin:index }
+#my_invite_code:
+#    path:     /my/invitecode
+#    defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
+#
+#invite_promote_link:
+#    path:     /my/invitecode/promotelink
+#    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
+#
+#write_invitecode:
+#    path:     /my/invitecode/writeinvitecode
+#    defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
+#receive_coupon:
+#    path:     /my/invitecode/receivecoupon
+#    defaults: { _controller: TopxiaWebBundle:Coin:receiveCoupon }
+#
+#coin_pay:
+#    path:     /coin/pay
+#    defaults: { _controller: TopxiaWebBundle:Coin:pay }
+#coin_change:
+#    path:     /coin/change
+#    defaults: { _controller: TopxiaWebBundle:Coin:change }
+#coin_show:
+#    path:     /coin/show
+#    defaults: { _controller: TopxiaWebBundle:Coin:show }
+#
+#user_password_check:
+#    path:   /user/password/check
+#    defaults: { _controller: TopxiaWebBundle:User:checkPassword }
+#
+#pay_center_show:
+#    path:   /pay/center
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:show }
+#
+#pay_center_pay:
+#    path:   /pay/center/pay
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
+#    methods: [POST]
+#
+#pay_center_auth_unbind:
+#    path:   /pay/center/auth_unbind
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:unbindAuth}
+#    methods: [POST]
+#
+#auth_unbind_mobile_show:
+#    path:   /pay/center/mobile_show
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:showMobile }
+#
+#pay_return:
+#    path:  /pay/center/pay/{name}/return
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
+#
+#pay_notify:
+#    path:  /pay/center/pay/{name}/notify
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:payNotify }
+#
+#pay_success_show:
+#    path:  /pay/center/success/show
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:showTarget }
+#
+#pay_password_check:
+#    path:  /pay/password/check
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
+#
+#pay_error:
+#    path:  /pay/error
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:payError }
+#
+#pay_result_notice:
+#    path: /pay/result/notice
+#    defaults: { _controller: TopxiaWebBundle:PayCenter:resultNotice }
+#
+#wxpay_roll:
+#    path: /pay/wxpay/roll
+#    defaults: {_controller: TopxiaWebBundle:PayCenter:wxpayRoll }
+#
+#order_show:
+#    path:  /order/show
+#    defaults: { _controller: TopxiaWebBundle:Order:show }
+#
+#order_create:
+#    path:  /order/create
+#    defaults: { _controller: TopxiaWebBundle:Order:create }
+#    methods: [POST]
+#
+#course_buy:
+#    path: /course/{id}/buy
+#    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+#
+#course_buy_modify_user_info:
+#    path: /course/buy/modify_user_info
+#    defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
+#
+#thread_jump:
+#    path:  /thread/{threadId}/jump
+#    defaults: { _controller: TopxiaWebBundle:Thread:jump }
+#
+#thread_post_jump:
+#    path:  /thread/{threadId}/post/{postId}/jump
+#    defaults: { _controller: TopxiaWebBundle:Thread:postJump }
+#
+#thread_post:
+#    path:  /thread/{threadId}/post
+#    defaults: { _controller: TopxiaWebBundle:Thread:post }
+#
+#thread_post_reply:
+#    path:  /thread/{threadId}/post/{postId}/
+#    defaults: { _controller: TopxiaWebBundle:Thread:postReply }
+#    methods: [POST]
+#
+#thread_post_subposts:
+#    path:  /thread/{threadId}/post/{postId}/subposts
+#    defaults: { _controller: TopxiaWebBundle:Thread:subposts, threadId:0 }
+#
+#article_post_subposts:
+#    path:  /article/{targetId}/post/{postId}/subposts
+#    defaults: { _controller: TopxiaWebBundle:Article:subposts }
+#
+#thread_post_delete:
+#    path:  /thread/{threadId}/post/{postId}/delete
+#    defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
+#    methods: [POST]
+#
+#thread_post_up:
+#    path:  /thread/{threadId}/post/{postId}/up
+#    defaults: { _controller: TopxiaWebBundle:Thread:postUp }
+#    methods: [POST]
+#
+#thread_delete:
+#    path: /thread/{threadId}/delete
+#    defaults: { _controller: TopxiaWebBundle:Thread:delete }
+#    methods: [POST]
+#
+#thread_set_sticky:
+#    path: /thread/{threadId}/set_sticky
+#    defaults: { _controller: TopxiaWebBundle:Thread:setSticky }
+#    methods: [POST]
+#
+#thread_cancel_sticky:
+#    path: /thread/{threadId}/cancel_sticky
+#    defaults: { _controller: TopxiaWebBundle:Thread:cancelSticky }
+#    methods: [POST]
+#
+#thread_set_nice:
+#    path: /thread/{threadId}/set_nice
+#    defaults: { _controller: TopxiaWebBundle:Thread:setNice }
+#    methods: [POST]
+#
+#thread_cancel_nice:
+#    path: /thread/{threadId}/cancel_nice
+#    defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
+#    methods: [POST]
+#
+#thread_export_members:
+#    path: /thread/{threadId}/export/members
+#    defaults: { _controller: TopxiaWebBundle:Thread\Member:export }
+#
+#ajax_thread_member_show:
+#    path: /ajax/thread/{threadId}/members
+#    defaults: { _controller: TopxiaWebBundle:Thread\Member:ajaxFindMembers }
+#    methods: [GET]
+#
+##占位
+#vip:
+#    path: /vip/
+#
+#vip_buy:
+#    path: /vip/buy
+#
+#vip_renew:
+#    path: /vip/renew
+#
+#vip_upgrade:
+#    path: /vip/upgrade
+#
+#edu_cloud_sms_send:
+#    path:  /edu_cloud/sms_send
+#    defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
+#    methods: [POST]
+#
+#edu_cloud_sms_check:
+#    path:  /edu_cloud/sms_check/{type}
+#    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
+#
+#edu_cloud_sms_send_callback:
+#    path:  /edu_cloud/sms/callback/{targetType}/{targetId}
+#    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
+#
+#edu_cloud_search_callback:
+#    path:  /edu_cloud/search/callback
+#    defaults: { _controller: TopxiaWebBundle:EduCloud:searchCallBack }
+#
+#settings_bind_mobile:
+#    path:  /settings/bind_mobile
+#    defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
+#
+#settings_check_login_password:
+#    path:  /settings/check_login_password
+#    defaults: { _controller: TopxiaWebBundle:Settings:passwordCheck }
+#    methods: [POST]
+#
+#password_reset_by_sms:
+#    path:  /password/reset/by_sms
+#    defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
+#    methods: [POST]
+#
+#settings_find_pay_password_by_sms:
+#    path:  /settings/find_pay_password_by_sms
+#    defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
+#
+#order_pay_sms_verification:
+#    path:  /order/sms_verification
+#    defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
+#
+#edu_cloud_sms_callback:
+#    path:  /edu_cloud/sms_callback
+#    defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
+#    methods: [POST]
+#
+#course_note_like:
+#    path:  /course/note/{noteId}/like
+#    defaults: { _controller: TopxiaWebBundle:Course/Note:like }
+#    methods: [POST]
+#
+#course_note_cancel_like:
+#    path:  /course/note/{noteId}/cancel_like
+#    defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
+#    methods: [POST]
+#
+#common_parse_qrcode:
+#    path: /qrcode/parse/{token}
+#    defaults: {_controller: TopxiaWebBundle:Common:parseQrcode}
+#
+#esbar_my_classroom:
+#    path:  /esbar/my/classroom
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
+#
+#esbar_my_course:
+#    path:  /esbar/my/course
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:course }
+#
+#esbar_my_notify:
+#    path:  /esbar/my/notify
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
+#
+#esbar_my_practice:
+#    path:  /esbar/my/practice/{status}
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+#
+#esbar_my_study_center:
+#    path:  /esbar/my/study_center
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
+#
+#my_cards:
+#    path:  /my/cards
+#    defaults: { _controller: TopxiaWebBundle:Card:index }
+#
+#my_useable_coupons:
+#    path: /my/useable_coupons
+#    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
+#
+#card_info:
+#    path:  /card/info
+#    defaults: { _controller: TopxiaWebBundle:Card:cardInfo }
+#
+#sms_prepare:
+#    path:  /sms/prepare/{targetType}/{id}
+#    defaults: { _controller: TopxiaWebBundle:Sms:prepare }
+#
+#publish_sms_send:
+#    path:  /publish/sms_send/{targetType}/{id}
+#    defaults: { _controller: TopxiaWebBundle:Sms:send }
+#
+#generate_short_link:
+#    path:  /generate/short/link
+#    defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
+#
+#live_course_manage_lesson_replay_edit:
+#    path:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/edit
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:editLessonReplay }
+#
+#live_course_manage_lesson_replay_title_update:
+#    path:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
+#    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
+#    methods: [POST]
+#
+#open_course_explore:
+#    path:  /open/course/explore
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:explore }
+#
+#open_course_manage:
+#    path:  /open/course/{id}/manage
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:index }
+#
+#open_course_manage_publish:
+#    path:  /open/course/{id}/manage/publish
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:publish }
+#
+#open_course_manage_base:
+#    path:  /open/course/{id}/manage/base
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:base }
+#
+#open_course_manage_lesson:
+#    path:  /open/course/{id}/manage/lesson
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:lesson }
+#
+#open_course_manage_lesson_create:
+#    path:  /open/course/{id}/manage/lesson/create
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:create }
+#
+#open_course_manage_lesson_edit:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:edit }
+#
+#open_course_manage_lesson_publish:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/publish
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:publish }
+#
+#open_course_manage_lesson_delete:
+#    path: /open/course/{courseId}/manage/lesson/{lessonId}/delete
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:delete}
+#
+#open_course_manage_lesson_unpublish:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/unpublish
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:unpublish }
+#
+#open_course_manage_lesson_sort:
+#    path:  /open/course/{id}/manage/lesson/sort
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:sort }
+#    methods: [POST]
+#
+#open_course_manage_picture:
+#    path:  /open/course/{id}/manage/picture
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:picture }
+#
+#open_course_manage_picture_crop:
+#    path:  /open/course/{id}/manage/picture/crop
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pictureCrop }
+#
+#open_course_manage_teachers:
+#    path:  /open/course/{id}/manage/teachers
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:teachers }
+#
+#open_course_manage_live_time_set:
+#    path:  /open/course/{id}/manage/live/time
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
+#
+#open_course_manage_marketing:
+#    path:  /open/course/{id}/manage/marketing
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
+#
+#open_course_manage_students:
+#    path:  /open/course/{id}/manage/students
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:students }
+#
+#open_course_manage_files:
+#    path:  /open/course/{id}/manage/files
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:index }
+#
+#open_course_manage_file_show:
+#    path:  /open/course/{id}/manage/file/{fileId}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:show }
+#
+#open_course_manage_file_convert:
+#    path:  /open/course/{id}/manage/file/{fileId}/convert
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:convert }
+#    methods: [POST]
+#
+#open_course_manage_files_batch_upload:
+#    path:  /open/course/{id}/manage/files/batch/upload/{targetType}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:batchUploadCourseFiles }
+#
+#open_course_manage_files_upload:
+#    path:  /open/course/{id}/manage/files/upload/{targetType}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles }
+#
+#open_course_manage_delete_materials_show:
+#    path:  /open/course/{id}/manage/show/delete/materials
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteMaterialShow }
+#    methods: [POST]
+#
+#open_course_manage_files_delete:
+#    path:  /open/course/{id}/manage/materials/delete
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
+#    methods: [POST]
+#
+#open_course_manage_course_pick:
+#    path: /open/course/{id}/manage/recommend/pick/{filter}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
+#
+#open_course_manage_recommend_course_delete:
+#    path: /open/course/{id}/manage/recommend/{recommendId}/delete
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:deleteRecommendCourse}
+#    methods: [POST]
+#
+#open_course_manage_lesson_replays_edit:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replays/edit
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:editLessonReplay }
+#
+#open_course_manage_replay_title_update:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:updateReplayTitle }
+#    methods: [POST]
+#
+#open_course_manage_student_export_csv:
+#    path:  /open/course/{id}/manage/student/export
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
+#
+#open_course_manage_student_export_datas:
+#    path:  /open/course/{id}/manage/student/export/datas
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExportDatas }
+#
+#open_course_manage_material:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialModal }
+#
+#open_course_manage_material_upload:
+#    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material/upload
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialUpload }
+#    methods: [POST]
+#
+#open_course_manage_material_delete:
+#    path:  /open/course/{courseId}/manage/material/{materialId}/delete
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialDelete }
+#    methods: [POST]
+#
+#open_course_material_download:
+#    path:  /open/course/{courseId}/material/{materialId}/download
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:materialDownload }
+#
+#open_course_manage_material_browser:
+#    path:  /open/course/{courseId}/manage/material/browser
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialBrowser }
+#
+#open_course_course_search:
+#    path: /open/course/{id}/recommended/search/{filter}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
+#
+#open_course_recommended_course_select:
+#    path: /open/course/{id}/recommended/select
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendedCoursesSelect}
+#
+#open_course_show:
+#    path:  /open/course/{courseId}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
+#
+#open_course_lesson_learn:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/learn
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
+#
+#open_course_lesson_show:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/show
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:lessonShow }
+#
+#open_course_favorite:
+#    path: /open/course/{id}/favorite
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:favorite }
+#    methods: [POST]
+#
+#open_course_unfavorite:
+#    path: /open/course/{id}/unfavorite
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:unfavorite }
+#    methods: [POST]
+#
+#open_course_like:
+#    path: /open/course/{id}/like
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:like }
+#    methods: [POST]
+#
+#open_course_unlike:
+#    path: /open/course/{id}/unlike
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:unlike }
+#    methods: [POST]
+#
+#open_course_post:
+#    path:  /open/course/{id}/post
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:post }
+#
+#open_course_post_reply:
+#    path:  /open/course/{id}/post/{postId}
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:postReply }
+#    methods: [POST]
+#
+#live_open_course_play:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/live_entry
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entry }
+#
+#live_open_course_manage_replay:
+#    path:  /open/course/{id}/manage/replay
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:replayManage }
+#
+#live_open_course_lesson_replay_create:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
+#
+#live_open_course_lesson_replay_upload:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:uploadModal }
+#
+#live_open_course_live_replay_entry:
+#    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entryReplay }
+#
+#live_open_course_live_replay_url:
+#    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url
+#    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:getReplayUrl }
+#
+#live_open_lesson_time_check:
+#    path:  /open/course/{courseId}/manage/live/time/check
+#    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:lessonTimeCheck }
+#
+#open_course_member_sms:
+#    path:  /open/course/{id}/member/sms
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:memberSms }
+#
+#open_course_member_create:
+#    path:  /open/course/{id}/member/create
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:createMember }
+#
+#open_course_lesson_player:
+#    path:  /open/course/{courseId}/lesson/{lessonId}/player
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:player }
+#
+#open_course_mobile_check:
+#    path:  /open/course/{courseId}/mobile/check
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:mobileCheck }
+#
+#open_course_ad_modal_recommend_course:
+#    path: /open/course/{id}/ad-modal/recommend/course
+#    defaults: { _controller: TopxiaWebBundle:OpenCourse:adModalRecommendCourse}
+#    methods: [GET]
+#
+#importer_check:
+#    path: /importer/{type}/check
+#    defaults: { _controller: TopxiaWebBundle:Importer:check}
+#    methods: [POST]
+#
+#importer_import:
+#    path: /importer/{type}/import
+#    defaults: { _controller: TopxiaWebBundle:Importer:import}
+#    methods: [POST]
+#
+#importer_index:
+#    path: /importer/{type}/index
+#    defaults: { _controller: TopxiaWebBundle:Importer:template}
+#
+##esbar_my_history:
+##    path:  /esbar/my/history
+##    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}

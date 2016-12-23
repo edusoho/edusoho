@@ -1,0 +1,27 @@
+<div class="es-bar-menu">
+  <ul class="bar-menu-top">
+    {% include 'es-bar/left-list/study-center.html.twig' %}
+    {% include 'es-bar/left-list/my-learn-result.html.twig' %}
+    {% include 'es-bar/left-list/my-learn-place.html.twig' %}
+    {% include 'es-bar/left-list/my-notification.html.twig' %}
+  </ul>
+  <ul class="bar-menu-sns">
+    {% if setting('consult.enabled', 0)  %}
+      {% include 'es-bar/left-list/qq-consult.html.twig' %}
+      {% include 'es-bar/left-list/phone-consult.html.twig' %}
+      {% include 'es-bar/left-list/wechat-consult.html.twig' %}
+    {% endif %}
+
+    {% if setting('mobile.enabled', 0) %}
+      <li data-toggle="tooltip" data-placement="left" title="{{'手机端'|trans}}">
+        <a href="{{ path('mobile') }}" target="_blank"><i class="es-icon es-icon-phone1"></i></a>
+      </li>
+    {% endif %}
+    <li class="go-top" style="margin:-10px auto 0 auto;" data-toggle="tooltip" data-placement="left" title="{{'回到顶端'|trans}}">
+      <a href="javascript:;">
+        <i class="es-icon es-icon-keyboardarrowup" style="margin-bottom:-8px"></i>
+        <span class="text-sm">TOP</span>
+      </a>
+    </li>
+  </ul>
+</div>

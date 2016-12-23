@@ -81,7 +81,6 @@
             </div>
           </div>
            {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
-
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>
             <div class="col-md-4 controls">

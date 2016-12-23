@@ -22,5 +22,9 @@ interface OpenCourseRecommendedService
 
     public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
 
-    public function findRandomRecommendCourses($courseId, $num=3);
+    public function findRandomRecommendCourses($courseId, $num = 3);
+
+    public function deleteRecommendCourse($recommendId);
+    
+    protected function deleteBatchRecommendCourses($recommendIds);
 }

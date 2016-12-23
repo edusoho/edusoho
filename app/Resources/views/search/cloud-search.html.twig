@@ -1,0 +1,59 @@
+{% extends 'old-layout.html.twig' %}
+
+{% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+
+{% do load_script('search/cloud-search') %}
+{% block top_content %}
+  <div class="search-banner">
+    <div class="container">
+      <form class="input-group search-input-group" id="search-input-group" action="{{path('search')}}" method="get">
+        <div class="input-wrap">
+          <input type="text" name="q" class="form-control" placeholder="{{'可搜索课程、教师、话题、资讯'|trans}}" value="{{keywords}}">
+          <i class="js-btn-clear es-icon es-icon-close01"></i>
+        </div>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+        </span>
+        <input type="hidden" name="type" value="{{type|default('')}}" >
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="es-section">
+        <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
+          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'课程'|trans}}</a></li>
+          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'教师'|trans}}</a></li>
+          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'小组话题'|trans}}</a></li>
+          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'资讯'|trans}}</a></li>
+        </ul>
+        <div class="search-result" id="search-result">
+        {% if type %}
+          {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
+        {% endif %}
+        </div>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }}
+        </nav>
+      </div>
+    </div>
+    <div class="col-md-4">
+        {% if type %}
+          {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
+        {% else %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
+          </div>
+          <div class="panel-body">
+
+          </div>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

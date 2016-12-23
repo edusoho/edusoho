@@ -2,6 +2,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
@@ -74,7 +75,7 @@ class TaskManageController extends BaseController
 
     public function publishAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId, $id);
+        $this->tryManageCourse($courseId);
         $this->getTaskService()->publishTask($id);
 
         return $this->createJsonResponse(array('success' => true));
@@ -82,8 +83,8 @@ class TaskManageController extends BaseController
 
     public function unPublishAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId, $id);
-        $this->getTaskService()->unPublishTask($id);
+        $this->tryManageCourse($courseId);
+        $this->getTaskService()->unpublishTask($id);
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -149,6 +150,10 @@ class TaskManageController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @param $course
+     * @return BaseStrategy
+     */
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
@@ -159,6 +164,10 @@ class TaskManageController extends BaseController
         return $this->get('extension.default')->getActivities();
     }
 
+    /**
+     * @param $type
+     * @return mixed
+     */
     protected function getActivityActionConfig($type)
     {
         $config = $this->getActivityConfig();

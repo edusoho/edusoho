@@ -2,8 +2,9 @@
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -218,17 +219,17 @@ class CourseManageController extends BaseController
 
         $response = true;
         if (!$user) {
-            $response = $this->getServiceKernel()->trans('该用户不存在');
+            $response = '该用户不存在';
         } else {
             $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
-                $response = $this->getServiceKernel()->trans('该用户已是本课程的学员了');
+                $response = '该用户已是本课程的学员了';
             } else {
                 $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
 
                 if ($isCourseTeacher) {
-                    $response = $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加');
+                    $response = '该用户是本课程的教师，不能添加';
                 }
             }
         }
@@ -284,6 +285,9 @@ class CourseManageController extends BaseController
         return $course;
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
@@ -297,18 +301,19 @@ class CourseManageController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
-    protected function getUserService()
+    /**
+     * @return \Topxia\WebBundle\Twig\Extension\WebExtension
+     */
+    protected function getWebExtension()
     {
-        return $this->createService('User:UserService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

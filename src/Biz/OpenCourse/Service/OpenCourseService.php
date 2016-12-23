@@ -32,6 +32,8 @@ interface OpenCourseService
 
     public function unFavoriteCourse($courseId);
 
+    public function changeCoursePicture($courseId, $data);
+
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
 
     public function publishCourse($id);
