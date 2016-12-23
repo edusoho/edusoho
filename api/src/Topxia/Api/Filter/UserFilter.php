@@ -149,9 +149,9 @@ class UserFilter implements Filter
 
     protected function isPluginInstalled($code)
 	{
-		$pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
 		return $pluginManager->isPluginInstalled($code);
-	}
+    }
 
     protected function getVipLevelService()
     {

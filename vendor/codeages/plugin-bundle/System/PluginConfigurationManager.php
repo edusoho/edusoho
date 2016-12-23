@@ -90,21 +90,21 @@ class PluginConfigurationManager
     }
 
     public function isPluginInstalled($code)
-	{
-		$plugins = $this->getInstalledPlugins();
+    {
+	    $plugins = $this->getInstalledPlugins();
 
-		foreach ($plugins as $plugin) {
-			if (is_array($plugin)) {
-				if (strtolower($code) == strtolower($plugin['code'])) {
-					return true;
-				}
-			} else {
-				if (strtolower($code) == strtolower($plugin)) {
-					return true;
-				}
-			}
-		}
+	    foreach ($plugins as $plugin) {
+		    if (is_array($plugin)) {
+			    if (strtolower($code) == strtolower($plugin['code'])) {
+				    return true;
+			    }
+	        } else {
+			    if (strtolower($code) == strtolower($plugin)) {
+				    return true;
+			    }
+		    }
+	    }
 
-		return false;
-	}
+	    return false;
+    }
 }
