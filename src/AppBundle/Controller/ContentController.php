@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Article\Service\CategoryService;
 use Biz\Content\Service\ContentService;
+use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;

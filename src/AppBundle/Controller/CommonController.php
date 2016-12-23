@@ -45,7 +45,7 @@ class CommonController extends BaseController
             return $this->redirect($token['data']['appUrl']);
         }
 
-        $currentUser = $this->getUserService()->getCurrentUser();
+        $currentUser = $this->getCurrentUser();
 
         if (!empty($token['userId']) && !$currentUser->isLogin() && $currentUser['id'] != $token['userId']) {
             $user = $this->getUserService()->getUser($token['userId']);

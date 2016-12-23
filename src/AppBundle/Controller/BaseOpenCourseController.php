@@ -32,6 +32,7 @@ class BaseOpenCourseController extends BaseController
         }
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
         $this->updatevisitRefererToken($refererLog, $request, $uv);
+        return true;
     }
 
     protected function updatevisitRefererToken($refererLog, Request $request, $uv)

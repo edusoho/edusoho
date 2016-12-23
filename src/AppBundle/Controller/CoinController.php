@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Card\Service\CardService;
-use Biz\Cash\Service\CashAccountService;
-use Biz\Cash\Service\CashOrdersService;
-use Biz\Cash\Service\CashService;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Coupon\Service\CouponService;
-use Biz\Order\Service\OrderService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\InviteRecordService;
-use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Biz\Card\Service\CardService;
+use Biz\Cash\Service\CashService;
+use Biz\User\Service\UserService;
+use Biz\Order\Service\OrderService;
+use Biz\Coupon\Service\CouponService;
+use Biz\System\Service\SettingService;
+use Biz\Cash\Service\CashOrdersService;
+use Biz\Cash\Service\CashAccountService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\User\Service\InviteRecordService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -175,21 +175,21 @@ class CoinController extends BaseController
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
         if (empty($user['inviteCode'])) {
-            $user = $this->getUserservice()->createInviteCode($user['id']);
+            $user = $this->getUserService()->createInviteCode($user['id']);
         }
 
-        $invitedUserIds = $this->getUserservice()->findUserIdsByInviteCode($user['inviteCode']);
+        $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
         $invitedUsers   = null;
 
         if (!empty($invitedUserIds)) {
             $conditions = array('userIds' => $invitedUserIds);
             $paginator  = new Paginator(
                 $request,
-                $this->getUserservice()->searchUserCount($conditions),
+                $this->getUserService()->searchUserCount($conditions),
                 20
             );
 
-            $invitedUsers = $this->getUserservice()->searchUsers(
+            $invitedUsers = $this->getUserService()->searchUsers(
                 $conditions,
                 array('id', 'DESC'),
                 $paginator->getOffsetCount(),
@@ -215,7 +215,7 @@ class CoinController extends BaseController
                 20
             );
         }
-  
+
         $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
 
         $message       = null;
@@ -294,7 +294,7 @@ class CoinController extends BaseController
             if ($record) {
                 $response = array('success' => false, 'message' => '您已经填过邀请码');
             } else {
-                $promoteUser = $this->getUserservice()->getUserByInviteCode($inviteCode);
+                $promoteUser = $this->getUserService()->getUserByInviteCode($inviteCode);
 
                 if ($promoteUser) {
                     if ($promoteUser['id'] == $user['id']) {
@@ -406,6 +406,7 @@ class CoinController extends BaseController
             return array($amount, $canChange, $data);
         }
 
+        $ranges = array();
         for ($i = 0; $i < count($coinRanges); $i++) {
             $consume = $coinRanges[$i][0];
             $change  = $coinRanges[$i][1];

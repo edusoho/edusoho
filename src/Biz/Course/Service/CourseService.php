@@ -32,7 +32,7 @@ interface CourseService
 
     public function findCourseItems($courseId);
 
-    public function tryManageCourse($courseId);
+    public function tryManageCourse($courseId, $courseSetId = 0);
 
     public function getNextNumberAndParentId($courseId);
 
@@ -66,4 +66,5 @@ interface CourseService
 
     public function searchCourseCount($conditions);
 
+    public function sortCourseItems($courseId, $ids);
 }

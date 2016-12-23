@@ -26,6 +26,62 @@ class BaseController extends Controller
         return $this->getUser();
     }
 
+    protected function getBiz()
+    {
+        return $this->get('biz');
+    }
+
+    public function getUser()
+    {
+        $biz = $this->getBiz();
+        return $biz['user'];
+    }
+
+    /**
+     * switch current user
+     *
+     * @param  Request       $request
+     * @param  CurrentUser   $user
+     * @return CurrentUser
+     */
+    protected function switchUser(Request $request, CurrentUser $user)
+    {
+        $user['currentIp'] = $request->getClientIp();
+        $biz               = $this->getBiz();
+        $biz['user']       = $user;
+        $token             = new UsernamePasswordToken($user, null, 'main', $user['roles']);
+        $this->container->get('security.token_storage')->setToken($token);
+
+        $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
+        $biz->service('System:LogService')->info('user', 'login_success', '登录成功');
+        return $user;
+    }
+
+    protected function authenticateUser($user)
+    {
+        $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
+        $currentUser       = new CurrentUser();
+        $currentUser->fromArray($user);
+        return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+    }
+
+    protected function fillOrgCode($conditions)
+    {
+        if ($this->setting('magic.enable_org')) {
+            if (!isset($conditions['orgCode'])) {
+                $conditions['likeOrgCode'] = $this->getCurrentUser()->getSelectOrgCode();
+            } else {
+                $conditions['likeOrgCode'] = $conditions['orgCode'];
+                unset($conditions['orgCode']);
+            }
+        } else {
+            if (isset($conditions['orgCode'])) {
+                unset($conditions['orgCode']);
+            }
+        }
+        return $conditions;
+    }
+
     /**
      * 判断是否微信内置浏览器访问
      *
@@ -82,34 +138,6 @@ class BaseController extends Controller
     }
 
     /**
-     * switch current user
-     *
-     * @param  Request       $request
-     * @param  CurrentUser   $user
-     * @return CurrentUser
-     */
-    protected function switchUser(Request $request, CurrentUser $user)
-    {
-        $user['currentIp'] = $request->getClientIp();
-        $biz               = $this->getBiz();
-        $biz['user']       = $user;
-        $token             = new UsernamePasswordToken($user, null, 'main', $user['roles']);
-        $this->container->get('security.token_storage')->setToken($token);
-
-        $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
-        $biz->service('System:LogService')->info('user', 'login_success', '登录成功');
-        return $user;
-    }
-
-    protected function authenticateUser($user)
-    {
-        $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
-        $currentUser       = new CurrentUser();
-        $currentUser->fromArray($user);
-        return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
-    }
-
-    /**
      *
      * @param  $pluginName
      * @return bool
@@ -122,17 +150,6 @@ class BaseController extends Controller
         $appService = $this->getBiz()->service('CloudPlatform:AppService');
         $app        = $appService->getAppByCode($pluginName);
         return !empty($app);
-    }
-
-    protected function getBiz()
-    {
-        return $this->get('biz');
-    }
-
-    public function getUser()
-    {
-        $biz = $this->getBiz();
-        return $biz['user'];
     }
 
     protected function getTargetPath(Request $request)
@@ -175,6 +192,20 @@ class BaseController extends Controller
         }
 
         return $targetPath;
+    }
+
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
+            return strpos($userAgent, $agent) > -1;
+        });
     }
 
     protected function createJsonResponse($data = null, $status = 200, $headers = array())
@@ -229,25 +260,6 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
-    protected function setFlashMessage($level, $message)
-    {
-        $this->get('session')->getFlashBag()->add($level, $message);
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android", "HTC");
-
-        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
-            return strpos($userAgent, $agent) > -1;
-        });
-    }
-
-    protected function setting($name, $default = null)
-    {
-        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
-    }
-
     /**
      * @param  string        $alias
      * @return BaseService
@@ -256,6 +268,11 @@ class BaseController extends Controller
     {
         $biz = $this->getBiz();
         return $biz->service($alias);
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
     /**

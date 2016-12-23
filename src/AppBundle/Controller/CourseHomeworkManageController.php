@@ -1,6 +1,11 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,38 +44,44 @@ class CourseHomeworkManageController extends BaseController
         ));
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
-    }
-
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
 }

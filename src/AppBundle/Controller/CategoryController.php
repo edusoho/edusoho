@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
@@ -100,11 +102,17 @@ class CategoryController extends BaseController
         ));
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->getBiz()->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->getBiz()->service('Taxonomy:CategoryService');

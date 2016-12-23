@@ -2,6 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -129,35 +133,42 @@ class CourseSetManageController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         try {
-            $this->getCourseSetService()->deleteCourseSet($id, $this->getUser()->getId());
+            $this->getCourseSetService()->deleteCourseSet($id);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
-    }
-
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 }

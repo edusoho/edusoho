@@ -35,6 +35,8 @@ class DefaultController extends BaseController
 
         $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
 
+        $teachers = array();
+
         if (!empty($courses)) {
             foreach ($courses as $course) {
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);

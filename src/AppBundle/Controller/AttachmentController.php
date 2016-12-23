@@ -90,7 +90,7 @@ class AttachmentController extends BaseController
         }
 
         if ($attachment['type'] != 'attachment') {
-            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+            return $this->createMessageResponse('error', '无权下载该资料');
         }
 
         $file = $this->getUploadFileService()->getFile($attachment['fileId']);

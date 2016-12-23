@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetController extends BaseController
@@ -41,11 +43,17 @@ class CourseSetController extends BaseController
         ));
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

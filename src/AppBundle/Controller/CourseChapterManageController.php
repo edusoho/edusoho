@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseChapterManageController extends BaseController
@@ -63,6 +64,9 @@ class CourseChapterManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
