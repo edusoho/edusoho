@@ -22,7 +22,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $api                = CloudAPIFactory::create('root');
 
         $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
             $urls[$i] = empty($url)? $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId), true): $url.$kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
@@ -45,7 +45,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         global $kernel;
         $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
         $originUrl = empty($url)? $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']), true) : $url.$kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
 

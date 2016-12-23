@@ -31,7 +31,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         global $kernel;
         $router = $kernel->getContainer()->get('router');
         $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
             $urls[$i] = empty($url) ? $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true) : $url.$router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
@@ -53,7 +53,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         global $kernel;
         $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
         $originUrl = empty($url) ? $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), true) : $site['url'].$kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
         $originUrl .= '#lesson/'.$lesson['id'];
 
