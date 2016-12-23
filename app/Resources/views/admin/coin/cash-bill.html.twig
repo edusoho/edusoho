@@ -1,0 +1,83 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_bill' %}
+
+{% block main %}
+
+    <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+      <div class="form-group">
+        <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
+          {% set options = {'':'全部记录'|trans,'oneWeek':'最近一周'|trans,'twoWeeks':'最近两周'|trans,'oneMonth':'最近一个月'|trans,'twoMonths':'最近两个月'|trans,'threeMonths':'最近三个月'|trans} %}
+          {{ select_options(options, app.request.get('lastHowManyMonths')) }}
+        </select>
+      </div>
+    <div class="form-group">
+        <input type="text" id="nickname" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}" placeholder="{{'用户名'|trans}}">
+    </div>
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+    lastHowManyMonths:app.request.get('lastHowManyMonths'),
+    cashType:cashType,
+    nickname:app.request.query.get('nickname'),
+    })}}">{{'导出结果'|trans}}</a>
+
+    </form>
+
+    <p class="text-muted">
+      <span class="mrl">{{'收入：'|trans}}<strong class="inflow-num">{{ amountInflow }}</strong> {{ '元'|trans }}</span>
+      <span class="mrl">{{'支出：'|trans}}<strong class="outflow-num">{{ amountOutflow }}</strong> {{ '元'|trans }}</span>
+    </p>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes %}
+        <tr>
+          <th><span class="text-sm">{{'流水号'|trans}}</span></th>
+          <th><span class="text-sm">{{'名称'|trans}}</span></th>  
+          <th><span class="text-sm">{{'用户名'|trans}}</span></th>             
+          <th><span class="text-sm">{{'成交时间'|trans}}</span></th>
+          <th class="text-right" style="padding-right: 60px;"><span class="text-sm">{{'收支'|trans}}</span></th>
+          
+          <th><span class="text-sm">{{'支付方式'|trans}}</span></th>
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td><span class="text-sm">{{cash.sn}}</span></td>
+            <td><span class="text-sm">{{cash.name}}</span><br>
+                <span class="text-muted text-sm">{{'订单号：'|trans}}{{cash.orderSn}}</span></td>
+            <td><span class="text-sm"><a href="{{ path('user_show', {id:cash.userId}) }}">
+            {{users[cash.userId].nickname}}</a></span></td>            
+            <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td>
+
+            {% if cash.type =="inflow" %}
+            <td class="text-right" style="color:#1bb974;padding-right: 50px;">
+               {{cash.amount}} 
+            </td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td  class="text-right" style="color:#ff7b0e;padding-right: 50px;">
+               -&nbsp;{{cash.amount}}               
+            </td>
+            {% endif %}
+           
+            <td>
+              <span class="text-sm">
+                {% if cash.type =="inflow" %}
+                  {{ dict_text('payment', cash.payment) }}
+                {% else %}
+                  {{'网校支付'|trans}}
+                {% endif %}
+              </span>
+            </td> 
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">{{'暂无记录'|trans}}</div>
+        {% endif %}
+      </table>
+    </div>
+ {{ admin_macro.paginator(paginator) }}
+
+
+{% endblock %}

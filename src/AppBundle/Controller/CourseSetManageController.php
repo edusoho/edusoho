@@ -2,12 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Content\Service\FileService;
+
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetManageController extends BaseController

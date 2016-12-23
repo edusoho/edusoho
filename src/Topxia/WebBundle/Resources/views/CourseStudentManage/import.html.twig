@@ -1,5 +1,7 @@
-
 {% extends 'TopxiaWebBundle:Importer:importer-layout.html.twig' %}
+
+{% set topxiawebbundle = true %}
+{# todo layout modify#}
 
 {% block form_data %}
   <div class="form-group" id="teachers-form-group">
@@ -46,7 +48,7 @@
 {% endblock %}
 
 {% block load_import_js %}
-  app.load('topxiawebbundle/controller/course-manage/student-import');
+  app.lazyLoad = function() { app.load('topxiawebbundle/controller/course-manage/student-import'); };
 {% endblock %}
 
 {% block stylesheet %}

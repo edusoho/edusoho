@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class= "modal-lg" %}
 
 {% block title %}选择课程{% endblock %}
@@ -38,5 +39,5 @@
   <button id="sure" class="btn btn-primary pull-right" data-url="{{path('open_course_recommended_course_select', {id:courseId})}}">添加</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 
-  <script>app.load('topxiawebbundle/controller/open-course-manage/pick')</script>
+  <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/open-course-manage/pick') };</script>
 {% endblock %}

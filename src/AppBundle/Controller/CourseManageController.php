@@ -309,6 +309,9 @@ class CourseManageController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return \Topxia\WebBundle\Twig\Extension\WebExtension
+     */
     protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');

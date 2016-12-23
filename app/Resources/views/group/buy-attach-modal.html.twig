@@ -1,5 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modalSize = 'large' %}
 {% block title %}{{'下载附件'|trans}}{% endblock %}
 {% block body %}
@@ -36,7 +37,7 @@
 
 {% block footer %}
   <script>
-    app.load('group/buy-modal');
+    app.lazyLoad = function() { app.load('group/buy-modal'); };
   </script>
   {% if not Trade %}
   <button id="create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#buy-form">{{'购买'|trans}}</button>

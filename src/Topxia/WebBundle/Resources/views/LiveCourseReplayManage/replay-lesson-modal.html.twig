@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modalSize = 'large' %}
 {% block title %}{{'录播显示编辑'|trans}}{% endblock %}
 {% block body %}
@@ -24,7 +25,7 @@
 	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 
-	<script>app.load('live-course-manage/replay-lesson-modal')</script>
+	<script>app.lazyLoad = function() { app.load('live-course-manage/replay-lesson-modal') };</script>
 
 {% endblock %}
 {% block footer %}

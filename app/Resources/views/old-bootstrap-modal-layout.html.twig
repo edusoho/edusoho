@@ -1,6 +1,12 @@
 {% import "macro.html.twig" as web_macro %}
 {% import "admin/macro.html.twig" as admin_macro %}
 
+{% if topxiawebbundle|default(false) %}
+  {% include 'TopxiaWebBundle::script_boot_compatible.html.twig' with {script_main: asset('bundles/topxiaweb/js/app-compatible.js')} %}
+{% elseif topxiaadminbundle|default(false) %}
+  {% include 'TopxiaWebBundle::script_boot_compatible.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-compatible.js')} %}
+{% endif %}
+
 <div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
   <div class="modal-content">
     <div class="modal-header">

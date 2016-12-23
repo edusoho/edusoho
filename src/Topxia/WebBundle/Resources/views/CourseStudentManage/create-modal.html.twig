@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'添加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{% endblock %}
@@ -55,5 +56,5 @@
     <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="{{'正在保存'|trans}}..." data-user="{{ default.user_name|default('学员'|trans) }}">{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  <script>app.load('course-manage/student-create')</script>
+  <script>app.lazyLoad = function() { app.load('course-manage/student-create') };</script>
 {% endblock %}

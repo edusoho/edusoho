@@ -1,0 +1,11 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_share' %}
+
+{% block main %}
+<meta http-equiv="pragma" content="no-cache" />
+  {{ web_macro.flash_messages() }}
+
+  {% include 'admin/system/default-share-content.html.twig' %}
+
+{% endblock %}

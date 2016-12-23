@@ -95,6 +95,8 @@ seajs.config({
     // 预加载项
     preload: [this.JSON ? '' : 'json'],
 
+    base: '/assets/libs',
+
     // 路径配置
     paths: app.jsPaths,
 
