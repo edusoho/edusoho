@@ -97,33 +97,6 @@ class PlayerController extends BaseController
         return $response;
     }
 
-    public function clefAction(Request $request, $globalId, $token)
-    {
-        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
-
-        if (empty($token)) {
-            return $this->makeFakeTokenString();
-        }
-
-        $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
-
-        if ($dataId != $globalId) {
-            return $this->makeFakeTokenString();
-        }
-
-        $file = $this->getMaterialLibService()->get($globalId);
-
-        if (empty($file)) {
-            return $this->makeFakeTokenString();
-        }
-
-        if (empty($file['metas']['levels'][$token['data']['level']]['hlsKey'])) {
-            return $this->makeFakeTokenString();
-        }
-
-        return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
-    }
-
     public function streamAction(Request $request, $globalId, $level, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);

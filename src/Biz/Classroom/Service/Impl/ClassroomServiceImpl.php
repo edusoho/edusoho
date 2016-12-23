@@ -3,6 +3,7 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Dao\ClassroomCourseDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Classroom\Dao\ClassroomDao;
 use Codeages\Biz\Framework\Event\Event;
@@ -93,8 +94,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($classroomIds)) {
             return array();
         }
+        $classroomId = array_shift($classroomIds);
 
-        return $this->getClassroom($classroomIds[0]);
+        return $this->getClassroom($classroomId['classroomId']);
     }
 
     public function findAssistants($classroomId)
@@ -460,7 +462,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -1334,7 +1336,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroomDao()->update($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -1410,7 +1412,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'courseIds' => $courseIds,
             'status'    => 'finished'
         );
-        $userLearnCount = $this->getCourseService()->searchLearnCount($conditions);
+        $userLearnCount          = $this->getCourseService()->searchLearnCount($conditions);
 
         $fields['lastLearnTime'] = time();
         $fields['learnedNum']    = $userLearnCount;
@@ -1518,6 +1520,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('Course:CourseCopyService');
     }
 
+    /**
+     * @return ClassroomCourseDao
+     */
     protected function getClassroomCourseDao()
     {
         return $this->createDao('Classroom:ClassroomCourseDao');
