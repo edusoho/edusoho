@@ -92,7 +92,7 @@
           </li>
           <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
             <a href="{{ path('course_manage_students', {id:course.id}) }}">
-              <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}{{'管理'|trans}}
+              <span></span>{{setting('default.user_name')|default('学员'|trans)}}{{'管理'|trans}}
             </a>
           </li>
         </ul>

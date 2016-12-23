@@ -36,6 +36,15 @@ define(function(require, exports, module) {
 
         });
 
+        $('.courses-list').on('click', '.pagination li', function() {
+            var url = $(this).data('url');
+            if (typeof(url) !== 'undefined') {
+                $.post(url, $('.form-search').serialize(),function(data){
+                    $('.courses-list').html(data);
+                });
+            }
+        });
+
         $('#enterSearch').keydown(function(event){
 
             if(event.keyCode==13){

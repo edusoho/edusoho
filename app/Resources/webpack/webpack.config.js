@@ -1,35 +1,4 @@
 // webpack配置文件
-/* 默认值,可在config中重写，但一般不推荐修改
-  let defaultOptions = {
-    commonsChunkFilename: 'common',
-    entryMainname: 'main',
-    entryFileName: 'index',
-
-    libsName: 'libs',
-    
-    pluginAssetsDir: 'Resources/static-src',
-
-    appName: 'app',
-    appIgnores: ['admin'],
-    appAssetsDir: 'app',
-
-    adminName: 'admin',
-    adminAssetsDir: 'app/js/admin',
-
-    globalDir: 'app/Resources/static-src',
-    libsDir: 'app/Resources/static-src/libs',
-    commonDir: 'app/Resources/static-src/common',
-    nodeModulesDir: 'node_modules',
-
-    fontlimit: 20480,
-    imglimit: 10240,
-    fontName: 'fonts',
-    imgName: 'img',
-
-    onlyCopys: [],
-  }
-*/
-
 const config = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
@@ -37,7 +6,7 @@ const config = {
   },
   libs: {
     vendor: ['libs/vendor.js'], //可以是一个js文件
-    "fix-ie": ['html5shiv', 'respond-js'], //也可以是一个npm依赖包
+    "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
     "jquery-validation": ['libs/js/jquery-validation.js'],
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
@@ -51,6 +20,9 @@ const config = {
     'bootstrap-notify/bootstrap-notify.js',
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
+    'fetch-ie8/fetch.js',
+    'console-polyfill/index.js',
+    'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker/daterangepicker.js',
     'moment/moment.js',
   ],
@@ -60,7 +32,21 @@ const config = {
       ignore: [
         '**/samples/**',
         '**/lang/!(zh-cn.js)',
+        '**/kityformula/libs/**',
+        '**/kityformula/kityformula/src/**'
       ]
+    },
+    {
+      name: 'bootstrap/dist/css/bootstrap.css'
+    },
+    {
+      name: 'font-awesome/css/font-awesome.css'
+    },
+    {
+      name: 'es5-shim/es5-shim.js'
+    },
+    {
+      name: 'es5-shim/es5-sham.js'
     }
   ],
 }

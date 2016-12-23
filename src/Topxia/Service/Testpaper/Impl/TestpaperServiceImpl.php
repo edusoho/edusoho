@@ -658,10 +658,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $userAnswers = ArrayToolkit::index($userAnswers, 'questionId');
 
         foreach ($field as $key => $value) {
+            if (is_numeric($key) && is_numeric($value)) {
+                unset($field[$key]);
+                continue;
+            }
             $keys = explode('_', $key);
 
             if (!is_numeric($keys[1])) {
-                throw $this->createServiceException($this->getKernel()->trans('得分必须为数字！'));
+                throw $this->createServiceException($this->getKernel()->trans('问题id必须为数字！'));
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;

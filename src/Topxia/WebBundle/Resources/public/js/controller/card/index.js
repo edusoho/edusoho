@@ -7,18 +7,17 @@ define(function(require, exports, module) {
     });
 
     $('.receive-modal').click();
-      $('.money-card-use').on('click',function(){
-        var url = $(this).data('url');
-        var target_url = $(this).data('target-url');
-        var coin = $(this).prev().text();
+    $('body').on('click', '.money-card-use', function() {
+      $('body').off('click', '.money-card-use');
+      var url = $(this).data('url');
+      var target_url = $(this).data('target-url');
+      var coin = $(this).prev().text();
 
-        $.post(url, function(response){
-          if (response == true) {
-            Notify.success(Translator.trans('学习卡已使用，充值'+ coin +'虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。'), 2);
-            setTimeout("window.location.href = '" + target_url + "'",2000);
-          } else {
-            Notify.danger(Translator.trans('失败！'), 1);
-        }
+      $.post(url, function(response){
+          Notify.success(Translator.trans('学习卡已使用，充值'+ coin +'虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。'), 2);
+          setTimeout("window.location.href = '" + target_url + "'",2000);
+      }).error(function() {
+        Notify.danger(Translator.trans('失败！'), 1);
       });
     });
   };

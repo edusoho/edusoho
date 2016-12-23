@@ -205,7 +205,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function($thiz) {
             self=this;
             $("html").attr('dir','ltr');
-            var jsPath = '//oiixxv3n6.qnssl.com/js-sdk/document-player/v7/viewer.html#'+self.attrs.pdfFileUrl.value;
+            var jsPath = 'http://opencdn.edusoho.net/pdf.js/v7/viewer.html#'+self.attrs.pdfFileUrl.value;
             if(app.lessonCopyEnabled==0){
                 jsPath = jsPath+'#false';
             }
