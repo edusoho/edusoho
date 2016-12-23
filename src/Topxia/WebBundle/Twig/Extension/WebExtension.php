@@ -429,21 +429,7 @@ class WebExtension extends \Twig_Extension
 
     public function isPluginInstalled($name)
     {
-        $plugins = $this->container->get('kernel')->getPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (is_array($plugin)) {
-                if (strtolower($name) == strtolower($plugin['code'])) {
-                    return true;
-                }
-            } else {
-                if (strtolower($name) == strtolower($plugin)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
     }
 
     public function getPluginVersion($name)
