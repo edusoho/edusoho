@@ -34,9 +34,9 @@ class OrderController extends BaseController
             $this->getOrderService()->countOrders($conditions),
             20
         );
-        $orders = $this->getOrderService()->searchOrders(
+        $orders    = $this->getOrderService()->searchOrders(
             $conditions,
-            array('createdTime'=> 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -112,16 +112,16 @@ class OrderController extends BaseController
         $conditions = $this->buildExportCondition($request, $targetType);
 
         $status = array(
-            'created'   => $this->trans('未付款'),
-            'paid'      => $this->trans('已付款'),
-            'refunding' => $this->trans('退款中'),
-            'refunded'  => $this->trans('已退款'),
-            'cancelled' => $this->trans('已关闭')
+            'created'   => '未付款',
+            'paid'      => '已付款',
+            'refunding' => '退款中',
+            'refunded'  => '已退款',
+            'cancelled' => '已关闭'
         );
 
         $payment        = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->countOrders($conditions);
-        $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime'=> 'DESC'), $start, $limit);
+        $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -131,30 +131,9 @@ class OrderController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         if ($targetType == 'vip') {
-            $str = $this->trans('订单号').','.
-            $this->trans('订单状态').','.
-            $this->trans('订单名称').','.
-            $this->trans('购买者').','.
-            $this->trans('姓名').','.
-            $this->trans('实付价格').','.
-            $this->trans('支付方式').','.
-            $this->trans('创建时间').','.
-            $this->trans('付款时间');
+            $str = '订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间';
         } else {
-            $str = $this->trans('订单号').','.
-            $this->trans('订单状态').','.
-            $this->trans('订单名称').','.
-            $this->trans('订单价格').','.
-            $this->trans('优惠码').','.
-            $this->trans('优惠金额').','.
-            $this->trans('虚拟币支付').','.
-            $this->trans('实付价格').','.
-            $this->trans('支付方式').','.
-            $this->trans('购买者').','.
-            $this->trans('姓名').','.
-            $this->trans('操作').','.
-            $this->trans('创建时间').','.
-            $this->trans('付款时间');
+            $str = '订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间';
         }
 
         $str .= "\r\n";
@@ -212,7 +191,7 @@ class OrderController extends BaseController
     private function genereateExportCsvFileName($targetType)
     {
         $rootPath = $this->getParameter('topxia.upload.private_directory');
-        $user     = $this->getCurrentUser();
+        $user     = $this->getUser();
         return $rootPath."/export_content".$targetType.$user['id'].time().".txt";
     }
 
@@ -303,8 +282,8 @@ class OrderController extends BaseController
             $member .= $users[$order['userId']]['nickname'].",";
             $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
 
-            if (preg_match($this->trans('/管理员添加/'), $order['title'])) {
-                $member .= $this->trans('管理员添加,');
+            if (preg_match('/管理员添加/', $order['title'])) {
+                $member .= '管理员添加,';
             } else {
                 $member .= "-,";
             }

@@ -12,7 +12,7 @@ class CommonAdminController extends BaseController
     {
         $data = $request->request->all();
 
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         $admin['url']    = $data['url'];
         $admin['title']  = $data['title'];
@@ -41,7 +41,7 @@ class CommonAdminController extends BaseController
 
     public function commonAdminAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         $url  = $_SERVER['REQUEST_URI'];
 
         $isCollect = 0;
@@ -62,7 +62,7 @@ class CommonAdminController extends BaseController
         $url = $request->request->get('url');
         $this->getUserCommonAdminService()->deleteCommonAdmin($id);
 
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         $isCollect = 0;
 

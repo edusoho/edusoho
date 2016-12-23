@@ -56,7 +56,7 @@ class DefaultController extends BaseController
     public function feedbackAction(Request $request)
     {
         $site  = $this->getSettingService()->get('site');
-        $user  = $this->getCurrentUser();
+        $user  = $this->getUser();
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
         $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         $site  = urlencode(http_build_query($site));
@@ -96,7 +96,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'warning',
-                'errorMessage' => $this->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
+                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl
@@ -389,7 +389,7 @@ class DefaultController extends BaseController
     public function weekday($time)
     {
         if (is_numeric($time)) {
-            $weekday = array($this->trans('星期日'), $this->trans('星期一'), $this->trans('星期二'), $this->trans('星期三'), $this->trans('星期四'), $this->trans('星期五'), $this->trans('星期六'));
+            $weekday = array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
             return $weekday[date('w', $time)];
         }
 

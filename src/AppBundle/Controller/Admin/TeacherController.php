@@ -59,7 +59,7 @@ class TeacherController extends BaseController
 
     public function promoteListAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         $fields     = $request->query->all();
         $conditions = array(
             'roles'    => 'ROLE_TEACHER',

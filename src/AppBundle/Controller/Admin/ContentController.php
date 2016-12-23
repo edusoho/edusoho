@@ -1,12 +1,10 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Biz\Content\Type\ContentTypeFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\DataDict\ContentStatusDict;
-use Topxia\WebBundle\DataDict\ContentTypeDict;
-use Topxia\Service\Content\Type\ContentTypeFactory;
 
 class ContentController extends BaseController
 {
@@ -63,7 +61,7 @@ class ContentController extends BaseController
             return $this->render('admin/content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
-                'user' => $this->getCurrentUser(),
+                'user' => $this->getUser(),
             ));
         }
 
@@ -94,7 +92,7 @@ class ContentController extends BaseController
             return $this->render('admin/content/content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
-                'user' => $this->getCurrentUser(),
+                'user' => $this->getUser(),
             ));
         }
 
@@ -142,7 +140,7 @@ class ContentController extends BaseController
             return $this->createJsonResponse(array('success' => true, 'message' => ''));
         }
 
-        return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('该URL路径已存在')));
+        return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
     }
 
     protected function filterEditorField($content)

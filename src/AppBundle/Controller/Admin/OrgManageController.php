@@ -9,7 +9,7 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         $org  = $this->getOrgService()->getOrg($user['orgId']);
         $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
 

@@ -99,7 +99,7 @@ class CategoryController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $this->trans('编码已被占用，请换一个。'));
+            $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
         }
 
         return $this->createJsonResponse($response);

@@ -11,7 +11,7 @@ class LoginRecordController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user           = $this->getCurrentUser();
+        $user           = $this->getUser();
         $userConditions = $conditions     = $request->query->all();
 
         unset( $userConditions['startDateTime']);

@@ -79,7 +79,7 @@ class OpenCourseController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $type)
     {
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
 
         if (!$currentUser->isSuperAdmin()) {
             throw $this->createAccessDeniedException('您不是超级管理员！');

@@ -28,7 +28,7 @@ class BaseController extends \AppBundle\Controller\BaseController
 
         if($this->setting('magic.enable_org')){
              if( !isset($conditions['orgCode'])){
-                $conditions['likeOrgCode'] =  $this->getCurrentUser()->getSelectOrgCode();
+                $conditions['likeOrgCode'] =  $this->getUser()->getSelectOrgCode();
              }else{
                 $conditions['likeOrgCode'] =  $conditions['orgCode'];
                  unset($conditions['orgCode']); 

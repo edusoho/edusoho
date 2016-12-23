@@ -14,7 +14,7 @@ class OperationSettingController extends BaseController
         $articleSetting = $this->getSettingService()->get('article', array());
 
         $default = array(
-            'name'     => $this->trans('资讯频道'),
+            'name'     => '资讯频道',
             'pageNums' => 20
         );
 
@@ -24,7 +24,7 @@ class OperationSettingController extends BaseController
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
             $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
-            $this->setFlashMessage('success', $this->trans('资讯频道设置已保存！'));
+            $this->setFlashMessage('success', '资讯频道设置已保存！');
         };
 
         return $this->render('admin/article/setting.html.twig', array(
@@ -38,7 +38,7 @@ class OperationSettingController extends BaseController
             $set = $request->request->all();
 
             $this->getSettingService()->set('group', $set);
-            $this->setFlashMessage('success', $this->trans('小组设置已保存！'));
+            $this->setFlashMessage('success', '小组设置已保存！');
         }
 
         return $this->render('admin/group/set.html.twig', array(
@@ -75,7 +75,7 @@ class OperationSettingController extends BaseController
             $inviteSetting = array_merge($default, $inviteSetting);
 
             $this->getSettingService()->set('invite', $inviteSetting);
-            $this->setFlashMessage('success', $this->trans('邀请码设置已保存！'));
+            $this->setFlashMessage('success', '邀请码设置已保存！');
             goto response;
         }
 

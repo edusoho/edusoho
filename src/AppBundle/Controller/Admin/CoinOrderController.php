@@ -110,7 +110,7 @@ class CoinOrderController extends BaseController
             $conditions['endTime']   = strtotime($conditions['endTime']);
         }
 
-        $status  = array('created' => $this->trans('未付款'), 'paid' => $this->trans('已付款'), 'cancelled' => $this->trans('已关闭'));
+        $status  = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
@@ -122,15 +122,7 @@ class CoinOrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = $this->trans('订单号').','
-        .$this->trans('订单状态').','
-        .$this->trans('订单名称').','
-        .$this->trans('购买者').','
-        .$this->trans('姓名').','
-        .$this->trans('实付价格').','
-        .$this->trans('支付方式').','
-        .$this->trans('创建时间').','
-        .$this->trans('付款时间');
+        $str = '订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间';
 
         $str .= "\r\n";
 

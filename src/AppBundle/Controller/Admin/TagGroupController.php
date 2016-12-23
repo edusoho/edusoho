@@ -69,7 +69,7 @@ class TagGroupController extends BaseController
         if ($avalieable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $this->trans('标签组已存在'));
+            $response = array('success' => false, 'message' => '标签组已存在');
         }
 
         return $this->createJsonResponse($response);

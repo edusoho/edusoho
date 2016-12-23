@@ -20,7 +20,7 @@ class SettingController extends BaseController
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新PostNumSetting设置', $setting);
-            $this->setFlashMessage('success', $this->trans('设置已保存！'));
+            $this->setFlashMessage('success', '设置已保存！');
         }
 
         $setting = $this->getSettingService()->get('post_num_rules', array());
@@ -66,7 +66,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', $this->trans('移动客户端设置已保存！'));
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
@@ -90,7 +90,7 @@ class SettingController extends BaseController
 
             //新增校验
             if (empty($fileds['productId']) || empty($fileds['title']) || empty($fileds['price']) || !is_numeric($fileds['price'])) {
-                $this->setFlashMessage('danger', $this->trans('产品ID或商品名称或价格输入不正确'));
+                $this->setFlashMessage('danger', '产品ID或商品名称或价格输入不正确');
                 return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
             }
 
@@ -103,7 +103,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mobile_iap_product', $products);
 
             $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
-            $this->setFlashMessage('success', $this->trans('IOS内购产品设置已保存'));
+            $this->setFlashMessage('success', 'IOS内购产品设置已保存');
             return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
             
         }
@@ -132,7 +132,7 @@ class SettingController extends BaseController
         $file   = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
         $filename  = 'mobile_picture'.time().'.'.$file->getExtension();
@@ -173,7 +173,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -227,7 +227,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -281,7 +281,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
+            throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -364,7 +364,7 @@ class SettingController extends BaseController
             $mailerWithoutPassword             = $mailer;
             $mailerWithoutPassword['password'] = '******';
             $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
-            $this->setFlashMessage('success', $this->trans('电子邮件设置已保存！'));
+            $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
         $status = $this->checkMailerStatus();
@@ -376,7 +376,7 @@ class SettingController extends BaseController
 
     public function mailerTestAction(Request $request)
     {
-        $user        = $this->getCurrentUser();
+        $user        = $this->getUser();
         $mailOptions = array(
             'to'       => $user['email'],
             'template' => 'email_system_self_test'
@@ -425,15 +425,15 @@ class SettingController extends BaseController
             $defaultSetting = $request->request->all();
 
             if (!isset($defaultSetting['user_name'])) {
-                $defaultSetting['user_name'] = $this->trans('学员');
+                $defaultSetting['user_name'] = '学员';
             }
 
             if (!isset($defaultSetting['chapter_name'])) {
-                $defaultSetting['chapter_name'] = $this->trans('章');
+                $defaultSetting['chapter_name'] = '章';
             }
 
             if (!isset($defaultSetting['part_name'])) {
-                $defaultSetting['part_name'] = $this->trans('节');
+                $defaultSetting['part_name'] = '节';
             }
 
             $default        = $this->getSettingService()->get('default', array());
@@ -441,7 +441,7 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', '更新系统默认设置', $defaultSetting);
-            $this->setFlashMessage('success', $this->trans('系统默认设置已保存！'));
+            $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
         return $this->render('admin/system/default.html.twig', array(
@@ -457,13 +457,13 @@ class SettingController extends BaseController
             'defaultCoursePicture'         => 0,
             'defaultAvatarFileName'        => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent'          => $this->trans('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'),
-            'courseShareContent'           => $this->trans('我正在学习{{course}}，收获巨大哦，一起来学习吧！'),
-            'groupShareContent'            => $this->trans('我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！'),
-            'classroomShareContent'        => $this->trans('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'),
-            'user_name'                    => $this->trans('学员'),
-            'chapter_name'                 => $this->trans('章'),
-            'part_name'                    => $this->trans('节')
+            'articleShareContent'          => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent'           => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent'            => '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！',
+            'classroomShareContent'        => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'user_name'                    => '学员',
+            'chapter_name'                 => '章',
+            'part_name'                    => '节'
         );
 
         return $default;
@@ -487,7 +487,7 @@ class SettingController extends BaseController
             $ips        = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] = join("\n", $ips['ips']);
 
-            $this->setFlashMessage('success', $this->trans('保存成功！'));
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         return $this->render('admin/system/ip-blacklist.html.twig', array(
@@ -512,7 +512,7 @@ class SettingController extends BaseController
             $customerServiceSetting = $request->request->all();
             $this->getSettingService()->set('customerService', $customerServiceSetting);
             $this->getLogService()->info('system', 'customerServiceSetting', '客服管理设置', $customerServiceSetting);
-            $this->setFlashMessage('success', $this->trans('客服管理设置已保存！'));
+            $this->setFlashMessage('success', '客服管理设置已保存！');
         }
 
         return $this->render('admin/system/customer-service.html.twig', array(
@@ -529,7 +529,7 @@ class SettingController extends BaseController
 
         $default = array(
             'welcome_message_enabled'  => '0',
-            'welcome_message_body'     => $this->trans('{{nickname}},欢迎加入课程{{course}}'),
+            'welcome_message_body'     => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo'        => '0',
             'teacher_modify_price'     => '1',
             'teacher_search_order'     => '0',
@@ -564,7 +564,7 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', '更新课程设置', $courseSetting);
-            $this->setFlashMessage('success', $this->trans('课程设置已保存！'));
+            $this->setFlashMessage('success', '课程设置已保存！');
         }
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -602,7 +602,7 @@ class SettingController extends BaseController
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
             $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
-            $this->setFlashMessage('success', $this->trans('题库设置已保存！'));
+            $this->setFlashMessage('success', '题库设置已保存！');
         }
 
         return $this->render('admin/system/questions-setting.html.twig');
@@ -610,11 +610,11 @@ class SettingController extends BaseController
 
     public function adminSyncAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
         $setting     = $this->getSettingService()->get('user_partner', array());
 
         if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
-            return $this->createMessageResponse('info', $this->trans('未开启用户中心，不能同步管理员帐号！'));
+            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
@@ -630,7 +630,7 @@ class SettingController extends BaseController
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
 
             if (empty($partnerUser)) {
-                $this->setFlashMessage('danger', $this->trans('用户名或密码不正确。'));
+                $this->setFlashMessage('danger', '用户名或密码不正确。');
                 goto response;
             } else {
                 $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
@@ -640,7 +640,7 @@ class SettingController extends BaseController
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);
 
-                $this->setFlashMessage('success', $this->trans('管理员帐号同步成功。'));
+                $this->setFlashMessage('success', '管理员帐号同步成功。');
 
                 return $this->redirect($this->generateUrl('admin_setting_user_center'));
             }

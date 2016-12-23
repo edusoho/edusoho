@@ -44,7 +44,7 @@ class DeveloperSettingController extends BaseController
 
             $this->dealServerConfigFile();
 
-            $this->setFlashMessage('success', $this->trans('开发者已保存！'));
+            $this->setFlashMessage('success', '开发者已保存！');
         }
 
         return $this->render('admin/developer-setting/index.html.twig', array(
@@ -93,7 +93,7 @@ class DeveloperSettingController extends BaseController
 
             $this->getSettingService()->set('magic', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新Magic设置', $setting);
-            $this->setFlashMessage('success', $this->trans('设置已保存！'));
+            $this->setFlashMessage('success', '设置已保存！');
         }
 
         $setting = $this->getSettingService()->get('magic', array());
@@ -123,7 +123,7 @@ class DeveloperSettingController extends BaseController
             }
 
             $this->getLogService()->info('system', 'update_redis', '更新redis设置', $redis);
-            $this->setFlashMessage('success', $this->trans('设置已保存！'));
+            $this->setFlashMessage('success', '设置已保存！');
         }
 
         $redis = $this->getSettingService()->get('redis', array());

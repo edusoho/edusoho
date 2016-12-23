@@ -78,10 +78,10 @@ class ArticleCategoryController extends BaseController
         }
 
         if ($this->canDeleteCategory($id)) {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => $this->trans('此栏目有子栏目，无法删除')));
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '此栏目有子栏目，无法删除'));
         } else {
             $this->getCategoryService()->deleteCategory($id);
-            return $this->createJsonResponse(array('status' => 'success', 'message' => $this->trans('栏目已删除')));
+            return $this->createJsonResponse(array('status' => 'success', 'message' => '栏目已删除'));
         }
     }
 
@@ -101,7 +101,7 @@ class ArticleCategoryController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $this->trans('编码已被占用，请换一个。'));
+            $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
         }
 
         return $this->createJsonResponse($response);
@@ -114,7 +114,7 @@ class ArticleCategoryController extends BaseController
         $currentId = $request->query->get('currentId');
 
         if ($currentId == $selectedParentId && $selectedParentId != 0) {
-            $response = array('success' => false, 'message' => $this->trans('不能选择自己作为父栏目'));
+            $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
         } else {
             $response = array('success' => true, 'message' => '');
         }
