@@ -106,12 +106,20 @@
               <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
             </a>
             <ul class="dropdown-menu" role="menu">
-              <li class="user-nav-li-login"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
-              <li class="user-nav-li-register"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
+              <li class="user-nav-li-login"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+                <i class="es-icon es-icon-denglu"></i>
+                {{'登录'|trans}}</a></li>
+              <li class="user-nav-li-register"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+                <i class="es-icon es-icon-zhuce"></i>
+                {{'注册'|trans}}</a></li>
               {% if mobile %}
-                <li class="mobile-switch js-switch-pc"><a href="javascript:;">{{'切换电脑版'|trans}}</a></li>
+                <li class="mobile-switch js-switch-pc"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>
+                  {{'切换电脑版'|trans}}</a></li>
               {% else %}
-                <li class="mobile-switch js-switch-mobile"><a href="javascript:;">{{'切换触屏版'|trans}}</a></li>
+                <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>              
+                  {{'切换触屏版'|trans}}</a></li>
               {% endif %}
             </ul>
           </li>

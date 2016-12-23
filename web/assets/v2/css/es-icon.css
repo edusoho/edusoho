@@ -47,6 +47,9 @@
 .es-icon-dot:before {
   content: "\e68a";
 }
+.es-icon-youjian:before {
+  content: "\e705";
+}
 .es-icon-close01:before {
   content: "\e68e";
 }
@@ -667,4 +670,10 @@
 }
 .es-icon-share_fill:before {
   content: "\e6d2";
+}
+.es-icon-zhuce:before {
+  content: "\e6d4";
+}
+.es-icon-denglu:before {
+  content: "\e6d5";
 }
