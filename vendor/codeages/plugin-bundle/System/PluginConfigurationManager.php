@@ -91,7 +91,7 @@ class PluginConfigurationManager
 
     public function isPluginInstalled($code)
     {
-        $plugins = $this->getInstalledPlugins;
+        $plugins = $this->getInstalledPlugins();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
