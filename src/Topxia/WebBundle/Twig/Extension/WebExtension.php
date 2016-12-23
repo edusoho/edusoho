@@ -421,7 +421,7 @@ class WebExtension extends \Twig_Extension
 
     public function isPluginInstalled($name)
     {
-	   return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
     }
 
     public function getPluginVersion($name)
