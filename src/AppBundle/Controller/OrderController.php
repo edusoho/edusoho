@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Biz\Cash\Service\CashService;
 use Biz\Classroom\Service\ClassroomService;
@@ -13,8 +13,6 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
-use Vip\Service\Vip\Impl\LevelServiceImpl;
-use Vip\Service\Vip\VipService;
 
 class OrderController extends BaseController
 {
@@ -361,7 +359,7 @@ class OrderController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip:VipService');
     }
 
     /**

@@ -1,10 +1,12 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
+use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
+use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
+use Topxia\Service\Course\CourseOrderService;
 
 class MyOrderController extends BaseController
 {
@@ -74,7 +76,7 @@ class MyOrderController extends BaseController
             }
         }
         
-        return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
+        return $this->render('my-order/index.html.twig',array(
         	'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
@@ -87,7 +89,7 @@ class MyOrderController extends BaseController
         $currentUser = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if ($currentUser['id'] != $order['userId'] ){
-            throw new \RuntimeException($this->getServiceKernel()->trans('普通用户不能查看别人的订单'));
+            throw $this->createAccessDeniedException('普通用户不能查看别人的订单');
         }
         $user = $this->getUserService()->getUser($order['userId']);
 
@@ -95,7 +97,7 @@ class MyOrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
         
-        return $this->render('TopxiaWebBundle:MyOrder:detail-modal.html.twig', array(
+        return $this->render('my-order/detail-modal.html.twig', array(
             'order'=>$order,
             'user'=>$user,
             'orderLogs'=>$orderLogs,
@@ -122,7 +124,7 @@ class MyOrderController extends BaseController
 
     	$orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
-        return $this->render('TopxiaWebBundle:MyOrder:refunds.html.twig',array(
+        return $this->render('my-order/refunds.html.twig',array(
         	'refunds' => $refunds,
         	'orders' => $orders,
             'paginator' => $paginator
@@ -139,19 +141,23 @@ class MyOrderController extends BaseController
 
     public function cancelAction(Request $request, $id)
     {
-
-        $order = $this->getOrderService()->cancelOrder($id, $this->getServiceKernel()->trans('取消订单'));
-
+        $order = $this->getOrderService()->cancelOrder($id, '取消订单');
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
+    /**
+     * @return CourseOrderService
+     */
     protected function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseOrderService');
+        return $this->getBiz()->service('Course:CourseOrderService');
     }
 }

@@ -32,7 +32,7 @@ interface OrderService
 
     public function canOrderPay($order);
 
-    public function cancelOrder($id, $message, $data);
+    public function cancelOrder($id, $message='', $data = array());
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
