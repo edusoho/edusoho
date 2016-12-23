@@ -30,8 +30,10 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         global $kernel;
         $router = $kernel->getContainer()->get('router');
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
         for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true);
+            $urls[$i] = empty($url) ? $router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId), true) : $url.$router->generate('edu_cloud_sms_send_callback', array('targetType' => 'lesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
@@ -50,7 +52,9 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         global $kernel;
-        $originUrl = $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), true);
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], '\/');
+        $originUrl = empty($url) ? $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']), true) : $site['url'].$kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
         $originUrl .= '#lesson/'.$lesson['id'];
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
