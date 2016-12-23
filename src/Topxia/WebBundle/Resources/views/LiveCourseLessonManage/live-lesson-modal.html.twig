@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}{% if liveLesson|default(null) %}{{'编辑直播课时'|trans}}{% else %}{{'新增直播课时'|trans}}{% endif %}{% endblock %}
@@ -60,6 +61,6 @@
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
   <button type="submit" class="btn btn-primary"  data-toggle="form-submit" data-submiting-text="{{'正在保存'|trans}}" data-target="#live-lesson-form" id="live-course-create-btn">{{'保存'|trans}}</button>
 
-  <script>app.load('live-course-manage/live-lesson-modal')</script>
+  <script>app.lazyLoad = function() { app.load('live-course-manage/live-lesson-modal') };</script>
 
 {% endblock %}

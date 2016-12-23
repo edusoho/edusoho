@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+
 {% set chapter = chapter|default(null) %}
 
 {% block title %}
@@ -29,7 +31,7 @@
   <input type="hidden" name="type" value="{{ type }}">
 </form>
 
-<script>app.load('course-manage/chapter-modal')</script>
+<script>app.lazyLoad = function() { app.load('course-manage/chapter-modal') };</script>
 
 {% endblock %}
 

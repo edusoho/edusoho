@@ -102,7 +102,7 @@ class PptController extends BaseController implements ActivityActionInterface
      */
     protected function getMaterialLibService()
     {
-        return ServiceKernel::instance()->createService('MaterialLib:MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
     }
 
 }

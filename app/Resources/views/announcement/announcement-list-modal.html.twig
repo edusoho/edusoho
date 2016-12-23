@@ -1,5 +1,8 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+{# todo layout modify#}
+
 {% set tab="list" %}
 
 {% block content %}
@@ -36,7 +39,7 @@
   </div>
 
 	<script>
-		app.load('announcement/announcement');
+		app.lazyLoad = function() { app.load('announcement/announcement'); };
 	</script>
 
 {% endblock %}

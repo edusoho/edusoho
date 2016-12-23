@@ -14,10 +14,9 @@ interface OpenCourseService
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
     /**
-     * @deprecated  countCourses
-     *
-     * @param  $conditions
+     * @param $conditions
      * @return mixed
+     * @before  searchCourseCount
      */
     public function countCourses($conditions);
 
@@ -59,10 +58,9 @@ interface OpenCourseService
     public function searchLessons($condition, $orderBy, $start, $limit);
 
     /**
-     * @deprecated  searchLessonCount
-     *
-     * @param  $conditions
+     * @param $conditions
      * @return mixed
+     * @before  searchLessonCount
      */
     public function countLessons($conditions);
 
@@ -104,10 +102,9 @@ interface OpenCourseService
     public function findMembersByCourseIds($courseIds);
 
     /**
-     * @deprecated  searchMemberCount
-     *
-     * @param  $conditions
+     * @param $conditions
      * @return mixed
+     * @before  searchMemberCount
      */
     public function countMembers($conditions);
 

@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+
 {% block title %} {{'短信验证码'|trans}} {% endblock %}
 
 {% block body %}
@@ -63,5 +65,5 @@
 
 {% block footer %}
   <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
-  <script>app.load('open-course/member-create-sms');</script>
+  <script>app.lazyLoad = function() { app.load('open-course/member-create-sms'); };</script>
 {% endblock %}

@@ -1,5 +1,8 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+{# todo layout modify#}
+
 {% set tab="manage" %}
 
 {% block content %}
@@ -56,7 +59,7 @@
   </form>
 
   <script>
-    app.load('announcement/announcement-write');
+    app.lazyLoad = function() { app.load('announcement/announcement-write'); };
   </script>
 
 {% endblock %}

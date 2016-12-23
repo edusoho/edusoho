@@ -1,3 +1,1463 @@
+homepage:
+    path:  /
+    defaults: { _controller: AppBundle:Default:index }
+
+switch_language:
+    path: /switch/language
+    defaults: { _controller: AppBundle:Default:translate }
+
+homepage_category:
+    path: /course/search
+    defaults: { _controller: AppBundle:Default:coursesCategory }
+
+live_jump:
+    path: /live/jump
+    defaults: { _controller: AppBundle:Default:jump }
+
+login:
+    path:  /login
+    defaults: { _controller: AppBundle:Login:index }
+
+login_check:
+    path:  /login_check
+
+logout:
+    path:  /logout
+
+login_ajax:
+    path:  /login/ajax
+    defaults: { _controller: AppBundle:Login:ajax }
+
+login_bind:
+    path:  /login/bind/{type}
+    defaults: { _controller: AppBundle:LoginBind:index }
+
+login_bind_callback:
+    path:  /login/bind/{type}/callback
+    defaults: { _controller: AppBundle:LoginBind:callback }
+
+login_bind_choose:
+    path:  /login/bind/{type}/choose
+    defaults: { _controller: AppBundle:LoginBind:choose }
+
+login_bind_new:
+    path:  /login/bind/{type}/new
+    defaults: { _controller: AppBundle:LoginBind:new }
+    methods: [POST]
+
+login_bind_newset:
+    path:  /login/bind/{type}/newset
+    defaults: { _controller: AppBundle:LoginBind:newSet }
+    methods: [POST]
+
+login_bind_exist:
+    path:  /login/bind/{type}/exist
+    defaults: { _controller: AppBundle:LoginBind:exist }
+    methods: [POST]
+
+login_bind_existbind:
+    path:  /login/bind/weixinmob/existbind
+    defaults: { _controller: AppBundle:LoginBind:existBind }
+    methods: [POST]
+
+login_bind_weixin:
+    path:  /login/weixinmob
+    defaults: { _controller: AppBundle:LoginBind:weixinIndex }
+
+login_check_email:
+    path:  /login/check/email
+    defaults: { _controller: AppBundle:Login:checkEmail }
+
+login_bind_change:
+    path: /login/bind/{type}/changetoexist
+    defaults: { _controller: AppBundle:LoginBind:changeToExist }
+
+common_qrcode:
+    path:  /common/qrcode
+    defaults: { _controller: AppBundle:Common:qrcode }
+
+common_crontab:
+    path:  /common/crontab
+    defaults: { _controller: AppBundle:Common:crontab }
+
+user_terms:
+    path:  /userterms
+    defaults: { _controller: AppBundle:Register:userTerms }
+
+register:
+    path:  /register
+    defaults: { _controller: AppBundle:Register:index }
+
+register_success:
+    path:  /register/success
+    defaults: { _controller: AppBundle:Register:success }
+
+register_submited:
+    path:  /register/submited/{id}/{hash}
+    defaults: { _controller: AppBundle:Register:submited }
+
+register_reset_email:
+    path: /register/email/reset/{id}/{hash}
+    defaults: { _controller: AppBundle:Register:resetEmail}
+
+register_reset_email_check:
+    path: /register/email/reset/check
+    defaults: { _controller: AppBundle:Register:resetEmailCheck}
+
+register_reset_email_verify:
+    path: /register/email/reset/verify
+    defaults: { _controller: AppBundle:Register:resetEmailVerify}
+    methods: [POST]
+
+register_email_send:
+    path:  /register/email/send/{id}/{hash}
+    defaults: { _controller: AppBundle:Register:emailSend }
+    methods: [POST]
+
+register_email_verify:
+    path:  /register/email/verify/{token}
+    defaults: { _controller: AppBundle:Register:emailVerify }
+
+register_email_check:
+    path:  /register/email/check
+    defaults: { _controller: AppBundle:Register:emailCheck }
+
+register_mobile_check:
+    path:  /register/mobile/check
+    defaults: { _controller: AppBundle:Register:mobileCheck }
+
+register_email_or_mobile_check:
+    path:  /register/email_or_mobile/check
+    defaults: { _controller: AppBundle:Register:emailOrMobileCheck }
+
+register_nickname_check:
+    path:  /register/nickname/check
+    defaults: { _controller: AppBundle:Register:nicknameCheck }
+
+invitecode_check:
+    path:  /register/invitecode/check
+    defaults: { _controller: AppBundle:Register:invitecodeCheck }
+
+register_captcha_check:
+    path:  /register/captcha/check
+    defaults: { _controller: AppBundle:Register:captchaCheck }
+
+register_captcha_modal:
+    path:  /register/captcha/modal
+    defaults: { _controller: AppBundle:Register:captchaModal }
+
+register_analysis:
+    path:  /register/analysis
+    defaults: { _controller: AppBundle:Register:analysis }
+
+register_captcha_num:
+    path:     /captcha_num
+    defaults: { _controller: AppBundle:Register:captcha }
+
+file_upload:
+    path:  /file/upload
+    defaults: { _controller: AppBundle:File:upload }
+    methods: [POST]
+
+file_img_crop:
+    path:  /file/img/crop
+    defaults: { _controller: AppBundle:File:cropImg }
+    methods: [POST]
+
+attachment_list:
+    path: /attachments/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:Attachment:list }
+    methods: [GET]
+
+attachment_form_fields:
+    path: /attachment/{targetType}/{targetId}/formFields
+    defaults: { _controller: AppBundle:Attachment:formFields , targetId:0}
+    methods: [GET]
+
+uploader_entry:
+    path:  /uploader
+    defaults: { _controller: AppBundle:Uploader:entry }
+
+uploader_init:
+    path:  /uploader/init
+    defaults: { _controller: AppBundle:Uploader:init }
+    methods: [GET, POST]
+
+uploader_auth:
+    path:  /uploader/auth
+    defaults: { _controller: AppBundle:Uploader:uploadAuth }
+    methods: [POST]
+
+uploader_batch_uplod:
+    path:  /uploader/batch_upload
+    defaults: { _controller: AppBundle:Uploader:batchUpload }
+
+uploader_finished:
+    path:  /uploader/finished
+    defaults: { _controller: AppBundle:Uploader:finished }
+    methods: [GET, POST]
+
+uploader_upload_callback:
+    path:  /uploader/upload_callback
+    defaults: { _controller: AppBundle:Uploader:uploadCallback }
+    methods: [GET, POST]
+
+uploader_process_callback:
+    path:  /uploader/process_callback
+    defaults: { _controller: AppBundle:Uploader:processCallback }
+    methods: [POST]
+
+uploader_chunks_start:
+    path:  /uploader/chunks/start
+    defaults: { _controller: AppBundle:Uploader:chunksStart }
+
+uploader_chunks_finish:
+    path:  /uploader/chunks/finish
+    defaults: { _controller: AppBundle:Uploader:chunksFinish }
+
+uploadfile_upload:
+    path:  /uploadfile/upload
+    defaults: { _controller: AppBundle:UploadFile:upload }
+    methods: [POST, OPTIONS]
+
+uploadfile_browser:
+    path:  /uploadfile/browser
+    defaults: { _controller: AppBundle:UploadFile:browser }
+
+uploadfile_params:
+    path:  /uploadfile/params
+    defaults: { _controller: AppBundle:UploadFile:params }
+
+uploadfile_browsers:
+    path:  /uploadfile/browsers
+    defaults: { _controller: AppBundle:UploadFile:browsers }
+
+uploadfile_cloud_callback:
+    path:  /uploadfile/cloud_callback
+    defaults: { _controller: AppBundle:UploadFile:cloudCallback }
+
+uploadfile_cloud_convert_callback:
+    path:  /uploadfile/cloud_convertcallback
+    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback }
+
+uploadfile_cloud_convert_callback2:
+    path:  /uploadfile/cloud_convertcallback2
+    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback2 }
+
+uploadfile_cloud_convert_callback3:
+    path:  /uploadfile/cloud_convertcallback3
+    defaults: { _controller: AppBundle:UploadFile:cloudConvertCallback3 }
+
+uploadfile_cloud_get_media_info:
+    path:  /uploadfile/get_media_info/{type}
+    defaults: { _controller: AppBundle:UploadFile:getMediaInfo }
+
+hls_playlist:
+    path: /hls/{id}/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLS:playlist}
+
+player_local_media:
+    path: /player/{id}/file/{token}
+    defaults: { _controller: AppBundle:Player:localMedia}
+
+hls_stream:
+    path: /hls/{id}/stream/{level}/{token}.m3u8
+    defaults: { _controller: AppBundle:HLS:stream}
+
+hls_clef:
+    path: /hls/{id}/clef/{token}
+    defaults: { _controller: AppBundle:HLS:clef}
+
+editor_upload:
+    path:  /editor/upload
+    defaults: { _controller: AppBundle:Editor:upload }
+    methods: [POST]
+
+editor_download:
+    path:  /editor/download
+    defaults: { _controller: AppBundle:Editor:download }
+    methods: [POST]
+
+liveroom_ticket:
+    path:  /liveroom/{id}/ticket
+    defaults: { _controller: AppBundle:Liveroom:ticket }
+
+order_refund:
+    path:  /target/{id}/order/refund
+    defaults: { _controller: AppBundle:OrderRefund:refund }
+
+order_cancel_refund:
+    path:  /target/{id}/order/cancel_refund
+    defaults: { _controller: AppBundle:OrderRefund:cancelRefund }
+    methods: [POST]
+
+media_play:
+    path:  /media/{mediaId}/play
+    defaults: { _controller: AppBundle:Media/Index:play }
+
+media_subtitle_preview:
+    path:  /media/{mediaId}/subtitles/preview
+    defaults: { _controller: AppBundle:Subtitle:preview }
+
+media_subtitle_manage:
+    path:  /media/{mediaId}/subtitles/manage
+    defaults: { _controller: AppBundle:Subtitle:manage }
+
+media_subtitle_list:
+    path:  /media/{mediaId}/subtitles
+    defaults: { _controller: AppBundle:Subtitle:list }
+
+media_subtitle_create:
+    path:  /media/{mediaId}/subtitle/create
+    defaults: { _controller: AppBundle:Subtitle:create }
+    methods: [POST]
+
+media_subtitle_delete:
+    path:  /media/{mediaId}/subtitle/{id}/delete
+    defaults: { _controller: AppBundle:Subtitle:delete }
+    methods: [POST]
+
+media_subtitle_manage_dialog:
+    path:  /media/subtitles/manage/dialog
+    defaults: { _controller: AppBundle:Subtitle:manageDialog }
+
+announcement_list:
+    path: /announcement/{targetType}/{targetId}/list
+    defaults: { _controller: AppBundle:Announcement:list }
+
+announcement_show_all:
+    path:  /announcement/{targetType}/{targetId}/all
+    defaults: { _controller: AppBundle:Announcement:showAll }
+
+announcement_add:
+    path:  /announcement/{targetType}/{targetId}/create
+    defaults: { _controller: AppBundle:Announcement:create }
+
+announcement_show:
+    path:  /announcement/{id}/{targetId}/show
+    defaults: { _controller: AppBundle:Announcement:show }
+
+announcement_manage:
+    path:  /announcement/{targetType}/{targetId}/manage
+    defaults: { _controller: AppBundle:Announcement:manage }
+
+announcement_update:
+    path:  /announcement/{id}/{targetType}/{targetId}/update
+    defaults: { _controller: AppBundle:Announcement:update }
+
+announcement_delete:
+    path:  /announcement/{id}/{targetType}/{targetId}/delete
+    defaults: { _controller: AppBundle:Announcement:delete }
+    methods: [POST]
+
+search:
+    path:  /search
+    defaults: { _controller: AppBundle:Search:index }
+
+cloud_search:
+    path:  /cloud/search
+    defaults: { _controller: AppBundle:Search:cloudSearch }
+
+settings:
+    path:  /settings/
+    defaults: { _controller: AppBundle:Settings:profile }
+
+settings_avatar:
+    path:  /settings/avatar
+    defaults: { _controller: AppBundle:Settings:avatar }
+
+settings_avatar_crop:
+    path:  /settings/avatar/crop
+    defaults: { _controller: AppBundle:Settings:avatarCrop }
+
+settings_avatar_crop_modal:
+    path:  /settings/avatar/crop/modal
+    defaults: { _controller: AppBundle:Settings:avatarCropModal }
+
+settings_avatar_fetch_partner:
+    path:  /settings/avatar/fetch_partner
+    defaults: { _controller: AppBundle:Settings:avatarFetchPartner }
+    methods: [POST]
+
+settings_security:
+    path:  /settings/security
+    defaults: { _controller: AppBundle:Settings:security }
+
+settings_set_pay_password:
+    path:  /settings/set_pay_password
+    defaults: { _controller: AppBundle:Settings:setPayPassword }
+
+settings_set_password:
+    path:  /settings/set_password
+    defaults: { _controller: AppBundle:Settings:setPassword }
+
+settings_pay_password:
+    path:  /settings/pay_password
+    defaults: { _controller: AppBundle:Settings:payPassword }
+
+settings_reset_pay_password:
+    path:  /settings/reset_pay_password
+    defaults: { _controller: AppBundle:Settings:resetPayPassword }
+
+settings_find_pay_password:
+    path:  /settings/find_pay_password
+    defaults: { _controller: AppBundle:Settings:findPayPassword }
+
+settings_update_pay_password:
+    path:  /settings/update_pay_password
+    defaults: { _controller: AppBundle:Settings:updatePayPassword }
+
+settings_security_questions:
+    path:  /settings/security_questions
+    defaults: { _controller: AppBundle:Settings:securityQuestions }
+
+setting_nickname:
+    path: /settings/nickname
+    defaults: { _controller: AppBundle:Settings:nickname }
+
+update_nickname_check:
+    path:  /settings/nickname/check
+    defaults: { _controller: AppBundle:Settings:nicknameCheck }
+
+settings_password:
+    path:  /settings/password
+    defaults: { _controller: AppBundle:Settings:password }
+
+settings_email:
+    path:  /settings/email
+    defaults: { _controller: AppBundle:Settings:email }
+
+settings_email_verify:
+    path:  /settings/email/verify
+    defaults: { _controller: AppBundle:Settings:emailVerify }
+    methods: [POST]
+
+settings_binds:
+    path:  /settings/binds
+    defaults: { _controller: AppBundle:Settings:binds }
+
+settings_binds_unbind:
+    path: /settings/unbind/{type}
+    defaults: { _controller: AppBundle:Settings:unBind  }
+
+settings_binds_bind:
+    path: /settings/bind/{type}
+    defaults: { _controller: AppBundle:Settings:bind }
+
+settings_binds_bind_callback:
+    path: /settings/bind/{type}/callback
+    defaults: { _controller: AppBundle:Settings:bindCallback }
+
+settings_setup:
+    path: /settings/setup
+    defaults: { _controller: AppBundle:Settings:setup }
+
+settings_setup_password:
+    path: /settings/setup_password
+    defaults: { _controller: AppBundle:Settings:setupPassword }
+
+settings_setup_check_nickname:
+    path: /settings/setup/check_nickname
+    defaults: { _controller: AppBundle:Settings:setupCheckNickname }
+
+auth_email_confirm:
+    path:  /auth/email/confirm
+    defaults: { _controller: AppBundle:Auth:emailConfirm }
+
+password_reset:
+    path:  /password/reset
+    defaults: { _controller: AppBundle:PasswordReset:index }
+
+password_reset_update:
+    path:  /password/reset/update
+    defaults: { _controller: AppBundle:PasswordReset:update }
+
+raw_password_update:
+    path: /raw/password/update
+    defaults: { _controller: AppBundle:PasswordReset:changeRawPassword }
+
+password_reset_check_mobile:
+    path:  /password/reset/check/mobile
+    defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
+
+browser_upgrade:
+    path:  /browser/upgrade
+    defaults: { _controller: AppBundle:Browser:upgrade }
+
+category_all:
+    path: /category/all
+    defaults: { _controller: AppBundle:Category:all }
+
+tag:
+    path: /tag
+    defaults: { _controller: AppBundle:Tag:index }
+
+tag_all:
+    path: /tag/all_jsonm
+    defaults: { _controller: AppBundle:Tag:all }
+
+tag_match:
+    path: /tag/match_jsonp
+    defaults: { _controller: AppBundle:Tag:match }
+
+tag_show:
+    path: /tag/{name}
+    defaults: { _controller: AppBundle:Tag:show }
+
+following_match_bynickname:
+    path: /following/bynickname/match_jsonp
+    defaults: { _controller: AppBundle:Message:match }
+
+comment_widget_init:
+    path:  /comment-widget/init
+    defaults: { _controller: AppBundle:CommentWidget:init }
+
+comment_widget_create:
+    path:  /comment-widget/create
+    defaults: { _controller: AppBundle:CommentWidget:create }
+
+comment_widget_delete:
+    path:  /comment-widget/delete
+    defaults: { _controller: AppBundle:CommentWidget:delete }
+    methods: [POST]
+
+notification:
+    path: /notification
+    defaults: { _controller: AppBundle:Notification:index }
+
+batch_notification_show:
+    path: /notification/{id}
+    defaults: { _controller:AppBundle:Notification:show }
+
+my_teaching_courses:
+    path: /my/teaching/courses/{filter}
+    defaults: { _controller: AppBundle:MyTeaching:courses, filter:'normal' }
+
+my_teaching_open_courses:
+    path: /my/teaching/open/courses/{filter}
+    defaults: { _controller: AppBundle:MyTeaching:openCourses, filter:'open'}
+
+my_teaching_threads:
+    path: /my/teaching/threads/{type}
+    defaults: { _controller: AppBundle:MyTeaching:threads }
+
+my_teaching_classrooms:
+    path: /my/teaching/classrooms
+    defaults: { _controller: AppBundle:MyTeaching:classrooms }
+
+my_orders:
+    path: /my/orders
+    defaults: { _controller: AppBundle:MyOrder:index }
+
+my_order_cancel:
+    path: /my/order/{id}/cancel
+    defaults: { _controller: AppBundle:MyOrder:cancel }
+    methods: [POST]
+
+web_user_order_detail:
+    path: /my/order/{id}/detail
+    defaults: { _controller: AppBundle:MyOrder:detail }
+
+my_order_cancel_refund:
+    path: /my/order/{id}/cancel_refund
+    defaults: { _controller: AppBundle:MyOrder:cancelRefund }
+    methods: [POST]
+
+my_refunds:
+    path: /my/refunds
+    defaults: { _controller: AppBundle:MyOrder:refunds }
+
+income_records:
+    path: /my/income_records
+    defaults: { _controller: AppBundle:MoneyRecord:index }
+
+payout_records:
+    path: /my/payout_records
+    defaults: { _controller: AppBundle:MoneyRecord:payout }
+
+user_show:
+    path:  /user/{id}
+    defaults: { _controller: AppBundle:User:show }
+
+my_page_show:
+    path:  /my/page/show
+    defaults: { _controller: AppBundle:User:pageShow }
+
+user_about:
+    path:  /user/{id}/about
+    defaults: { _controller: AppBundle:User:about }
+
+user_teach:
+    path:  /user/{id}/teach
+    defaults: { _controller: AppBundle:User:teach }
+
+user_learn:
+    path:  /user/{id}/learn
+    defaults: { _controller: AppBundle:User:learn }
+
+user_favorited:
+    path:  /user/{id}/favorited
+    defaults: { _controller: AppBundle:User:favorited }
+
+user_group:
+    path:  /user/{id}/group
+    defaults: { _controller: AppBundle:User:group }
+
+user_following:
+    path:  /user/{id}/following
+    defaults: { _controller: AppBundle:User:following }
+
+user_follower:
+    path:  /user/{id}/follower
+    defaults: { _controller: AppBundle:User:follower }
+
+user_follow:
+    path:  /user/{id}/follow
+    defaults: { _controller: AppBundle:User:follow }
+    methods: [POST]
+
+user_unfollow:
+    path:  /user/{id}/unfollow
+    defaults: { _controller: AppBundle:User:unfollow }
+    methods: [POST]
+
+user_remind_counter:
+    path:  /user_remind_counter
+    defaults: { _controller: AppBundle:User:remindCounter }
+
+user_teaching_classrooms:
+    path:  /user/{id}/teaching/classrooms
+    defaults: { _controller: AppBundle:User:teaching }
+
+user_learning_classrooms:
+    path:  /user/{id}/learning/classrooms
+    defaults: { _controller: AppBundle:User:learning }
+
+user_card_show:
+    path:  /user/{userId}/card/show
+    defaults: { _controller: AppBundle:User:cardShow }
+
+login_after_fill_userinfo:
+    path:  /fill/userinfo
+    defaults: { _controller: AppBundle:User:fillUserInfo }
+
+message_create:
+    path: /message/create/{toId}
+    defaults: { _controller: AppBundle:Message:create }
+
+message:
+    path: /message/
+    defaults: { _controller: AppBundle:Message:index }
+
+message_check_receiver:
+    path: /message/check/receiver
+    defaults: { _controller: AppBundle:Message:checkReceiver }
+
+message_send:
+    path: /message/send/
+    defaults: { _controller: AppBundle:Message:send }
+
+message_send_to_receiver:
+    path: /message/send/{receiverId}/to/receiver/
+    defaults: { _controller: AppBundle:Message:sendTo }
+
+message_conversation_show:
+    path: /message/conversation/{conversationId}
+    defaults: { _controller: AppBundle:Message:showConversation }
+
+message_conversation_delete:
+    path: /message/conversation/{conversationId}/delete
+    defaults: { _controller: AppBundle:Message:deleteConversation }
+    methods: [POST]
+
+message_delete:
+    path: /message/conversation/{conversationId}/message/{messageId}/delete
+    defaults: { _controller: AppBundle:Message:deleteConversationMessage }
+    methods: [POST]
+
+content_article_show:
+    path: /carticle/{alias}
+    defaults: {_controller: AppBundle:Content:articleShow }
+
+content_article_list:
+    path: /carticle
+    defaults: {_controller: AppBundle:Content:articleList }
+
+content_activity_show:
+    path: /activity/{alias}
+    defaults: {_controller: AppBundle:Content:activityShow }
+
+content_activity_list:
+    path: /activity
+    defaults: {_controller: AppBundle:Content:activityList }
+
+content_page_show:
+    path: /page/{alias}
+    defaults: {_controller: AppBundle:Content:pageShow }
+
+content_page_list:
+    path: /page
+    defaults: {_controller: AppBundle:Content:pageList }
+
+teacher:
+    path: /teacher
+    defaults: {_controller: AppBundle:Teacher:index }
+
+teacher_search:
+    path: /teacher/search
+    defaults: {_controller: AppBundle:Teacher:search }
+
+partner_login:
+    path: /partner/login
+    defaults: {_controller: AppBundle:Partner:login }
+
+partner_logout:
+    path: /partner/logout
+    defaults: {_controller: AppBundle:Partner:logout }
+
+partner_discuz_notify:
+    path:  /partner/discuz/api/notify
+    defaults: {_controller: AppBundle:PartnerDiscuz:notify }
+
+partner_phpwind_notify:
+    path: /partner/phpwind/api/notify
+    defaults: {_controller: AppBundle:PartnerPhpwind:notify }
+
+cloud_set_server:
+    path: /cloud/set-server
+    defaults: {_controller: AppBundle:Cloud:setServer }
+
+cloud_oldkeys:
+    path: /cloud/oldkeys
+    defaults: {_controller: AppBundle:Cloud:oldkeys }
+
+cloud_reconvert_old_file:
+    path: /cloud/reconvert_old_file
+    defaults: {_controller: AppBundle:Cloud:reconvertOldFile }
+
+cloud_video_fingerprint:
+    path: /cloud/video_fingerprint
+    defaults: {_controller: AppBundle:Cloud:videoFingerprint }
+
+cloud_ppt_watermark:
+    path: /cloud/ppt_watermark
+    defaults: {_controller: AppBundle:Cloud:pptWatermark }
+
+cloud_doc_watermark:
+    path: /cloud/doc_watermark
+    defaults: {_controller: AppBundle:Cloud:docWatermark }
+
+cloud_testpaper_watermark:
+    path: /cloud/testpaper_watermark
+    defaults: {_controller: AppBundle:Cloud:testpaperWatermark }
+
+systeminfo:
+    path: /systeminfo
+    defaults: {_controller: AppBundle:Systeminfo:index }
+
+setting_approval_submit:
+    path: /settings/approval/submit
+    defaults: { _controller: AppBundle:Settings:approvalSubmit }
+
+article_show:
+    path: /article
+    defaults: { _controller: AppBundle:Article:index }
+
+article_detail:
+    path: /article/{id}
+    defaults: { _controller: AppBundle:Article:detail }
+
+article_category:
+    path: /article/category/{categoryCode}
+    defaults: { _controller: AppBundle:Article:category, category:'' }
+
+article_post:
+    path: /article/{id}/post
+    defaults: { _controller: AppBundle:Article:post }
+    methods: [POST]
+
+article_post_reply:
+    path:  /article/{articleId}/post/{postId}/
+    defaults: { _controller: AppBundle:Article:postReply }
+    methods: [POST]
+
+article_like:
+    path: /article/{articleId}/like
+    defaults: { _controller: AppBundle:Article:like }
+    methods: [POST]
+
+article_cancel_like:
+    path: /article/{articleId}/canceLike
+    defaults: { _controller: AppBundle:Article:cancelLike }
+    methods: [POST]
+
+article_post_jump:
+    path: /article/{articleId}/post/{postId}/jump
+    defaults: { _controller: AppBundle:Article:postJump }
+
+article_tag_show:
+    path: /article/tag/{name}
+    defaults: { _controller: AppBundle:Article:tag }
+
+
+mobile:
+    path: /mobile/
+    defaults: { _controller: AppBundle:Mobile:index }
+
+mobile_download_qrcode:
+    path: /mobile/downloadQrcode
+    defaults: { _controller: AppBundle:Mobile:downloadQrcode }
+
+mobile_download:
+    path: /mobile/download
+    defaults: { _controller: AppBundle:Mobile:download }
+
+group:
+    path:  /group
+    defaults: { _controller: AppBundle:Group:index }
+group_search_group:
+    path:  /group/search_group
+    defaults: { _controller: AppBundle:Group:search }
+group_add:
+    path:  /group/add
+    defaults: { _controller: AppBundle:Group:addGroup }
+
+group_show:
+    path:  /group/{id}
+    defaults: { _controller: AppBundle:Group:groupIndex }
+group_join:
+    path:  /group/{id}/join
+    defaults: { _controller: AppBundle:Group:groupJoin }
+group_exit:
+    path:  /group/{id}/exit
+    defaults: { _controller: AppBundle:Group:groupExit }
+group_member:
+    path:  /group/member/{id}
+    defaults: { _controller: AppBundle:Group:groupMember }
+group_member_delete:
+    path:  /group/member/delete/{id}
+    defaults: { _controller: AppBundle:Group:deleteMembers }
+    methods: [POST]
+group_set_admin:
+    path:  /group/set/admin/{id}
+    defaults: { _controller: AppBundle:Group:setAdmin }
+group_remove_admin:
+    path:  /group/remove/admin/{id}
+    defaults: { _controller: AppBundle:Group:removeAdmin }
+group_set:
+    path:  /group/{id}/setting/info
+    defaults: { _controller: AppBundle:Group:groupSet }
+group_setLogoCrop:
+    path:  /group/{id}/setting/logoCrop
+    defaults: { _controller: AppBundle:Group:logoCrop }
+group_logo_set:
+    path:  /group/{id}/setting/logo
+    defaults: { _controller: AppBundle:Group:setGrouplogo }
+group_edit:
+    path:  /group/info/edit/{id}
+    defaults: { _controller: AppBundle:Group:groupEdit }
+group_backgroundlogo_set:
+    path:  /group/set/backgroundlogo/{id}
+    defaults: { _controller: AppBundle:Group:setGroupBackgroundLogo }
+group_search:
+    path:  /group/{id}/serach
+    defaults: { _controller: AppBundle:GroupThread:searchResult }
+group_thread_post:
+    path:  /group/thread/{groupId}/{threadId}/post
+    defaults: { _controller: AppBundle:GroupThread:postThread }
+group_thread_add:
+    path:  /group/{id}/thread/create
+    defaults: { _controller: AppBundle:GroupThread:addThread }
+group_thread_update:
+    path:  /group/{id}/thread/{threadId}/update
+    defaults: { _controller: AppBundle:GroupThread:updateThread }
+group_thread_check_user:
+    path:  /mygroup/checkuser
+    defaults: { _controller: AppBundle:GroupThread:checkUser }
+group_thread_show:
+    path:  /group/{id}/thread/{threadId}
+    defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
+group_thread_collect:
+    path:  /group/thread/{threadId}/collect
+    defaults: { _controller: AppBundle:GroupThread:collect }
+    methods: [POST]
+group_thread_uncollect:
+    path:  /group/thread/{threadId}/uncollect
+    defaults: { _controller: AppBundle:GroupThread:uncollect }
+    methods: [POST]
+group_thread_setElite:
+    path:  /group/thread/{threadId}/setElite
+    defaults: { _controller: AppBundle:GroupThread:setElite }
+group_thread_removeElite:
+    path:  /group/thread/{threadId}/removeElite
+    defaults: { _controller: AppBundle:GroupThread:removeElite }
+group_thread_setStick:
+    path:  /group/thread/{threadId}/setStick
+    defaults: { _controller: AppBundle:GroupThread:setStick }
+group_thread_removeStick:
+    path:  /group/thread/{threadId}/removeStick
+    defaults: { _controller: AppBundle:GroupThread:removeStick }
+group_thread_closeThread:
+    path:  /group/thread/{threadId}/closeThread/{memberId}
+    defaults: { _controller: AppBundle:GroupThread:closeThread }
+group_thread_deletePost:
+    path:  /group/thread/deletePost/{postId}
+    defaults: { _controller: AppBundle:GroupThread:deletePost }
+    methods: [POST]
+group_thread_post_reply:
+    path:  /group/post/{postId}/reply
+    defaults: { _controller: AppBundle:GroupThread:postReply }
+group_thread_reward:
+    path:  /thread/{threadId}/reward
+    defaults: { _controller: AppBundle:GroupThread:reward }
+group_thread_cancel_reward:
+    path:  /thread/{threadId}/reward/cancel
+    defaults: { _controller: AppBundle:GroupThread:cancelReward }
+group_thread_adopt:
+    path:  /thread/{postId}/adopt
+    defaults: { _controller: AppBundle:GroupThread:adopt }
+group_thread_hide:
+    path:  /thread/{threadId}/hide
+    defaults: { _controller: AppBundle:GroupThread:hide }
+group_upload:
+    path:  /group/thread/upload
+    defaults: { _controller: AppBundle:GroupThread:upload }
+group_attach_download:
+    path:  /group/attach/download/{fileId}
+    defaults: { _controller: AppBundle:GroupThread:download }
+group_thread_buy_attach:
+    path:  /group/attach/buy/{attachId}
+    defaults: { _controller: AppBundle:GroupThread:buyAttach }
+group_thread_delete_attach:
+    path:  /group/attach/delete/{goodsId}
+    defaults: { _controller: AppBundle:GroupThread:deleteAttach }
+    methods: [POST]
+
+my_bill:
+    path: /my/bill
+    defaults: { _controller: AppBundle:Coin:cashBill }
+my_coin:
+    path:     /my/coin
+    defaults: { _controller: AppBundle:Coin:index }
+my_invite_code:
+    path:     /my/invitecode
+    defaults: { _controller: AppBundle:Coin:inviteCode }
+
+invite_promote_link:
+    path:     /my/invitecode/promotelink
+    defaults: { _controller: AppBundle:Coin:promoteLink }
+
+write_invitecode:
+    path:     /my/invitecode/writeinvitecode
+    defaults: { _controller: AppBundle:Coin:writeInvitecode }
+receive_coupon:
+    path:     /my/invitecode/receivecoupon
+    defaults: { _controller: AppBundle:Coin:receiveCoupon }
+
+coin_pay:
+    path:     /coin/pay
+    defaults: { _controller: AppBundle:Coin:pay }
+coin_change:
+    path:     /coin/change
+    defaults: { _controller: AppBundle:Coin:change }
+coin_show:
+    path:     /coin/show
+    defaults: { _controller: AppBundle:Coin:show }
+
+user_password_check:
+    path:   /user/password/check
+    defaults: { _controller: AppBundle:User:checkPassword }
+
+pay_center_show:
+    path:   /pay/center
+    defaults: { _controller: AppBundle:PayCenter:show }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: AppBundle:PayCenter:pay }
+    methods: [POST]
+
+pay_center_auth_unbind:
+    path:   /pay/center/auth_unbind
+    defaults: { _controller: AppBundle:PayCenter:unbindAuth}
+    methods: [POST]
+
+auth_unbind_mobile_show:
+    path:   /pay/center/mobile_show
+    defaults: { _controller: AppBundle:PayCenter:showMobile }
+
+pay_return:
+    path:  /pay/center/pay/{name}/return
+    defaults: { _controller: AppBundle:PayCenter:payReturn }
+
+pay_notify:
+    path:  /pay/center/pay/{name}/notify
+    defaults: { _controller: AppBundle:PayCenter:payNotify }
+
+pay_success_show:
+    path:  /pay/center/success/show
+    defaults: { _controller: AppBundle:PayCenter:showTarget }
+
+pay_password_check:
+    path:  /pay/password/check
+    defaults: { _controller: AppBundle:PayCenter:payPasswordCheck }
+
+pay_error:
+    path:  /pay/error
+    defaults: { _controller: AppBundle:PayCenter:payError }
+
+pay_result_notice:
+    path: /pay/result/notice
+    defaults: { _controller: AppBundle:PayCenter:resultNotice }
+
+wxpay_roll:
+    path: /pay/wxpay/roll
+    defaults: {_controller: AppBundle:PayCenter:wxpayRoll }
+
+order_show:
+    path:  /order/show
+    defaults: { _controller: AppBundle:Order:show }
+
+order_create:
+    path:  /order/create
+    defaults: { _controller: AppBundle:Order:create }
+    methods: [POST]
+
+thread_jump:
+    path:  /thread/{threadId}/jump
+    defaults: { _controller: AppBundle:Thread:jump }
+
+thread_post_jump:
+    path:  /thread/{threadId}/post/{postId}/jump
+    defaults: { _controller: AppBundle:Thread:postJump }
+
+thread_post:
+    path:  /thread/{threadId}/post
+    defaults: { _controller: AppBundle:Thread:post }
+
+thread_post_reply:
+    path:  /thread/{threadId}/post/{postId}/
+    defaults: { _controller: AppBundle:Thread:postReply }
+    methods: [POST]
+
+thread_post_subposts:
+    path:  /thread/{threadId}/post/{postId}/subposts
+    defaults: { _controller: AppBundle:Thread:subposts, threadId:0 }
+
+article_post_subposts:
+    path:  /article/{targetId}/post/{postId}/subposts
+    defaults: { _controller: AppBundle:Article:subposts }
+
+thread_post_delete:
+    path:  /thread/{threadId}/post/{postId}/delete
+    defaults: { _controller: AppBundle:Thread:postDelete }
+    methods: [POST]
+
+thread_post_up:
+    path:  /thread/{threadId}/post/{postId}/up
+    defaults: { _controller: AppBundle:Thread:postUp }
+    methods: [POST]
+
+thread_delete:
+    path: /thread/{threadId}/delete
+    defaults: { _controller: AppBundle:Thread:delete }
+    methods: [POST]
+
+thread_set_sticky:
+    path: /thread/{threadId}/set_sticky
+    defaults: { _controller: AppBundle:Thread:setSticky }
+    methods: [POST]
+
+thread_cancel_sticky:
+    path: /thread/{threadId}/cancel_sticky
+    defaults: { _controller: AppBundle:Thread:cancelSticky }
+    methods: [POST]
+
+thread_set_nice:
+    path: /thread/{threadId}/set_nice
+    defaults: { _controller: AppBundle:Thread:setNice }
+    methods: [POST]
+
+thread_cancel_nice:
+    path: /thread/{threadId}/cancel_nice
+    defaults: { _controller: AppBundle:Thread:cancelNice }
+    methods: [POST]
+
+thread_export_members:
+    path: /thread/{threadId}/export/members
+    defaults: { _controller: AppBundle:Thread\Member:export }
+
+ajax_thread_member_show:
+    path: /ajax/thread/{threadId}/members
+    defaults: { _controller: AppBundle:Thread\Member:ajaxFindMembers }
+    methods: [GET]
+
+#占位
+vip:
+    path: /vip/
+
+vip_buy:
+    path: /vip/buy
+
+vip_renew:
+    path: /vip/renew
+
+vip_upgrade:
+    path: /vip/upgrade
+
+edu_cloud_sms_send:
+    path:  /edu_cloud/sms_send
+    defaults: { _controller: AppBundle:EduCloud:smsSend }
+    methods: [POST]
+
+edu_cloud_sms_check:
+    path:  /edu_cloud/sms_check/{type}
+    defaults: { _controller: AppBundle:EduCloud:smsCheck }
+
+edu_cloud_sms_send_callback:
+    path:  /edu_cloud/sms/callback/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:EduCloud:smsCallBack }
+
+edu_cloud_search_callback:
+    path:  /edu_cloud/search/callback
+    defaults: { _controller: AppBundle:EduCloud:searchCallBack }
+
+settings_bind_mobile:
+    path:  /settings/bind_mobile
+    defaults: { _controller: AppBundle:Settings:bindMobile }
+
+settings_check_login_password:
+    path:  /settings/check_login_password
+    defaults: { _controller: AppBundle:Settings:passwordCheck }
+    methods: [POST]
+
+password_reset_by_sms:
+    path:  /password/reset/by_sms
+    defaults: { _controller: AppBundle:PasswordReset:resetBySms }
+    methods: [POST]
+
+settings_find_pay_password_by_sms:
+    path:  /settings/find_pay_password_by_sms
+    defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
+
+order_pay_sms_verification:
+    path:  /order/sms_verification
+    defaults: { _controller: AppBundle:Order:smsVerification }
+
+edu_cloud_sms_callback:
+    path:  /edu_cloud/sms_callback
+    defaults: { _controller: AppBundle:EduCloud:cloudCallBack }
+    methods: [POST]
+
+common_parse_qrcode:
+    path: /qrcode/parse/{token}
+    defaults: {_controller: AppBundle:Common:parseQrcode}
+
+esbar_my_classroom:
+    path:  /esbar/my/classroom
+    defaults: { _controller: AppBundle:EsBar/EsBar:classroom }
+
+esbar_my_course:
+    path:  /esbar/my/course
+    defaults: { _controller: AppBundle:EsBar/EsBar:course }
+
+esbar_my_notify:
+    path:  /esbar/my/notify
+    defaults: { _controller: AppBundle:EsBar/EsBar:notify }
+
+esbar_my_practice:
+    path:  /esbar/my/practice/{status}
+    defaults: { _controller: AppBundle:EsBar/EsBar:practice }
+
+esbar_my_study_center:
+    path:  /esbar/my/study_center
+    defaults: { _controller: AppBundle:EsBar/EsBar:studyCenter }
+
+my_cards:
+    path:  /my/cards
+    defaults: { _controller: AppBundle:Card:index }
+
+my_useable_coupons:
+    path: /my/useable_coupons
+    defaults: { _controller: AppBundle:Card:useableCoupons }
+
+card_info:
+    path:  /card/info
+    defaults: { _controller: AppBundle:Card:cardInfo }
+
+sms_prepare:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:Sms:prepare }
+
+publish_sms_send:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:Sms:send }
+
+generate_short_link:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:Sms:changeLink }
+
+open_course_explore:
+    path:  /open/course/explore
+    defaults: { _controller: AppBundle:OpenCourse:explore }
+
+open_course_manage:
+    path:  /open/course/{id}/manage
+    defaults: { _controller: AppBundle:OpenCourseManage:index }
+
+open_course_manage_publish:
+    path:  /open/course/{id}/manage/publish
+    defaults: { _controller: AppBundle:OpenCourseManage:publish }
+
+open_course_manage_base:
+    path:  /open/course/{id}/manage/base
+    defaults: { _controller: AppBundle:OpenCourseManage:base }
+
+open_course_manage_lesson:
+    path:  /open/course/{id}/manage/lesson
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:lesson }
+
+open_course_manage_lesson_create:
+    path:  /open/course/{id}/manage/lesson/create
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:create }
+
+open_course_manage_lesson_edit:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:edit }
+
+open_course_manage_lesson_publish:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:publish }
+
+open_course_manage_lesson_delete:
+    path: /open/course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:delete}
+
+open_course_manage_lesson_unpublish:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:unpublish }
+
+open_course_manage_lesson_sort:
+    path:  /open/course/{id}/manage/lesson/sort
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:sort }
+    methods: [POST]
+
+open_course_manage_picture:
+    path:  /open/course/{id}/manage/picture
+    defaults: { _controller: AppBundle:OpenCourseManage:picture }
+
+open_course_manage_picture_crop:
+    path:  /open/course/{id}/manage/picture/crop
+    defaults: { _controller: AppBundle:OpenCourseManage:pictureCrop }
+
+open_course_manage_teachers:
+    path:  /open/course/{id}/manage/teachers
+    defaults: { _controller: AppBundle:OpenCourseManage:teachers }
+
+open_course_manage_live_time_set:
+    path:  /open/course/{id}/manage/live/time
+    defaults: { _controller: AppBundle:OpenCourseManage:liveOpenTimeSet }
+
+open_course_manage_marketing:
+    path:  /open/course/{id}/manage/marketing
+    defaults: { _controller: AppBundle:OpenCourseManage:marketing }
+
+open_course_manage_students:
+    path:  /open/course/{id}/manage/students
+    defaults: { _controller: AppBundle:OpenCourseManage:students }
+
+open_course_manage_files:
+    path:  /open/course/{id}/manage/files
+    defaults: { _controller: AppBundle:OpenCourseFileManage:index }
+
+open_course_manage_file_show:
+    path:  /open/course/{id}/manage/file/{fileId}
+    defaults: { _controller: AppBundle:OpenCourseFileManage:show }
+
+open_course_manage_file_convert:
+    path:  /open/course/{id}/manage/file/{fileId}/convert
+    defaults: { _controller: AppBundle:OpenCourseFileManage:convert }
+    methods: [POST]
+
+open_course_manage_files_batch_upload:
+    path:  /open/course/{id}/manage/files/batch/upload/{targetType}
+    defaults: { _controller: AppBundle:OpenCourseFileManage:batchUploadCourseFiles }
+
+open_course_manage_files_upload:
+    path:  /open/course/{id}/manage/files/upload/{targetType}
+    defaults: { _controller: AppBundle:OpenCourseFileManage:uploadCourseFiles }
+
+open_course_manage_delete_materials_show:
+    path:  /open/course/{id}/manage/show/delete/materials
+    defaults: { _controller: AppBundle:OpenCourseFileManage:deleteMaterialShow }
+    methods: [POST]
+
+open_course_manage_files_delete:
+    path:  /open/course/{id}/manage/materials/delete
+    defaults: { _controller: AppBundle:OpenCourseFileManage:deleteCourseFiles }
+    methods: [POST]
+
+open_course_manage_course_pick:
+    path: /open/course/{id}/manage/recommend/pick/{filter}
+    defaults: { _controller: AppBundle:OpenCourseManage:pick,filter:'openCourse'}
+
+open_course_manage_recommend_course_delete:
+    path: /open/course/{id}/manage/recommend/{recommendId}/delete
+    defaults: { _controller: AppBundle:OpenCourseManage:deleteRecommendCourse}
+    methods: [POST]
+
+open_course_manage_lesson_replays_edit:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replays/edit
+    defaults: { _controller: AppBundle:LiveOpenCourse:editLessonReplay }
+
+open_course_manage_replay_title_update:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update
+    defaults: { _controller: AppBundle:LiveOpenCourse:updateReplayTitle }
+    methods: [POST]
+
+open_course_manage_student_export_csv:
+    path:  /open/course/{id}/manage/student/export
+    defaults: { _controller: AppBundle:OpenCourseManage:studentsExport }
+
+open_course_manage_student_export_datas:
+    path:  /open/course/{id}/manage/student/export/datas
+    defaults: { _controller: AppBundle:OpenCourseManage:studentsExportDatas }
+
+open_course_manage_material:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:materialModal }
+
+open_course_manage_material_upload:
+    path:  /open/course/{courseId}/manage/lesson/{lessonId}/material/upload
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:materialUpload }
+    methods: [POST]
+
+open_course_manage_material_delete:
+    path:  /open/course/{courseId}/manage/material/{materialId}/delete
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:materialDelete }
+    methods: [POST]
+
+open_course_material_download:
+    path:  /open/course/{courseId}/material/{materialId}/download
+    defaults: { _controller: AppBundle:OpenCourse:materialDownload }
+
+open_course_manage_material_browser:
+    path:  /open/course/{courseId}/manage/material/browser
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:materialBrowser }
+
+open_course_course_search:
+    path: /open/course/{id}/recommended/search/{filter}
+    defaults: { _controller: AppBundle:OpenCourseManage:search}
+
+open_course_recommended_course_select:
+    path: /open/course/{id}/recommended/select
+    defaults: { _controller: AppBundle:OpenCourseManage:recommendedCoursesSelect}
+
+open_course_show:
+    path:  /open/course/{courseId}
+    defaults: { _controller: AppBundle:OpenCourse:show, lessonId:null }
+
+open_course_lesson_learn:
+    path:  /open/course/{courseId}/lesson/{lessonId}/learn
+    defaults: { _controller: AppBundle:OpenCourse:show, lessonId:null }
+
+open_course_lesson_show:
+    path:  /open/course/{courseId}/lesson/{lessonId}/show
+    defaults: { _controller: AppBundle:OpenCourse:lessonShow }
+
+open_course_favorite:
+    path: /open/course/{id}/favorite
+    defaults: { _controller: AppBundle:OpenCourse:favorite }
+    methods: [POST]
+
+open_course_unfavorite:
+    path: /open/course/{id}/unfavorite
+    defaults: { _controller: AppBundle:OpenCourse:unfavorite }
+    methods: [POST]
+
+open_course_like:
+    path: /open/course/{id}/like
+    defaults: { _controller: AppBundle:OpenCourse:like }
+    methods: [POST]
+
+open_course_unlike:
+    path: /open/course/{id}/unlike
+    defaults: { _controller: AppBundle:OpenCourse:unlike }
+    methods: [POST]
+
+open_course_post:
+    path:  /open/course/{id}/post
+    defaults: { _controller: AppBundle:OpenCourse:post }
+
+open_course_post_reply:
+    path:  /open/course/{id}/post/{postId}
+    defaults: { _controller: AppBundle:OpenCourse:postReply }
+    methods: [POST]
+
+live_open_course_play:
+    path:  /open/course/{courseId}/lesson/{lessonId}/live_entry
+    defaults: { _controller: AppBundle:LiveOpenCourse:entry }
+
+live_open_course_manage_replay:
+    path:  /open/course/{id}/manage/replay
+    defaults: { _controller: AppBundle:LiveOpenCourse:replayManage }
+
+live_open_course_lesson_replay_create:
+    path:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
+    defaults: { _controller: AppBundle:LiveOpenCourse:createLessonReplay }
+
+live_open_course_lesson_replay_upload:
+    path:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: AppBundle:LiveOpenCourse:uploadModal }
+
+live_open_course_live_replay_entry:
+    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry
+    defaults: { _controller: AppBundle:LiveOpenCourse:entryReplay }
+
+live_open_course_live_replay_url:
+    path: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url
+    defaults: { _controller: AppBundle:LiveOpenCourse:getReplayUrl }
+
+live_open_lesson_time_check:
+    path:  /open/course/{courseId}/manage/live/time/check
+    defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
+
+open_course_member_sms:
+    path:  /open/course/{id}/member/sms
+    defaults: { _controller: AppBundle:OpenCourse:memberSms }
+
+open_course_member_create:
+    path:  /open/course/{id}/member/create
+    defaults: { _controller: AppBundle:OpenCourse:createMember }
+
+open_course_lesson_player:
+    path:  /open/course/{courseId}/lesson/{lessonId}/player
+    defaults: { _controller: AppBundle:OpenCourse:player }
+
+open_course_mobile_check:
+    path:  /open/course/{courseId}/mobile/check
+    defaults: { _controller: AppBundle:OpenCourse:mobileCheck }
+
+open_course_ad_modal_recommend_course:
+    path: /open/course/{id}/ad-modal/recommend/course
+    defaults: { _controller: AppBundle:OpenCourse:adModalRecommendCourse}
+    methods: [GET]
+
+importer_check:
+    path: /importer/{type}/check
+    defaults: { _controller: AppBundle:Importer:check}
+    methods: [POST]
+
+importer_import:
+    path: /importer/{type}/import
+    defaults: { _controller: AppBundle:Importer:import}
+    methods: [POST]
+
+importer_index:
+    path: /importer/{type}/index
+    defaults: { _controller: AppBundle:Importer:template}
+
+
 #activity
 course_activity_trigger:
     path: /course/{courseId}/activity/{activityId}/trigger
@@ -119,7 +1579,7 @@ course_set_manage_course_teachers:
 
 course_set_manage_course_teachers_match:
   path: /course_set/{courseSetId}/manage/course/{courseId}/teachers_match
-  defaults: {_controller: TopxiaWebBundle:CourseManage:teachersMatch}
+  defaults: {_controller: AppBundle:CourseManage:teachersMatch}
 
 course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
@@ -488,3 +1948,403 @@ attachment_download:
   path: /attachment/{id}/download
   defaults: { _controller: AppBundle:File/Attachment:download }
   methods: [GET]
+
+#classroom
+
+classroom_manage:
+    path: /classroom/{id}/manage
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:index }
+
+classroom_manage_courses:
+    path: /classroom/{id}/manage/courses
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
+
+classroom_courses_select:
+    path: /classroom/{id}/courses/select
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
+
+classroom_manage_set_info:
+    path: /classroom/{id}/manage/set_info
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setInfo }
+
+classroom_manage_set_picture:
+    path: /classroom/{id}/manage/set_picture
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPicture }
+
+classroom_manage_picture_crop:
+    path: /classroom/{id}/manage/picture_crop
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:pictureCrop }
+
+classroom_manage_set_price:
+    path: /classroom/{id}/manage/price/set
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPrice }
+
+classroom_manage_students:
+    path: /classroom/{id}/manage/students
+    defaults: { _controller:AppBundle:Classroom/ClassroomManage:students }
+
+classroom_manage_aduitor:
+    path: /classroom/{id}/manage/aduitor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+
+classroom_manage_record:
+    path: /classroom/{id}/manage/refund_record
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+
+classroom_manage_service:
+    path: /classroom/{id}/manage/service
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:service}
+
+classroom_manage_teachers:
+    path: /classroom/{id}/manage/teachers
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:teachers }
+
+classroom_manage_headteacher:
+    path: /classroom/{id}/manage/headteacher
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:headteacher }
+
+classroom_manage_assistants:
+    path: /classroom/{id}/manage/assistants
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:assistants }
+
+classroom_manage_publish:
+    path: /classroom/{id}/manage/publish
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:publish }
+    methods: [POST]
+
+classroom_manage_close:
+    path: /classroom/{id}/manage/close
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:close }
+    methods: [POST]
+
+classroom_manage_checkName:
+    path: /classroom/manage/checkName
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkName }
+
+classroom_manage_student_remark:
+    path:  /classroom/{classroomId}/manage/student/{userId}/remark
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:remark }
+
+classroom_manage_student_remove:
+    path:  /classroom/{classroomId}/manage/student/{userId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:remove }
+    methods: [POST]
+
+classroom_manage_student_create:
+    path:  /classroom/{id}/manage/student/create
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:create }
+
+classroom_manage_student_check:
+    path:  /classroom/{id}/manage/student_check
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkStudent }
+
+classroom_manage_student_export_datas:
+    path:  /classroom/{id}/manage/student/export/{role}/datas
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exportDatas }
+
+classroom_manage_student_export_csv:
+    path:  /classroom/{id}/manage/student/export
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:exportCsv }
+
+classroom_manage_student_import:
+    path:  /classroom/{id}/manage/student/import
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:importUsers }
+
+classroom_manage_student_to_base:
+    path:  /classroom/{id}/manage/student/importing
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:excelDataImport }
+    methods: [POST]
+
+classroom_manage_testpaper:
+    path:  /classroom/{id}/manage/testpaper/{status}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
+
+classroom_manage_homework:
+    path:  /classroom/{id}/manage/homework/{status}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
+
+classroom_explore:
+    path:  /classroom/explore/{category}
+    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
+
+classroom_show:
+    path:  /classroom/{id}
+    defaults: { _controller: AppBundle:Classroom/Classroom:show }
+
+classroom_qrcode:
+    path:  /classroom/{id}/qrcode
+    defaults: { _controller: AppBundle:Classroom/Classroom:qrcode }
+
+classroom_reviews:
+    path:  /classroom/{id}/review
+    defaults: { _controller: AppBundle:Classroom/Review:list }
+
+classroom_review_create:
+    path:  /classroom/{id}/review/create
+    defaults: { _controller: AppBundle:Classroom/Review:create }
+
+classroom_review_post:
+    path:  /classroom/{id}/review/{reviewId}/post
+    defaults: { _controller: AppBundle:Classroom/Review:post }
+
+classroom_review_delete:
+    path:  /classroom/review/{reviewId}/delete
+    defaults: { _controller: AppBundle:Classroom/Review:delete }
+
+classroom_introductions:
+    path:  /classroom/{id}/introduction
+    defaults: { _controller: AppBundle:Classroom/Classroom:introduction }
+
+# classroom_review_create:
+#     path:  /classroom/{id}/review/create
+#     defaults: { _controller: AppBundle:Classroom/Classroom:create }
+
+classroom_buy:
+    path: /classroom/{id}/buy
+    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+
+classroom_buy_modify_user_info:
+    path: /classroom/buy/modify_user_info
+    defaults: { _controller: AppBundle:Classroom/Classroom:modifyUserInfo }
+
+classroom_sign:
+    path:  classroom/sign/{classroomId}
+    defaults: { _controller: AppBundle:Classroom/Classroom:sign }
+
+classroom_signed_records:
+    path:  classroom/sign/{classroomId}/records
+    defaults: { _controller: AppBundle:Classroom/Classroom:getSignedRecordsByPeriod }
+
+classroom_become_auditor:
+    path: /classroom/{id}/becomeAuditor
+    defaults: { _controller: AppBundle:Classroom/Classroom:becomeAuditor }
+
+classroom_exit:
+    path: /classroom/{id}/exit
+    defaults: { _controller: AppBundle:Classroom/Classroom:exit }
+
+classroom_canview:
+    path: /classroom/{classroomId}/canview
+    defaults: { _controller: AppBundle:Classroom/Classroom:canview }
+
+classroom_courses:
+    path: /classroom/{classroomId}/courses
+    defaults: { _controller: AppBundle:Classroom/Course:list }
+#
+# 讨论区
+#
+classroom_threads:
+    path: /classroom/{classroomId}/threads
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:list }
+
+classroom_thread_create:
+    path: /classroom/{classroomId}/thread/{type}/create
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:create, type:'discussion' }
+
+classroom_thread_show:
+    path: /classroom/{classroomId}/thread/{threadId}
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:show }
+
+classroom_thread_update:
+    path: /classroom/{classroomId}/thread/{threadId}/update
+    defaults: { _controller: AppBundle:Classroom/ClassroomThread:update }
+
+classroom_vip_buy:
+    path: /classroom/{id}/vip_buy
+    defaults: { _controller: AppBundle:Classroom/Classroom:becomeStudent }
+
+classroom_member_ids:
+    path: /classroom/{id}/member_ids
+    defaults: { _controller: AppBundle:Classroom/Classroom:memberIds }
+
+classroom_thread_members_become:
+    path: /classroom/{classroomId}/thread/{threadId}/members/become
+    defaults: { _controller: AppBundle:Classroom/ThreadMember:become }
+
+classroom_thread_members_quit:
+    path: /classroom/{classroomId}/thread/{threadId}/member/{memberId}/quit
+    defaults: { _controller: AppBundle:Classroom/ThreadMember:quit }
+
+classroom_headteacher_match:
+    path: /classroom/{classroomId}/headteacher/match
+    defaults: { _controller: AppBundle:Classroom/Utility:headteacherMatch }
+
+classroom_assistants_match:
+    path: /classroom/{classroomId}/assistants/match
+    defaults: { _controller: AppBundle:Classroom/Utility:assistantsMatch }
+
+classroom_courses_pick:
+    path: /classroom/{classroomId}/course/pick
+    defaults: { _controller: AppBundle:Classroom/Course:pick }
+
+classroom_course_search:
+    path: /classroom/{classroomId}/course/search
+    defaults: { _controller: AppBundle:Classroom/Course:search }
+
+my_teaching_classroom_threads:
+    path: /my/teaching/classroom/threads/{type}
+    defaults: { _controller: AppBundle:Classroom/Classroom:classroomThreads }
+
+classroom_course_notes_list:
+    path: /classroom/{classroomId}/courses/notes
+    defaults: { _controller: AppBundle:Classroom/CourseNote:list }
+
+classroom_teachers:
+    path: /classroom/{classroomId}/teachers/list
+    defaults: { _controller: AppBundle:Classroom/Teacher:list }
+
+classroom_teacherIds_catch:
+    path: /classroom/{classroomId}/teacherIds/catch
+    defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
+
+classroom_course_lessons_preview:
+    path: /classroom/{classroomId}/course/{courseId}/lessons/preview
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:preview }
+
+classroom_buy_hint:
+    path: /classroom/courses/{courseId}/buy/hint
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:buyHint }
+
+classrom_course_lessons_list:
+    path: /classroom/{classroomId}/course/{courseId}/lessons/list
+    defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+
+#material_lib
+material_lib_browsing:
+  path: /material/lib/browse
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:index}
+
+material_lib_show_browsing:
+  path: /material/lib/show/browse
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showMyMaterialLibForm}
+
+material_lib_my_sharing:
+  path: /material/lib/my/sharing/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showShareForm }
+
+material_lib_my_sharing_detail:
+  path: /material/lib/my/sharing_detail/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:historyDetailShow }
+
+material_lib_my_sharing_users:
+  path: /material/lib/my/sharing_users/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:historyUserShow }
+
+material_lib_my_sharing_contacts:
+  path: /material/lib/recent/contacts
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:findMySharingContacts }
+
+material_lib_save_sharing:
+  path: /material/lib/my/sharing/save
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:saveShare }
+
+material_tag_show_match:
+  path: /material/lib/tag/match
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:match }
+
+material_lib_show_sharing_history:
+  path: /material/lib/my/sharing/history
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:showShareHistory }
+
+material_lib_cancel_sharing:
+  path: /material/lib/my/sharing/cancel
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:cancelShare }
+
+material_lib_save_collection:
+  path: /material/lib/my/collection/save
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:collect }
+
+material_lib_file_preview:
+  path:  /material/lib/file/{fileId}/preview
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:preview }
+
+material_edit:
+  path:  /materiallib/{fileId}/edit
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:edit }
+  methods: [POST]
+
+material_lib_file_player:
+  path:  /material/lib/{fileId}/player
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:player }
+
+material_reconvert:
+  path:  /material/lib/{globalId}/reconvert
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:reconvert }
+
+material_thumbnail_generate:
+  path:  /material/lib/{globalId}/thumbnail/generate
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:generateThumbnail }
+
+material_lib_file_detail:
+  path:  /material/lib/{fileId}/detail
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:detail }
+
+material_download:
+  path:  /materiallib/{fileId}/download
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:download }
+
+material_delete:
+  path:  /materiallib/{fileId}/delete
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:delete }
+  methods: [POST]
+
+material_batch_delete:
+  path: /materials/batch/delete
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchDelete }
+  methods: [POST]
+
+material_delete_modal_show:
+  path: /materials/delete/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:deleteModalShow }
+  methods: [POST]
+
+material_batch_share:
+  path: /materials/batch/share
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchShare }
+  methods: [POST]
+
+material_unshare:
+  path: /materiallib/{fileId}/unshare
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:unshare }
+
+material_batch_tag_show:
+  path: /materials/batch/tag/show
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
+
+global_file_player:
+  path:  /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
+
+global_file_hls_playlist:
+  path:  /global_file/{globalId}/playlist/{token}.m3u8
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
+
+global_file_hls_stream:
+  path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:stream }
+
+global_file_hls_clef:
+  path:  /global_file/{globalId}/clef/{token}
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:clef }
+
+global_file_ppt:
+  path:  /global_file/{globalId}/ppt
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:ppt }
+
+global_file_document:
+  path:  /global_file/{globalId}/document
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:document }
+
+material_lib_choose:
+  path: /material/lib/choose
+  defaults: { _controller: AppBundle:MaterialLib/MaterialLib:materialChoose }
+
+#org
+switch_org:
+    path: /swithOrg/{id}
+    defaults: { _controller: AppBundle:Org:switchOrg }
+
+org_tree:
+    path: /org-tree.json
+    defaults: { _controller: AppBundle:Org:orgTreeJson }
+    methods: [GET]

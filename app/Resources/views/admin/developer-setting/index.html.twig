@@ -1,0 +1,128 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{'开发者设置'|trans}} - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block content %}
+<div class="page-header"><h1>{{'开发者设置'|trans}}</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'调试'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('debug', {1:'开启'|trans, 0:'关闭'|trans}, developerSetting.debug) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'应用中心API地址'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="app_api_url" value="{{ developerSetting.app_api_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'云服务API地址'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_server" value="{{ developerSetting.cloud_api_server|default('') }}">
+    </div>
+  </div>
+
+{#   <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>云文件服务地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_file_server" value="{{ developerSetting.cloud_file_server|default('') }}">
+    </div>
+  </div> #}
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Push API{{'地址'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_tui_server" value="{{ developerSetting.cloud_api_tui_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Event API{{ '地址'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_event_server" value="{{ developerSetting.cloud_api_event_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'IMAPI地址'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_im_server" value="{{ developerSetting.cloud_api_im_server|default('http://imapi.edusoho.net/v1/') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '气球云SDK的CDN地址'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'HLS加密视频'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('hls_encrypted', {1:'开启'|trans, 0:'关闭'|trans}, developerSetting.hls_encrypted) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'是否无外网'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('without_network', {1:'是'|trans, 0:'否'|trans}, developerSetting.without_network|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-warning">
+  <h4>{{'注意事项'|trans}}</h4>
+  <ul>
+    <li>{{'此页设置，仅供调试使用，请勿随意修改参数，不然将造成系统不可预知的错误。'|trans}}</li>
+    <li>{{'请保持：'|trans}}<br>
+      {{'「调试」：关闭'|trans}}<br>
+      {{'「应用中心API地址」：空'|trans}}<br>
+      {{'「云服务API地址」：'|trans}}　http://api.edusoho.net {{'或 空'|trans}}<br>
+      {{'「IMAPI地址」：'|trans}}　http://imapi.edusoho.net/v1/ {{'或 空'|trans}}<br>
+      {{'「HLS加密视频」：　开启'|trans}}
+    </li>
+  </ul>
+</div>
+
+{% endblock %}

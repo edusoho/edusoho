@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set topxiawebbundle = true %}
+
 {% set billable = true %}
 {% if (
   (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.price == 0)
@@ -106,6 +108,6 @@
   {% endif %}
 
   <script>
-    app.load('course/buy-modal');
+    app.lazyLoad = function() { app.load('course/buy-modal'); };
   </script>
 {% endblock %}

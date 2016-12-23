@@ -30,24 +30,16 @@ interface MoneyCardService
     /**
      * @param array $conditions
      * @return mixed
-     * @deprecated  countMoneyCards
+     * @befor  searchMoneyCardsCount
      */
     public function countMoneyCards(array $conditions);
 
-    /**
-     * @param array $conditions
-     * @param array $oderBy
-     * @param $start
-     * @param $limit
-     * @return mixed
-     * @deprecated  searchBatchs
-     */
     public function searchBatches(array $conditions, array $oderBy, $start, $limit);
 
     /**
      * @param array $conditions
      * @return mixed
-     * @deprecated  searchBatchsCount
+     * @befor  searchBatchsCount
      */
     public function countBatches(array $conditions);
 

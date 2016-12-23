@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% block title %}
+
+{% set topxiawebbundle = true %}
+  {% block title %}
   {% if model == 'show' %}
     角色详情
   {% elseif model == 'edit' %}
@@ -61,5 +63,5 @@
             data-target="#role-form">添加
     </button>
   {% endif %}
-  <script>app.load('permissionbundle/controller/role/create')</script>
+  <script>app.lazyLoad = function() { app.load('permissionbundle/controller/role/create') };</script>
 {% endblock %}

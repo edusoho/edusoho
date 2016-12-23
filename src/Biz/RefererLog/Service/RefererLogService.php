@@ -42,7 +42,7 @@ interface RefererLogService
     /**
      * @param $conditions
      * @return mixed
-     * @deprecated searchRefererLogCount
+     * @before searchRefererLogCount
      */
     public function countRefererLogs($conditions);
 
