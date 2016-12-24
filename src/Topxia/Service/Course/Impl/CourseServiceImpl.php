@@ -15,6 +15,7 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
+
     /**
      * Course API
      */

@@ -290,8 +290,6 @@ interface CourseService
 
     public function resetLessonMaterialCount($lessonId, $count);
 
-    public function setMemberNoteNumber($courseId, $userId, $number);
-
     public function favoriteCourse($courseId);
 
     public function unFavoriteCourse($courseId);

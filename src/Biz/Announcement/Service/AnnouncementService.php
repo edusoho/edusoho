@@ -3,7 +3,7 @@ namespace Biz\Announcement\Service;
 
 interface AnnouncementService
 {
-	  public function searchAnnouncements($conditions, $sort, $start, $limit);
+    public function searchAnnouncements($conditions, $sort, $start, $limit);
 
     public function searchAnnouncementsCount($conditions);
 
@@ -13,7 +13,5 @@ interface AnnouncementService
 
     public function updateAnnouncement($id, $fields);
 
-    public function deleteAnnouncement($id){
-        echo '1';
-    }
+    public function deleteAnnouncement($id);
 }
