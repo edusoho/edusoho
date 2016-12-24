@@ -29,13 +29,13 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                     'courseId'  => $course['id'],
                     'isLearned' => 1
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
             } elseif ($sourceCourse['serializeMode'] == 'serialize' && $course['serializeMode'] != 'serialize') {
                 $conditions = array(
                     'courseId'              => $course['id'],
                     'learnedNumGreaterThan' => $course['lessonNum']
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 1));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 1));
             }
         }
     }
@@ -54,7 +54,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'isLearned'          => 1,
                 'learnedNumLessThan' => $course['lessonNum']
             );
-            $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+            $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
         }
     }
 
@@ -76,7 +76,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'learnedNum' => $course['lessonNum']
             );
 
-            $this->getCourseService()->updateMembers($conditions, $updateFields);
+            $this->getCourseMemberService()->updateMembers($conditions, $updateFields);
         }
     }
 
