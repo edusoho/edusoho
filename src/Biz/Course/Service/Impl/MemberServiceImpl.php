@@ -40,7 +40,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException("course #{$courseId} does not exist ");
         }
 
-        if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
+        if ($this->getCourseMemberService()->isCourseStudent($course['id'], $user['id'])) {
             throw $this->createNotFoundException('用户已经是学员，不能添加！');
         }
 
@@ -810,5 +810,10 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCategoryService()
     {
         return $this->biz->service('Taxonomy:CategoryService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

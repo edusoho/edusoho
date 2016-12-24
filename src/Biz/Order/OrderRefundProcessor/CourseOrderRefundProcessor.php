@@ -29,11 +29,11 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 	{
 		$order = $this->getOrderService()->getOrder($id);
 		if ($pass) {
-            if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
             }
         } else {
-            if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }

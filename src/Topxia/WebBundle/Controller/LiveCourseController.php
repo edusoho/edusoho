@@ -307,7 +307,7 @@ class LiveCourseController extends BaseController
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $params['role'] = 'teacher';
-        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
@@ -363,7 +363,7 @@ class LiveCourseController extends BaseController
             } else {
                 $params['role'] = 'speaker';
             }
-        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));

@@ -32,7 +32,7 @@ class LiveAuthController extends BaseController
             return new Response('fail');
         }
 
-        if (!$this->getCourseService()->isCourseStudent($courseId, $userId)) {
+        if (!$this->getCourseMemberService()->isCourseStudent($courseId, $userId)) {
             return new Response('fail');
         }
 
@@ -52,6 +52,12 @@ class LiveAuthController extends BaseController
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 
 }

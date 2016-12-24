@@ -29,7 +29,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
                     $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                 }
             }
@@ -309,7 +309,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
                     $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                 }
             }
@@ -321,7 +321,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
         }
 

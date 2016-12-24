@@ -127,7 +127,7 @@ class UserImporter extends Importer
                     $course = $this->getCourseService()->getCourse($courseId);
 
                     if ($mode = "update") {
-                        $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+                        $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
                         if ($isCourseStudent) {
                             continue;

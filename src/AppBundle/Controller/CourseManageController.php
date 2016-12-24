@@ -221,7 +221,7 @@ class CourseManageController extends BaseController
         if (!$user) {
             $response = '该用户不存在';
         } else {
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
                 $response = '该用户已是本课程的学员了';

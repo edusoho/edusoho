@@ -83,7 +83,7 @@ class CourseManageController extends BaseController
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户还不存在！'));
         } else {
             $user            = $this->getUserService()->getUserByNickname($nickname);
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了！'));
