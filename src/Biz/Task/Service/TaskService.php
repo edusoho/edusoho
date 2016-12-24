@@ -8,6 +8,8 @@ interface TaskService
 
     public function getTask($id);
 
+    public function findTasksByIds($ids);
+
     public function createTask($task);
 
     public function updateTask($id, $fields);

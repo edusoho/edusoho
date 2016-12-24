@@ -208,6 +208,11 @@ class BaseController extends Controller
         });
     }
 
+    protected function createNamedFormBuilder($name, $data = null, array $options = array())
+    {
+        return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
+    }
+
     protected function createJsonResponse($data = null, $status = 200, $headers = array())
     {
         return new JsonResponse($data, $status, $headers);

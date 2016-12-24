@@ -19,7 +19,6 @@ class CourseSetController extends BaseController
 
     public function noteListAction(Request $request, $id)
     {
-
     }
 
     protected function getCourseSetAndCourse(Request $request, $id)

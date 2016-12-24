@@ -5,22 +5,8 @@ namespace Biz\Course\Service;
 // TODO refactor. use Thread.
 interface ThreadService
 {
-    /**
-     *
-     * @see replace of searchThreadPosts
-     * @param $conditions
-     * @param $sort
-     * @param $start
-     * @param $limit
-     * @return mixed
-     */
     public function searchThreads($conditions, $sort, $start, $limit);
 
-    /**
-     * @see replace of searchThreadPostsCount
-     * @param $conditions
-     * @return mixed
-     */
     public function countThreads($conditions);
 
     public function getThread($courseId, $threadId);
@@ -74,9 +60,9 @@ interface ThreadService
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
-//    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy);
-//
-//    public function searchThreadPostsCount($conditions, $groupBy);
+    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy);
+
+    public function searchThreadPostsCount($conditions, $groupBy);
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId);
 

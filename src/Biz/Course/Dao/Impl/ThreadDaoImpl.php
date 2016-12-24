@@ -31,7 +31,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',
-                'lessonId = :lessonId',
+                'courseSetId = :courseSetId',
+                'taskId = :taskId',
                 'userId = :userId',
                 'type = :type',
                 'type IN (:types)',
