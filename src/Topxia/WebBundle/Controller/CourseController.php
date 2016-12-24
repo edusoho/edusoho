@@ -155,7 +155,7 @@ class CourseController extends CourseBaseController
             6
         );
 
-        $students = $this->getCourseService()->findCourseStudents(
+        $students = $this->getCourseMemberService()->findCourseStudents(
             $course['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -406,7 +406,7 @@ class CourseController extends CourseBaseController
         $count     = $this->getCourseService()->getCourseStudentCount($id);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $students = $this->getCourseMemberService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($students as $key => $student) {
             $user                       = $this->getUserService()->getUser($student['userId']);
@@ -539,7 +539,7 @@ class CourseController extends CourseBaseController
 
     public function latestMembersBlockAction($course, $count = 10)
     {
-        $students = $this->getCourseService()->findCourseStudents($course['id'], 0, 12);
+        $students = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, 12);
         $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:latest-members-block.html.twig', array(

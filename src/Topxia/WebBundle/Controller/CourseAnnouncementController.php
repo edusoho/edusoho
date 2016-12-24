@@ -42,7 +42,7 @@ class CourseAnnouncementController extends BaseController
         	if ($request->request->get('notify') == 'notify'){
 	        	$count = $this->getCourseService()->getCourseStudentCount($courseId);
 
-	        	$members = $this->getCourseService()->findCourseStudents($courseId, 0, $count);
+	        	$members = $this->getCourseMemberService()->findCourseStudents($courseId, 0, $count);
 
 	        	$message = array(
 	        		'title'=> $course['title'],
@@ -108,6 +108,11 @@ class CourseAnnouncementController extends BaseController
     protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
 }

@@ -2674,7 +2674,7 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $createCourse = $this->getCourseService()->createCourse($course);
-        $result       = $this->getCourseService()->findCourseStudents($createCourse['id'], 0, 100);
+        $result       = $this->getCourseMemberService()->findCourseStudents($createCourse['id'], 0, 100);
         $this->assertEquals(array(), $result);
     }
 
