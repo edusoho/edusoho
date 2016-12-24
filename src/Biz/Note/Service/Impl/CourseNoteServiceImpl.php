@@ -87,7 +87,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
@@ -114,7 +114,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $this->dispatchEvent('course.note.delete', $note);
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])

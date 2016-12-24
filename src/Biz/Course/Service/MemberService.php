@@ -3,18 +3,6 @@
 
 namespace Biz\Course\Service;
 
-//Course:MemberService
-
-protected function getCourseMemberService()
-{
-    return ServiceKernel::instance()->createService('Course:MemberService');
-}
-
-protected function getCourseMemberService()
-{
-    return $this->getBiz()->service('Course:MemberService');
-}
-
 
 interface MemberService
 {

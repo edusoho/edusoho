@@ -104,7 +104,7 @@ class NoteServiceImpl extends BaseService implements NoteService
             $this->getDispatcher()->dispatch('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
@@ -128,7 +128,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         $this->getNoteDao()->deleteNote($id);
         $this->getDispatcher()->dispatch('course.note.delete', new Event($note));
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
@@ -252,5 +252,10 @@ class NoteServiceImpl extends BaseService implements NoteService
     protected function getNoteLikeDao()
     {
         return $this->createDao('Course:CourseNoteLikeDao');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

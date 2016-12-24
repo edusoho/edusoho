@@ -3131,7 +3131,7 @@ class CourseServiceTest extends BaseTestCase
             'type'     => 'text'
         ));
 
-        $result = $this->getCourseService()->setMemberNoteNumber($course['id'], $currentUser['id'], '2');
+        $result = $this->getCourseMemberService()->setMemberNoteNumber($course['id'], $currentUser['id'], '2');
         $this->assertTrue($result);
     }
 
@@ -3383,7 +3383,7 @@ class CourseServiceTest extends BaseTestCase
         $normalUser = $this->createNormalUser();
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $normalUser['id']);
-        $this->getCourseService()->becomeStudentByClassroomJoined($course['id'], $normalUser['id']);
+        $this->getCourseMemberService()->becomeStudentByClassroomJoined($course['id'], $normalUser['id']);
     }
 
     public function testCreateLessonAndChapter()

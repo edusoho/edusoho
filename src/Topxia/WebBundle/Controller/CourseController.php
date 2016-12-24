@@ -201,7 +201,7 @@ class CourseController extends CourseBaseController
             }
 
             $user   = $this->getCurrentUser();
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($id, $user->id);
 
             if (isset($member["id"])) {
                 $course['studentNum']++;
