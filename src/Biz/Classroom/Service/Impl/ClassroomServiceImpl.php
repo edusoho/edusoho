@@ -656,7 +656,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 foreach ($diff as $courseId) {
                     $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
                     $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
-                    $this->getCourseService()->deleteMemberByCourseIdAndRole($courseId, 'student');
+                    $this->getCourseMemberService()->deleteMemberByCourseIdAndRole($courseId, 'student');
                     $this->getCourseService()->closeCourse($courseId, 'classroom');
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->wave(array($classroomId), array('noteNum' => "-{$course['noteNum']}"));
