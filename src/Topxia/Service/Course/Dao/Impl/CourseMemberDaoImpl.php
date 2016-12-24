@@ -231,20 +231,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
-    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
-    {
-        $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
-        $sql .= " JOIN  `user` As c ON m.courseId = ?";
-
-        if ($locked) {
-            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1 ";
-        } else {
-            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
-        }
-
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
-    }
-
     public function findMembersByUserIdAndJoinType($userId, $joinedType)
     {
         $that = $this;

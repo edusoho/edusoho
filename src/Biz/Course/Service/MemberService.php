@@ -3,7 +3,18 @@
 
 namespace Biz\Course\Service;
 
-Course:MemberService
+//Course:MemberService
+
+protected function getCourseMemberService()
+{
+    return ServiceKernel::instance()->createService('Course:MemberService');
+}
+
+protected function getCourseMemberService()
+{
+    return $this->getBiz()->service('Course:MemberService');
+}
+
 
 interface MemberService
 {
@@ -34,8 +45,6 @@ interface MemberService
     public function findCourseStudents($courseId, $start, $limit);
 
     public function findCourseStudentsByCourseIds($courseIds);
-
-    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
     public function getCourseStudentCount($courseId);
 

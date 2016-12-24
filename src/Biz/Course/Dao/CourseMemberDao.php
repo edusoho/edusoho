@@ -70,8 +70,6 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true); //
 
-    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
-
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
     public function findMemberCountByCourseIdAndRole($courseId, $role);
