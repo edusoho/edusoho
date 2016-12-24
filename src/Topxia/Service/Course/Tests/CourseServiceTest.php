@@ -220,7 +220,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $user['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $user['id']);
         $this->getCourseService()->tryLearnCourse($createCourse['id']);
         $result = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1);
         $this->assertCount(1, $result);
@@ -243,7 +243,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $user['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $user['id']);
         $this->getCourseService()->tryLearnCourse($createCourse['id']);
         $result = $this->getCourseService()->findUserLearnCoursesNotInClassroom($user['id'], 0, 1);
         $this->assertCount(1, $result);
@@ -272,8 +272,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
@@ -304,8 +304,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
@@ -336,8 +336,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
@@ -368,8 +368,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
@@ -428,8 +428,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
         $this->getCourseService()->finishLearnLesson($createCourse1['id'], $createdLesson1['id']);
@@ -489,8 +489,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
         $this->getCourseService()->finishLearnLesson($createCourse1['id'], $createdLesson1['id']);
@@ -814,8 +814,8 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
-        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'], $user['id']);
+        $addCourse1 = $this->getCourseMemberService()->becomeStudent($createCourse1['id'], $user['id']);
+        $addCourse2 = $this->getCourseMemberService()->becomeStudent($createCourse2['id'], $user['id']);
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
         $this->getCourseService()->finishLearnLesson($createCourse1['id'], $createdLesson1['id']);
@@ -1787,7 +1787,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $user['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $user['id']);
         $result = $this->getCourseService()->canLearnLesson($createCourse['id'], $createLesson['id']);
         $this->assertEquals('yes', $result['status']);
     }
@@ -2556,7 +2556,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $member = $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $member = $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
         $this->assertNotEmpty($member);
     }
 
@@ -2665,7 +2665,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
 
         $result = $this->getCourseMemberService()->findCourseStudentsByCourseIds(array(1));
         $this->assertEquals($result[0]['id'], '1');
@@ -2686,7 +2686,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
         $count = $this->getCourseService()->getCourseStudentCount($createCourse['id']);
         $this->assertEquals('1', $count);
     }
@@ -2815,7 +2815,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $member = $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $member = $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
         $this->assertNotEmpty($member);
     }
 
@@ -2837,7 +2837,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $member = $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $member = $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
         $this->getCourseService()->removeStudent($createCourse['id'], $currentUser['id']);
         $result = $this->getCourseMemberService()->isCourseStudent($createCourse['id'], $currentUser['id']);
         $this->assertEquals(false, $result);
@@ -2861,7 +2861,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $normalUser['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $normalUser['id']);
         $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
         $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
@@ -2885,7 +2885,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $normalUser['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $normalUser['id']);
         $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
         $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
@@ -3351,7 +3351,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
+        $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
         $result = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser['id'], array($createCourse['id']));
         $this->assertEquals('2', $result[0]['id']);
     }

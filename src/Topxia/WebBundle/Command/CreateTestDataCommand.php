@@ -45,7 +45,7 @@ class CreateTestDataCommand extends BaseCommand
 
             $this->getCourseService()->publishCourse($course['id']);
 
-            $this->getCourseService()->becomeStudent($course['id'], $user['id']);
+            $this->getCourseMemberService()->becomeStudent($course['id'], $user['id']);
 
             for ($j = 0; $j < 5; $j++) {
                 $lesson = array(
@@ -75,6 +75,11 @@ class CreateTestDataCommand extends BaseCommand
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
     protected function authenticateUser($user)

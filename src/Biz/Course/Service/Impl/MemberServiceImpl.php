@@ -81,7 +81,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember'] : false
         );
 
-        $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
         $member = $this->getCourseMember($course['id'], $user['id']);
 

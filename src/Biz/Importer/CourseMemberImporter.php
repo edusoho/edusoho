@@ -77,7 +77,7 @@ class CourseMemberImporter extends Importer
                     'orderId' => $order['id']
                 );
 
-                if ($this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
+                if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
                     $successCount++;
                 };
 

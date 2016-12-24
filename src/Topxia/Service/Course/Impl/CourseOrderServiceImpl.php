@@ -107,7 +107,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                     'orderId' => $order['id'],
                     'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
                 );
-                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
 
             $connection->commit();
@@ -132,7 +132,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         );
 
         if (!$this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
             $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
             $this->getLogService()->warning("course_order", "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付成功。'), $order);

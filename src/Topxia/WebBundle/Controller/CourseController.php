@@ -329,7 +329,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException();
         }
 
-        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+        $this->getCourseMemberService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
 
         return $this->createJsonResponse(true);
     }

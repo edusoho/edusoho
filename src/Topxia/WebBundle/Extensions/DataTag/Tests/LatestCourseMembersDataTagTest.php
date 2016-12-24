@@ -61,8 +61,8 @@ class LatestCourseMembersDataTagTest extends BaseTestCase
             'confirmPassword' => '123456',
             'createdIp' => '127.0.0.1'
         ));
-    	$this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course2['id'],$user2['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course2['id'],$user2['id']);
 
         $datatag = new LatestCourseMembersDataTag();
         $members1 = $datatag->getData(array('count' => 5,'categoryId' => $category1['id']));

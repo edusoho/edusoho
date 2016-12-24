@@ -878,7 +878,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->controller->getCourseService()->becomeStudent($courseId, $user['id'], array(
+            $this->controller->getCourseMemberService()->becomeStudent($courseId, $user['id'], array(
                 'becomeUseMember' => true
             ));
         } catch (ServiceException $e) {
