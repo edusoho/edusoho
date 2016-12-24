@@ -15,7 +15,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
     {
         return $this->getByFields(array(
             'userId'   => $userId,
-            'taskId' => $taskId
+            'taskId' => $taskId,
         ));
     }
 
@@ -49,7 +49,8 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'createdTime >= :startTimeGreaterThan',
                 'status = :status',
                 'content LIKE :content',
-                'courseId IN (:courseIds)'
+                'courseId IN (:courseIds)',
+                'courseSetId = :courseSetId'
             ),
             'orderbys' => array(
                 'createdTime'
