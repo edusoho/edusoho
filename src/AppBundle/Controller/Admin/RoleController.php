@@ -1,5 +1,5 @@
 <?php
-namespace Permission\PermissionBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Controller\Admin\BaseController;
 use Topxia\Common\Paginator;

@@ -1,11 +1,11 @@
 <?php
-namespace Permission\Listener;
+namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class KernelResponseListener
+class PermissionKernelResponseListener
 {
     public function __construct($container)
     {
@@ -18,7 +18,6 @@ class KernelResponseListener
             return;
         }
 
-        
         ServiceKernel::instance()->getCurrentUser()->setPermissions(null);
     }
 }

@@ -1,12 +1,12 @@
 <?php
-namespace Permission\Listener;
+namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class KernelControllerListener
+class PermissionKernelControllerListener
 {
     protected $paths;
 

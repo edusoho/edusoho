@@ -1,6 +1,6 @@
 <?php
 
-namespace Permission\PermissionBundle\Security;
+namespace AppBundle\SfExtend;
 
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

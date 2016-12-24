@@ -1,5 +1,5 @@
 <?php
-namespace Permission\PermissionBundle\TwigExtension;
+namespace AppBundle\Twig;
 
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;

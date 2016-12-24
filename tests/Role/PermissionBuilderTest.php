@@ -1,5 +1,5 @@
 <?php
-namespace Permission\Common\Tests;
+namespace Tests\Tests;
 
 use Symfony\Component\Yaml\Yaml;
 use Biz\BaseTestCase;;

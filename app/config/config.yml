@@ -70,6 +70,8 @@ parameters:
     topxia.upload.public_url_path: "/files"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
     templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
+    permission.path_regular_expression: ['/^\/admin/']
+    router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
 
 services:
 
@@ -205,3 +207,34 @@ services:
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
+
+    ### permission
+    permission.admin_voter:
+        class: Permission\PermissionBundle\Security\AdminVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    permission.twig.permission_extension:
+        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    kernel.controller.permission_listener:
+        class: Permission\Listener\KernelControllerListener
+        arguments:    ['@service_container', '%permission.path_regular_expression%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
+
+    kernel.response.permission_listener:
+        class: Permission\Listener\KernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    routing.loader.yml:
+        class: Permission\Loader\YamlFileLoader
+        arguments: ['@file_locator']
+        tags:
+            - {name: routing.loader}

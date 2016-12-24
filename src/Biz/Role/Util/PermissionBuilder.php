@@ -1,5 +1,5 @@
 <?php
-namespace Permission\Common;
+namespace Biz\Role\Util;
 
 use Topxia\Common\Tree;
 use Topxia\Common\ArrayToolkit;
