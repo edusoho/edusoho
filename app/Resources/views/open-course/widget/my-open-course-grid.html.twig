@@ -1,0 +1,55 @@
+<li class="course-grid">
+  <a href="{{ path('open_course_show', {courseId:course.id}) }}" class="grid-body">
+    <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
+      <span class="course-label">
+      {% if course.status == 'draft' %}
+        <span class="label  label-warning">{{'未发布'|trans}}</span>
+      {% elseif course.status == 'closed' %}
+        <span class="label label-danger">{{'已关闭'|trans}}</span>
+      {% endif %}
+
+      {% if course.type == 'liveOpen' %}
+        {% set lesson = course['lesson']|default(null) %}
+        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+          <span class="label label-warning">{{'正在直播中'|trans}}</span>
+        {% else %}
+          <span class="label label-success">{{'直播'|trans}}</span>
+        {% endif %}
+      {% endif %}
+    </span>
+    <span class="title">{{ course.title }}</span>
+    {% if mode in ['default', 'teach'] %}
+
+      {% if course.type == 'live' %}
+        {% set lesson = course['lesson']|default(null) %}
+        {% if lesson %}
+          <span class="live-course-lesson metas">
+            <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+          </span>
+        {% endif %}
+      {% endif %}
+
+      <span class="metas clearfix">
+        <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum}}</span>
+        <span class="comment mlm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+        <span class="course-price-widget">
+          <span class="price">
+            <span class="text-success">公开课</span>
+          </span>
+        </span>
+      </span>
+    {% endif %}
+
+    {% if mode == 'teach' %}
+      {% if course.status == 'published' %}
+        <span class="label label-success course-status">{{'已发布'|trans}}</span>
+      {% elseif course.status == 'draft' %}
+        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
+      {% elseif course.status == 'closed' %}
+        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
+      {% endif %}
+    {% endif %}
+
+  </a>
+</li>

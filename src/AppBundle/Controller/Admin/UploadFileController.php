@@ -10,7 +10,7 @@ class UploadFileController extends BaseController
 {
 	public function headLeaderParamsAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }

@@ -42,7 +42,7 @@ class TaskPluginController extends BaseController
 
         $task = $this->getTaskService()->getTask($taskId);
 
-        $note = $this->getNoteService()->findCourseNotesByUserIdAndTaskId($currentUser['id'], $taskId);
+        $note = $this->getNoteService()->getCourseNoteByUserIdAndTaskId($currentUser['id'], $taskId);
 
         return $this->render('task/plugin/note.html.twig', array(
             'note' => $note,

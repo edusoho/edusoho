@@ -10,6 +10,8 @@ interface CourseSetService
 
     public function createCourseSet($courseSet);
 
+    public function updateCourseSet($id, $fields);
+
     public function updateCourseSetDetail($id, $fields);
 
     public function changeCourseSetCover($id, $fields);

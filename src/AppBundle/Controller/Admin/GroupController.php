@@ -82,7 +82,7 @@ class GroupController extends BaseController
     public function batchDeleteThreadAction(Request $request)
     {
         $threadIds=$request->request->all();
-         $user = $this->getCurrentUser();
+         $user = $this->getUser();
         foreach ($threadIds['ID'] as $threadId) {
             $thread=$this->getThreadService()->getThread($threadId);
             $message = array(
@@ -133,7 +133,7 @@ class GroupController extends BaseController
     public function transferGroupAction(Request $request,$groupId)
     {
         $data=$request->request->all();
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
         $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
 
         $group=$this->getGroupService()->getGroup($groupId);
@@ -212,7 +212,7 @@ class GroupController extends BaseController
         $thread=$this->getThreadService()->getThread($threadId);
         $this->getThreadService()->deleteThread($threadId);
 
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         $message = array(
             'title' => $thread['title'],
@@ -320,7 +320,7 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException($this->trans('参数sort不正确。'));
+                throw $this->createServiceException('参数sort不正确。');
         }
         return $orderBys;
     }

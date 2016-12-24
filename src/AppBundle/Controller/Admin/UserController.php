@@ -14,7 +14,7 @@ class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user   = $this->getCurrentUser();
+        $user   = $this->getUser();
         $fields = $request->query->all();
 
         $conditions = array(
@@ -227,7 +227,7 @@ class UserController extends BaseController
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
-                $this->setFlashMessage('danger', $this->trans('用户已绑定的手机不能修改。'));
+                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -275,7 +275,7 @@ class UserController extends BaseController
     public function rolesAction(Request $request, $id)
     {
         $user        = $this->getUserService()->getUser($id);
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
 
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');

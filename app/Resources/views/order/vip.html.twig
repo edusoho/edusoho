@@ -1,0 +1,34 @@
+<input type="hidden" name="buyType" value="{{buyType}}"/>
+<input type="hidden" name="duration" value="{{duration|default('')}}"/>
+<input type="hidden" name="unitType" value="{{unitType|default('')}}"/>
+<input type="hidden" name="type" value="{{type|default('')}}"/>
+<div class="order-detail">
+  <div class="order-img hidden-xs">
+    <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+      <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="">
+    </a>
+  </div>
+  <div class="order-info">
+    {% if type|default(true) %}
+      {% if buyType == "upgrade" %}
+      {{'会员升级为：%level.name%'|trans({'level.name':level.name})}}
+      {% elseif buyType == "renew" %}
+         {{ '%level.name% 会员续费 x %duration%'|trans({'%level.name%':level.name,'%duration%':duration})}}{% if unitType == "month" %}{{'个月'|trans}}{% elseif unitType == "year" %}{{'年'|trans}}
+      {% endif %}
+      {% else %}
+        {{'购买 %level.name%会员 x %duration%'|trans({'%level.name%':level.name,'%duration%':duration})}}{% if unitType == "month" %}{{'个月'|trans}}{% elseif unitType == "year" %}{{'年'|trans}}
+      {% endif %}
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="order-price">
+    {% if priceType|default('RMB') == "RMB" %}
+      <span class="pay-rmb">￥</span>
+    {% endif %}
+    <span role="total-price" class="pay-rmb">{{totalPrice}}</span>
+    {% if priceType|default('RMB') == "RMB" %}
+    {% elseif priceType|default('RMB') == "Coin" %}
+    {{setting("coin.coin_name")}}
+    {% endif %}
+  </div>
+</div>

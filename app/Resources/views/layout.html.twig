@@ -1,4 +1,4 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "macro.html.twig" as web_macro %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
@@ -42,8 +42,8 @@
   <div class="es-wrap">
 
     {% block header %}
-      {% include 'TopxiaWebBundle::site-hint.html.twig' %}
-      {% include 'TopxiaWebBundle:Default:header.html.twig' %}
+      {% include 'site-hint.html.twig' %}
+      {% include 'default/header.html.twig' %}
     {% endblock %}
 
     {% block full_content %}
@@ -57,7 +57,7 @@
     {% endblock %}
 
     {% block footer %}
-      {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
+      {% include 'default/footer.html.twig' %}
     {% endblock %}
 
     {% block bottom %}{% endblock %}
@@ -65,14 +65,14 @@
 
   {% block esBar %}
     {% if setting('esBar.enabled', 0) %}
-        {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+        {% include 'es-bar/index.html.twig' %}
     {% endif %}
   {% endblock %}
 
   {% block floatConsult %}
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
       {% if not setting('esBar.enabled',0) %}
-        {% include 'TopxiaWebBundle::float-consult.html.twig' %}
+        {% include 'float-consult.html.twig' %}
       {% endif %}
     {% endif %}
   {% endblock %}

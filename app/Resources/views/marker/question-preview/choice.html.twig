@@ -1,0 +1,39 @@
+{% if not role|default(null) == 'teacher' %}
+  {% set keys = [] %}
+  <div class="modal-header">
+    <div class="modal-title">选择选题</div>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  </div>
+  <div class="modal-body">
+    <ul class="popup-topic js-topic-content">
+      <li class="title">
+        {{ item.question.stem|bbCode2Html|raw }}
+      </li>
+      {% for key, choice in item.question.metas.choices %}
+        {% set choiceIndex = (65+key)|chr %}
+        <li class="list">
+          <span class="num">{{ choiceIndex }}</span>
+          <div class="info">{{ choice|bbCode2Html|raw }}</div>
+        </li>
+        {% if key in item.question.answer %}
+          {% set keys = keys|merge([choiceIndex]) %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <ul class="popup-topic topic-resolve js-topic-resolve hidden">
+      <li class="title">
+        {{ item.question.stem|bbCode2Html|raw }}
+      </li>
+      <li class="list">
+        <div class="info">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+      </li>
+    </ul>
+  </div>
+  <div class="topic-bottom">
+    <div class="topic-bottom-info">
+      {{ '正确答案是'|trans }}：<span class="color-success">{{ keys|join(',') }}</span>
+      <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+      <a class="btn btn-primary js-show-resolve">查看解析</a>
+    </div>
+  </div>
+{% endif %}

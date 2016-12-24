@@ -12,7 +12,7 @@ class UserApprovalController extends BaseController
     public function approvalsAction(Request $request, $approvalStatus)
     {
         $fields     = $request->query->all();
-        $user       = $this->getCurrentUser();
+        $user       = $this->getUser();
         $conditions = array(
             'roles'          => '',
             'keywordType'    => '',
@@ -94,7 +94,7 @@ class UserApprovalController extends BaseController
                     $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
 
                     if (!empty($approval)) {
-                        $this->getTeacherAuditService()->rejectApproval($user['id'], $this->trans('教师资格申请因实名认证未通过而失败'));
+                        $this->getTeacherAuditService()->rejectApproval($user['id'], '教师资格申请因实名认证未通过而失败');
                     }
                 }
 
@@ -135,7 +135,7 @@ class UserApprovalController extends BaseController
     public function showIdcardAction($userId, $type)
     {
         $user        = $this->getUserService()->getUser($userId);
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
 
         if (empty($currentUser)) {
             throw $this->createAccessDeniedException();
@@ -154,13 +154,13 @@ class UserApprovalController extends BaseController
 
     public function cancelAction(Request $request, $id)
     {
-        $this->getUserService()->rejectApproval($id, $this->trans('管理员撤销'));
+        $this->getUserService()->rejectApproval($id, '管理员撤销');
 
         if ($this->isPluginInstalled('TeacherAudit')) {
             $approval = $this->getTeacherAuditService()->getApprovalByUserId($id);
 
             if (!empty($approval)) {
-                $this->getTeacherAuditService()->rejectApproval($id, $this->trans('管理员撤销'));
+                $this->getTeacherAuditService()->rejectApproval($id, '管理员撤销');
             }
         }
 

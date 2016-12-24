@@ -17,6 +17,6 @@
         {{ question.stem|bbCode2Html|raw }}
       {% endif %}
     	
-      {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id|default(null)  } %}
+      {% include 'attachment/widget/list.html.twig' with {targetType:'question.stem', targetId:question.id|default(null)  } %}
     </div>
 </div>

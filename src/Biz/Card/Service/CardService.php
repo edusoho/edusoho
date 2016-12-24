@@ -26,4 +26,7 @@ interface CardService
 
     public function findCardsByCardIds($cardIds);
 
+    public function sortArrayByField(array $array, $field);
+
+    public function sortArrayByKey(array $array, $key);
 }
