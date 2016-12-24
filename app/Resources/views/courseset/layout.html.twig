@@ -371,8 +371,9 @@
             <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
               <a href="{{ path('course_set_show', {'id': courseSet.id}) }}">课程概览</a>
             </li>
+
             <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
-              <a href="">课程目录</a>
+              <a href="/">课程目录</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
               <a href="">评价</a>
@@ -380,7 +381,7 @@
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
               <a href="">笔记</a>
             </li>
-            <li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>
+            {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
           </ul>
         </div>
         <div class="course-detail-content">
