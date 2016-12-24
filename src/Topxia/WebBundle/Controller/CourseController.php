@@ -693,7 +693,7 @@ class CourseController extends CourseBaseController
 
     public function memberIdsAction(Request $request, $id)
     {
-        $ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+        $ids = $this->getCourseMemberService()->findMemberUserIdsByCourseId($id);
 
         return $this->createJsonResponse($ids);
     }
