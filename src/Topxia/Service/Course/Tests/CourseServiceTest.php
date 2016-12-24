@@ -2648,7 +2648,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $createCourse           = $this->getCourseService()->createCourse($course);
         $normalUser['deadline'] = time();
-        $result                 = $this->getCourseService()->isMemberNonExpired($createCourse, $normalUser);
+        $result                 = $this->getCourseMemberService()->isMemberNonExpired($createCourse, $normalUser);
         $this->assertFalse($result);
     }
 

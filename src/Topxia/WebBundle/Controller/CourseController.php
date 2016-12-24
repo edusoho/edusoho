@@ -362,7 +362,7 @@ class CourseController extends CourseBaseController
         try {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
-            if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
             }
 

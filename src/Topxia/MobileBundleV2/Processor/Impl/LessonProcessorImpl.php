@@ -123,7 +123,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
 
-        if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->controller->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return "course_materials";
         }
 
