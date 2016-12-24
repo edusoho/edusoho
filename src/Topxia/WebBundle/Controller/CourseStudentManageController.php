@@ -304,7 +304,7 @@ class CourseStudentManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
-            $member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+            $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
             return $this->createStudentTrResponse($course, $member);
         }
 

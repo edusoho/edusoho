@@ -2793,7 +2793,7 @@ class CourseServiceTest extends BaseTestCase
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
 
-        $result = $this->getCourseService()->remarkStudent($createCourse['id'], $user['id'], 'remark');
+        $result = $this->getCourseMemberService()->remarkStudent($createCourse['id'], $user['id'], 'remark');
         $this->assertEquals($result['id'], '1');
     }
 
