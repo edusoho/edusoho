@@ -2695,7 +2695,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseService()->becomeStudent($createCourse['id'], $currentUser['id']);
 
-        $result = $this->getCourseService()->findCourseStudentsByCourseIds(array(1));
+        $result = $this->getCourseMemberService()->findCourseStudentsByCourseIds(array(1));
         $this->assertEquals($result[0]['id'], '1');
     }
 
