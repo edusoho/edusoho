@@ -199,6 +199,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['studentCount'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskCount') {
                 $updateFields['taskCount'] = $this->getTaskService()->countTasksByCourseId($id);
+            } elseif ($fields === 'ratingNum') {
+                $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
+                $updateFields = array_merge($updateFields, $ratingFields);
             }
         }
 
@@ -391,7 +394,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int)$num,
+            'noteNum'            => (int) $num,
             'noteLastUpdateTime' => time()
         ));
 
@@ -579,7 +582,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime'=>'DESC'), $start, $limit);
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
         } else {
             $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
@@ -725,7 +728,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
-
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
@@ -739,19 +741,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
-            $orderBy = array('hitNum'=>'DESC');
+            $orderBy = array('hitNum' => 'DESC');
         } elseif ($sort == 'recommended') {
-            $orderBy = array('recommendedTime'=>'DESC');
+            $orderBy = array('recommendedTime' => 'DESC');
         } elseif ($sort == 'Rating') {
-            $orderBy = array('Rating'=>'DESC');
+            $orderBy = array('Rating' => 'DESC');
         } elseif ($sort == 'studentNum') {
-            $orderBy = array('studentNum'=>'DESC');
+            $orderBy = array('studentNum' => 'DESC');
         } elseif ($sort == 'recommendedSeq') {
-            $orderBy = array('recommendedSeq'=> 'ASC', 'recommendedTime'=>'DESC');
+            $orderBy = array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC');
         } elseif ($sort == 'createdTimeByAsc') {
-            $orderBy = array('createdTime'=> 'ASC');
+            $orderBy = array('createdTime' => 'ASC');
         } else {
-            $orderBy = array('createdTime'=>'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         }
         return $orderBy;
     }
@@ -813,5 +815,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCategoryService()
     {
         return $this->biz->service('Taxonomy:CategoryService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->biz->service('Course:ReviewService');
     }
 }

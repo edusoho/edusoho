@@ -15,4 +15,6 @@ interface CourseSetService
     public function changeCourseSetCover($id, $fields);
 
     public function deleteCourseSet($id);
+
+    public function updateCourseSetStatistics($id, $fields);
 }
