@@ -50,7 +50,7 @@ class GenerateNotificationHandler
 				'endtime' => date("Y-m-d",$courseMembers[$course["id"]]["deadline"]) );
 			$this->getNotificationService()->notify($user["id"], "course-deadline",$message);
 			$courseMemberId = $courseMembers[$course["id"]]["id"];
-			$this->getCourseService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
+			$this->getCourseMemberService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
 		}
 
 		$vipApp = $this->getAppService()->findInstallApp('Vip');
