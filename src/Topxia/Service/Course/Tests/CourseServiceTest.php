@@ -3352,7 +3352,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
-        $result = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser['id'], array($createCourse['id']));
+        $result = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($currentUser['id'], array($createCourse['id']));
         $this->assertEquals('2', $result[0]['id']);
     }
 
