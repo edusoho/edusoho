@@ -14,14 +14,13 @@ class CourseSetController extends BaseController
 
         $courseId = $request->query->get('courseId', 0);
 
-        $course = array();
         if ($courseId > 0) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
         }
 
-        return $this->render('courseset/show.html.twig', array(
+        return $this->render('courseset/overview.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
         ));
