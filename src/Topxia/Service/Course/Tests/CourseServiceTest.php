@@ -2862,7 +2862,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseMemberService()->becomeStudent($createCourse['id'], $normalUser['id']);
-        $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
+        $this->getCourseMemberService()->lockStudent($createCourse['id'], $normalUser['id']);
         $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
     }
@@ -2886,10 +2886,10 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseMemberService()->becomeStudent($createCourse['id'], $normalUser['id']);
-        $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
+        $this->getCourseMemberService()->lockStudent($createCourse['id'], $normalUser['id']);
         $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
-        $this->getCourseService()->unlockStudent($createCourse['id'], $normalUser['id']);
+        $this->getCourseMemberService()->unlockStudent($createCourse['id'], $normalUser['id']);
         $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '0');
     }
@@ -3328,7 +3328,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getCourseService()->createMemberByClassroomJoined($course['id'], $normalUser['id'], $classroom['id']);
+        $result = $this->getCourseMemberService()->createMemberByClassroomJoined($course['id'], $normalUser['id'], $classroom['id']);
         $this->getCourseMemberService()->isCourseStudent($course2['id'], $normalUser['id']);
     }
 

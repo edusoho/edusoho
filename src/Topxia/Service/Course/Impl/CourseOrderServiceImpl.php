@@ -152,7 +152,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
 
         if ($refund['status'] == 'created') {
-            $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
+            $this->getCourseMemberService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting   = $this->getSettingService()->get('refund');
             $message   = (empty($setting) || empty($setting['applyNotification'])) ? '' : $setting['applyNotification'];
@@ -189,7 +189,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $this->getOrderService()->cancelRefundOrder($id);
 
         if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
-            $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
+            $this->getCourseMemberService()->unlockStudent($order['targetId'], $order['userId']);
         }
     }
 

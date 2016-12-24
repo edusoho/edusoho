@@ -34,7 +34,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
             }
         } else {
             if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
+                $this->getCourseMemberService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }
 
