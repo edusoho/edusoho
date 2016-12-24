@@ -210,31 +210,31 @@ services:
 
     ### permission
     permission.admin_voter:
-        class: Permission\PermissionBundle\Security\AdminVoter
+        class: AppBundle\SfExtend\AdminVoter
         tags:
             - { name: security.voter }
         public: false
 
     permission.twig.permission_extension:
-        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
+        class: AppBundle\SfExtend\Twig\PermissionExtension
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
     kernel.controller.permission_listener:
-        class: Permission\Listener\KernelControllerListener
+        class: AppBundle\Listener\PermissionKernelControllerListener
         arguments:    ['@service_container', '%permission.path_regular_expression%']
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
 
     kernel.response.permission_listener:
-        class: Permission\Listener\KernelResponseListener
+        class: AppBundle\Listener\PermissionKernelResponseListener
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     routing.loader.yml:
-        class: Permission\Loader\YamlFileLoader
+        class: AppBundle\SfExtend\YamlFileLoader
         arguments: ['@file_locator']
         tags:
             - {name: routing.loader}
