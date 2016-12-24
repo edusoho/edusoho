@@ -83,7 +83,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member = $this->getCourseMember($course['id'], $user['id']);
 
         if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
             $this->getNotificationService()->notify($member['userId'], 'student-create', array(
@@ -107,11 +107,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $conditions = $this->_prepareConditions($conditions);
        // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
-    }
-
-    public function countMembersByStartTimeAndEndTime($startTime, $endTime)
-    {
-        //return $this->getMemberDao()->countMembersByStartTimeAndEndTime($startTime, $endTime);
     }
 
     public function searchMemberCount($conditions)

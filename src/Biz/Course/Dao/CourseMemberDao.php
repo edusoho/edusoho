@@ -32,9 +32,6 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    //TODO 需要调整
-    public function countMembersByStartTimeAndEndTime($startTime, $endTime);
-
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
     /**

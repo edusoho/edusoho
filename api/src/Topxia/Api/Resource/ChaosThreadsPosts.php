@@ -146,4 +146,9 @@ class ChaosThreadsPosts extends BaseResource
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
+    }
 }

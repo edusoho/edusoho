@@ -74,12 +74,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($courseId, $userId));
     }
 
-    public function countMembersByStartTimeAndEndTime($startTime, $endTime)
-    {
-        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table()} WHERE createdTime <  ? AND createdTime > ? AND role='student' AND classroomId = 0  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
-        return $this->db()->fetchAll($sql, array($endTime, $startTime));
-    }
-
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions)

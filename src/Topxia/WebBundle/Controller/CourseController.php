@@ -524,7 +524,7 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        $member          = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member          = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);
@@ -819,5 +819,10 @@ class CourseController extends CourseBaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order:OrderService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

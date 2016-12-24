@@ -46,4 +46,9 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
 
         return $members;
     }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
+    }
 }

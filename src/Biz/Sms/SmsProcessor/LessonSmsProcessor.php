@@ -155,4 +155,9 @@ class LessonSmsProcessor implements SmsProcessor
     {
         return ServiceKernel::instance();
     }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->servicecreateService('Course:MemberService');
+    }
 }

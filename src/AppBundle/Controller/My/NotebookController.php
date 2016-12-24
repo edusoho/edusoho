@@ -45,4 +45,9 @@ class NotebookController extends BaseController
     {
         return $this->createService('Course:CourseService');
     }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
 }

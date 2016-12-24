@@ -70,7 +70,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return null;
         }
 
-        $member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($courseId, $user['id']) : null;
+        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
@@ -967,7 +967,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_found', "课程不存在");
         }
 
-        $member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
@@ -1312,7 +1312,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
 
         if (!empty($course)) {
-            $member   = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
+            $member   = $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
             $progress = $this->calculateUserLearnProgress($course, $member);
         } else {
             $course   = array();
@@ -1646,5 +1646,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     private function getClassroomService()
     {
         return $this->controller->getService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

@@ -57,7 +57,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function getTargetMember($targetId, $userId)
     {
-        return $this->getCourseService()->getCourseMember($targetId, $userId);
+        return $this->getCourseMemberService()->getCourseMember($targetId, $userId);
     }
 
     protected function getCourseOrderService()
@@ -83,5 +83,10 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
     protected function getOrderService()
     {
         return ServiceKernel::instance()->createService('Order:OrderService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

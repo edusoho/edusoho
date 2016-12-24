@@ -39,7 +39,7 @@ class GenerateNotificationHandler
 		
 		$user = ServiceKernel::instance()->getCurrentUser();
 		
-		list($courses, $courseMembers) = $this->getCourseService()->findWillOverdueCourses();
+		list($courses, $courseMembers) = $this->getCourseMemberService()->findWillOverdueCourses();
 		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
 		foreach ($courses as $key => $course) {
@@ -100,7 +100,13 @@ class GenerateNotificationHandler
     {
         return ServiceKernel::instance()->createService('Vip:Vip.VipService');
     }
-     protected function getServiceKernel()
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

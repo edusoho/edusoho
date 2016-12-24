@@ -81,7 +81,7 @@ class CourseMemberImporter extends Importer
                     $successCount++;
                 };
 
-                $member = $this->getCourseService()->getCourseMember($targetObject['id'], $user['id']);
+                $member = $this->getCourseMemberService()->getCourseMember($targetObject['id'], $user['id']);
 
                 $message = array(
                     'courseId'    => $targetObject['id'],
@@ -438,5 +438,10 @@ class CourseMemberImporter extends Importer
     protected function getLogService()
     {
         return $this->getServiceKernel()->getBiz()->service('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 }

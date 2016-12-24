@@ -572,7 +572,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         $response = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],

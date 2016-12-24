@@ -260,6 +260,11 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $this->createService('Course:CourseService');
     }
 
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');

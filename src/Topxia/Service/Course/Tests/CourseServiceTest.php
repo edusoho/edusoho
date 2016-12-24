@@ -2565,23 +2565,8 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse = $this->getCourseService()->createCourse($course);
         $conditions   = array('role' => 'student');
-        $result       = $this->getCourseService()->searchMember($conditions, array('createdTime', 'DESC'), 0, 100);
+        $result       = $this->getCourseMemberService()->searchMember($conditions, array('createdTime', 'DESC'), 0, 100);
         $this->assertEmpty($result);
-    }
-
-    public function testCountMembersByStartTimeAndEndTime()
-    {
-        $course = array(
-            'title' => 'test course 1'
-        );
-
-        $createCourse = $this->getCourseService()->createCourse($course);
-        $conditions   = array('role' => 'student');
-        $startTime    = strtotime(date("Y-m-d", time() - 24 * 3600));
-        $endTime      = strtotime(date("Y-m-d", time() + 24 * 3600));
-        $result       = $this->getCourseService()->countMembersByStartTimeAndEndTime($startTime, $endTime);
-
-        $this->assertNotNull($result);
     }
 
     public function testSearchMemberCount()
@@ -2618,7 +2603,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $createCourse = $this->getCourseService()->createCourse($course);
 
-        $result = $this->getCourseService()->getCourseMember($createCourse['id'], $normalUser['id']);
+        $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['id'], '1');
     }
 
@@ -2906,7 +2891,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseService()->becomeStudent($createCourse['id'], $normalUser['id']);
         $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
-        $result = $this->getCourseService()->getCourseMember($createCourse['id'], $normalUser['id']);
+        $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
     }
 
@@ -2930,10 +2915,10 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseService()->becomeStudent($createCourse['id'], $normalUser['id']);
         $this->getCourseService()->lockStudent($createCourse['id'], $normalUser['id']);
-        $result = $this->getCourseService()->getCourseMember($createCourse['id'], $normalUser['id']);
+        $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '1');
         $this->getCourseService()->unlockStudent($createCourse['id'], $normalUser['id']);
-        $result = $this->getCourseService()->getCourseMember($createCourse['id'], $normalUser['id']);
+        $result = $this->getCourseMemberService()->getCourseMember($createCourse['id'], $normalUser['id']);
         $this->assertEquals($result['locked'], '0');
     }
 

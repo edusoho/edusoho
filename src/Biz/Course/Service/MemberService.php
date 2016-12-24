@@ -3,6 +3,7 @@
 
 namespace Biz\Course\Service;
 
+Course:MemberService
 
 interface MemberService
 {
@@ -11,8 +12,6 @@ interface MemberService
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchMember($conditions, $start, $limit);
-
-    public function countMembersByStartTimeAndEndTime($startTime, $endTime);
 
     public function searchMemberCount($conditions);
 

@@ -300,7 +300,7 @@ class CourseStudentManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user   = $this->getUserService()->getUser($userId);
-        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
@@ -546,4 +546,5 @@ class CourseStudentManageController extends BaseController
     {
         return ServiceKernel::instance()->createService('User:UserFieldService');
     }
+
 }

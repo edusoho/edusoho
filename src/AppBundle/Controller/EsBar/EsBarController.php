@@ -197,4 +197,9 @@ class EsBarController extends BaseController
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
     }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
+    }
 }

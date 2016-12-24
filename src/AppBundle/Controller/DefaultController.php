@@ -39,7 +39,7 @@ class DefaultController extends BaseController
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
 
                 $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
             }
@@ -289,5 +289,10 @@ class DefaultController extends BaseController
     protected function getThemeService()
     {
         return $this->getBiz()->service('Theme:ThemeService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

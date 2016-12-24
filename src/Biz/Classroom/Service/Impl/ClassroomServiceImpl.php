@@ -610,7 +610,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = ArrayToolkit::column($courses, "courseId");
 
         foreach ($courseIds as $key => $courseId) {
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $userId);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
             if (empty($courseMember)) {
                 $info = array(
@@ -1220,7 +1220,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($courseIds as $key => $courseId) {
             $count        = 0;
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $userId);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
             if ($courseMember && $courseMember['joinedType'] == "course") {
                 unset($courseIds[$key]);
@@ -1556,5 +1556,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }
