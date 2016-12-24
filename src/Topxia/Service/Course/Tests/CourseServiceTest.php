@@ -2776,7 +2776,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->getCourseMemberService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
-        $this->getCourseService()->cancelTeacherInAllCourses($teacher['id']);
+        $this->getCourseMemberService()->cancelTeacherInAllCourses($teacher['id']);
         $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $teacher['id']);
         $this->assertFalse($result);
     }
