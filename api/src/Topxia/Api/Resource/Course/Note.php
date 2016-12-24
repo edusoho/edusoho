@@ -2,10 +2,12 @@
 
 namespace Topxia\Api\Resource\Course;
 
+use Biz\Course\Service\CourseService;
+use Biz\Note\Service\CourseNoteService;
+use Biz\Task\Service\TaskService;
 use Silex\Application;
-use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use Topxia\Api\Resource\BaseResource;
 
 class Note extends BaseResource
 {
@@ -22,19 +24,19 @@ class Note extends BaseResource
 
     public function post(Application $app, Request $request)
     {
-        $requiredFields = array('lessonId', 'content');
-        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
+        $requiredFields = array('taskId', 'content');
+        $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $lesson = $this->getCourseService()->getLesson($fields['lessonId']);
-        if (empty($lesson)) {
-            throw new \Exception("ID为{$lessonId}的课时不存在");
+        $task = $this->getTaskService()->getTask($fields['taskId']);
+        if (empty($task)) {
+            throw new \Exception("ID为{$fields['taskId']}的任务不存在");
         }
 
         $note = array(
-            'courseId' => $lesson['courseId'],
-            'lessonId' => $fields['lessonId'],
-            'status' => !empty($fields['status']) ? 1 : 0,
-            'content' => $fields['content'],
+            'courseId' => $task['courseId'],
+            'taskId'   => $task['id'],
+            'status'   => !empty($fields['status']) ? 1 : 0,
+            'content'  => $fields['content']
         );
         $note = $this->getCourseNoteService()->saveNote($note);
         return $this->filter($note);
@@ -47,13 +49,28 @@ class Note extends BaseResource
         return $res;
     }
 
+    /**
+     * @return CourseNoteService
+     */
     protected function getCourseNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:NoteService');
+        return $this->getServiceKernel()->createService('Note:CourseNoteService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
+    }
+
 }
