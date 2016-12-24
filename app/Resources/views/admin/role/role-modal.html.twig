@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% set topxiawebbundle = true %}
   {% block title %}
@@ -63,5 +63,5 @@
             data-target="#role-form">添加
     </button>
   {% endif %}
-  <script>app.lazyLoad = function() { app.load('permissionbundle/controller/role/create') };</script>
+  <script>app.lazyLoad = function() { app.load('topxiaadmin/controller/role/create') };</script>
 {% endblock %}
