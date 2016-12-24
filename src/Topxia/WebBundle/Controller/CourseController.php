@@ -679,7 +679,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
     }
