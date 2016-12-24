@@ -260,7 +260,7 @@ class CourseLessonController extends BaseController
             $json['homeworkOrExerciseNum'] = 0;
         }
 
-        $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
+        $json['isTeacher'] = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getLiveReplays($lesson);

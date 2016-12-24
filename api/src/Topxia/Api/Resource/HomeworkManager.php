@@ -46,7 +46,7 @@ class HomeworkManager extends BaseResource
             return $this->error('500', '用户不存在或者尚未登录，请先登录');
         }
 
-        if (!$this->getCourseService()->isCourseTeacher($courseId, $currentUser['id'])) {
+        if (!$this->getCourseMemberService()->isCourseTeacher($courseId, $currentUser['id'])) {
             return $this->error('error', '您不是老师，不能查看此页面！');
         }
 
@@ -111,6 +111,11 @@ class HomeworkManager extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getUserService()

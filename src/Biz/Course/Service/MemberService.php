@@ -48,9 +48,7 @@ interface MemberService
 
     public function getCourseStudentCount($courseId);
 
-    public function findCourseTeachers($courseId);
-
-    public function isCourseTeacher($courseId, $userId);
+    public function isCourseTeacher($courseId, $userId);//---
 
     public function isCourseStudent($courseId, $userId);
 

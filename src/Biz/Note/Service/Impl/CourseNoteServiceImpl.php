@@ -106,7 +106,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $currentUser = $this->getCurrentUser();
 
-        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->isCourseTeacher($note['courseId'], 'admin_course_note')) {
+        if (($note['userId'] != $currentUser['id']) && !$this->getCourseMemberService()->isCourseTeacher($note['courseId'], 'admin_course_note')) {
             throw $this->createServiceException('你没有权限删除笔记');
         }
 
@@ -290,5 +290,10 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

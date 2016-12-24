@@ -47,7 +47,7 @@ class CourseMemberImporter extends Importer
             }
 
             $isCourseStudent = $this->getCourseService()->isCourseStudent($targetObject['id'], $user['id']);
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($targetObject['id'], $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($targetObject['id'], $user['id']);
 
             if ($isCourseStudent || $isCourseTeacher) {
                 $existsUserCount++;

@@ -226,7 +226,7 @@ class CourseManageController extends BaseController
             if ($isCourseStudent) {
                 $response = '该用户已是本课程的学员了';
             } else {
-                $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+                $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
                 if ($isCourseTeacher) {
                     $response = '该用户是本课程的教师，不能添加';
@@ -315,5 +315,10 @@ class CourseManageController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

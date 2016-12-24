@@ -333,7 +333,7 @@ class CourseStudentManageController extends BaseController
                 $response = array('success' => true, 'message' => '');
             }
 
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($id, $user['id']);
 
             if ($isCourseTeacher) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));

@@ -74,7 +74,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
 
         $params = array();
-        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findCourseTeachers($courseId);
             $teacher  = array_shift($teachers);
 
@@ -136,6 +136,11 @@ class LiveController extends BaseController implements ActivityActionInterface
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     protected function getServiceKernel()

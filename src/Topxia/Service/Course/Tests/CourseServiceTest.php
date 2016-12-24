@@ -2717,7 +2717,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
-        $result = $this->getCourseService()->isCourseTeacher($createCourse['id'], $currentUser['id']);
+        $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $currentUser['id']);
         $this->assertTrue($result);
     }
 
@@ -2754,7 +2754,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->getCourseService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
-        $result = $this->getCourseService()->isCourseTeacher($createCourse['id'], $teacher['id']);
+        $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $teacher['id']);
         $this->assertTrue($result);
     }
 
@@ -2777,7 +2777,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
         $this->getCourseService()->cancelTeacherInAllCourses($teacher['id']);
-        $result = $this->getCourseService()->isCourseTeacher($createCourse['id'], $teacher['id']);
+        $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $teacher['id']);
         $this->assertFalse($result);
     }
 

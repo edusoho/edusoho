@@ -278,7 +278,7 @@ class BaseProcessor
             return null;
         }
 
-        $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
+        $userIsTeacher = $this->controller->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
         if ($userIsTeacher) {
             $member['role'] = 'teacher';

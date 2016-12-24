@@ -91,7 +91,7 @@ class CourseManageController extends BaseController
                 $response = array('success' => true, 'message' => '');
             }
 
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
             if ($isCourseTeacher) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加!'));
@@ -776,5 +776,10 @@ class CourseManageController extends BaseController
     protected function getUserFieldService()
     {
         return ServiceKernel::instance()->createService('User:UserFieldService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }
