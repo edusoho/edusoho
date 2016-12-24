@@ -184,7 +184,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             $teachers = $context['teachers'];
 
             foreach ($courseIds as $courseId) {
-                $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+                $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
             }
         }
     }
@@ -430,5 +430,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getNotifiactionService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

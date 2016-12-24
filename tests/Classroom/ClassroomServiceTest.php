@@ -530,7 +530,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $course1   = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
         $courseIds = array($course1['id']);
         $this->getClassroomService()->setClassroomCourses($classroom['id'], $courseIds);
 
@@ -817,7 +817,7 @@ class ClassroomServiceTest extends BaseTestCase
         );
         $course1       = $this->mockCourse('Test Course 1');
         $course1       = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id']);
 
@@ -1194,9 +1194,9 @@ class ClassroomServiceTest extends BaseTestCase
         $course2 = $this->getCourseService()->createCourse($course2);
         $course3 = $this->getCourseService()->createCourse($course3);
 
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id'], $course2['id']);
 
@@ -1233,9 +1233,9 @@ class ClassroomServiceTest extends BaseTestCase
         $course2 = $this->getCourseService()->createCourse($course2);
         $course3 = $this->getCourseService()->createCourse($course3);
 
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id'], $course2['id'], $course3['id']);
 
@@ -1334,6 +1334,11 @@ class ClassroomServiceTest extends BaseTestCase
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->createService('Course:MemberService');
     }
 
     private function createStudent()

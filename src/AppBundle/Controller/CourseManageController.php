@@ -122,7 +122,7 @@ class CourseManageController extends BaseController
             }
             $teachers = json_decode($data['teachers'], true);
 
-            $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+            $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }

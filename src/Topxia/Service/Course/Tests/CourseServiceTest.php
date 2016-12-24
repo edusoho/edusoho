@@ -516,7 +516,7 @@ class CourseServiceTest extends BaseTestCase
             'id' => $user['id']
         );
         $createCourse = $this->getCourseService()->createCourse($course);
-        $this->getCourseService()->setCourseTeachers($createCourse['id'], array('0' => $teacher));
+        $this->getCourseMemberService()->setCourseTeachers($createCourse['id'], array('0' => $teacher));
         $result = $this->getCourseService()->findUserTeachCourseCount($conditions, $onlyPublished = false);
         $this->assertEquals(1, $result);
     }
@@ -538,7 +538,7 @@ class CourseServiceTest extends BaseTestCase
             'id' => $user['id']
         );
         $createCourse = $this->getCourseService()->createCourse($course);
-        $this->getCourseService()->setCourseTeachers($createCourse['id'], array('0' => $teacher));
+        $this->getCourseMemberService()->setCourseTeachers($createCourse['id'], array('0' => $teacher));
         $result = $this->getCourseService()->findUserTeachCourses($conditions, 0, 5, $onlyPublished = false);
         // print_r($result);
         $this->assertCount(1, $result);
@@ -2753,7 +2753,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($teacher);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
-        $this->getCourseService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
         $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $teacher['id']);
         $this->assertTrue($result);
     }
@@ -2775,7 +2775,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($teacher);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
-        $this->getCourseService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($createCourse['id'], array(array('id' => $teacher['id'], 'isVisible' => 1)));
         $this->getCourseService()->cancelTeacherInAllCourses($teacher['id']);
         $result = $this->getCourseMemberService()->isCourseTeacher($createCourse['id'], $teacher['id']);
         $this->assertFalse($result);

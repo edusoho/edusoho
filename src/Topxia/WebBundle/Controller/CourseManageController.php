@@ -493,7 +493,7 @@ class CourseManageController extends BaseController
                 );
             }
 
-            $this->getCourseService()->setCourseTeachers($id, $teachers);
+            $this->getCourseMemberService()->setCourseTeachers($id, $teachers);
 
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
 
