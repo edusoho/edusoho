@@ -3,3 +3,5 @@
 废弃的api：
 	CourseService:
 		countMembersByStartTimeAndEndTime
+		findMobileVerifiedMemberCountByCourseId
+		deleteMemberByCourseIdAndUserId

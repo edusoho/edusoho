@@ -48,7 +48,7 @@ interface MemberService
 
     public function getCourseStudentCount($courseId);
 
-    public function isCourseTeacher($courseId, $userId);//---
+    public function isCourseTeacher($courseId, $userId);
 
     public function isCourseStudent($courseId, $userId);
 
@@ -59,8 +59,6 @@ interface MemberService
     public function cancelTeacherInAllCourses($userId);
 
     public function remarkStudent($courseId, $userId, $remark);
-
-    public function deleteMemberByCourseIdAndUserId($courseId, $userId);
 
     public function deleteMemberByCourseIdAndRole($courseId, $role);
 

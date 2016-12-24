@@ -80,8 +80,6 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function updateMembers($conditions, $updateFields);
 
-    public function deleteMemberByCourseIdAndUserId($courseId, $userId);
-
     public function deleteMemberByCourseIdAndRole($courseId, $role);
 
     public function findCourseMembersByUserId($userId);

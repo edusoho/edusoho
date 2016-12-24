@@ -350,11 +350,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->update($member['id'], $fields);
     }
 
-    public function deleteMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
-    }
-
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
         return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId, $role);
