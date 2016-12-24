@@ -436,6 +436,6 @@ class CourseOrderController extends OrderController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

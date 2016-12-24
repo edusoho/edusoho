@@ -42,11 +42,11 @@ interface CourseService
 
     public function countStudentsByCourseId($courseId);
 
-    public function isCourseTeacher($courseId, $userId);
+   // public function isCourseTeacher($courseId, $userId);
 
-    public function isCourseStudent($courseId, $userId);
+   // public function isCourseStudent($courseId, $userId);
 
-    public function createCourseStudent($courseId, $fields);
+   // public function createCourseStudent($courseId, $fields);
 
     public function removeCourseStudent($courseId, $userId);
 
@@ -58,9 +58,14 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    public function countMembers($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @deprecated  使用course:member中的api
+     */
+   // public function countMembers($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+   // public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchCourses($conditions, $sort, $start, $limit);
 

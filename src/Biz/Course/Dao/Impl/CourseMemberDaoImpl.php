@@ -10,7 +10,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
     protected $table = 'course_member';
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
+    public function getByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
@@ -72,6 +72,23 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
         return $this->db()->fetchAll($sql, array($courseId, $userId));
+    }
+
+    public function countMembersByStartTimeAndEndTime($startTime, $endTime)
+    {
+        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table()} WHERE createdTime <  ? AND createdTime > ? AND role='student' AND classroomId = 0  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
+        return $this->db()->fetchAll($sql, array($endTime, $startTime));
+    }
+
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        $builder = $this->_createQueryBuilder($conditions)
+            ->select('courseId, COUNT(id) AS count')
+            ->groupBy($groupBy)
+            ->orderBy('count', 'DESC')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function filterStartLimit(&$start, &$limit)

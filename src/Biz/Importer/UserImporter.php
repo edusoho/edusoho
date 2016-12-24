@@ -780,7 +780,7 @@ class UserImporter extends Importer
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getOrgService()

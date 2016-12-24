@@ -29,7 +29,7 @@ class EsBarController extends BaseController
             'role'        => 'student'
         );
         $sort             = array('createdTime', 'DESC');
-        $members          = $this->getCourseService()->searchMembers($conditions, $sort, 0, 15);
+        $members          = $this->getCourseMemberService()->searchMembers($conditions, $sort, 0, 15);
         $courseIds        = ArrayToolkit::column($members, 'courseId');
         $courseConditions = array(
             'courseIds' => $courseIds,

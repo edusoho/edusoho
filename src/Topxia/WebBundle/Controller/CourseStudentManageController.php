@@ -30,7 +30,7 @@ class CourseStudentManageController extends BaseController
             20
         );
 
-        $students = $this->getCourseService()->searchMembers(
+        $students = $this->getCourseMemberService()->searchMembers(
             $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -232,7 +232,7 @@ class CourseStudentManageController extends BaseController
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
-        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
+        $courseMembers = $this->getCourseMemberService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $userFields    = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
@@ -516,7 +516,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getSettingService()

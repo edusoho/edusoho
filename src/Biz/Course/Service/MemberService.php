@@ -6,6 +6,8 @@ namespace Biz\Course\Service;
 
 interface MemberService
 {
+    public function becomeStudentAndCreateOrder($userId, $courseId, $data);
+
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchMember($conditions, $start, $limit);
@@ -81,4 +83,12 @@ interface MemberService
      * 解封学员
      */
     public function unlockStudent($courseId, $userId);
+
+    public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+    public function becomeStudentByClassroomJoined($courseId, $userId);
+
+    public function setMemberNoteNumber($courseId, $userId, $number);
 }

@@ -32,4 +32,69 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
+    //TODO 需要调整
+    public function countMembersByStartTimeAndEndTime($startTime, $endTime);
+
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
+    /**
+     * @deprecated
+     */
+    public function getMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
+
+    /**
+     * @deprecated
+     */
+    public function getMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+
+    /**
+     * @deprecated
+     */
+    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
+
+    /**
+     * @deprecated
+     */
+    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
+
+
+    /**
+     * @param $courseIds
+     * @return mixed
+     * @before getMembersByCourseIds
+     */
+    public function findMembersByCourseIds($courseIds);
+
+    public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
+
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
+
+    public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true);
+
+    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true); //
+
+    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
+
+    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
+
+    public function findMemberCountByCourseIdAndRole($courseId, $role);
+
+    public function findMembersByUserIdAndJoinType($userId, $joinedType);
+
+    public function searchMemberIds($conditions, $orderBy, $start, $limit);
+
+    public function updateMembers($conditions, $updateFields);
+
+    public function deleteMemberByCourseIdAndUserId($courseId, $userId);
+
+    public function deleteMemberByCourseIdAndRole($courseId, $role);
+
+    public function findCourseMembersByUserId($userId);
+
+    public function deleteMembersByCourseId($courseId);
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+    public function findMemberUserIdsByCourseId($courseId);
+
 }

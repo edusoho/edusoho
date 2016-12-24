@@ -17,7 +17,7 @@ class Members extends BaseResource
         $limit = $request->query->get('limit', 10);
 
         $total = $this->getCourseService()->searchMemberCount($conditions);
-        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $members = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $members = $this->assemblyMembers($members);
         return $this->wrap($this->filter($members), $total);
     }

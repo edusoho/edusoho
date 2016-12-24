@@ -2553,7 +2553,7 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse = $this->getCourseService()->createCourse($course);
         $conditions   = array('role' => 'student');
-        $result       = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 100);
+        $result       = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 100);
         $this->assertEmpty($result);
     }
 
@@ -3729,6 +3729,6 @@ class CourseServiceTest extends BaseTestCase
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

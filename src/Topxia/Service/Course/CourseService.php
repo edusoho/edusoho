@@ -312,12 +312,6 @@ interface CourseService
 
     public function deleteCourseLessonReplayByLessonId($lessonId);
 
-    public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
-
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
-
-    public function becomeStudentByClassroomJoined($courseId, $userId);
-
     public function addCourseLessonReplay($courseLessonReplay);
 
     public function deleteLessonReplayByLessonId($lessonId, $lessonType);

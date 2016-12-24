@@ -19,7 +19,7 @@ class CourseMembers extends BaseResource
         if ($request->query->has('cursor')) {
             $cursor = $request->query->get('cursor', 0);
             $conditions['createdTime_GE'] = $cursor;
-            $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $members = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime', 'ASC'), $start, $limit);
             $members = $this->assemblyMembers($members);
             $next = $this->nextCursorPaging($cursor, $start, $limit, $members);
             return $this->wrap($this->filter($members), $next);
