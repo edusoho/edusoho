@@ -312,7 +312,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
         
-        $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
     }

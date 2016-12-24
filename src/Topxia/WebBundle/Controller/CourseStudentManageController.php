@@ -163,7 +163,7 @@ class CourseStudentManageController extends BaseController
         );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
-        $this->getCourseService()->removeStudent($courseId, $userId);
+        $this->getCourseMemberService()->removeStudent($courseId, $userId);
 
         $this->getNotificationService()->notify($userId, 'student-remove', array(
             'courseId'    => $course['id'],

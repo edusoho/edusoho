@@ -2838,7 +2838,7 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $member = $this->getCourseMemberService()->becomeStudent($createCourse['id'], $currentUser['id']);
-        $this->getCourseService()->removeStudent($createCourse['id'], $currentUser['id']);
+        $this->getCourseMemberService()->removeStudent($createCourse['id'], $currentUser['id']);
         $result = $this->getCourseMemberService()->isCourseStudent($createCourse['id'], $currentUser['id']);
         $this->assertEquals(false, $result);
     }

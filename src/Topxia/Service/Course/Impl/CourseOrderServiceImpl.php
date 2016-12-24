@@ -173,7 +173,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
             }
         } elseif ($refund['status'] == 'success') {
-            $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+            $this->getCourseMemberService()->removeStudent($order['targetId'], $order['userId']);
         }
 
         return $refund;

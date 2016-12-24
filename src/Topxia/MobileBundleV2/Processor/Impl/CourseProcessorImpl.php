@@ -949,7 +949,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->getCourseService()->removeStudent($course['id'], $user['id']);
+            $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }

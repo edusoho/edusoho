@@ -1250,7 +1250,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($courseIds as $key => $value) {
             if ($this->getCourseMemberService()->isCourseStudent($value, $userId)) {
-                $this->getCourseService()->removeStudent($value, $userId);
+                $this->getCourseMemberService()->removeStudent($value, $userId);
             }
         }
     }

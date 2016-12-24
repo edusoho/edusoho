@@ -12,7 +12,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function removeStudent($targetId, $userId)
     {
-        $this->getCourseService()->removeStudent($targetId, $userId);
+        $this->getCourseMemberService()->removeStudent($targetId, $userId);
     }
 
     public function getRefundLayout()
@@ -30,7 +30,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 		$order = $this->getOrderService()->getOrder($id);
 		if ($pass) {
             if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+                $this->getCourseMemberService()->removeStudent($order['targetId'], $order['userId']);
             }
         } else {
             if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
