@@ -1,11 +1,12 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "admin/macro.html.twig" as admin_macro %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 <div class="modal-dialog mark-questions-modal">
   <div class="modal-content">
     {% include 'TopxiaWebBundle:Marker/QuestionPreview:' ~ type ~ '.html.twig' %}
-    <script>app.lazyLoad = function() { app.load('quiz-question/preview'); };</script>
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('quiz-question/preview'); };</script>
   </div>
 </div>

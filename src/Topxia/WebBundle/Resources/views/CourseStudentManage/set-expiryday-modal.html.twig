@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block title %}{{'增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'课程有效期'|trans}}{% endblock %}
 {% block body %}
@@ -52,5 +52,6 @@
     <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('学员'|trans) }}">{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('course-manage/set-expiryday-modal') };</script>
 {% endblock %}

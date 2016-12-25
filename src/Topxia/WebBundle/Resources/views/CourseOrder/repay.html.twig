@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block title %}{{'购买课程'|trans}}{% endblock %}
 
@@ -20,6 +20,7 @@
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-repay-form">{{'点击支付'|trans}}</button>
     <a href="javascript:;" class="btn btn-primary cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'取消此订单'|trans}}</a>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
     app.lazyLoad = function() { app.load('course/repay'); };
   </script>

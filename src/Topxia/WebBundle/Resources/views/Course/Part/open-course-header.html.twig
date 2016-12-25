@@ -2,6 +2,7 @@
 {% import _self as header_macro %}
 
 {% do load_script('course/common') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% if member and not member.locked %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}

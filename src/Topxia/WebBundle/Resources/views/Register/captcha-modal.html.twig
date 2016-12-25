@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 {% set modalSize = 'large' %}
 
 {% block title %}{{'请输入验证码'|trans}}{% endblock %}
@@ -27,5 +27,6 @@
 {% block footer %}
   <button type="submit" class="btn btn-primary pull-right captcha-btn" data-toggle="form-submit" data-target="#captcha-form">{{'确定'|trans}}</button>
 
-<script>app.lazyLoad = function() { app.load('auth/captcha-modal') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('auth/captcha-modal') };</script>
 {% endblock %}
