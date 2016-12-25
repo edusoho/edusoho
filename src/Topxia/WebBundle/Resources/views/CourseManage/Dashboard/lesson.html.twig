@@ -3,6 +3,7 @@
 {% set submenu = 'lesson_dashboard' %}
 
 {% do load_script('course-manage/dashboard/lesson') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% block dashboard %}
   

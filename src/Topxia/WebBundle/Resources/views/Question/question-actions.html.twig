@@ -1,5 +1,6 @@
 {% set favorites = favorites|default([]) %}
 {% do load_script('topxiawebbundle/controller/quiz-question/do-homework') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 <!-- {% if 'mark' in flags and id|default(null) %}
   <a class="btn btn-link btn-muted btn-sm marking text-muted"><span class="glyphicon glyphicon-bookmark text-muted"></span> 标记</a>

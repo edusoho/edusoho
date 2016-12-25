@@ -7,6 +7,7 @@
 
 {% if setting('course.testpaperCopy_enabled') == '1' %}
 {% do load_script('quiz-question/do-test-prevent-copy') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endif %}
 
 {% block content %}

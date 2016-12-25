@@ -2,6 +2,7 @@
 {% set nav = nav|default(null) %} 
 
 {% do load_script('open-course-analysis/index') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set menu = 'admin_opencourse_analysis' %}
 
 {% block main %}
