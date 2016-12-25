@@ -258,10 +258,41 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files   = $this->getUploadFiles($courseId);
         $lessons = $this->filterLessons($lessons, $files);
+
+        $lessons = $this->makeTryLookVideoUrl($lessons, $courseId);
+
         return array(
             "lessons"       => array_values($lessons),
             "learnStatuses" => empty($learnStatuses) ? array("-1" => "learning") : $learnStatuses
         );
+    }
+
+    private function makeTryLookVideoUrl($lessons, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        foreach ($lessons as $key => $lesson) {
+            if ($lesson['type'] == 'video') {
+                if (!empty($lesson['free']) && empty($course['tryLookable'])) {
+                    $lessons[$key] = $this->getVideoLesson($lesson);
+                }
+
+                if (!empty($course['tryLookable'])) {
+                    if (!empty($lesson['free'])) {
+                        $lessons[$key] = $this->getVideoLesson($lesson);
+                    }
+
+                    if (empty($lesson['free'])) {
+                        $tryLookTime = $course['tryLookTime'];
+                        $options     = array('watchTimeLimit' => $tryLookTime * 60);
+
+                        $lessons[$key] = $this->getVideoLesson($lesson, $options);
+                    }
+                }
+            }
+        }
+
+        return $lessons;
     }
 
     private function getUploadFiles($courseId)
@@ -416,7 +447,26 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    private function getVideoLesson($lesson)
+    protected function makeTokenDatas($fields)
+    {
+        $datas = array();
+
+        if (isset($fields['options']) && !empty($fields['options'])) {
+            foreach ($fields['options'] as $key => $option) {
+                $datas[$key] = $option;
+            }
+
+            unset($fields['options']);
+        }
+
+        foreach ($fields as $key => $field) {
+            $datas[$key] = $field;
+        }
+
+        return $datas;
+    }
+
+    private function getVideoLesson($lesson, $options = null)
     {
         $token       = $this->controller->getUserToken($this->request);
         $mediaId     = $lesson['mediaId'];
@@ -451,10 +501,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                    'data'     => array(
+                                    'data'     => $this->makeTokenDatas(array(
                                         'id'      => $headLeaderInfo['id'],
                                         'fromApi' => true
-                                    ),
+                                    )),
                                     'times'    => 2,
                                     'duration' => 3600
                                 ));
@@ -472,10 +522,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data'     => array(
+                                'data'     => $this->makeTokenDatas(array(
                                     'id'      => $file['id'],
-                                    'fromApi' => true
-                                ),
+                                    'fromApi' => true,
+                                    'options' => $options
+                                )),
                                 'times'    => 2,
                                 'duration' => 3600
                             ));
