@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block title %} {{'短信验证码'|trans}} {% endblock %}
 
@@ -65,5 +65,6 @@
 
 {% block footer %}
   <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('open-course/member-create-sms'); };</script>
 {% endblock %}

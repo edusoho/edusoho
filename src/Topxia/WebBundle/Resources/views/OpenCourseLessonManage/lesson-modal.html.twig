@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 {% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
@@ -100,7 +100,8 @@
 </form>
 
 
-<script>app.lazyLoad = function() { app.load('open-course-manage/lesson-modal') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('open-course-manage/lesson-modal') };</script>
 
 
 {% endblock %}

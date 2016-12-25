@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block title %}{% if announcement.id %}{{'编辑公告'|trans}}{% else %}{{'添加公告'|trans}}{% endif %}{% endblock %}
 
@@ -29,6 +29,7 @@
 
   </form>
 
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
     app.lazyLoad = function() { app.load('course/announcement-write'); };
   </script>

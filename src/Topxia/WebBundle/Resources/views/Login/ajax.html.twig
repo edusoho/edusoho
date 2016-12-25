@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block title %}{{'登录%name%'|trans({'%name%':setting('site.name')})}}{% endblock %}
 {% set modal_class = 'login-modal' %}
@@ -34,7 +34,8 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-<script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>
 	app.lazyLoad = function() { app.load('auth/login-ajax'); };
 </script>
 
