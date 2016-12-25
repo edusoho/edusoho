@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% block title %}{{'提交问题'|trans}}{% endblock %}
 
 {% block body %}

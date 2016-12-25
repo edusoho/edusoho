@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% block title %}{{'登录%name%'|trans({'%name%':setting('site.name')})}}{% endblock %}
 {% set modal_class = 'login-modal' %}

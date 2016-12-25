@@ -1,6 +1,5 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiaadminbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}{{'设置用户头像'|trans}}{% endblock %}
@@ -54,5 +53,6 @@
 
 {% block footer %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('user/avatar-modal') };</script>
 {% endblock %}

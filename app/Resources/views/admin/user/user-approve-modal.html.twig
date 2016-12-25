@@ -1,6 +1,5 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiaadminbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}
@@ -40,6 +39,7 @@
   <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">{{'审核通过'|trans}}</button>
 
 
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('user/approve') };</script>
     
 </div>

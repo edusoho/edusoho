@@ -1,8 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'审核退款申请'|trans}}{% endblock %}
-
-{% set topxiaadminbundle = true %}
 
 {% block body %}
 
@@ -45,5 +43,6 @@
 
 {% block footer %}
   <button id="refund-confirm-btn" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#order-refund-confirm-form">{{'提交'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('order/refund-confirm-modal') };</script>
 {% endblock %}

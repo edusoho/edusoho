@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% set category = category | default(null)%}
 {% block title %}{% if category %}{{'编辑题目类别'|trans}}{% else %}{{'添加题目类别'|trans}}{% endif %}{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Importer:importer-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
-{# todo layout modify#}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {% block form_data %}
   <div class="form-group" id="teachers-form-group">

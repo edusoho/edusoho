@@ -1,11 +1,11 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "admin/macro.html.twig" as admin_macro %}
 
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'题目预览'|trans}}{% endblock %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set modal_class = 'modal-lg' %}
 
 {% block body %}

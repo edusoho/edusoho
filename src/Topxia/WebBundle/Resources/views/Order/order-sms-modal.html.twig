@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set showSms = ( verifiedMobile|length > 0) %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% block title %} {{'短信验证码'|trans}} {% endblock %}
 

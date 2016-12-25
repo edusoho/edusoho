@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}{% if liveLesson|default(null) %}{{'编辑直播课时'|trans}}{% else %}{{'新增直播课时'|trans}}{% endif %}{% endblock %}

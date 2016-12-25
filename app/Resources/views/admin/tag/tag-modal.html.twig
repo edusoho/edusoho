@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set tag = tag|default(null) %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block title %}
 {% if tag.id %}{{'编辑标签'|trans}}{% else %}{{'新增标签'|trans}}{% endif %}

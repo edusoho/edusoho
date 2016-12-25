@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set modalSize = 'large' %}
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 {% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}{{'编辑'|trans}}{% endblock %}

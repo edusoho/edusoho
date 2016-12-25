@@ -1,8 +1,8 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% set updateName = package.type == 'upgrade' ? '升级'|trans : '安装'|trans %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block title %}{{ updateName }}{{ '应用'|trans }}{% endblock %}
 

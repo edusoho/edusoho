@@ -1,8 +1,8 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{ '头像图片'|trans }}{% endblock %}
   
-{% set topxiawebbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set modal_class= 'modal-lg' %}
 {% block body %}
   <form id="avatar-crop-form" method="post">

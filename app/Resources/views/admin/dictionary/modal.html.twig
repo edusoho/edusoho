@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
 {% if dictionaryItem|default(false) %}{{ '更新字典'|trans }}
@@ -6,7 +6,7 @@
 {% endif %}
 {% endblock %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block body %}
 <div id="dictionary-creater-widget">

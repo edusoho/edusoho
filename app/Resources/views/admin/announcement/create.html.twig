@@ -1,6 +1,5 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiaadminbundle = true %}
 {% set modalSize = 'large' %}
 
 {% block title %}{% if announcement|default(null) %}{{'编辑'|trans}}{% else %}{{'新增'|trans}}{% endif %}{{'公告'|trans}}{% endblock %}
@@ -56,5 +55,6 @@
 {% block footer %}
   <button id="announcement-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-create-form">{{'提交'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('announcement/create-modal') };</script>
 {% endblock %}
