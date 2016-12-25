@@ -25,7 +25,7 @@
 {% block footer %}
   <button id="course-copy-btn" data-submiting-text="{{'正在复制'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#course-copy-form">{{'复制'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
   <script>app.lazyLoad = function() { app.load('course/copy') };</script>
 {% endblock %}
 
