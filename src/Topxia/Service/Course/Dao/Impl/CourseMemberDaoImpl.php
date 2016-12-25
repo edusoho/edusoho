@@ -3,9 +3,8 @@ namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\CourseDao;
-use Topxia\Service\Course\Dao\CourseMemberDao;
 
-class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
+class CourseMemberDaoImpl extends BaseDao
 {
     protected $table = 'course_member';
 
@@ -48,17 +47,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         ));
     }
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        $that = $this;
-
-        return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
-        }
-
-        );
-    }
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {

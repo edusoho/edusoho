@@ -91,6 +91,94 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $limit = (int) $limit;
     }
 
+    public function getMemberByCourseIdAndUserId($courseId, $userId)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
+        }
+
+        );
+    }
+
+    public function findMembersByCourseIds($courseIds)
+    {
+        // TODO: Implement findMembersByCourseIds() method.
+    }
+
+    public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
+    {
+        // TODO: Implement findMembersByUserIdAndRole() method.
+    }
+
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
+    {
+        // TODO: Implement findMembersNotInClassroomByUserIdAndRole() method.
+    }
+
+    public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true)
+    {
+        // TODO: Implement findMemberCountByUserIdAndRole() method.
+    }
+
+    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
+    {
+        // TODO: Implement findMemberCountNotInClassroomByUserIdAndRole() method.
+    }
+
+    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
+    {
+        // TODO: Implement findMembersByCourseIdAndRole() method.
+    }
+
+    public function findMemberCountByCourseIdAndRole($courseId, $role)
+    {
+        // TODO: Implement findMemberCountByCourseIdAndRole() method.
+    }
+
+    public function findMembersByUserIdAndJoinType($userId, $joinedType)
+    {
+        // TODO: Implement findMembersByUserIdAndJoinType() method.
+    }
+
+    public function searchMemberIds($conditions, $orderBy, $start, $limit)
+    {
+        // TODO: Implement searchMemberIds() method.
+    }
+
+    public function updateMembers($conditions, $updateFields)
+    {
+        // TODO: Implement updateMembers() method.
+    }
+
+    public function deleteMemberByCourseIdAndRole($courseId, $role)
+    {
+        // TODO: Implement deleteMemberByCourseIdAndRole() method.
+    }
+
+    public function findCourseMembersByUserId($userId)
+    {
+        // TODO: Implement findCourseMembersByUserId() method.
+    }
+
+    public function deleteMembersByCourseId($courseId)
+    {
+        // TODO: Implement deleteMembersByCourseId() method.
+    }
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    {
+        // TODO: Implement findCoursesByStudentIdAndCourseIds() method.
+    }
+
+    public function findMemberUserIdsByCourseId($courseId)
+    {
+        // TODO: Implement findMemberUserIdsByCourseId() method.
+    }
+
+
     public function declares()
     {
         return array(

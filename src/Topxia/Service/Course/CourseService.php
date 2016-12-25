@@ -39,15 +39,8 @@ interface CourseService
 
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit); //
 
-    public function findUserLearnCourseCount($userId);
 
-    public function findUserLearnCourseCountNotInClassroom($userId); //
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
-
-    public function findUserLeaningCourseCount($userId, $filters = array());
-
-    public function findUserLeanedCourseCount($userId, $filters = array());
 
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
 

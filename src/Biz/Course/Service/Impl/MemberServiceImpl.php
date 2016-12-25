@@ -106,10 +106,10 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function searchMember($conditions, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
-       // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
+        // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
     }
 
-    public function searchMemberCount($conditions)
+    public function countMembers($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
         return $this->getMemberDao()->count($conditions);
@@ -441,7 +441,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 
             if ($levelChecked != 'ok') {
-                throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不能以会员身份加入课程！', array('%userId%' => $userId)));
+                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
             }
 
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
@@ -474,8 +474,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseId' => $courseId
         );
         //TODO course2.0 获取学习了的task数量
-        $count      = 0; //$this->getLessonLearnDao()->searchLearnCount($conditions);
-        $fields     = array(
+        $count  = 0; //$this->getLessonLearnDao()->searchLearnCount($conditions);
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
@@ -528,13 +528,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，退出课程失败。', array('%courseId%' => $courseId)));
+            throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
         }
 
         $this->getMemberDao()->delete($member['id']);
@@ -557,13 +557,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' => $courseId)));
+            throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
         }
 
         if ($member['locked']) {
@@ -578,13 +578,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' => $courseId)));
+            throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
         }
 
         if (empty($member['locked'])) {
@@ -720,7 +720,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int) $number,
+            'noteNum'            => (int)$number,
             'noteLastUpdateTime' => time()
         ));
 

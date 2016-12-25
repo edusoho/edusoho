@@ -2,6 +2,7 @@
 namespace Topxia\Service\Course\Impl;
 
 use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
@@ -284,7 +285,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (isset($filters["type"])) {
             $members = $this->getMemberDao()->findMembersByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
         } else {
-            $members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+            $conditions = array(
+                'userId'    => $userId,
+                'role'      => 'student',
+                'isLearned' => 0
+            );
+            $members    = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
         }
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -306,7 +312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
 
-
     public function addCourseLessonReplay($courseLessonReplay)
     {
         $replay = $this->getCourseLessonReplayDao()->create($courseLessonReplay);
@@ -324,22 +329,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
-    public function findUserLeanedCourseCount($userId, $filters = array())
-    {
-        if (isset($filters["type"])) {
-            return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 1);
-        }
-
-        return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
-    }
 
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
     {
-        if (isset($filters["type"])) {
-            $members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, 'student', $filters["type"], '1', $start, $limit);
-        } else {
-            $members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
-        }
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 1
+        );
+        $members    = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -547,7 +545,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             });
         }
 
@@ -615,7 +613,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -1517,7 +1515,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $lesson                = $this->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson) || $lesson['courseId'] != $courseId) {
             throw $this->createNotFoundException();
@@ -1539,7 +1537,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function startLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return false;
@@ -1896,7 +1894,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
+        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -1915,7 +1913,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                     break;
                 case 'chapter':
-                    $item    = $currentChapter    = $items[$itemId];
+                    $item    = $currentChapter = $items[$itemId];
                     $chapter = $this->getChapter($courseId, $item['id']);
 
                     if ($item['type'] == 'unit') {
@@ -2002,13 +2000,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
 
-
     /**
      * @todo refactor it.
-     * @param  int|string                                $courseId
-     * @param  null|string                               $otherPermission
-     * @param  int|string                                $courseId
-     * @param  null|string                               $otherPermission
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
      * @throws NotFoundException|AccessDeniedException
      * @return array
      * @return array
@@ -2035,10 +2032,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int|string                                $courseId
-     * @param  null|string                               $actionPermission
-     * @param  int|string                                $courseId
-     * @param  null|string                               $actionPermission
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
      * @throws NotFoundException|AccessDeniedException
      * @return array
      * @return array
@@ -2108,7 +2105,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return array($course, $member);
     }
-
 
 
     public function canTakeCourse($course)
@@ -2257,7 +2253,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
-        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
         $courseLessonReplay = $this->getCourseLessonReplayDao()->get($courseLessonReplayId);
@@ -2295,7 +2291,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getCourseLessonReplayDao()->get($id);
     }
-
 
 
     public function updateCourseLessonReplay($id, $fields)
@@ -2425,6 +2420,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:FavoriteDao');
     }
 
+    /**
+     * @return CourseMemberDao
+     */
     protected function getMemberDao()
     {
         return $this->createDao('Course:CourseMemberDao');

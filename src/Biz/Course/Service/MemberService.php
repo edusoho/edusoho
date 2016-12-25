@@ -12,7 +12,12 @@ interface MemberService
 
     public function searchMember($conditions, $start, $limit);
 
-    public function searchMemberCount($conditions);
+    /**
+     * @param $conditions
+     * @return mixed
+     * @before searchMemberCount
+     */
+    public function countMembers($conditions);
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 

@@ -1338,7 +1338,7 @@ class ClassroomServiceTest extends BaseTestCase
 
     protected function getCourseMemberService()
     {
-        return $this->getBiz()->createService('Course:MemberService');
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     private function createStudent()

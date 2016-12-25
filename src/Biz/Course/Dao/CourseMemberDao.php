@@ -34,26 +34,6 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
-    /**
-     * @deprecated
-     */
-    public function getMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
-
-    /**
-     * @deprecated
-     */
-    public function getMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
-
-    /**
-     * @deprecated
-     */
-    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
-
-    /**
-     * @deprecated
-     */
-    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
-
 
     /**
      * @param $courseIds

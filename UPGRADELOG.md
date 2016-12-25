@@ -5,3 +5,9 @@
 		countMembersByStartTimeAndEndTime
 		findMobileVerifiedMemberCountByCourseId
 		deleteMemberByCourseIdAndUserId
+
+	CourseMemberDao
+		getMemberCountByUserIdAndCourseTypeAndIsLearned
+		getMemberCountByUserIdAndRoleAndIsLearned
+		findMembersByUserIdAndCourseTypeAndIsLearned
+		findMembersByUserIdAndRoleAndIsLearned
