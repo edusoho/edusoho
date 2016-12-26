@@ -3,6 +3,7 @@
 {% set side_nav = 'base' %}
 {% set script_controller = 'classroombundle/controller/classroom/set-info' %}
 {% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set script_arguments = {
 tagMatchUrl: path('tag_match'),
 } %}

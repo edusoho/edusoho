@@ -6,10 +6,11 @@
   {% set modal = modal|default(null) %}
 
   {% if modal == 'modal' %}
-    {% set topxiawebbundle = true %}
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
     <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/widget/category-select') };</script>
   {% else %}
     {% do load_script('topxiawebbundle/controller/widget/category-select') %}
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   {% endif %}
 
   {% set colmd = colmd|default(8) %}

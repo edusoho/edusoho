@@ -7,6 +7,7 @@
 
 {#
 {% do load_script('topxiawebbundle/controller/coin/share') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set url = inviteInfomation_template %}
 {% set message = ds|default('我正在%site%学习，邀请你也来体验下。')|trans({'%site%':setting('site.name')}) %}
 {% set title = setting('site.name') %}

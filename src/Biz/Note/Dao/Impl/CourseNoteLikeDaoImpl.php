@@ -1,5 +1,5 @@
 <?php
-namespace Biz\Course\Dao\Impl;
+namespace Biz\Note\Dao\Impl;
 
 
 

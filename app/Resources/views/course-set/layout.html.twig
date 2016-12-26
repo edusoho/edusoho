@@ -379,7 +379,7 @@
               <a href="{{ path('course_set_review',{id:courseSet.id}) }}">评价</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
-              <a href="">笔记</a>
+              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">笔记</a>
             </li>
             {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
           </ul>
@@ -449,22 +449,22 @@
 
       {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
       <!-- 课程特色: 加入前显示，加入后不显示 -->
-      {% include 'courseset/characteristic.html.twig' %}
+      {% include 'course-set/characteristic.html.twig' %}
 
       <!-- 其他计划: 加入前不显示，加入后不显示-->
-      {% include 'courseset/other-course.html.twig' %}
+      {% include 'course-set/other-course.html.twig' %}
 
       <!-- 推荐班级 -->
-      {% include 'courseset/recommend-classroom.html.twig' %}
+      {% include 'course-set/recommend-classroom.html.twig' %}
 
       <!-- 授课教师 -->
-      {% include 'courseset/teachers.html.twig' %}
+      {% include 'course-set/teachers.html.twig' %}
 
       <!-- 最新学员-->
-      {% include 'courseset/newest-students.html.twig' %}
+      {% include 'course-set/newest-students.html.twig' %}
 
       <!-- 学员动态 -->
-      {% include 'courseset/student-activity.html.twig' %}
+      {% include 'course-set/student-activity.html.twig' %}
 
     </div>
   </div>

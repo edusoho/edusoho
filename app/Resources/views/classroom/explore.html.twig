@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'old-layout.html.twig' %}
 {% set bodyClass = 'classroom-list-page bg-blank' %}
 {% set script_controller = 'classroombundle/controller/classroom/explore' %}
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{'全部'|trans}}{% endif %}{% endblock %}

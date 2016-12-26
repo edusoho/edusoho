@@ -22,6 +22,13 @@ interface TaskService
 
     public function countTasksByCourseId($courseId);
 
+    /**
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function findTasksByIds(array $ids);
+
     public function findTasksFetchActivityByCourseId($courseId);
 
     public function findUserTasksFetchActivityAndResultByCourseId($courseId);

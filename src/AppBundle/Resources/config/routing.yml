@@ -943,6 +943,16 @@ my_invite_code:
     path:     /my/invitecode
     defaults: { _controller: AppBundle:Coin:inviteCode }
 
+note_like:
+    path: /note/{id}/like
+    defaults: { _controller: AppBundle:Note:like }
+    methods: [POST]
+
+note_cancel_like:
+    path: /note/{id}/cancel_like
+    defaults: { _controller: AppBundle:Note:cancelLike }
+    methods: [POST]
+
 invite_promote_link:
     path:     /my/invitecode/promotelink
     defaults: { _controller: AppBundle:Coin:promoteLink }
@@ -1672,6 +1682,11 @@ course_set_manage_create:
 course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
+
+
+course_set_notes:
+  path: /course_set/{id}/notes
+  defaults: { _controller: AppBundle:CourseSet:notes }
 
 course_set_review:
   path: /course_set/{id}/review

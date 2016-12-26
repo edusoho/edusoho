@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% do load_script('course/note/like')%}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% if notes %}
 <div class="note-list" id="note-list">

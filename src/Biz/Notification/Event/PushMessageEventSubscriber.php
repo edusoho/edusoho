@@ -12,61 +12,65 @@ class PushMessageEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'user.registered'           => 'onUserCreate',
-            'user.unlock'               => 'onUserCreate',
-            'user.lock'                 => 'onUserDelete',
-            'user.update'               => 'onUserUpdate',
-            'user.change_nickname'      => 'onUserUpdate',
-            'user.follow'               => 'onUserFollow',
-            'user.unfollow'             => 'onUserUnFollow',
-
-            'course.publish'            => 'onCourseCreate',
-            'course.update'             => 'onCourseUpdate',
-            'course.delete'             => 'onCourseDelete',
-            'course.close'              => 'onCourseDelete',
-            'course.join'               => 'onCourseJoin',
-            'course.quit'               => 'onCourseQuit',
-            'course.create'             => 'onCourseCreate',
-
-            'course.lesson.publish'     => 'onCourseLessonCreate',
-            'course.lesson.unpublish'   => 'onCourseLessonDelete',
-            'course.lesson.update'      => 'onCourseLessonUpdate',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
-
-            'classroom.join'            => 'onClassroomJoin',
-            'classroom.quit'            => 'onClassroomQuit',
-
-            'article.create'            => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
-            'article.publish'           => 'onArticleCreate',
-            'article.update'            => 'onArticleUpdate',
-            'article.trash'             => 'onArticleDelete',
-            'article.unpublish'         => 'onArticleDelete',
-            'article.delete'            => 'onArticleDelete',
-
-            //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'             => 'onThreadCreate',
-            'thread.update'             => 'onThreadUpdate',
-            'thread.delete'             => 'onThreadDelete',
-            'course.thread.create'      => 'onCourseThreadCreate',
-            'course.thread.update'      => 'onCourseThreadUpdate',
-            'course.thread.delete'      => 'onCourseThreadDelete',
-            'group.thread.create'       => 'onGroupThreadCreate',
-            'group.thread.open'         => 'onGroupThreadOpen',
-            'group.thread.update'       => 'onGroupThreadUpdate',
-            'group.thread.delete'       => 'onGroupThreadDelete',
-
-            'thread.post.create'        => 'onThreadPostCreate',
-            'thread.post.delete'        => 'onThreadPostDelete',
-            'course.thread.post.create' => 'onCourseThreadPostCreate',
-            'course.thread.post.update' => 'onCourseThreadPostUpdate',
-            'course.thread.post.delete' => 'onCourseThreadPostDelete',
-            'group.thread.post.create'  => 'onGroupThreadPostCreate',
-            'group.thread.post.delete'  => 'onGroupThreadPostDelete',
-
-            'announcement.create'       => 'onAnnouncementCreate'
-
-            //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+            /**
+             * // malianbo@howzhi.com 2016-12-23 这里的实现逻辑需要重构，先注释掉，以确保基本业务跑通
+             *
+             * 'user.registered'           => 'onUserCreate',
+             * 'user.unlock'               => 'onUserCreate',
+             * 'user.lock'                 => 'onUserDelete',
+             * 'user.update'               => 'onUserUpdate',
+             * 'user.change_nickname'      => 'onUserUpdate',
+             * 'user.follow'               => 'onUserFollow',
+             * 'user.unfollow'             => 'onUserUnFollow',
+             *
+             * 'course.publish'            => 'onCourseCreate',
+             * 'course.update'             => 'onCourseUpdate',
+             * 'course.delete'             => 'onCourseDelete',
+             * 'course.close'              => 'onCourseDelete',
+             * 'course.join'               => 'onCourseJoin',
+             * 'course.quit'               => 'onCourseQuit',
+             * 'course.create'             => 'onCourseCreate',
+             *
+             * 'course.lesson.publish'     => 'onCourseLessonCreate',
+             * 'course.lesson.unpublish'   => 'onCourseLessonDelete',
+             * 'course.lesson.update'      => 'onCourseLessonUpdate',
+             * 'course.lesson.delete'      => 'onCourseLessonDelete',
+             *
+             * 'classroom.join'            => 'onClassroomJoin',
+             * 'classroom.quit'            => 'onClassroomQuit',
+             *
+             * 'article.create'            => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
+             * 'article.publish'           => 'onArticleCreate',
+             * 'article.update'            => 'onArticleUpdate',
+             * 'article.trash'             => 'onArticleDelete',
+             * 'article.unpublish'         => 'onArticleDelete',
+             * 'article.delete'            => 'onArticleDelete',
+             *
+             * //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
+             * 'thread.create'             => 'onThreadCreate',
+             * 'thread.update'             => 'onThreadUpdate',
+             * 'thread.delete'             => 'onThreadDelete',
+             * 'course.thread.create'      => 'onCourseThreadCreate',
+             * 'course.thread.update'      => 'onCourseThreadUpdate',
+             * 'course.thread.delete'      => 'onCourseThreadDelete',
+             * 'group.thread.create'       => 'onGroupThreadCreate',
+             * 'group.thread.open'         => 'onGroupThreadOpen',
+             * 'group.thread.update'       => 'onGroupThreadUpdate',
+             * 'group.thread.delete'       => 'onGroupThreadDelete',
+             *
+             * 'thread.post.create'        => 'onThreadPostCreate',
+             * 'thread.post.delete'        => 'onThreadPostDelete',
+             * 'course.thread.post.create' => 'onCourseThreadPostCreate',
+             * 'course.thread.post.update' => 'onCourseThreadPostUpdate',
+             * 'course.thread.post.delete' => 'onCourseThreadPostDelete',
+             * 'group.thread.post.create'  => 'onGroupThreadPostCreate',
+             * 'group.thread.post.delete'  => 'onGroupThreadPostDelete',
+             *
+             * 'announcement.create'       => 'onAnnouncementCreate'
+             *
+             * //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+             * //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+             */
         );
     }
 
