@@ -30,7 +30,7 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
         $courseIds = ArrayToolkit::column($courses, 'id');
         $conditions = array('courseIds' => $courseIds, 'unique' => true , 'role' => 'student');
 
-        $members = $this->getCourseService()->searchMembers($conditions,array('createdTime', 'DESC'),0,$arguments['count']);
+        $members = $this->getCourseMemberService()->searchMembers($conditions,array('createdTime', 'DESC'),0,$arguments['count']);
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -45,5 +45,10 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
         }
 
         return $members;
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

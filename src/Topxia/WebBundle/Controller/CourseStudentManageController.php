@@ -30,7 +30,7 @@ class CourseStudentManageController extends BaseController
             20
         );
 
-        $students = $this->getCourseService()->searchMembers(
+        $students = $this->getCourseMemberService()->searchMembers(
             $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -163,7 +163,7 @@ class CourseStudentManageController extends BaseController
         );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
-        $this->getCourseService()->removeStudent($courseId, $userId);
+        $this->getCourseMemberService()->removeStudent($courseId, $userId);
 
         $this->getNotificationService()->notify($userId, 'student-remove', array(
             'courseId'    => $course['id'],
@@ -232,7 +232,7 @@ class CourseStudentManageController extends BaseController
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
-        $courseMembers = $this->getCourseService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
+        $courseMembers = $this->getCourseMemberService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
         $userFields    = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
@@ -300,11 +300,11 @@ class CourseStudentManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $user   = $this->getUserService()->getUser($userId);
-        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
-            $member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+            $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
             return $this->createStudentTrResponse($course, $member);
         }
 
@@ -325,7 +325,7 @@ class CourseStudentManageController extends BaseController
         if (!$user) {
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
         } else {
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($id, $user['id']);
 
             if ($isCourseStudent) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了'));
@@ -333,7 +333,7 @@ class CourseStudentManageController extends BaseController
                 $response = array('success' => true, 'message' => '');
             }
 
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($id, $user['id']);
 
             if ($isCourseTeacher) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));
@@ -516,7 +516,7 @@ class CourseStudentManageController extends BaseController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getSettingService()
@@ -546,4 +546,5 @@ class CourseStudentManageController extends BaseController
     {
         return ServiceKernel::instance()->createService('User:UserFieldService');
     }
+
 }

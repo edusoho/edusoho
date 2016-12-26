@@ -38,8 +38,8 @@ class MemberRecentlyLearnedDataTagTest extends BaseTestCase
         $this->getCourseService()->publishCourse($course1['id']);
         $this->getCourseService()->publishCourse($course2['id']);
         $this->getCourseService()->publishCourse($course3['id']);
-        $this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course2['id'],$user1['id']);
+        $this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course2['id'],$user1['id']);
 
     	$lesson1 =array(
         	'courseId' => $course1['id'],
@@ -92,6 +92,11 @@ class MemberRecentlyLearnedDataTagTest extends BaseTestCase
     public function getUserService()
     {
         return $this->getServiceKernel()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
 }

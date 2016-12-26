@@ -38,8 +38,8 @@ class TeacherCoursesDataTagTest extends BaseTestCase
         $this->getCourseService()->publishCourse($course1['id']);
         $this->getCourseService()->publishCourse($course2['id']);
         $this->getCourseService()->publishCourse($course3['id']);
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course2['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $user1['id'], 'isVisible' => 1)));
         $datatag = new TeacherCoursesDataTag();
         $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
         $this->assertEquals(2, count($courses));
@@ -54,5 +54,10 @@ class TeacherCoursesDataTagTest extends BaseTestCase
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

@@ -16,7 +16,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function preCheck($targetId, $userId)
     {
-        if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
+        if ($this->getCourseMemberService()->isCourseStudent($targetId, $userId)) {
             return array('error' => $this->getKernel()->trans('已经是课程的学员了!'));
         }
 
@@ -288,6 +288,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getPayCenterService()
     {
         return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
     protected function getKernel()

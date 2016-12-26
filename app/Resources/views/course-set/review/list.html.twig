@@ -1,0 +1,11 @@
+{% extends 'course-set/layout.html.twig' %}
+
+{% set nav = 'review' %}
+
+{% block detail_content %}
+  {% set goto = path('course_set_review',{id:courseSet.id}) %}
+  {% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+
+  {% include 'review/widget/list.html.twig' %}
+
+{% endblock %}

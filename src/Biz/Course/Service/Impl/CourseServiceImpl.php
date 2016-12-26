@@ -318,25 +318,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
-    public function isCourseMember($courseId, $userId)
-    {
-        $role = $this->getUserRoleInCourse($courseId, $userId);
-        return !empty($role);
-    }
-
-    public function isCourseStudent($courseId, $userId)
-    {
-        $role = $this->getUserRoleInCourse($courseId, $userId);
-        return $role == 'student';
-    }
-
-    public function isCourseTeacher($courseId, $userId)
-    {
-        $role = $this->getUserRoleInCourse($courseId, $userId);
-
-        return $role == 'teacher';
-    }
-
     public function createCourseStudent($courseId, $fields)
     {
         $this->tryManageCourse($courseId);
@@ -383,27 +364,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
         return $result;
-    }
-
-    public function getCourseMember($courseId, $userId)
-    {
-        return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-    }
-
-    public function setMemberNoteNumber($courseId, $userId, $num)
-    {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-
-        if (empty($member)) {
-            return false;
-        }
-
-        $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int) $num,
-            'noteLastUpdateTime' => time()
-        ));
-
-        return true;
     }
 
     public function getUserRoleInCourse($courseId, $userId)
@@ -563,7 +523,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    public function countLeaningCourseByUserId($userId, $filters = array())
+    public function findUserLeaningCourseCount($userId, $filters = array())
     {
         $conditions = array(
             'userId'    => $userId,
@@ -578,7 +538,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->count($conditions);
     }
 
-    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array('type' => ''))
+    public function findUserLeaningCourses($userId, $start, $limit, $filters = array('type' => ''))
     {
         $conditions = array(
             'userId'    => $userId,
@@ -610,15 +570,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function findUserLeanedCourseCount($userId, $filters = array())
     {
-        $conditions = $this->_prepareCourseConditions($conditions);
-        return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
-    }
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 1
 
-    public function countMembers($conditions)
-    {
-        $conditions = $this->_prepareCourseConditions($conditions);
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            return $this->getMemberDao()->countMemberFetchCourse($conditions);
+        }
         return $this->getMemberDao()->count($conditions);
     }
 

@@ -8,8 +8,6 @@ interface TaskDao extends GeneralDaoInterface
 {
     public function deleteByCategoryId($categoryId);
 
-    public function findByIds(array $ids);
-
     public function findByCourseId($courseId);
 
     public function findByIds($ids);

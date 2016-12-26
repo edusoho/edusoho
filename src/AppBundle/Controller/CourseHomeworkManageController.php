@@ -32,7 +32,7 @@ class CourseHomeworkManageController extends BaseController
         $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user      = $this->getUser();
-        $isTeacher = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'homework');
 
@@ -83,6 +83,11 @@ class CourseHomeworkManageController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
 }

@@ -5,10 +5,9 @@ namespace AppBundle\Controller\Classroom;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomController extends BaseController
@@ -61,7 +60,6 @@ class ClassroomController extends BaseController
             }
         }
 
-
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
                 $previewAs = "";
@@ -75,7 +73,7 @@ class ClassroomController extends BaseController
         $cashRate = $this->getCashRate();
 
         foreach ($courses as $key => $course) {
-            $lessonNum += $course['lessonNum'];
+            $lessonNum += $course['taskCount'];
 
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
@@ -84,13 +82,12 @@ class ClassroomController extends BaseController
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
 
-
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        $member    = $this->previewAsMember($previewAs, $member, $classroom);
-        
+        $member = $this->previewAsMember($previewAs, $member, $classroom);
+
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId']>0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+            $vipChecked         = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId'] > 0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
             return $this->render("classroom/classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,
@@ -203,7 +200,7 @@ class ClassroomController extends BaseController
         $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%title%，如有需要请联系客服',array('%title%'=>$classroom['title'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%title%，如有需要请联系客服', array('%title%' => $classroom['title'])), '', 3, $this->generateUrl('homepage'));
         }
 
         if (!$classroom) {
@@ -221,7 +218,7 @@ class ClassroomController extends BaseController
         }
 
         $this->dispatchEvent('classroom.view',
-            new Event($classroom, array('userId' =>$user['id']))
+            new Event($classroom, array('userId' => $user['id']))
         );
         return $this->render("classroom/introduction.html.twig", array(
             'introduction'         => $introduction,
@@ -502,7 +499,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom['buyable']) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，该%title%不允许加入，如有需要请联系客服',array('%title%'=>$classroom['title'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，该%title%不允许加入，如有需要请联系客服', array('%title%' => $classroom['title'])), '', 3, $this->generateUrl('homepage'));
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -621,7 +618,7 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
 
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('%title%不存在，不能购买。',array('%title%'=>$classroom['title'])));
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('%title%不存在，不能购买。', array('%title%' => $classroom['title'])));
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -655,13 +652,13 @@ class ClassroomController extends BaseController
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
-        if ($this->isPluginInstalled('Vip') 
-            && $this->setting('vip.enabled') 
+        if ($this->isPluginInstalled('Vip')
+            && $this->setting('vip.enabled')
             && !empty($classroom['vipLevelId'])
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
             return $this->forward("classroom/becomeStudent", array(
-                'request' => $request, 
-                'id' => $classroom['id']
+                'request' => $request,
+                'id'      => $classroom['id']
             ));
         }
 
@@ -717,7 +714,7 @@ class ClassroomController extends BaseController
 
         $courseIds         = ArrayToolkit::column($courses, "parentId");
         $courses           = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseMembers     = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
+        $courseMembers     = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
         $priceType         = "RMB";
@@ -1002,5 +999,10 @@ class ClassroomController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

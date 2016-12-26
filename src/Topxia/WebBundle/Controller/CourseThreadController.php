@@ -76,7 +76,7 @@ class CourseThreadController extends CourseBaseController
 
         $user = $this->getCurrentUser();
 
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             $isMemberNonExpired = false;
         } else {
             $isMemberNonExpired = true;
@@ -138,7 +138,7 @@ class CourseThreadController extends CourseBaseController
             return $response;
         }
 
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_threads', array('id' => $id)));
         }
 
@@ -655,6 +655,11 @@ class CourseThreadController extends CourseBaseController
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File:UploadFileService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
     protected function createPostForm($data = array())
