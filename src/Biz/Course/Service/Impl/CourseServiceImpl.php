@@ -139,7 +139,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $visibleTeacherIds = array();
 
         foreach ($teacherMembers as $member) {
-            $existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
                 $this->getMemberDao()->delete($existMember['id']);
@@ -321,7 +321,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('userId', 'price'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $fields['userId']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $fields['userId']);
         if (!empty($member)) {
             throw $this->createInvalidArgumentException("User#{$fields['userId']} is already in Course#{$courseId}");
         }
@@ -350,7 +350,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($user)) {
             throw $this->createNotFoundException("User#{$user['id']} Not Found");
         }
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
         if (empty($member)) {
             throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
         }
@@ -366,7 +366,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getUserRoleInCourse($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
         return empty($member) ? null : $member['role'];
     }
 
@@ -381,7 +381,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
         $user   = $this->getCurrentUser();
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
         return array($course, $member);
     }
 
@@ -408,7 +408,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //            return true;
         //        }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;

@@ -91,12 +91,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $limit = (int)$limit;
     }
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? LIMIT 1";
-        return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
-    }
-
     public function findMembersByCourseIds($courseIds)
     {
         // TODO: Implement findMembersByCourseIds() method.

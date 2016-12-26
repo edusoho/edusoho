@@ -31,7 +31,7 @@ class WarmupCommand extends BaseCommand
 			$this->getUserService()->getUserByNickname($user['nickname']);
             $this->getUserService()->getUserByEmail($user['email']);
 
-            $this->getServiceKernel()->createDao('Course:CourseMemberDao')->getMemberByCourseIdAndUserId(1, $user['id']);
+            $this->getServiceKernel()->createDao('Course:CourseMemberDao')->getByCourseIdAndUserId(1, $user['id']);
 
             $this->getServiceKernel()->createDao('Course:LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
         }

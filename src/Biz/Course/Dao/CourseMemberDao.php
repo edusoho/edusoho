@@ -6,7 +6,13 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseMemberDao extends GeneralDaoInterface
 {
-    public function getMemberByCourseIdAndUserId($courseId, $userId);
+    /**
+     * @param $courseId
+     * @param $userId
+     * @return mixed
+     * @before getMemberByCourseIdAndUserId
+     */
+    public function getByCourseIdAndUserId($courseId, $userId);
 
     public function findStudentsByCourseId($courseId);
 
