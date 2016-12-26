@@ -217,7 +217,7 @@ class PermissionBuilder
         $configPaths = array();
         $position    = $this->position;
 
-        $rootDir = realpath(__DIR__.'/../../../');
+        $rootDir = realpath(__DIR__.'/../../../../');
 
         $finder = new Finder();
         $finder->directories()->depth('== 0');
