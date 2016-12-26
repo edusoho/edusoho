@@ -14,6 +14,7 @@
 		findMembersByUserIdAndRoleAndIsLearned
 		findStudentsByCourseId
 		findTeachersByCourseId
+		findMemberCountByCourseIdAndRole
 		
     MaterialService:
         findMaterialCountGroupByFileId

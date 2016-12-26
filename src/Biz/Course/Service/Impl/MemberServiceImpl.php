@@ -216,7 +216,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getCourseStudentCount($courseId)
     {
-        return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+        $conditions = array(
+            'courseId' => $courseId,
+            'role'     => 'student'
+        );
+        return $this->getMemberDao()->count($conditions);
     }
 
     protected function findCourseTeachers($courseId)
