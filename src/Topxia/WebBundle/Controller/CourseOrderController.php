@@ -24,7 +24,7 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -436,6 +436,6 @@ class CourseOrderController extends OrderController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

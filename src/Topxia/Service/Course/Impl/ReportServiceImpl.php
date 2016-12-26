@@ -204,7 +204,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $startTimeGreaterThan = strtotime('- 29 days', $now);
         $role = 'student';
         $result = array();
-        $result['students'] = $this->getCourseService()->searchMembers(
+        $result['students'] = $this->getCourseMemberService()->searchMembers(
             array(
                 'courseId' => $courseId,
                 'role' => $role,
@@ -258,6 +258,11 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     protected function getThreadService()

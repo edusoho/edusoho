@@ -122,7 +122,7 @@ class CourseManageController extends BaseController
             }
             $teachers = json_decode($data['teachers'], true);
 
-            $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+            $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
@@ -221,12 +221,12 @@ class CourseManageController extends BaseController
         if (!$user) {
             $response = '该用户不存在';
         } else {
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
                 $response = '该用户已是本课程的学员了';
             } else {
-                $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+                $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
                 if ($isCourseTeacher) {
                     $response = '该用户是本课程的教师，不能添加';
@@ -315,5 +315,10 @@ class CourseManageController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

@@ -196,7 +196,7 @@ class ChaosThreads extends BaseResource
             'userId' => $currentUser['id']
         );
 
-        $userCourses = $this->getCourseService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         if (!$userCourses) {
             return array();
@@ -266,5 +266,10 @@ class ChaosThreads extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

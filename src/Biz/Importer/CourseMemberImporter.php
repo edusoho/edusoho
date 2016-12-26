@@ -46,8 +46,8 @@ class CourseMemberImporter extends Importer
                 }
             }
 
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($targetObject['id'], $user['id']);
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($targetObject['id'], $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($targetObject['id'], $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($targetObject['id'], $user['id']);
 
             if ($isCourseStudent || $isCourseTeacher) {
                 $existsUserCount++;
@@ -77,11 +77,11 @@ class CourseMemberImporter extends Importer
                     'orderId' => $order['id']
                 );
 
-                if ($this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
+                if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
                     $successCount++;
                 };
 
-                $member = $this->getCourseService()->getCourseMember($targetObject['id'], $user['id']);
+                $member = $this->getCourseMemberService()->getCourseMember($targetObject['id'], $user['id']);
 
                 $message = array(
                     'courseId'    => $targetObject['id'],
@@ -438,5 +438,10 @@ class CourseMemberImporter extends Importer
     protected function getLogService()
     {
         return $this->getServiceKernel()->getBiz()->service('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 }

@@ -84,6 +84,11 @@ interface ClassroomService
 
     public function findClassroomsByCoursesIds($courseIds);
 
+    /**
+     * @param $courseId
+     * @return mixed
+     * @before findClassroomByCourseId
+     */
     public function getClassroomByCourseId($courseId);
 
     // 内部方法
@@ -134,6 +139,12 @@ interface ClassroomService
 
     public function findClassroomsByCourseId($courseId);
 
+    /**
+     * @param $classroomId
+     * @param $courseId
+     * @return mixed
+     * @before findClassroomCourse
+     */
     public function getClassroomCourse($classroomId, $courseId);
 
     public function findCoursesByClassroomId($classroomId);

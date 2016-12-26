@@ -503,7 +503,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $user = $this->controller->getUserByToken($this->request);
 
 		foreach ($courses as $key => $course) {
-       	    $courseMember = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
+       	    $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $user["id"]);
 
             $lessonNum = (float)$course['lessonNum'];
             $progress = $lessonNum == 0 ? 0 : (float)$courseMember['learnedNum'] / $lessonNum;
@@ -697,5 +697,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getClassroomReviewService()
     {
         return $this->controller->getService('Classroom:Classroom.ClassroomReviewService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
     }
 }

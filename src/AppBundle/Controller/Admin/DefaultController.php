@@ -322,7 +322,7 @@ class DefaultController extends BaseController
         $days      = $this->getDaysDiff($period);
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
-        $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseId', 0, 10);
+        $memberCounts = $this->getCourseMemberService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseId', 0, 10);
         $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
         $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses      = ArrayToolkit::index($courses, 'id');
@@ -598,6 +598,11 @@ class DefaultController extends BaseController
     protected function getUserActiveService()
     {
         return $this->createService('User:UserActiveService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     /**

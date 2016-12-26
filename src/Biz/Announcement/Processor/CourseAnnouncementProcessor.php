@@ -23,7 +23,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 	public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
 	{
 		$count = $this->getCourseService()->getCourseStudentCount($targetId);
-    	$members = $this->getCourseService()->findCourseStudents($targetId, 0, $count);
+    	$members = $this->getCourseMemberService()->findCourseStudents($targetId, 0, $count);
 
     	$result = false;
 		if ($members) {
@@ -65,6 +65,12 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     {
         return ServiceKernel::instance()->createService('Course:CourseService');
     }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
 
     /**
      * @return NotificationService

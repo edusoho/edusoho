@@ -3,6 +3,7 @@
 namespace Tests\Classroom;
 
 use Biz\BaseTestCase;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\User\CurrentUser;
 
 class ClassroomServiceTest extends BaseTestCase
@@ -13,8 +14,8 @@ class ClassroomServiceTest extends BaseTestCase
             'title'  => 'test',
             'status' => 'draft'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $this->assertEquals(1, $classroom['id']);
 
@@ -28,7 +29,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test11'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
         // $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
         // 是为了清空缓存再getClassroom,保证test之间互不影响,下同
@@ -50,7 +51,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test1'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
 
         $this->getClassroomService()->publishClassroom($classroom['id']);
 
@@ -87,7 +88,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom3 = array(
             'title' => 'test3'
         );
-        $classroom1 = $this->getClassroomService()->addClassroom($textClassroom1);
+        $classroom1     = $this->getClassroomService()->addClassroom($textClassroom1);
         $this->getClassroomService()->updateClassroom($classroom1['id'], $textClassroom1);
         $classroom2 = $this->getClassroomService()->addClassroom($textClassroom2);
         $this->getClassroomService()->updateClassroom($classroom2['id'], $textClassroom2);
@@ -106,14 +107,14 @@ class ClassroomServiceTest extends BaseTestCase
     {
     }
 
-    public function testFindClassroomCourse()
+    public function testGetClassroomCourse()
     {
         $textClassroom = array(
             'title' => 'test19878'
         );
 
-        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course1 = $this->mockCourse('Test Course 1');
+        $course2 = $this->mockCourse('Test Course 2');
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
 
@@ -122,7 +123,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id']));
 
-        $result = $this->getClassroomService()->findClassroomCourse($classroom['id'], $course1['id']);
+        $result = $this->getClassroomService()->getClassroomCourse($classroom['id'], $course1['id']);
         $this->assertEquals($course1['id'], $result['id']);
     }
 
@@ -132,8 +133,8 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'testwe'
         );
 
-        $course1 = array('title' => 'estCourse1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course2 = array('title' => 'estCourse2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course1 = $this->mockCourse('Test Course 1');
+        $course2 = $this->mockCourse('Test Course 2');
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
 
@@ -158,9 +159,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test3'
         );
-        $course    = array('title' => 'Test Course');
-        $course    = $this->getCourseService()->createCourse($course);
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $course        = $this->mockCourse('Test Course 1');
+        $course        = $this->getCourseService()->createCourse($course);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
 
         $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
 
@@ -174,11 +175,11 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom1 = array(
             'title' => 'test12333'
         );
-        $course1    = array('title' => 'Test Course 1');
-        $course2    = array('title' => 'Test Course 2');
-        $course1    = $this->getCourseService()->createCourse($course1);
-        $course2    = $this->getCourseService()->createCourse($course2);
-        $classroom1 = $this->getClassroomService()->addClassroom($textClassroom1);
+        $course1        = $this->mockCourse('Test Course 1');
+        $course2        = $this->mockCourse('Test Course 2');
+        $course1        = $this->getCourseService()->createCourse($course1);
+        $course2        = $this->getCourseService()->createCourse($course2);
+        $classroom1     = $this->getClassroomService()->addClassroom($textClassroom1);
 
         $this->getClassroomService()->setClassroomCourses($classroom1['id'], array($course1['id']));
 
@@ -200,12 +201,12 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test1234'
         );
-        $course    = array('title' => 'Test Course');
-        $course    = $this->getCourseService()->createCourse($course);
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $course        = $this->mockCourse('Test Course');
+        $course        = $this->getCourseService()->createCourse($course);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
 
         $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course['id']));
-        $result    = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $result    = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $this->assertEquals('test1234', $classroom['title']);
@@ -216,9 +217,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test111'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
-        $title     = 'test111';
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $title         = 'test111';
 
         $result = $this->getClassroomService()->findClassroomByTitle($title);
 
@@ -233,11 +234,11 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom2 = array(
             'title' => 'test334'
         );
-        $classroom1 = $this->getClassroomService()->addClassroom($textClassroom1);
-        $classroom1 = $this->getClassroomService()->updateClassroom($classroom1['id'], $textClassroom1);
-        $classroom2 = $this->getClassroomService()->addClassroom($textClassroom2);
-        $classroom2 = $this->getClassroomService()->updateClassroom($classroom2['id'], $textClassroom2);
-        $likeTitle  = '%test2%';
+        $classroom1     = $this->getClassroomService()->addClassroom($textClassroom1);
+        $classroom1     = $this->getClassroomService()->updateClassroom($classroom1['id'], $textClassroom1);
+        $classroom2     = $this->getClassroomService()->addClassroom($textClassroom2);
+        $classroom2     = $this->getClassroomService()->updateClassroom($classroom2['id'], $textClassroom2);
+        $likeTitle      = '%test2%';
 
         $result = $this->getClassroomService()->findClassroomsByLikeTitle($likeTitle);
 
@@ -274,8 +275,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
         $this->getClassroomService()->deleteClassroom($classroom['id']);
         $result = $this->getClassroomService()->getClassroom($classroom['id']);
         $this->assertEquals(0, count($result));
@@ -294,7 +295,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test6543'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->assertEquals('draft', $classroom['status']);
 
         $currentUser = new CurrentUser();
@@ -328,8 +329,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test1111223'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -364,8 +365,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test43234'
         );
-        $course = array('title' => 'Test Course 1');
-        $course = $this->getCourseService()->createCourse($course);
+        $course        = $this->mockCourse('Test Course 1');
+        $course        = $this->getCourseService()->createCourse($course);
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
@@ -387,8 +388,8 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'test12321'
         );
 
-        $course1 = array('title' => 'Test Course 1');
-        $course2 = array('title' => 'Test Course 2');
+        $course1 = $this->mockCourse('Test Course 1');
+        $course2 = $this->mockCourse('Test Course 2');
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
 
@@ -421,8 +422,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test54345'
         );
-        $course = array('title' => 'Test Course 2');
-        $course = $this->getCourseService()->createCourse($course);
+        $course        = $this->mockCourse('Test Course 2');
+        $course        = $this->getCourseService()->createCourse($course);
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
@@ -471,8 +472,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test001'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], 3);
 
@@ -497,7 +498,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test066'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -525,11 +526,11 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1');
+        $course1       = $this->mockCourse('Test Course 1');
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $course1   = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
         $courseIds = array($course1['id']);
         $this->getClassroomService()->setClassroomCourses($classroom['id'], $courseIds);
 
@@ -549,7 +550,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test991'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -578,7 +579,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test001'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -620,7 +621,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test099'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -646,8 +647,8 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test433'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $user2 = $this->getUserService()->register(array(
             'id'        => 2,
@@ -668,7 +669,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test077'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -699,7 +700,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test1444'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -727,7 +728,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test333'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -756,7 +757,7 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test2111'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
@@ -814,9 +815,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1');
-        $course1 = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $course1       = $this->mockCourse('Test Course 1');
+        $course1       = $this->getCourseService()->createCourse($course1);
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id']);
 
@@ -1135,8 +1136,8 @@ class ClassroomServiceTest extends BaseTestCase
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
-        $this->getCourseService()->createCourse(array('title' => 'ssssss'));
-        $this->getCourseService()->createCourse(array('title' => 'sss222sss'));
+        $this->getCourseService()->createCourse($this->mockCourse('Test Course 1'));
+        $this->getCourseService()->createCourse($this->mockCourse('Test Course 2'));
 
         $this->getClassroomService()->setClassroomCourses($classroom['id'], array(1, 2));
 
@@ -1185,17 +1186,17 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course3 = array('title' => 'Test Course 3','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course1       = $this->mockCourse('Test Course 1');
+        $course2       = $this->mockCourse('Test Course 2');
+        $course3       = $this->mockCourse('Test Course 3');
 
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
         $course3 = $this->getCourseService()->createCourse($course3);
 
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id'], $course2['id']);
 
@@ -1224,17 +1225,17 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $course1 = array('title' => 'Test Course 1','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course2 = array('title' => 'Test Course 2','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
-        $course3 = array('title' => 'Test Course 3','courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days');
+        $course1       = $this->mockCourse('Test Course 1');
+        $course2       = $this->mockCourse('Test Course 2');
+        $course3       = $this->mockCourse('Test Course 3');
 
         $course1 = $this->getCourseService()->createCourse($course1);
         $course2 = $this->getCourseService()->createCourse($course2);
         $course3 = $this->getCourseService()->createCourse($course3);
 
-        $this->getCourseService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
-        $this->getCourseService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course2['id'], array(array('id' => $teacher4['id'], 'isVisible' => 1), array('id' => $teacher5['id'], 'isVisible' => 1)));
+        $this->getCourseMemberService()->setCourseTeachers($course3['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher3['id'], 'isVisible' => 1), array('id' => $teacher6['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id'], $course2['id'], $course3['id']);
 
@@ -1300,6 +1301,11 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertCount(1, $members);
     }
 
+    protected function mockCourse($title = 'Test Course 1')
+    {
+        return array('title' => $title, 'courseSetId' => 1, 'learnMode' => 'freeMode', 'expiryMode' => 'days');
+    }
+
     private function createUser()
     {
         $user              = array();
@@ -1322,9 +1328,17 @@ class ClassroomServiceTest extends BaseTestCase
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     private function createStudent()

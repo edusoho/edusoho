@@ -421,7 +421,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
         $post['userId']      = $this->getCurrentUser()->id;
-        $post['isElite']     = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
+        $post['isElite']     = $this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
         $post['createdTime'] = time();
 
         //创建post过滤html
@@ -525,5 +525,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getLogService()
     {
         return ServiceKernel::instance()->createService('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

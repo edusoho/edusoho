@@ -114,7 +114,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findUserTasksFetchActivityAndResultByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
-        if (!$this->getCourseService()->isCourseMember($courseId, $user->getId())) {
+        if (!$this->getCourseMemberService()->isCourseMember($courseId, $user->getId())) {
             return array();
         }
 
@@ -337,5 +337,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getTaskResultService()
     {
         return $this->biz->service('Task:TaskResultService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

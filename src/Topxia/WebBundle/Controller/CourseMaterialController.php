@@ -52,7 +52,7 @@ class CourseMaterialController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_materials', array('id' => $courseId)));
         }
 
@@ -117,5 +117,10 @@ class CourseMaterialController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

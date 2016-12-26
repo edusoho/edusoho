@@ -32,7 +32,7 @@ class CourseTestpaperManageController extends BaseController
         $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user      = $this->getUser();
-        $isTeacher = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'testpaper');
 
@@ -61,7 +61,7 @@ class CourseTestpaperManageController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
         }
 
-        $isTeacher = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         return $this->render('course-manage/testpaper-check/result-list.html.twig', array(
             'course'    => $course,
@@ -109,5 +109,10 @@ class CourseTestpaperManageController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
