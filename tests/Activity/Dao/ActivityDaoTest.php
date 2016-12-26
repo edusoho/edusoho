@@ -33,19 +33,19 @@ class ActivityDaoTest extends BaseDaoTestCase
 
 		$testConditons = array(
 			array(
-				'condition' => array('fromCourseId' => 1), 
-				'results' => array($activity1, $activity2), 
-				'countResult' => 2
+				'testCondition' => array('fromCourseId' => 1), 
+				'expectedResults' => array($activity1, $activity2), 
+				'expectedCount' => 2
 			),
             array(
-            	'condition' => array('mediaType' => 'text'), 
-            	'results' => array($activity1), 
-            	'countResult' => 1
+            	'testCondition' => array('mediaType' => 'text'), 
+            	'expectedResults' => array($activity1), 
+            	'expectedCount' => 1
             ),
             array(
-            	'condition' => array('mediaType' => 'text', 'fromCourseId' => 1), 
-            	'results' => array($activity1), 
-            	'countResult' => 1
+            	'testCondition' => array('mediaType' => 'text', 'fromCourseId' => 1), 
+            	'expectedResults' => array($activity1), 
+            	'expectedCount' => 1
             ),
 		);
 
