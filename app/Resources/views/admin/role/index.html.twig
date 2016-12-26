@@ -48,7 +48,7 @@
           <div class="btn-group">
             <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
             {% if role.code not in notUpdateRoles %}
-              {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_role_manage', group:'groupBtn', role: role} %}
+              {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_role_manage', group:'groupBtn', role: role} %}
             {% endif %}
           </div>
         </td>
