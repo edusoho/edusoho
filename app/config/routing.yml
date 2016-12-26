@@ -8,10 +8,6 @@ __web:
 #    resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
 #    prefix:   /admin
 
-permission_admin:
-    resource: "@PermissionBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
-
 topxia_mobile:
     resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
     prefix:   /mapi_v1

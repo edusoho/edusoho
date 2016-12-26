@@ -2206,6 +2206,7 @@ admin_batch_update_org:
     path:  batch/update/{module}/org
     defaults: { _controller: AppBundle:Admin/OrgManage:batchUpdate }
 
+### role
 admin_roles:
     pattern:  /roles
     defaults: { _controller: AppBundle:Admin/Role:index }

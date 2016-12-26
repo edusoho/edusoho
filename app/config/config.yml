@@ -71,7 +71,7 @@ parameters:
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
     templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
     permission.path_regular_expression: ['/^\/admin/']
-    router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
+    router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
 
 services:
 
@@ -216,7 +216,7 @@ services:
         public: false
 
     permission.twig.permission_extension:
-        class: AppBundle\SfExtend\Twig\PermissionExtension
+        class: AppBundle\Twig\PermissionExtension
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
