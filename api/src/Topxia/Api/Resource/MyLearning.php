@@ -34,11 +34,21 @@ class MyLearning extends BaseResource
             $learningData[] = $this->buildLearningData($member, $courses, $classrooms);
         }
 
-        return $learningData;
+        $learningData = $this->filter($learningData);
+        return  $this->wrap($learningData, count($learningData));
     }
 
-    public function filter($res)
+    public function filter($learningData)
     {
+        foreach ($learningData as &$data) {
+            if ('classroom' == $data['learningType']) {
+                $data = $this->callFilter('Classroom', $data);
+            } else {
+                $data = $this->callFilter('Course', $data);
+            }
+        }
+
+        return $learningData;
     }
 
     protected function filterDuplicateClassroom(array $members)
@@ -86,11 +96,9 @@ class MyLearning extends BaseResource
 
     protected function buildLearningData($member, $courses, $classrooms)
     {
-        if (!empty($member['classroomId'])) {
-            return $classrooms[$member['classroomId']];
-        } else {
-            return $courses[$member['courseId']];
-        }
+        $data= !empty($member['classroomId']) ? $classrooms[$member['classroomId']] : $courses[$member['courseId']];
+        $data['learningType'] = !empty($member['classroomId']) ? 'classroom' : 'course';
+        return $data;
     }
 
     protected function findCoursesByIds(array $courseIds)
