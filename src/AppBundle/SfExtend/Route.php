@@ -6,6 +6,49 @@ use Symfony\Component\Routing\Route as BaseRoute;
 
 class Route extends BaseRoute
 {
+    /**
+     * @var string
+     */
+    private $path = '/';
+
+    /**
+     * @var string
+     */
+    private $host = '';
+
+    /**
+     * @var array
+     */
+    private $schemes = array();
+
+    /**
+     * @var array
+     */
+    private $methods = array();
+
+    /**
+     * @var array
+     */
+    private $defaults = array();
+
+    /**
+     * @var array
+     */
+    private $requirements = array();
+
+    /**
+     * @var array
+     */
+    private $options = array();
+
+    /**
+     * @var null|CompiledRoute
+     */
+    private $compiled;
+
+    /**
+     * @var array
+     */
     private $permissions = array();
 
     public function __construct($path, array $defaults = array(), array $requirements = array(), array $options = array(), $host = '', $schemes = array(), $methods = array(), $permissions = array())
