@@ -6,22 +6,35 @@ use Tests\Base\BaseDaoTestCase;
 
 class ActivityDaoTest extends BaseDaoTestCase
 {
+
+	protected function getDefaultMockFields() 
+	{
+		return array(
+			'title' => 'activity',
+			'mediaId' => 0,
+			'mediaType' => 'text',
+			'content' => '124',
+			'fromCourseId' => 1,
+			'fromCourseSetId' => 1,
+			'fromUserId' => 1,
+		);
+	}
+
+	protected function getCompareKeys()
+	{
+		$default = $this->getDefaultMockFields();
+		return array_keys($default);
+	} 
+
 	public function testSearch()
 	{
 		$activity = $this->mockActivity(array('title' => 'activity 1'));
 		$conditons = array(
 			array('fromCourseId' => 1),
-            array('mediaType' => 'text')
+            array('mediaType' => 'text'),
+            array('mediaType' => 'text', 'fromCourseId' => 1)
 		);
-		$this->searchTestUtil($this->getActivityDao(), $activity, $conditons, array(
-			'title', 
-			'mediaId',
-			'mediaType',
-			'content',
-			'fromCourseId',
-			'fromCourseSetId',
-			'fromUserId'
-		));
+		$this->searchTestUtil($this->getActivityDao(), $activity, $conditons, $this->getCompareKeys());
 	}
 
 	public function testFindByCourseId()
@@ -29,15 +42,7 @@ class ActivityDaoTest extends BaseDaoTestCase
 		$activity = $this->mockActivity(array('title' => 'activity 1'));
 		$activities = $this->getActivityDao()->findByCourseId(1);
 		$this->assertEquals(count($activities), 1);
-		$this->assertArrayEquals($activity, $activities[0], array(
-			'title', 
-			'mediaId',
-			'mediaType',
-			'content',
-			'fromCourseId',
-			'fromCourseSetId',
-			'fromUserId'
-		));
+		$this->assertArrayEquals($activity, $activities[0], $this->getCompareKeys());
 	}
 
 	public function testFindByIds()
@@ -49,50 +54,14 @@ class ActivityDaoTest extends BaseDaoTestCase
 		$activities = $this->getActivityDao()->findByIds(array($activity1['id'], $activity2['id'], $activity3['id']));
 		$this->assertEquals(count($activities), 3);
 
-		$this->assertArrayEquals($activity1, $activities[0], array(
-			'title', 
-			'mediaId',
-			'mediaType',
-			'content',
-			'fromCourseId',
-			'fromCourseSetId',
-			'fromUserId'
-		));
-
-		$this->assertArrayEquals($activity2, $activities[1], array(
-			'title', 
-			'mediaId',
-			'mediaType',
-			'content',
-			'fromCourseId',
-			'fromCourseSetId',
-			'fromUserId'
-		));
-
-		$this->assertArrayEquals($activity3, $activities[2], array(
-			'title', 
-			'mediaId',
-			'mediaType',
-			'content',
-			'fromCourseId',
-			'fromCourseSetId',
-			'fromUserId'
-		));
+		$this->assertArrayEquals($activity1, $activities[0], $this->getCompareKeys());
+		$this->assertArrayEquals($activity2, $activities[1], $this->getCompareKeys());
+		$this->assertArrayEquals($activity3, $activities[2], $this->getCompareKeys());
 	}
 
 	private function mockActivity($fields)
 	{
-		$defaultFields = array(
-			'title' => 'activity',
-			'mediaId' => 0,
-			'mediaType' => 'text',
-			'content' => '124',
-			'fromCourseId' => 1,
-			'fromCourseSetId' => 1,
-			'fromUserId' => 1,
-		);
-
-		$fields = array_merge($fields, $defaultFields);
+		$fields = array_merge($fields, $this->getDefaultMockFields());
 		return $this->getActivityDao()->create($fields);
 	}
 
