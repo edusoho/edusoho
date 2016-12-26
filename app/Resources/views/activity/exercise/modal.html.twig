@@ -33,11 +33,12 @@
 
       <div class="col-xs-9 controls">
         {% set range = activity.metas.questionTypes|default(null) %}
+        {% set questionTypes = getQuestionTypes() %}
         {{dump(questionTypes)}}
         {% for questionType,name in questionTypes %}
-    
+          {% set questionNum = questionNums[questionType]|default(null) %}
           <label class="checkbox-inline">
-            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %}checked=checked{% endif %}>{{ name }}
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %}checked=checked{% endif %}>{{ name }}({% if questionNum %}{{ questionNum.questionNum }}{% else %}0{% endif %})
           </label>
         {% endfor %}
         <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_set_manage_question_check',{id:courseSetId}) }}" />

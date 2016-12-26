@@ -21,8 +21,7 @@ class QuestionTypeExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('getQuestionTypes', array($this, 'getQuestionTypes')),
-            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
-            new \Twig_SimpleFunction('getActivityMeta', array($this, 'getActivityMeta'))
+            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate'))
         );
     }
 
@@ -48,8 +47,6 @@ class QuestionTypeExtension extends \Twig_Extension
 
         return $questionExtension[$type]['templates'][$showAction];
     }
-
-
 
     public function getName()
     {
