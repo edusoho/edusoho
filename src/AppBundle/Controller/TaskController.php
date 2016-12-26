@@ -19,7 +19,7 @@ class TaskController extends BaseController
             throw $this->createNotFoundException("activity not found");
         }
 
-        if ($this->getCourseService()->isCourseStudent($courseId, $this->getUser()->getId())) {
+        if ($this->getCourseMemberService()->isCourseStudent($courseId, $this->getUser()->getId())) {
             $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
         } else {
             $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
@@ -185,5 +185,11 @@ class TaskController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

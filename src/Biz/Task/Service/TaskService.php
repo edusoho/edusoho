@@ -23,8 +23,7 @@ interface TaskService
     public function countTasksByCourseId($courseId);
 
     /**
-     * @param array $ids
-     *
+     * @param  array   $ids
      * @return array
      */
     public function findTasksByIds(array $ids);

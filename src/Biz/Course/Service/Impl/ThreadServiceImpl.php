@@ -126,7 +126,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['latestPostUserId'] = $thread['userId'];
         $thread['latestPostTime']   = $thread['createdTime'];
         $thread['private']          = $course['status'] == 'published' ? 0 : 1;
-        $thread                     = $this->getThreadDao()->create($thread);
+
+        $thread = $this->getThreadDao()->create($thread);
 
         foreach ($course['teacherIds'] as $teacherId) {
             if ($teacherId == $thread['userId']) {

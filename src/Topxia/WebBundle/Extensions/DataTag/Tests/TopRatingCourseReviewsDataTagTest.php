@@ -35,8 +35,8 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
             'createdIp' => '127.0.0.1'
         ));
 
-    	$this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course1['id'],$user2['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user2['id']);
 
 		$review1 = $this->getReviewService()->saveReview(array(
 			'courseId' => $course1['id'],
@@ -72,6 +72,11 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
     public function getUserService()
     {
         return $this->getServiceKernel()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
 }

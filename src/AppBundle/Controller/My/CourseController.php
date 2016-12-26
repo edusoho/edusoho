@@ -15,11 +15,11 @@ class CourseController extends BaseController
         $currentUser = $this->getUser();
         $paginator   = new Paginator(
             $request,
-            $this->getCourseService()->countLeaningCourseByUserId($currentUser['id']),
+            $this->getCourseService()->findUserLeaningCourseCount($currentUser['id']),
             12
         );
 
-        $courses = $this->getCourseService()->findLearningCourseByUserId(
+        $courses = $this->getCourseService()->findUserLeaningCourses(
             $currentUser['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

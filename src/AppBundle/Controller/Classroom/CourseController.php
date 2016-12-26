@@ -59,7 +59,7 @@ class CourseController extends BaseController
         $teachers      = array();
 
         foreach ($courses as &$course) {
-            $courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $currentUser->id);
+            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser->id);
 
             $course['teachers']      = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
             $teachers[$course['id']] = $course['teachers'];
@@ -192,5 +192,10 @@ class CourseController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

@@ -55,7 +55,7 @@ class MemberSync extends BaseResource
 
     protected function syncCourseConversations($user)
     {
-        $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
+        $courseIds = $this->getCourseMemberService()->findMembersByUserIdAndJoinType($user['id']);
 
         $this->syncTargetConversations($user, $courseIds, 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
@@ -186,5 +186,10 @@ class MemberSync extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

@@ -32,7 +32,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             // 获得锁
             $user = $this->getUserService()->getUser($user['id'], true);
 
-            if ($this->getCourseService()->isCourseStudent($info['targetId'], $user['id'])) {
+            if ($this->getCourseMemberService()->isCourseStudent($info['targetId'], $user['id'])) {
                 throw $this->createServiceException($this->getKernel()->trans('已经是课程学员，操作失败。'));
             }
 
@@ -107,7 +107,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                     'orderId' => $order['id'],
                     'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
                 );
-                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
 
             $connection->commit();
@@ -131,8 +131,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
         );
 
-        if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        if (!$this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
             $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
             $this->getLogService()->warning("course_order", "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付成功。'), $order);
@@ -152,7 +152,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
 
         if ($refund['status'] == 'created') {
-            $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
+            $this->getCourseMemberService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting   = $this->getSettingService()->get('refund');
             $message   = (empty($setting) || empty($setting['applyNotification'])) ? '' : $setting['applyNotification'];
@@ -173,7 +173,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
             }
         } elseif ($refund['status'] == 'success') {
-            $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+            $this->getCourseMemberService()->removeStudent($order['targetId'], $order['userId']);
         }
 
         return $refund;
@@ -188,8 +188,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
         $this->getOrderService()->cancelRefundOrder($id);
 
-        if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-            $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
+        if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            $this->getCourseMemberService()->unlockStudent($order['targetId'], $order['userId']);
         }
     }
 
@@ -242,5 +242,10 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

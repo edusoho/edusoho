@@ -714,7 +714,7 @@ class ClassroomController extends BaseController
 
         $courseIds         = ArrayToolkit::column($courses, "parentId");
         $courses           = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseMembers     = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
+        $courseMembers     = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
         $priceType         = "RMB";
@@ -999,5 +999,10 @@ class ClassroomController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

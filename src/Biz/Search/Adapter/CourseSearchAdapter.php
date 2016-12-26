@@ -15,7 +15,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
         if (!empty($user['id'])) {
             $courseIds         = ArrayToolkit::column($courses, 'courseId');
-            $learningCourse    = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
+            $learningCourse    = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
             $learningCourseIds = ArrayToolkit::column($learningCourse, 'courseId');
         }
 
@@ -88,5 +88,10 @@ class CourseSearchAdapter extends AbstractSearchAdapter
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

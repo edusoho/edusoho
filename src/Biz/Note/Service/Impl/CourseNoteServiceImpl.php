@@ -70,7 +70,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $user = $this->getCurrentUser();
 
-        if(!$user->isLogin()){
+        if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('user is not log in');
         }
 
@@ -82,9 +82,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
-        if(empty($course)){
-            throw $this->createNotFoundException('course not found. #' . $task['courseId']);
-        }else{
+        if (empty($course)) {
+            throw $this->createNotFoundException('course not found. #'.$task['courseId']);
+        } else {
             $note['courseSetId'] = $course['courseSetId'];
         }
 
@@ -110,7 +110,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
@@ -129,15 +129,15 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $currentUser = $this->getCurrentUser();
 
-        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->isCourseTeacher($note['courseId'], 'admin_course_note')) {
-            throw $this->createAccessDeniedException('你没有权限删除笔记');
+        if (($note['userId'] != $currentUser['id']) && !$this->getCourseMemberService()->isCourseTeacher($note['courseId'], 'admin_course_note')) {
+            throw $this->createServiceException('你没有权限删除笔记');
         }
 
         $this->getNoteDao()->delete($id);
 
         $this->dispatchEvent('course.note.delete', $note);
 
-        $this->getCourseService()->setMemberNoteNumber(
+        $this->getCourseMemberService()->setMemberNoteNumber(
             $note['courseId'],
             $note['userId'],
             $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
@@ -314,5 +314,10 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

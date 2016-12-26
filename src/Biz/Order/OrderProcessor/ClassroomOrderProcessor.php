@@ -259,7 +259,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getPaidCourses($currentUser, $courseIds)
     {
-        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
         $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         return $this->getCourseService()->findCoursesByIds($paidCourseIds);
@@ -394,6 +394,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getPayCenterService()
     {
         return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
     protected function getKernel()
