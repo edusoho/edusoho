@@ -49,7 +49,8 @@
   </div>
   <div class="col-md-12">
     {% if tab == "trend" %}
-     <p class="mbl"> 总数:{{count|default(0)}}</p>
+      <p class="text-muted">
+      <span class="mrl">{{ '总数：'|trans }}<strong class="inflow-num">{{count|default(0)}}</strong></span>
     {% endif %}
   </div>
   <div class="col-md-12">
