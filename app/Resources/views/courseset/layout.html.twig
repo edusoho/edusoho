@@ -375,8 +375,8 @@
             <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
               <a href="/">课程目录</a>
             </li>
-            <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
-              <a href="">评价</a>
+            <li role="presentation" class="{% if nav|default('') == 'review' %}active{% endif %}">
+              <a href="{{ path('course_set_review',{id:courseSet.id}) }}">评价</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
               <a href="">笔记</a>

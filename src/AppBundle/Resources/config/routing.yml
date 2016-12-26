@@ -1673,6 +1673,18 @@ course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
 
+course_set_review:
+  path: /course_set/{id}/review
+  defaults: {_controller: AppBundle:CourseSet:reviewList}
+
+course_review_post:
+  path:  /course/{courseId}/review/{reviewId}/post
+  defaults: { _controller: AppBundle:Review:post }
+
+course_review_delete:
+  path:  /course/{courseId}/review/{reviewId}/delete
+  defaults: { _controller: AppBundle:Review:delete }
+
 course_set_manage:
   path: /course_set/{id}/manage
   defaults: {_controller: AppBundle:CourseSetManage:index}
@@ -2061,7 +2073,7 @@ classroom_manage_homework:
 
 classroom_explore:
     path:  /classroom/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
+    defaults: { _controller: AppBundle:Explore:classroom, category:'' }
 
 classroom_show:
     path:  /classroom/{id}
@@ -2344,3 +2356,9 @@ org_tree:
     path: /org-tree.json
     defaults: { _controller: AppBundle:Org:orgTreeJson }
     methods: [GET]
+
+#todo:只为展示页面
+course_explore:
+   path:  /course/explore/{category}
+   defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
+

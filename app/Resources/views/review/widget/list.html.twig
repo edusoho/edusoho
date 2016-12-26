@@ -4,24 +4,7 @@
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
 
-  <form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
-    <div class="form-group controls">
-      {{'请打分：'|trans}} <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
-      <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
-    </div>
-
-    <div class="form-group controls">
-      <textarea class="form-control" rows="8" data-display="{{'评价详细内容'|trans}}" name="content">{{ userReview.content|default('') }}</textarea>
-    </div>
-
-    <div class="form-group clearfix">
-      <span class="text-success pull-left" style="display: none;">{{'评价已保存！'|trans}}</span>
-      <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-loading-text="{{'正在保存'|trans}}..." autocomplete="off">{{'保存'|trans}}</a>
-      <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'取消'|trans}}</a>
-    </div>
-
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
+  {% include 'review/widget/review-form.html.twig' with {userReview:userReview} %}
 {% endif %}
 
 {% set canAccess = canAccess|default(false) %}
@@ -63,7 +46,7 @@
         {% if targetType|default('course') == 'classroom' %}
           {% set postReplyUrl = path('classroom_review_post',{id:review.classroomId,reviewId:review.id}) %}
         {% else %}
-          {% set postReplyUrl = path('course_review_post',{id:review.courseId,reviewId:review.id}) %}
+          {% set postReplyUrl = path('course_review_post',{courseId:review.courseId,reviewId:review.id}) %}
         {% endif %}
 
         <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">
