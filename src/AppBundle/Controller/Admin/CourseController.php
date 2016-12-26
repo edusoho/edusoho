@@ -391,7 +391,7 @@ class CourseController extends BaseController
     {
         return $this->forward('AppBundle:Admin/Category:embed', array(
             'group'  => 'course',
-            'layout' => 'TopxiaAdminBundle::layout.html.twig'
+            'layout' => 'admin/layout.html.twig'
         ));
     }
 

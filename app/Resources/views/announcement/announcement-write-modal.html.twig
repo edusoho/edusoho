@@ -1,8 +1,5 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
-{# todo layout modify#}
-
 {% set tab="manage" %}
 
 {% block content %}
@@ -57,7 +54,7 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
-
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
     app.lazyLoad = function() { app.load('announcement/announcement-write'); };
   </script>

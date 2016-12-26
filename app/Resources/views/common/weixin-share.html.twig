@@ -1,6 +1,7 @@
 {% set wxconfig = wx_js_sdk_config() %}
 {% if wxconfig|default(null) %}
 	{% do load_script('common/weixin-share') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 	<div class="hidden jweixin-data" 
 		data-config="{{wxconfig}}"
  		data-title="{{title}}" 

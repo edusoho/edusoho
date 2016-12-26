@@ -1,4 +1,4 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "macro.html.twig" as web_macro %}
 {% import "admin/macro.html.twig" as admin_macro %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -320,7 +320,7 @@
 
 <div class="col-md-1"></div>
 
-  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+  {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
 
 <div id="modal" class="modal"></div>
 

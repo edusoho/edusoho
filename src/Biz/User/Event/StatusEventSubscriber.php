@@ -2,7 +2,6 @@
 namespace Biz\User\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -47,21 +46,21 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     protected function getStatusService()
     {
-        return $this->createService('User:StatusService');
+        return $this->getBiz()->service('User:StatusService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getThreadService()
     {
-        return ServiceKernel::instance()->createService('Course:ThreadService');
+        return $this->getBiz()->service('Course:ThreadService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

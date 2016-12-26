@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}<span class="text-muted">{{'资料预览'|trans}}</span>{% endblock %}
@@ -17,6 +17,7 @@
     </div>
     {% endif %}
 
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/preview') };</script>
 {% endblock %}
 

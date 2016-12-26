@@ -1,5 +1,6 @@
 {% if setting('magic.enable_org','0') %}
 	{% do load_script('orgbundle/controller/org/batch-org-btn') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 	{% set generate = generate|default('generate') != 'no-generate' %}
 	{% if generate %}
 		<div>

@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 
 {% block title %}{{'分享邀请链接'|trans}}{% endblock %}
 {% block body %}
@@ -12,7 +12,8 @@
     </div>
   </div>
 </div>
-<script>app.lazyLoad = function() { app.load('coin/invite-content-copy') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('coin/invite-content-copy') };</script>
 {% endblock %}
 {% block footer %}
     <button class="btn-sm btn btn-primary" id='copy'>{{'复制到剪贴板'|trans}}</button>

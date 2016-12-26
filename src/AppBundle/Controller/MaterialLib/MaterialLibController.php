@@ -206,7 +206,7 @@ class MaterialLibController extends BaseController
                 $thumbnails = array();
             }
 
-            return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
+            return $this->render('admin/cloud-file/detail.html.twig', array(
                 'material'   => $file,
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
                 'params'     => $request->query->all(),

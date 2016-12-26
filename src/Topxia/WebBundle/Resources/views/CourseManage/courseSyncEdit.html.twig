@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 
 {% block title %}{{'解除确认'|trans}}{% endblock %}
 {% block body %}
@@ -22,5 +22,6 @@
     <button id="courseSync-btn" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#courseSync-form">{{'确认'|trans}}</button>
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
 
-    <script>app.lazyLoad = function() { app.load('course-manage/sync-edit') };</script>
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('course-manage/sync-edit') };</script>
 {% endblock %}

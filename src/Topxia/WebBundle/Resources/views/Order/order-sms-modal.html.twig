@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set showSms = ( verifiedMobile|length > 0) %}
 
-{% set topxiawebbundle = true %}
+
 
 {% block title %} {{'短信验证码'|trans}} {% endblock %}
 
@@ -45,6 +45,7 @@
 {% block footer %}
   {% if showSms %}
      <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
-     <script>app.lazyLoad = function() { app.load('order/order-create-sms'); };</script>
+     {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('order/order-create-sms'); };</script>
   {% endif %}
 {% endblock %}

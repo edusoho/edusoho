@@ -1,8 +1,5 @@
 {% extends 'announcement/announcement-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
-{# todo layout modify#}
-
 {% set tab="list" %}
 
 {% block content %}
@@ -37,8 +34,9 @@
 		<div class="alert alert-edit">{{'暂无公告'|trans}}</div>
 	{% endif %}
   </div>
-
-	<script>
+  
+	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>
 		app.lazyLoad = function() { app.load('announcement/announcement'); };
 	</script>
 

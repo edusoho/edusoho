@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        {{ render(controller('attachment/formFields', {targetType: 'group.thread', targetId: thread.id|default(0)})) }}
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'group.thread', targetId: thread.id|default(0)})) }}
 
         <div class="form-group">
           <div class="col-sm-7 col-xs-10 col-xs-offset-2">

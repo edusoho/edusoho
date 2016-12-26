@@ -1,5 +1,5 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% set topxiawebbundle = true %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
 {% set modalSize = 'large' %}
 {% block title %}{{'分享资料'|trans}}{% endblock %}
 {% block body %}
@@ -16,7 +16,8 @@
 	</div>
 </form>
 
-<script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/teachers') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/teachers') };</script>
 {% endblock %} {% block footer %}
 <button id="share-materials-form-submit" type="submit"
 	class="btn btn-primary pull-right" data-toggle="form-submit"

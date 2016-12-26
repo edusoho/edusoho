@@ -38,6 +38,8 @@ interface CourseService
 
     public function tryTakeCourse($courseId);
 
+    public function canTakeCourse($course);
+
     public function findStudentsByCourseId($courseId);
 
     public function countStudentsByCourseId($courseId);
@@ -50,6 +52,8 @@ interface CourseService
 
     public function removeCourseStudent($courseId, $userId);
 
+    public function getCourseMember($courseId, $userId);
+
     public function setMemberNoteNumber($courseId, $userId, $num);
 
     public function countLeaningCourseByUserId($userId, $filters = array());
@@ -57,6 +61,8 @@ interface CourseService
     public function findLearningCourseByUserId($userId, $start, $limit, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+
+    public function hasCourseManagerRole($courseId = 0);
 
     public function countMembers($conditions);
 

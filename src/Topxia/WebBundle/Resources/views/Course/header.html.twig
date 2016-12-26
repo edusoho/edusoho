@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
- {{ load_script('course-manage/header') }}
+{% do load_script('course-manage/header') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 <div class="es-section course-manage-header clearfix">
   <a href="{{ path('course_show', {id:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />

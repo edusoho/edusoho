@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 
 {% set chapter = chapter|default(null) %}
 
@@ -31,7 +31,8 @@
   <input type="hidden" name="type" value="{{ type }}">
 </form>
 
-<script>app.lazyLoad = function() { app.load('course-manage/chapter-modal') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('course-manage/chapter-modal') };</script>
 
 {% endblock %}
 

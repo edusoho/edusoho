@@ -1,5 +1,7 @@
 {#课程创建前需要用户完成一下字段#}
 {% do load_script('settings/user-profile')  %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 <div class="alert alert-info">
   <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
   <ol>

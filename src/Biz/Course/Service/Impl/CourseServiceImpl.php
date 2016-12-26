@@ -385,6 +385,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
+    public function getCourseMember($courseId, $userId)
+    {
+        return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+    }
+
     public function setMemberNoteNumber($courseId, $userId, $num)
     {
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
@@ -422,7 +427,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($course, $member);
     }
 
-    protected function canTakeCourse($course)
+    public function canTakeCourse($course)
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 
@@ -622,6 +627,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function hasCourseManagerRole($courseId = 0)
+    {
+        $userId = $this->getCurrentUser()->getId();
+        //TODO
+        //1. courseId为空，判断是否有创建教学计划的权限
+        //2. courseId不为空，判断是否有该教学计划的管理权限
+        return true;
+    }
+
     protected function fillMembersWithUserInfo($members)
     {
         if (empty($members)) {
@@ -638,15 +652,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $members;
-    }
-
-    protected function hasCourseManagerRole($courseId = 0)
-    {
-        $userId = $this->getCurrentUser()->getId();
-        //TODO
-        //1. courseId为空，判断是否有创建教学计划的权限
-        //2. courseId不为空，判断是否有该教学计划的管理权限
-        return true;
     }
 
     protected function _prepareCourseConditions($conditions)
