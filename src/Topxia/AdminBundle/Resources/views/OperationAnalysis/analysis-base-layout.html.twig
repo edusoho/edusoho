@@ -16,7 +16,7 @@
   <form  class="well well-sm form-inline" action="{{url("admin_operation_analysis_rount",{tab:tab})}}" method="get" id="operation-form"  role="form" >
           <div class="form-group">
     <select class="form-control" name="analysisDateType">
-        {{ select_options(dict('analysisDateType'), dataInfo.analysisDateType, '--选择数据类型--'|trans) }}
+        {{ select_options(dict('analysisDateType'), dataInfo.analysisDateType) }}
     </select>
   </div>
         <div class="form-group">
@@ -48,6 +48,9 @@
       {% endif %}
   </div>
   <div class="col-md-12"><br>
+    {% if tab == "trend" %}
+      总数:{{count|default(0)}}
+    {% endif %}
   </div>
   <div class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
