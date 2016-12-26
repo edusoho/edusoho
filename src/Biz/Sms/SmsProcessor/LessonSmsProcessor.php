@@ -84,7 +84,7 @@ class LessonSmsProcessor implements SmsProcessor
                 $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime', 'Desc'), $index, 1000);
             }
         } else {
-            $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
+            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
         }
 
         $studentIds = ArrayToolkit::column($students, 'userId');
@@ -154,5 +154,10 @@ class LessonSmsProcessor implements SmsProcessor
     protected function getKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->servicecreateService('Course:MemberService');
     }
 }

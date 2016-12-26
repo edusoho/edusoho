@@ -155,7 +155,7 @@ class CourseController extends CourseBaseController
             6
         );
 
-        $students = $this->getCourseService()->findCourseStudents(
+        $students = $this->getCourseMemberService()->findCourseStudents(
             $course['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -201,7 +201,7 @@ class CourseController extends CourseBaseController
             }
 
             $user   = $this->getCurrentUser();
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($id, $user->id);
 
             if (isset($member["id"])) {
                 $course['studentNum']++;
@@ -312,7 +312,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
         
-        $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
     }
@@ -329,7 +329,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException();
         }
 
-        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+        $this->getCourseMemberService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
 
         return $this->createJsonResponse(true);
     }
@@ -362,7 +362,7 @@ class CourseController extends CourseBaseController
         try {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
-            if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
             }
 
@@ -406,7 +406,7 @@ class CourseController extends CourseBaseController
         $count     = $this->getCourseService()->getCourseStudentCount($id);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $students = $this->getCourseMemberService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($students as $key => $student) {
             $user                       = $this->getUserService()->getUser($student['userId']);
@@ -524,7 +524,7 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        $member          = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member          = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);
@@ -539,7 +539,7 @@ class CourseController extends CourseBaseController
 
     public function latestMembersBlockAction($course, $count = 10)
     {
-        $students = $this->getCourseService()->findCourseStudents($course['id'], 0, 12);
+        $students = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, 12);
         $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:latest-members-block.html.twig', array(
@@ -679,7 +679,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
     }
@@ -693,7 +693,7 @@ class CourseController extends CourseBaseController
 
     public function memberIdsAction(Request $request, $id)
     {
-        $ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+        $ids = $this->getCourseMemberService()->findMemberUserIdsByCourseId($id);
 
         return $this->createJsonResponse($ids);
     }
@@ -819,5 +819,10 @@ class CourseController extends CourseBaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order:OrderService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

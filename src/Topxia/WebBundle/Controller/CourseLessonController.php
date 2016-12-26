@@ -260,7 +260,7 @@ class CourseLessonController extends BaseController
             $json['homeworkOrExerciseNum'] = 0;
         }
 
-        $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
+        $json['isTeacher'] = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getLiveReplays($lesson);
@@ -572,7 +572,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         $response = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
@@ -836,7 +836,7 @@ class CourseLessonController extends BaseController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getVipService()

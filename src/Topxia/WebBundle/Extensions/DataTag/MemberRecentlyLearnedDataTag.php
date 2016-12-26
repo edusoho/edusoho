@@ -37,7 +37,7 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
             $course = $this->getCourseService()->getCourse($lesson[0]['courseId']);
 
             if ($course && $course['status'] == 'published'){
-                $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
                 $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
                 $course['nextLearnLesson'] = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
@@ -60,6 +60,11 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     private function calculateUserLearnProgress($course, $member)

@@ -3,9 +3,8 @@ namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\CourseDao;
-use Topxia\Service\Course\Dao\CourseMemberDao;
 
-class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
+class CourseMemberDaoImpl extends BaseDao
 {
     protected $table = 'course_member';
 
@@ -48,17 +47,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         ));
     }
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        $that = $this;
-
-        return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
-        }
-
-        );
-    }
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
@@ -231,20 +219,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
-    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
-    {
-        $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
-        $sql .= " JOIN  `user` As c ON m.courseId = ?";
-
-        if ($locked) {
-            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1 ";
-        } else {
-            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
-        }
-
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
-    }
-
     public function findMembersByUserIdAndJoinType($userId, $joinedType)
     {
         $that = $this;
@@ -291,11 +265,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function countMembersByStartTimeAndEndTime($startTime, $endTime)
-    {
-        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student' AND classroomId = 0  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
-        return $this->getConnection()->fetchAll($sql, array($endTime, $startTime));
-    }
+
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
@@ -374,16 +344,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $result;
     }
 
-    public function deleteMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        $member = $this->getMemberByCourseIdAndUserId($courseId, $userId);
-
-        $sql    = "DELETE FROM {$this->table} WHERE userId = ? AND courseId = ?";
-        $result = $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
-        $this->flushCache($member);
-        return $result;
-    }
-
     public function findCourseMembersByUserId($userId)
     {
         $that = $this;
@@ -421,16 +381,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
-    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('courseId, COUNT(id) AS count')
-            ->groupBy($groupBy)
-            ->orderBy('count', 'DESC')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
-    }
+
 
     protected function _createSearchQueryBuilder($conditions)
     {

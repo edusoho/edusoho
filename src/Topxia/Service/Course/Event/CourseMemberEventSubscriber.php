@@ -29,13 +29,13 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                     'courseId'  => $course['id'],
                     'isLearned' => 1
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
             } elseif ($sourceCourse['serializeMode'] == 'serialize' && $course['serializeMode'] != 'serialize') {
                 $conditions = array(
                     'courseId'              => $course['id'],
                     'learnedNumGreaterThan' => $course['lessonNum']
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 1));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 1));
             }
         }
     }
@@ -54,7 +54,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'isLearned'          => 1,
                 'learnedNumLessThan' => $course['lessonNum']
             );
-            $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+            $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
         }
     }
 
@@ -76,7 +76,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'learnedNum' => $course['lessonNum']
             );
 
-            $this->getCourseService()->updateMembers($conditions, $updateFields);
+            $this->getCourseMemberService()->updateMembers($conditions, $updateFields);
         }
     }
 
@@ -115,8 +115,8 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $memberFields['credit']        = $totalCredits;
         $memberFields['lastLearnTime'] = time();
 
-        $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
-        $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+        $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $learn['userId']);
+        $this->getCourseMemberService()->updateCourseMember($courseMember['id'], $memberFields);
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
@@ -133,5 +133,10 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

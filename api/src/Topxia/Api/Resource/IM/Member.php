@@ -40,7 +40,7 @@ class Member extends BaseResource
                 return array('convNo' => $convMember['convNo']);
             }
 
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
                 return $this->error('700003', '学员未加入课程');
             }
@@ -56,7 +56,7 @@ class Member extends BaseResource
                 return $this->error($e->getCode(), $e->getMessage());
             }
         } else {
-            $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
                 return $this->error('700003', '学员未加入课程');
             }
@@ -122,5 +122,10 @@ class Member extends BaseResource
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

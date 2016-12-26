@@ -35,7 +35,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $user = $event->getSubject();
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
-            $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
+            $this->getCourseMemberService()->cancelTeacherInAllCourses($user['id']);
         }
     }
 
@@ -184,7 +184,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             $teachers = $context['teachers'];
 
             foreach ($courseIds as $courseId) {
-                $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+                $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
             }
         }
     }
@@ -363,7 +363,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 'targetType' => 'course',
                 'userId'     => $review['userId']
             );
-            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+            $this->getNotificationService()->notify($parentReview['userId'], 'comment-post',
                 $message);
         }
     }
@@ -427,8 +427,13 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('Course:ReviewService');
     }
 
-    protected function getNotifiactionService()
+    protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

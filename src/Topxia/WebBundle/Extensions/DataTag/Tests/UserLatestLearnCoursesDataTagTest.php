@@ -44,9 +44,9 @@ class UserLatestLearnCoursesDataTagTest extends BaseTestCase
             'confirmPassword' => '123456',
             'createdIp'       => '127.0.0.1'
         ));
-        $this->getCourseService()->becomeStudent($course1['id'], $user1['id']);
-        $this->getCourseService()->becomeStudent($course2['id'], $user1['id']);
-        $this->getCourseService()->becomeStudent($course3['id'], $user2['id']);
+        $this->getCourseMemberService()->becomeStudent($course1['id'], $user1['id']);
+        $this->getCourseMemberService()->becomeStudent($course2['id'], $user1['id']);
+        $this->getCourseMemberService()->becomeStudent($course3['id'], $user2['id']);
 
         $datatag = new UserLatestLearnCoursesDataTag();
         $courses = $datatag->getData(array('userId' => $user1['id'], 'count' => 5));
@@ -62,5 +62,10 @@ class UserLatestLearnCoursesDataTagTest extends BaseTestCase
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

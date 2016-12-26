@@ -42,7 +42,7 @@ class LiveNotifyCommand extends BaseCommand
 	    
 	    if ($courseIds) {
 
-	    	$courseMembers = $this->getCourseService()->findCourseStudentsByCourseIds($courseIds);
+	    	$courseMembers = $this->getCourseMemberService()->findCourseStudentsByCourseIds($courseIds);
 
 		    foreach ($courseMembers as $key => $value) {
 		      $minStartTime = $this->getCourseService()->findMinStartTimeByCourseId($value['courseId']);
@@ -77,6 +77,11 @@ class LiveNotifyCommand extends BaseCommand
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getKernel()

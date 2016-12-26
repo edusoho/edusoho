@@ -39,7 +39,7 @@ class DefaultController extends BaseController
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
 
                 $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
             }
@@ -138,7 +138,7 @@ class DefaultController extends BaseController
     {
         $courseId = intval($request->query->get('id'));
 
-        if ($this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
             $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
         } else {
             $url = $this->generateUrl('course_show', array('id' => $courseId));
@@ -289,5 +289,10 @@ class DefaultController extends BaseController
     protected function getThemeService()
     {
         return $this->getBiz()->service('Theme:ThemeService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }
