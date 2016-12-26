@@ -6,15 +6,14 @@ namespace Biz\Note\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
-use Biz\System\Service\LogService;
 use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Dao\CourseNoteLikeDao;
 use Biz\Note\Service\CourseNoteService;
+use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 {
@@ -26,6 +25,22 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getNoteDao()->getByUserIdAndTaskId($userId, $taskId);
+    }
+
+    public function findPublicNotesByCourseSetId($courseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+            'status'      => 1
+        );
+        return $this->searchNotes(
+            $conditions,
+            array(
+                'createdTime' => 'DESC'
+            ),
+            0,
+            $this->countCourseNotes($conditions)
+        );
     }
 
     public function findCourseNotesByUserIdAndCourseId($userId, $courseId)
@@ -45,12 +60,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->count($conditions);
     }
 
-    /**
-     * @param array $note
-     *
-     * @return array
-     * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
-     */
     public function saveNote(array $note)
     {
         if (!ArrayToolkit::requireds($note, array('taskId', 'courseId', 'content'))) {
@@ -58,19 +67,33 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         }
 
         $this->getCourseService()->tryTakeCourse($note['courseId']);
+
         $user = $this->getCurrentUser();
 
-        $task   = $this->getTaskService()->getTask($note['taskId']);
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('user is not log in');
+        }
+
+        $task = $this->getTaskService()->getTask($note['taskId']);
 
         if (empty($task)) {
-            throw $this->createServiceException('task not found');
+            throw $this->createNotFoundException('task not found');
+        }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException('course not found. #'.$task['courseId']);
+        } else {
+            $note['courseSetId'] = $course['courseSetId'];
         }
 
         $note = ArrayToolkit::filter($note, array(
-            'courseId' => 0,
-            'taskId' => 0,
-            'content'  => '',
-            'status'   => 0
+            'courseId'    => 0,
+            'courseSetId' => 0,
+            'taskId'      => 0,
+            'content'     => '',
+            'status'      => 0
         ));
 
         $note['content'] = $this->biz['html_helper']->purify($note['content']) ?: '';
@@ -78,12 +101,12 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $existNote = $this->getCourseNoteByUserIdAndTaskId($user['id'], $note['taskId']);
         if (!$existNote) {
-            $note['userId']      = $user['id'];
-            $note                = $this->getNoteDao()->create($note);
+            $note['userId'] = $user['id'];
+            $note           = $this->getNoteDao()->create($note);
             $this->dispatchEvent('course.note.create', $note);
         } else {
             unset($note['id']);
-            $note                = $this->getNoteDao()->update($existNote['id'], $note);
+            $note = $this->getNoteDao()->update($existNote['id'], $note);
             $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
@@ -142,8 +165,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function like($noteId)
     {
         $user = $this->getCurrentUser();
-        if (empty($user)) {
-            throw $this->createNotFoundException('用户还未登录,不能点赞。');
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('用户还未登录,不能点赞。');
         }
 
         $note = $this->getNote($noteId);
@@ -170,8 +194,8 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function cancelLike($noteId)
     {
         $user = $this->getCurrentUser();
-        if (empty($user)) {
-            throw $this->createNotFoundException('用户还未登录,不能点赞。');
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('用户还未登录,不能点赞。');
         }
 
         $note = $this->getNote($noteId);

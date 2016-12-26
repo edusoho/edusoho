@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set block = block|default(null) %}
 
 {% block title %}
@@ -18,7 +18,7 @@
 
 {% endblock %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block body %}
 

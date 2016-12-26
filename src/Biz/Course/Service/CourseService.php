@@ -38,9 +38,14 @@ interface CourseService
 
     public function tryTakeCourse($courseId);
 
+    public function canTakeCourse($course);
+
     public function findStudentsByCourseId($courseId);
 
     public function countStudentsByCourseId($courseId);
+
+    public function hasCourseManagerRole($courseId = 0);
+
 
     /**
      * @param $courseId
@@ -58,6 +63,7 @@ interface CourseService
      */
     public function removeCourseStudent($courseId, $userId);
 
+
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function findUserLeaningCourseCount($userId, $filters = array());
 
@@ -66,6 +72,7 @@ interface CourseService
     public function findUserLeanedCourseCount($userId, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+
 
    // public function findUserLearnCourses($userId, $start, $limit);
 

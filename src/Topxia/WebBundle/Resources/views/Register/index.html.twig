@@ -140,5 +140,6 @@
 </div>
   {% if setting('login_bind.weixinmob_enabled') == '1' %}
     {% do load_script('auth/isWeiXin') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   {% endif %}
 {% endblock %}

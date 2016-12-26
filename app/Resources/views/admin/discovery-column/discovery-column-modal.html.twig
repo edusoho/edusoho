@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
   {% if discoveryColumn|default(false) %}
@@ -8,7 +8,7 @@
   {% endif %}
 {% endblock %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">

@@ -63,5 +63,6 @@
             data-target="#role-form">添加
     </button>
   {% endif %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('permissionbundle/controller/role/create') };</script>
 {% endblock %}

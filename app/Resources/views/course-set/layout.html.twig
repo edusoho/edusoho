@@ -1,4 +1,7 @@
 {% extends 'layout.html.twig' %}
+
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
+
 {% block top_content %}
 {% endblock %}
 
@@ -10,21 +13,25 @@
     <li>
       <a href="/">首页</a>
     </li>
-    <li class="active">sdfdsf</li>
+    <li class="active">{{ courseSet.title }}</li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top clearfix">
       <span class="tags">
         <span class="tag-serialing"></span>
       </span>
-      <span class="course-detail-heading">sdfdsf</span>
-      <span class="es-qrcode top" data-url="/course/2/qrcode">
+
+      <!-- 课程标题 -->
+      <span class="course-detail-heading">{{ courseSet.title }}</span>
+      <span class="es-qrcode top" data-url="">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
           <img src="" alt="">扫二维码继续学习二维码时效为半小时
         </span>
       </span>
-      <div>sdfsdf</div>
+
+      <!-- 课程副标题 -->
+      <div>{{ courseSet.subtitle }}</div>
       <ul class="course-operation clearfix ">
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
           <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
@@ -54,7 +61,7 @@
           </div>
         </li>
         <li>
-          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': courseSet.id}) }}" title="课程管理">
             <i class="es-icon es-icon-setting"></i>
           </a>
         </li>
@@ -132,7 +139,7 @@
   </div>
 </div>
 <!-- 2、加入后：自由式学习 -->
-<div class="container">
+{#<div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="/">首页</a></li>
     <li class="active">sdfdsf </li>
@@ -225,9 +232,9 @@
       </div>
     </section>
   </div>
-</div>
+</div>#}
 <!-- 3、加入后：任务式学习 -->
-<div class="container">
+{#<div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li>
       <a href="/">首页</a>
@@ -346,7 +353,7 @@
       </div>
     </section>
   </div>
-</div>
+</div>#}
 
 <!-- 中部 -->
 <div class="container">
@@ -357,67 +364,36 @@
           课程公告：下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。 <i class="es-icon es-icon-close01 alert-close"></i>
         </a>
       </div>
-      <!-- 课程目标 -->
+      <!-- 课程详情页中部内容 -->
       <section class="es-section">
         <div class="nav-btn-tab">
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-              <a href="">课程概览</a>
+            <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
+              <a href="{{ path('course_set_show', {'id': courseSet.id}) }}">课程概览</a>
             </li>
-            <li role="presentation">
-              <a href="">课程目录</a>
+
+            <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
+              <a href="/">课程目录</a>
             </li>
-            <li role="presentation">
-              <a href="">评论</a>
+            <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
+              <a href="{{path('course_set_threads', {courseSetId: courseSet.id})}}">话题</a>
             </li>
-            <li role="presentation">
-              <a href="">笔记</a>
+            <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
+              <a href="">评价</a>
             </li>
-            <li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>
+            <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
+              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">笔记</a>
+            </li>
+            {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
           </ul>
         </div>
         <div class="course-detail-content">
-          <div class="es-piece">
-            <div class="piece-header">课程介绍</div>
-            <div class="piece-body p-lg clearfix">
-              <p>Google Analytics是一个运行在Google主机上的免费网站分析工具，她可以告诉你访问者是如何找到并使用你的网站，</p>
-              <p>到并使用你的网站，这样，你就可以：</p>
-              <p>对网站的设计和内容作出更明智的决定。</p>
-              <p>改进网站使更多的访问者转化为客户。</p>
-              <p>追踪你的关键字，Banner广告，EDM，及其他营销活动的效果。</p>
-              <p>追踪数据，诸如收益，平均订单价值和电子商务转化率。</p>
-            </div>
-          </div>
-          <div class="es-piece">
-            <div class="piece-header">课程目标</div>
-            <div class="piece-body">
-              <ul class="piece-body-list">
-                <li> <i class="es-icon es-icon-dot mrm"></i>
-                  学习使用Google Analytics追踪网校数据
-                </li>
-                <li> <i class="es-icon es-icon-dot mrm"></i>
-                  学习分析网校数据，改进网校内容
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="es-piece">
-            <div class="piece-header">适合人群</div>
-            <div class="piece-body">
-              <ul class="piece-body-list">
-                <li> <i class="es-icon es-icon-dot mrm"></i>
-                  网校运营人员
-                </li>
-                <li> <i class="es-icon es-icon-dot mrm"></i>
-                  网校开发人员
-                </li>
-              </ul>
-            </div>
-          </div>
+          {% block detail_content %}
+          {% endblock %}
         </div>
       </section>
       <!-- 课程列表 -->
-      <section class="es-section">
+      {#<section class="es-section">
         <div class="nav-btn-tab">
           <ul class="nav nav-tabs" role="tablist">
             <li role="presentation">
@@ -470,156 +446,29 @@
             </li>
           </ul>
         </div>
-      </section>
+      </section>#}
     </div>
     <div class="col-lg-3 col-md-4 course-sidebar">
-      <!-- 课程特色: 加入前显示，加入后不显示 -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">课程特色</h3>
-        </div>
-        <div class="panel-body row panel-bottom">
-          <div class="col-md-6">
-            <div class="media-left">
-              <button class="media-icon bg-primary"></button>
-                <i class="es-icon es-icon-videocam media-logo"></i>
-            </div>
-            <div class="media-body">含直播(3)</div>
-          </div>
-          <div class="col-md-6">
-            <div class="media-left">
-              <button class="media-icon bg-primary"></button>
-                <i class="es-icon es-icon-mylibrarybooks media-logo"></i>
-            </div>
-            <div class="media-body">含作业(8)</div>
-          </div>
-        </div>
-        <div class="panel-body row panel-bottom">
-          <div class="col-md-6">
-            <div class="media-left">
-              <button class="media-icon bg-primary"></button>
-                <i class="es-icon es-icon-exam media-logo"></i>
-            </div>
-            <div class="media-body">含考试(5)</div>
-          </div>
-          <div class="col-md-6">
-            <div class="media-left">
-              <button class="media-icon bg-primary"></button>
-                <i class="es-icon es-icon-download media-logo"></i>
-            </div>
-            <div class="media-body">含资料(3)</div>
-          </div>
-        </div>
-        <div class="panel-body row panel-bottom">
-          <div class="col-md-6">
-            <div class="media-left">
-              <button class="media-icon bg-primary"></button>
-                <i class="es-icon es-icon-forum media-logo"></i>
-            </div>
-            <div class="media-body">含讨论(2)</div>
-          </div>
-        </div>
-      </div>
-      <!-- 其他计划: 加入前不显示，加入后不显示-->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">其他计划</h3>
-        </div>
-        <div class="panel-body course-list">
-          <div class="course-item">
-            <div class="course-img">
-              <a href="/course/2" target="_blank">
-                <img src="/assets/img/default/course.png" alt="xxx" class="img-responsive"></a>
-            </div>
-            <div class="course-info">
-              <div class="title">
-                <a class="link-dark" href="/course/2" target="_blank">xxx</a>
-              </div>
-              <div class="metas clearfix">
-                <span class="num"> <i class="es-icon es-icon-people"></i>
-                  0
-                </span>
-                <span class="comment"> <i class="es-icon es-icon-textsms"></i>
-                  0
-                </span>
-                <span class="course-price-widget">
-                  <span class="price">0.01元</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 推荐班级 -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">推荐班级</h3>
-        </div>
-        <div class="panel-body recommend-class-list">
-          <div class="class-item">
-            <div class="class-img-wrap">
-              <a class="class-img" href="/classroom/2">
-                <img src="/assets/img/default/course.png" alt="课程套餐" class="img-responsive"></a>
-              <div class="mask">
 
-                <a href="/classroom/2" class="btn btn-warning">继续学习</a>
-              </div>
-            </div>
-            <h3>
-              <a class="link-dark" href="/classroom/2">课程套餐</a>
-            </h3>
-            <div class="metas">共有5门课程</div>
-          </div>
-        </div>
-      </div>
+      {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
+      <!-- 课程特色: 加入前显示，加入后不显示 -->
+      {% include 'course-set/characteristic.html.twig' %}
+
+      <!-- 其他计划: 加入前不显示，加入后不显示-->
+      {% include 'course-set/other-course.html.twig' %}
+
+      <!-- 推荐班级 -->
+      {% include 'course-set/recommend-classroom.html.twig' %}
+
       <!-- 授课教师 -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">授课教师</h3>
-        </div>
-        <div class="panel-body">
-          <div class="media media-default">
-            <div class="media-left">
-              <a class=" js-user-card" href="/user/61" data-card-url="/user/61/card/show" data-user-id="61" data-original-title="" title="">
-                <img class="avatar-md" src="/files/user/2016/05-25/1739048f39be702535.png"></a>
-            </div>
-            <div class="media-body">
-              <div class="title">
-                <a class="link-dark link-light" href="/user/61">无名02</a>
-              </div>
-              <div class="content">教师</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% include 'course-set/teachers.html.twig' %}
+
       <!-- 最新学员-->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">最新学员</h3>
-        </div>
-        <div class="panel-body">
-          <ul class="user-avatar-list clearfix">
-            <li>
-              <a class=" js-user-card" href="/user/20913" data-card-url="/user/20913/card/show" data-user-id="20913" data-original-title="" title="">
-                <img class="avatar-sm" src="{{ asset('assets/v2/img/card_user.png') }}">
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- 授课教师 -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">授课教师</h3>
-        </div>
-        <div class="panel-body">
-          <div class="media media-number-o color-gray text-overflow">
-            <a class="link-dark " href="/user/18431">C佳佳</a>
-            开始学习课时
-            <a class="link-dark" href="" title="来自《课程功能体验》">引进腾讯视频</a>
-          </div>
-        </div>
-      </div>
+      {% include 'course-set/newest-students.html.twig' %}
+
+      <!-- 学员动态 -->
+      {% include 'course-set/student-activity.html.twig' %}
+
     </div>
   </div>
 </div>
