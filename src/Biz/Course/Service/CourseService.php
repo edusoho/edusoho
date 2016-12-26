@@ -67,9 +67,9 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    public function findUserLearnCourses($userId, $start, $limit);
+   // public function findUserLearnCourses($userId, $start, $limit);
 
-    public function findUserLearnCourseCount($userId);
+    //public function findUserLearnCourseCount($userId);
 
     //---end
     public function searchCourses($conditions, $sort, $start, $limit);

@@ -21,7 +21,6 @@ use Topxia\Common\ArrayToolkit;
  */
 class MemberServiceImpl extends BaseService implements MemberService
 {
-
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
         if (!ArrayToolkit::requireds($data, array("price", "remark"))) {

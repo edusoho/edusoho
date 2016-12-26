@@ -6,6 +6,8 @@ namespace Biz\Course\Service;
 
 interface MemberService
 {
+    const MAX_TEACHER = 100;
+
     public function becomeStudentAndCreateOrder($userId, $courseId, $data);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
