@@ -123,4 +123,4 @@ $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
 $app->post(_u('/emails'), 'res.Emails:post');
 $app->post(_u('/sms_codes'), 'res.SmsCodes:post');
 
-$app->get(_u('/classroom/{classroomId}/user/{userId}/courses_learn_progress'), 'res.ClassRoomCourses:getLearnProgress');
+$app->get(_u('/classroom/{classroomId}/courses_learn_progress'), 'res.ClassRoom/CoursesLearnProgress:get');
