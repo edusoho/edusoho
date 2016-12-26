@@ -13,17 +13,17 @@ class ActivityDaoTest extends BaseDaoTestCase
 
 		$testConditons = array(
 			array(
-				'testCondition' => array('fromCourseId' => 1), 
+				'condition' => array('fromCourseId' => 1), 
 				'expectedResults' => array($activity1, $activity2), 
 				'expectedCount' => 2
 			),
             array(
-            	'testCondition' => array('mediaType' => 'text'), 
+            	'condition' => array('mediaType' => 'text'), 
             	'expectedResults' => array($activity1), 
             	'expectedCount' => 1
             ),
             array(
-            	'testCondition' => array('mediaType' => 'text', 'fromCourseId' => 1), 
+            	'condition' => array('mediaType' => 'text', 'fromCourseId' => 1), 
             	'expectedResults' => array($activity1), 
             	'expectedCount' => 1
             ),
