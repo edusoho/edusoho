@@ -12,7 +12,8 @@ class BaseDaoTestCase extends BaseTestCase
 			$count = $dao->count($testConditon['testCondition']);
 			$this->assertEquals($count, $testConditon['expectedCount']);
 			
-			$results = $dao->search($testConditon['testCondition'], array(), 0, 10);
+			$orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
+			$results = $dao->search($testConditon['testCondition'], $orderBy, 0, 10);
 			foreach ($results as $key => $result) {
 				$this->assertArrayEquals($result, $testConditon['expectedResults'][$key], $testFields);
 			}
