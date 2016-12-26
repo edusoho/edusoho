@@ -1945,7 +1945,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function addMemberExpiryDays($courseId, $userId, $day)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member['deadline'] > 0) {
             $deadline = $day * 24 * 60 * 60 + $member['deadline'];
@@ -2079,7 +2079,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $user->isAdmin();
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user->id);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $user->id);
 
         if ($member && ($member['role'] == 'teacher')) {
             return true;
@@ -2101,7 +2101,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $user   = $this->getCurrentUser();
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         return array($course, $member);
     }
@@ -2129,7 +2129,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         if ($member && in_array($member['role'], array('teacher', 'student'))) {
             return true;
@@ -2152,7 +2152,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $user['id']);
 
         if (empty($member) || !in_array($member['role'], array('admin', 'teacher', 'student'))) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能学习！'));
@@ -2363,7 +2363,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function hasTeacherRole($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
         return !empty($member) && $member['role'] == 'teacher';
     }
 

@@ -1560,6 +1560,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 }
