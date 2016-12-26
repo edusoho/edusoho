@@ -88,7 +88,7 @@ tr.placeholder:before {
 
       <div class="form-group">
         <div class="col-md-8 controls">
-          <div class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>{{'这是一份纯客观题的试卷, 达到'|trans}} <input type="text" name="passedScore" class="form-control width-input width-input-small" value="{{ passedScoreDefault }}" data-score-total="0" />{{'分（含）可以自动审阅通过考试。'|trans}}</div>
+          <div class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>{{'这是一份纯客观题的试卷, 达到'|trans}} <input type="text" name="passedScore" class="form-control inline-block width-150" value="{{ passedScoreDefault }}" data-score-total="0" />{{'分（含）可以自动审阅通过考试。'|trans}}</div>
         </div>
         <div class="col-md-4 controls">
           <button type="button" class="btn btn-primary pull-right mlm request-save">{{'保存'|trans}}</button>

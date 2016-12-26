@@ -11,17 +11,19 @@ class BatchSelect {
 
   _batch2Item(event) {
     let checked = $(event.currentTarget).prop('checked');
-    this.$element.find('[data-role=batch-item]').prop('checked',checked);
+    this.$element.find('[data-role="batch-select"]').prop('checked',checked);
+    this.$element.find('[data-role="batch-item"]').prop('checked',checked);
   }
 
   _item2Batch(event) {
-    let itemLength = $('[data-role="batch-item"]').length;
-    let itemCheckedLength = $('[data-role="batch-item"]:checked').length;
-
+    let itemLength = this.$element.find('[data-role="batch-item"]').length;
+    let itemCheckedLength = this.$element.find('[data-role="batch-item"]:checked').length;
+    console.log(itemLength);
+    console.log(itemCheckedLength);
     if (itemLength == itemCheckedLength) {
-      this.$element.find('[data-role=batch-select]').prop('checked',true);
+      this.$element.find('[data-role="batch-select"]').prop('checked',true);
     } else {
-      this.$element.find('[data-role=batch-select]').prop('checked',false);
+      this.$element.find('[data-role="batch-select"]').prop('checked',false);
     }
   }
 }
