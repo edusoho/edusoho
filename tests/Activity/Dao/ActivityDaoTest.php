@@ -9,7 +9,11 @@ class ActivityDaoTest extends BaseDaoTestCase
 	public function testSearch()
 	{
 		$activity = $this->mockActivity(array('title' => 'activity 1'));
-		$this->searchTestUtil($this->getActivityDao(), $activity, array(
+		$conditons = array(
+			array('fromCourseId' => 1),
+            array('mediaType' => 'text')
+		);
+		$this->searchTestUtil($this->getActivityDao(), $activity, $conditons, array(
 			'title', 
 			'mediaId',
 			'mediaType',
