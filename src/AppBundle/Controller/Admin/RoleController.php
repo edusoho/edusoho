@@ -1,10 +1,10 @@
 <?php
-namespace Permission\PermissionBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Controller\Admin\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -39,7 +39,7 @@ class RoleController extends BaseController
         $users   = $this->getUserService()->findUsersByIds($userIds);
         $users   = ArrayToolkit::index($users, 'id');
 
-        return $this->render('PermissionBundle:Role:index.html.twig', array(
+        return $this->render('admin/role/index.html.twig', array(
             'roles'     => $roles,
             'users'     => $users,
             'paginator' => $paginator
@@ -57,7 +57,7 @@ class RoleController extends BaseController
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
         $res  = $tree->toArray();
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+        return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($res['children']),
             'model' => 'create'
         ));
@@ -86,7 +86,7 @@ class RoleController extends BaseController
 
         $originPermissions = $tree->toArray();
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+        return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($originPermissions['children']),
             'model' => 'edit',
             'role'  => $role
@@ -114,7 +114,7 @@ class RoleController extends BaseController
 
         $treeArray = $tree->toArray();
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+        return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($treeArray['children']),
             'model' => 'show',
             'role'  => $role

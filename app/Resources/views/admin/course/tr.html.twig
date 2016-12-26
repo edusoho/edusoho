@@ -65,7 +65,7 @@
         <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">{{'管理'|trans}}</a>
       {% endif %}
 
-      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
     </div>
   </td>
 </tr>

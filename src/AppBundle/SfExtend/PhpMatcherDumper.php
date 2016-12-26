@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Permission\Dumper;
+namespace AppBundle\SfExtend;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;

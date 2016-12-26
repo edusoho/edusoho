@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Permission\Loader;
+namespace AppBundle\SfExtend;
 
-use Permission\Loader\Route;
+use AppBundle\SfExtend\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Config\Resource\FileResource;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 
 /**
  * YamlFileLoader loads Yaml routing files.

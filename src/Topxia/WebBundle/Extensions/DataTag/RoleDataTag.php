@@ -1,6 +1,6 @@
 <?php
 
-namespace Permission\PermissionBundle\Extensions\DataTag;
+namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;

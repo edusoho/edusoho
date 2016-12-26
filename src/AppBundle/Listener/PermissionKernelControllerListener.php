@@ -1,12 +1,12 @@
 <?php
-namespace Permission\Listener;
+namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class KernelControllerListener
+class PermissionKernelControllerListener
 {
     protected $paths;
 
@@ -51,7 +51,7 @@ class KernelControllerListener
 
                 $self = $this;
                 $event->setController(function () use ($self, $request) {
-                    return $self->container->get('templating')->renderResponse('PermissionBundle:Admin:permission-error.html.twig');
+                    return $self->container->get('templating')->renderResponse('admin/role/permission-error.html.twig');
                 });
             }
         }

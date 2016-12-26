@@ -1,6 +1,6 @@
 <?php
 
-namespace Permission\Loader;
+namespace AppBundle\SfExtend;
 
 use Symfony\Component\Routing\Route as BaseRoute;
 
