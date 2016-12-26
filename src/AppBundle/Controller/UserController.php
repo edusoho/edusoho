@@ -664,7 +664,7 @@ class UserController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Course:NoteService');
+        return $this->getBiz()->service('Note:CourseNoteService');
     }
 
     /**
