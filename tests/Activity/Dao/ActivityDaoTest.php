@@ -2,14 +2,28 @@
 
 namespace Tests\Activity\Dao;
 
-use Biz\BaseTestCase;
+use Tests\Base\BaseDaoTestCase;
 
-class ActivityDaoTest extends BaseTestCase
+class ActivityDaoTest extends BaseDaoTestCase
 {
+	public function testSearch()
+	{
+		$activity = $this->mockActivity(array('title' => 'activity 1'));
+		$this->searchTestUtil($this->getActivityDao(), $activity, array(
+			'title', 
+			'mediaId',
+			'mediaType',
+			'content',
+			'fromCourseId',
+			'fromCourseSetId',
+			'fromUserId'
+		));
+	}
+
 	public function testFindByCourseId()
 	{
-		$activity = $this->mockActivity('activity 1');
-		$activities = $this->getActivityService()->findByCourseId(1);
+		$activity = $this->mockActivity(array('title' => 'activity 1'));
+		$activities = $this->getActivityDao()->findByCourseId(1);
 		$this->assertEquals(count($activities), 1);
 		$this->assertArrayEquals($activity, $activities[0], array(
 			'title', 
@@ -24,11 +38,11 @@ class ActivityDaoTest extends BaseTestCase
 
 	public function testFindByIds()
 	{
-		$activity1 = $this->mockActivity('activity 1');
-		$activity2 = $this->mockActivity('activity 2');
-		$activity3 = $this->mockActivity('activity 3');
+		$activity1 = $this->mockActivity(array('title' => 'activity 1'));
+		$activity2 = $this->mockActivity(array('title' => 'activity 2'));
+		$activity3 = $this->mockActivity(array('title' => 'activity 3'));
 
-		$activities = $this->getActivityService()->findByIds(array($activity1['id'], $activity2['id'], $activity3['id']));
+		$activities = $this->getActivityDao()->findByIds(array($activity1['id'], $activity2['id'], $activity3['id']));
 		$this->assertEquals(count($activities), 3);
 
 		$this->assertArrayEquals($activity1, $activities[0], array(
@@ -62,10 +76,10 @@ class ActivityDaoTest extends BaseTestCase
 		));
 	}
 
-	private function mockActivity($title)
+	private function mockActivity($fields)
 	{
-		$fields = array(
-			'title' => $title,
+		$defaultFields = array(
+			'title' => 'activity',
 			'mediaId' => 0,
 			'mediaType' => 'text',
 			'content' => '124',
@@ -73,10 +87,12 @@ class ActivityDaoTest extends BaseTestCase
 			'fromCourseSetId' => 1,
 			'fromUserId' => 1,
 		);
-		return $this->getActivityService()->create($fields);
+
+		$fields = array_merge($fields, $defaultFields);
+		return $this->getActivityDao()->create($fields);
 	}
 
-	protected function getActivityService()
+	protected function getActivityDao()
     {
         return $this->getBiz()->dao('Activity:ActivityDao');
     }
