@@ -7,9 +7,7 @@ class QuestionFormBase {
     this.analysisFieldId = 'question-analysis-field';
     this.validator = null;
     this.titleEditorToolBarName = 'Minimal';
-
     this._init();
-
     this.attachmentActions = new AttachmentActions($form);
   }
 
@@ -23,8 +21,10 @@ class QuestionFormBase {
   }
 
   submitForm(event) {
-    let submitType = $(event.currentTarget).data('submission');
-    this.$form.find('[name=submission]').val(submitType);
+    if(this.validator.form()){
+      $(event.currentTarget).button('loading');
+      $form.submit();
+    }
   }
 
   _initValidate() {
@@ -48,8 +48,8 @@ class QuestionFormBase {
           }
         },
         messages: {
-            '[data-role="target"]': "请选择从属",
-            difficulty : "请选择难度"
+          '[data-role="target"]': "请选择从属",
+          difficulty : "请选择难度"
         }
     });
     this.validator = validator;

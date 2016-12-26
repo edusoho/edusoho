@@ -58,14 +58,14 @@ class Marketing {
 				$('.js-enable-try-look').addClass('hidden');
 			}
             // $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
-        });
+      });
 
 		$('#course-submit').click(function(evt){
-            if(validator.form()){
-                $(evt.currentTarget).button('loading');
-                $form.submit();
-            }
-        });
+      if(validator.form()){
+        $(evt.currentTarget).button('loading');
+        $form.submit();
+      }
+    });
 	}
 }
 
