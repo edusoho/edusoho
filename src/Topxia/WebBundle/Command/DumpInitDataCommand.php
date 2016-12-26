@@ -36,15 +36,17 @@ class DumpInitDataCommand extends BaseCommand
         $user     = $input->getArgument('user');
         $password = $input->getArgument('password');
         $database = $input->getArgument('database');
-
+        $domain = explode(':', $domain);
+        $host = $domain[0];
+        $port = empty($domain[1]) ? 22 : $domain[1];
         $time = time();
 
-        $command = "ssh -l kuozhi {$domain} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table={$database}.cache --ignore-table={$database}.cloud_app_logs --ignore-table={$database}.sessions --ignore-table={$database}.log --ignore-table={$database}.session2 --ignore-table={$database}.user_token --ignore-table={$database}.status --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
+        $command = "ssh -l root {$host} -p {$port} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table={$database}.cache --ignore-table={$database}.cloud_app_logs --ignore-table={$database}.sessions --ignore-table={$database}.log --ignore-table={$database}.session2 --ignore-table={$database}.user_token --ignore-table={$database}.status --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
 
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "ssh -l kuozhi {$domain} \"mysqldump -u{$user} -p{$password} -d {$database} --compact --add-drop-table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > edusoho_structure.{$time}.sql\"";
+        $command = "ssh -l root {$host} -p {$port} \"mysqldump -u{$user} -p{$password} -d {$database} --compact --add-drop-table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > edusoho_structure.{$time}.sql\"";
 
         $output->writeln("<info>{$command}</info>");
         exec($command);
@@ -56,11 +58,11 @@ class DumpInitDataCommand extends BaseCommand
             $filesystem->mkdir("{$rootPath}/installFiles");
         }
 
-        $command = "scp kuozhi@{$domain}:~/edusoho_init.{$time}.sql {$rootPath}/installFiles/edusoho_init.sql";
+        $command = "scp -P {$port} root@{$host}:~/edusoho_init.{$time}.sql {$rootPath}/installFiles/edusoho_init.sql";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "scp kuozhi@{$domain}:~/edusoho_structure.{$time}.sql {$rootPath}/installFiles/edusoho_structure.sql";
+        $command = "scp -P {$port} root@{$host}:~/edusoho_structure.{$time}.sql {$rootPath}/installFiles/edusoho_structure.sql";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
@@ -72,11 +74,11 @@ class DumpInitDataCommand extends BaseCommand
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "ssh -l kuozhi {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
+        $command = "ssh -l root {$host} -p {$port} 'cd /var/www/edusoho \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "scp kuozhi@{$domain}:~/data.{$time}.zip {$rootPath}/installFiles/data.zip";
+        $command = "scp -P {$port} root@{$host}:~/data.{$time}.zip {$rootPath}/installFiles/data.zip";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
