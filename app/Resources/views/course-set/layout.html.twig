@@ -383,7 +383,8 @@
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
               <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">
-                <small class="text-muted">笔记({{ course.noteNum }})</small>
+                笔记
+                <small class="text-muted">({{ course.noteNum }})</small>
               </a>
             </li>
             {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
