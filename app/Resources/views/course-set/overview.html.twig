@@ -18,10 +18,10 @@
     <div class="piece-header">课程目标</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        <li> <i class="es-icon es-icon-dot mrm"></i>
+        <li><i class="es-icon es-icon-dot mrm"></i>
           学习使用Google Analytics追踪网校数据
         </li>
-        <li> <i class="es-icon es-icon-dot mrm"></i>
+        <li><i class="es-icon es-icon-dot mrm"></i>
           学习分析网校数据，改进网校内容
         </li>
       </ul>
@@ -31,14 +31,16 @@
     <div class="piece-header">适合人群</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        <li> <i class="es-icon es-icon-dot mrm"></i>
+        <li><i class="es-icon es-icon-dot mrm"></i>
           网校运营人员
         </li>
-        <li> <i class="es-icon es-icon-dot mrm"></i>
+        <li><i class="es-icon es-icon-dot mrm"></i>
           网校开发人员
         </li>
       </ul>
     </div>
   </div>
 
+  {#{{ render(controller('AppBundle:Course:taskList',{id: course.id})) }}#}
+  {% include 'course-set/task-list/index.html.twig' %}
 {% endblock %}

@@ -19,10 +19,6 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function getByCourseIdAndUserId($courseId, $userId);
 
-    public function findStudentsByCourseId($courseId);
-
-    public function findTeachersByCourseId($courseId);
-
     /**
      * 用来替代各种命名复杂的关联表的列表查询
      *

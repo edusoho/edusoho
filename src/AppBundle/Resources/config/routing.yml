@@ -1687,7 +1687,6 @@ course_set_notes:
   path: /course_set/{id}/notes
   defaults: { _controller: AppBundle:CourseSet:notes }
 
-#course
 course_set_threads:
   path: /course_set/{courseSetId}/threads
   defaults: {_controller: AppBundle:CourseThread:index}
@@ -1761,6 +1760,12 @@ course_set_manage_cover:
 course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
+
+#course
+course_task_list:
+    path:  /course/{id}/task/list
+    defaults: { _controller: AppBundle:Course:taskList }
+
 
 #file chooser
 media_materiallib_choose:
