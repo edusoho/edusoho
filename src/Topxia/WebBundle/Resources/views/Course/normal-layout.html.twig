@@ -82,5 +82,8 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   } %}
-
+  {% set consult = setting('consult') %}
+  {% if consult.supplier is not empty %}
+    {{ consult.supplier | raw }}
+  {% endif %}
 {% endblock %}
