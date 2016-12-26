@@ -363,7 +363,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
-
     public function getUserRoleInCourse($courseId, $userId)
     {
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);

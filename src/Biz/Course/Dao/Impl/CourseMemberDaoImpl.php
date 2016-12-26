@@ -93,7 +93,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $courseMembers;
     }
 
-
     public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
@@ -108,7 +107,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
-
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
@@ -151,7 +149,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role));
     }
 
-
     public function findMembersByCourseIdAndRole($courseId, $role)
     {
         if ($role == 'student') {
@@ -169,13 +166,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($courseId, $role));
     }
 
-
     public function findMembersByUserIdAndJoinType($userId, $joinedType)
     {
         $sql = "SELECT courseId FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
         return $this->db()->fetchAll($sql, array($userId, $joinedType));
     }
-
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
@@ -199,7 +194,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-
     public function updateMembers($conditions, $updateFields)
     {
         $builder = $this->_createQueryBuilder($conditions)
@@ -214,11 +208,10 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return true;
     }
 
-
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
 //        $sql    = "DELETE FROM {$this->table} WHERE courseId = ? AND role= ?";
-//        $result = $this->db()->executeUpdate($sql, array($courseId, $role));
+        //        $result = $this->db()->executeUpdate($sql, array($courseId, $role));
 
         return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
     }
@@ -228,7 +221,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
         return $this->db()->fetchAll($sql, array($userId));
     }
-
 
     public function deleteMembersByCourseId($courseId)
     {
@@ -248,7 +240,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql = "SELECT userId FROM {$this->table()} WHERE courseId = ?";
         return $this->db()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
     }
-
 
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
     {
