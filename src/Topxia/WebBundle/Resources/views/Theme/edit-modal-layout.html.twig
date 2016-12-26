@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 {% set modalSize = 'large' %}
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 {% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}{{'编辑'|trans}}{% endblock %}
@@ -94,5 +94,6 @@
 {% block footer %}
   <button data-submiting-text="{{'正在保存'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'确定'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/theme/left-edit-modal') };</script>
 {% endblock %}

@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% set topxiawebbundle = true %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "macro.html.twig" as web_macro %}
+
   {% set modalSize = 'large' %}
 
 {% block title %}{{'我的分享历史'|trans}}{% endblock %}
@@ -63,8 +63,10 @@
     </tbody>
   </table>
 </div>
-<script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/share-history') };</script>
-<script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/teachers') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/share-history') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/teachers') };</script>
 
 
 {% endblock %}

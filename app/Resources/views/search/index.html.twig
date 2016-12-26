@@ -3,6 +3,7 @@
 {% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 {% set bodyClass = 'bg-blank' %}
 {% do load_script('search/search') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% block top_content %}
   <div class="course-banner es-banner">

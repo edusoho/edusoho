@@ -40,7 +40,7 @@
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('course_set_preview', {id: courseSet.id, courseId: course.id})}}"><i class="es-icon es-icon-removeredeye mrm"></i>{{'预览'|trans}}</a>
+		                  	<a href="{{path('course_set_show', { id: courseSet.id, courseId: course.id, preview: 1 })}}"><i class="es-icon es-icon-removeredeye mrm"></i>{{'预览'|trans}}</a>
 		                  </li>
     	      				  {# <li>
     	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>

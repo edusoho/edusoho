@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 
 {% block title %}{{'填写TA的邀请码'|trans}}{% endblock %}
 
@@ -20,7 +20,8 @@
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-<script>app.lazyLoad = function() { app.load('coin/invite-code') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('coin/invite-code') };</script>
 {% endblock %}
 
 {% block footer %}

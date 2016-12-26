@@ -1,4 +1,4 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "macro.html.twig" as web_macro %}
 {% import "admin/macro.html.twig" as admin_macro %}
 {% import _self as self_macro %}
 
@@ -150,7 +150,7 @@
     {{ setting('site.analytics')|raw }} 
   {% endblock %}
 
-  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+  {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
   {% if setting('copyright.thirdCopyright') != 1 %}
     <div class="fixed-bar">

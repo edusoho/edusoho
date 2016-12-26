@@ -10,7 +10,7 @@ class CourseMembership extends BaseResource
 
     public function get(Application $app, Request $request, $courseId, $userId)
     {
-        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
             return array('membership' => 'none');
@@ -22,6 +22,11 @@ class CourseMembership extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     public function filter($res)

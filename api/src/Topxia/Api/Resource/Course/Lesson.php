@@ -29,7 +29,7 @@ class Lesson extends BaseResource
                 return $this->error('not_login', "您尚未登录，不能查看该课时");
             }
         } else {
-            if (!$this->getCourseService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
+            if (!$this->getCourseMemberService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
                 if (!$lesson['free']) {
                     return $this->error('not_student', "你不是该课程学员，请加入学习");
                 }
@@ -330,5 +330,10 @@ class Lesson extends BaseResource
     protected function getTokenService()
     {
         return ServiceKernel::instance()->createService('User:TokenService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

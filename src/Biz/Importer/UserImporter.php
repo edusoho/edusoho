@@ -127,7 +127,7 @@ class UserImporter extends Importer
                     $course = $this->getCourseService()->getCourse($courseId);
 
                     if ($mode = "update") {
-                        $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+                        $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
                         if ($isCourseStudent) {
                             continue;
@@ -780,7 +780,7 @@ class UserImporter extends Importer
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getOrgService()

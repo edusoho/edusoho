@@ -38,30 +38,47 @@ interface CourseService
 
     public function tryTakeCourse($courseId);
 
+    public function canTakeCourse($course);
+
     public function findStudentsByCourseId($courseId);
 
     public function countStudentsByCourseId($courseId);
 
-    public function isCourseTeacher($courseId, $userId);
+    public function hasCourseManagerRole($courseId = 0);
 
-    public function isCourseStudent($courseId, $userId);
 
+    /**
+     * @param $courseId
+     * @param $fields
+     * @return mixed
+     * @before becomeStudent
+     */
     public function createCourseStudent($courseId, $fields);
 
+    /**
+     * @param $courseId
+     * @param $userId
+     * @return mixed
+     * @before removeStudent
+     */
     public function removeCourseStudent($courseId, $userId);
 
-    public function setMemberNoteNumber($courseId, $userId, $num);
 
-    public function countLeaningCourseByUserId($userId, $filters = array());
+    //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
+    public function findUserLeaningCourseCount($userId, $filters = array());
 
-    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array());
+    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
+
+    public function findUserLeanedCourseCount($userId, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    public function countMembers($conditions);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+   // public function findUserLearnCourses($userId, $start, $limit);
 
+    //public function findUserLearnCourseCount($userId);
+
+    //---end
     public function searchCourses($conditions, $sort, $start, $limit);
 
     public function searchCourseCount($conditions);

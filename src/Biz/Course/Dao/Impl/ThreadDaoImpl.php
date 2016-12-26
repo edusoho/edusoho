@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Dao\Impl;
-
 
 use Biz\Course\Dao\ThreadDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -11,16 +9,30 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 {
     protected $table = 'course_thread';
 
+    protected function _createQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['title'] = "%{$conditions['title']}%";
+        }
+
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        return parent::_createQueryBuilder($conditions);
+    }
+
     public function declares()
     {
         return array(
-            'timestamps' => array('created_time', 'updated_time'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(),
-            'orderbys'   => array('isStick', 'latestPostTime','createdTime','latestPostTime','hitNum'),
+            'orderbys'   => array('isStick', 'latestPostTime', 'createdTime', 'latestPostTime', 'hitNum'),
             'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',
-                'lessonId = :lessonId',
+                'courseSetId = :courseSetId',
+                'taskId = :taskId',
                 'userId = :userId',
                 'type = :type',
                 'type IN (:types)',
@@ -36,8 +48,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'createdTime < :startTimeLessThan',
                 'createdTime >= :startCreatedTime',
                 'createdTime < :endCreatedTime'
-            ),
+            )
         );
     }
-
 }

@@ -1,6 +1,6 @@
 {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
-  {% set topxiawebbundle = true %}
-  {# todo layout modify#}
+  
+  
   <div class="video-quality-switcher">
     <div>
       <label>{{'视频转码类型：'|trans}}</label>
@@ -26,5 +26,6 @@
       </div>
     </div>
   </div>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/cloud-file/cloud-video-quality-switcher') };</script>
 {% endif %}

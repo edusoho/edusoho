@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 {% block title %}{{'提交问题'|trans}}{% endblock %}
 
 {% block body %}
@@ -21,7 +21,8 @@
   {{ form_rest(form) }}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-<script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>
     app.lazyLoad = function() { app.load('lesson-question/ask'); };
 </script>
 

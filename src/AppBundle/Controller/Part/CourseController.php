@@ -80,7 +80,7 @@ class CourseController extends BaseController
     public function studentsAction($course)
     {
         $course   = $this->getCourse($course);
-        $members  = $this->getCourseService()->findCourseStudents($course['id'], 0, 15);
+        $members  = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, 15);
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         return $this->render('course/part/normal-sidebar-students.html.twig', array(
@@ -199,6 +199,11 @@ class CourseController extends BaseController
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     protected function calculateUserLearnProgress($course, $member)

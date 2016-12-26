@@ -11,7 +11,7 @@
 
 {% block content %}
 
-  {{ render(controller('article/categoryNav', {categoryCode:categoryCode})) }}
+  {{ render(controller('AppBundle:Article:categoryNav', {categoryCode:categoryCode})) }}
 
   <div class="article-list-body row">
     <div class="col-md-8 article-list-main">

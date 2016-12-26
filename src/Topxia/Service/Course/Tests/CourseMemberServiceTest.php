@@ -67,7 +67,7 @@ class CourseMemberServiceTest extends BaseTestCase
 
 	protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getCourseService()
