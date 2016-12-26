@@ -28,13 +28,28 @@ class ActivityDaoTest extends BaseDaoTestCase
 
 	public function testSearch()
 	{
-		$activity = $this->mockActivity(array('title' => 'activity 1'));
-		$conditons = array(
-			array('fromCourseId' => 1),
-            array('mediaType' => 'text'),
-            array('mediaType' => 'text', 'fromCourseId' => 1)
+		$activity1 = $this->mockActivity(array('title' => 'activity 1'));
+		$activity2 = $this->mockActivity(array('title' => 'activity 2', 'mediaType' => 'video'));
+
+		$testConditons = array(
+			array(
+				'condition' => array('fromCourseId' => 1), 
+				'results' => array($activity1, $activity2), 
+				'countResult' => 2
+			),
+            array(
+            	'condition' => array('mediaType' => 'text'), 
+            	'results' => array($activity1), 
+            	'countResult' => 1
+            ),
+            array(
+            	'condition' => array('mediaType' => 'text', 'fromCourseId' => 1), 
+            	'results' => array($activity1), 
+            	'countResult' => 1
+            ),
 		);
-		$this->searchTestUtil($this->getActivityDao(), $activity, $conditons, $this->getCompareKeys());
+
+		$this->searchTestUtil($this->getActivityDao(), $testConditons, $this->getCompareKeys());
 	}
 
 	public function testFindByCourseId()
@@ -61,7 +76,7 @@ class ActivityDaoTest extends BaseDaoTestCase
 
 	private function mockActivity($fields)
 	{
-		$fields = array_merge($fields, $this->getDefaultMockFields());
+		$fields = array_merge($this->getDefaultMockFields(), $fields);
 		return $this->getActivityDao()->create($fields);
 	}
 
