@@ -153,7 +153,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getCourseMember($courseId, $userId)
     {
-        return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        return $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
     }
 
     public function searchMemberIds($conditions, $sort, $start, $limit)
@@ -204,12 +204,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseStudents($courseId, $start, $limit)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
+        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
     }
 
     public function findCourseStudentsByCourseIds($courseIds)
     {
-        return $this->getMemberDao()->findMembersByCourseIds($courseIds);
+        return $this->getMemberDao()->findByCourseIds($courseIds);
     }
 
     public function getCourseStudentCount($courseId)
@@ -219,12 +219,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     protected function findCourseTeachers($courseId)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, self::MAX_TEACHER);
+        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (!$member) {
             return false;
@@ -246,7 +246,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function isCourseMember($courseId, $userId)
     {
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         return empty($member) ? false : true;
     }
@@ -289,7 +289,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         foreach ($teacherMembers as $member) {
             // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
-            $existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
                 $this->getMemberDao()->delete($existMember['id']);
@@ -321,7 +321,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function cancelTeacherInAllCourses($userId)
     {
         $count   = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
-        $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', 0, $count, false);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, $count, false);
 
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
@@ -373,7 +373,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
@@ -428,7 +428,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
             throw $this->createServiceException("用户(#{$userId})已加入该课程！");
@@ -530,7 +530,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
@@ -559,7 +559,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
@@ -580,7 +580,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
         }
 
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
@@ -607,7 +607,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'classroomId' => $classRoomId,
             'joinedType'  => 'classroom'
         );
-        $isMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $isMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($isMember) {
             return array();
