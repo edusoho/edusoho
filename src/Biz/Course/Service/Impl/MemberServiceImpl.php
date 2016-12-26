@@ -204,12 +204,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseStudents($courseId, $start, $limit)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
+        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
     }
 
     public function findCourseStudentsByCourseIds($courseIds)
     {
-        return $this->getMemberDao()->findMembersByCourseIds($courseIds);
+        return $this->getMemberDao()->findByCourseIds($courseIds);
     }
 
     public function getCourseStudentCount($courseId)
@@ -219,7 +219,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     protected function findCourseTeachers($courseId)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, self::MAX_TEACHER);
+        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
@@ -321,7 +321,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function cancelTeacherInAllCourses($userId)
     {
         $count   = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
-        $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', 0, $count, false);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, $count, false);
 
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);

@@ -50,8 +50,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyTeachers($courseId, $newCourse)
     {
-        $count   = $this->getCourseMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'teacher');
-        $members = $this->getCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, $count);
+        $members = $this->getCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
 
         foreach ($members as $member) {
             $fields = array(

@@ -4,6 +4,11 @@ namespace Biz\Course\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
+/**
+ * Interface CourseMemberDao
+ * @package Biz\Course\Dao
+ * TODO course2.0 所有的api 需要重构，很多的api可以合并，还有名字不规范
+ */
 interface CourseMemberDao extends GeneralDaoInterface
 {
     /**
@@ -45,10 +50,20 @@ interface CourseMemberDao extends GeneralDaoInterface
      * @param $courseIds
      * @return mixed
      * @before getMembersByCourseIds
+     * @before findMembersByCourseIds
      */
-    public function findMembersByCourseIds($courseIds);
+    public function findByCourseIds($courseIds);
 
-    public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
+    /**
+     * @param $userId
+     * @param $role
+     * @param $start
+     * @param $limit
+     * @param bool $onlyPublished
+     * @return mixed
+     * @before findMembersByUserIdAndRole
+     */
+    public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
@@ -56,7 +71,7 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true); //
 
-    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
+    public function findMembersByCourseIdAndRole($courseId, $role);
 
     public function findMemberCountByCourseIdAndRole($courseId, $role);
 
@@ -76,4 +91,5 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findMemberUserIdsByCourseId($courseId);
 
+    public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true);
 }

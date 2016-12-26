@@ -110,6 +110,9 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return $this->table;
     }
 
+    /**
+     * @return Connection
+     */
     public function db()
     {
         return $this->biz['db'];
