@@ -19,6 +19,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->get($id);
     }
 
+    public function findTasksByIds($ids)
+    {
+        return $this->getTaskDao()->findByIds($ids);
+    }
+
     public function createTask($fields)
     {
         $strategy = $this->createCourseStrategy($fields['fromCourseId']);
@@ -84,6 +89,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function countTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->count(array('courseId' => $courseId));
+    }
+
+    public function findTasksByIds(array $ids)
+    {
+        return $this->getTaskDao()->findByIds($ids);
     }
 
     public function findTasksFetchActivityByCourseId($courseId)

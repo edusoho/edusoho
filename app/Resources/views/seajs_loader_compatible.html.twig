@@ -1,0 +1,6 @@
+{# 为了兼容seajs和webpack在同一个页面范围使用，可以兼容加载使用了seajs的modal、被include的片段、ajax加载的片段 #}
+{% if topxiawebbundle|default(false) %}
+  {% include 'seajs_boot_compatible.html.twig' with {script_main: asset('bundles/topxiaweb/js/app-compatible.js')} %}
+{% elseif topxiaadminbundle|default(false) %}
+  {% include 'seajs_boot_compatible.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-compatible.js')} %}
+{% endif %}

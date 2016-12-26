@@ -363,6 +363,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
+
     public function getUserRoleInCourse($courseId, $userId)
     {
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
@@ -384,7 +385,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($course, $member);
     }
 
-    protected function canTakeCourse($course)
+    public function canTakeCourse($course)
     {
         $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 
@@ -544,7 +545,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime'=>'DESC'), $start, $limit);
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
         } else {
             $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
@@ -587,6 +588,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function hasCourseManagerRole($courseId = 0)
+    {
+        $userId = $this->getCurrentUser()->getId();
+        //TODO
+        //1. courseId为空，判断是否有创建教学计划的权限
+        //2. courseId不为空，判断是否有该教学计划的管理权限
+        return true;
+    }
+
     protected function fillMembersWithUserInfo($members)
     {
         if (empty($members)) {
@@ -603,15 +613,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $members;
-    }
-
-    protected function hasCourseManagerRole($courseId = 0)
-    {
-        $userId = $this->getCurrentUser()->getId();
-        //TODO
-        //1. courseId为空，判断是否有创建教学计划的权限
-        //2. courseId不为空，判断是否有该教学计划的管理权限
-        return true;
     }
 
     protected function _prepareCourseConditions($conditions)
@@ -693,7 +694,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
-
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
@@ -707,19 +707,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'popular' || $sort == 'hitNum') {
-            $orderBy = array('hitNum'=>'DESC');
+            $orderBy = array('hitNum' => 'DESC');
         } elseif ($sort == 'recommended') {
-            $orderBy = array('recommendedTime'=>'DESC');
+            $orderBy = array('recommendedTime' => 'DESC');
         } elseif ($sort == 'Rating') {
-            $orderBy = array('Rating'=>'DESC');
+            $orderBy = array('Rating' => 'DESC');
         } elseif ($sort == 'studentNum') {
-            $orderBy = array('studentNum'=>'DESC');
+            $orderBy = array('studentNum' => 'DESC');
         } elseif ($sort == 'recommendedSeq') {
-            $orderBy = array('recommendedSeq'=> 'ASC', 'recommendedTime'=>'DESC');
+            $orderBy = array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC');
         } elseif ($sort == 'createdTimeByAsc') {
-            $orderBy = array('createdTime'=> 'ASC');
+            $orderBy = array('createdTime' => 'ASC');
         } else {
-            $orderBy = array('createdTime'=>'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         }
         return $orderBy;
     }

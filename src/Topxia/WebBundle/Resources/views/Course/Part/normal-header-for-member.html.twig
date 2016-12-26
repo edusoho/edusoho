@@ -19,8 +19,8 @@
 {% endblock %}
 
 {% block content %}
-  {{ load_script('course/common') }}
-
+  {% do load_script('course/common') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <div class="course-header-top clearfix">
 
     {{ header_macro.picture(course) }}

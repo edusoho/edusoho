@@ -1,6 +1,5 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}上传文件{% endblock %}
@@ -239,7 +238,8 @@
       </ul>
     </div>
   {% endif %}
-
+  
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/attachment/upload-modal') };</script>
 {% endblock %}
 {% block footer %}

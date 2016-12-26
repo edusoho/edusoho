@@ -1,8 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'优化课程文件'|trans}}{% endblock %}
-
-{% set topxiaadminbundle = true %}
 
 {% block body %}
   <div id="optimize-files-progress" class="optimize-files-progress" style="display:none;">
@@ -17,5 +15,6 @@
 {% block footer %}
    <strong class="text text-danger" id="optimize-hint">{{'正在优化课程文件，请不要关闭当前窗口...'|trans}}</strong>
   <button id="finish-optimize-btn" data-loading-text="{{'正在优化, 请稍等...'|trans}}" class="btn btn-primary" style="display:none;"data-dismiss="modal">{{'完成优化'|trans}}</button>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
   <script>app.lazyLoad = function() { app.load('optimize/optimize-modal') };</script>
 {% endblock %}
