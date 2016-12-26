@@ -8,7 +8,9 @@
     <table class="table table-striped table-hover">
     	<tbody>
     		{% for favoriteQuestion in favoriteQuestions %}
-    			{% set paper = testpapers[targets[favoriteQuestion.target].id] %}
+			    {% if favoriteQuestion.target.id is defined %}
+				    {% set paper = testpapers[targets[favoriteQuestion.target].id] %}
+			    {% endif %}
     			{% set question = questions[favoriteQuestion.questionId] %}
 
     				{% include 'TopxiaWebBundle:MyQuiz:my-favorite-question-tr.html.twig' %}
