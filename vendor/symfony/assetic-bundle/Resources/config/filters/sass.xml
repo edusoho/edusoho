@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.sass.class">Assetic\Filter\Sass\SassFilter</parameter>
+        <parameter key="assetic.filter.sass.bin">%assetic.sass.bin%</parameter>
+        <parameter key="assetic.filter.sass.timeout">null</parameter>
+        <parameter key="assetic.filter.sass.style">null</parameter>
+        <parameter key="assetic.filter.sass.compass">null</parameter>
+        <parameter key="assetic.filter.sass.precision">null</parameter>
+        <parameter key="assetic.filter.sass.load_paths" type="collection">
+            <parameter>%kernel.root_dir%/../web</parameter>
+        </parameter>
+        <parameter key="assetic.filter.sass.cache_location">%kernel.cache_dir%</parameter>
+        <parameter key="assetic.filter.sass.enable_sourcemaps">null</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.sass" class="%assetic.filter.sass.class%">
+            <tag name="assetic.filter" alias="sass" />
+            <argument>%assetic.filter.sass.bin%</argument>
+            <argument>%assetic.ruby.bin%</argument>
+            <call method="setTimeout"><argument>%assetic.filter.sass.timeout%</argument></call>
+            <call method="setStyle"><argument>%assetic.filter.sass.style%</argument></call>
+            <call method="setCompass"><argument>%assetic.filter.sass.compass%</argument></call>
+            <call method="setLoadPaths"><argument>%assetic.filter.sass.load_paths%</argument></call>
+            <call method="setCacheLocation"><argument>%assetic.filter.sass.cache_location%</argument></call>
+            <call method="setSourceMap"><argument>%assetic.filter.sass.enable_sourcemaps%</argument></call>
+            <call method="setPrecision"><argument>%assetic.filter.sass.precision%</argument></call>
+        </service>
+    </services>
+</container>

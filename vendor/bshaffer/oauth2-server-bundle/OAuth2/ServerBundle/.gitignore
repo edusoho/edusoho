@@ -1,0 +1,5 @@
+vendor
+composer.lock
+.DS_Store
+phpunit.xml
+cli-config.php

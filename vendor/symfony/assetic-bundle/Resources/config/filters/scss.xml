@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.scss.class">Assetic\Filter\Sass\ScssFilter</parameter>
+        <parameter key="assetic.filter.scss.sass">%assetic.sass.bin%</parameter>
+        <parameter key="assetic.filter.scss.timeout">null</parameter>
+        <parameter key="assetic.filter.scss.style">null</parameter>
+        <parameter key="assetic.filter.scss.compass">null</parameter>
+        <parameter key="assetic.filter.scss.precision">null</parameter>
+        <parameter key="assetic.filter.scss.load_paths" type="collection">
+            <parameter>%kernel.root_dir%/../web</parameter>
+        </parameter>
+        <parameter key="assetic.filter.scss.cache_location">%kernel.cache_dir%</parameter>
+        <parameter key="assetic.filter.scss.enable_sourcemaps">null</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.scss" class="%assetic.filter.scss.class%">
+            <tag name="assetic.filter" alias="scss" />
+            <argument>%assetic.filter.scss.sass%</argument>
+            <argument>%assetic.ruby.bin%</argument>
+            <call method="setTimeout"><argument>%assetic.filter.scss.timeout%</argument></call>
+            <call method="setStyle"><argument>%assetic.filter.scss.style%</argument></call>
+            <call method="setCompass"><argument>%assetic.filter.scss.compass%</argument></call>
+            <call method="setLoadPaths"><argument>%assetic.filter.scss.load_paths%</argument></call>
+            <call method="setCacheLocation"><argument>%assetic.filter.scss.cache_location%</argument></call>
+            <call method="setSourceMap"><argument>%assetic.filter.scss.enable_sourcemaps%</argument></call>
+            <call method="setPrecision"><argument>%assetic.filter.scss.precision%</argument></call>
+        </service>
+    </services>
+</container>

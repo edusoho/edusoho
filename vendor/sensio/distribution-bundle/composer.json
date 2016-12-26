@@ -1,0 +1,32 @@
+{
+    "name": "sensio/distribution-bundle",
+    "description": "Base bundle for Symfony Distributions",
+    "keywords": ["distribution","configuration"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/dependency-injection": "~2.3|~3.0",
+        "symfony/config": "~2.3|~3.0",
+        "symfony/filesystem": "~2.3|~3.0",
+        "symfony/http-kernel": "~2.3|~3.0",
+        "symfony/class-loader": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0",
+        "sensiolabs/security-checker": "~3.0|~4.0"
+    },
+    "autoload": {
+        "psr-4": { "Sensio\\Bundle\\DistributionBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
