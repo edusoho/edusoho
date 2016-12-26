@@ -15,7 +15,73 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? LIMIT 1";
         return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
     }
-    
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+        return $this->db()->fetchAll($sql, array($courseId, $userId));
+    }
+
+    public function findByCourseIds($courseIds)
+    {
+        $marks         = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql           = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
+        $courseMembers = $this->db()->fetchAll($sql, $courseIds);
+        return $courseMembers;
+    }
+
+
+    public function findMembersByCourseIdAndRole($courseId, $role)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC";
+
+        return $this->db()->fetchAll($sql, array($courseId, $role));
+    }
+
+    public function findMemberCountByCourseIdAndRole($courseId, $role)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND role = ?";
+        return $this->db()->fetchColumn($sql, array($courseId, $role));
+    }
+
+
+    public function findMembersByUserIdAndJoinType($userId, $joinedType)
+    {
+        $sql = "SELECT courseId FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
+        return $this->db()->fetchAll($sql, array($userId, $joinedType));
+    }
+
+
+    public function deleteMemberByCourseIdAndRole($courseId, $role)
+    {
+        return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
+    }
+
+    public function findCourseMembersByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
+        return $this->db()->fetchAll($sql, array($userId));
+    }
+
+    public function deleteMembersByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array(array('courseId' => $courseId)));
+    }
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    {
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
+        return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
+    }
+
+    public function findByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ?";
+        return $this->db()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+
     public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
@@ -33,12 +99,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->_buildQueryBuilder($conditions)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
     }
 
-    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
-        return $this->db()->fetchAll($sql, array($courseId, $userId));
-    }
-
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions)
@@ -49,15 +109,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
-
-    public function findByCourseIds($courseIds)
-    {
-        $marks         = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql           = "SELECT * FROM `course_member` WHERE courseId IN ({$marks})";
-        $courseMembers = $this->db()->fetchAll($sql, $courseIds);
-        return $courseMembers;
-    }
-
 
     public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
@@ -130,28 +181,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     }
 
 
-
-    public function findMembersByCourseIdAndRole($courseId, $role)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC";
-
-        return $this->db()->fetchAll($sql, array($courseId, $role));
-    }
-
-    public function findMemberCountByCourseIdAndRole($courseId, $role)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND role = ?";
-        return $this->db()->fetchColumn($sql, array($courseId, $role));
-    }
-
-
-    public function findMembersByUserIdAndJoinType($userId, $joinedType)
-    {
-        $sql = "SELECT courseId FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
-        return $this->db()->fetchAll($sql, array($userId, $joinedType));
-    }
-
-
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions);
@@ -190,34 +219,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     }
 
 
-    public function deleteMemberByCourseIdAndRole($courseId, $role)
-    {
-        return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
-    }
 
-    public function findCourseMembersByUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
-        return $this->db()->fetchAll($sql, array($userId));
-    }
-
-    public function deleteMembersByCourseId($courseId)
-    {
-        return $this->db()->delete($this->table(), array(array('courseId' => $courseId)));
-    }
-
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
-    {
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
-        return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
-    }
-
-    public function findMemberUserIdsByCourseId($courseId)
-    {
-        $sql = "SELECT userId FROM {$this->table()} WHERE courseId = ?";
-        return $this->db()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
-    }
 
     protected function _buildQueryBuilder($conditions)
     {
