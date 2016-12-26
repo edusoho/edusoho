@@ -49,7 +49,7 @@
 {% if setting('login_bind.enabled') %}
   <div class="social-login">
     <span>
-      {{ render(controller('login/oauth2LoginsBlock', {targetPath:_target_path})) }}
+      {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
     </span>
     <div class="line"></div>
   </div>

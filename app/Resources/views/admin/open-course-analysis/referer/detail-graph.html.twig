@@ -1,5 +1,3 @@
-{% set topxiaadminbundle = true %}
-{# todo layout modify#}
 <div class="row form-group">
 	<div>
     <div  class= "col-md-4" id="echats-pie" style="height: 300px; width: 400px;"></div>
@@ -13,4 +11,5 @@
 	</div>
 </div> 
 
-<script>app.lazyLoad = function() { app.load('open-course-analysis/detail-graph') };</script>
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('open-course-analysis/detail-graph') };</script>

@@ -1,6 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiaadminbundle = true %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 {% set modal_class = 'modal-lg' %}
 {% set block = block|default(null) %}
 

@@ -26,6 +26,8 @@ interface CourseNoteService
      */
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId);
 
+    public function findPublicNotesByCourseSetId($courseSetId);
+
     /**
      * return notes
      *

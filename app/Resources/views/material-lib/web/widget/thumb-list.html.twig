@@ -1,4 +1,4 @@
-{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+{% import 'macro.html.twig' as web_macro %}
 <div class="row">
 {% for uploadFile in files %}
    {% include 'MaterialLibBundle:Web/Widget:thumb-item.html.twig' with {uploadFile:uploadFile} %}

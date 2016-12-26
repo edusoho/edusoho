@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set topxiawebbundle = true %}
+
 {% set modalSize = 'large' %}
 {% block title %}{{'查看隐藏帖'|trans}}{% endblock %}
 {% block body %}
@@ -36,6 +36,7 @@
 {% endblock %}
 
 {% block footer %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
     app.lazyLoad = function() { app.load('group/hide-modal'); };
   </script>
