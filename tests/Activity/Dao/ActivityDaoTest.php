@@ -6,26 +6,6 @@ use Tests\Base\BaseDaoTestCase;
 
 class ActivityDaoTest extends BaseDaoTestCase
 {
-
-	protected function getDefaultMockFields() 
-	{
-		return array(
-			'title' => 'activity',
-			'mediaId' => 0,
-			'mediaType' => 'text',
-			'content' => '124',
-			'fromCourseId' => 1,
-			'fromCourseSetId' => 1,
-			'fromUserId' => 1,
-		);
-	}
-
-	protected function getCompareKeys()
-	{
-		$default = $this->getDefaultMockFields();
-		return array_keys($default);
-	} 
-
 	public function testSearch()
 	{
 		$activity1 = $this->mockActivity(array('title' => 'activity 1'));
@@ -74,7 +54,26 @@ class ActivityDaoTest extends BaseDaoTestCase
 		$this->assertArrayEquals($activity3, $activities[2], $this->getCompareKeys());
 	}
 
-	private function mockActivity($fields)
+	protected function getDefaultMockFields() 
+	{
+		return array(
+			'title' => 'activity',
+			'mediaId' => 0,
+			'mediaType' => 'text',
+			'content' => '124',
+			'fromCourseId' => 1,
+			'fromCourseSetId' => 1,
+			'fromUserId' => 1,
+		);
+	}
+
+	protected function getCompareKeys()
+	{
+		$default = $this->getDefaultMockFields();
+		return array_keys($default);
+	}
+
+	protected function mockActivity($fields)
 	{
 		$fields = array_merge($this->getDefaultMockFields(), $fields);
 		return $this->getActivityDao()->create($fields);
