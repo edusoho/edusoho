@@ -740,7 +740,7 @@ class CourseManageController extends BaseController
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:NoteService');
+        return $this->getServiceKernel()->createService('Note:CourseNoteService');
     }
 
     protected function getThreadService()

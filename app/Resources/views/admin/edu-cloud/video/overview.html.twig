@@ -4,7 +4,7 @@
 {% set script_controller = 'setting/cloud-video-overview.js' %}
 
 {% set script_arguments = {spaceItems: spaceItems, flowItems: flowItems}  %}
-{#{% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}#}
+{#{% block tabs %}{% include 'admin/role/templates/tabs.html.twig' %}{% endblock %}#}
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}

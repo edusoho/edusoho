@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service;
 
+
 interface CourseService
 {
     public function getCourse($id);
@@ -84,4 +85,7 @@ interface CourseService
     public function searchCourseCount($conditions);
 
     public function sortCourseItems($courseId, $ids);
+
+    public function waveNoteNum($courseId, $num);
 }
+

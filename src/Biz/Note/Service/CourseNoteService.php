@@ -7,6 +7,9 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 interface CourseNoteService
 {
+    const PUBLIC_STATUS = 1;
+    const PRIVATE_STATUS = 0;
+
     /**
      * return note
      *
@@ -107,7 +110,7 @@ interface CourseNoteService
      * @throws NotFoundException
      * @throws AccessDeniedException
      *
-     * @return array
+     * @return bool
      */
     public function like($noteId);
 
@@ -117,7 +120,7 @@ interface CourseNoteService
      * @throws NotFoundException
      * @throws AccessDeniedException
      *
-     * @return void
+     * @return bool
      */
     public function cancelLike($noteId);
 

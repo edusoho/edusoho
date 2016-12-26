@@ -6,7 +6,7 @@ use Mockery;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {

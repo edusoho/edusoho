@@ -2,7 +2,7 @@
 namespace Biz\User;
 
 use Biz\User\Service\UserService;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\User\UserInterface;
