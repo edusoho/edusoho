@@ -1,10 +1,10 @@
 <?php
-namespace Topxia\Service\Course\Impl;
+namespace Biz\Course\Service\Impl;
 
+use Biz\BaseService;
+use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Course\Service\MaterialService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Course\MaterialService;
 
 class MaterialServiceImpl extends BaseService implements MaterialService
 {
@@ -33,7 +33,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
                     'source'      => $fields['source'],
                     'description' => $fields['description']
                 );
-                $material = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
+                $material     = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
             } else {
                 $material = $this->addMaterial($fields, $argument);
             }
@@ -46,7 +46,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function addMaterial($fields, $argument)
     {
-        $material = $this->getMaterialDao()->addMaterial($fields);
+        $material = $this->getMaterialDao()->create($fields);
 
         $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
 
@@ -55,8 +55,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function updateMaterial($id, $fields, $argument)
     {
-        $sourceMaterial = $this->getMaterialDao()->getMaterial($id);
-        $material       = $this->getMaterialDao()->updateMaterial($id, $fields);
+        $sourceMaterial = $this->getMaterialDao()->get($id);
+        $material       = $this->getMaterialDao()->update($id, $fields);
 
         $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
 
@@ -65,12 +65,12 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function deleteMaterial($courseId, $materialId)
     {
-        $material = $this->getMaterialDao()->getMaterial($materialId);
+        $material = $this->getMaterialDao()->get($materialId);
         if (empty($material) || $material['courseId'] != $courseId) {
             throw $this->createNotFoundException($this->getKernel()->trans('课程资料不存在，删除失败。'));
         }
 
-        $this->getMaterialDao()->deleteMaterial($materialId);
+        $this->getMaterialDao()->delete($materialId);
 
         $this->dispatchEvent("course.material.delete", $material);
     }
@@ -82,7 +82,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function deleteMaterialByMaterialId($materialId)
     {
-        return $this->getMaterialDao()->deleteMaterial($materialId);
+        return $this->getMaterialDao()->delete($materialId);
     }
 
     public function deleteMaterialsByLessonId($lessonId, $courseType = 'course')
@@ -126,7 +126,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function getMaterial($courseId, $materialId)
     {
-        $material = $this->getMaterialDao()->getMaterial($materialId);
+        $material = $this->getMaterialDao()->get($materialId);
         if (empty($material) || $material['courseId'] != $courseId) {
             return null;
         }
@@ -143,34 +143,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->getMaterialCountByFileId($fileId);
     }
 
-    public function findLessonMaterials($lessonId, $start, $limit)
-    {
-        return $this->getMaterialDao()->findMaterialsByLessonId($lessonId, $start, $limit);
-    }
-
-    public function getMaterialCount($courseId)
-    {
-        return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
-    }
-
-    public function findMaterialsGroupByFileId($courseId, $start, $limit)
-    {
-        return $this->getMaterialDao()->findMaterialsGroupByFileId($courseId, $start, $limit);
-    }
-
-    public function findMaterialCountGroupByFileId($courseId)
-    {
-        return $this->getMaterialDao()->findMaterialCountGroupByFileId($courseId);
-    }
-
     public function searchMaterials($conditions, $orderBy, $start, $limit)
     {
-        return $this->getMaterialDao()->searchMaterials($conditions, $orderBy, $start, $limit);
+        return $this->getMaterialDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchMaterialCount($conditions)
     {
-        return $this->getMaterialDao()->searchMaterialCount($conditions);
+        return $this->getMaterialDao()->count($conditions);
     }
 
     public function searchMaterialsGroupByFileId($conditions, $orderBy, $start, $limit)
@@ -252,7 +232,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['link']   = $material['link'];
             $fields['title']  = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
-            $fields['fileId'] = (int) $material['fileId'];
+            $fields['fileId'] = (int)$material['fileId'];
             $file             = $this->getUploadFileService()->getFile($material['fileId']);
             if (empty($file)) {
                 throw $this->createServiceException('文件不存在，上传资料失败！');
@@ -269,6 +249,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $fields;
     }
 
+    /**
+     * @return CourseMaterialDao
+     */
     protected function getMaterialDao()
     {
         return $this->createDao('Course:CourseMaterialDao');
@@ -286,6 +269,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }

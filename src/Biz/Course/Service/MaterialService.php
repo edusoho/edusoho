@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course;
+namespace Biz\Course\Service;
 
 interface MaterialService
 {

@@ -1000,14 +1000,14 @@
 #    path:  /course/{courseId}/manage/material/create
 #    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
 #
-#course_manage_media_library:
-#    path:  /course/{id}/manage/media/library
-#    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
-#
-#course_manage_media_import:
-#    path:  /course/{id}/manage/media/import
-#    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:import }
-#
+course_manage_media_library:
+    path:  /course/{id}/manage/media/library
+    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
+
+course_manage_media_import:
+    path:  /course/{id}/manage/media/import
+    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:import }
+
 #course_manage_publish:
 #    path:  /course/{id}/manage/publish
 #    defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
