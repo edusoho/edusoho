@@ -390,6 +390,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw new InvalidArgumentException('参数不正确，更改密码失败');
         }
 
+        if (!SimpleValidator::password($password)) {
+            throw new UnexpectedValueException('密码校验失败');
+        }
+
         $user = $this->getUser($id);
 
         if (empty($user)) {
