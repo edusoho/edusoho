@@ -61,6 +61,7 @@ class SiteSettingController extends BaseController
             'phone' => array(
                 array('name' => '', 'number' => ''),
             ),
+            'supplier' => '',
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',

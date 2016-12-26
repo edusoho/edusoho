@@ -7,7 +7,6 @@
       <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="{{'QQ客服'|trans}}" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
       {% set break = 1 %}
     {% endfor %}
-
     {% set break = 0 %}
     {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty and break == 0 %}
       <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="{{'QQ群'|trans}}" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
@@ -26,6 +25,10 @@
 
     {% if consult.email is not empty %}
       <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'电子邮箱'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
+    {% endif %}
+
+    {% if consult.supplier is not empty %}
+      {{ consult.supplier | raw }}
     {% endif %}
   </div>
 

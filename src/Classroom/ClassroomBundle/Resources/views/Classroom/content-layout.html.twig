@@ -3,6 +3,8 @@
   {{ render(controller('ClassroomBundle:Classroom:keywords',{classroom: classroom} )) }}
 {% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
+{% set consult = setting('consult') %}
+
 {% block content %}
 
 {% if is_plugin_installed('GroupSell') and not member %}
@@ -56,5 +58,7 @@
   'link': app.request.uri,
   'imgUrl': fileurl(classroom.largePicture,'course.png'),
   }%}
-
+  {% if consult.supplier %}
+    {{ consult.supplier | raw }}
+  {% endif %}
 {% endblock %}
