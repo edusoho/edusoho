@@ -170,10 +170,6 @@ class BuildPackageCommand extends BaseCommand
             return str_ireplace('src/Org/OrgBundle/Resources/public', 'web/bundles/org', $file);
         }
 
-        if (stripos($file, 'src/Permission/PermissionBundle/Resources/public') === 0) {
-            return str_ireplace('src/Permission/PermissionBundle/Resources/public', 'web/bundles/permission', $file);
-        }
-
         return null;
     }
 

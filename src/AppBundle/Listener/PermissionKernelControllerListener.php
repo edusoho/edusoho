@@ -51,7 +51,7 @@ class PermissionKernelControllerListener
 
                 $self = $this;
                 $event->setController(function () use ($self, $request) {
-                    return $self->container->get('templating')->renderResponse('PermissionBundle:Admin:permission-error.html.twig');
+                    return $self->container->get('templating')->renderResponse('admin/role/permission-error.html.twig');
                 });
             }
         }
