@@ -16,7 +16,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-
     public function findByCourseIds($courseIds)
     {
         $marks         = str_repeat('?,', count($courseIds) - 1).'?';
@@ -24,7 +23,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $courseMembers = $this->db()->fetchAll($sql, $courseIds);
         return $courseMembers;
     }
-
 
     public function getByCourseIdAndUserId($courseId, $userId)
     {
@@ -47,7 +45,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType)
     {
-        $sql = "SELECT courseId FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
+        $sql = "SELECT * FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
         return $this->db()->fetchAll($sql, array($userId, $joinedType));
     }
 
