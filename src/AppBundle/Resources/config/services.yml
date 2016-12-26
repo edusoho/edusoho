@@ -11,6 +11,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_note_event_subscriber:
+        class: Biz\Course\Event\NoteEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     content_event_subscriber:
         class: Biz\Content\Event\ContentEventSubscriber
         arguments: ['@biz']

@@ -176,6 +176,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         }
 
         $like = $this->getNoteLikeByNoteIdAndUserId($noteId, $user['id']);
+
         if (!empty($like)) {
             throw $this->createAccessDeniedException('不可重复对一条笔记点赞！');
         }
@@ -187,8 +188,8 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         );
 
         $this->dispatchEvent('course.note.liked', $note);
-
-        return $this->getNoteLikeDao()->create($noteLike);
+        $like = $this->getNoteLikeDao()->create($noteLike);
+        return !empty($like);
     }
 
     public function cancelLike($noteId)
@@ -206,6 +207,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $this->getNoteLikeDao()->deleteByNoteIdAndUserId($noteId, $user['id']);
 
         $this->dispatchEvent('course.note.cancelLike', $note);
+        return true;
     }
 
     public function getNoteLikeByNoteIdAndUserId($noteId, $userId)

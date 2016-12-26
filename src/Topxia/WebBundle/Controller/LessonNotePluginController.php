@@ -60,6 +60,6 @@ class LessonNotePluginController extends BaseController
 
     protected function getCourseNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:NoteService');
+        return $this->getServiceKernel()->createService('Note:CourseNoteService');
     }
 }

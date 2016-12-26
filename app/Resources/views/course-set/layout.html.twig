@@ -379,7 +379,9 @@
               <a href="">评价</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
-              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">笔记</a>
+              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">
+                <small class="text-muted">笔记({{ course.noteNum }})</small>
+              </a>
             </li>
             {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
           </ul>
