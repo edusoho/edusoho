@@ -87,20 +87,14 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     protected function filterStartLimit(&$start, &$limit)
     {
-        $start = (int) $start;
-        $limit = (int) $limit;
+        $start = (int)$start;
+        $limit = (int)$limit;
     }
 
     public function getMemberByCourseIdAndUserId($courseId, $userId)
     {
-        $that = $this;
-
-        return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
-        }
-
-        );
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
     }
 
     public function findMembersByCourseIds($courseIds)
@@ -130,7 +124,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
-        // TODO: Implement findMembersByCourseIdAndRole() method.
+        if ($role == 'student') {
+            return $this->findStudentsByCourseId($courseId, $start, $limit);
+        }
+
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($courseId, $role));
     }
 
     public function findMemberCountByCourseIdAndRole($courseId, $role)
