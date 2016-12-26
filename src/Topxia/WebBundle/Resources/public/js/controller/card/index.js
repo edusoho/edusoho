@@ -7,7 +7,8 @@ define(function(require, exports, module) {
     });
 
     $('.receive-modal').click();
-    $('.money-card-use').on('click',function(){
+    $('body').on('click', '.money-card-use', function() {
+      $('body').off('click', '.money-card-use');
       var url = $(this).data('url');
       var target_url = $(this).data('target-url');
       var coin = $(this).prev().text();

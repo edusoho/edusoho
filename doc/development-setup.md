@@ -63,6 +63,13 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
             rewrite ^(.*)$ /app.php/$1 last;
         }
 
+        location ~ ^/static-dist {
+            if (-f $document_root/static-dist/dev.lock)
+            {
+                rewrite ^(.*)$ http://127.0.0.1:3030$1 last;
+            }
+        }
+
         location ~ ^/udisk {
             internal;
             root /var/www/edusoho/app/data/;

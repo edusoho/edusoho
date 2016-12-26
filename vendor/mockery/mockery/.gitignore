@@ -1,0 +1,12 @@
+*~
+pearfarm.spec
+*.sublime-project
+library/Hamcrest/*
+composer.lock
+vendor/
+composer.phar
+test.php
+build/
+phpunit.xml
+*.DS_store
+.idea/*

@@ -1,7 +1,8 @@
-// import './vendor.less';
-
+import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
+
+// import './vendor.less';
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {
