@@ -55,7 +55,7 @@ class CourseController extends MobileController
         $items         = $this->getCourseService()->getCourseItems($courseId);
         $reviews       = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
         $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
-        $member        = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member        = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
 
         if ($member) {
             $member['createdTime'] = date('c', $member['createdTime']);
@@ -65,7 +65,7 @@ class CourseController extends MobileController
         $result['course']        = $this->filterCourse($course);
         $result['reviews']       = $this->filterReviews($reviews);
         $result['member']        = $member;
-        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']) : false;
 
         if (!$result['userIsStudent']) {
             $learnStatuses = array();
@@ -294,7 +294,7 @@ class CourseController extends MobileController
             goto response;
         }
 
-        if (!$this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        if (!$this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $result = array('status' => 'fail', 'message' => '您不是课程学员，不能学习');
             goto response;
         }
@@ -531,5 +531,10 @@ class CourseController extends MobileController
     private function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File:UploadFileService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

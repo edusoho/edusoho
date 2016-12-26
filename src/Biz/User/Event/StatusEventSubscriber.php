@@ -25,7 +25,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
             $classroom = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
             $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom[0], $post['userId']);
         } else {
-            $isTeacher = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']);
+            $isTeacher = $this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId']);
         }
 
         if ($isTeacher && $thread['type'] == 'question') {
@@ -62,5 +62,10 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

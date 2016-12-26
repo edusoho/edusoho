@@ -6,14 +6,16 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\Impl\TokenServiceImpl;
 
-class BaseProcessor {
+class BaseProcessor
+{
 
     const API_VERSIN_RANGE = '3.6.0';
 
-    public $formData;
-    public $controller;
-    public $request;
+    public    $formData;
+    public    $controller;
+    public    $request;
     protected $delegator;
+
     private function __construct($controller)
     {
         $this->controller = $controller;
@@ -46,14 +48,15 @@ class BaseProcessor {
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))) {
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))
+                ) {
                     unset($user[$key]);
                 }
             }
 
-            $user['smallAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
 
             return $user;
         }, $users);
@@ -82,10 +85,10 @@ class BaseProcessor {
             unset($announcement["userId"]);
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
-            $announcement["content"] = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
+            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
             $announcement["createdTime"] = date('c', $announcement['createdTime']);
-            $announcement["startTime"] = date('c', $announcement['startTime']);
-            $announcement["endTime"] = date('c', $announcement['endTime']);
+            $announcement["startTime"]   = date('c', $announcement['startTime']);
+            $announcement["endTime"]     = date('c', $announcement['endTime']);
             return $announcement;
         }, $announcements);
     }
@@ -223,6 +226,11 @@ class BaseProcessor {
         return $this->controller->getService('Course.CourseService');
     }
 
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
+    }
+
     protected function getPayCenterService()
     {
         return $this->controller->getService('PayCenter.PayCenterService');
@@ -270,12 +278,12 @@ class BaseProcessor {
             return null;
         }
 
-        $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
+        $userIsTeacher = $this->controller->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
         if ($userIsTeacher) {
             $member['role'] = 'teacher';
         } else {
-            $userIsStudent  = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $userIsStudent  = $this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
             $member['role'] = $userIsStudent ? "student" : null;
         }
 
