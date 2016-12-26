@@ -1687,6 +1687,61 @@ course_set_notes:
   path: /course_set/{id}/notes
   defaults: { _controller: AppBundle:CourseSet:notes }
 
+#course
+course_set_threads:
+  path: /course_set/{courseSetId}/threads
+  defaults: {_controller: AppBundle:CourseThread:index}
+
+course_thread_create:
+   path:  /course/{courseId}/thread/create
+   defaults: { _controller: AppBundle:CourseThread:create }
+
+course_thread_show:
+   path:  /course/{courseId}/thread/{threadId}
+   defaults: { _controller: AppBundle:CourseThread:show }
+
+course_thread_post:
+   path:  /course/{courseId}/thread/{threadId}/post
+   defaults: { _controller: AppBundle:CourseThread:post }
+
+course_thread_edit:
+   path:  /course/{courseId}/thread/{threadId}/edit
+   defaults: { _controller: AppBundle:CourseThread:edit }
+
+course_thread_post_delete:
+   path:  /course/{courseId}/thread/{threadId}/post/{postId}/delete
+   defaults: { _controller: AppBundle:CourseThread:deletePost }
+   methods: [POST]
+
+course_thread_post_edit:
+   path:  /course/{courseId}/thread/{threadId}/post/{postId}/edit
+   defaults: { _controller: AppBundle:CourseThread:editPost }
+
+course_thread_stick:
+   path:  /course/{courseId}/thread/{threadId}/stick
+   defaults: { _controller: AppBundle:CourseThread:stick }
+   methods: [POST]
+
+course_thread_unstick:
+   path:  /course/{courseId}/thread/{threadId}/unstick
+   defaults: { _controller: AppBundle:CourseThread:unstick }
+   methods: [POST]
+
+course_thread_elite:
+   path:  /course/{courseId}/thread/{threadId}/elite
+   defaults: { _controller: AppBundle:CourseThread:elite }
+   methods: [POST]
+
+course_thread_unelite:
+   path:  /course/{courseId}/thread/{threadId}/unelite
+   defaults: { _controller: AppBundle:CourseThread:unelite }
+   methods: [POST]
+
+course_thread_delete:
+   path:  /course/{courseId}/thread/{threadId}/delete
+   defaults: { _controller: AppBundle:CourseThread:delete }
+   methods: [POST]
+
 course_set_manage:
   path: /course_set/{id}/manage
   defaults: {_controller: AppBundle:CourseSetManage:index}
