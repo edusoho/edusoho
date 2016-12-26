@@ -316,9 +316,7 @@ class PushMessageEventSubscriber extends EventSubscriber
      */
     public function onArticleCreate(Event $event)
     {
-        $fields = $event->getSubject();
-
-        $article = $fields['article'];
+        $article = $event->getSubject();
 
         $schoolUtil = new MobileSchoolUtil();
 
@@ -352,28 +350,12 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $this->pushIM($from, $to, $body);
-
-        if (!empty($fields['tagIds'])) {
-            $tagIds = $fields['tagIds'];
-            $userId = $fields['userId'];
-
-            $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
-            $tagOwnerManager->create();
-        }
     }
 
     public function onArticleUpdate(Event $event)
     {
-        $fields  = $event->getSubject();
-        $article = $fields['article'];
-
+        $article  = $event->getSubject();
         $this->pushCloud('article.update', $this->convertArticle($article));
-
-        $tagIds = $fields['tagIds'];
-        $userId = $fields['userId'];
-
-        $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
-        $tagOwnerManager->update();
     }
 
     public function onArticleDelete(Event $event)
