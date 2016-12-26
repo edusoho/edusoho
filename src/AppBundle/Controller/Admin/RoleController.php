@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Controller\Admin\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 

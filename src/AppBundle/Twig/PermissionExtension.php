@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Twig;
 
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionExtension extends \Twig_Extension
