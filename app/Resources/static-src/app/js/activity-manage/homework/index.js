@@ -1,6 +1,6 @@
 import BatchSelect from '../../../common/widget/batch-select';
 import DeleteAction from '../../../common/widget/delete-action';
-import { deleteQuestion, replaceQuestion , previewQuestion } from '../../../common/component/question-operate';
+import QuestionOperate from '../../../common/component/question-operate';
 
 class Homework {
 	constructor($iframeContent) {
@@ -61,6 +61,9 @@ class Homework {
         title:{
           required:true
         },
+        description: {
+          required:true
+        },
         'questionLength':{
           required:true
         },
@@ -114,7 +117,4 @@ class Homework {
 new Homework($('#iframe-content'));
 new BatchSelect($('#step2-form'));
 new DeleteAction($('#step2-form'));
-
-deleteQuestion($('#step2-form'));
-replaceQuestion($('#step2-form'),$("#attachment-modal",window.parent.document))
-previewQuestion($('#step2-form'));
+new QuestionOperate($('#step2-form'),$("#attachment-modal",window.parent.document));
