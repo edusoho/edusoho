@@ -5,7 +5,8 @@
     position: relative;
     padding: 12px 0 12px 30px;
     line-height: 1;
-    cursor: pointer;
+    background-color: transparent;
+    margin-bottom: 15px;
     color: @gray;
     .border-radius(4px);
     &:hover,
@@ -30,9 +31,17 @@
         }
       }
     }
+    &.task-chapter{
+      background-color: #f8f8f8;
+    }
+    &.task-unit{
+      background-color: #f8f8f8;
+    }
     .title {
       display: inline-block;
-      max-width: 280px;
+      // max-width: 280px;
+      width: 100%;
+      padding-right: 40px;
       color: @gray;
     }
     .left-menu {
