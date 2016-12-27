@@ -19,6 +19,15 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->getByFields(array('courseSetId' => $courseSetId, 'isDefault' => 1));
     }
 
+    public function getFirstPublishedByCourseSetId($courseSetId)
+    {
+        $records = $this->search(array('courseSetId' => $courseSetId, 'status' => 'published'), array('createdTime' => 'ASC'), 0, 1);
+        if (!empty($records)) {
+            return $records[0];
+        }
+        return null;
+    }
+
     public function findCoursesByIds($ids)
     {
         return $this->findInField('id', $ids);
@@ -36,6 +45,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             'orderbys'   => array('hitNum', 'recommendedTime', 'rating', 'studentNum', 'recommendedSeq', 'createdTime'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
+                'courseSetId = :courseSetId',
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
                 'type = :type',
@@ -73,7 +83,6 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             )
         );
     }
-
 
     protected function _createSearchQueryBuilder($conditions)
     {

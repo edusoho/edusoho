@@ -33,7 +33,7 @@
             </label>
             <label for="learnLockOrder">
               <input type="radio" id="learnLockOrder" name="learnMode" value="lockMode" {% if course.learnMode|default('freeMode') == 'lockMode' %}checked{% endif %} data-role="tab" data-tab-content="#learnLockOrderHelp">
-              任务式学习
+              解锁式学习
             </label>
             <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'学员自由安排学习过程'|trans}}</p>
             <p class="help-block hidden" id="learnLockOrderHelp" data-role="tab-content" >{{'根据既定顺序逐个解锁学习'|trans}}</p>
@@ -53,15 +53,15 @@
             </label>
             <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiryByDaysHelp" data-role="tab-content">
             {{'学习有效期'|trans}}
-              <input class="form-control inline-block form-control-150" type="text" name="expiryDays" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
+              <input class="form-control width-150 mhs" type="text" name="expiryDays" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
               {{'天'|trans}}
               <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
             </div>
             <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiryByDateHelp" data-role="tab-content">
              {{'开始日期'|trans}}
-              <input class="form-control inline-block form-control-150" type="text" id="expiryStartDate" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
+              <input class="form-control width-150 mls mrl" type="text" id="expiryStartDate" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
              {{'结束日期'|trans}}
-              <input class="form-control inline-block form-control-150" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}"{% if course.status|default('draft') == 'published' %}disabled{% endif %}>
+              <input class="form-control width-150 mhs" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}"{% if course.status|default('draft') == 'published' %}disabled{% endif %}>
             </div>
             <div class="help-block">{{'过期后将无法观看内容，系统默认会在到期前10天提醒学员。'|trans}}</div>
             <div class="color-warning">{{'教学计划首次发布后“学习有效期方式”将不能再修改'|trans}}</div>

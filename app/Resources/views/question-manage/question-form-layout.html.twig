@@ -93,9 +93,9 @@
           <div class="col-md-8 col-md-offset-2 controls">
             {% block question_buttons %}
               {% if not question|default(null) %}
-                <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'正在保存'|trans}}...">{{'保存并继续添加'|trans}}</button>
+                <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue" data-loading-text="{{'正在保存'|trans}}...">{{'保存并继续添加'|trans}}</button>
               {% endif %}
-              <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
+              <button type="button" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit" data-loading-text="{{'正在保存'|trans}}...">{{'保存'|trans}}</button>
             {% endblock %}
             <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'返回'|trans}}</a>
           </div>

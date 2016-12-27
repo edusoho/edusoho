@@ -53,6 +53,7 @@ class CourseManageController extends BaseController
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
         $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
         $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
+
         return $this->render($tasksRenderPage, array(
             'tasks'      => $tasks,
             'courseSet'  => $courseSet,

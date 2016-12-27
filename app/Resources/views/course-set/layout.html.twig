@@ -351,13 +351,13 @@
               <a href="/">课程目录</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
-              <a href="{{path('course_set_threads', {courseSetId: courseSet.id})}}">话题</a>
+              <a href="{{path('course_threads', {id: course.id})}}">话题</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
               <a href="">评价</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
-              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">
+              <a href="{{ path('course_notes', { id: course.id }) }}">
                 笔记
                 <small class="text-muted">({{ course.noteNum }})</small>
               </a>
@@ -437,9 +437,11 @@
     <div class="col-lg-3 col-md-4 course-sidebar">
       {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
       <!-- 课程特色: 加入前显示，加入后不显示 -->
-      {% include 'course-set/characteristic.html.twig' %}
-      <!-- 其他计划: 加入前不显示，加入后不显示-->
-      {% include 'course-set/other-course.html.twig' %}
+      {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
+
+      <!-- 其他计划: 加入前不显示，加入后显示-->
+      {{ render(controller('AppBundle:Course:otherCoursePart', {id: course.id})) }}
+
       <!-- 推荐班级 -->
       {% include 'course-set/recommend-classroom.html.twig' %}
       <!-- 授课教师 -->

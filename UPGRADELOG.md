@@ -12,9 +12,16 @@
 		getMemberCountByUserIdAndRoleAndIsLearned
 		findMembersByUserIdAndCourseTypeAndIsLearned
 		findMembersByUserIdAndRoleAndIsLearned
+		findStudentsByCourseId
+		findTeachersByCourseId
+		findMemberCountByCourseIdAndRole
+		findCourseMembersByUserId
+		findMemberCountNotInClassroomByUserIdAndRole
+		findMemberCountByUserIdAndRole
 		
     MaterialService:
         findMaterialCountGroupByFileId
         findMaterialsGroupByFileId
         findLessonMaterials
         getMaterialCount
+    
