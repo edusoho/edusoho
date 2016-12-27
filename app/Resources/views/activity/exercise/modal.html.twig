@@ -33,7 +33,9 @@
 
       <div class="col-xs-9 controls">
         {% set range = activity.metas.questionTypes|default(null) %}
+        {{dump(questionTypes)}}
         {% for questionType,name in questionTypes %}
+    
           <label class="checkbox-inline">
             <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %}checked=checked{% endif %}>{{ name }}
           </label>

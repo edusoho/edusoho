@@ -158,6 +158,7 @@ class Testpaper {
     let scoreTotal = $('#score-single-input').data('score-total');
     let silder = null;
     console.log($('.single-slider'));
+    $('')
     silder = $('.single-slider').jRange({
       from: 0,
       to: score,

@@ -53,6 +53,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
         $questionTypes = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
 
+
         return $this->render('activity/exercise/modal.html.twig', array(
             'courseId'      => $courseId,
             'questionTypes' => $questionTypes,

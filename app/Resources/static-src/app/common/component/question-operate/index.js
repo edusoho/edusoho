@@ -6,11 +6,14 @@ export const deleteQuestion = ($form) =>{
     let id = $target.closest('tr').data('id');
     $target.closest('tbody').find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
+    let num  = 0;
     $('tbody:visible tr').each(function(index,item) {
       console.log($(item));
       let $tr = $(item);
       $tr.find('td.seq').html(index+1);
+      num++;
     });
+    $('[name="questionLength"]').val(num > 0 ? num : null );
   })
 }
 
