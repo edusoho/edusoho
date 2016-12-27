@@ -11,7 +11,6 @@ class Exercise {
   }
 
   _initEvent() {
-  	
   }
 
   _inItStep2form() {
@@ -37,7 +36,8 @@ class Exercise {
             remote: {    
               url: $('[name="checkQuestion"]').data('checkUrl'),   
               type: "post",    
-              dataType: "json",       
+              dataType: "json", 
+              async: false,      
               data: {    
                 itemCount: function() {    
                   return $('[name="itemCount"]').val();    

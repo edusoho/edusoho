@@ -26,7 +26,7 @@
   <div class="form-group">
     <div class="col-sm-2 control-label"><label>{{'时间限制'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      <input class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+      <input id="test" class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
       <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
     </div>
   </div>
@@ -54,12 +54,9 @@
     <div class="col-sm-10 controls radios">
       {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
     </div>
-    <div class="col-sm-offset-2 col-sm-10 mtm starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
-      <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" readonly>
-    </div>
-    <div class="col-sm-offset-2 col-sm-10 mtm endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
-      - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
-        <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" readonly>
+    <div class="col-sm-10 mtm starttime-input {% if activity.testMode|default('normal') == 'normal' %} hidden {% endif %}">
+    <input class="form-control width-input width-input-large mr0" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" ><span class="endtime-input {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %} hidden {% endif %}"><span class="mhs">－</span><input  class="form-control width-input width-input-large" name="endTime" id="starttime-show"  value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" /><input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" disabled>
+      </span>
     </div>
   </div>
 

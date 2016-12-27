@@ -8,8 +8,6 @@
   data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
   data-process="{{ uploader_process(targetType) }}">
   </div>
-  {{dump(mediaType)}}
-
   {% if mediaType|default(null) == 'video' and setting('storage.upload_mode', 'local') != 'local' %}
     <div class="uploader-bottom">
       <div class="row">

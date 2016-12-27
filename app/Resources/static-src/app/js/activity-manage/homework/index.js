@@ -61,12 +61,12 @@ class Homework {
         title:{
           required:true
         },
-        'questions':{
+        'questionLength':{
           required:true
         },
       },
       messages: {
-        'questions':"请选择题目",
+        'questionLength':"请选择题目",
       },
     });
     this.$step2_form.data('validator',validator);

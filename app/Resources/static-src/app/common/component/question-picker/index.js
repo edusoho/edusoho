@@ -26,10 +26,7 @@ export default class QuestionPicker {
   pickItem(event) {
     let $target = $(event.currentTarget);
     let replace = parseInt($target.data('replace'));
-    console.log(replace);
-    console.log(this.$questionAppendForm);
     $.get($target.data('url'), html=> {
-      console.log(html);
       if (replace) {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
       } else {
@@ -50,12 +47,13 @@ export default class QuestionPicker {
   }
 
   _refreshSeqs() {
-    let seq = 1;
+    let seq = 0;
     this.$questionAppendForm.find('tbody tr').each(function(index,item) {
       let $tr = $(item);
-      $tr.find('td.seq').html(seq);
-      seq ++;
+      $tr.find('td.seq').html(seq+1);
+      seq++;
     });
+    this.$questionAppendForm.find('[name="questionLength"]').val(seq > 0 ? seq : null );
   }
 
   _refreshPassedDivShow() {

@@ -191,8 +191,7 @@ class Editor {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
-    console.log(validator);
-    console.log(!validator.form());
+
     if (validator && !validator.form()) {
       return false;
     }

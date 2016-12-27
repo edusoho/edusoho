@@ -4,9 +4,9 @@
 
 {% set replaceFor= replaceFor|default(null) %}
 
-{% do script(['app/js/homework-manage/index.js']) %}
+{% do script(['app/js/activity-manage/homework/picker/index.js']) %}
 
-{% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目1{% endblock %}
+{% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目{% endblock %}
 
 {% block body %}
 <div id="question-picker-body">
