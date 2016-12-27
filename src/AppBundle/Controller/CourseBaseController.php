@@ -10,7 +10,7 @@ abstract class CourseBaseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course#{$id} Not Found');
+            throw $this->createNotFoundException("Course#{$id} Not Found");
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);

@@ -76,16 +76,16 @@ class Audio extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
     protected function getActivityService()
     {
-        return $this->createService("Activity:ActivityService");
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 
     protected function getUploadFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->getBiz()->service('File:UploadFileService');
     }
 }

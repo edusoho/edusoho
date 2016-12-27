@@ -59,7 +59,8 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'categoryId'
+            'categoryId',
+            'number'
         ));
         return $this->getTaskDao()->update($id, $fields);
     }

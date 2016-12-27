@@ -13,7 +13,7 @@ class CourseController extends CourseBaseController
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course-set/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -75,11 +75,16 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function taskListAction(Request $request, $courseId)
+    public function taskListAction(Request $request, $id)
     {
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $courseItems = $this->getCourseService()->findCourseItems($id);
 
-        var_dump($courseItems);
+        return $this->render('course-set/task-list.html.twig', array(
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'courseItems' => $courseItems
+        ));
     }
 
     protected function getUserService()

@@ -12,6 +12,8 @@ interface TaskService
 
     public function updateTask($id, $fields);
 
+    public function updateSeq($id, $fields);
+
     public function publishTask($id);
 
     public function unpublishTask($id);
@@ -23,7 +25,7 @@ interface TaskService
     public function countTasksByCourseId($courseId);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
