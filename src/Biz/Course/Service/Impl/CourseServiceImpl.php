@@ -241,6 +241,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
+        // $this->dispatchEvent('course.publish', $course);
     }
 
     protected function validateExpiryMode($course)
