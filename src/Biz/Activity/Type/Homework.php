@@ -83,6 +83,6 @@ class Homework extends Activity
 
     protected function getTestpaperService()
     {
-        return $this->createService('Testpaper:TestpaperService');
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 }

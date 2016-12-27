@@ -25,7 +25,7 @@ class TaskPluginController extends BaseController
         $preview = $request->query->get('preview', false);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $tasks    = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($courseId);
+        $tasks    = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
         return $this->render('task/plugin/task-list.html.twig', array(
             'tasks'    => $tasks,
             'course'   => $course,

@@ -192,7 +192,7 @@ class TaskServiceTest extends BaseTestCase
 
         $forthTask = $this->getTaskService()->createTask($task);
 
-        $tasks = $this->getTaskService()->findUserTasksFetchActivityAndResultByCourseId($course['id']);
+        $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         $tasks = ArrayToolkit::index($tasks, 'id');
 
         $this->assertEquals('finish', $tasks[$firstTask['id']]['result']['status']);
