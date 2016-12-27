@@ -1,6 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
  {% do load_script('course-manage/header') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 <div class="es-section course-manage-header clearfix">
   <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
     <img class="picture" src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
@@ -58,3 +57,5 @@
 {% if courseSet.status == 'closed' %}
 <div class="alert alert-warning">课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。</div>
 {% endif %}
+
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

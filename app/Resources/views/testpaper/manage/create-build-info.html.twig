@@ -3,16 +3,17 @@
     <label for="testpaper-percentage-field">{{'生成方式'|trans}}</label>
   </div>
   <div class="col-md-8 controls radios">
-       {{ radios('mode', {'rand':'随机生成'|trans, 'difficulty':'按难易程度'|trans}, 'rand') }}
+    {{ radios('mode', {'rand':'随机生成'|trans, 'difficulty':'按难易程度'|trans}, 'rand') }}
   </div>
 </div>
 
-<div class="form-group difficulty-form-group hidden">
+<div class="form-group" id="difficulty-form-group">
   <div class="col-md-2 control-label">
     <label for="testpaper-percentage-field">{{'试卷难度'|trans}}</label>
   </div>
   <div class="col-md-8 controls form-control-static">
-    <div class="difficulty-percentage-slider"></div>
+    <div class="difficulty-percentage-slider" id="difficulty-percentage-slider"></div>
+    <div class="difficulty-percentage-slider mtl" id="score-slider"></div>
     <div class="help-block">
       <span class="simple-percentage-text"></span>
       <span class="normal-percentage-text"></span>

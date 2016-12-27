@@ -2,10 +2,10 @@ import sortList from 'common/sortable';
 
 class TestpaperForm{
   constructor($form) {
-
     this.$form = $form;
     this.$description = this.$form.find('[name="description"]');
     this.validator = null;
+    this.difficultySlider = null;
     this._initEvent();
     this._initEditor();
     this._initValidate();
@@ -14,7 +14,57 @@ class TestpaperForm{
 
   _initEvent() {
     this.$form.on('click','[data-role="submit"]',event=>this._submit(event));
+    this.$form.on('click','[name="mode"]',event=>this.changeMode(event))
+    this.initDifficultySlider();
+    this.initScoreSlider();
+  }
 
+  initScoreSlider() {
+    let scoreSlider = document.getElementById('score-slider');
+    console.log(scoreSlider);
+    noUiSlider.create(scoreSlider, {
+      start: 20,
+      tooltips: [true],
+      step: 1,
+      range: {
+        'min': 0,
+        'max': 100
+      }
+    });
+  }
+
+  changeMode(event) {
+    let $this = $(event.currentTarget);
+    ($this.val() == 'difficulty') ? $('#difficulty-form-group').removeClass('hidden') : $('#difficulty-form-group').addClass('hidden');
+  }
+
+  initDifficultySlider() {
+    if(!this.difficultySlider ) {
+      let sliders = document.getElementById('difficulty-percentage-slider');
+      this.difficultySlider = noUiSlider.create(sliders, {
+        start: [ 30, 70 ],
+        margin: 30,
+        range: {
+          'min': 0,
+          'max': 100
+        },
+        step: 5,
+        serialization: {
+          resolution: 1
+        },
+      });
+      sliders.noUiSlider.on('update', function( values, handle ){
+        let simplePercentage = values[0],
+        normalPercentage = values[1] - values[0],
+        difficultyPercentage = 100 - values[1];
+        $('.simple-percentage-text').html(Translator.trans('简单') + simplePercentage + '%');
+        $('.normal-percentage-text').html(Translator.trans('一般') + normalPercentage + '%');
+        $('.difficulty-percentage-text').html(Translator.trans('困难') + difficultyPercentage + '%');
+        $('input[name="percentages[simple]"]').val(simplePercentage);
+        $('input[name="percentages[normal]"]').val(normalPercentage);
+        $('input[name="percentages[difficulty]"]').val(difficultyPercentage);
+      });
+    }
   }
 
   _initEditor() {
