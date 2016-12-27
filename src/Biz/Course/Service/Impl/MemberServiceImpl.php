@@ -127,10 +127,15 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $courseMembers = $this->getMemberDao()->findCourseMembersByUserId($currentUser["id"]);
-
-        $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $condition     = array(
+            'userId'              => $currentUser["id"],
+            'role'                => 'student',
+            'deadlineNotified'    => 0,
+            'deadlineGreaterThan' => 0
+        );
+        $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
+        $courseIds     = ArrayToolkit::column($courseMembers, "courseId");
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
@@ -172,7 +177,9 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findMemberUserIdsByCourseId($courseId)
     {
-        return $this->getMemberDao()->findMemberUserIdsByCourseId($courseId);
+        $members = $this->getMemberDao()->findByCourseId($courseId);
+
+        return ArrayToolkit::column($members, 'userId');
     }
 
     public function updateCourseMember($id, $fields)
@@ -204,7 +211,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseStudents($courseId, $start, $limit)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
     }
 
     public function findCourseStudentsByCourseIds($courseIds)
@@ -214,12 +221,16 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getCourseStudentCount($courseId)
     {
-        return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+        $conditions = array(
+            'courseId' => $courseId,
+            'role'     => 'student'
+        );
+        return $this->getMemberDao()->count($conditions);
     }
 
     protected function findCourseTeachers($courseId)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
@@ -320,8 +331,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     public function cancelTeacherInAllCourses($userId)
     {
-        $count   = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
-        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, $count, false);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher');
 
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
@@ -351,17 +361,17 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
-        return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId, $role);
+        return $this->getMemberDao()->deleteByCourseIdAndRole($courseId, $role);
     }
 
     public function deleteMemberByCourseId($courseId)
     {
-        return $this->getMemberDao()->deleteMembersByCourseId($courseId);
+        return $this->getMemberDao()->deleteByCourseId($courseId);
     }
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findByUserIdAndJoinType($userId, $joinedType);
         return ArrayToolkit::column($courseIds, 'courseId');
     }
 
@@ -621,13 +631,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
         if (empty($courseIds) || count($courseIds) == 0) {
             return array();
         }
 
-        $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+        $courseMembers = $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
         return $courseMembers;
     }
 
@@ -648,7 +658,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         return array();
     }
-
 
     protected function _prepareConditions($conditions)
     {
