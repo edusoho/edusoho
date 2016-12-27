@@ -71,7 +71,6 @@ class MyQuestionController extends BaseController
         }
 
         $myTestpapers = $this->getTestpaperService()->findTestpapersByIds($myTestpaperIds);
-
         return $this->render('TopxiaWebBundle:MyQuiz:my-favorite-question.html.twig', array(
             'favoriteActive' => 'active',
             'user' => $user,
