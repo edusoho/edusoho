@@ -23,9 +23,9 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <button data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview" data-role="preview-btn">{{'预览'|trans}}</button>
-        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="item-delete-btn">{{'删除'|trans}}</a>
-        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="replace-item" data-url="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
+        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" >{{'预览'|trans}}</a>
+        <a class="mrm" data-role="replace-item"  href="javascript:"  data-url="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'替换'|trans}}</a>
+        <a class="" data-role="item-delete-btn" href="javascript:" >{{'删除'|trans}}</a>
       {% endif %}
     </div>
   </td>

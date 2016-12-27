@@ -1,5 +1,5 @@
 import QuestionPicker from '../../../common/component/question-picker';
 import BatchSelect from '../../../common/widget/batch-select';
 
-new QuestionPicker($('#quiz-table-container'), $('#quiz-table'));
-new BatchSelect($('#quiz-table-container'));
+new QuestionPicker($('#question-picker-body'), $('#item-picker-table'));
+new BatchSelect($('#question-picker-body'));

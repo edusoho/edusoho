@@ -4,7 +4,7 @@
 
 {% set side_nav = 'testpaper' %}
 
-{% do script(['app/js/testpaper-manage/picker/index.js']) %}
+{% do script(['app/js/testpaper-manage/questions/index.js']) %}
 
 {% block main %}
 
@@ -33,8 +33,7 @@ tr.placeholder:before {
 {% set questionTypesDict = getQuestionTypes() %}
 
 <div class="panel panel-default panel-col" id="testpaper-items-manager">
-  <div class="panel-heading">
-    {{testpaper.name}}
+  <div class="panel-heading">{{testpaper.name}}
   </div>
 
   <div class="panel-body clearfix">
@@ -69,7 +68,6 @@ tr.placeholder:before {
         {% for type,count in testpaper['metas']['counts'] if count > 0 %}
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="testpaper-table-tbody {% if loop.index != 1 %}hide{% endif %}" data-role="question-body">
             {% for question in questions[type]|default(null) if question %}
-              
               {% include 'question-manage/question-picked-tr.html.twig' %}
               {% if question.subs|default(null) %}
                 {% for question in question.subs %}
