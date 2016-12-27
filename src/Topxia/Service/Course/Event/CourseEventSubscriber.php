@@ -302,10 +302,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return array(
             'id'      => $course['id'],
             'title'   => $course['title'],
-            'picture' => $course['middlePicture'],
             'type'    => $course['type'],
             'rating'  => $course['rating'],
-            'about'   => StringToolkit::plain($course['about'], 100),
             'price'   => $course['price']
         );
     }
