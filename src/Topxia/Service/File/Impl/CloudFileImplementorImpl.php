@@ -349,10 +349,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
-    public function player($globalId)
+    public function player($globalId, $ssl = false)
     {
         $api    = CloudAPIFactory::create('leaf');
-        $player = $api->get("/resources/{$globalId}/player");
+        $params = array();
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+        $player = $api->get("/resources/{$globalId}/player", $params);
         return $player;
     }
 
@@ -491,10 +495,15 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $download;
     }
 
-    public function getDownloadFile($file)
+    public function getDownloadFile($file, $ssl = false)
     {
+        $params = array();
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+
         $api              = CloudAPIFactory::create('leaf');
-        $download         = $api->get("/resources/{$file['globalId']}/download");
+        $download         = $api->get("/resources/{$file['globalId']}/download", $params);
         $download['type'] = 'url';
         return $download;
     }
