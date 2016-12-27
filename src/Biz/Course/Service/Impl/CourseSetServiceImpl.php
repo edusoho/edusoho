@@ -140,6 +140,23 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
+    public function publishCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        $this->dispatchEvent('course-set.publish', $courseSet);
+    }
+
+    public function closeCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if ($courseSet['status'] != 'published') {
+            throw $this->createAccessDeniedException('CourseSet has not bean published');
+        }
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        $this->dispatchEvent('course-set.closed', $courseSet);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();

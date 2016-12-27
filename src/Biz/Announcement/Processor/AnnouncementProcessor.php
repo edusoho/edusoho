@@ -15,18 +15,15 @@ abstract class AnnouncementProcessor
         $this->biz = $biz;
     }
 
-    public abstract function checkManage($targetId);
+    abstract public function checkManage($targetId);
 
-    public abstract function checkTake($targetId);
+    abstract public function checkTake($targetId);
 
-    public abstract function getTargetShowUrl();
+    abstract public function getTargetShowUrl();
 
-	public abstract function announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
+    abstract public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
 
-	public abstract function tryManageObject($targetId);
-	
-	public abstract function getTargetObject($targetId);
+    abstract public function tryManageObject($targetId);
 
-	public abstract function getShowPageName($targetId);
-
+    abstract public function getTargetObject($targetId);
 }
