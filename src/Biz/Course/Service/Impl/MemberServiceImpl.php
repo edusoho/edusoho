@@ -147,7 +147,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($courses as $key => $course) {
             $courseMember = $courseMembers[$course["id"]];
 
-            if ($course["expiryDay"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
+            if ($course["expiryDays"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
                 $shouldNotifyCourses[]       = $course;
                 $shouldNotifyCourseMembers[] = $courseMember;
             }
@@ -458,12 +458,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         //按照课程有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryDay'] > 0) {
+        if ($course['expiryDays'] > 0) {
             if ($course['expiryMode'] == 'days') {
-                $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+                $deadline = $course['expiryDays'] * 24 * 60 * 60 + time();
             }
             if ($course['expiryMode'] == 'date') {
-                $deadline = $course['expiryDay'];
+                $deadline = $course['expiryDays'];
             }
         }
 
