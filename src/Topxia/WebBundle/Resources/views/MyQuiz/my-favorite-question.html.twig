@@ -8,7 +8,8 @@
     <table class="table table-striped table-hover">
     	<tbody>
     		{% for favoriteQuestion in favoriteQuestions %}
-			    {% if favoriteQuestion.target.id is defined %}
+
+			    {% if targets[favoriteQuestion.target] %}
 				    {% set paper = testpapers[targets[favoriteQuestion.target].id] %}
 			    {% endif %}
     			{% set question = questions[favoriteQuestion.questionId] %}
