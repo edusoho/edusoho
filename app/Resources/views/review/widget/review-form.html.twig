@@ -1,7 +1,7 @@
 {% set reviewSaveUrl = reviewSaveUrl|default('') %}
 {% set userReview = userReview|default(null) %}
 
-<form id="review-form" method="post" {% if userReview %}style="display:none;"{% endif %}>
+<form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
   <div class="form-group controls">
     {{'请打分：'|trans}} <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
     <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">

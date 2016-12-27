@@ -36,6 +36,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
     }
 
+    public function getFirstPublishedCourseByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getFirstPublishedByCourseSetId($courseSetId);
+    }
+
     public function createCourse($course)
     {
         if (!$this->hasCourseManagerRole()) {
@@ -130,7 +135,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
 
-        $existTeachers = $this->findTeachersByCourseId($courseId);
+        $existTeachers = $this->findMembersByCourseIdAndRole($courseId, 'teacher');
 
         foreach ($existTeachers as $member) {
             $this->getMemberDao()->delete($member['id']);
@@ -239,6 +244,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
+        // $this->dispatchEvent('course.publish', $course);
     }
 
     protected function validateExpiryMode($course)
@@ -271,6 +277,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findCourseItems($courseId)
     {
         $course = $this->getCourse($courseId);
+        if (empty($course)) {
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+        }
         return $this->createCourseStrategy($course)->findCourseItems($courseId);
     }
 
@@ -298,14 +307,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findStudentsByCourseId($courseId)
     {
-        $students = $this->getMemberDao()->findStudentsByCourseId($courseId);
+        $students = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
 
         return $this->fillMembersWithUserInfo($students);
     }
 
     public function findTeachersByCourseId($courseId)
     {
-        $teachers = $this->getMemberDao()->findTeachersByCourseId($courseId);
+        $teachers = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
 
         return $this->fillMembersWithUserInfo($teachers);
     }
@@ -587,7 +596,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
-        return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+        return $this->getMemberDao()->findLearnedByCourseIdAndUserId($courseId, $userId);
     }
 
     public function hasCourseManagerRole($courseId = 0)
@@ -730,6 +739,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         return $this->getCourseDao()->count($conditions);
+    }
+
+    public function waveNoteNum($courseId, $num)
+    {
+        return $this->getCourseDao()->wave(array($courseId), array(
+            'noteNum' => $num
+        ));
     }
 
     protected function createCourseStrategy($course)

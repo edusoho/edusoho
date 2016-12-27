@@ -341,7 +341,7 @@ class ClassroomController extends BaseController
 
         $learns = $this->getStatusService()->searchStatuses(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             $count
         );
@@ -712,9 +712,10 @@ class ClassroomController extends BaseController
             return false;
         }
 
-        $courseIds         = ArrayToolkit::column($courses, "parentId");
-        $courses           = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseMembers     = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
+        $courseIds     = ArrayToolkit::column($courses, 'parentId');
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
+
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
         $priceType         = "RMB";

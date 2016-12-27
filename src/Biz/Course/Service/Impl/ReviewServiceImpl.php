@@ -155,6 +155,8 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             throw $this->createNotFoundException("course review(#{$id}) not found");
         }
 
+        $this->getCourseService()->tryManageCourse($review['courseId']);
+
         $result = $this->getReviewDao()->delete($id);
 
         $this->dispatchEvent('course.review.delete', new Event($review));
@@ -209,9 +211,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         if (is_array($sort)) {
             $orderBy = $sort;
         } elseif ($sort == 'latest') {
-            $orderBy = array('createdTime', 'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         } else {
-            $orderBy = array('rating', 'DESC');
+            $orderBy = array('rating' => 'DESC');
         }
 
         return $orderBy;

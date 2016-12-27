@@ -5,7 +5,7 @@ use Biz\BaseService;
 use Biz\Role\Service\RoleService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\UnexpectedValueException;
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Tree;
 use Topxia\Service\Common\ServiceKernel;

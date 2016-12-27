@@ -63,7 +63,7 @@
               <div class="btn-group">
                 <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}"
                    class="btn btn-default btn-sm">{{ '查看'|trans }}</a>
-                {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_approval_approvals', group:'groupButton', user: user} %}
+                {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_approval_approvals', group:'groupButton', user: user} %}
               </div>
             {% elseif approvalStatus == 'approving' %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}"

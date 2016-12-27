@@ -14,6 +14,10 @@ $kernel = new AppKernel('test', true);
 $kernel->setRequest($request);
 $kernel->boot();
 
+//clear cache
+$filesystem = new \Symfony\Component\Filesystem\Filesystem();
+$filesystem->remove($kernel->getCacheDir());
+
 // inject request service
 $container = $kernel->getContainer();
 $container->enterScope('request');
@@ -29,3 +33,4 @@ ServiceKernel::instance()
     ->setEnvVariable(array(
         'host'          => 'test.com',
         'schemeAndHost' => 'http://test.com'));
+

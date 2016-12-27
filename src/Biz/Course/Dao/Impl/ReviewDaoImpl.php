@@ -34,7 +34,6 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'updatedTime',
                 'rating'
             ),
-            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'userId = :userId',
                 'courseId = :courseId',

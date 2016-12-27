@@ -2,31 +2,25 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\BaseController;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReviewController extends BaseController
 {
-    public function listAction(Request $request, $courseSetId)
+    public function createAction(Request $request, $id)
     {
-        $conditions = array(
-            'courseSetId' => $courseSetId,
-            'parentId'    => 0
-        );
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
-        $courseId = $request->query->get('courseId');
+        $fields             = $request->request->all();
+        $fields['courseId'] = $id;
+        $this->getReviewService()->saveReview($fields);
 
-        $reviews = $this->getReviewService()->searchReviews(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            0,
-            10
-        );
+        return $this->createJsonResponse(true);
     }
 
     public function postAction(Request $request, $courseId, $reviewId)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $postNum = $this->getReviewService()->searchReviewsCount(array('parentId' => $reviewId));
 
@@ -49,6 +43,14 @@ class ReviewController extends BaseController
             'author'    => $this->getCurrentUser(),
             'canAccess' => true
         ));
+    }
+
+    public function deleteAction(Request $request, $courseId, $reviewId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $this->getReviewService()->deleteReview($reviewId);
+        return $this->createJsonResponse(true);
     }
 
     protected function getCourseService()

@@ -2,7 +2,6 @@
 namespace Topxia\Service\Course\Tests;
 
 use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
 use Biz\Note\Service\CourseNoteService;
 use Biz\BaseTestCase;
@@ -34,9 +33,6 @@ class NoteServiceTest extends BaseTestCase
         $this->assertEquals($note['taskId'], $foundNote['taskId']);
     }
 
-    /**
-     * @todo
-     */
     public function testsearchNoteCount()
     {
         $user      = $this->getCurrentUser();
@@ -79,9 +75,6 @@ class NoteServiceTest extends BaseTestCase
         $this->assertEquals(2, $resultCount);
     }
 
-    /**
-     * @todo
-     */
     public function testSearchNotes()
     {
         $user      = $this->getCurrentUser();
@@ -268,13 +261,5 @@ class NoteServiceTest extends BaseTestCase
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
     }
 }

@@ -15,6 +15,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Course\Service\MemberService;
 use Vip\Service\Vip\LevelService;
 use Vip\Service\Vip\VipService;
 
@@ -526,7 +527,7 @@ class UserController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
+            $this->getCourseMemberService()->findUserLearnCourseCountNotInClassroom($user['id']),
             20
         );
 
@@ -652,6 +653,14 @@ class UserController extends BaseController
     }
 
     /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
      * @return ThreadService
      */
     protected function getThreadService()
@@ -664,7 +673,7 @@ class UserController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Course:NoteService');
+        return $this->getBiz()->service('Note:CourseNoteService');
     }
 
     /**

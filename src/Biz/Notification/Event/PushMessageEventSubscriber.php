@@ -316,9 +316,7 @@ class PushMessageEventSubscriber extends EventSubscriber
      */
     public function onArticleCreate(Event $event)
     {
-        $fields = $event->getSubject();
-
-        $article = $fields['article'];
+        $article = $event->getSubject();
 
         $schoolUtil = new MobileSchoolUtil();
 
@@ -352,28 +350,12 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $this->pushIM($from, $to, $body);
-
-        if (!empty($fields['tagIds'])) {
-            $tagIds = $fields['tagIds'];
-            $userId = $fields['userId'];
-
-            $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
-            $tagOwnerManager->create();
-        }
     }
 
     public function onArticleUpdate(Event $event)
     {
-        $fields  = $event->getSubject();
-        $article = $fields['article'];
-
+        $article  = $event->getSubject();
         $this->pushCloud('article.update', $this->convertArticle($article));
-
-        $tagIds = $fields['tagIds'];
-        $userId = $fields['userId'];
-
-        $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
-        $tagOwnerManager->update();
     }
 
     public function onArticleDelete(Event $event)
@@ -755,8 +737,9 @@ class PushMessageEventSubscriber extends EventSubscriber
         switch ($type) {
             case 'course':
                 $course               = $this->getCourseService()->getCourse($id);
+                $courseSet            = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
                 $target['title']      = $course['title'];
-                $target['image']      = $this->getFileUrl($course['smallPicture']);
+                $target['image']      = empty($courseSet['cover']['small']) ? '' : $this->getFileUrl($courseSet['cover']['small']);
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 $conv                 = $this->getConversationService()->getConversationByTarget($id, 'course-push');
                 $target['convNo']     = empty($conv) ? '' : $conv['no'];
@@ -904,6 +887,11 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getClassroomService()

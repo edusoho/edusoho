@@ -62,7 +62,7 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'管理后台'|trans}}</a>
       </div>
       <div class="navbar-collapse collapse">
-        {% include 'PermissionBundle:Templates:navigation.html.twig' with {parentCode:'admin'} %}
+        {% include 'admin/role/templates/navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
@@ -99,7 +99,7 @@
         {% block content %}
           <div class="col-md-2">
             {% block sidebar %}
-              {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
+              {% include 'admin/role/templates/side-bar.html.twig' %}
             {% endblock %}
           </div>
 
@@ -133,7 +133,7 @@
 
             {% block content_header %}{% endblock %}
             
-            {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
+            {% block tabs %}{% include 'admin/role/templates/tabs.html.twig' %}{% endblock %}
 
             {% block capsule %}{% endblock %}
 

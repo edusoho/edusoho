@@ -4,10 +4,9 @@
 {% block keywords %} {{classroom.title}} {% endblock %}
 {% do load_script('classroombundle/controller/classroom/unjoin') %}
 
-
-
 {% block top_content %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
 
