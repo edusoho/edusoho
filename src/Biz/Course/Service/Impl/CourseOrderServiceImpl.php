@@ -1,11 +1,11 @@
 <?php
-namespace Topxia\Service\Course\Impl;
+namespace Biz\Course\Service\Impl;
 
+use Biz\BaseService;
+use Biz\Course\Service\CourseOrderService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Course\CourseOrderService;
 
 class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 {
@@ -211,22 +211,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     protected function getCashService()
     {
-        return $this->getKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getKernel()->createService('Cash:CashAccountService');
+        return $this->createService('Cash:CashAccountService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getCourseService()
@@ -241,11 +241,21 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');        
     }
 
     protected function getCourseMemberService()
     {
-        return ServiceKernel::instance()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

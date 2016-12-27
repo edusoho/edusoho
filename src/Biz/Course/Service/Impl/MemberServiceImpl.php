@@ -11,7 +11,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Order\Service\OrderService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Topxia\Common\ArrayToolkit;
 
 /**
@@ -410,7 +410,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->delete($member['id']);
         $this->dispatchEvent(
             'learning.quit',
-            new Event($course, array('userId' => $userId))
+            $course, array('userId' => $userId)
         );
 
         $this->getCourseDao()->update($courseId, array(
@@ -505,7 +505,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->setMemberNoteNumber(
             $courseId,
             $userId,
-            $this->getNoteDao()->getNoteCountByUserIdAndCourseId($userId, $courseId)
+            $this->getNoteDao()->count(array('userId'=>$userId, 'courseId'=>$courseId))
         );
 
         $setting = $this->getSettingService()->get('course', array());
@@ -523,10 +523,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
         }
 
-        $this->getCourseDao()->updateCourse($courseId, $fields);
+        $this->getCourseDao()->update($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new Event($course, array('userId' => $member['userId'], 'member' => $member))
+            $course, array('userId' => $member['userId'], 'member' => $member)
         );
         return $member;
     }
@@ -557,7 +557,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
-            new Event($course, array('userId' => $member['userId'], 'member' => $member))
+            $course, array('userId' => $member['userId'], 'member' => $member)
         );
     }
 

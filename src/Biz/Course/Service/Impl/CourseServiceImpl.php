@@ -174,6 +174,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable',
             'tryLookLength',
             'watchLimit',
+            'buyExpiryTime',
             'services'
         ));
 
@@ -187,6 +188,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
+
+        if(!empty($fields['buyExpiryTime'])){
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+        }
+
         if (isset($fields['price'])) {
             $fields['price'] = round(floatval($fields['price']) * 100, 0);
         }
