@@ -160,4 +160,12 @@ interface CourseNoteService
      * @return array[]
      */
     public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId);
+
+    /**
+     * @param integer $userId
+     * @param integer $courseId
+     *
+     * @return integer
+     */
+    public function countNotesByUserIdAndCourseId($userId, $courseId);
 }

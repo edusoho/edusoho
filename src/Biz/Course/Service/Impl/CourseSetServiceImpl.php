@@ -3,6 +3,8 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Service\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseSetService;
 use Topxia\Service\Common\ServiceKernel;
@@ -28,6 +30,36 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         return $courseSet;
     }
+
+    /**
+     * @param array $conditions
+     * @param array $orderBys
+     * @param int   $start
+     * @param int   $limit
+     *
+     * @return mixed
+     */
+    public function searchCourseSets(array $conditions, array $orderBys, $start, $limit)
+    {
+        return $this->getCourseSetDao()->search($conditions, $orderBys, $start, $limit);
+    }
+
+    /**
+     * @param array $conditions
+     *
+     * @return mixed
+     */
+    public function countCourseSets(array $conditions)
+    {
+        return $this->getCourseSetDao()->count($conditions);
+    }
+
+
+    public function findCourseSetsByIds(array $ids)
+    {
+        return $this->getCourseSetDao()->findByIds($ids);
+    }
+
 
     public function getCourseSet($id)
     {
@@ -140,6 +172,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
+    public function findTeachingCourseSetsByUserId($userId)
+    {
+        $courses = $this->getCourseService()->findTeachingCoursesSetByUserId($userId);
+        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+        return $this->findCourseSetsByIds($setIds);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -159,11 +198,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    /**
+     * @return CourseSetDao
+     */
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
@@ -176,6 +221,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function getFileService()
     {
-        return ServiceKernel::instance()->createService('Content:FileService');
+        return $this->biz->service('Content:FileService');
     }
 }

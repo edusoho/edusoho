@@ -8,6 +8,8 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Note\Dao\CourseNoteDao;
+use Biz\Note\Service\CourseNoteService;
 use Biz\Order\Service\OrderService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
@@ -492,10 +494,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->create($fields);
 
-        $this->setMemberNoteNumber(
-            $courseId,
-            $userId,
-            $this->getNoteDao()->getNoteCountByUserIdAndCourseId($userId, $courseId)
+        $this->refreshMemberNoteNumber(
+            $courseId, $userId
         );
 
         $setting = $this->getSettingService()->get('course', array());
@@ -710,7 +710,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $conditions;
     }
 
-    public function setMemberNoteNumber($courseId, $userId, $number)
+    public function refreshMemberNoteNumber($courseId, $userId)
     {
         $member = $this->getCourseMember($courseId, $userId);
 
@@ -718,12 +718,19 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         }
 
+        $number = $this->getCourseNoteService()->countNotesByUserIdAndCourseId($userId, $courseId);
+
         $this->getMemberDao()->update($member['id'], array(
             'noteNum'            => (int)$number,
             'noteLastUpdateTime' => time()
         ));
 
         return true;
+    }
+
+    public function findTeachingMembersByUserId($userId)
+    {
+        return $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, PHP_INT_MAX);
     }
 
 
@@ -758,9 +765,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->createService('System:LogService');
     }
 
-    protected function getNoteDao()
+    /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
     {
-        return $this->createDao('Course:CourseNoteDao');
+        return $this->createService('Note:CourseNoteService');
     }
 
     /**

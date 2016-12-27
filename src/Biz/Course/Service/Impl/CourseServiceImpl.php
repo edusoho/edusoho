@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Service\MemberService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -588,6 +589,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function findTeachingCoursesSetByUserId($userId)
+    {
+        $members = $this->getMemberService()->findTeachingMembersByUserId($userId);
+        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courses = $this->findCoursesByIds($courseIds);
+        return $courses;
+    }
+
     public function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -780,6 +789,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     /**

@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
-use Biz\Note\Service\CourseNoteService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Note\Service\CourseNoteService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class CourseSetController extends BaseController
 {
@@ -62,6 +62,36 @@ class CourseSetController extends BaseController
         }
 
         return array($courseSet, $course);
+    }
+
+    public function courseSetsBlockAction(array $courseSets, $view = 'list', $mode = 'default')
+    {
+        $userIds = array();
+
+        foreach ($courseSets as $index => $set) {
+            $sets[$index]['course'] = $this->getCourseService()->get($set['id']);
+        }
+        /*foreach ($sets as $key => $set) {
+            $userIds = array_merge($userIds, $set['teacherIds']);
+
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+
+            $courses[$key]['classroomCount'] = count($classroomIds);
+
+            if (count($classroomIds) > 0) {
+                $classroom                  = $this->getClassroomService()->getClassroom($classroomIds[0]);
+                $courses[$key]['classroom'] = $classroom;
+            }
+        }*/
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        var_dump($courseSets);
+        exit();
+        return $this->render("course-set/block-{$view}.html.twig", array(
+            'courseSets' => $courseSets,
+            'users'      => $users,
+            'mode'       => $mode
+        ));
     }
 
     /**

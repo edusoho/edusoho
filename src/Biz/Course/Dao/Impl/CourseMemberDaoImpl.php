@@ -184,7 +184,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('*');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('('.$builder->getSQL().')', $this->getTable());
+            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->select('DISTINCT userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');

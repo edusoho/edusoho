@@ -1,21 +1,22 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\ThreadService;
-use Biz\Note\Service\CourseNoteService;
-use Biz\User\CurrentUser;
-use Biz\User\Service\NotificationService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\UserService;
-use Biz\Group\Service\GroupService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\UserFieldService;
 use Biz\Classroom\Service\ClassroomService;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService;
+use Biz\Group\Service\GroupService;
+use Biz\Note\Service\CourseNoteService;
+use Biz\System\Service\SettingService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserFieldService;
+use Biz\User\Service\UserService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 use Vip\Service\Vip\LevelService;
 use Vip\Service\Vip\VipService;
 
@@ -169,11 +170,11 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         if (empty($classroomIds)) {
-            $paginator = new Paginator(
+            $paginator  = new Paginator(
                 $this->get('request'),
                 0,
                 20
@@ -228,7 +229,7 @@ class UserController extends BaseController
         $conditions = array(
             'userId' => $user['id']
         );
-        $paginator = new Paginator(
+        $paginator  = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseFavoriteCount($conditions),
             20
@@ -259,12 +260,12 @@ class UserController extends BaseController
         $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $owners = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
+        $owners               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $members     = array_merge($admins, $owners);
-        $groupIds    = ArrayToolkit::column($members, 'groupId');
-        $adminGroups = $this->getGroupService()->getGroupsByIds($groupIds);
+        $members              = array_merge($admins, $owners);
+        $groupIds             = ArrayToolkit::column($members, 'groupId');
+        $adminGroups          = $this->getGroupService()->getGroupsByIds($groupIds);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -525,9 +526,10 @@ class UserController extends BaseController
 
     protected function _learnAction($user)
     {
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseMemberService()->findUserLearnCourseCountNotInClassroom($user['id']),
+            $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
             20
         );
 
@@ -547,27 +549,30 @@ class UserController extends BaseController
 
     protected function _teachAction($user)
     {
+        $teachSets       = $this->getCourseSetService()->findTeachingCourseSetsByUserId($user['id']);
+        $setIds     = ArrayToolkit::column($teachSets, 'id');
         $conditions = array(
-            'userId'   => $user['id'],
-            'parentId' => 0
+            'ids' => $setIds
         );
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($conditions),
+            $this->getCourseSetService()->countCourseSets($conditions),
             20
         );
 
-        $courses = $this->getCourseService()->findUserTeachCourses(
+        $sets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
+            array('created' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        return $this->render('user/courses.html.twig', array(
-            'user'      => $user,
-            'courses'   => $courses,
-            'paginator' => $paginator,
-            'type'      => 'teach'
+
+        return $this->render('user/course-sets.html.twig', array(
+            'user'       => $user,
+            'courseSets' => $sets,
+            'paginator'  => $paginator,
+            'type'       => 'teach'
         ));
     }
 
@@ -682,5 +687,13 @@ class UserController extends BaseController
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 }

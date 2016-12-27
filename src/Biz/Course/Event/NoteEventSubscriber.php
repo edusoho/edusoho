@@ -5,6 +5,7 @@ namespace Biz\Course\Event;
 
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -37,6 +38,8 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($course && $note['status']) {
             $this->getCourseService()->waveNoteNum($note['courseId'], +1);
         }
+
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 
     public function onCourseNoteUpdate(Event $event)
@@ -68,6 +71,8 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         ) {
             $this->getCourseService()->waveNoteNum($note['courseId'], -1);
         }
+
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 
     public function onCourseNoteDelete(Event $event)
@@ -84,6 +89,8 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if (!empty($course) && $needWave) {
             $this->getCourseService()->waveNoteNum($note['courseId'], -1);
         }
+
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 
     public function onCourseNoteLike(Event $event)
@@ -112,5 +119,13 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseNoteService()
     {
         return $this->getBiz()->service('Note:CourseNoteService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

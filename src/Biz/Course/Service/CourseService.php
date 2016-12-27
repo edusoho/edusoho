@@ -47,6 +47,12 @@ interface CourseService
 
     public function hasCourseManagerRole($courseId = 0);
 
+    /**
+     * @param integer $userId
+     *
+     * @return array[]
+     */
+    public function findTeachingCoursesSetByUserId($userId);
 
     /**
      * @param $courseId
