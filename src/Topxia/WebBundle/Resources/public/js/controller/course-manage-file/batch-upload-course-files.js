@@ -168,7 +168,7 @@ define(function(require, exports, module) {
 
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
-            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg";
+            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg;";
             if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: videoInfoUrl,
