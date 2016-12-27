@@ -26,10 +26,10 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
-        $orderType  = JoinPointToolkit::load('order');
+        $orderTypes  = JoinPointToolkit::load('order');
         if (empty($targetType)
             || empty($targetId)
-            || !array_key_exists($targetType, $orderType)) {
+            || !array_key_exists($targetType, $orderTypes)) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 

@@ -11,6 +11,11 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends BaseController
 {
+    public function showAction($request, $id)
+    {
+        
+    }
+
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
     {
         $userIds = array();

@@ -1922,6 +1922,11 @@ testpaper_do_suspend:
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
 
+#course
+course_show:
+  path: /course/{id}
+  defaults: { _controller: AppBundle:Course/Course:show }
+
 #homework
 course_manage_homework:
   path: /course/{courseId}/manage/homework
