@@ -374,12 +374,15 @@
                 </a>
               </li>
               <li role="presentation" class="{% if nav|default('') == 'review' %}active{% endif %}">
-                <a href="{{ path('course_review',{id:course.id}) }}">评价({{ course.ratingNum }})</a>
+                <a href="{{ path('course_review',{id:course.id}) }}">
+                  评价
+                  <small class="text-muted">({{ course.ratingNum|default(0) }})</small>
+                </a>
               </li>
               <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
                 <a href="{{ path('course_notes', { id: course.id }) }}">
                   笔记
-                  <small class="text-muted">({{ course.noteNum }})</small>
+                  <small class="text-muted">({{ course.noteNum|default(0) }})</small>
                 </a>
               </li>
               {#

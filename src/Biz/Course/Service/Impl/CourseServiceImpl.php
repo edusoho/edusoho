@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Note\Service\CourseNoteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -210,6 +211,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'ratingNum') {
                 $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
+            } elseif ($field === 'noteNum'){
+                $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             }
         }
 
@@ -751,13 +754,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function waveNoteNum($courseId, $num)
-    {
-        return $this->getCourseDao()->wave(array($courseId), array(
-            'noteNum' => $num
-        ));
-    }
-
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -823,4 +819,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->biz->service('Course:ReviewService');
     }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getNoteService()
+    {
+        return $this->biz->service('Note:CourseNoteService');
+    }
+
 }
