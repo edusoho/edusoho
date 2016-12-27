@@ -23,20 +23,14 @@ services:
         tags:
            - { name: codeages_plugin.event.subscriber }
 
-    user_message_event_subscriber:
-        class: Biz\User\Event\MessageEventSubscriber
+    user_course_thread_event_subscriber:
+        class: Biz\User\Event\CourseThreadEventSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
 
-    user_order_event_subscriber:
-        class: Biz\User\Event\OrderEventSubscriber
-        arguments: ['@biz']
-        tags:
-            - { name: codeages_plugin.event.subscriber }
-
-    user_status_event_subscriber:
-        class: Biz\User\Event\StatusEventSubscriber
+    user_classroom_event_subscriber:
+        class: Biz\User\Event\ClassroomEventSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

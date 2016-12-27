@@ -152,7 +152,12 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
         $queryField = $request->query->get('q');
-        $users      = $this->getUserService()->searchUsers(array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $users      = $this->getUserService()->searchUsers(
+            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
+            array('createdTime' => 'DESC'),
+            0,
+            10
+        );
 
         $teachers = array();
 

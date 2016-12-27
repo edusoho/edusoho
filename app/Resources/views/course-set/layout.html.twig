@@ -464,13 +464,13 @@
       {% include 'course-set/recommend-classroom.html.twig' %}
 
       <!-- 授课教师 -->
-      {% include 'course-set/teachers.html.twig' %}
+      {{ render(controller('AppBundle:Course:teachersPart', {id: course.id})) }}
 
       <!-- 最新学员-->
-      {% include 'course-set/newest-students.html.twig' %}
+      {{ render(controller('AppBundle:Course:newestStudentsPart', {id: course.id})) }}
 
       <!-- 学员动态 -->
-      {% include 'course-set/student-activity.html.twig' %}
+      {% include 'course-set/student-activity.html.twig' with {course: course} %}
 
     </div>
   </div>

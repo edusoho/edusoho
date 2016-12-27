@@ -2,12 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseSetService;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
+
 use Biz\Note\Service\CourseNoteService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class CourseController extends CourseBaseController
 {
@@ -69,10 +68,10 @@ class CourseController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("course/courses-block-{$view}.html.twig", array(
-            'courses'      => $courses,
-            'users'        => $users,
-            'classroomIds' => $classroomIds,
-            'mode'         => $mode
+            'courses' => $courses,
+            'users'   => $users,
+            //'classroomIds' => $classroomIds,
+            'mode'    => $mode
         ));
     }
 
@@ -114,31 +113,33 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    protected function getUserService()
+    public function teachersPartAction(Request $request, $id)
     {
-        return $this->createService('User:UserService');
+        list(, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return $this->render('course/part/teachers.html.twig', array(
+            'teachers' => $teachers
+        ));
+    }
+
+    public function newestStudentsPartAction(Request $request, $id)
+    {
+        list(, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $userIds  = $this->getMemberService()->findMemberUserIdsByCourseId($course['id']);
+        $students = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('course/part/newest-students.html.twig', array(
+            'students' => $students
+        ));
     }
 
     // TODO old
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**
