@@ -32,7 +32,7 @@ interface TaskService
 
     public function findTasksFetchActivityByCourseId($courseId);
 
-    public function findUserTasksFetchActivityAndResultByCourseId($courseId);
+    public function findTasksFetchActivityAndResultByCourseId($courseId);
 
     public function startTask($taskId);
 
