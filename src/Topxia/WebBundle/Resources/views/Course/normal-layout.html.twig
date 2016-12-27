@@ -82,10 +82,5 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   } %}
-  {% if setting('consult.enabled', 0) %}
-    {% set consult = setting('consult') %}
-    {% if consult.supplier is not empty %}
-      {{ consult.supplier | raw }}
-    {% endif %}
-  {% endif %}
+  {% include 'TopxiaWebBundle:Common:consult-supplier.html.twig' %}
 {% endblock %}
