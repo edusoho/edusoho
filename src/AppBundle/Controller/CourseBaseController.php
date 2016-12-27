@@ -22,7 +22,7 @@ abstract class CourseBaseController extends BaseController
     protected function getCourseMember($previewAs, $course)
     {
         $user   = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
         return $this->previewAsMember($previewAs, $member, $course);
     }
 
@@ -115,5 +115,10 @@ abstract class CourseBaseController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

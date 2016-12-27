@@ -4,18 +4,23 @@
 
   <div data-role="choices"></div>
   <div id="ckeditor-config" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></div>
-  <div class="form-group">
+  <div class="question-options" id="question-options" dataSource ={[]}></div>
+  {#<div class="form-group">
     <div class="col-md-2 control-label"></div>
     <div class="col-md-8 controls">
        <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">{{'新增选项'|trans}}</button>
     </div>
-  </div>
-
+  </div>#}
+  <div id="choices-group"></div>
   {% if question.metas.choices|default(null) %}
-    <script type="text/plain" data-role="choices-data">{{ question.metas.choices|json_encode|raw}}</script>
-    <script type="text/plain" data-role="answers-data">{{ question.answer|json_encode|raw}}</script>
+    <script type="text/plain" data-role="choices-data">
+      {{ question.metas.choices|json_encode|raw}}
+    </script>
+    <script type="text/plain" data-role="answers-data">
+      {{ question.answer|json_encode|raw}}
+    </script>
   {% endif %}
-  <script type="text/x-handlebars-template" data-role="choice-template">
+  {#<script type="text/x-handlebars-template" data-role="choice-template">
     {% verbatim %}
       <div class="form-group" data-role="choice">
         <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">{% endverbatim %}{{'选项'|trans}} {% verbatim %}{{ code }}</label></div>
@@ -30,7 +35,7 @@
         </div>
       </div>
     {% endverbatim %}
-  </script>
+  </script>#}
 {% endblock %}
 {# <div id="item-upload-{{ id }}" class="btn btn-default btn-sm webuploader-container" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-picture"></i></div>
 <div id="item-audio-upload-{{ id }}" class="btn btn-sm btn-default item-audio-upload webuploader-container hide" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-volume-up"></i></div> #}

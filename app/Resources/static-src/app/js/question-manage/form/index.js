@@ -7,9 +7,9 @@ import Fill from '../type/question-fill';
 import Essay from '../type/question-essay';
 import Material from '../type/question-material';
 
+
 class QuestionCreator {
   constructor() {
-
   }
 
   static getCreator(type, $form) {

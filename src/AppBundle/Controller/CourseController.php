@@ -1,13 +1,12 @@
 <?php
 
 
-namespace AppBundle\Controller\Course;
+namespace AppBundle\Controller;
 
 
-use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class CourseController extends BaseController
 {
@@ -45,6 +44,13 @@ class CourseController extends BaseController
     }
 
 
+    public function taskListAction(Request $request, $courseId)
+    {
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+
+        var_dump($courseItems);
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -62,6 +68,14 @@ class CourseController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
 

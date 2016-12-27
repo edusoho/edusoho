@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
@@ -14,9 +15,11 @@ class CourseSetController extends BaseController
     public function showAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->getCourseSetAndCourse($request, $id);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
         return $this->render('course-set/overview.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'   => $courseSet,
+            'course'      => $course,
+            'courseItems' => $courseItems
         ));
     }
 
