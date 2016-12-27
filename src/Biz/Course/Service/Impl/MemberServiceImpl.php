@@ -367,7 +367,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findByUserIdAndJoinType($userId, $joinedType);
         return ArrayToolkit::column($courseIds, 'courseId');
     }
 
