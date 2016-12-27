@@ -20,8 +20,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $marks         = str_repeat('?,', count($courseIds) - 1).'?';
         $sql           = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
-        $courseMembers = $this->db()->fetchAll($sql, $courseIds);
-        return $courseMembers;
+        return $this->db()->fetchAll($sql, $courseIds);
     }
 
     public function getByCourseIdAndUserId($courseId, $userId)
@@ -30,7 +29,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
     }
 
-    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    public function findLearnedByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
         return $this->db()->fetchAll($sql, array($courseId, $userId));
