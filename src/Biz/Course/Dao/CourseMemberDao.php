@@ -77,11 +77,9 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function deleteByCourseIdAndRole($courseId, $role);
 
-    public function findCourseMembersByUserId($userId);
-
     public function deleteByCourseId($courseId);
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+    public function findByUserIdAndCourseIds($studentId, $courseIds);
 
     public function findByCourseId($courseId);
 

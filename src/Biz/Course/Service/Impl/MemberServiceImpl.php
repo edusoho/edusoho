@@ -127,10 +127,15 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $courseMembers = $this->getMemberDao()->findCourseMembersByUserId($currentUser["id"]);
-
-        $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $condition     = array(
+            'userId'              => $currentUser["id"],
+            'role'                => 'student',
+            'deadlineNotified'    => 0,
+            'deadlineGreaterThan' => 0
+        );
+        $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
+        $courseIds     = ArrayToolkit::column($courseMembers, "courseId");
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
@@ -627,13 +632,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
         if (empty($courseIds) || count($courseIds) == 0) {
             return array();
         }
 
-        $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+        $courseMembers = $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
         return $courseMembers;
     }
 
@@ -654,7 +659,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         return array();
     }
-
 
     protected function _prepareConditions($conditions)
     {

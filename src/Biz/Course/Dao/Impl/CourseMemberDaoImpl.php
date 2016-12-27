@@ -48,12 +48,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $joinedType));
     }
 
-    public function findCourseMembersByUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
-        return $this->db()->fetchAll($sql, array($userId));
-    }
-
     public function deleteByCourseIdAndRole($courseId, $role)
     {
         return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
@@ -64,14 +58,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->delete($this->table(), array(array('courseId' => $courseId)));
     }
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
-
-
 
     public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit)
     {
@@ -254,7 +246,8 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseId IN (:courseIds)',
                 'userId IN (:userIds)',
                 'learnedNum >= :learnedNumGreaterThan',
-                'learnedNum < :learnedNumLessThan'
+                'learnedNum < :learnedNumLessThan',
+                'deadline >= :deadlineGreaterThan'
             )
         );
     }
