@@ -1,15 +1,52 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
-
+use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Note\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
 
-
-class CourseController extends BaseController
+class CourseController extends CourseBaseController
 {
+    public function showAction($id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
+
+        return $this->render('course-set/overview.html.twig', array(
+            'courseSet'   => $courseSet,
+            'course'      => $course,
+            'courseItems' => $courseItems
+        ));
+    }
+
+    public function notesAction($id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
+        $users = ArrayToolkit::index($users, 'id');
+
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        $currentUser = $this->getCurrentUser();
+        $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
+        $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
+        return $this->render('course-set/note/notes.html.twig', array(
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'notes'       => $notes,
+            'users'       => $users,
+            'tasks'       => $tasks,
+            'likeNoteIds' => $likeNoteIds
+        ));
+    }
+
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
     {
         $userIds = array();
@@ -37,7 +74,6 @@ class CourseController extends BaseController
             'mode'         => $mode
         ));
     }
-
 
     public function taskListAction(Request $request, $courseId)
     {
@@ -73,5 +109,19 @@ class CourseController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
+    {
+        return $this->createService('Note:CourseNoteService');
+    }
 
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
 }

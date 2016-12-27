@@ -36,6 +36,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
     }
 
+    public function getFirstPublishedCourseByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getFirstPublishedByCourseSetId($courseSetId);
+    }
+
     public function createCourse($course)
     {
         if (!$this->hasCourseManagerRole()) {
@@ -365,7 +370,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
         return $result;
     }
-
 
     public function getUserRoleInCourse($courseId, $userId)
     {

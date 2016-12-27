@@ -6,23 +6,26 @@ use Biz\Course\Service\CourseSetService;
 
 abstract class CourseBaseController extends BaseController
 {
-    protected function getCourseSetAndCourse($courseSetId, $courseId = 0)
+    protected function tryGetCourseSetAndCourse($id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException('Course#{$id} Not Found');
+        }
 
-        if ($courseId > 0) {
-            $course = $this->getCourseService()->getCourse($courseId);
-        } else {
-            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if (empty($courseSet)) {
+            throw $this->createNotFoundException("CourseSet#{$course['courseSetId']} Not Found");
         }
 
         return array($courseSet, $course);
     }
 
-    protected function getCourseMember($previewAs, $course)
+    protected function getCourseMember($request, $course)
     {
-        $user   = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $previewAs = $request->query->get('previewAs');
+        $user      = $this->getCurrentUser();
+        $member    = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
         return $this->previewAsMember($previewAs, $member, $course);
     }
 
@@ -35,7 +38,7 @@ abstract class CourseBaseController extends BaseController
             throw $this->createNotFoundException('Course Not Found');
         }
 
-        $member = $this->getCourseMember($request->query->get('previewAs'), $course);
+        $member = $this->getCourseMember($request, $course);
 
         return array($courseSet, $course, $member);
     }
@@ -115,5 +118,10 @@ abstract class CourseBaseController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

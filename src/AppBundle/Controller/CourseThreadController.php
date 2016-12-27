@@ -15,10 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseThreadController extends CourseBaseController
 {
-    public function indexAction(Request $request, $courseSetId)
+    public function indexAction(Request $request, $id)
     {
-        $courseId                 = $request->query->get('courseId', 0);
-        list($courseSet, $course) = $this->getCourseSetAndCourse($courseSetId, $courseId);
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
 
         $filters    = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
@@ -62,7 +61,7 @@ class CourseThreadController extends CourseBaseController
         ));
     }
 
-    public function showAction(Request $request, $courseSetId, $courseId, $threadId)
+    public function showAction(Request $request, $courseId, $threadId)
     {
         list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
 
@@ -185,9 +184,8 @@ class CourseThreadController extends CourseBaseController
                     $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                     return $this->redirect($this->generateUrl('course_thread_show', array(
-                        'courseSetId' => $thread['courseSetId'],
-                        'courseId'    => $thread['courseId'],
-                        'threadId'    => $thread['id']
+                        'courseId' => $thread['courseId'],
+                        'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
                     var_dump($e->getMessage());exit;
@@ -246,7 +244,7 @@ class CourseThreadController extends CourseBaseController
                     $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                     if ($user->isAdmin()) {
-                        $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $thread['id']), true);
+                        $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
                         $message   = array(
                             'courseId'   => $courseId,
                             'id'         => $thread['id'],
@@ -259,9 +257,8 @@ class CourseThreadController extends CourseBaseController
                     }
 
                     return $this->redirect($this->generateUrl('course_thread_show', array(
-                        'courseSetId' => $thread['courseSetId'],
-                        'courseId'    => $thread['courseId'],
-                        'threadId'    => $thread['id']
+                        'courseId' => $thread['courseId'],
+                        'threadId' => $thread['id']
                     )));
                 }
             } catch (\Exception $e) {
@@ -296,7 +293,7 @@ class CourseThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
             $message   = array(
                 'courseId'   => $courseId,
                 'id'         => $threadId,
@@ -366,7 +363,7 @@ class CourseThreadController extends CourseBaseController
                 'threadType' => $thread['type'],
                 'type'       => 'elite'
             );
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
             $this->getNotificationService()->notify($thread['userId'], 'course-thread', $message);
         }
 
@@ -387,7 +384,7 @@ class CourseThreadController extends CourseBaseController
                 'threadType' => $thread['type'],
                 'type'       => 'unelite'
             );
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
             $this->getNotificationService()->notify($thread['userId'], 'course-thread', $message);
         }
 
@@ -428,7 +425,7 @@ class CourseThreadController extends CourseBaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $threadId), true);
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
                 $threadUrl .= "#post-".$post['id'];
 
                 if ($thread['userId'] != $currentUser->id) {
@@ -565,9 +562,8 @@ class CourseThreadController extends CourseBaseController
                 }
 
                 return $this->redirect($this->generateUrl('course_thread_show', array(
-                    'courseSetId' => $thread['courseSetId'],
-                    'courseId'    => $post['courseId'],
-                    'threadId'    => $post['threadId']
+                    'courseId' => $post['courseId'],
+                    'threadId' => $post['threadId']
                 )));
             }
         }
@@ -589,7 +585,7 @@ class CourseThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseSetId' => $thread['courseSetId'], 'courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('threadId' => $threadId), true);
 
             $message = array(
                 'userId'     => $user['id'],
