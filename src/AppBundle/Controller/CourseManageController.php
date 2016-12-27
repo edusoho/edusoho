@@ -101,6 +101,10 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if(empty($data['enableBuyExpiryTime'])) {
+                unset($data['buyExpiryTime']);
+            }
+            
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));

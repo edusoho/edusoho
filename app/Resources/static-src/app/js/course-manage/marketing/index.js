@@ -54,11 +54,19 @@ class Marketing {
 
 		$('input[name="enableBuyExpiryTime"]').on('change', function(event){
 			if($('input[name="enableBuyExpiryTime"]:checked').val() == 0){
-				$('.js-is-free').removeClass('hidden');
+				$('#buyExpiryTime').addClass('hidden');
 			}else{
-				$('.js-is-free').addClass('hidden');
+				$('#buyExpiryTime').removeClass('hidden');
 			}
         });
+
+
+		$('input[name="buyExpiryTime"]').datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: "zh",
+			minView: 2, //month
+			autoclose: true
+		});
 
         $('input[name="tryLookable"]').on('change', function(event){
         	if($('input[name="tryLookable"]:checked').val() == 1){
