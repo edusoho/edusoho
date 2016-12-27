@@ -44,7 +44,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        //if the task is first return true;
+
         $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
         if (empty($preTask)) {
             return true;
@@ -72,9 +72,9 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return 'task-manage/list-item-lock-mode.html.twig';
     }
 
-    public function findCourseItems($courseId)
+    public function prepareCourseItems($courseId, $tasks)
     {
-        return $this->baseFindCourseItems($courseId);
+        return $this->baseFindCourseItems($courseId, $tasks);
     }
 
     public function sortCourseItems($courseId, array $itemIds)
