@@ -29,7 +29,19 @@ interface CourseNoteService
      */
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId);
 
+    /**
+     * @param integer $courseSetId
+     *
+     * @return array[]
+     */
     public function findPublicNotesByCourseSetId($courseSetId);
+
+    /**
+     * @param integer $courseId
+     *
+     * @return array[]
+     */
+    public function findPublicNotesByCourseId($courseId);
 
     /**
      * return notes

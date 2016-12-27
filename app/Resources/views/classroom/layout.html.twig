@@ -3,10 +3,10 @@
 {% block title %}{{ classroom.title }} - {{ parent() }}{% endblock %}
 {% block keywords %} {{classroom.title}} {% endblock %}
 {% do load_script('classroombundle/controller/classroom/unjoin') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
 
 {% block top_content %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 
 {{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
 

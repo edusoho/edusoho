@@ -1,12 +1,12 @@
 <?php
 namespace Biz\Announcement\Service\Impl;
 
+use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Course\Service\CourseService;
 use Biz\Announcement\Dao\AnnouncementDao;
 use Biz\Announcement\Service\AnnouncementService;
-use Biz\BaseService;
-use Biz\Course\Service\CourseService;
-use Biz\System\Service\LogService;
-use Topxia\Common\ArrayToolkit;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {

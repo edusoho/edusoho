@@ -105,7 +105,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
-
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
@@ -143,7 +142,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-
     public function updateMembers($conditions, $updateFields)
     {
         $builder = $this->_createQueryBuilder($conditions)
@@ -157,7 +155,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder->execute();
         return true;
     }
-
 
     protected function _buildQueryBuilder($conditions, $join)
     {
@@ -181,7 +178,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->andWhere('c.parentId = parentId');
         return $builder;
     }
-
 
     public function declares()
     {

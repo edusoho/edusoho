@@ -1,11 +1,8 @@
 {% extends 'layout.html.twig' %}
-
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
-
 {% block top_content %}
 
 {% endblock %}
-
 {% block content %}
 
   {{ render(controller('AppBundle:Course:header',{id: course.id})) }}
@@ -107,29 +104,25 @@
         </section>#}
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
-
         {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
         <!-- 课程特色: 加入前显示，加入后不显示 -->
-        {% include 'course-set/characteristic.html.twig' %}
+        {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
 
-        <!-- 其他计划: 加入前不显示，加入后不显示-->
-        {% include 'course-set/other-course.html.twig' %}
+        <!-- 其他计划: 加入前不显示，加入后显示-->
+        {{ render(controller('AppBundle:Course:otherCoursePart', {id: course.id})) }}
 
         <!-- 推荐班级 -->
         {% include 'course-set/recommend-classroom.html.twig' %}
-
         <!-- 授课教师 -->
-        {% include 'course-set/teachers.html.twig' %}
+        {{ render(controller('AppBundle:Course:teachersPart', {id: course.id})) }}
 
         <!-- 最新学员-->
-        {% include 'course-set/newest-students.html.twig' %}
+        {{ render(controller('AppBundle:Course:newestStudentsPart', {id: course.id})) }}
 
         <!-- 学员动态 -->
-        {% include 'course-set/student-activity.html.twig' %}
-
+        {% include 'course-set/student-activity.html.twig' with {course: course} %}
       </div>
     </div>
   </div>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} 
 {% endblock %}
-

@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
+
 use Biz\Note\Service\CourseNoteService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class CourseController extends CourseBaseController
 {
@@ -37,7 +37,7 @@ class CourseController extends CourseBaseController
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
 
-        $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -79,10 +79,10 @@ class CourseController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("course/courses-block-{$view}.html.twig", array(
-            'courses'      => $courses,
-            'users'        => $users,
-            'classroomIds' => $classroomIds,
-            'mode'         => $mode
+            'courses' => $courses,
+            'users'   => $users,
+            //'classroomIds' => $classroomIds,
+            'mode'    => $mode
         ));
     }
 
@@ -98,31 +98,64 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    protected function getUserService()
+    public function characteristicPartAction(Request $request, $id)
     {
-        return $this->createService('User:UserService');
+        $course = $this->getCourseService()->getCourse($id);
+
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+
+        $characteristicData = array();
+
+        foreach ($tasks as $task) {
+            $type = strtolower($task['activity']['mediaType']);
+            isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
+        }
+
+        return $this->render('course/part/characteristic.html.twig', array(
+            'course'             => $course,
+            'characteristicData' => $characteristicData
+        ));
+    }
+
+    public function otherCoursePartAction(Request $request, $id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $otherCourse = $course;// $this->getCourseService()->getOtherCourses($course['id']);
+
+        return $this->render('course/part/other-course.html.twig', array(
+            'otherCourse' => $otherCourse,
+            'courseSet'   => $courseSet
+        ));
+    }
+
+    public function teachersPartAction(Request $request, $id)
+    {
+        list(, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return $this->render('course/part/teachers.html.twig', array(
+            'teachers' => $teachers
+        ));
+    }
+
+    public function newestStudentsPartAction(Request $request, $id)
+    {
+        list(, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $userIds  = $this->getMemberService()->findMemberUserIdsByCourseId($course['id']);
+        $students = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('course/part/newest-students.html.twig', array(
+            'students' => $students
+        ));
     }
 
     // TODO old
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**
