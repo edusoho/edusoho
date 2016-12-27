@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,13 +52,15 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $questionTypes = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseId' => $course['courseSetId']));
+        $questionNums = ArrayToolkit::index($questionNums, 'type');
 
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
 
         return $this->render('activity/exercise/modal.html.twig', array(
-            'courseId'      => $courseId,
-            'questionTypes' => $questionTypes,
-            'courseSetId'   => $course['courseSetId']
+            'courseId'     => $courseId,
+            'questionNums' => $questionNums,
+            'courseSetId'  => $course['courseSetId']
         ));
     }
 
@@ -94,6 +97,11 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getTestpaperActivityService()
