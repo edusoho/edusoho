@@ -49,16 +49,15 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $joinedType));
     }
 
-
-    public function deleteMemberByCourseIdAndRole($courseId, $role)
-    {
-        return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
-    }
-
     public function findCourseMembersByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
         return $this->db()->fetchAll($sql, array($userId));
+    }
+
+    public function deleteMemberByCourseIdAndRole($courseId, $role)
+    {
+        return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
     }
 
     public function deleteMembersByCourseId($courseId)
