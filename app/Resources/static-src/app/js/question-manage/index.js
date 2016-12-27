@@ -1,6 +1,7 @@
+// import QuestionPicker from '../../../common/component/question-picker';
 import BatchSelect from '../../common/widget/batch-select';
 import DeleteAction from '../../common/widget/delete-action';
 
-let $container = $('#quiz-table-container');
-new BatchSelect($container);
-new DeleteAction($container);
+// new QuestionPicker($('#quiz-table-container'), $('#quiz-table'));
+new BatchSelect($('#quiz-table-container'));
+new DeleteAction($('#quiz-table-container'));
