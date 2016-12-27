@@ -48,15 +48,15 @@
         <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
         <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name }}</span>
         <span class="mlm">{{'题目数量'|trans}}:</span>
-        <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{ type }}]" data-role="count"  value="0" />/
+        <input type="text" class="form-control width-input width-input-mini item-number" name="counts[{{ type }}]" data-role="count"  value="0" />/
         <span class="text-info question-num" role="questionNum" type="{{ type }}">{{ questionNums[type].questionNum|default(0) }}</span>
 
         <span class="mlm">{{'题目分值'|trans}}:</span>
-        <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{ type }}]"  value="2" data-role="score" />
+        <input type="text" class="form-control width-input width-input-mini item-score" name="scores[{{ type }}]"  value="2" data-role="score" />
 
         {% if config.hasMissScore|default(null) %}
           <span class="mlm">{{'漏选分值'|trans}}:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-miss-score" name="missScores[{{ type }}]"  value="0" data-role="missScore" />
+          <input type="text" class="form-control width-input width-input-mini item-miss-score" name="missScores[{{ type }}]"  value="0" data-role="missScore" />
         {% endif %}
       </li>
 
