@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -121,6 +122,9 @@ abstract class CourseBaseController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');

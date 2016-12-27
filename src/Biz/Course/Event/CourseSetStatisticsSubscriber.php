@@ -21,7 +21,7 @@ class CourseSetStatisticsSubscriber extends EventSubscriber implements EventSubs
     {
         $review = $event->getSubject();
 
-        $this->getCourseSetService()->updateCourseStatistics($review['courseSetId'], array(
+        $this->getCourseSetService()->updateCourseSetStatistics($review['courseSetId'], array(
             'ratingNum'
         ));
     }

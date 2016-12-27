@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -200,11 +201,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updateFields = array();
         foreach ($fields as $field) {
-            if ($field === 'studentCount') {
-                $updateFields['studentCount'] = $this->countStudentsByCourseId($id);
-            } elseif ($field === 'taskCount') {
-                $updateFields['taskCount'] = $this->getTaskService()->countTasksByCourseId($id);
-            } elseif ($fields === 'ratingNum') {
+            if ($field === 'studentNum') {
+                $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
+            } elseif ($field === 'taskNum') {
+                $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
+            } elseif ($field === 'threadNum') {
+                $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
+            } elseif ($field === 'ratingNum') {
                 $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
             }
@@ -324,6 +327,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->count(array(
             'courseId' => $courseId,
             'role'     => 'student'
+        ));
+    }
+
+    public function countThreadsByCourseId($courseId)
+    {
+        return $this->getThreadDao()->count(array(
+            'courseId' => $courseId
         ));
     }
 
@@ -783,6 +793,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
+    }
+
+    /**
+     * @return ThreadDao
+     */
+    protected function getThreadDao()
+    {
+        return $this->createDao('Course:ThreadDao');
     }
 
     /**

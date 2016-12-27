@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface StatusDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface StatusDao extends GeneralDaoInterface
 {
     public function deleteByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId);
 
