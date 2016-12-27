@@ -1,19 +1,24 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseLessonReplayDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
+/**
+ * Class CourseServiceImpl
+ * @package Topxia\Service\Course\Impl
+ * 所有的api涉及到memberdao的需要重构
+ */
 class CourseServiceImpl extends BaseService implements CourseService
 {
 
@@ -234,7 +239,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO searchCoursesCount
     public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -253,6 +258,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO searchCourse
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
+        //$members= $this->getMemberDao()->search(array())
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -263,12 +269,33 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {
-        return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'status'    => 'published'
+        );
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
     {
-        return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'parentId'  => 0,
+            'status'    => 'published'
+        );
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLeaningCourseCount($userId, $filters = array())
@@ -276,7 +303,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (isset($filters["type"])) {
             return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 0);
         }
-
+        //TODO removed
         return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
     }
 
@@ -2408,6 +2435,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Taxonomy:TagOwnerDao');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
