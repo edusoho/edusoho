@@ -4,7 +4,6 @@
   margin-bottom: 0;
   .task-item {
     position: relative;
-    padding: 12px 0 12px 30px;
     line-height: 1;
     background-color: transparent;
     &.task-content {
@@ -14,7 +13,7 @@
     }
     .title {
       display: block;
-      padding-right: 40px;
+      padding: 12px 40px 12px 30px;
     }
     .left-menu {
       position: absolute;
@@ -26,50 +25,42 @@
       top:14px;
       right: 0;
     }
-  }
-}
-
-.task-list.task-list-md {
-  .task-item {
-    padding: 18px 0 18px 40px;
-    padding-left: 40px;
-    margin-bottom: 10px;
-  }
-  .left-menu {
-    left: 15px;
-    top: 18px;
-  }
-  .right-menu {
-    right: 10px;
-    top: 18px;
-  }
-  .btn-learn {
-    margin-top: -8px;
-  }
-}
-
-.task-list.task-list-hover {
-  .task-item.task-content {
-    &:hover {
-      background-color: #f3fee8;
+    .btn-learn {
+      margin-top: -8px;
     }
   }
-}
-
-.task-list.task-list-gray {
-  .task-item.task-content {
-    background-color: #f8f8f8;
+  &.task-list-md {
+    .task-item {
+      margin-bottom: 10px;
+    }
+    .title {
+      padding: 18px 80px 18px 40px;
+    }
+    .left-menu {
+      left: 15px;
+      top: 18px;
+    }
+    .right-menu {
+      right: 10px;
+      top: 18px;
+    }
   }
-}
-
-.task-list.task-show {
-  .task-item {
-    &:hover,
-    &.active {
-      &.task-content {
-        .title,
-        .left-menu{
-          color: @brand-primary
+  &.task-list-hover {
+    .task-item.task-content {
+      &:hover {
+        background-color: #f3fee8;
+      }
+    }
+  }
+  &.task-show {
+    .task-item {
+      &:hover,
+      &.active {
+        &.task-content {
+          .title,
+          .left-menu{
+            color: @brand-primary
+          }
         }
       }
     }
