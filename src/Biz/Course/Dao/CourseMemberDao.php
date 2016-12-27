@@ -59,7 +59,7 @@ interface CourseMemberDao extends GeneralDaoInterface
      * @return mixed
      * @before findMembersByUserIdAndRole
      */
-    public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
+    public function findByUserIdAndRole($userId, $role);
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
@@ -79,9 +79,9 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function deleteByCourseId($courseId);
 
-    public function findByUserIdAndCourseIds($studentId, $courseIds);
+    public function findByUserIdAndCourseIds($userId, $courseIds);
 
     public function findByCourseId($courseId);
 
-    public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true);
+    public function findByUserId($userId);
 }

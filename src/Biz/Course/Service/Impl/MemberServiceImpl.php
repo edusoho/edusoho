@@ -331,8 +331,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     public function cancelTeacherInAllCourses($userId)
     {
-        $count   = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
-        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, $count, false);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher');
 
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
