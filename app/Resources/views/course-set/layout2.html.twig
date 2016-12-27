@@ -1,0 +1,480 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
+
+{% block top_content %}
+{% endblock %}
+
+{% block content %}
+
+<!-- 1、加入前 -->
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="/">首页</a>
+    </li>
+    <li class="active">{{ courseSet.title }}</li>
+  </ol>
+  <div class="es-section course-detail-section clearfix">
+    <div class="course-detail-top clearfix">
+      <span class="tags">
+        <span class="tag-serialing"></span>
+      </span>
+
+      <!-- 课程标题 -->
+      <span class="course-detail-heading">{{ courseSet.title }}</span>
+      <span class="es-qrcode top" data-url="">
+        <i class="es-icon es-icon-qrcode"></i>
+        <span class="qrcode-popover">
+          <img src="" alt="">扫二维码继续学习二维码时效为半小时
+        </span>
+      </span>
+
+      <!-- 课程副标题 -->
+      <div>{{ courseSet.subtitle }}</div>
+      <ul class="course-operation clearfix ">
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs  " href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': courseSet.id}) }}" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="course-detail-bottom">
+      <div class="course-detail-img">
+        <a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover"> <i class="es-icon es-icon-playcircleoutline"></i>
+        </a>
+        <img class="img-responsive" src="/assets/img-course-set/default/course-set.png" alt="sdfdsf ">
+        <div class="course-detail-remask">
+          <i class="es-icon es-icon-people"></i>122222 人加入学习
+          <div class="score pull-right">
+            <span class="es-icon es-icon-star"></span>
+            <span class="es-icon es-icon-star"></span>
+            <span class="es-icon es-icon-star"></span>
+            <span class="es-icon es-icon-starhalf"></span>
+            <span class="es-icon es-icon-starhalf"></span>
+            4.5
+          </div>
+        </div>
+      </div>
+      <div class="course-detail-info">
+        <div class="course-detail-item">
+          <span class="course-detail-title">价格</span>
+          <!-- 折扣价 -->
+          <span class="discount-price">¥<span class="price">75</span></span>
+          <!-- 原价 -->
+          <span class="original-price">¥<span class="price">118</span></span>
+          <span class="tag-discount"><span class="discount-font">8折</span></span>
+        </div>
+        <div class="course-detail-item">
+          <span class="course-detail-title">活动</span>
+          <span class="color-warning ">
+          <span class="text-blod mrl">双十二活动</span>
+          <i class="es-icon es-icon-alarmon mrm"></i>
+          22 时 53 分 44.12 秒</span>    
+        </div>
+        <div class="course-detail-item course-detail-gray">
+          <div class="course-detail-nav">
+            <span class="course-detail-title">教学计划</span>
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent">
+              <li>
+                <a href="javascript:;">默认教学计划</a>
+              </li>
+              <li>
+                <a href="javascript:;">9月提高班</a>
+              </li>
+              <li>
+                <a href="javascript:;">6月提高班(已加入)</a>
+              </li>              
+            </ul>
+          </div>
+          <div class="course-detail-item">
+            <span class="course-detail-title">承诺服务</span>
+            <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+            <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+            <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+            <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+            <span class="lump-sm color-lump course-detail-font" data-placement="top" data-toggle="popover" title="title" data-content="content. ">疑</span>
+            <span class="lump-sm color-lump course-detail-font" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
+          </div>
+          <div class="course-detail-item">
+            <span class="course-detail-title">学习方式</span>
+            <span class="gray-dark mrl">随到随学</span>
+            <span class="gray-dark">180天</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mrs"></i>会员</a>
+          <a class="btn btn-primary btn-lg">购买课程</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 2、加入后：自由式学习 -->
+{#<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="/">首页</a></li>
+    <li class="active">sdfdsf </li>
+  </ol>
+  <div class="es-section course-detail-section clearfix">
+    <div class="course-detail-top">
+      <div class="course-detail-heading">数据结构PHP开发入门课程  暑期班A</div>
+      <ul class="course-operation clearfix ">
+        <li class="mrl"> <i class="es-icon es-icon-people"></i>
+          2035 人
+        </li>
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs  " href="javascript:;">
+            <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <section class="course-freelearn-section">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="course-progress">
+            <div class="cricle-progress" id="freeprogress" data-percent="44.444444444444">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-7">
+          <ul class="course-learn-list">
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>
+                已完成
+              </p>
+              <span class="color-primary">09</span>
+              ／
+              <span class="mrl">24</span>
+              课时
+            </li>
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-today mrm"></i>
+                学习有效期
+              </p>
+              2016-0-28
+            </li>
+            <li>
+              <p class="mbs color-gray">
+                <i class="es-icon es-icon-book"></i>
+                下一课
+              </p>
+              PS移动工具
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-2 text-center">
+          <a class="btn btn-primary btn-lg">继续学习</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>#}
+<!-- 3、加入后：任务式学习 -->
+{#<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="/">首页</a>
+    </li>
+    <li class="active">sdfdsf</li>
+  </ol>
+  <div class="es-section course-detail-section clearfix">
+    <div class="course-detail-top">
+      <span class="course-detail-heading">数据结构PHP开发入门课程  暑期班A
+      </span>
+       <span class="">
+          <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+          <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+          <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+          <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+      </span>
+      <ul class="course-operation clearfix ">
+        <li class="mrl">
+          <i class="es-icon es-icon-people"></i>
+          2035 人
+        </li>
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs  " href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <section class="row course-orderlearn-section">
+      <div class="col-sm-5">
+        <span class="progress-img">
+          <div class="course-progress">
+            <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
+            </div>
+            <div class="cricle-progress" id="orderprogress" data-percent="44.444444444444">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </span>
+        <ul class="progress-info mbl">
+          <li>
+            <i class="es-icon es-icon-dot color-primary"></i>
+            已完成
+            <span class="color-primary">3</span>
+            ／45个任务
+          </li>
+          <li>
+            <i class="es-icon es-icon-dot color-warning"></i>
+            计划完成5个任务，落后计划5%</li>
+          <li class="learn-time time-margin">学习有效期</li>
+          <li class="time-margin">2015-08-09 ~ 2025-23-23</li>
+        </ul>
+      </div>
+      <div class="col-sm-7 ">
+        <ul class="task-list task-list-detail">
+          <li class="task-item  mouse-control">
+            <i class="es-icon es-icon-undone-check left-menu"></i>
+            <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
+            <span class="right-menu mouse-leave">
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
+            <span class="right-menu mouse-enter">
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
+          </li>
+          <li class="task-item  mouse-control">
+            <i class="es-icon es-icon-undone-check left-menu"></i>
+            <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
+            <span class="right-menu mouse-leave">
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
+            <span class="right-menu mouse-enter">
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
+          </li>
+          <li class="task-item  mouse-control">
+            <i class="es-icon es-icon-undone-check left-menu"></i>
+            <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
+            <span class="right-menu mouse-leave">
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
+            <span class="right-menu mouse-enter">
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
+          </li>
+        </ul>  
+      </div>
+    </section>
+  </div>
+</div>#}
+
+<!-- 中部 -->
+<div class="container">
+  <div class="course-detail row">
+    <div class="col-lg-9 col-md-8 course-detail-main">
+      <div class="alert alert-warning" role="alert">
+        <a href="" class="alert-link">
+          课程公告：下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。 <i class="es-icon es-icon-close01 alert-close"></i>
+        </a>
+      </div>
+      <!-- 课程详情页中部内容 -->
+      <section class="es-section">
+        <div class="nav-btn-tab">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
+              <a href="{{ path('course_set_show', {'id': courseSet.id}) }}">课程概览</a>
+            </li>
+
+            <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
+              <a href="/">课程目录</a>
+            </li>
+            <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
+              <a href="{{path('course_set_threads', {courseSetId: courseSet.id})}}">话题</a>
+            </li>
+            <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
+              <a href="">评价</a>
+            </li>
+            <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
+              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">
+                笔记
+                <small class="text-muted">({{ course.noteNum }})</small>
+              </a>
+            </li>
+            {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
+          </ul>
+        </div>
+        <div class="course-detail-content">
+          {% block detail_content %}
+          {% endblock %}
+        </div>
+      </section>
+      <!-- 课程列表 -->
+      {#<section class="es-section">
+        <div class="nav-btn-tab">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation">
+              <a href="">课程概览</a>
+            </li>
+            <li class="active" role="presentation">
+              <a href="">课程目录</a>
+            </li>
+            <li role="presentation">
+              <a href="">评论</a>
+            </li>
+            <li role="presentation">
+              <a href="">笔记</a>
+            </li>
+            <li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>
+          </ul>
+        </div>
+        <div class="course-detail-content">
+          <ul class="task-list task-list-detail">
+            <li class="task-item  mouse-control"> <i class="es-icon es-icon-undone-check left-menu"></i>
+              <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
+              <span class="right-menu mouse-leave">
+                01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
+              </span>
+              <span class="right-menu mouse-enter">
+                <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+              </span>
+            </li>
+            <li class="task-item  mouse-control">
+              <i class="es-icon es-icon-undone-check left-menu"></i>
+              <a class="text-overflow title" href="/course/29/task/131/show?preview=1"><span class="label label-warning">免费</span>预习-音频</a>
+              <span class="right-menu mouse-leave">
+                01:00:00
+                <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
+              </span>
+              <span class="right-menu mouse-enter">
+                <a class="btn btn-warning btn-sm btn-learn">免费试听</a>
+              </span>
+            </li>
+            <li class="task-item  mouse-control">
+              <i class="es-icon es-icon-undone-check left-menu"></i>
+              <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
+              <span class="right-menu mouse-leave">
+                01:00:00
+                <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
+              </span>
+              <span class="right-menu mouse-enter">
+                <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </section>#}
+    </div>
+    <div class="col-lg-3 col-md-4 course-sidebar">
+
+      {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
+      <!-- 课程特色: 加入前显示，加入后不显示 -->
+      {% include 'course-set/characteristic.html.twig' %}
+
+      <!-- 其他计划: 加入前不显示，加入后不显示-->
+      {% include 'course-set/other-course.html.twig' %}
+
+      <!-- 推荐班级 -->
+      {% include 'course-set/recommend-classroom.html.twig' %}
+
+      <!-- 授课教师 -->
+      {% include 'course-set/teachers.html.twig' %}
+
+      <!-- 最新学员-->
+      {% include 'course-set/newest-students.html.twig' %}
+
+      <!-- 学员动态 -->
+      {% include 'course-set/student-activity.html.twig' %}
+
+    </div>
+  </div>
+</div>
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} 
+{% endblock %}
+
