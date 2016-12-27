@@ -25,24 +25,33 @@ class Picker{
   }
 
   _initSortList() {
-    // this.$form.find('table').sortable({
-    //     containerPath: '> tr',
-    //     itemSelector: 'tr.is-question',
-    //     placeholder: '<tr class="placeholder"/>',
-    //     exclude: '.notMoveHandle',
-    //     onDrop: function (item, container, _super) {
-    //         _super(item, container);
-    //         if (item.hasClass('have-sub-questions')) {
-    //             let $tbody = item.parents('tbody');
-    //             $tbody.find('tr.is-question').each(function() {
-    //                 let $tr = $(this);
-    //                 $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
-    //             });
-    //         }
-
-    //         self.refreshSeqs();
-    //     }
+    //$('table').sortable({
+    //   containerSelector: 'table',
+    //   itemPath: '> tbody',
+    //   itemSelector: 'tr',
+    //   placeholder: '<tr class="placeholder"/>'
     // });
+    this.$form.find('table').sortable({
+        containerSelector: 'table',
+        itemPath: '> tbody',
+        itemSelector: 'tr',
+        placeholder: '<tr class="placeholder"/>',
+        onDrop: function (item, container, _super) {
+            console.log(item);
+            console.log(container);
+            _super(item, container);
+
+            if (item.hasClass('have-sub-questions')) {
+                let $tbody = item.parents('tbody');
+                $tbody.find('tr.is-question').each(function() {
+                    let $tr = $(this);
+                    $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+                });
+            }
+
+            // self.refreshSeqs();
+        }
+    });
   }
 
   _showPickerModal(event) {
