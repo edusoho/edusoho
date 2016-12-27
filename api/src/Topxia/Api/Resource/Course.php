@@ -28,6 +28,7 @@ class Course extends BaseResource
         $res['expiryDay'] = '0';
 
         $res['tags'] = TagUtil::buildTags('course', $res['id']);
+        $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
 
         return $res;
     }
