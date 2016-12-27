@@ -1,0 +1,42 @@
+{% set typeDataMap = {
+'live': {
+'name': '直播',
+'icon': 'es-icon-videocam'
+},
+'homework': {
+'name': '作业',
+'icon': 'es-icon-mylibrarybooks'
+},
+'testpaper': {
+'name': '考试',
+'icon': 'es-icon-exam'
+},
+'download': {
+'name': '资料',
+'icon': 'es-icon-download'
+},
+'discuss': {
+'name': '讨论',
+'icon': 'es-icon-forum',
+} %}
+
+{% if not characteristicData is empty and characteristicData|keys in typeDataMap|keys %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">课程特色</h3>、
+    </div>
+
+    {% for type, num in characteristicData if typeDataMap[type] is defined %}
+      <div class="panel-body row panel-bottom">
+        <div class="col-md-6">
+          <div class="media-left">
+            <button class="media-icon bg-primary"></button>
+            <i class="es-icon {{ typeDataMap[type].icon }} media-logo"></i>
+          </div>
+          <div class="media-body">含{{ typeDataMap[type].name }}({{ num }})</div>
+          </div>
+      </div>
+    {% endfor %}
+
+  </div>
+{% endif %}

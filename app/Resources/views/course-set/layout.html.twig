@@ -455,7 +455,7 @@
 
       {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
       <!-- 课程特色: 加入前显示，加入后不显示 -->
-      {% include 'course-set/characteristic.html.twig' %}
+      {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
 
       <!-- 其他计划: 加入前不显示，加入后不显示-->
       {% include 'course-set/other-course.html.twig' %}

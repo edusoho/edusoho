@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -46,6 +47,25 @@ class CourseController extends BaseController
         var_dump($courseItems);
     }
 
+    public function characteristicPartAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        $tasks  = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+
+        $characteristicData = array();
+
+        foreach ($tasks as $task) {
+            $type = strtolower($task['activity']['mediaType']);
+            isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
+        }
+
+        return $this->render('course/part/characteristic.html.twig', array(
+            'course'             => $course,
+            'characteristicData' => $characteristicData
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -73,5 +93,11 @@ class CourseController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
-
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
 }
