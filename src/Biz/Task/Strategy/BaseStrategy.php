@@ -79,10 +79,9 @@ class BaseStrategy
         return $this->getTaskDao()->update($id, $fields);
     }
 
-    public function baseFindCourseItems($courseId)
+    public function baseFindCourseItems($courseId, $tasks)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;

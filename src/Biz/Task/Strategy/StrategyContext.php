@@ -90,9 +90,9 @@ class StrategyContext
     }
 
     //课程的api 策略
-    public function findCourseItems($courseId)
+    public function prepareCourseItems($courseId, $tasks)
     {
-        return $this->strategy->findCourseItems($courseId);
+        return $this->strategy->prepareCourseItems($courseId, $tasks);
     }
 
     public function sortCourseItems($courseId, array $itemIds)
