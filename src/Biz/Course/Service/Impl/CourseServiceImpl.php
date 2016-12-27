@@ -207,6 +207,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
+            } elseif ($field === 'ratingNum') {
+                $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
+                $updateFields = array_merge($updateFields, $ratingFields);
             }
         }
 
@@ -814,5 +817,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCategoryService()
     {
         return $this->biz->service('Taxonomy:CategoryService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->biz->service('Course:ReviewService');
     }
 }
