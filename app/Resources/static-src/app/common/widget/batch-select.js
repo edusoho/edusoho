@@ -2,15 +2,18 @@ class BatchSelect {
   constructor($element) {
     this.$element = $element;
     this.initEvent();
+    console.log('BatchSelect');
   }
 
   initEvent() {
+    console.log(this.$element.find('[data-role="batch-select"]'));
     this.$element.on('click','[data-role="batch-select"]', event=>this._batch2Item(event));
     this.$element.on('click','[data-role="batch-item"]', event=>this._item2Batch(event));
   }
 
   _batch2Item(event) {
     let checked = $(event.currentTarget).prop('checked');
+    console.log(event);
     this.$element.find('[data-role="batch-select"]').prop('checked',checked);
     this.$element.find('[data-role="batch-item"]').prop('checked',checked);
   }

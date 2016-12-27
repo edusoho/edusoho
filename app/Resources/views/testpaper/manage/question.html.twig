@@ -42,7 +42,7 @@ tr.placeholder:before {
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'试卷题目管理'} %}
 
     <div class="clearfix mbm">
-      <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="glyphicon glyphicon-plus"></span> {{'新增试题'|trans}}</button>
+      <button data-url="{{ path('course_set_manage_question_picker',{id:courseSet.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="es-icon es-icon-anonymous-iconfont"></span> {{'新增试题'|trans}}</button>
       <ul class="nav nav-pills nav-mini">
         {% for type,count in testpaper['metas']['counts'] if count > 0 %}
           <li {% if loop.index == 1 %}class="active"{% endif %}><a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link">{{ questionTypesDict[type] }}</a></li>
