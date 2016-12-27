@@ -22,6 +22,17 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function headerAction(Request $request, $id)
+    {
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        return $this->render('course-set/header.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'member'    => $member
+        ));
+    }
+
     public function notesAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
