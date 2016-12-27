@@ -1683,12 +1683,16 @@ course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
 
-course_set_notes:
-  path: /course_set/{id}/notes
-  defaults: { _controller: AppBundle:CourseSet:notes }
+course_show:
+  path: /course/{id}
+  defaults: {_controller: AppBundle:Course:show}
 
-course_set_threads:
-  path: /course_set/{courseSetId}/threads
+course_notes:
+  path: /course/{id}/notes
+  defaults: { _controller: AppBundle:Course:notes }
+
+course_threads:
+  path: /course/{id}/threads
   defaults: {_controller: AppBundle:CourseThread:index}
 
 course_thread_create:
@@ -1761,11 +1765,36 @@ course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
 
+course_set_manage_publish:
+  path: /course_set/{id}/manage/publish
+  defaults: {_controller: AppBundle:CourseSetManage:publish}
+
+course_set_manage_close:
+  path: /course_set/{id}/manage/close
+  defaults: {_controller: AppBundle:CourseSetManage:close}
+
 #course
 course_task_list:
     path:  /course/{id}/task/list
     defaults: { _controller: AppBundle:Course:taskList }
 
+#course review
+course_review:
+  path: /course/{id}/review
+  defaults: {_controller: AppBundle:Course:reviewList}
+
+course_review_create:
+   path:  /course/{id}/review/create
+   defaults: { _controller: AppBundle:Course/Review:create }
+   methods: [POST]
+
+course_review_post:
+  path:  /course/{courseId}/review/{reviewId}/post
+  defaults: { _controller: AppBundle:Course/Review:post }
+
+course_review_delete:
+  path:  /course/{courseId}/review/{reviewId}/delete
+  defaults: { _controller: AppBundle:Course/Review:delete }
 
 #file chooser
 media_materiallib_choose:
@@ -2140,7 +2169,7 @@ classroom_manage_homework:
 
 classroom_explore:
     path:  /classroom/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
+    defaults: { _controller: AppBundle:Explore:classroom, category:'' }
 
 classroom_show:
     path:  /classroom/{id}
@@ -2423,3 +2452,9 @@ org_tree:
     path: /org-tree.json
     defaults: { _controller: AppBundle:Org:orgTreeJson }
     methods: [GET]
+
+#todo:只为展示页面
+course_explore:
+   path:  /course/explore/{category}
+   defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
+

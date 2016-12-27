@@ -113,7 +113,7 @@
               <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
             {% else %}
               <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.taskCount) }};"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.taskNum) }};"></div>
               </div>
               <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
             {% endif %}

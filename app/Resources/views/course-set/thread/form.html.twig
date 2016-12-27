@@ -11,7 +11,7 @@
 {% block detail_content %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('course_set_threads', {courseSetId: courseSet.id, courseId:course.id}) }}">{{'讨论区'|trans}}</a></li>
+  <li><a href="{{ path('course_threads', {id:course.id}) }}">{{'讨论区'|trans}}</a></li>
   {% if thread %}
     <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
     <li class="active">{% if type == 'question' %}{{'编辑问题'|trans}}{% else %}{{'编辑话题'|trans}}{% endif %}</li>
@@ -69,7 +69,7 @@
         <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
         <button type="submit" class="btn btn-primary btn-fat">{{'保存'|trans}}</button>
       {% else %}
-        <a href="{{ path('course_set_threads', {courseSetId: courseSet.id, courseId: course.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
+        <a href="{{ path('course_threads', {id: course.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
         <button type="submit" class="btn btn-primary">{{'发表'|trans}}</button>
       {% endif  %}
     </div>

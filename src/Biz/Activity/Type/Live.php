@@ -40,11 +40,11 @@ class Live extends Activity
 
     protected function getLiveActivityService()
     {
-        return $this->createService('Activity:LiveActivityService');
+        return $this->getBiz()->service('Activity:LiveActivityService');
     }
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 }

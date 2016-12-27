@@ -1,17 +1,15 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\Echats\EchartsBuilder;
+use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Order\OrderService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Course\ThreadService;
-use Topxia\Service\Order\OrderService;
-use Vip\Service\Vip\VipService;
+use Topxia\Component\Echats\EchartsBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends BaseController
 {
@@ -62,7 +60,6 @@ class DefaultController extends BaseController
         $site  = urlencode(http_build_query($site));
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
-
 
     public function validateDomainAction(Request $request)
     {
@@ -181,9 +178,8 @@ class DefaultController extends BaseController
         $todayTimeStart = strtotime(date("Y-m-d", time()));
         $todayTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
 
-
-        $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
-        $loginCount  = $this->getStatisticsService()->getloginCount(15 * 60);
+        $onlineCount = $this->getStatisticsService()->countOnline(15 * 60);
+        $loginCount  = $this->getStatisticsService()->countLogin(15 * 60);
 
         $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->searchUserCount(array());
@@ -201,34 +197,32 @@ class DefaultController extends BaseController
             $totalVipNum = $this->getVipService()->searchMembersCount(array());
         }
 
-        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
-        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array('postNum' => 0, 'type' => 'question'));
+        $todayThreadUnAnswerNum = $this->getThreadService()->countThreads(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
+        $totalThreadNum         = $this->getThreadService()->countThreads(array('postNum' => 0, 'type' => 'question'));
 
         return $this->render('admin/default/operation-analysis-dashbord.html.twig', array(
-            'onlineCount' => $onlineCount,
-            'loginCount'  => $loginCount,
+            'onlineCount'             => $onlineCount,
+            'loginCount'              => $loginCount,
 
-            'todayRegisterNum' => $todayRegisterNum,
-            'totalRegisterNum' => $totalRegisterNum,
+            'todayRegisterNum'        => $todayRegisterNum,
+            'totalRegisterNum'        => $totalRegisterNum,
 
-            'todayCourseMemberNum' => $todayCourseMemberNum,
-            'totalCourseMemberNum' => $totalCourseMemberNum,
+            'todayCourseMemberNum'    => $todayCourseMemberNum,
+            'totalCourseMemberNum'    => $totalCourseMemberNum,
 
             'todayClassroomMemberNum' => $todayClassroomMemberNum,
             'totalClassroomMemberNum' => $totalClassroomMemberNum,
 
-            'todayVipNum' => $todayVipNum,
-            'totalVipNum' => $totalVipNum,
+            'todayVipNum'             => $todayVipNum,
+            'totalVipNum'             => $totalVipNum,
 
-            'todayThreadUnAnswerNum' => $todayThreadUnAnswerNum,
-            'totalThreadNum'         => $totalThreadNum,
+            'todayThreadUnAnswerNum'  => $todayThreadUnAnswerNum,
+            'totalThreadNum'          => $totalThreadNum
         ));
     }
 
-
     public function userStatisticAction(Request $request, $period)
     {
-
         $series    = array();
         $days      = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
@@ -245,11 +239,10 @@ class DefaultController extends BaseController
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
 
         //流失用户
-        $userAnalysis['series']['lostUserCount'] = $this->getLostUserCount($userAnalysis);;
+        $userAnalysis['series']['lostUserCount'] = $this->getLostUserCount($userAnalysis);
 
         return $this->createJsonResponse($userAnalysis);
     }
-
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
@@ -266,17 +259,16 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param $period
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
      * 订单统计
+     * @param  Request                                          $request
+     * @param  $period
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function studyStatisticAction(Request $request, $period)
     {
         $series    = array();
         $days      = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
-
 
         $conditions              = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
         $newOrders               = $this->getOrderService()->analysisOrderDate($conditions);
@@ -288,19 +280,17 @@ class DefaultController extends BaseController
 
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
         return $this->createJsonResponse($userAnalysis);
-
     }
 
     public function orderStatisticAction(Request $request, $period)
     {
-
         $days = $this->getDaysDiff($period);
 
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
         $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
 
-        $defaults   = array(
+        $defaults = array(
             'course'    => array('targetType' => 'course', 'value' => 0),
             'vip'       => array('targetType' => 'vip', 'value' => 0),
             'classroom' => array('targetType' => 'classroom', 'value' => 0)
@@ -314,7 +304,6 @@ class DefaultController extends BaseController
             unset($orderData['targetType']);
         });
         return $this->createJsonResponse(array_values($orderDatas));
-
     }
 
     public function courseExploreAction(Request $request, $period)
@@ -384,7 +373,6 @@ class DefaultController extends BaseController
         $searchRanking = isset($result['items']) ? $result['items'] : array();
         return $this->render('admin/default/cloud-search-ranking.html.twig', array('searchRankings' => $searchRanking));
     }
-
 
     public function weekday($time)
     {
@@ -521,7 +509,6 @@ class DefaultController extends BaseController
 
         return $dayRegisterTotal;
     }
-
 
     protected function getSettingService()
     {

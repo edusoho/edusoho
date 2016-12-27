@@ -82,7 +82,7 @@ class BaseStrategy
     public function baseFindCourseItems($courseId)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;

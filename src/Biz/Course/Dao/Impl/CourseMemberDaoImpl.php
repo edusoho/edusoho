@@ -88,24 +88,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->_buildQueryBuilder($conditions)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
     }
 
-
-//    public function searchMemberFetchUser($conditions, $orderBy, $start, $limit)
-//    {
-//        $builder = $this->_buildQueryBuilder($conditions, $join)->select('*');
-//        if (!empty($orderBy)) {
-//            $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
-//        }
-//        if ($start && $limit) {
-//            $builder = $builder->setFirstResult($start)->setMaxResults($limit);
-//        }
-//        return $builder->execute()->fetchAll() ?: array();
-//    }
-//
-//    public function countMemberFetchUser($conditions)
-//    {
-//        return $this->_buildQueryBuilder($conditions, $join)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
-//    }
-
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions)
@@ -123,7 +105,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
-
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
@@ -138,33 +119,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
-
-    public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true)
-    {
-        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table()} m ";
-        $sql .= " JOIN  c2_course AS c ON m.userId = ? ";
-        $sql .= " AND m.role =  ? AND m.courseId = c.id ";
-
-        if ($onlyPublished) {
-            $sql .= " AND c.status = 'published' ";
-        }
-
-        return $this->db()->fetchColumn($sql, array($userId, $role));
-    }
-
-    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
-    {
-        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
-        $sql .= " JOIN  c2_course AS c ON m.userId = ? ";
-        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
-
-        if ($onlyPublished) {
-            $sql .= " AND c.status = 'published' ";
-        }
-
-        return $this->db()->fetchColumn($sql, array($userId, $role));
-    }
-
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
@@ -188,7 +142,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-
     public function updateMembers($conditions, $updateFields)
     {
         $builder = $this->_createQueryBuilder($conditions)
@@ -202,7 +155,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder->execute();
         return true;
     }
-
 
     protected function _buildQueryBuilder($conditions, $join)
     {
@@ -226,7 +178,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->andWhere('c.parentId = parentId');
         return $builder;
     }
-
 
     public function declares()
     {
