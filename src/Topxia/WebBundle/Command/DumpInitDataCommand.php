@@ -26,6 +26,10 @@ class DumpInitDataCommand extends BaseCommand
             'database',
             InputArgument::OPTIONAL,
             '数据库?'
+        )->addArgument(
+            'projectDir',
+            InputArgument::OPTIONAL,
+            '演示站路径'
         )->setName('topxia:dump-init-data');
     }
 
@@ -36,6 +40,8 @@ class DumpInitDataCommand extends BaseCommand
         $user     = $input->getArgument('user');
         $password = $input->getArgument('password');
         $database = $input->getArgument('database');
+        $projectDir = empty($input->getArgument('projectDir')) ? '/var/www/edusoho' : $input->getArgument('projectDir');
+
         $domain = explode(':', $domain);
         $host = $domain[0];
         $port = empty($domain[1]) ? 22 : $domain[1];
@@ -74,7 +80,7 @@ class DumpInitDataCommand extends BaseCommand
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "ssh -l root {$host} -p {$port} 'cd /var/www/edusoho \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
+        $command = "ssh -l root {$host} -p {$port} 'cd {$projectDir} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
