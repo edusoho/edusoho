@@ -53,70 +53,11 @@
             {% endblock %}
           </div>
         </section>
-<<<<<<< HEAD
 
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
-=======
-        <!-- 课程列表 -->
-        {#<section class="es-section">
-          <div class="nav-btn-tab">
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation">
-                <a href="">课程概览</a>
-              </li>
-              <li class="active" role="presentation">
-                <a href="">课程目录</a>
-              </li>
-              <li role="presentation">
-                <a href="">评论</a>
-              </li>
-              <li role="presentation">
-                <a href="">笔记</a>
-              </li>
-              <li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>
-            </ul>
-          </div>
-          <div class="course-detail-content">
-            <ul class="task-list task-list-detail">
-              <li class="task-item  mouse-control"> <i class="es-icon es-icon-undone-check left-menu"></i>
-                <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
-                <span class="right-menu mouse-leave">
-                  01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
-                </span>
-                <span class="right-menu mouse-enter">
-                  <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
-                </span>
-              </li>
-              <li class="task-item  mouse-control">
-                <i class="es-icon es-icon-undone-check left-menu"></i>
-                <a class="text-overflow title" href="/course/29/task/131/show?preview=1"><span class="label label-warning">免费</span>预习-音频</a>
-                <span class="right-menu mouse-leave">
-                  01:00:00
-                  <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
-                </span>
-                <span class="right-menu mouse-enter">
-                  <a class="btn btn-warning btn-sm btn-learn">免费试听</a>
-                </span>
-              </li>
-              <li class="task-item  mouse-control">
-                <i class="es-icon es-icon-undone-check left-menu"></i>
-                <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
-                <span class="right-menu mouse-leave">
-                  01:00:00
-                  <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="" data-original-title="音频任务"></i>
-                </span>
-                <span class="right-menu mouse-enter">
-                  <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </section>#}
-      </div>
-      <div class="col-lg-3 col-md-4 course-sidebar">
->>>>>>> cc0358ad5bcff5fe329e6a898474b2f202834150
+
         <!-- 课程特色: 加入前显示，加入后不显示 -->
         {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
 
@@ -137,9 +78,6 @@
       </div>
     </div>
   </div>
-<<<<<<< HEAD
+
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-=======
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} 
->>>>>>> cc0358ad5bcff5fe329e6a898474b2f202834150
 {% endblock %}
