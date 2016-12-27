@@ -1,5 +1,5 @@
 
-import { TabChange } from '../help';
+import { TabChange, publishCourse } from '../help';
 
 class Marketing {
 	constructor(){
@@ -9,6 +9,7 @@ class Marketing {
 	init(){
 		let $form = $('#course-marketing-form');
 		TabChange();
+		publishCourse();
 
 		let validator = $form.validate({
 			onkeyup: false,

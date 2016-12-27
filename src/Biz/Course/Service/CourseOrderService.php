@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course;
+namespace Biz\Course\Service;
 
 /**
  * 课程订单服务
