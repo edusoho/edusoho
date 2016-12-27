@@ -206,7 +206,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseStudents($courseId, $start, $limit)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
     }
 
     public function findCourseStudentsByCourseIds($courseIds)
@@ -225,7 +225,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     protected function findCourseTeachers($courseId)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
