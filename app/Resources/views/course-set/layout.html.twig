@@ -457,8 +457,8 @@
       <!-- 课程特色: 加入前显示，加入后不显示 -->
       {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
 
-      <!-- 其他计划: 加入前不显示，加入后不显示-->
-      {% include 'course-set/other-course.html.twig' %}
+      <!-- 其他计划: 加入前不显示，加入后显示-->
+      {{ render(controller('AppBundle:Course:otherCoursePart', {id: course.id})) }}
 
       <!-- 推荐班级 -->
       {% include 'course-set/recommend-classroom.html.twig' %}

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseSetService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
@@ -101,6 +102,18 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function otherCoursePartAction(Request $request, $id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $otherCourse = $course;// $this->getCourseService()->getOtherCourses($course['id']);
+
+        return $this->render('course/part/other-course.html.twig', array(
+            'otherCourse' => $otherCourse,
+            'courseSet'   => $courseSet
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -113,7 +126,7 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * @return CourseService
+     * @return CourseSetService
      */
     protected function getCourseSetService()
     {
