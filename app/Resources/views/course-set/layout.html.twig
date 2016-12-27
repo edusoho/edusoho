@@ -376,13 +376,13 @@
               <a href="/">课程目录</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
-              <a href="{{path('course_set_threads', {courseSetId: courseSet.id})}}">话题</a>
+              <a href="{{path('course_threads', {id: course.id})}}">话题</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
               <a href="">评价</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
-              <a href="{{ path('course_set_notes', { id: courseSet.id }) }}">
+              <a href="{{ path('course_notes', { id: course.id }) }}">
                 笔记
                 <small class="text-muted">({{ course.noteNum }})</small>
               </a>

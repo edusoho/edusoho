@@ -17,13 +17,14 @@
 },
 'discuss': {
 'name': '讨论',
-'icon': 'es-icon-forum',
+'icon': 'es-icon-forum'
+}
 } %}
 
 {% if not characteristicData is empty and characteristicData|keys in typeDataMap|keys %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">课程特色</h3>、
+      <h3 class="panel-title">课程特色</h3>
     </div>
 
     {% for type, num in characteristicData if typeDataMap[type] is defined %}
@@ -33,10 +34,11 @@
             <button class="media-icon bg-primary"></button>
             <i class="es-icon {{ typeDataMap[type].icon }} media-logo"></i>
           </div>
-          <div class="media-body">含{{ typeDataMap[type].name }}({{ num }})</div>
+          <div class="media-body">
+            含{{ typeDataMap[type].name }}({{ num }})
           </div>
+        </div>
       </div>
     {% endfor %}
-
   </div>
 {% endif %}
