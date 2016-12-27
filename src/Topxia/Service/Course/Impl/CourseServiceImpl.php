@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseLessonReplayDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\FavoriteDao;
@@ -263,12 +264,29 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {
-        return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'status'    => 'published'
+        );
+
+        return   $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
     {
-        return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'parentId'  => 0,
+            'status'    => 'published'
+        );
+
+        return   $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLeaningCourseCount($userId, $filters = array())
@@ -276,7 +294,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (isset($filters["type"])) {
             return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 0);
         }
-
+        //TODO removed
         return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
     }
 
@@ -2408,6 +2426,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Taxonomy:TagOwnerDao');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
