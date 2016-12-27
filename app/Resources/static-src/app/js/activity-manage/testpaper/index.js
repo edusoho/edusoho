@@ -2,17 +2,15 @@ class Testpaper {
 	constructor($form) {
 		this.$element = $form;
     this.slider = null;
+    this.$parentiframe = $(window.parent.document).find('#task-create-content-iframe');
 		this._setValidateRule();
     this._init();
     this._initEvent();
-    //this._initSlider();
-
   }
 
   _init() {
     this._inItStep2form();
     this._dateTimePicker();
-
     let passScore = $('[name="finishScore"]').val();
     this._initSelectTestpaper($('#testpaper-media').find('option:selected'),passScore);
   }
@@ -23,40 +21,33 @@ class Testpaper {
   	$('input[name="testMode"]').on('change',event=>this._startTimeCheck(event))
     $('input[name="limitedTime"]').on('blur',event=>this._changeEndTime(event));
     $('#condition-select').on('change',event=>this._changeCondition(event));
-
   }
 
-  _initSlider() {
-    this.slider = $('.nstSlider').nstSlider({
-      "left_grip_selector": ".leftGrip",
-      "value_changed_callback": function(cause, leftValue, rightValue) {
-        let $list = $(this).closest('.nstSlider-list');
-        let left = $('.js-leftGrip').css('left');
-        let total = $list.find('.js-totale-text').text();
-        let value = Math.ceil(leftValue/total*100)+'%';
-
-        $list.find('.js-leftGrip-remask-text').text(leftValue);
-        $list.find('.js-bar').css('width',value);
-        $list.find('.js-nstSlider-content').css('left',left);
-        $list.find('.js-leftGrip-text').css('left',left).text(value);
-        $('[name="finishScore"]').val(leftValue);
+  _initSlider(passScore,score) {
+    let $sliderRemask = null;
+    let scoreTotal = $('#score-single-input').data('score-total');
+    $('.single-slider').jRange({
+      from: 0,
+      to: score,
+      step: 1,
+      format: function(value,type) {
+        let  v= (parseInt(value) / parseInt(score)).toFixed(2)*100;
+        return `${v}%`;
+      },
+      width: 300,
+      showLabels: true,
+      showScale: false,
+      onstatechange: function (argument,data) {
+        $sliderRemask.text(argument);
       }
     });
-
-    $(document).mousemove(function() {
-      window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();;
-    });
-    let defaultValue = $('.js-totale-text').text()*0.6;
+    $sliderRemask = $('.js-slider-remask').text(passScore);
   }
 
   _changeCondition(event) {
     let $this = $(event.currentTarget);
     let value = $this.find('option:selected').val();
-    if(value!='score') {
-      $('.js-score-slider').addClass('hidden');
-    }else {
-      $('.js-score-slider').removeClass('hidden');
-    }
+    value!='score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
   }
 
   _changeTestpaper(event) {
@@ -72,18 +63,12 @@ class Testpaper {
     if (mediaId != '') {
       this._getItemsTable($option.closest('select').data('getTestpaperItems'), mediaId);
       let score = $option.data('score');
-
-      $('.nstSlider').attr('data-range_max',score);
-      $('.js-totale-text').text(score);
       if (passScore == '') {
         passScore = Math.ceil(score * 0.6);
       }
-      
-      $('.js-leftGrip-remask-text').text(passScore);
-      $('.nstSlider').attr('data-cur_min',passScore);
-
-      this._initSlider();
-
+      $('#score-single-input').val(passScore);
+      $('.js-score-total').text(score);
+      this._initSlider(passScore,score);
     } else {
       $('#questionItemShowDiv').hide();
     }
@@ -120,19 +105,18 @@ class Testpaper {
 
   _dateTimePicker() {
     let $starttime = $('input[name="startTime"]');
-    var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-
     $starttime.datetimepicker({
         autoclose: true,
         format: 'yyyy-mm-dd hh:ii',
         language:"zh",
         minView: 'hour'
     })
-    .on('show', function(ev){
-      $parentiframe.height($parentiframe.contents().find('body').height()+260);
+    .on('show', event => {
+      this.$parentiframe.height($('body').height() + 240);
+
     })
-    .on('hide', function(ev){
-      $parentiframe.height($parentiframe.contents().find('body').height());
+    .on('hide', event => {
+      this.$parentiframe.height($('body').height());
     })
     .on('changeDate', function(ev){
       let date = ev.date.valueOf();

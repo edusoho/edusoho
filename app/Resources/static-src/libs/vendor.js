@@ -11,10 +11,15 @@ $('[data-toggle="popover"]').popover({
   html:true,
 });
 
-$('[data-toggle="tooltip"]').tooltip();
+$('[data-toggle="tooltip"]').tooltip({
+  html:true,
+});
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
 });
+
+
+

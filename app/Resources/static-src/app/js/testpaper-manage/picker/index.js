@@ -3,6 +3,7 @@ import 'jquery-sortable';
 import notify from 'common/notify';
 import BatchSelect from '../../../common/widget/batch-select';
 import DeleteAction from '../../../common/widget/delete-action';
+import { deleteQuestion, replaceQuestion  } from '../../../common/component/question-operate';
 
 class Picker{
   constructor($button, $typeNav, $form) {
@@ -10,45 +11,38 @@ class Picker{
     this.$typeNav = $typeNav;
     this.$form = $form;
     this.$modal = $('#testpaper-confirm-modal');
-    
     this.currentType = this.$typeNav.find('.active').children().data('type');
     this._initEvent();
     this._initSortList();
     this.questions = [];
   }
 
-  _init() {
-
-  }
-
-  _initSortList() {
-    this.$form.find('table').sortable({
-        containerPath: '> tr',
-        itemSelector: 'tr.is-question',
-        placeholder: '<tr class="placeholder"/>',
-        exclude: '.notMoveHandle',
-        onDrop: function (item, container, _super) {
-            _super(item, container);
-            if (item.hasClass('have-sub-questions')) {
-                let $tbody = item.parents('tbody');
-                $tbody.find('tr.is-question').each(function() {
-                    let $tr = $(this);
-                    $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
-                });
-            }
-
-            self.refreshSeqs();
-        }
-    });
-  }
-
   _initEvent() {
     this.$button.on('click',event => this._showPickerModal(event));
     this.$typeNav.on('click','li', event => this._changeNav(event));
-    this.$form.on('click','[data-role="item-delete-btn"]',event => this._deleteItem(event));
-    this.$form.on('click','[data-role="replace-item"]',event => this._replaceItem(event));
     this.$form.on('click','.request-save',event => this._confirmSave(event));
     this.$modal.on('click','.confirm-submit',event => this._submitSave(event));
+  }
+
+  _initSortList() {
+    // this.$form.find('table').sortable({
+    //     containerPath: '> tr',
+    //     itemSelector: 'tr.is-question',
+    //     placeholder: '<tr class="placeholder"/>',
+    //     exclude: '.notMoveHandle',
+    //     onDrop: function (item, container, _super) {
+    //         _super(item, container);
+    //         if (item.hasClass('have-sub-questions')) {
+    //             let $tbody = item.parents('tbody');
+    //             $tbody.find('tr.is-question').each(function() {
+    //                 let $tr = $(this);
+    //                 $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+    //             });
+    //         }
+
+    //         self.refreshSeqs();
+    //     }
+    // });
   }
 
   _showPickerModal(event) {
@@ -75,29 +69,6 @@ class Picker{
     this.$form.find('[data-role="question-body"]').addClass('hide');
     this.$form.find('#testpaper-items-'+type).removeClass('hide');
   }
-
-  _deleteItem(event) {
-    let $target = $(event.currentTarget);
-    let id = $target.closest('tr').data('id');
-    $target.closest('tbody').find('[data-parent-id="'+id+'"]').remove();
-    $target.closest('tr').remove();
-  }
-
-  _replaceItem(event) {
-    let $target = $(event.currentTarget);
-    let excludeIds = [];
-
-    $('[data-role="question-body"]:visible').find('[name="questionId[]"]').each(function(){
-      excludeIds.push($(this).val());
-    })
-
-    let $modal = $("#modal").modal();
-    $modal.data('manager', this);
-    $.get($target.data('url'), {excludeIds: excludeIds.join(','), type: this.currentType}, function(html) {
-        $modal.html(html);
-    });
-  }
-
   _confirmSave(event) {
     let isOk = this._validateScore();
 
@@ -214,4 +185,7 @@ let $form = $('#question-checked-form');
 new Picker($('[data-role="pick-item"]'), $('.nav-mini'), $form);
 new BatchSelect($form);
 new DeleteAction($form);
+replaceQuestion($form,$("#modal"))
+deleteQuestion($form);
+//modal 预览
 

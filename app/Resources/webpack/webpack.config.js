@@ -50,6 +50,7 @@ const config = {
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
     "jquery-nstslider":['jquery-nstslider'],
     'jquery-timer':['libs/js/jquery-timer.js'],
+    'jquery-range':['libs/js/jquery-range.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',

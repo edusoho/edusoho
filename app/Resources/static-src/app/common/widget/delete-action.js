@@ -43,8 +43,8 @@ class DeleteAction {
     let name = $btn.data('name');
 
     let ids = [];
-    this.$element.find('[data-role=batch-item]:checked').each(function(){
-        ids.push(this.value);
+    this.$element.find('[data-role="batch-item"]:checked').each(function(){
+      ids.push(this.value);
     });
 
     if (ids.length == 0) {

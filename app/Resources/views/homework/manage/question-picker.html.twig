@@ -6,7 +6,7 @@
 
 {% do script(['app/js/homework-manage/index.js']) %}
 
-{% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目{% endblock %}
+{% block title %}{% if replaceFor %}替换{% else %}选择{% endif %}题目1{% endblock %}
 
 {% block body %}
 <div id="question-picker-body">
@@ -17,7 +17,7 @@
     <thead>
     <tr>
       {% if not replace|default(null) %}
-        <th><input type="checkbox" data-role="item-batch-select"></th>
+        <th><input type="checkbox" data-role="batch-select"></th>
       {% endif %}
       <th width="45%">{{'题干'|trans}}</th>
       <th>{{'类型'|trans}}</th>
@@ -38,7 +38,7 @@
   {% if not replace %}
     <div id="item-operate">
       <label class="checkbox-inline">
-        <input type="checkbox" data-role="item-batch-select">{{'全选'|trans}}
+        <input type="checkbox" data-role="batch-select">{{'全选'|trans}}
       </label>
     </div>
   {% endif %}

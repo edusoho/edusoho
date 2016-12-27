@@ -1,13 +1,13 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-nstslider.js','app/js/activity-manage/testpaper/index.js'], 300) %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-range.js','app/js/activity-manage/testpaper/index.js'], 300) %}
 
 {% block activity_content %}
   <div class="form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
     </div>
-    <div class="col-xs-9 controls">
+    <div class="col-sm-10 controls">
       <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
         <option value="">{{ '请选择试卷'|trans }}</option>>
         {% for testpaper in testpapers if testpaper %}
@@ -19,55 +19,55 @@
   </div>
 
   <div class="form-group" id="questionItemShowDiv" style="display:none;">
-    <div class="col-xs-2 control-label"></div>
-    <div class="col-xs-9 controls" id="questionItemShowTable"></div>
+    <div class="col-sm-2 control-label"></div>
+    <div class="col-sm-10 controls" id="questionItemShowTable"></div>
   </div>
 
   <div class="form-group">
-    <div class="col-xs-2 control-label"><label>{{'时间限制'|trans}}</label></div>
-    <div class="col-xs-9 controls radios">
-      <input class="form-control width-input width-input-small" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+    <div class="col-sm-2 control-label"><label>{{'时间限制'|trans}}</label></div>
+    <div class="col-sm-10 controls radios">
+      <input class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
       <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
     </div>
   </div>
 
   <div class="form-group">
-    <div class="col-xs-2 control-label"><label>{{'考试次数'|trans}}</label></div>
-    <div class="col-xs-9 controls radios">
+    <div class="col-sm-2 control-label"><label>{{'考试次数'|trans}}</label></div>
+    <div class="col-sm-10 controls radios">
       {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
     </div>
   </div>
 
   <div class="form-group" {% if activity.doTimes|default('0') == 1 %}style="display:none;" {% endif %}>
-    <div class="col-xs-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
-    <div class="col-xs-9 controls">
-      <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ activity.redoInterval|default('0') }}"> {{'小时'|trans}}
+    <div class="col-sm-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
+    <div class="col-sm-10 controls">
+      <input id="lesson-redo-interval-field" class="form-control inline-block width-150" type="text" name="redoInterval" value="{{ activity.redoInterval|default('0') }}"> {{'小时'|trans}}
       <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'|trans}}"></i>
       <div class="help-block">{{'0小时，表示无限制。'|trans}}</div>
     </div>
   </div>
 
   <div class="form-group starttime-check-div" {% if activity.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label>{{'考试开始时间'|trans}}</label>
     </div>
-    <div class="col-xs-9 controls radios">
+    <div class="col-sm-10 controls radios">
       {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
-      <label class="starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
-        <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
-      </label>
-      <label class="endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
-        - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
-        <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
-      </label>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10 mtm starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
+      <input class="form-control width-input width-input-large" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" readonly>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10 mtm endtime-input" {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %}style="display:none;" {% endif %}>
+      - <span id="starttime-show">{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% endif %}</span>
+        <input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" readonly>
     </div>
   </div>
 
   {% if 'lesson_credit' in features %}
     <div class="form-group">
-      <div class="col-xs-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
-      <div class="col-xs-9 controls">
-        <input class="form-control widt-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
+      <div class="col-sm-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
+      <div class="col-sm-10 controls">
+        <input class="form-control widt-input width-150" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
         <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
       </div>
     </div>
@@ -77,7 +77,7 @@
 
 {% block activity_finish %}
   <div class="form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '考评方式'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
@@ -87,33 +87,25 @@
     </div>
   </div>
   <div class="form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishCondition">
         {{ select_options({'score':'分数达标'|trans,'submit':'提交答卷'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
-
       <input type="hidden" name="finishScore" value="{{ activity.finishCondition['finishScore']|default('0') }}" />
       <input type="hidden" name="mediaType" value="testpaper" />
-
     </div>
   </div>
-  <div class="form-group js-score-slider">
-    <div class="col-sm-offset-2 col-sm-8">
-      <div class="nstSlider-list clearfix">
-        <div class="nstSlider-item leftLabel">0</div>  
-        <div class="nstSlider-item nstSlider" data-range_min="0" data-range_max="100" data-cur_min="{{100 * 0.6 }}">
-          <div class="bar js-bar"></div>
-          <div class="nstSlider-content js-nstSlider-content">
-            <div class="leftGrip js-leftGrip"></div>
-            <div class="leftGrip-remask ">达标：<span class="js-leftGrip-remask-text">60</span>分</div>
-          </div>
-          <div class="leftGrip-text js-leftGrip-text">0%</div>
-        </div>
-        <div class="nstSlider-item mll js-totale-text">100</div>分
+  <div class="form-group js-score-form-group">
+    <div class="col-sm-offset-2 col-sm-8 color-gray">
+      <span>0</span>
+      <div class="js-slider-content inline-block vertical-middle mlm mrl">
+        <input class="single-slider" id="score-single-input" type="hidden"  value="6" date-score-total=''/>
+        <span class="slider-remask" data-toggle="tooltip" data-placement="top" title="达标分数:<span class='js-slider-remask'>4</span>" html="true"></span>   
       </div>
+      <span class="js-score-total"></span>分
     </div>
   </div>
 {% endblock %}

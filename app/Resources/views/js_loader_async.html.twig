@@ -17,7 +17,9 @@
 
     script(paths, function() {
       var node = document.getElementById('script-loader-async');
-      node.parentNode.removeChild(node);
+      if(node) {
+        node.parentNode.removeChild(node);
+      }
     }, document.getElementById('modal'));
   })();
 </script>

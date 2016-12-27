@@ -47,7 +47,6 @@ src/Topxia/WebBundle/Resources/views/Test/*
 !/web/themes/block.json
 edusoho.komodoproject
 .project
-/vendor
 .settings
 composer.sublime-workspace
 web/assets/img/default/video.png

@@ -1,6 +1,6 @@
 <tr data-type="{{ question.type }}">
   {% if not replace|default(null) %}
-    <th><input type="checkbox" data-role="item-select" data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id,questionId:question.id }) }}"></th>
+    <th><input type="checkbox" data-role="batch-item"  data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id,questionId:question.id }) }}"></th>
   {% endif %}
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
