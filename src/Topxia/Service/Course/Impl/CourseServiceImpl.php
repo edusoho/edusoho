@@ -8,13 +8,17 @@ use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
+/**
+ * Class CourseServiceImpl
+ * @package Topxia\Service\Course\Impl
+ * 所有的api涉及到memberdao的需要重构
+ */
 class CourseServiceImpl extends BaseService implements CourseService
 {
 
@@ -235,7 +239,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO searchCoursesCount
     public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -254,6 +258,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     // TODO searchCourse
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
+        //$members= $this->getMemberDao()->search(array())
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -271,8 +276,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'courseIds' => $courseIds,
             'status'    => 'published'
         );
-
-        return   $this->getCourseDao()->count($conditions);
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
@@ -285,8 +292,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'parentId'  => 0,
             'status'    => 'published'
         );
-
-        return   $this->getCourseDao()->count($conditions);
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
     }
 
     public function findUserLeaningCourseCount($userId, $filters = array())

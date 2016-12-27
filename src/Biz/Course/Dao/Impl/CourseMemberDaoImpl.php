@@ -121,20 +121,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
-    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
-    {
-        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
-        $sql .= " JOIN  c2_course AS c ON m.userId = ? ";
-        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
-
-        if ($onlyPublished) {
-            $sql .= " AND c.status = 'published' ";
-        }
-
-        return $this->db()->fetchColumn($sql, array($userId, $role));
-    }
-
-
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions);
