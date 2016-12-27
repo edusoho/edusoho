@@ -1,12 +1,11 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Biz\Common\Mail\MailFactory;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,7 +35,7 @@ class UserController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
