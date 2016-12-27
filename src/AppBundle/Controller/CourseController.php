@@ -128,8 +128,15 @@ class CourseController extends CourseBaseController
     {
         list(, $course) = $this->tryGetCourseSetAndCourse($id);
 
-        $userIds  = $this->getMemberService()->findMemberUserIdsByCourseId($course['id']);
-        $students = $this->getUserService()->findUsersByIds($userIds);
+        $conditions = array(
+            'courseId' => $course['id'],
+            'role'     => 'student',
+            'locked'   => 0
+        );
+
+        $members  = $this->getMemberService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, 20);
+        $studentIds = ArrayToolkit::column($members, 'userId');
+        $students = $this->getUserService()->findUsersByIds($studentIds);
 
         return $this->render('course/part/newest-students.html.twig', array(
             'students' => $students

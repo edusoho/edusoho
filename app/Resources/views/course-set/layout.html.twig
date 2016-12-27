@@ -356,13 +356,13 @@
             课程公告：下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。 <i class="es-icon es-icon-close01 alert-close"></i>
           </a>
         </div> -->
-        {% include 'course-set/announcement/block.html.twig' with {courseSetId:courseSet.id,courseId:0} %}
+        {% include 'course-set/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
         <!-- 课程详情页中部内容 -->
         <section class="es-section">
           <div class="nav-btn-tab">
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
-                <a href="{{ path('course_set_show', {'id': courseSet.id}) }}">课程概览</a>
+                <a href="{{ path('course_show', {'id': course.id}) }}">课程概览</a>
               </li>
               <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
                 <a href="/">课程目录</a>
@@ -370,7 +370,7 @@
               <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
                 <a href="{{ path('course_threads', {id: course.id}) }}">
                   话题
-                  <small class="text-muted">({{ course.threadNum }})</small>
+                  <small class="text-muted">({{ course.threadNum|default(0) }})</small>
                 </a>
               </li>
               <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
@@ -457,7 +457,6 @@
         </section>#}
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
-        {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
         <!-- 课程特色: 加入前显示，加入后不显示 -->
         {{ render(controller('AppBundle:Course:characteristicPart', {id: course.id})) }}
 
@@ -466,6 +465,7 @@
 
         <!-- 推荐班级 -->
         {% include 'course-set/recommend-classroom.html.twig' %}
+
         <!-- 授课教师 -->
         {{ render(controller('AppBundle:Course:teachersPart', {id: course.id})) }}
 

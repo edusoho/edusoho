@@ -10,7 +10,7 @@
             <a class=" js-user-card" href="{{ path('user_show', {'id': student.id}) }}"
                data-card-url="{{ path('user_card_show', {userId: student.id}) }}"
                data-user-id="{{ student.id }}"
-               data-original-title="{{ student.nickname }}" title="{{ student.nickname }}">
+               data-original-title="" title="">
               <img class="avatar-sm" src="{{ filepath(student.smallAvatar, 'avatar.png') }}">
             </a>
           </li>
