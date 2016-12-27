@@ -35,14 +35,16 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}">{{'预览'|trans}}</a>
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <a class="mrm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}">{{'预览'|trans}}</a>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        更多<i class="es-icon es-icon-keyboardarrowdown"></i>
+      </a>
       <ul class="dropdown-menu pull-right">
         {% if question.type == 'material'%}
-          <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId:question.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'管理子题'|trans}}</a></li>
+          <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId:question.id}) }}"><span class="glyphicon glyphicon-list mrm"></span> {{'管理子题'|trans}}</a></li>
         {% endif %}
-        <li><a href="{{ path('course_set_manage_question_update', {courseSetId:courseSet.id,questionId:question.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit"></span> {{'编辑'|trans}}</a></li>
-        <li><a href="javascript:" data-name='{{'题目'|trans}}{% if question.type == 'material'%}({{'含子题'|trans}}){% endif %}' data-role='item-delete' data-url="{{ path('course_set_manage_question_delete', {courseSetId:courseSet.id, questionId:question.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> {{'删除'|trans}}</a></li>
+        <li><a href="{{ path('course_set_manage_question_update', {courseSetId:courseSet.id,questionId:question.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'编辑'|trans}}</a></li>
+        <li><a href="javascript:" data-name='{{'题目'|trans}}{% if question.type == 'material'%}({{'含子题'|trans}}){% endif %}' data-role='item-delete' data-url="{{ path('course_set_manage_question_delete', {courseSetId:courseSet.id, questionId:question.id}) }}"><span class="es-icon es-icon-delete mrm"></span> {{'删除'|trans}}</a></li>
       </ul>
     </div>
   </td>

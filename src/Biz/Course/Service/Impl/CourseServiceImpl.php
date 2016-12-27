@@ -735,7 +735,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function waveNoteNum($courseId, $num)
     {
-        return $this->getCourseDao()->wave($courseId, array(
+        return $this->getCourseDao()->wave(array($courseId), array(
             'noteNum' => $num
         ));
     }

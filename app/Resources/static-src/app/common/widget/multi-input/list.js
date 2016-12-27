@@ -34,7 +34,7 @@ export default class List extends Component {
               { this.props.sortable && <i className="es-icon es-icon-yidong mrl color-gray"></i> }
               <span className="label-name text-overflow">{ item.label }</span>
               <a className="btn-close link-gray" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
-                <i className = "es-icon es-icon-close01"></i>
+                <i className = "es-icon es-icon-close01 text-sm"></i>
               </a>
             </li>
           )

@@ -36,8 +36,8 @@ export default class List extends Component {
               <img src ={item.avatar}/> 
               <span className="label-name text-overflow">{ item.nickname }</span>
               <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
-              <a className="btn-close link-gray mts" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
-                <i className = "es-icon es-icon-close01"></i>
+              <a className="btn-close btn-close-lg link-gray" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
+                <i className = "es-icon es-icon-close01 text-sm"></i>
               </a>
             </li>
           )

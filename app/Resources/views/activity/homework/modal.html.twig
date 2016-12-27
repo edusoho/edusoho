@@ -6,15 +6,16 @@
   <form id="step2-form" class="form-horizontal homework-activity-form" method="post">
 
     <div class="form-group">
-      <div class="col-xs-2 control-label"><label>作业说明</label></div>
-      <div class="col-xs-8 controls">
+      <div class="col-sm-2 control-label"><label>作业说明</label></div>
+      <div class="col-sm-10 controls">
         <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.description|default('') }}</textarea>
       </div>
     </div>
 
     {% if not activity|default(null) %}
-      <div class="clearfix mbm">
-        <button  id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,target:'homework'}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"　><span class="glyphicon glyphicon-plus"  ></span> 选择题目</button>
+      <div class="form-group text-right">
+        <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
+        <button  id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,target:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><span class="es-icon es-icon-anonymous-iconfont"></span> 选择题目</button>
       </div>
 
       <table class="table table-striped table-hover tab-content" id="question-table">
@@ -40,28 +41,29 @@
         </tbody>
       </table>
 
-      <div class="form-group hidden">
-        <label class="col-xs-2 control-label"></label>
-        <div class="col-xs-9 controls">
+      {#<div class="form-group hidden">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10 controls">
           <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseSetId}) }}" />
         </div>
-      </div>
+      </div>#}
 
-      <div>
+      <div class="mbl">
         <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
         <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目">删除</button>
       </div>
-      <div id="homework_items_help" class="help-block" style="display:none;">请选择题目</div>
-      
+      {#<div id="homework_items_help" class="help-block" style="display:none;">
+        请选择题目
+      </div>
       <div class="form-group">
         <div class="col-xs-12 controls correctPercentDiv"></div>
         <div class="help-block col-xs-12 correct_percent_help"></div>
-      </div>
+      </div>#}
     {% endif %}
 
     <div class="form-group">
-      <div class="col-xs-8 controls">
-        <p class="help-block">{{'提示：作业保存以后将会添加到课时中去，作业一旦保存将不能修改。'|trans}}</p>
+      <div class="col-sm-10 controls">
+        <p class="help-block color-warning">{{'提示：作业保存以后将会添加到课时中去，作业一旦保存将不能修改。'|trans}}</p>
       </div>
       <div class="col-xs-4 controls"></div>
     </div>
@@ -73,7 +75,7 @@
 {% block activity_finish %}
 
   <div class="row form-group">
-    <div class="col-xs-2 control-label">
+    <div class="col-sm-2 control-label">
       <label for="condition-select">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
