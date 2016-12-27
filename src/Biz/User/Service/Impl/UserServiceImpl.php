@@ -245,6 +245,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+
         return UserSerialize::unserializes($users);
     }
 

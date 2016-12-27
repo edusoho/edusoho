@@ -14,7 +14,9 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.create'    => 'onTaskNumberChange',
             'course.task.delete'    => 'onTaskNumberChange',
             'course.student.create' => 'onStudentNumberChange',
-            'course.student.delete' => 'onStudentNumberChange'
+            'course.student.delete' => 'onStudentNumberChange',
+            'course.thread.create'  => 'onCourseThreadChange',
+            'course.thread.delete'  => 'onCourseThreadChange'
         );
     }
 
@@ -23,7 +25,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $task     = $event->getSubject();
         $courseId = $task['courseId'];
         $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'taskCount'
+            'taskNum'
         ));
     }
 
@@ -36,12 +38,25 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
         $courseId = $member['courseId'];
         $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'studentCount'
+            'studentNum'
+        ));
+    }
+
+    public function onCourseThreadChange(Event $event)
+    {
+        $thread = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($thread['courseId'], array(
+            'threadNum'
         ));
     }
 
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }

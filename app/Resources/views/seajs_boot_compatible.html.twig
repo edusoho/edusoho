@@ -27,7 +27,7 @@ var loadJs = function (path, fn, target) {
 window.seajsBoot = function() {
 
   if (typeof seajs !== 'undefined') {
-    // app.lazyLoad && app.lazyLoad();
+    app.lazyLoad && app.lazyLoad();
     return ;
   }
 
