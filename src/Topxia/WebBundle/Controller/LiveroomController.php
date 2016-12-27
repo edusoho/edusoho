@@ -10,6 +10,9 @@ class LiveroomController extends BaseController
     {
         $user           = $request->query->all();
         $user['device'] = $this->getDevice($request);
+        if ($request->isSecure()) {
+            $user['protocol'] = 'https';
+        }
 
         $systemUser = $this->getUserService()->getUser($user['id']);
         $avatar = !empty($systemUser['smallAvatar']) ? $systemUser['smallAvatar'] : '';
