@@ -536,7 +536,7 @@ flash课程: flash课程
 从资料库中选择: 从资料库中选择
 从课程文件中选择: 从课程文件中选择
 '导入网络视频': '导入网络视频'
-'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
+'mp4, avi, flv, wmv, mov, m4v, mpg': 'mp4, avi, flv, wmv, mov, m4v, mpg'
 '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。': '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'
 '断点续传': '断点续传'
 '（仅支持HTML5浏览器）。': '（仅支持HTML5浏览器）。'
