@@ -111,26 +111,6 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="col-md-2 control-label">学员有效期</label>
-    <div class="col-md-8 controls radios">
-      {% if course.expiryMode %}
-      <input type="hidden" name="expiryMode" value="{{course.expiryMode}}">
-      {% endif %}
-      {{ radios('expiryMode', { 'date': '截止日期'|trans, 'days': '有效期天数'|trans, 'none': '无'|trans }, course.expiryMode|default(''), (course.expiryMode in ['date', 'days', 'none']) ? true : false) }}
-      <div class="help-block">已发布课程无法修改有效期方式，如需要修改，请关闭课程后再设置；有效期变更，不影响已经加入课程的学员。</div>
-    </div>
-  </div>
-
-  <div class="form-group expiry-day-js">
-    <label class="col-md-2 control-label"></label>
-    <div class="col-md-8 controls">
-      <input type="text" id="course_expiryDay" name="expiryDay" required="required" value="10" class="form-control width-input width-input-large" data-widget-cid="widget-3" data-explain="设置该值后，学员学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。"> <span>天</span>
-      <div class="help-block" data-date="设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。" data-days="设置该值后，学员学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。">
-        设置该值后，学员学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。</div>          
-    </div>
-  </div>
-
   {# <div class="form-group">
     <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
     <div class="col-sm-8">
