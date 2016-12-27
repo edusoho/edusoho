@@ -20,15 +20,37 @@ class AnnouncementController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $targetId)
+    public function editAction(Request $request, $targetId, $announcementId)
     {
         $this->getClassroomService()->tryManageClassroom($targetId);
         $classroom    = $this->getClassroomService()->getClassroom($targetId);
-        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+        $announcement = $this->getAnnouncementService()->getAnnouncement($announcementId);
 
-        return $this->render('announcement/announcement-show-modal.html.twig', array(
+        return $this->render('announcement/announcement-write-modal.html.twig', array(
             'announcement' => $announcement,
-            'targetObject' => $classroom
+            'targetObject' => $classroom,
+            'targetType'   => 'classroom',
+            'targetId'     => $targetId
+        ));
+    }
+
+    public function listAction(Request $request, $targetId)
+    {
+        $this->getClassroomService()->tryManageClassroom($targetId);
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        $conditions = array(
+            'targetType' => 'classroom',
+            'targetId'   => $classroom['id']
+        );
+
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
+
+        return $this->render('announcement/announcement-list-modal.html.twig', array(
+            'announcements' => $announcements,
+            'targetType'    => 'classroom',
+            'targetId'      => $classroom['id'],
+            'canManage'     => true
         ));
     }
 

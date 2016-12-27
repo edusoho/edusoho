@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller\Course;
 
+use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,7 +14,7 @@ class CourseAnnouncementController extends BaseController
         //TODO:这里需要根据用户所拥有的计划的权限展示
         $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        return $this->render('course/announcement/announcement-write-modal.html.twig', array(
+        return $this->render('course-set/announcement/write-modal.html.twig', array(
             'announcement' => array('id' => '', 'content' => ''),
             'targetObject' => $course,
             'targetType'   => 'course',
@@ -22,23 +23,44 @@ class CourseAnnouncementController extends BaseController
         ));
     }
 
-    /*public function showAction(Request $request, $announcementId)
+    public function listAction(Request $request, $targetId)
     {
-    }
-     */
+        $course = $this->getCourseService()->tryManageCourse($targetId);
+        //TODO:这里需要根据用户所拥有的计划的权限展示
+        $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $plans = ArrayToolkit::index($plans, 'id');
 
-    public function editAction(Request $request, $targetId)
+        $conditions = array(
+            'targetType' => 'course',
+            'targetIds'  => ArrayToolkit::column($plans, 'id')
+        );
+
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
+
+        return $this->render('course-set/announcement/list-modal.html.twig', array(
+            'announcements' => $announcements,
+            'targetType'    => 'course',
+            'targetId'      => $course['id'],
+            'canManage'     => true,
+            'plans'         => $plans
+        ));
+    }
+
+    public function editAction(Request $request, $targetId, $announcementId)
     {
         $course = $this->getCourseService()->tryManageCourse($targetId);
 
         //TODO:这里需要根据用户所拥有的计划的权限展示
         $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+        $announcement = $this->getAnnouncementService()->getAnnouncement($announcementId);
 
-        return $this->render('announcement/announcement-show-modal.html.twig', array(
+        return $this->render('course-set/announcement/write-modal.html.twig', array(
             'announcement' => $announcement,
-            'targetObject' => $course
+            'targetObject' => $course,
+            'targetType'   => 'course',
+            'targetId'     => $targetId,
+            'plans'        => $plans
         ));
     }
 
@@ -50,5 +72,10 @@ class CourseAnnouncementController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getAnnouncementService()
+    {
+        return $this->createService('Announcement:AnnouncementService');
     }
 }

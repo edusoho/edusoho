@@ -23,21 +23,12 @@ class AnnouncementController extends BaseController
 
     public function listAction(Request $request, $targetType, $targetId)
     {
-        $conditions = array(
-            'targetType' => $targetType,
-            'targetId'   => $targetId
-        );
+        $processor  = $this->getAnnouncementProcessor($targetType);
+        $controller = $processor->getActions('list');
 
-        $processor = $this->getAnnouncementProcessor($targetType);
-        $canManage = $processor->checkManage($targetId);
-
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
-
-        return $this->render('announcement/announcement-list-modal.html.twig', array(
-            'announcements' => $announcements,
-            'targetType'    => $targetType,
-            'targetId'      => $targetId,
-            'canManage'     => $canManage
+        return $this->forward($controller, array(
+            'request'  => $request,
+            'targetId' => $targetId
         ));
     }
 
@@ -74,9 +65,11 @@ class AnnouncementController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data               = $request->request->all();
             $data['targetType'] = $targetType;
-            $data['targetId']   = $targetId;
+
             if ($targetType == 'course') {
-                $data['targetId'] = empty($data['targetId']) ? $data['targetId'] : $targetId;
+                $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
+            } else {
+                $data['targetId'] = $targetId;
             }
             $data['url']       = isset($data['url']) ? $data['url'] : '';
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
@@ -93,13 +86,6 @@ class AnnouncementController extends BaseController
 
             return $this->createJsonResponse(true);
         }
-
-        /*return $this->render('announcement/announcement-write-modal.html.twig', array(
-        'announcement' => array('id' => '', 'content' => ''),
-        'targetObject' => $targetObject,
-        'targetType'   => $targetType,
-        'targetId'     => $targetId
-        ));*/
 
         return $this->forward($controller, array(
             'request'  => $request,
@@ -118,11 +104,16 @@ class AnnouncementController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data               = $request->request->all();
+            $data = $request->request->all();
+
             $data['targetType'] = $targetType;
-            $data['targetId']   = $targetId;
-            $data['startTime']  = isset($data['startTime']) ? strtotime($data['startTime']) : time();
-            $data['endTime']    = isset($data['endTime']) ? strtotime($data['endTime']) : time();
+            if ($targetType == 'course') {
+                $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
+            } else {
+                $data['targetId'] = $targetId;
+            }
+            $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
+            $data['endTime']   = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $this->getAnnouncementService()->updateAnnouncement($id, $data);
             return $this->createJsonResponse(true);
@@ -130,14 +121,9 @@ class AnnouncementController extends BaseController
 
         $controller = $processor->getActions('edit');
 
-        /*return $this->forward($controller, array(
-
-        ));*/
-        return $this->render('announcement/announcement-write-modal.html.twig', array(
-            'targetObject' => $targetObject,
-            'announcement' => $announcement,
-            'targetType'   => $targetType,
-            'targetId'     => $targetId
+        return $this->forward($controller, array(
+            'announcementId' => $announcement['id'],
+            'targetId'       => $targetId
         ));
     }
 

@@ -57,23 +57,12 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         return $this->getClassroomService()->getClassroom($targetId);
     }
 
-    public function getShowPageName($targetId)
-    {
-        $canTake = $this->checkTake($targetId);
-
-        if ($canTake) {
-            return 'announcement-show-modal.html.twig';
-        } else {
-            return 'announcement-classroom-nojoin-show-modal.html.twig';
-        }
-    }
-
     public function getActions($action)
     {
         $config = array(
             'create' => 'AppBundle:Classroom/Announcement:create',
             'edit'   => 'AppBundle:Classroom/Announcement:edit',
-            'show'   => 'AppBundle:Classroom/Announcement:show'
+            'list'   => 'AppBundle:Classroom/Announcement:list'
         );
 
         return $config[$action];
