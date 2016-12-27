@@ -303,14 +303,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findStudentsByCourseId($courseId)
     {
-        $students = $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
+        $students = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
 
         return $this->fillMembersWithUserInfo($students);
     }
 
     public function findTeachersByCourseId($courseId)
     {
-        $teachers = $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
+        $teachers = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
 
         return $this->fillMembersWithUserInfo($teachers);
     }
@@ -592,7 +592,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
-        return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+        return $this->getMemberDao()->findLearnedByCourseIdAndUserId($courseId, $userId);
     }
 
     public function hasCourseManagerRole($courseId = 0)
