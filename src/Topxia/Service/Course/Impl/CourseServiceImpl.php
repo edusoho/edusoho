@@ -359,7 +359,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
         unset($conditions['userId']);
 
         $courseIds               = ArrayToolkit::column($members, 'courseId');
@@ -378,7 +378,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
         unset($conditions['userId']);
 
         $courseIds               = ArrayToolkit::column($members, 'courseId');
