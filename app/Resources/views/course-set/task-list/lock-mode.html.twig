@@ -1,13 +1,13 @@
 <div class="course-detail-content">
   <ul class="task-list task-list-md task-list-hover">
     {% for key, item in courseItems %}
-      {% if item.itemType == 'chapter' and item.type == 'chapter'  %}
+      {% if item.itemType == 'chapter' and item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter"><i class="es-icon es-icon-menu left-menu"></i>
           <span class="text-overflow title" href="/course/29/task/131/show?preview=1">第{{ item.number }}
             章：{{ item.title }}</span>
           <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
         </li>
-      {% elseif item.itemType == 'chapter'  and item.type == 'unit'  %}
+      {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
           <span class="text-overflow title" href="/course/29/task/131/show?preview=1">第{{ item.number }}
             节：{{ item.title }}</span>
@@ -15,11 +15,22 @@
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
+        {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
         <li class="task-item task-content mouse-control">
-          <i class="es-icon {% if not task.result|default(null) %} es-icon-undone-check {% elseif task.result.status == 'finish' %}  es-icon-done {% else %} es-icon-doing  {% endif %} left-menu"></i>
+          <i class="es-icon
+              {% if task_lock %}
+              es-icon-lock
+              {% elseif  not task.result|default(null) %}
+              es-icon-undone-check
+              {% elseif task.result.status == 'start' %}
+              es-icon-doing
+              {% elseif task.result.status == 'finish' %}
+              es-icon-iccheckcircleblack24px
+              {% endif %}
+              left-menu"></i>
           <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
             {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
-            课时{{task.number }}：{{ task.title }}
+            课时{{ task.number }}：{{ task.title }}
           </a>
           <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
