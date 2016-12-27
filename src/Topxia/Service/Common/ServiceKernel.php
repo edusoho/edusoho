@@ -250,13 +250,14 @@ class ServiceKernel
     public function createService($name)
     {
         if (empty($this->pool[$name])) {
-            $class = $this->getClassName('service', $name);
+            $this->pool[$name] = $this->biz->service($name);
 
-            if (class_exists($class)) {
-                $this->pool[$name] = new $class();
-            } else {
-                $this->pool[$name] = $this->biz->service($name);
-            }
+            // $class = $this->getClassName('service', $name);
+            // if (class_exists($class)) {
+            //     $this->pool[$name] = new $class();
+            // } else {
+            //     $this->pool[$name] = $this->biz->service($name);
+            // }
         }
 
         return $this->pool[$name];

@@ -51,6 +51,15 @@ class Marketing {
 				$('.js-is-free').addClass('hidden');
 			}
         });
+
+		$('input[name="enableBuyExpiryTime"]').on('change', function(event){
+			if($('input[name="enableBuyExpiryTime"]:checked').val() == 0){
+				$('.js-is-free').removeClass('hidden');
+			}else{
+				$('.js-is-free').addClass('hidden');
+			}
+        });
+
         $('input[name="tryLookable"]').on('change', function(event){
         	if($('input[name="tryLookable"]:checked').val() == 1){
 				$('.js-enable-try-look').removeClass('hidden');

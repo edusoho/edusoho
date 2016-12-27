@@ -44,7 +44,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getOrderInfo($targetId, $fields)
     {
         $course = $this->getCourseService()->getCourse($targetId);
-var_dump($course);
+
         if (empty($course)) {
             throw new Exception($this->getKernel()->trans('找不到要购买课程!'));
         }
