@@ -65,12 +65,12 @@ class CourseManageController extends BaseController
 
     protected function getFinishedTaskPerDay($course, $tasks)
     {
-        $taskCount = count($tasks);
+        $taskNum = count($tasks);
         if ($course['expiryMode'] == 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskCount / $course['expiryDays'];
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
             $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? false : $taskCount / $diffDay;
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
         return round($finishedTaskPerDay, 1);
     }

@@ -351,7 +351,10 @@
               <a href="/">课程目录</a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
-              <a href="{{path('course_threads', {id: course.id})}}">话题</a>
+              <a href="{{path('course_threads', {id: course.id})}}">
+                话题
+                <small class="text-muted">({{ course.threadNum }})</small>
+              </a>
             </li>
             <li role="presentation" class="{% if nav|default('') == 'appraise' %}active{% endif %}">
               <a href="">评价</a>
