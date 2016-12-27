@@ -1,14 +1,14 @@
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="/">首页</a></li>
+    <li><a href="{{path('homepage') }}">首页</a></li>
     <li class="active">sdfdsf</li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
-      <div class="course-detail-heading">数据结构PHP开发入门课程 暑期班A</div>
+      <div class="course-detail-heading">{{ courseSet.title }} {{ course.title }}</div>
       <ul class="course-operation clearfix ">
         <li class="mrl"><i class="es-icon es-icon-people"></i>
-          2035 人
+          {{ memberCount }} 人
         </li>
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
           <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
@@ -45,7 +45,7 @@
           </div>
         </li>
         <li>
-          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
             <i class="es-icon es-icon-setting"></i>
           </a>
         </li>

@@ -11,7 +11,7 @@ class CourseController extends CourseBaseController
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course-set/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -23,11 +23,14 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
+        $courses     = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $memberCount = $this->getMemberService()->countMembers(array('courseId' => $id));
         return $this->render('course-set/header.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'member'    => $member
+            'courseSet'    => $courseSet,
+            'courses'      => $courses,
+            'course'       => $course,
+            'member'       => $member,
+            'memberCount' => $memberCount,
         ));
     }
 
@@ -59,7 +62,7 @@ class CourseController extends CourseBaseController
     public function reviewListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member)    = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
 
         $courseId = $request->query->get('courseId', 0);
 
@@ -149,7 +152,7 @@ class CourseController extends CourseBaseController
         $characteristicData = array();
 
         foreach ($tasks as $task) {
-            $type                                                                                         = strtolower($task['activity']['mediaType']);
+            $type = strtolower($task['activity']['mediaType']);
             isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
         }
 
@@ -192,9 +195,9 @@ class CourseController extends CourseBaseController
             'locked'   => 0
         );
 
-        $members  = $this->getMemberService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, 20);
+        $members    = $this->getMemberService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, 20);
         $studentIds = ArrayToolkit::column($members, 'userId');
-        $students = $this->getUserService()->findUsersByIds($studentIds);
+        $students   = $this->getUserService()->findUsersByIds($studentIds);
 
         return $this->render('course/part/newest-students.html.twig', array(
             'students' => $students
