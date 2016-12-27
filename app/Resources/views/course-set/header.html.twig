@@ -1,0 +1,15 @@
+{% if not  member|default(null) %}
+  <!-- 1、加入前 -->
+  {% include 'course-set/part/header-for-guest.html.twig' %}
+{% else %}
+
+  {% if course.learnMode == 'freeMode' %}
+    <!-- 2、加入后：自由式学习 -->
+    {% include 'course-set/part/free-mode-header-for-member.html.twig' %}
+
+  {% elseif course.learnMode == 'lockMode' %}
+    <!-- 3、加入后：任务式学习 -->
+    {% include 'course-set/part/lock-mode-header-for-member.html.twig' %}
+  {% endif %}
+{% endif %}
+

@@ -20,6 +20,17 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function headerAction(Request $request, $id)
+    {
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        return $this->render('course-set/header.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'member'    => $member
+        ));
+    }
+
     public function notesAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
@@ -117,11 +128,16 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function taskListAction(Request $request, $courseId)
+    public function taskListAction(Request $request, $id)
     {
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $courseItems = $this->getCourseService()->findCourseItems($id);
 
-        var_dump($courseItems);
+        return $this->render('course-set/task-list.html.twig', array(
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'courseItems' => $courseItems
+        ));
     }
 
     public function characteristicPartAction(Request $request, $id)

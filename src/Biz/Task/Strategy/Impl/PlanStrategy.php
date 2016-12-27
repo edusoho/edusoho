@@ -84,8 +84,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             'unit'    => array(),
             'chapter' => array()
         );
-
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber     = 0;
+        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
@@ -131,9 +131,11 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id         = str_replace('task-', '', $id);
+                $taskNumber++;
                 $this->getTaskService()->updateSeq($id, array(
                     'seq'        => $key,
-                    'categoryId' => $categoryId
+                    'categoryId' => $categoryId,
+                    'number'     => $taskNumber
                 ));
             }
         }
