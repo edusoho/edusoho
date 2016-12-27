@@ -42,7 +42,7 @@ class BuildCommand extends BaseCommand
             ->addArgument('user', InputArgument::REQUIRED, '演示站点数据库用户')
             ->addArgument('password', InputArgument::REQUIRED, '数据库密码')
             ->addArgument('database', InputArgument::REQUIRED, '演示站数据库')
-            ->addArgument('projectDir', InputArgument::OPTIONAL, '演示站路径')
+            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径')
         ;
     }
 
@@ -117,7 +117,7 @@ class BuildCommand extends BaseCommand
             'user'    => $this->input->getArgument('user'),
             'password'=> $this->input->getArgument('password'),
             'database'=> $this->input->getArgument('database'),
-            'projectDir' => $this->input->getArgument('projectDir')
+            'projectPath' => $this->input->getArgument('projectPath')
         ));
 
         $returnCode = $dumpCommand->run($input, $this->output);
