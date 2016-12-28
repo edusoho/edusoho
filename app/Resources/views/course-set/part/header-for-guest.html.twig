@@ -67,10 +67,7 @@
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
         {# end 需要设置是否可以预览 #}
-
-
-        <img class="img-responsive" src=" {% if  not courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else  %} {{filepath(courseSet.cover.large) }} {% endif  %}"  alt="{{course.title  }} ">
-
+        <img class="img-responsive" src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else  %} {{filepath(courseSet.cover.large) }} {% endif  %}"  alt="{{course.title  }} ">
         <div class="course-detail-remask">
           <i class="es-icon es-icon-people"></i>{{ course.studentNum }} 人加入学习
           <div class="score pull-right">

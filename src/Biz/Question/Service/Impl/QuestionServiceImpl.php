@@ -37,7 +37,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        // $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
     }

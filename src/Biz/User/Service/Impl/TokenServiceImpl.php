@@ -43,7 +43,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         }
 
         if ($token['remainedTimes'] > 1) {
-            $this->getTokenDao()->wave($token['id'], array('remainedTimes', -1));
+            $this->getTokenDao()->wave(array($token['id']), array('remainedTimes' => -1));
         }
 
         $this->_gcToken($token);
