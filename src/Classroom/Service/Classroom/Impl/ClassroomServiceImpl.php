@@ -1440,7 +1440,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields['learnedNum'] = $userLearnCount;
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
-
         return $this->updateMember($classroomMember['id'], $fields);
     }
 
