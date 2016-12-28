@@ -40,7 +40,8 @@ class DumpInitDataCommand extends BaseCommand
         $user     = $input->getArgument('user');
         $password = $input->getArgument('password');
         $database = $input->getArgument('database');
-        $projectPath = empty($input->getArgument('projectPath')) ? '/var/www/edusoho' : $input->getArgument('projectPath');
+        $projectPath = $input->getArgument('projectPath');
+        $projectPath = empty($projectPath) ? '/var/www/edusoho' : $projectPath;
 
         $domain = explode(':', $domain);
         $host = $domain[0];
