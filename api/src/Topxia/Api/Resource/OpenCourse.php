@@ -22,6 +22,10 @@ class OpenCourse extends BaseResource
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
+        if (empty($res['tags'])) {
+            $res['tags'] = array();
+        }
+        
         return $res;
     }
 
