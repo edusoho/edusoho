@@ -68,8 +68,10 @@
       <div class="col-sm-6">
         <span class="progress-img">
           <div class="course-progress">
-            <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
+             {% if taskPerDay %}
+               <div class="cricle-progress" id="orderprogress-plan" data-percent="{{ planProgressProgress }}">
             </div>
+             {% endif %}
             <div class="cricle-progress" id="orderprogress" data-percent="{{ progress }}">
               <span class="percent"></span>
             </div>
@@ -82,13 +84,22 @@
             <span class="color-primary">{{ taskResultCount }}</span>
             ／{{ taskCount }}个任务
           </li>
-          <li class="mb20">
-            <i class="es-icon es-icon-dot color-warning"></i>
-            计划完成5个任务，落后计划5%
-          </li>
+          {% if taskPerDay %}
+            <li class="mb20">
+              <i class="es-icon es-icon-dot color-warning"></i>
+              计划完成{{ planStudyTaskCount }}
+              个任务，{% if planProgressProgress -progress > 0 %} 领先计划 (planProgressProgress -progress)% {% else %}落后计划(progress- planProgressProgress)% {% endif %}
+            </li>
+          {% endif %}
           <li class="pt20 mb10 progress-learn-time">学习有效期</li>
-          <li class="progress-learn-time">{{ course.expiryStartDate|date('Y-m-d ') }}
-            ~ {{ course.expiryEndDate|date('Y-m-d ') }}</li>
+
+          {% if course.expiryMode == 'days' %}
+            <li class="progress-learn-time"> {% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}无限制 {% endif %}</li>
+          {% elseif course.expiryMode == 'date' %}
+            <li class="progress-learn-time">{ {{ course.expiryStartDate|date('Y-m-d ') }}
+              ~ {{ course.expiryEndDate|date('Y-m-d ') }}</li>
+          {% endif %}
+
         </ul>
       </div>
       <div class="col-sm-6 course-detail-content">
@@ -110,13 +121,16 @@
               {% endif %}
               left-menu"></i>
 
-              <a class="text-overflow title" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+              <a class="text-overflow title"
+                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
               <span class="right-menu mouse-leave">
-              {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top"
-                          title="{{ meta.name|default(null) }}任务"></i>
+              {{ task.activity.length|activity_length_format }} <i
+                    class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top"
+                    title="{{ meta.name|default(null) }}任务"></i>
             </span>
               <span class="right-menu mouse-enter">
-              <a class="btn btn-primary btn-sm btn-learn" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
+              <a class="btn btn-primary btn-sm btn-learn"
+                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
             </span>
             </li>
           {% endfor %}

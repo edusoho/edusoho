@@ -78,7 +78,11 @@
                 <i class="es-icon es-icon-today mrm"></i>
                 学习有效期
               </p>
-              {{ course.expiryDays }} 天
+              {% if course.expiryMode == 'days' %}
+                {% if course.expiryDays %} {{ course.expiryDays  }}天 {% else %}无限制 {% endif  %}
+              {% elseif course.expiryMode == 'date' %}
+               {{ course.expiryStartDate|date('Y-m-d ') }} ~ {{ course.expiryEndDate|date('Y-m-d ') }}
+              {% endif %}
             </li>
             <li>
               <p class="mb20 color-gray">
