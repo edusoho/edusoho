@@ -1,9 +1,9 @@
 <?php
 
-namespace Custom\AdminBundle\Controller;
+namespace Custom\WebBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\AdminBundle\Controller\DefaultController as BaseDefaultController;
+use Topxia\WebBundle\Controller\DefaultController as BaseDefaultController;
 
 class DefaultController extends BaseDefaultController
 {
