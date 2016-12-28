@@ -129,16 +129,6 @@ class Testpaper {
   }
 
   changeEndTime(event) {
-    // let $this = $(event.currentTarget);
-    // let limitedTime = $this.val();
-    // let startTime = $('input[name="startTime"]:visible').val();
-    // console.log(startTime);
-    // if (startTime) {
-    //   let endTime = new Date(Date.parse(startTime) + limitedTime * 60 * 1000);
-    //   let endDate = endTime.Format("yyyy-MM-dd hh:mm");
-    //   $('input[name="endTime"]').val(endDate);
-    // }
-    // 
     let startTime = $('input[name="startTime"]:visible').val();
     if (startTime) {
       this.showEndTime(Date.parse(startTime));
