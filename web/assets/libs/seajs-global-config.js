@@ -146,3 +146,12 @@ seajs.on('define', function(data) {
         data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
     }
 });
+
+seajs.on('require', function(data) {
+    if ((data.id == '$' || data.id == 'jquery' || data.id == '$-debug') && (typeof window.jQuery !== 'undefined' || typeof window.$ !== 'undefined'))
+    {
+        data.exec = function () {
+            return window.$;
+        }
+    }
+});
