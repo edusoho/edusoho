@@ -29,20 +29,25 @@
       margin-top: -8px;
     }
   }
+  &.task-list-gray{
+    .task-item{
+      background-color: #f8f8f8;
+    }
+  }
   &.task-list-md {
     .task-item {
       margin-bottom: 10px;
     }
     .title {
-      padding: 18px 80px 18px 40px;
+      padding: 18px 80px 18px 45px;
     }
     .left-menu {
-      left: 15px;
-      top: 18px;
+      left: 20px;
+      top: 15px;
     }
     .right-menu {
-      right: 10px;
-      top: 18px;
+      right: 20px;
+      top: 15px;
     }
   }
   &.task-list-hover {
@@ -53,6 +58,7 @@
     }
   }
   &.task-show {
+    //学习页
     .task-item {
       &:hover,
       &.active {
@@ -62,6 +68,32 @@
             color: @brand-primary
           }
         }
+      }
+    }
+  }
+  &.task-chart {
+    margin-right: -18px;
+    .task-item {
+      float: left;
+      width: 33.2%;
+      margin-bottom: 20px;
+      background-color: #f8f8f8;
+      border-right:20px solid #fff;
+      .title {
+        color: #616161;
+        padding: 18px 70px 28px 45px;
+      }
+      .task-overflow{
+        display: -webkit-box;
+        overflow: hidden;
+        line-height: 20px;
+        height: 40px;
+      }
+      .right-menu {
+        font-size: 48px;
+        margin-right: -5px;
+        margin-top: -6px;
+        color: #e9eaea;
       }
     }
   }

@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/courseset-manage/index"],[function(module,exports){"use strict";console.log("js for courseset-manage")}]);
