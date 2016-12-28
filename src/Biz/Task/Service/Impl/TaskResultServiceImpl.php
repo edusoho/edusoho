@@ -116,7 +116,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         }
         $conditions  = array(
             'userId'   => $user->getId(),
-            'status'   => 'fini1sh',
+            'status'   => 'finish',
             'courseId' => $courseId
         );
         $taskResults = $this->getTaskResultDao()->search($conditions, array('updatedTime' => 'DESC'), 0, 1);

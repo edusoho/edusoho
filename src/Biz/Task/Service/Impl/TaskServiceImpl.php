@@ -337,8 +337,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask  = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
-            $tasks = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
-            $toLearnTask = array_pop($tasks);//如果当正在学习的是最后一个，则取当前在学的任务
+            $tasks            = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
+            $toLearnTask      = array_pop($tasks);//如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
     }
@@ -346,28 +346,51 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function getToLearnTasksWithLockMode($courseId)
     {
-        $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
-
-        $toLearnTasks = array();
+        $toLearnTaskCount = 3;
+        $taskResult       = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
+        $toLearnTasks     = array();
         if (empty($taskResult)) {
-            $toLearnTasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, 3);
-        } else {
-            $taskCount = $this->countTasksByCourseId($courseId);
-            $tasks     = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
+            $toLearnTasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $toLearnTaskCount);
+            return $toLearnTasks;
+        }
 
-            $previousTask = null;
-            foreach ($tasks as $task) {
+        //取出所有的任务
+        $taskCount = $this->countTasksByCourseId($courseId);
+        $tasks     = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
+
+        if (count($tasks) <= $toLearnTaskCount) {
+            $toLearnTasks = $tasks;
+            return $toLearnTasks;
+        }
+
+        $previousTask = null;
+        //向后取待学习的三个任务
+        foreach ($tasks as $task) {
+            if ($task['id'] == $taskResult['courseTaskId']) {
+                $toLearnTasks[] = $task;
+                $previousTask   = $task;
+            }
+            if ($previousTask && $task['seq'] > $previousTask['seq'] and count($toLearnTasks) < $toLearnTaskCount) {
+                array_push($toLearnTasks, $task);
+                $previousTask = $task;
+            }
+        }
+
+        //向后去待学习的任务不足3个，向前取。
+        $reverseTasks = array_reverse($tasks);
+        if (count($toLearnTasks) < $toLearnTaskCount) {
+            foreach ($reverseTasks as $task) {
                 if ($task['id'] == $taskResult['courseTaskId']) {
-                    $toLearnTasks[] = $task;
-                    $previousTask   = $task;
+                    $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] > $previousTask['seq'] and count($toLearnTasks) < 3) {
-                    $toLearnTasks[] = $task;
-                    $previousTask   = $task;
+                if ($previousTask && $task['seq'] < $previousTask['seq'] and count($toLearnTasks) < $toLearnTaskCount) {
+                    array_unshift($toLearnTasks, $task);
+                    $previousTask = $task;
                 }
             }
         }
         return $toLearnTasks;
+
     }
 
 
