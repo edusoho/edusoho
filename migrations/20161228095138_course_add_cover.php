@@ -9,6 +9,7 @@ class CourseAddCover extends Migration
      */
     public function up()
     {
+        $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
             ALTER TABLE c2_course ADD COLUMN cover VARCHAR(1024);
@@ -20,6 +21,7 @@ class CourseAddCover extends Migration
      */
     public function down()
     {
+        $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
             ALTER TABLE c2_course DROP COLUMN cover;
