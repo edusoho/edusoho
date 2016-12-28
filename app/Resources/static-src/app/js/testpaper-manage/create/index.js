@@ -2,19 +2,94 @@ import sortList from 'common/sortable';
 
 class TestpaperForm{
   constructor($form) {
-
     this.$form = $form;
     this.$description = this.$form.find('[name="description"]');
     this.validator = null;
+    this.difficultySlider = null;
     this._initEvent();
     this._initEditor();
     this._initValidate();
     this._initSortList();
+    this.scoreSlider = null;
   }
 
   _initEvent() {
     this.$form.on('click','[data-role="submit"]',event=>this._submit(event));
+    this.$form.on('click','[name="mode"]',event=>this.changeMode(event));
+    this.$form.on('click','[name="range"]',event=>this.changeRange(event));
+    this.$form.on('blur','[data-role="count"]',event=>this.changeCount(event));
+  }
 
+  initScoreSlider(passScore,score) {
+    let scoreSlider = document.getElementById('score-slider');
+    let option = {
+      start: passScore,
+      connect: [true, false],
+      tooltips: [true],
+      step: 1,
+      range: {
+        'min': 0,
+        'max': score
+      }
+    }
+    if(this.scoreSlider) {
+      console.log('test');
+      this.scoreSlider.updateOptions(option);
+    }else {
+      this.scoreSlider = noUiSlider.create(scoreSlider,option);
+      scoreSlider.noUiSlider.on('update', function( values, handle ){
+        $('.noUi-tooltip').text(`${(values[handle]/score*100).toFixed(0)}%`);
+        $('.js-passScore').text(parseInt(values[handle]));
+      });
+    }
+    $('.noUi-handle').attr('data-placement','top').attr('data-original-title',`达标分数：<span class="js-passScore">${passScore}</span>分`).attr('data-container','body');
+    $('.noUi-handle').tooltip({html: true})
+    $('.noUi-tooltip').text(`${(passScore/score*100).toFixed(0)}%`);
+  }
+
+  changeMode(event) {
+    let $this = $(event.currentTarget);
+    if($this.val() == 'difficulty') {
+      this.$form.find('#difficulty-form-group').removeClass('hidden');
+      this.initDifficultySlider();
+    }else {
+      this.$form.find('#difficulty-form-group').addClass('hidden')
+    }
+  }
+
+  changeRange(event) {
+    let $this = $(event.currentTarget);
+    ($this.val() == 'course') ? this.$form.find('#testpaper-range-selects').addClass('hidden') : this.$form.find('#testpaper-range-selects').removeClass('hidden');
+  }
+
+  initDifficultySlider() {
+    if(!this.difficultySlider ) {
+      let sliders = document.getElementById('difficulty-percentage-slider');
+      this.difficultySlider = noUiSlider.create(sliders, {
+        start: [ 30, 70 ],
+        margin: 30,
+        range: {
+          'min': 0,
+          'max': 100
+        },
+        step: 1,
+        connect: [true, true,true],
+        serialization: {
+          resolution: 1
+        },
+      });
+      sliders.noUiSlider.on('update', function( values, handle ){
+        let simplePercentage = parseInt(values[0]),
+        normalPercentage = values[1] - values[0],
+        difficultyPercentage = 100 - values[1];
+        $('.js-simple-percentage-text').html(Translator.trans('简单') + simplePercentage + '%');
+        $('.js-normal-percentage-text').html(Translator.trans('一般') + normalPercentage + '%');
+        $('.js-difficulty-percentage-text').html(Translator.trans('困难') + difficultyPercentage + '%');
+        $('input[name="percentages[simple]"]').val(simplePercentage);
+        $('input[name="percentages[normal]"]').val(normalPercentage);
+        $('input[name="percentages[difficulty]"]').val(difficultyPercentage);
+      });
+    }
   }
 
   _initEditor() {
@@ -26,6 +101,14 @@ class TestpaperForm{
     editor.on( 'change', () => {    
       this.$description.val(editor.getData());
     });
+  }
+
+  changeCount() {
+    let num = 0;
+    this.$form.find('[data-role="count"]').each(function(index,item){
+      num += parseInt($(item).val());
+    });
+    this.$form.find('[name="questioncount"]').val(num > 0 ? num : null);
   }
 
   _initValidate() {
@@ -48,9 +131,13 @@ class TestpaperForm{
         },
         range:{
           required:true
+        },
+        questioncount: {
+          required:true
         }
       },
       messages:{
+        questioncount:"请选择题目",
         name:"请输入试卷名称",
         description:"请输入试卷描述",
         mode:"请选择生成方式",
@@ -104,3 +191,5 @@ class TestpaperForm{
 }
 
 new TestpaperForm($('#testpaper-form'));
+
+

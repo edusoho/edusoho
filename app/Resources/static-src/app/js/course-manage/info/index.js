@@ -1,7 +1,7 @@
 import { TabChange, publishCourse } from '../help';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import MultiInput from '../../../common/widget/multi-input';
+import MultiInput from '../../../common/component/multi-input';
 import sortList from 'common/sortable';
 
 function renderMultiGroupComponent(elementId,name){
