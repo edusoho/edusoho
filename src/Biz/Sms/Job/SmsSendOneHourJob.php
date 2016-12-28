@@ -4,7 +4,7 @@ namespace Biz\Sms\Job;
 use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 
 class SmsSendOneHourJob implements Job
 {
