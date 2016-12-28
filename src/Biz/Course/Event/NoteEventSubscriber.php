@@ -27,26 +27,21 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $note = $event->getSubject();
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-        $course = $this->getCourseService()->getCourse($note['courseId']);
+
 
         // @TODO 班级功能改造完后完善
         /*if ($classroom && $note['status']) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
         }*/
 
-        if ($course && $note['status']) {
-            $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
-        }
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
     }
 
     public function onCourseNoteUpdate(Event $event)
     {
         $note      = $event->getSubject();
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
 
-        if (empty($course)) {
-            return;
-        }
 
         // @TODO 班级功能改造完后完善
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
@@ -58,7 +53,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }*/
 
-        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
+
     }
 
     public function onCourseNoteDelete(Event $event)

@@ -1,31 +1,32 @@
+<!-- 3、加入后：任务式学习 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li>
       <a href="/">首页</a>
     </li>
-    <li class="active">sdfdsf</li>
+    <li class="active">{{ courseSet.title }} </li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
-          <span class="course-detail-heading">数据结构PHP开发入门课程  暑期班A
-          </span>
-      <span class="">
-              <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
-              <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
-              <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
-              <span class="lump-sm color-lump bg-primary" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
-          </span>
+      <div class="course-detail-heading gray-darker text-24">{{ course.title }}  {{ courseSet.subtitle }}
+      </div>
+      <span class="item-icon-font">
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+      </span>
       <ul class="course-operation clearfix ">
-        <li class="mrl">
+        <li>
           <i class="es-icon es-icon-people"></i>
           2035 人
         </li>
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
           </a>
         </li>
         <li id="favorite-btn" data-url="/course/2/favorite">
-          <a class="btn btn-default btn-xs  " href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
           </a>
         </li>
         <li class="es-share top">
@@ -49,69 +50,69 @@
             </a>
           </div>
         </li>
-        <li>
-          <a class="btn btn-default btn-xs " href="/course/2/manage" title="课程管理">
+        <li class="pull-left">
+          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
             <i class="es-icon es-icon-setting"></i>
           </a>
         </li>
       </ul>
     </div>
     <section class="row course-orderlearn-section">
-      <div class="col-sm-5">
-            <span class="progress-img">
-              <div class="course-progress">
-                <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
-                </div>
-                <div class="cricle-progress" id="orderprogress" data-percent="44.444444444444">
-                  <span class="percent"></span>
-                </div>
-              </div>
-            </span>
+      <div class="col-sm-6">
+        <span class="progress-img">
+          <div class="course-progress">
+            <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
+            </div>
+            <div class="cricle-progress" id="orderprogress" data-percent="{{ taskResultCount }}">
+              <span class="percent"></span>
+            </div>
+          </div>
+        </span>
         <ul class="progress-info mbl">
-          <li>
+          <li class="mb10">
             <i class="es-icon es-icon-dot color-primary"></i>
             已完成
-            <span class="color-primary">3</span>
-            ／45个任务
+            <span class="color-primary">{{ taskResultCount }}</span>
+            ／{{ taskCount }}个任务
           </li>
-          <li>
-            <i class="es-icon es-icon-dot color-warning"></i>
-            计划完成5个任务，落后计划5%</li>
-          <li class="learn-time time-margin">学习有效期</li>
-          <li class="time-margin">2015-08-09 ~ 2025-23-23</li>
+          <li class="mb20">
+          <i class="es-icon es-icon-dot color-warning"></i>
+          计划完成5个任务，落后计划5%</li>
+          <li class="pt20 mb10 progress-learn-time">学习有效期</li>
+          <li class="progress-learn-time">{{ course.expiryStartDate|date('Y-m-d ') }} ~ {{ course.expiryEndDate|date('Y-m-d ') }}</li>
         </ul>
       </div>
-      <div class="col-sm-7 ">
-        <ul class="task-list task-list-detail">
-          <li class="task-item  mouse-control">
+      <div class="col-sm-6 course-detail-content">
+        <ul class="task-list task-list-md task-list-hover task-list-gray">
+          <li class="task-item task-content mouse-control">
             <i class="es-icon es-icon-undone-check left-menu"></i>
             <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
             <span class="right-menu mouse-leave">
-                  01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
-                </span>
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
             <span class="right-menu mouse-enter">
-                  <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
-                </span>
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
           </li>
-          <li class="task-item  mouse-control">
+          <li class="task-item task-content mouse-control">
             <i class="es-icon es-icon-undone-check left-menu"></i>
             <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
             <span class="right-menu mouse-leave">
-                  01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
-                </span>
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
             <span class="right-menu mouse-enter">
-                  <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
-                </span>
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
           </li>
-          <li class="task-item  mouse-control">
+          <li class="task-item  task-content mouse-control">
             <i class="es-icon es-icon-undone-check left-menu"></i>
             <a class="text-overflow title" href="/course/29/task/131/show?preview=1">预习-音频</a>
             <span class="right-menu mouse-leave">
-                  01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
-                </span>
+              01:00:00 <i class="es-icon es-icon es-icon-audioclass mlm" data-toggle="tooltip" data-placement="top" title="音频任务"></i>
+            </span>
             <span class="right-menu mouse-enter">
-                  <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
-                </span>
+              <a class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            </span>
           </li>
         </ul>
       </div>

@@ -20,7 +20,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $rc4 = new \Topxia\Service\Util\Phpsec\Crypt\RC4();
+ *    $rc4 = new \Biz\Util\Phpsec\Crypt\RC4();
  *
  *    $rc4->setKey('abcdefgh');
  *
@@ -44,9 +44,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of RC4.
@@ -60,7 +60,7 @@ class RC4 extends Base
 {
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::_crypt()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::_crypt()
      */
     const ENCRYPT = 0;
     const DECRYPT = 1;
@@ -74,7 +74,7 @@ class RC4 extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::block_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 0;
 
@@ -83,8 +83,8 @@ class RC4 extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 128; // = 1024 bits
 
@@ -93,7 +93,7 @@ class RC4 extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'arcfour';
 
@@ -102,7 +102,7 @@ class RC4 extends Base
      *
      * @var mixed
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::inline_crypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::inline_crypt
      */
     public $use_inline_crypt = false; // currently not available
 
@@ -111,7 +111,7 @@ class RC4 extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      */
     public $key = "\0";
 
@@ -120,7 +120,7 @@ class RC4 extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      */
     public $stream;
 
@@ -130,9 +130,9 @@ class RC4 extends Base
      * Determines whether or not the mcrypt extension should be used.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      *
-     * @return \Topxia\Service\Util\Phpsec\Crypt\RC4
+     * @return \Biz\Util\Phpsec\Crypt\RC4
      */
     public function __construct()
     {
@@ -189,7 +189,7 @@ class RC4 extends Base
      * {@link http://en.wikipedia.org/wiki/Related_key_attack http://en.wikipedia.org/wiki/Related_key_attack}
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      *
      * @param String $iv
      */
@@ -204,7 +204,7 @@ class RC4 extends Base
      * be used.  If no key is explicitly set, it'll be assumed to be a single null byte.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String $key
      */
@@ -217,8 +217,8 @@ class RC4 extends Base
      * Encrypts a message.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::_crypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::_crypt()
      *
      * @param  String $plaintext
      * @return String $ciphertext
@@ -239,8 +239,8 @@ class RC4 extends Base
      * At least if the continuous buffer is disabled.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::_crypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::_crypt()
      *
      * @param  String $ciphertext
      * @return String $plaintext
@@ -280,7 +280,7 @@ class RC4 extends Base
      * Setup the key (expansion)
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -308,8 +308,8 @@ class RC4 extends Base
      * Encrypts or decrypts a message.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC4::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RC4::decrypt()
      *
      * @param  String  $text
      * @param  Integer $mode

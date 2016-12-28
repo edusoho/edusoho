@@ -3,7 +3,6 @@ namespace Biz\MoneyCard\Dao\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Topxia\Service\Common\BaseDao;
 
 class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
 {

@@ -3,8 +3,8 @@ namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Util\Phpsec\Crypt\Rijndael;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class QuickpayRequest extends Request
 {

@@ -5,9 +5,6 @@ use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Order\OrderService;
-use Topxia\Service\Course\CourseService;
-use Topxia\Service\Course\ThreadService;
 use Topxia\Component\Echats\EchartsBuilder;
 use Symfony\Component\HttpFoundation\Request;
 

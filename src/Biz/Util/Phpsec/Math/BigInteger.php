@@ -20,7 +20,7 @@
  * base is being used should more than compensate.
  *
  * Numbers are stored in {@link http://en.wikipedia.org/wiki/Endianness little endian} format.  ie.
- * (new \Topxia\Service\Util\Phpsec\Math\BigInteger(pow(2, 26)))->value = array(0, 1)
+ * (new \Biz\Util\Phpsec\Math\BigInteger(pow(2, 26)))->value = array(0, 1)
  *
  * Useful resources are as follows:
  *
@@ -31,8 +31,8 @@
  * Here's an example of how to use this library:
  * <code>
  * <?php
- *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger(2);
- *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger(3);
+ *    $a = new \Biz\Util\Phpsec\Math\BigInteger(2);
+ *    $b = new \Biz\Util\Phpsec\Math\BigInteger(3);
  *
  *    $c = $a->add($b);
  *
@@ -50,9 +50,9 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace Topxia\Service\Util\Phpsec\Math;
+namespace Biz\Util\Phpsec\Math;
 
-use Topxia\Service\Util\Phpsec\Crypt\Random;
+use Biz\Util\Phpsec\Crypt\Random;
 
 /**
  * Pure-PHP arbitrary precision integer arithmetic library. Supports base-2, base-10, base-16, and base-256
@@ -248,7 +248,7 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('0x32', 16); // 50 in base-16
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('0x32', 16); // 50 in base-16
      *
      *    echo $a->toString(); // outputs 50
      * ?>
@@ -257,7 +257,7 @@ class BigInteger
      * @access public
      * @param  optional                                       $x      base-10 number or base-$base number if $base set.
      * @param  optional                                       integer $base
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function __construct($x = 0, $base = 10)
     {
@@ -538,7 +538,7 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('65');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('65');
      *
      *    echo $a->toBytes(); // outputs chr(65)
      * ?>
@@ -638,7 +638,7 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('65');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('65');
      *
      *    echo $a->toHex(); // outputs '41'
      * ?>
@@ -663,7 +663,7 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('65');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('65');
      *
      *    echo $a->toBits(); // outputs '1000001'
      * ?>
@@ -703,7 +703,7 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('50');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('50');
      *
      *    echo $a->toString(); // outputs 50
      * ?>
@@ -767,7 +767,7 @@ class BigInteger
      * @access public
      * @see __clone()
      *
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function copy()
     {
@@ -805,7 +805,7 @@ class BigInteger
      * @access public
      * @see copy()
      *
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function __clone()
     {
@@ -862,8 +862,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('10');
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger('20');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('10');
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger('20');
      *
      *    $c = $a->add($b);
      *
@@ -873,8 +873,8 @@ class BigInteger
      *
      * @access public
      * @internal Performs base-2**52 addition
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $y
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $y
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function add($y)
     {
@@ -995,8 +995,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('10');
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger('20');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('10');
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger('20');
      *
      *    $c = $a->subtract($b);
      *
@@ -1006,8 +1006,8 @@ class BigInteger
      *
      * @access public
      * @internal Performs base-2**52 subtraction
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $y
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $y
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function subtract($y)
     {
@@ -1134,8 +1134,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('10');
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger('20');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('10');
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger('20');
      *
      *    $c = $a->multiply($b);
      *
@@ -1144,8 +1144,8 @@ class BigInteger
      * </code>
      *
      * @access public
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $x
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function multiply($x)
     {
@@ -1422,8 +1422,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('10');
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger('20');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('10');
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger('20');
      *
      *    list($quotient, $remainder) = $a->divide($b);
      *
@@ -1435,7 +1435,7 @@ class BigInteger
      *
      * @access public
      * @internal This function is based off of {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=9 HAC 14.20}.
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $y
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $y
      * @return Array
      */
     public function divide($y)
@@ -1648,9 +1648,9 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger('10');
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger('20');
-     *    $c = new \Topxia\Service\Util\Phpsec\Math\BigInteger('30');
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger('10');
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger('20');
+     *    $c = new \Biz\Util\Phpsec\Math\BigInteger('30');
      *
      *    $c = $a->modPow($b, $c);
      *
@@ -1678,9 +1678,9 @@ class BigInteger
      *    uses a trick involving the Chinese Remainder Theorem to factor the even modulo into two numbers - one odd and
      *    the other, a power of two - and recombine them, later.  This is the method that this modPow function uses.
      *    {@link http://islab.oregonstate.edu/papers/j34monex.pdf Montgomery Reduction with Even Modulus} elaborates.
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $e
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $n
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $e
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $n
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function modPow($e, $n)
     {
@@ -1832,9 +1832,9 @@ class BigInteger
      * Alias for modPow().
      *
      * @access public
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $e
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $n
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $e
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $n
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function powMod($e, $n)
     {
@@ -1850,10 +1850,10 @@ class BigInteger
      * As such, this function has the same preconditions that the reductions being used do.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $e
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $n
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $e
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $n
      * @param  Integer                                        $mode
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _slidingWindow($e, $n, $mode)
     {
@@ -2034,8 +2034,8 @@ class BigInteger
      * @access private
      * @see _slidingWindow()
      *
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _mod2($n)
     {
@@ -2489,8 +2489,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger(30);
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger(17);
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger(30);
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger(17);
      *
      *    $c = $a->modInverse($b);
      *    echo $c->toString(); // outputs 4
@@ -2505,8 +2505,8 @@ class BigInteger
      *
      * @access public
      * @internal See {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=21 HAC 14.64} for more information.
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $n
-     * @return mixed                                       false, if no modular inverse exists, \Topxia\Service\Util\Phpsec\Math\BigInteger, otherwise.
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $n
+     * @return mixed                                       false, if no modular inverse exists, \Biz\Util\Phpsec\Math\BigInteger, otherwise.
      */
     public function modInverse($n)
     {
@@ -2556,8 +2556,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger(693);
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger(609);
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger(693);
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger(609);
      *
      *    extract($a->extendedGCD($b));
      *
@@ -2570,8 +2570,8 @@ class BigInteger
      * @internal Calculates the GCD using the binary xGCD algorithim described in
      *    {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=19 HAC 14.61}.  As the text above 14.61 notes,
      *    the more traditional algorithim requires "relatively costly multiple-precision divisions".
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $n
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $n
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function extendedGCD($n)
     {
@@ -2693,8 +2693,8 @@ class BigInteger
      * Here's an example:
      * <code>
      * <?php
-     *    $a = new \Topxia\Service\Util\Phpsec\Math\BigInteger(693);
-     *    $b = new \Topxia\Service\Util\Phpsec\Math\BigInteger(609);
+     *    $a = new \Biz\Util\Phpsec\Math\BigInteger(693);
+     *    $b = new \Biz\Util\Phpsec\Math\BigInteger(609);
      *
      *    $gcd = a->extendedGCD($b);
      *
@@ -2703,8 +2703,8 @@ class BigInteger
      * </code>
      *
      * @access public
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $n
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $n
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function gcd($n)
     {
@@ -2716,7 +2716,7 @@ class BigInteger
      * Absolute value.
      *
      * @access public
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function abs()
     {
@@ -2752,7 +2752,7 @@ class BigInteger
      * @internal Could return $this->subtract($x), but that's not as fast as what we do do.
      * @see equals()
      *
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $y
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $y
      * @return Integer                                     < if $this is less than $y; > if $this is greater than $y, and if they are equal.
      */
     public function compare($y)
@@ -2813,7 +2813,7 @@ class BigInteger
      * @access public
      * @see compare()
      *
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $x
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $x
      * @return Boolean
      */
     public function equals($x)
@@ -2854,8 +2854,8 @@ class BigInteger
      *
      * @access public
      * @internal Implemented per a request by Lluis Pamies i Juarez <lluis _a_ pamies.cat>
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $x
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_and($x)
     {
@@ -2895,8 +2895,8 @@ class BigInteger
      *
      * @access public
      * @internal Implemented per a request by Lluis Pamies i Juarez <lluis _a_ pamies.cat>
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $x
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_or($x)
     {
@@ -2935,8 +2935,8 @@ class BigInteger
      *
      * @access public
      * @internal Implemented per a request by Lluis Pamies i Juarez <lluis _a_ pamies.cat>
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $x
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_xor($x)
     {
@@ -2975,7 +2975,7 @@ class BigInteger
      *
      * @access public
      * @internal Implemented per a request by Lluis Pamies i Juarez <lluis _a_ pamies.cat>
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_not()
     {
@@ -3017,7 +3017,7 @@ class BigInteger
      * @access public
      * @internal The only version that yields any speed increases is the internal version.
      * @param  Integer                                       $shift
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_rightShift($shift)
     {
@@ -3055,7 +3055,7 @@ class BigInteger
      * @access public
      * @internal The only version that yields any speed increases is the internal version.
      * @param  Integer                                       $shift
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_leftShift($shift)
     {
@@ -3092,7 +3092,7 @@ class BigInteger
      *
      * @access public
      * @param  Integer                                       $shift
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_leftRotate($shift)
     {
@@ -3141,7 +3141,7 @@ class BigInteger
      *
      * @access public
      * @param  Integer                                       $shift
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function bitwise_rightRotate($shift)
     {
@@ -3151,15 +3151,15 @@ class BigInteger
     /**
      * Generates a random BigInteger
      *
-     * Byte length is equal to $length. Uses \Topxia\Service\Util\Phpsec\Crypt\Random if it's loaded and mt_rand if it's not.
+     * Byte length is equal to $length. Uses \Biz\Util\Phpsec\Crypt\Random if it's loaded and mt_rand if it's not.
      *
      * @access private
      * @param  Integer                                       $length
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _random_number_helper($size)
     {
-        if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\Random')) {
+        if (class_exists('\Biz\Util\Phpsec\Crypt\Random')) {
             $random = Random::string($size);
         } else {
             $random = '';
@@ -3191,9 +3191,9 @@ class BigInteger
      * @access public
      * @internal The API for creating random numbers used to be $a->random($min, $max), where $a was a BigInteger object.
      *           That method is still supported for BC purposes.
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger    $arg1
-     * @param  optional                                       \Topxia\Service\Util\Phpsec\Math\BigInteger $arg2
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger    $arg1
+     * @param  optional                                       \Biz\Util\Phpsec\Math\BigInteger $arg2
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function random($arg1, $arg2 = false)
     {
@@ -3273,8 +3273,8 @@ class BigInteger
      *
      * @access public
      * @internal See {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap4.pdf#page=15 HAC 4.44}.
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $arg1
-     * @param  optional                                    \Topxia\Service\Util\Phpsec\Math\BigInteger $arg2
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $arg1
+     * @param  optional                                    \Biz\Util\Phpsec\Math\BigInteger $arg2
      * @param  optional                                    Integer                                     $timeout
      * @return Mixed
      */
@@ -3414,7 +3414,7 @@ class BigInteger
      * @internal Uses the
      *     {@link http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test Miller-Rabin primality test}.  See
      *     {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap4.pdf#page=8 HAC 4.24}.
-     * @param  optional  \Topxia\Service\Util\Phpsec\Math\BigInteger $t
+     * @param  optional  \Biz\Util\Phpsec\Math\BigInteger $t
      * @return Boolean
      */
     public function isPrime($t = false)
@@ -3675,8 +3675,8 @@ class BigInteger
      * @access private
      * @see _trim()
      *
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _normalize($result)
     {
@@ -3727,7 +3727,7 @@ class BigInteger
      *
      * @access private
      * @param  Array                                         $value
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _trim($value)
     {

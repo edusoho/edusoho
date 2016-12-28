@@ -4,7 +4,7 @@ namespace Topxia\Component\Payment\Quickpay;
 use Topxia\Component\Payment\Payment;
 use Topxia\Component\Payment\Response;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
+use Biz\Util\Phpsec\Crypt\Rijndael;
 
 class QuickpayResponse extends Response
 {
