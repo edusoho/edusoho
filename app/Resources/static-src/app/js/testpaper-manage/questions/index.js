@@ -3,9 +3,16 @@ import 'jquery-sortable';
 import notify from 'common/notify';
 import BatchSelect from '../../../common/widget/batch-select';
 import DeleteAction from '../../../common/widget/delete-action';
-import { deleteQuestion, replaceQuestion  } from '../../../common/component/question-operate';
+import QuestionOperate from '../../../common/component/question-operate';
 
-class Picker{
+let $form = $('#question-checked-form');
+let questionOperate = new QuestionOperate($form,$("#modal"));
+
+new TestpaperQuestion($('[data-role="pick-item"]'), $('.nav-mini'), $form);
+new BatchSelect($form);
+new DeleteAction($form);
+
+class TestpaperQuestion{
   constructor($button, $typeNav, $form) {
     this.$button = $button;
     this.$typeNav = $typeNav;
@@ -25,12 +32,6 @@ class Picker{
   }
 
   _initSortList() {
-    //$('table').sortable({
-    //   containerSelector: 'table',
-    //   itemPath: '> tbody',
-    //   itemSelector: 'tr',
-    //   placeholder: '<tr class="placeholder"/>'
-    // });
     this.$form.find('table').sortable({
         containerSelector: 'table',
         itemPath: '> tbody',
@@ -40,7 +41,6 @@ class Picker{
             console.log(item);
             console.log(container);
             _super(item, container);
-
             if (item.hasClass('have-sub-questions')) {
                 let $tbody = item.parents('tbody');
                 $tbody.find('tr.is-question').each(function() {
@@ -49,7 +49,7 @@ class Picker{
                 });
             }
 
-            // self.refreshSeqs();
+            questionOperate.refreshSeqs($tbody);
         }
     });
   }
@@ -190,11 +190,4 @@ class Picker{
   }
 }
 
-let $form = $('#question-checked-form');
-new Picker($('[data-role="pick-item"]'), $('.nav-mini'), $form);
-new BatchSelect($form);
-new DeleteAction($form);
-replaceQuestion($form,$("#modal"))
-deleteQuestion($form);
-//modal 预览
 
