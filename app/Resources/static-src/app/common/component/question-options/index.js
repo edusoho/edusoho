@@ -11,7 +11,11 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
     inputValue: inputValue,
     checked: checked,
   }
-  validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0,
+  console.log(obj);
+  validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0;
+  if(checked) {
+    validatorDatas.checkedNum += 1;
+  }
   dataSource.push(obj);
 }
 
@@ -73,16 +77,14 @@ export default class QuestionOptions extends Component {
             checked = true;
           }
         }
-        InitOptionData(this.state.dataSource,item,this.validatorDatas,index,checked);
+        InitOptionData(this.state.dataSource,item,this.validatorDatas,index+1,checked);
       })
     }else {
-      for(let i = 1; i<= this.props.defaultNum;i++) {
+      for(let i = 1; i <= this.props.defaultNum;i++) {
         InitOptionData(this.state.dataSource,'',this.validatorDatas,i,false);
       }
     }
     this.subscriptionMessage();
-
-    console.log(this.state.dataSource);
   }
 
   subscriptionMessage() {
