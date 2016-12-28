@@ -5,7 +5,6 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Note\Service\CourseNoteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -13,6 +12,7 @@ use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\Service\CategoryService;
 
@@ -189,7 +189,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tryLookLength'] = 0;
         }
 
-        if(!empty($fields['buyExpiryTime'])){
+        if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
         }
 
@@ -217,7 +217,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'ratingNum') {
                 $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
-            } elseif ($field === 'noteNum'){
+            } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             }
         }
@@ -624,6 +624,42 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->count($conditions);
     }
 
+    public function findUserTeachCourseCount($conditions, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
+        unset($conditions['userId']);
+
+        if (!$members) {
+            return 0;
+        }
+
+        $conditions['courseIds'] = ArrayToolkit::column($members, 'courseId');
+
+        if ($onlyPublished) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->searchCourseCount($conditions);
+    }
+
+    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
+        unset($conditions['userId']);
+
+        if (!$members) {
+            return array();
+        }
+
+        $conditions['courseIds'] = ArrayToolkit::column($members, 'courseId');
+
+        if ($onlyPublished) {
+            $conditions['status'] = 'published';
+        }
+
+        return $this->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
+    }
+
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
     {
         return $this->getMemberDao()->findLearnedByCourseIdAndUserId($courseId, $userId);
@@ -844,5 +880,4 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->biz->service('Note:CourseNoteService');
     }
-
 }

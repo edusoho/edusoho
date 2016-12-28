@@ -81,6 +81,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseId($courseId);
     }
 
+    public function findTasksByCourseIds($courseIds)
+    {
+        return $this->getTaskDao()->findByCourseIds($courseIds);
+    }
+
     public function countTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->count(array('courseId' => $courseId));
@@ -125,6 +130,32 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
         });
         return $tasks;
+    }
+
+    public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
+    {
+        $conditions = array(
+            'userId' => $userId
+        );
+        $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
+
+        $conditions = array(
+            'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
+            'courseSetId' => $courseSetId
+        );
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+
+        return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
+    }
+
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getTaskDao()->count($conditions);
     }
 
     public function startTask($taskId)
