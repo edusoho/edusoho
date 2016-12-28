@@ -2,7 +2,7 @@
 
 namespace Biz\Search\Adapter;
 
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 
 abstract class AbstractSearchAdapter extends BaseService
 {

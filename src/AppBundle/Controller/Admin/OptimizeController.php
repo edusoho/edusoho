@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Service\Util\FileUtil;
-use Topxia\Service\Util\SystemUtil;
+use Biz\Util\FileUtil;
+use Biz\Util\SystemUtil;
 
 class OptimizeController extends BaseController
 {

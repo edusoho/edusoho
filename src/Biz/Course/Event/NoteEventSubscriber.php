@@ -27,27 +27,21 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $note = $event->getSubject();
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-        $course = $this->getCourseService()->getCourse($note['courseId']);
+
 
         // @TODO 班级功能改造完后完善
         /*if ($classroom && $note['status']) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
         }*/
 
-        if ($course && $note['status']) {
-            $this->getCourseService()->waveNoteNum($note['courseId'], +1);
-        }
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
     }
 
     public function onCourseNoteUpdate(Event $event)
     {
         $note      = $event->getSubject();
-        $preStatus = $event->getArgument('preStatus');
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
 
-        if (empty($course)) {
-            return;
-        }
 
         // @TODO 班级功能改造完后完善
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
@@ -59,31 +53,18 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }*/
 
-        if ($note['status'] == CourseNoteService::PUBLIC_STATUS
-            && $preStatus == CourseNoteService::PRIVATE_STATUS
-        ) {
-            $this->getCourseService()->waveNoteNum($note['courseId'], +1);
-        } else if ($note['status'] == CourseNoteService::PRIVATE_STATUS
-            && $preStatus == CourseNoteService::PUBLIC_STATUS
-        ) {
-            $this->getCourseService()->waveNoteNum($note['courseId'], -1);
-        }
+
     }
 
     public function onCourseNoteDelete(Event $event)
     {
         $note      = $event->getSubject();
-        $needWave  = $note['status'] == CourseNoteService::PUBLIC_STATUS;
-
         /*$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         if ($classroom) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }*/
 
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-        if (!empty($course) && $needWave) {
-            $this->getCourseService()->waveNoteNum($note['courseId'], -1);
-        }
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
     }
 
     public function onCourseNoteLike(Event $event)

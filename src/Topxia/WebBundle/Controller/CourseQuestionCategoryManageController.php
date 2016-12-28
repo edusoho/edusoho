@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Question\QuestionService;
+use Biz\Question\QuestionService;
 
 class CourseQuestionCategoryManageController extends BaseController
 {

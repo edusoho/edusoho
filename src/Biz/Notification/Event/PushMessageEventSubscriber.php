@@ -737,8 +737,9 @@ class PushMessageEventSubscriber extends EventSubscriber
         switch ($type) {
             case 'course':
                 $course               = $this->getCourseService()->getCourse($id);
+                $courseSet            = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
                 $target['title']      = $course['title'];
-                $target['image']      = $this->getFileUrl($course['smallPicture']);
+                $target['image']      = empty($courseSet['cover']['small']) ? '' : $this->getFileUrl($courseSet['cover']['small']);
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 $conv                 = $this->getConversationService()->getConversationByTarget($id, 'course-push');
                 $target['convNo']     = empty($conv) ? '' : $conv['no'];
@@ -886,6 +887,11 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getClassroomService()

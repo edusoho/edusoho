@@ -2,12 +2,11 @@
 namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExportHelp;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomManageController extends BaseController
@@ -53,7 +52,7 @@ class ClassroomManageController extends BaseController
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             array('classroomId' => $id),
-            array('createdTime', 'desc'),
+            array('createdTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -117,7 +116,7 @@ class ClassroomManageController extends BaseController
 
         $students = $this->getClassroomService()->searchMembers(
             $condition,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -163,7 +162,7 @@ class ClassroomManageController extends BaseController
 
         $students = $this->getClassroomService()->searchMembers(
             $condition,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -205,7 +204,7 @@ class ClassroomManageController extends BaseController
 
         $refunds = $this->getOrderService()->searchRefunds(
             $condition,
-            array('createdTime'=> 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -416,21 +415,21 @@ class ClassroomManageController extends BaseController
         }
 
         $content = implode("\r\n", $students);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
-        $status = ExportHelp::getNextMethod($start+$limit, $classroomMemberCount);
+        $file    = ExportHelp::saveToTempFile($request, $content, $file);
+        $status  = ExportHelp::getNextMethod($start + $limit, $classroomMemberCount);
 
         return $this->createJsonResponse(
             array(
-                'status' => $status,
+                'status'   => $status,
                 'fileName' => $file,
-                'start' => $start+$limit
+                'start'    => $start + $limit
             )
         );
     }
 
     public function exportCsvAction(Request $request, $id)
     {
-        $role = $request->query->get('role');
+        $role     = $request->query->get('role');
         $fileName = sprintf("classroom-%s-%s-(%s).csv", $id, $role, date('Y-n-d'));
         return ExportHelp::exportCsv($request, $fileName);
     }
@@ -447,22 +446,22 @@ class ClassroomManageController extends BaseController
         if ($role == 'student') {
             $condition = array(
                 'classroomId' => $classroom['id'],
-                'role' => 'student'
+                'role'        => 'student'
             );
         } else {
             $condition = array(
                 'classroomId' => $classroom['id'],
-                'role' => 'auditor'
+                'role'        => 'auditor'
             );
         }
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
-        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount:$classroomMemberCount;
+        $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount : $classroomMemberCount;
         if ($classroomMemberCount < ($start + $limit + 1)) {
             $limit = $classroomMemberCount - $start;
         }
         $classroomMembers = $this->getClassroomService()->searchMembers(
             $condition,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $start,
             $limit
         );
@@ -678,7 +677,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($request->getMethod() == "POST") {
-            $class = $request->request->all();
+            $class           = $request->request->all();
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
@@ -690,7 +689,7 @@ class ClassroomManageController extends BaseController
             'ownerType' => 'classroom',
             'ownerId'   => $id
         ));
-        
+
         return $this->render("classroom-manage/set-info.html.twig", array(
             'classroom' => $classroom,
             'tags'      => ArrayToolkit::column($tags, 'name')
@@ -862,7 +861,7 @@ class ClassroomManageController extends BaseController
         $user     = array();
 
         if ($nickName != "") {
-            $user = $this->getUserService()->searchUsers(array('nickname' => $nickName, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 1);
+            $user = $this->getUserService()->searchUsers(array('nickname' => $nickName, 'roles' => 'ROLE_TEACHER'), array('createdTime' => 'DESC'), 0, 1);
         }
 
         $user = $user ? $user[0] : array();

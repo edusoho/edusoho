@@ -16,7 +16,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $rc2 = new \Topxia\Service\Util\Phpsec\Crypt\RC2();
+ *    $rc2 = new \Biz\Util\Phpsec\Crypt\RC2();
  *
  *    $rc2->setKey('abcdefgh');
  *
@@ -35,9 +35,9 @@
  * @link     http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of RC2.
@@ -52,7 +52,7 @@ class RC2 extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::block_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 8;
 
@@ -61,7 +61,7 @@ class RC2 extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::key
+     * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      */
     public $key;
@@ -71,7 +71,7 @@ class RC2 extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::key
+     * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      * @see encrypt()
      * @see decrypt()
@@ -83,8 +83,8 @@ class RC2 extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 16; // = 128 bits
 
@@ -93,7 +93,7 @@ class RC2 extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'rc2';
 
@@ -102,7 +102,7 @@ class RC2 extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cfb_init_len
+     * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 500;
 
@@ -113,8 +113,8 @@ class RC2 extends Base
      * @access private
      * @internal Should be in range [1..1024].
      * @internal Changing this value after setting the key has no effect.
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::setKeyLength()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::setKeyLength()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $default_key_length = 1024;
 
@@ -124,8 +124,8 @@ class RC2 extends Base
      * @var Integer
      * @access private
      * @internal Should be in range [1..1024].
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::isValidEnine()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::isValidEnine()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $current_key_length;
 
@@ -134,7 +134,7 @@ class RC2 extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::_setupKey()
      */
     public $keys;
 
@@ -144,7 +144,7 @@ class RC2 extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $pitable = array(
         0xD9, 0x78, 0xF9, 0xC4, 0x19, 0xDD, 0xB5, 0xED,
@@ -218,7 +218,7 @@ class RC2 extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $invpitable = array(
         0xD1, 0xDA, 0xB9, 0x6F, 0x9C, 0xC8, 0x78, 0x66,
@@ -261,7 +261,7 @@ class RC2 extends Base
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -287,7 +287,7 @@ class RC2 extends Base
      *
      * Valid key lengths are 1 to 1024.
      * Calling this function after setting the key has no effect until the next
-     *  \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey() call.
+     *  \Biz\Util\Phpsec\Crypt\RC2::setKey() call.
      *
      * @access public
      * @param Integer $length in bits
@@ -311,7 +311,7 @@ class RC2 extends Base
      * null byte.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String  $key
      * @param Integer $t1     optional Effective key length in bits.
@@ -414,8 +414,8 @@ class RC2 extends Base
      * Encrypts a block
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_encryptBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_encryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
      * @param  String   $in
      * @return String
@@ -460,8 +460,8 @@ class RC2 extends Base
      * Decrypts a block
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_decryptBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_decryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
      * @param  String   $in
      * @return String
@@ -503,10 +503,10 @@ class RC2 extends Base
     }
 
     /**
-     * Setup the \Topxia\Service\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
+     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupMcrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public function _setupMcrypt()
     {
@@ -521,7 +521,7 @@ class RC2 extends Base
      * Creates the key schedule
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -529,7 +529,7 @@ class RC2 extends Base
             $this->setKey('');
         }
 
-        // Key has already been expanded in \Topxia\Service\Util\Phpsec\Crypt\RC2::setKey():
+        // Key has already been expanded in \Biz\Util\Phpsec\Crypt\RC2::setKey():
         // Only the first value must be altered.
         $l = unpack('Ca/Cb/v*', $this->key);
         array_unshift($l, $this->pitable[$l['a']] | ($l['b'] << 8));
@@ -542,7 +542,7 @@ class RC2 extends Base
      * Setup the performance-optimized function for de/encrypt()
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
     {

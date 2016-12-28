@@ -3,7 +3,7 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends MobileController

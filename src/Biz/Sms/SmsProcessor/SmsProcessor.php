@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Sms\SmsProcessor;
+namespace Biz\Sms\SmsProcessor;
 
 interface SmsProcessor 
 {

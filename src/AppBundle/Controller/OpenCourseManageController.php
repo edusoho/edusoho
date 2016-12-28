@@ -13,7 +13,6 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\File\Service\UploadFileService;
-use Topxia\Service\Course\LiveCourseService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\OpenCourse\Processor\CourseProcessorFactory;

@@ -4,7 +4,7 @@ namespace Biz\Classroom\Event;
 use Topxia\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Taxonomy\TagOwnerManager;
+use Biz\Taxonomy\TagOwnerManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface
@@ -14,8 +14,6 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         return array(
             'classroom.delete'       => 'onClassroomDelete',
             'classroom.update'       => 'onClassroomUpdate',
-            'classroom.join'         => 'onClassroomJoin',
-            'classroom.auditor_join' => 'onClassroomGuest',
             'classReview.add'        => 'onReviewCreate'
         );
     }
@@ -38,42 +36,6 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
         $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $tagIds, $userId);
         $tagOwnerManager->update();
-    }
-
-    public function onClassroomJoin(Event $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
-        $this->getStatusService()->publishStatus(array(
-            'type'        => 'become_student',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'private'     => $classroom['showable'] == 1 ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        ));
-    }
-
-    public function onClassroomGuest(Event $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
-        $this->getStatusService()->publishStatus(array(
-            'type'        => 'become_auditor',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'private'     => $classroom['showable'] == 1 ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        ));
     }
 
     public function onReviewCreate(Event $event)

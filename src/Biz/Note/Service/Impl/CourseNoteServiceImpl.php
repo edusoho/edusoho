@@ -22,6 +22,20 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->get($id);
     }
 
+    /**
+     * @param $courseId
+     *
+     * @return mixed
+     */
+    public function countCourseNoteByCourseId($courseId)
+    {
+        return $this->countCourseNotes(array(
+            'courseId' => $courseId,
+            'status'   => CourseNoteService::PUBLIC_STATUS
+        ));
+    }
+
+
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getNoteDao()->getByUserIdAndTaskId($userId, $taskId);
@@ -42,6 +56,28 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->countCourseNotes($conditions)
         );
     }
+
+    /**
+     * @param int $courseId
+     *
+     * @return mixed
+     */
+    public function findPublicNotesByCourseId($courseId)
+    {
+        $conditions = array(
+            'courseId' => $courseId,
+            'status'      => 1
+        );
+        return $this->searchNotes(
+            $conditions,
+            array(
+                'createdTime' => 'DESC'
+            ),
+            0,
+            $this->countCourseNotes($conditions)
+        );
+    }
+
 
     public function findCourseNotesByUserIdAndCourseId($userId, $courseId)
     {

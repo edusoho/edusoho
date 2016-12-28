@@ -13,7 +13,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
     {
         return array(
             'timestamps' => array('createdTime'),
-            'serializes' => array('role'=>'delimiter', 'assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
+            'serializes' => array('role' => 'delimiter', 'assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
             'orderbys'   => array('name', 'createdTime'),
             'conditions' => array(
                 'userId = :userId',
@@ -108,7 +108,6 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
 
     public function findByClassroomIdAndRole($classroomId, $role, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $role = '%|'.$role.'|%';
         $sql  = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 

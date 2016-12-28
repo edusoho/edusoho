@@ -37,7 +37,7 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function countMemberFetchCourse($conditions);
 
-    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    public function findLearnedByCourseIdAndUserId($courseId, $userId);
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
@@ -59,33 +59,25 @@ interface CourseMemberDao extends GeneralDaoInterface
      * @return mixed
      * @before findMembersByUserIdAndRole
      */
-    public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
+    public function findByUserIdAndRole($userId, $role);
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
-    public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true);
+    public function findByCourseIdAndRole($courseId, $role);
 
-    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true); //
-
-    public function findMembersByCourseIdAndRole($courseId, $role);
-
-    public function findMemberCountByCourseIdAndRole($courseId, $role);
-
-    public function findMembersByUserIdAndJoinType($userId, $joinedType);
+    public function findByUserIdAndJoinType($userId, $joinedType);
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit);
 
     public function updateMembers($conditions, $updateFields);
 
-    public function deleteMemberByCourseIdAndRole($courseId, $role);
+    public function deleteByCourseIdAndRole($courseId, $role);
 
-    public function findCourseMembersByUserId($userId);
+    public function deleteByCourseId($courseId);
 
-    public function deleteMembersByCourseId($courseId);
+    public function findByUserIdAndCourseIds($userId, $courseIds);
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+    public function findByCourseId($courseId);
 
-    public function findMemberUserIdsByCourseId($courseId);
-
-    public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true);
+    public function findByUserId($userId);
 }

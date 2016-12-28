@@ -10,9 +10,9 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $agent = new \Topxia\Service\Util\Phpsec\System\SSH\Agent();
+ *    $agent = new \Biz\Util\Phpsec\System\SSH\Agent();
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH2('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH2('www.domain.tld');
  *    if (!$ssh->login('username', $agent)) {
  *        exit('Login Failed');
  *    }
@@ -33,15 +33,15 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\System\SSH;
+namespace Biz\Util\Phpsec\System\SSH;
 
-use Topxia\Service\Util\Phpsec\Crypt\RSA;
-use Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity;
+use Biz\Util\Phpsec\Crypt\RSA;
+use Biz\Util\Phpsec\System\SSH\Agent\Identity;
 
 /**
  * Pure-PHP ssh-agent client identity factory
  *
- * requestIdentities() method pumps out \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity objects
+ * requestIdentities() method pumps out \Biz\Util\Phpsec\System\SSH\Agent\Identity objects
  *
  * @access  internal
  * @package SSH\Agent
@@ -118,7 +118,7 @@ class Agent
      * Default Constructor
      *
      * @access public
-     * @return \Topxia\Service\Util\Phpsec\System\SSH\Agent
+     * @return \Biz\Util\Phpsec\System\SSH\Agent
      */
     public function __construct()
     {
@@ -145,7 +145,7 @@ class Agent
      * Request Identities
      *
      * See "2.5.2 Requesting a list of protocol 2 keys"
-     * Returns an array containing zero or more \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity objects
+     * Returns an array containing zero or more \Biz\Util\Phpsec\System\SSH\Agent\Identity objects
      *
      * @access public
      * @return Array
