@@ -101,6 +101,10 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if(empty($data['enableBuyExpiryTime'])) {
+                unset($data['buyExpiryTime']);
+            }
+            
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
@@ -152,7 +156,12 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
         $queryField = $request->query->get('q');
-        $users      = $this->getUserService()->searchUsers(array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $users      = $this->getUserService()->searchUsers(
+            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
+            array('createdTime' => 'DESC'),
+            0,
+            10
+        );
 
         $teachers = array();
 

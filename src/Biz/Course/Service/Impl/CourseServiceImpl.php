@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Note\Service\CourseNoteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -173,6 +174,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable',
             'tryLookLength',
             'watchLimit',
+            'buyExpiryTime',
             'services'
         ));
 
@@ -186,6 +188,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
+
+        if(!empty($fields['buyExpiryTime'])){
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+        }
+
         if (isset($fields['price'])) {
             $fields['price'] = round(floatval($fields['price']) * 100, 0);
         }
@@ -207,6 +214,11 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
+            } elseif ($field === 'ratingNum') {
+                $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
+                $updateFields = array_merge($updateFields, $ratingFields);
+            } elseif ($field === 'noteNum'){
+                $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             }
         }
 
@@ -280,7 +292,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-        return $this->createCourseStrategy($course)->findCourseItems($courseId);
+        $tasks = $this->findTasksByCourseId($courseId);
+        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks);
+    }
+
+    protected function findTasksByCourseId($courseId)
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
+        } else {
+            return $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        }
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -748,13 +771,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function waveNoteNum($courseId, $num)
-    {
-        return $this->getCourseDao()->wave(array($courseId), array(
-            'noteNum' => $num
-        ));
-    }
-
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -815,4 +831,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->biz->service('Taxonomy:CategoryService');
     }
+
+    protected function getReviewService()
+    {
+        return $this->biz->service('Course:ReviewService');
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getNoteService()
+    {
+        return $this->biz->service('Note:CourseNoteService');
+    }
+
 }

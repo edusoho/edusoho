@@ -22,6 +22,20 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->getNoteDao()->get($id);
     }
 
+    /**
+     * @param $courseId
+     *
+     * @return mixed
+     */
+    public function countCourseNoteByCourseId($courseId)
+    {
+        return $this->countCourseNotes(array(
+            'courseId' => $courseId,
+            'status'   => CourseNoteService::PUBLIC_STATUS
+        ));
+    }
+
+
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getNoteDao()->getByUserIdAndTaskId($userId, $taskId);

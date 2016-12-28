@@ -1806,6 +1806,23 @@ course_task_list:
     path:  /course/{id}/task/list
     defaults: { _controller: AppBundle:Course:taskList }
 
+#course review
+course_review:
+  path: /course/{id}/review
+  defaults: {_controller: AppBundle:Course:reviewList}
+
+course_review_create:
+   path:  /course/{id}/review/create
+   defaults: { _controller: AppBundle:Course/Review:create }
+   methods: [POST]
+
+course_review_post:
+  path:  /course/{courseId}/review/{reviewId}/post
+  defaults: { _controller: AppBundle:Course/Review:post }
+
+course_review_delete:
+  path:  /course/{courseId}/review/{reviewId}/delete
+  defaults: { _controller: AppBundle:Course/Review:delete }
 
 #file chooser
 media_materiallib_choose:
@@ -1966,6 +1983,11 @@ testpaper_do_suspend:
   path: /testpaper/result/{resultId}/suspend
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
+
+#course
+course_show:
+  path: /course/{id}
+  defaults: { _controller: AppBundle:Course/Course:show }
 
 #homework
 course_manage_homework:
@@ -2175,7 +2197,7 @@ classroom_manage_homework:
 
 classroom_explore:
     path:  /classroom/explore/{category}
-    defaults: { _controller: TopxiaWebBundle:Explore:classroom, category:'' }
+    defaults: { _controller: AppBundle:Explore:classroom, category:'' }
 
 classroom_show:
     path:  /classroom/{id}
@@ -2458,4 +2480,9 @@ org_tree:
     path: /org-tree.json
     defaults: { _controller: AppBundle:Org:orgTreeJson }
     methods: [GET]
+
+#todo:只为展示页面
+course_explore:
+   path:  /course/explore/{category}
+   defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
 

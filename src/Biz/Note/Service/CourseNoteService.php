@@ -20,6 +20,13 @@ interface CourseNoteService
     public function getNote($id);
 
     /**
+     * @param $courseId
+     *
+     * @return integer
+     */
+    public function countCourseNoteByCourseId($courseId);
+
+    /**
      * return note by user id and task id
      *
      * @param integer $userId

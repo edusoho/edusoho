@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -10,7 +11,7 @@ abstract class CourseBaseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course#{$id} Not Found');
+            throw $this->createNotFoundException("Course#{$id} Not Found");
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -121,6 +122,9 @@ abstract class CourseBaseController extends BaseController
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
