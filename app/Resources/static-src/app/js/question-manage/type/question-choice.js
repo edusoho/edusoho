@@ -44,8 +44,8 @@ class Choice extends QuestionFormBase {
 
   submitForm(event) {
     this.$submit = $(event.currentTarget);
+    
     if(this.validator.form() && this.isSubmit ) {
-      console.log('submit by subscriptionMessage click');
       this.submit();
     }
     if(!this.isSubmit ) {
@@ -54,7 +54,6 @@ class Choice extends QuestionFormBase {
   }
 
   submit() {
-    console.log('submit...');
     this.$submit.button('loading');
     this.$form.submit();
   }
