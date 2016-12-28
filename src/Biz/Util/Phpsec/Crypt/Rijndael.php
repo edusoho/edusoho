@@ -7,11 +7,11 @@
  *
  * PHP version 5
  *
- * If {@link \Topxia\Service\Util\Phpsec\Crypt\Rijndael::setBlockLength() setBlockLength()} isn't called, it'll be assumed to be 128 bits.  If
- * {@link \Topxia\Service\Util\Phpsec\Crypt\Rijndael::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
- * {@link \Topxia\Service\Util\Phpsec\Crypt\Rijndael::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's
+ * If {@link \Biz\Util\Phpsec\Crypt\Rijndael::setBlockLength() setBlockLength()} isn't called, it'll be assumed to be 128 bits.  If
+ * {@link \Biz\Util\Phpsec\Crypt\Rijndael::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
+ * {@link \Biz\Util\Phpsec\Crypt\Rijndael::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's
  * 136-bits it'll be null-padded to 192-bits and 192 bits will be the key length until
- * {@link \Topxia\Service\Util\Phpsec\Crypt\Rijndael::setKey() setKey()} is called, again, at which point, it'll be recalculated.
+ * {@link \Biz\Util\Phpsec\Crypt\Rijndael::setKey() setKey()} is called, again, at which point, it'll be recalculated.
  *
  * Not all Rijndael implementations may support 160-bits or 224-bits as the block length / key length.  mcrypt, for example,
  * does not.  AES, itself, only supports block lengths of 128 and key lengths of 128, 192, and 256.
@@ -30,7 +30,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $rijndael = new \Topxia\Service\Util\Phpsec\Crypt\Rijndael();
+ *    $rijndael = new \Biz\Util\Phpsec\Crypt\Rijndael();
  *
  *    $rijndael->setKey('abcdefghijklmnop');
  *
@@ -54,9 +54,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of Rijndael.
@@ -73,8 +73,8 @@ class Rijndael extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 16;
 
@@ -82,14 +82,14 @@ class Rijndael extends Base
      * The mcrypt specific name of the cipher
      *
      * Mcrypt is useable for 128/192/256-bit $block_size/$key_size. For 160/224 not.
-     * \Topxia\Service\Util\Phpsec\Crypt\Rijndael determines automatically whether mcrypt is useable
+     * \Biz\Util\Phpsec\Crypt\Rijndael determines automatically whether mcrypt is useable
      * or not for the current $block_size/$key_size.
      * In case of, $cipher_name_mcrypt will be set dynamically at run time accordingly.
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::engine
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::engine
      * @see isValidEngine()
      */
     public $cipher_name_mcrypt = 'rijndael-128';
@@ -99,8 +99,8 @@ class Rijndael extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_default_salt
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_default_salt
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_default_salt = 'phpseclib';
 
@@ -199,17 +199,17 @@ class Rijndael extends Base
      *
      * $mode could be:
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_ECB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_ECB
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CBC
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CBC
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CTR
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CTR
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CFB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CFB
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_OFB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_OFB
      *
-     * If not explictly set, \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
+     * If not explictly set, \Biz\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
      *
      * @access public
      *
@@ -226,8 +226,8 @@ class Rijndael extends Base
      * Note: 160/224-bit keys must explicitly set by setKeyLength(), otherwise they will be round/pad up to 192/256 bits.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base:setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base:setKey()
      * @see setKeyLength()
      *
      * @param optional Integer $mode
@@ -331,10 +331,10 @@ class Rijndael extends Base
     /**
      * Test for engine validity
      *
-     * This is mainly just a wrapper to set things up for \Topxia\Service\Util\Phpsec\Crypt\Base::isValidEngine()
+     * This is mainly just a wrapper to set things up for \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -365,10 +365,10 @@ class Rijndael extends Base
     }
 
     /**
-     * Setup the \Topxia\Service\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
+     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupMcrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public function _setupMcrypt()
     {
@@ -583,7 +583,7 @@ class Rijndael extends Base
      * Setup the key (expansion)
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -908,7 +908,7 @@ class Rijndael extends Base
      * Setup the performance-optimized function for de/encrypt()
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
     {

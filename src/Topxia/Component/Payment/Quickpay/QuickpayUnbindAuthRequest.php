@@ -3,7 +3,7 @@ namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
+use Biz\Util\Phpsec\Crypt\Rijndael;
 
 class QuickpayUnbindAuthRequest extends Request
 {

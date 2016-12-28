@@ -11,13 +11,13 @@
  * just a wrapper to Rijndael.php you may consider using Rijndael.php instead of
  * to save one include_once().
  *
- * If {@link \Topxia\Service\Util\Phpsec\Crypt\AES::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
- * {@link \Topxia\Service\Util\Phpsec\Crypt\AES::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's 136-bits
- * it'll be null-padded to 192-bits and 192 bits will be the key length until {@link \Topxia\Service\Util\Phpsec\Crypt\AES::setKey() setKey()}
+ * If {@link Biz\Util\Phpsec\Crypt\AES::setKeyLength() setKeyLength()} isn't called, it'll be calculated from
+ * {@link Biz\Util\Phpsec\Crypt\AES::setKey() setKey()}.  ie. if the key is 128-bits, the key length will be 128-bits.  If it's 136-bits
+ * it'll be null-padded to 192-bits and 192 bits will be the key length until {@link Biz\Util\Phpsec\Crypt\AES::setKey() setKey()}
  * is called, again, at which point, it'll be recalculated.
  *
- * Since \Topxia\Service\Util\Phpsec\Crypt\AES extends \Topxia\Service\Util\Phpsec\Crypt\Rijndael, some functions are available to be called that, in the context of AES, don't
- * make a whole lot of sense.  {@link \Topxia\Service\Util\Phpsec\Crypt\AES::setBlockLength() setBlockLength()}, for instance.  Calling that function,
+ * Since Biz\Util\Phpsec\Crypt\AES extends Biz\Util\Phpsec\Crypt\Rijndael, some functions are available to be called that, in the context of AES, don't
+ * make a whole lot of sense.  {@link Biz\Util\Phpsec\Crypt\AES::setBlockLength() setBlockLength()}, for instance.  Calling that function,
  * however possible, won't do anything (AES has a fixed block length whereas Rijndael has a variable one).
  *
  * Here's a short example of how to use this library:
@@ -25,7 +25,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $aes = new \Topxia\Service\Util\Phpsec\Crypt\AES();
+ *    $aes = new Biz\Util\Phpsec\Crypt\AES();
  *
  *    $aes->setKey('abcdefghijklmnop');
  *
@@ -49,9 +49,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
+use Biz\Util\Phpsec\Crypt\Rijndael;
 
 /**
  * Pure-PHP implementation of AES.
@@ -66,10 +66,10 @@ class AES extends Rijndael
     /**
      * Dummy function
      *
-     * Since \Topxia\Service\Util\Phpsec\Crypt\AES extends \Topxia\Service\Util\Phpsec\Crypt\Rijndael, this function is, technically, available, but it doesn't do anything.
+     * Since Biz\Util\Phpsec\Crypt\AES extends Biz\Util\Phpsec\Crypt\Rijndael, this function is, technically, available, but it doesn't do anything.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Rijndael::setBlockLength()
+     * @see Biz\Util\Phpsec\Crypt\Rijndael::setBlockLength()
      *
      * @param Integer $length
      */
@@ -85,7 +85,7 @@ class AES extends Rijndael
      * 128.  If the length is greater than 128 and invalid, it will be rounded down to the closest valid amount.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Rijndael:setKeyLength()
+     * @see Biz\Util\Phpsec\Crypt\Rijndael:setKeyLength()
      *
      * @param Integer $length
      */
@@ -108,7 +108,7 @@ class AES extends Rijndael
      * Rijndael supports five different key lengths, AES only supports three.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Rijndael:setKey()
+     * @see Biz\Util\Phpsec\Crypt\Rijndael:setKey()
      * @see setKeyLength()
      *
      * @param String $key

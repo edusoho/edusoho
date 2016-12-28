@@ -4,7 +4,7 @@ namespace Biz\Classroom\Event;
 use Topxia\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Taxonomy\TagOwnerManager;
+use Biz\Taxonomy\TagOwnerManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface

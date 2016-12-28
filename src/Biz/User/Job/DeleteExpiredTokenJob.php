@@ -2,7 +2,7 @@
 namespace Biz\User\Job;
 
 use Biz\User\Service\TokenService;
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 
 class DeleteExpiredTokenJob implements Job

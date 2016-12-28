@@ -16,7 +16,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $sftp = new \Topxia\Service\Util\Phpsec\Net\SFTP('www.domain.tld');
+ *    $sftp = new \Biz\Util\Phpsec\Net\SFTP('www.domain.tld');
  *    if (!$sftp->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -37,9 +37,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Net;
+namespace Biz\Util\Phpsec\Net;
 
-use Topxia\Service\Util\Phpsec\Net\SSH2;
+use Biz\Util\Phpsec\Net\SSH2;
 
 /**
  * Pure-PHP implementations of SFTP.
@@ -54,17 +54,17 @@ class SFTP extends SSH2
     /**
      * SFTP channel constant
      *
-     * \Topxia\Service\Util\Phpsec\Net\SSH2::exec() uses 0 and \Topxia\Service\Util\Phpsec\Net\SSH2::read() / \Topxia\Service\Util\Phpsec\Net\SSH2::write() use 1.
+     * \Biz\Util\Phpsec\Net\SSH2::exec() uses 0 and \Biz\Util\Phpsec\Net\SSH2::read() / \Biz\Util\Phpsec\Net\SSH2::write() use 1.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
      */
     const CHANNEL = 0x100;
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::put()
+     * @see \Biz\Util\Phpsec\Net\SFTP::put()
      */
     /**
      * Reads data from a local file.
@@ -95,7 +95,7 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::__construct()
+     * @see \Biz\Util\Phpsec\Net\SFTP::__construct()
      */
     public $packet_types = array();
 
@@ -104,7 +104,7 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::__construct()
+     * @see \Biz\Util\Phpsec\Net\SFTP::__construct()
      */
     public $status_codes = array();
 
@@ -116,7 +116,7 @@ class SFTP extends SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_send_sftp_packet()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_send_sftp_packet()
      */
     public $request_id = false;
 
@@ -128,7 +128,7 @@ class SFTP extends SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_get_sftp_packet()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_get_sftp_packet()
      */
     public $packet_type = -1;
 
@@ -137,7 +137,7 @@ class SFTP extends SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_get_sftp_packet()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_get_sftp_packet()
      */
     public $packet_buffer = '';
 
@@ -146,7 +146,7 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_initChannel()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_initChannel()
      */
     public $extensions = array();
 
@@ -155,7 +155,7 @@ class SFTP extends SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_initChannel()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_initChannel()
      */
     public $version;
 
@@ -164,8 +164,8 @@ class SFTP extends SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_realpath()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::chdir()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_realpath()
+     * @see \Biz\Util\Phpsec\Net\SFTP::chdir()
      */
     public $pwd = false;
 
@@ -174,7 +174,7 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::getLog()
+     * @see \Biz\Util\Phpsec\Net\SFTP::getLog()
      */
     public $packet_type_log = array();
 
@@ -183,7 +183,7 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::getLog()
+     * @see \Biz\Util\Phpsec\Net\SFTP::getLog()
      */
     public $packet_log = array();
 
@@ -192,8 +192,8 @@ class SFTP extends SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::getSFTPErrors()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::getLastSFTPError()
+     * @see \Biz\Util\Phpsec\Net\SFTP::getSFTPErrors()
+     * @see \Biz\Util\Phpsec\Net\SFTP::getLastSFTPError()
      */
     public $sftp_errors = array();
 
@@ -205,9 +205,9 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_update_stat_cache()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_remove_from_stat_cache()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_query_stat_cache()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_update_stat_cache()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_remove_from_stat_cache()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_query_stat_cache()
      */
     public $stat_cache = array();
 
@@ -216,8 +216,8 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::get()
+     * @see \Biz\Util\Phpsec\Net\SFTP::__construct()
+     * @see \Biz\Util\Phpsec\Net\SFTP::get()
      */
     public $max_sftp_packet;
 
@@ -226,8 +226,8 @@ class SFTP extends SSH2
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::disableStatCache()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::enableStatCache()
+     * @see \Biz\Util\Phpsec\Net\SFTP::disableStatCache()
+     * @see \Biz\Util\Phpsec\Net\SFTP::enableStatCache()
      */
     public $use_stat_cache = true;
 
@@ -236,8 +236,8 @@ class SFTP extends SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_comparator()
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::setListOrder()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_comparator()
+     * @see \Biz\Util\Phpsec\Net\SFTP::setListOrder()
      */
     public $sortOptions = array();
 
@@ -250,7 +250,7 @@ class SFTP extends SSH2
      * @param  String                                 $host
      * @param  optional                               Integer $port
      * @param  optional                               Integer $timeout
-     * @return \Topxia\Service\Util\Phpsec\Net\SFTP
+     * @return \Biz\Util\Phpsec\Net\SFTP
      */
     public function __construct($host, $port = 22, $timeout = 10)
     {
@@ -330,7 +330,7 @@ class SFTP extends SSH2
             31 => 'NET_SFTP_STATUS_NO_MATCHING_BYTE_RANGE_LOCK'
         );
         // http://tools.ietf.org/html/draft-ietf-secsh-filexfer-13#section-7.1
-        // the order, in this case, matters quite a lot - see \Topxia\Service\Util\Phpsec\Net\SFTP::_parseAttributes() to understand why
+        // the order, in this case, matters quite a lot - see \Biz\Util\Phpsec\Net\SFTP::_parseAttributes() to understand why
         $this->attributes = array(
             0x00000001 => 'NET_SFTP_ATTR_SIZE',
             0x00000002 => 'NET_SFTP_ATTR_UIDGID', // defined in SFTPv3, removed in SFTPv4+
@@ -354,7 +354,7 @@ class SFTP extends SSH2
             0x00000020 => 'NET_SFTP_OPEN_EXCL'
         );
         // http://tools.ietf.org/html/draft-ietf-secsh-filexfer-04#section-5.2
-        // see \Topxia\Service\Util\Phpsec\Net\SFTP::_parseLongname() for an explanation
+        // see \Biz\Util\Phpsec\Net\SFTP::_parseLongname() for an explanation
         $this->file_types = array(
             1 => 'NET_SFTP_TYPE_REGULAR',
             2 => 'NET_SFTP_TYPE_DIRECTORY',
@@ -529,7 +529,7 @@ class SFTP extends SSH2
         So what do you do if you have a client whose initial SSH_FXP_INIT packet says it implements v3 and
         a server whose initial SSH_FXP_VERSION reply says it implements v4 and only v4?  If it only implements
         v4, the "versions" extension is likely not going to have been sent so version re-negotiation as discussed
-        in draft-ietf-secsh-filexfer-13 would be quite impossible.  As such, what \Topxia\Service\Util\Phpsec\Net\SFTP would do is close the
+        in draft-ietf-secsh-filexfer-13 would be quite impossible.  As such, what \Biz\Util\Phpsec\Net\SFTP would do is close the
         channel and reopen it with a new and updated SSH_FXP_INIT packet.
          */
 
@@ -619,7 +619,7 @@ class SFTP extends SSH2
      * the absolute (canonicalized) path.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::chdir()
+     * @see \Biz\Util\Phpsec\Net\SFTP::chdir()
      *
      * @param  String  $path
      * @return Mixed
@@ -717,7 +717,7 @@ class SFTP extends SSH2
             return false;
         }
 
-        // see \Topxia\Service\Util\Phpsec\Net\SFTP::nlist() for a more thorough explanation of the following
+        // see \Biz\Util\Phpsec\Net\SFTP::nlist() for a more thorough explanation of the following
         $response = $this->_get_sftp_packet();
 
         switch ($this->packet_type) {
@@ -1340,7 +1340,7 @@ class SFTP extends SSH2
     /**
      * Returns general information about a file or symbolic link
      *
-     * Determines information without calling \Topxia\Service\Util\Phpsec\Net\SFTP::_realpath().
+     * Determines information without calling \Biz\Util\Phpsec\Net\SFTP::_realpath().
      * The second parameter can be either NET_SFTP_STAT or NET_SFTP_LSTAT.
      *
      * @access private
@@ -1875,8 +1875,8 @@ class SFTP extends SSH2
     /**
      * Uploads a file to the SFTP server.
      *
-     * By default, \Topxia\Service\Util\Phpsec\Net\SFTP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
-     * So, for example, if you set $data to 'filename.ext' and then do \Topxia\Service\Util\Phpsec\Net\SFTP::get(), you will get a file, twelve bytes
+     * By default, \Biz\Util\Phpsec\Net\SFTP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
+     * So, for example, if you set $data to 'filename.ext' and then do \Biz\Util\Phpsec\Net\SFTP::get(), you will get a file, twelve bytes
      * long, containing 'filename.ext' as its contents.
      *
      * Setting $mode to self::SOURCE_LOCAL_FILE will change the above behavior.  With self::SOURCE_LOCAL_FILE, $remote_file will
@@ -1908,7 +1908,7 @@ class SFTP extends SSH2
      * Setting $local_start to > 0 or $mode | self::RESUME_START doesn't do anything unless $mode | self::SOURCE_LOCAL_FILE.
      *
      * @access public
-     * @internal ASCII mode for SFTPv4/5/6 can be supported by adding a new function - \Topxia\Service\Util\Phpsec\Net\SFTP::setMode().
+     * @internal ASCII mode for SFTPv4/5/6 can be supported by adding a new function - \Biz\Util\Phpsec\Net\SFTP::setMode().
      * @param  String          $remote_file
      * @param  String|resource $data
      * @param  optional        Integer         $mode
@@ -2848,8 +2848,8 @@ class SFTP extends SSH2
      * See '6. General Packet Format' of draft-ietf-secsh-filexfer-13 for more info.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_get_sftp_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_get_sftp_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
      *
      * @param  Integer   $type
      * @param  String    $data
@@ -2894,7 +2894,7 @@ class SFTP extends SSH2
      * messages containing one SFTP packet.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SFTP::_send_sftp_packet()
+     * @see \Biz\Util\Phpsec\Net\SFTP::_send_sftp_packet()
      *
      * @return String
      */

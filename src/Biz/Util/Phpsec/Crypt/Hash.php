@@ -7,7 +7,7 @@
  *
  * md2, md5, md5-96, sha1, sha1-96, sha256, sha256-96, sha384, and sha512, sha512-96
  *
- * If {@link \Topxia\Service\Util\Phpsec\Crypt\Hash::setKey() setKey()} is called, {@link \Topxia\Service\Util\Phpsec\Crypt\Hash::hash() hash()} will return the HMAC as opposed to
+ * If {@link \Biz\Util\Phpsec\Crypt\Hash::setKey() setKey()} is called, {@link \Biz\Util\Phpsec\Crypt\Hash::hash() hash()} will return the HMAC as opposed to
  * the hash.  If no valid algorithm is provided, sha1 will be used.
  *
  * PHP version 5
@@ -20,7 +20,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $hash = new \Topxia\Service\Util\Phpsec\Crypt\Hash('sha1');
+ *    $hash = new \Biz\Util\Phpsec\Crypt\Hash('sha1');
  *
  *    $hash->setKey('abcdefg');
  *
@@ -38,9 +38,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Math\BigInteger;
+use Biz\Util\Phpsec\Math\BigInteger;
 
 /**
  * Pure-PHP implementations of keyed-hash message authentication codes (HMACs) and various cryptographic hashing functions.
@@ -54,7 +54,7 @@ class Hash
 {
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::__construct()
      */
     /**
      * Toggles the internal implementation
@@ -75,7 +75,7 @@ class Hash
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setHash()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setHash()
      */
     public $hashParam;
 
@@ -84,7 +84,7 @@ class Hash
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setAlgorithm()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setAlgorithm()
      */
     public $b;
 
@@ -93,7 +93,7 @@ class Hash
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setHash()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setHash()
      */
     public $l = false;
 
@@ -102,7 +102,7 @@ class Hash
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setHash()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setHash()
      */
     public $hash;
 
@@ -111,7 +111,7 @@ class Hash
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setKey()
      */
     public $key = false;
 
@@ -120,7 +120,7 @@ class Hash
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setKey()
      */
     public $opad;
 
@@ -129,7 +129,7 @@ class Hash
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Hash::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Hash::setKey()
      */
     public $ipad;
 
@@ -138,7 +138,7 @@ class Hash
      *
      * @access public
      * @param  optional                                 String $hash
-     * @return \Topxia\Service\Util\Phpsec\Crypt\Hash
+     * @return \Biz\Util\Phpsec\Crypt\Hash
      */
     public function __construct($hash = 'sha1')
     {
@@ -746,7 +746,7 @@ class Hash
         }
 
         // Produce the final hash value (big-endian)
-        // (\Topxia\Service\Util\Phpsec\Crypt\Hash::hash() trims the output for hashes but not for HMACs.  as such, we trim the output here)
+        // (\Biz\Util\Phpsec\Crypt\Hash::hash() trims the output for hashes but not for HMACs.  as such, we trim the output here)
         $temp = $hash[0]->toBytes().$hash[1]->toBytes().$hash[2]->toBytes().$hash[3]->toBytes().$hash[4]->toBytes().$hash[5]->toBytes();
 
         if ($this->l != 48) {

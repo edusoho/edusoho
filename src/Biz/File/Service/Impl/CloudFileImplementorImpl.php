@@ -14,7 +14,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {

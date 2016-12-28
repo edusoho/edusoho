@@ -26,14 +26,14 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\File;
+namespace Biz\Util\Phpsec\File;
 
-use Topxia\Service\Util\Phpsec\Crypt\RSA;
-use Topxia\Service\Util\Phpsec\File\ASN1;
-use Topxia\Service\Util\Phpsec\Crypt\Hash;
-use Topxia\Service\Util\Phpsec\Crypt\Random;
-use Topxia\Service\Util\Phpsec\Math\BigInteger;
-use Topxia\Service\Util\Phpsec\File\ASN1\Element;
+use Biz\Util\Phpsec\Crypt\RSA;
+use Biz\Util\Phpsec\File\ASN1;
+use Biz\Util\Phpsec\Crypt\Hash;
+use Biz\Util\Phpsec\Crypt\Random;
+use Biz\Util\Phpsec\Math\BigInteger;
+use Biz\Util\Phpsec\File\ASN1\Element;
 
 /**
  * Pure-PHP X.509 Parser
@@ -56,7 +56,7 @@ class X509
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\File\X509::getDN()
+     * @see \Biz\Util\Phpsec\File\X509::getDN()
      */
     /**
      * Return internal array representation
@@ -86,9 +86,9 @@ class X509
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\File\X509::saveX509()
-     * @see \Topxia\Service\Util\Phpsec\File\X509::saveCSR()
-     * @see \Topxia\Service\Util\Phpsec\File\X509::saveCRL()
+     * @see \Biz\Util\Phpsec\File\X509::saveX509()
+     * @see \Biz\Util\Phpsec\File\X509::saveCSR()
+     * @see \Biz\Util\Phpsec\File\X509::saveCRL()
      */
     /**
      * Save as PEM
@@ -233,7 +233,7 @@ class X509
     /**
      * The signature subject
      *
-     * There's no guarantee \Topxia\Service\Util\Phpsec\File\X509 is going to reencode an X.509 cert in the same way it was originally
+     * There's no guarantee \Biz\Util\Phpsec\File\X509 is going to reencode an X.509 cert in the same way it was originally
      * encoded so we take save the portion of the original cert that the signature would have made for.
      *
      * @var String
@@ -296,7 +296,7 @@ class X509
      * Default Constructor.
      *
      * @access public
-     * @return \Topxia\Service\Util\Phpsec\File\X509
+     * @return \Biz\Util\Phpsec\File\X509
      */
     public function __construct()
     {
@@ -574,8 +574,8 @@ class X509
 
         $AdministrationDomainName = array(
             'type'     => ASN1::TYPE_CHOICE,
-            // if class isn't present it's assumed to be \Topxia\Service\Util\Phpsec\File\ASN1::CLASS_UNIVERSAL or
-            // (if constant is present) \Topxia\Service\Util\Phpsec\File\ASN1::CLASS_CONTEXT_SPECIFIC
+            // if class isn't present it's assumed to be \Biz\Util\Phpsec\File\ASN1::CLASS_UNIVERSAL or
+            // (if constant is present) \Biz\Util\Phpsec\File\ASN1::CLASS_CONTEXT_SPECIFIC
             'class'    => ASN1::CLASS_APPLICATION,
             'cast'     => 2,
             'children' => array(
@@ -586,8 +586,8 @@ class X509
 
         $CountryName = array(
             'type'     => ASN1::TYPE_CHOICE,
-            // if class isn't present it's assumed to be \Topxia\Service\Util\Phpsec\File\ASN1::CLASS_UNIVERSAL or
-            // (if constant is present) \Topxia\Service\Util\Phpsec\File\ASN1::CLASS_CONTEXT_SPECIFIC
+            // if class isn't present it's assumed to be \Biz\Util\Phpsec\File\ASN1::CLASS_UNIVERSAL or
+            // (if constant is present) \Biz\Util\Phpsec\File\ASN1::CLASS_CONTEXT_SPECIFIC
             'class'    => ASN1::CLASS_APPLICATION,
             'cast'     => 1,
             'children' => array(
@@ -709,7 +709,7 @@ class X509
                     'optional' => true,
                     'implicit' => true
                 ) + $this->DirectoryString,
-                         // partyName is technically required but \Topxia\Service\Util\Phpsec\File\ASN1 doesn't currently support non-optional constants and
+                         // partyName is technically required but \Biz\Util\Phpsec\File\ASN1 doesn't currently support non-optional constants and
                          // setting it to optional gets the job done in any event.
                 'partyName'    => array(
                     'constant' => 1,
@@ -1521,8 +1521,8 @@ class X509
         $filters['distributionPoint']['fullName']['directoryName']['rdnSequence']['value'] = $type_utf8_string;
         $filters['directoryName']['rdnSequence']['value']                                  = $type_utf8_string;
 
-        /* in the case of policyQualifiers/qualifier, the type has to be \Topxia\Service\Util\Phpsec\File\ASN1::TYPE_IA5_STRING.
-        \Topxia\Service\Util\Phpsec\File\ASN1::TYPE_PRINTABLE_STRING will cause OpenSSL's X.509 parser to spit out random
+        /* in the case of policyQualifiers/qualifier, the type has to be \Biz\Util\Phpsec\File\ASN1::TYPE_IA5_STRING.
+        \Biz\Util\Phpsec\File\ASN1::TYPE_PRINTABLE_STRING will cause OpenSSL's X.509 parser to spit out random
         characters.
          */
         $filters['policyQualifiers']['qualifier']
@@ -1634,8 +1634,8 @@ class X509
                                 $subvalue = &$value[$j]['policyQualifiers'][$k]['qualifier'];
 
                                 if ($map !== false) {
-                                    // by default \Topxia\Service\Util\Phpsec\File\ASN1 will try to render qualifier as a \Topxia\Service\Util\Phpsec\File\ASN1::TYPE_IA5_STRING since it's
-                                    // actual type is \Topxia\Service\Util\Phpsec\File\ASN1::TYPE_ANY
+                                    // by default \Biz\Util\Phpsec\File\ASN1 will try to render qualifier as a \Biz\Util\Phpsec\File\ASN1::TYPE_IA5_STRING since it's
+                                    // actual type is \Biz\Util\Phpsec\File\ASN1::TYPE_ANY
                                     $subvalue = new Element($asn1->encodeDER($subvalue, $map));
                                 }
                             }
@@ -1771,7 +1771,7 @@ class X509
     public function _getMapping($extnId)
     {
         if (!is_string($extnId)) {
-            // eg. if it's a \Topxia\Service\Util\Phpsec\File\ASN1\Element object
+            // eg. if it's a \Biz\Util\Phpsec\File\ASN1\Element object
             return true;
         }
 
@@ -2816,7 +2816,7 @@ class X509
     /**
      * Set public key
      *
-     * Key needs to be a \Topxia\Service\Util\Phpsec\Crypt\RSA object
+     * Key needs to be a \Biz\Util\Phpsec\Crypt\RSA object
      *
      * @access public
      * @param  Object    $key
@@ -2831,7 +2831,7 @@ class X509
     /**
      * Set private key
      *
-     * Key needs to be a \Topxia\Service\Util\Phpsec\Crypt\RSA object
+     * Key needs to be a \Biz\Util\Phpsec\Crypt\RSA object
      *
      * @access public
      * @param Object $key
@@ -2857,7 +2857,7 @@ class X509
     /**
      * Gets the public key
      *
-     * Returns a \Topxia\Service\Util\Phpsec\Crypt\RSA object or a false.
+     * Returns a \Biz\Util\Phpsec\Crypt\RSA object or a false.
      *
      * @access public
      * @return Mixed
@@ -3289,8 +3289,8 @@ class X509
      * a CSR or something with the DN and public key explicitly set.
      *
      * @access public
-     * @param  \Topxia\Service\Util\Phpsec\File\X509 $issuer
-     * @param  \Topxia\Service\Util\Phpsec\File\X509 $subject
+     * @param  \Biz\Util\Phpsec\File\X509 $issuer
+     * @param  \Biz\Util\Phpsec\File\X509 $subject
      * @param  String                                $signatureAlgorithm optional
      * @return Mixed
      */
@@ -3462,7 +3462,7 @@ class X509
         }
 
         // resync $this->signatureSubject
-        // save $tbsCertificate in case there are any \Topxia\Service\Util\Phpsec\File\ASN1\Element objects in it
+        // save $tbsCertificate in case there are any \Biz\Util\Phpsec\File\ASN1\Element objects in it
         $tbsCertificate = $this->currentCert['tbsCertificate'];
         $this->loadX509($this->saveX509($this->currentCert));
 
@@ -3523,7 +3523,7 @@ class X509
         }
 
         // resync $this->signatureSubject
-        // save $certificationRequestInfo in case there are any \Topxia\Service\Util\Phpsec\File\ASN1\Element objects in it
+        // save $certificationRequestInfo in case there are any \Biz\Util\Phpsec\File\ASN1\Element objects in it
         $certificationRequestInfo = $this->currentCert['certificationRequestInfo'];
         $this->loadCSR($this->saveCSR($this->currentCert));
 
@@ -3591,7 +3591,7 @@ class X509
         }
 
         // resync $this->signatureSubject
-        // save $publicKeyAndChallenge in case there are any \Topxia\Service\Util\Phpsec\File\ASN1\Element objects in it
+        // save $publicKeyAndChallenge in case there are any \Biz\Util\Phpsec\File\ASN1\Element objects in it
         $publicKeyAndChallenge = $this->currentCert['publicKeyAndChallenge'];
         $this->loadSPKAC($this->saveSPKAC($this->currentCert));
 
@@ -3610,8 +3610,8 @@ class X509
      * $issuer's private key needs to be loaded.
      *
      * @access public
-     * @param  \Topxia\Service\Util\Phpsec\File\X509 $issuer
-     * @param  \Topxia\Service\Util\Phpsec\File\X509 $crl
+     * @param  \Biz\Util\Phpsec\File\X509 $issuer
+     * @param  \Biz\Util\Phpsec\File\X509 $crl
      * @param  String                                $signatureAlgorithm optional
      * @return Mixed
      */
@@ -3725,7 +3725,7 @@ class X509
         unset($tbsCertList);
 
         // resync $this->signatureSubject
-        // save $tbsCertList in case there are any \Topxia\Service\Util\Phpsec\File\ASN1\Element objects in it
+        // save $tbsCertList in case there are any \Biz\Util\Phpsec\File\ASN1\Element objects in it
         $tbsCertList = $this->currentCert['tbsCertList'];
         $this->loadCRL($this->saveCRL($this->currentCert));
 
@@ -3743,7 +3743,7 @@ class X509
      *
      * @access public
      * @param  Object                                $key
-     * @param  \Topxia\Service\Util\Phpsec\File\X509 $subject
+     * @param  \Biz\Util\Phpsec\File\X509 $subject
      * @param  String                                $signatureAlgorithm
      * @return Mixed
      */
@@ -4293,9 +4293,9 @@ class X509
      * recommended methods (4.2.1.2 RFC 3280).
      * Highly polymorphic: try to accept all possible forms of key:
      * - Key object
-     * - \Topxia\Service\Util\Phpsec\File\X509 object with public or private key defined
+     * - \Biz\Util\Phpsec\File\X509 object with public or private key defined
      * - Certificate or CSR array
-     * - \Topxia\Service\Util\Phpsec\File\ASN1\Element object
+     * - \Biz\Util\Phpsec\File\ASN1\Element object
      * - PEM or DER string
      *
      * @access public
@@ -4363,7 +4363,7 @@ class X509
                 }
 
                 return false;
-            default:    // Should be a key object (i.e.: \Topxia\Service\Util\Phpsec\Crypt\RSA).
+            default:    // Should be a key object (i.e.: \Biz\Util\Phpsec\Crypt\RSA).
                 $key = $key->getPublicKey(RSA::PUBLIC_FORMAT_PKCS1);
                 break;
         }

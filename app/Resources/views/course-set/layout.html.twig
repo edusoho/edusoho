@@ -13,11 +13,6 @@
   <div class="container">
     <div class="course-detail row">
       <div class="col-lg-9 col-md-8 course-detail-main">
-        <div class="alert alert-warning" role="alert">
-          <a href="" class="alert-link">
-            课程公告：下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。 <i class="es-icon es-icon-close01 alert-close"></i>
-          </a>
-        </div> 
         {% include 'course-set/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
         <!-- 课程详情页中部内容 -->
         <section class="es-section">
