@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class C2CourseAddRating extends Migration
+class C2CourseAddAllFields extends Migration
 {
     /**
      * Do the migration
