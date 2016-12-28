@@ -12,6 +12,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(
                 'tags'      => 'delimiter',
                 'goals'     => 'delimiter',

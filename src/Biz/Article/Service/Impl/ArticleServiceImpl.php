@@ -8,6 +8,7 @@ use Biz\Article\Service\CategoryService;
 use Biz\BaseService;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 
 class ArticleServiceImpl extends BaseService implements ArticleService
@@ -114,7 +115,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
-        $this->dispatchEvent('article.create', array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        $this->dispatchEvent('article.create', new Event($article, array('tagIds' => $tagIds, 'userId' => $user['id'])));
 
         return $article;
     }
@@ -144,7 +145,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
 
-        $this->dispatchEvent('article.update', array('article' => $article, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        $event = new Event($article, array(
+            'tagIds' => $tagIds,
+            'userId' => $user['id']
+        ));
+        $this->dispatchEvent('article.update', $event);
 
         return $article;
     }
@@ -314,7 +319,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     {
         $article = $this->getArticleDao()->update($id, $fields = array('status' => 'published'));
         $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
-        $this->dispatchEvent('article.publish', array('article' => $article));
+        $this->dispatchEvent('article.publish', $article);
     }
 
     public function unpublishArticle($id)
@@ -376,8 +381,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
         }
 
-        $self = $this;
-
         $tags = $this->getTagService()->findTagsByOwner(array("ownerType" => 'article', "ownerId" => $articleId));
 
         $tagIds = ArrayToolkit::column($tags, 'id');
@@ -391,6 +394,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             }
         }
 
+        $self = $this;
         $relativeArticles = array_map(function ($articleId) use ($article, $self) {
             $conditions = array(
                 'articleId' => $articleId,

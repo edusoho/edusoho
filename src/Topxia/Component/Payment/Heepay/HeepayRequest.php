@@ -2,7 +2,7 @@
 namespace Topxia\Component\Payment\Heepay;
 
 use Topxia\Component\Payment\Request;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class HeepayRequest extends Request
 {

@@ -2205,3 +2205,37 @@ admin_org_sort:
 admin_batch_update_org:
     path:  batch/update/{module}/org
     defaults: { _controller: AppBundle:Admin/OrgManage:batchUpdate }
+
+### role
+admin_roles:
+    pattern:  /roles
+    defaults: { _controller: AppBundle:Admin/Role:index }
+    permissions: [admin_role_manage]
+
+admin_role_create:
+    pattern:  /role/create
+    defaults: { _controller: AppBundle:Admin/Role:create }
+
+admin_role_edit:
+    pattern:  /role/{id}/edit
+    defaults: { _controller: AppBundle:Admin/Role:edit }
+
+admin_role_delete:
+    pattern:  /role/{id}/delete
+    defaults: { _controller: AppBundle:Admin/Role:delete }
+    methods: [POST]
+
+admin_role_show:
+    pattern:  /role/{id}/show
+    defaults: { _controller: AppBundle:Admin/Role:show }
+    permissions: [admin_role_manage]
+
+admin_role_check_name:
+    pattern:  /role/checkName
+    defaults: { _controller: AppBundle:Admin/Role:checkName }
+    permissions: [admin_role_manage]
+
+admin_role_check_code:
+    pattern:  /role/checkCode
+    defaults: { _controller: AppBundle:Admin/Role:checkCode }
+    permissions: [admin_role_manage]

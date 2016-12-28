@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
@@ -14,11 +15,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return array(
             'course.join'            => 'onCourseJoin',
             'course.favorite'        => 'onCourseFavorite',
-            'course.note.create'     => 'onCourseNoteCreate',
-            'course.note.update'     => 'onCourseNoteUpdate',
-            'course.note.delete'     => 'onCourseNoteDelete',
-            'course.note.liked'      => 'onCourseNoteLike',
-            'course.note.cancelLike' => 'onCourseNoteCancelLike',
             'course.update'          => 'onCourseUpdate',
             'course.teacher.update'  => 'onCourseTeacherUpdate',
             'course.price.update'    => 'onCoursePriceUpdate',
@@ -95,73 +91,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 'course' => $this->simplifyCousrse($course)
             )
         ));
-    }
-
-    public function onCourseNoteCreate(Event $event)
-    {
-        $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($classroom && $note['status']) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
-        }
-
-        if ($course && $note['status']) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
-        }
-    }
-
-    public function onCourseNoteUpdate(Event $event)
-    {
-        $note      = $event->getSubject();
-        $preStatus = $event->getArgument('preStatus');
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($classroom && $note['status'] && !$preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
-        }
-
-        if ($classroom && !$note['status'] && $preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
-        }
-
-        if ($course && $note['status'] && !$preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
-        }
-
-        if ($course && !$note['status'] && $preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
-        }
-    }
-
-    public function onCourseNoteDelete(Event $event)
-    {
-        $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-
-        if ($classroom) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
-        }
-
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($course) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
-        }
-    }
-
-    public function onCourseNoteLike(Event $event)
-    {
-        $note = $event->getSubject();
-        $this->getNoteService()->count($note['id'], 'likeNum', +1);
-    }
-
-    public function onCourseNoteCancelLike(Event $event)
-    {
-        $note = $event->getSubject();
-        $this->getNoteService()->count($note['id'], 'likeNum', -1);
     }
 
     public function onCourseTeacherUpdate(Event $event)
@@ -373,10 +302,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return array(
             'id'      => $course['id'],
             'title'   => $course['title'],
-            'picture' => $course['middlePicture'],
             'type'    => $course['type'],
             'rating'  => $course['rating'],
-            'about'   => StringToolkit::plain($course['about'], 100),
             'price'   => $course['price']
         );
     }
@@ -395,11 +322,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User:StatusService');
-    }
-
-    protected function getNoteService()
-    {
-        return ServiceKernel::instance()->createService('Course:NoteService');
     }
 
     protected function getCourseService()

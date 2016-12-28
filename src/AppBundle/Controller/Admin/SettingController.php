@@ -6,7 +6,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
 use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\CloudPlatform\CloudAPIFactory;

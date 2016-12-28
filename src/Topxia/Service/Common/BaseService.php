@@ -6,7 +6,7 @@ use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Biz\Util\HTMLPurifierFactory;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 

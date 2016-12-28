@@ -3,7 +3,7 @@
 namespace Topxia\WebBundle\Command;
 
 
-use Permission\Service\Role\RoleService;
+use Biz\Role\RoleService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Topxia\Service\Common\ServiceKernel;

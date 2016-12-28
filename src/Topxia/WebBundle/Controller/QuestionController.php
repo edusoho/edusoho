@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController

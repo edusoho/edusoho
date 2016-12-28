@@ -234,7 +234,6 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove("{$this->distDirectory}/src/Classroom/ClassroomBundle/Resources/public");
         $this->filesystem->remove("{$this->distDirectory}/src/MaterialLib/MaterialLibBundle/Resources/public");
         $this->filesystem->remove("{$this->distDirectory}/src/Org/OrgBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Permission/PermissionBundle/Resources/public");
         $this->filesystem->remove("{$this->distDirectory}/src/SensitiveWord/SensitiveWordBundle/Resources/public");
 
         $this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");

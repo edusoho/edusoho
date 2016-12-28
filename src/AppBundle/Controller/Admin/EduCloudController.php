@@ -7,7 +7,7 @@ use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Biz\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

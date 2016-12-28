@@ -63,12 +63,12 @@ class Text extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService('Activity:ActivityLearnLogService');
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     protected function getActivityService()
     {
-        return $this->createService('Activity:ActivityService');
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
 }

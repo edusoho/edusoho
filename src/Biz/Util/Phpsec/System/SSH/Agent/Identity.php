@@ -15,15 +15,15 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\System\SSH\Agent;
+namespace Biz\Util\Phpsec\System\SSH\Agent;
 
-use Topxia\Service\Util\Phpsec\System\SSH\Agent;
+use Biz\Util\Phpsec\System\SSH\Agent;
 
 /**
  * Pure-PHP ssh-agent client identity object
  *
- * Instantiation should only be performed by \Topxia\Service\Util\Phpsec\System\SSH\Agent class.
- * This could be thought of as implementing an interface that Topxia\Service\Util\Phpsec\Crypt\RSA
+ * Instantiation should only be performed by \Biz\Util\Phpsec\System\SSH\Agent class.
+ * This could be thought of as implementing an interface that Biz\Util\Phpsec\Crypt\RSA
  * implements. ie. maybe a Net_SSH_Auth_PublicKey interface or something.
  * The methods in this interface would be getPublicKey, setSignatureMode
  * and sign since those are the methods phpseclib looks for to perform
@@ -39,9 +39,9 @@ class Identity
     /**
      * Key Object
      *
-     * @var \Topxia\Service\Util\Phpsec\Crypt\RSA
+     * @var \Biz\Util\Phpsec\Crypt\RSA
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity::getPublicKey()
+     * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::getPublicKey()
      */
     public $key;
 
@@ -50,7 +50,7 @@ class Identity
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity::sign()
+     * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::sign()
      */
     public $key_blob;
 
@@ -59,7 +59,7 @@ class Identity
      *
      * @var Resource
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity::sign()
+     * @see \Biz\Util\Phpsec\System\SSH\Agent\Identity::sign()
      */
     public $fsock;
 
@@ -68,7 +68,7 @@ class Identity
      *
      * @access private
      * @param  Resource                                                $fsock
-     * @return \Topxia\Service\Util\Phpsec\System\SSH\Agent\Identity
+     * @return \Biz\Util\Phpsec\System\SSH\Agent\Identity
      */
     public function __construct($fsock)
     {
@@ -78,10 +78,10 @@ class Identity
     /**
      * Set Public Key
      *
-     * Called by \Topxia\Service\Util\Phpsec\System\SSH\Agent::requestIdentities()
+     * Called by \Biz\Util\Phpsec\System\SSH\Agent::requestIdentities()
      *
      * @access private
-     * @param \Topxia\Service\Util\Phpsec\Crypt\RSA $key
+     * @param \Biz\Util\Phpsec\Crypt\RSA $key
      */
     public function setPublicKey($key)
     {
@@ -92,7 +92,7 @@ class Identity
     /**
      * Set Public Key
      *
-     * Called by \Topxia\Service\Util\Phpsec\System\SSH\Agent::requestIdentities(). The key blob could be extracted from $this->key
+     * Called by \Biz\Util\Phpsec\System\SSH\Agent::requestIdentities(). The key blob could be extracted from $this->key
      * but this saves a small amount of computation.
      *
      * @access private
@@ -121,7 +121,7 @@ class Identity
      * Set Signature Mode
      *
      * Doesn't do anything as ssh-agent doesn't let you pick and choose the signature mode. ie.
-     * ssh-agent's only supported mode is \Topxia\Service\Util\Phpsec\Crypt\RSA::SIGNATURE_PKCS1
+     * ssh-agent's only supported mode is \Biz\Util\Phpsec\Crypt\RSA::SIGNATURE_PKCS1
      *
      * @access public
      * @param Integer $mode

@@ -53,6 +53,7 @@ class CourseManageController extends BaseController
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
         $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
         $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
+
         return $this->render($tasksRenderPage, array(
             'tasks'      => $tasks,
             'courseSet'  => $courseSet,
@@ -64,12 +65,12 @@ class CourseManageController extends BaseController
 
     protected function getFinishedTaskPerDay($course, $tasks)
     {
-        $taskCount = count($tasks);
+        $taskNum = count($tasks);
         if ($course['expiryMode'] == 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskCount / $course['expiryDays'];
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
             $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? false : $taskCount / $diffDay;
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
         return round($finishedTaskPerDay, 1);
     }
@@ -100,6 +101,10 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if(empty($data['enableBuyExpiryTime'])) {
+                unset($data['buyExpiryTime']);
+            }
+            
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
@@ -151,7 +156,12 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request, $courseSetId, $courseId)
     {
         $queryField = $request->query->get('q');
-        $users      = $this->getUserService()->searchUsers(array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $users      = $this->getUserService()->searchUsers(
+            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
+            array('createdTime' => 'DESC'),
+            0,
+            10
+        );
 
         $teachers = array();
 

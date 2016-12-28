@@ -16,7 +16,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $blowfish = new \Topxia\Service\Util\Phpsec\Crypt\Blowfish();
+ *    $blowfish = new \Biz\Util\Phpsec\Crypt\Blowfish();
  *
  *    $blowfish->setKey('12345678901234567890123456789012');
  *
@@ -37,9 +37,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of Blowfish.
@@ -57,7 +57,7 @@ class Blowfish extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::block_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 8;
 
@@ -66,8 +66,8 @@ class Blowfish extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 56;
 
@@ -76,7 +76,7 @@ class Blowfish extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'blowfish';
 
@@ -85,7 +85,7 @@ class Blowfish extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cfb_init_len
+     * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 500;
 
@@ -297,7 +297,7 @@ class Blowfish extends Base
      * If the key is not explicitly set, or empty, it'll be assumed a 128 bits key to be all null bytes.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String $key
      */
@@ -320,7 +320,7 @@ class Blowfish extends Base
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::isValidEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -343,7 +343,7 @@ class Blowfish extends Base
      * Setup the key (expansion)
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -479,7 +479,7 @@ class Blowfish extends Base
      * Setup the performance-optimized function for de/encrypt()
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
     {

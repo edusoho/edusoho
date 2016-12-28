@@ -18,7 +18,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $des = new \Topxia\Service\Util\Phpsec\Crypt\DES();
+ *    $des = new \Biz\Util\Phpsec\Crypt\DES();
  *
  *    $des->setKey('abcdefgh');
  *
@@ -42,9 +42,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of DES.
@@ -58,8 +58,8 @@ class DES extends Base
 {
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_setupKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_processBlock()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
      */
     /**
      * Contains $keys[self::ENCRYPT]
@@ -76,7 +76,7 @@ class DES extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::block_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 8;
 
@@ -85,7 +85,7 @@ class DES extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::key
+     * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      */
     public $key = "\0\0\0\0\0\0\0\0";
@@ -95,8 +95,8 @@ class DES extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 8;
 
@@ -105,7 +105,7 @@ class DES extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'des';
 
@@ -114,7 +114,7 @@ class DES extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::openssl_mode_names
+     * @see \Biz\Util\Phpsec\Crypt\Base::openssl_mode_names
      */
     public $openssl_mode_names = array(
         self::MODE_ECB => 'des-ecb',
@@ -129,7 +129,7 @@ class DES extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cfb_init_len
+     * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 500;
 
@@ -140,8 +140,8 @@ class DES extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_setupKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_processBlock()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
      */
     public $des_rounds = 1;
 
@@ -150,7 +150,7 @@ class DES extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
      */
     public $key_size_max = 8;
 
@@ -159,7 +159,7 @@ class DES extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      */
     public $keys;
 
@@ -172,8 +172,8 @@ class DES extends Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_processBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_processBlock()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      */
     public $shuffle = array(
         "\x00\x00\x00\x00\x00\x00\x00\x00", "\x00\x00\x00\x00\x00\x00\x00\xFF",
@@ -600,7 +600,7 @@ class DES extends Base
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::isValidEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -629,7 +629,7 @@ class DES extends Base
      * If the key is not explicitly set, it'll be assumed to be all zero's.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String $key
      */
@@ -650,9 +650,9 @@ class DES extends Base
      * Encrypts a block
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_encryptBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_encryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\DES::encrypt()
      *
      * @param  String   $in
      * @return String
@@ -666,9 +666,9 @@ class DES extends Base
      * Decrypts a block
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_decryptBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_decryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\DES::decrypt()
      *
      * @param  String   $in
      * @return String
@@ -686,8 +686,8 @@ class DES extends Base
      * idea of what this function does.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_encryptBlock()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_decryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_encryptBlock()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_decryptBlock()
      *
      * @param  String    $block
      * @param  Integer   $mode
@@ -775,7 +775,7 @@ class DES extends Base
      * Creates the key schedule
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -1313,7 +1313,7 @@ class DES extends Base
      * Setup the performance-optimized function for de/encrypt()
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
     {

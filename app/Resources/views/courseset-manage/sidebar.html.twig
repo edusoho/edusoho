@@ -28,6 +28,12 @@
               <span></span>{{'试卷管理'|trans}}
             </a>
           </li>
+          <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
+            {# 未考虑课程同步问题 #}
+            <a href="{{ path('course_set_manage_files', {id:id}) }}">
+              <span></span>{{'课程文件'|trans}}
+            </a>
+          </li>
         </ul>
         <ul class="list-group">
          {#  <li class="list-group-heading">{{'默认教学计划'|trans}}</li>

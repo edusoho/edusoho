@@ -1,5 +1,5 @@
 
-import { TabChange } from '../help';
+import { TabChange, publishCourse } from '../help';
 
 class Marketing {
 	constructor(){
@@ -9,6 +9,7 @@ class Marketing {
 	init(){
 		let $form = $('#course-marketing-form');
 		TabChange();
+		publishCourse();
 
 		let validator = $form.validate({
 			onkeyup: false,
@@ -51,6 +52,23 @@ class Marketing {
 				$('.js-is-free').addClass('hidden');
 			}
         });
+
+		$('input[name="enableBuyExpiryTime"]').on('change', function(event){
+			if($('input[name="enableBuyExpiryTime"]:checked').val() == 0){
+				$('#buyExpiryTime').addClass('hidden');
+			}else{
+				$('#buyExpiryTime').removeClass('hidden');
+			}
+        });
+
+
+		$('input[name="buyExpiryTime"]').datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: "zh",
+			minView: 2, //month
+			autoclose: true
+		});
+
         $('input[name="tryLookable"]').on('change', function(event){
         	if($('input[name="tryLookable"]:checked').val() == 1){
 				$('.js-enable-try-look').removeClass('hidden');
@@ -58,14 +76,14 @@ class Marketing {
 				$('.js-enable-try-look').addClass('hidden');
 			}
             // $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
-        });
+      });
 
 		$('#course-submit').click(function(evt){
-            if(validator.form()){
-                $(evt.currentTarget).button('loading');
-                $form.submit();
-            }
-        });
+      if(validator.form()){
+        $(evt.currentTarget).button('loading');
+        $form.submit();
+      }
+    });
 	}
 }
 

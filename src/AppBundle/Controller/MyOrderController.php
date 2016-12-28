@@ -6,7 +6,6 @@ use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Course\CourseOrderService;
 
 class MyOrderController extends BaseController
 {

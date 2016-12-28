@@ -3,7 +3,7 @@ namespace Biz\Media\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Media\Service\MediaService;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 
 class MediaServiceImpl extends BaseService implements MediaService
 {

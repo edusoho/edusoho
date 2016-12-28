@@ -4,10 +4,9 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Course\Impl\CourseServiceImpl;
 
 class CourseManageController extends BaseController
 {
@@ -700,9 +699,6 @@ class CourseManageController extends BaseController
         unset($fields['enableBuyExpiryTime']);
     }
 
-    /**
-     * @return CourseServiceImpl
-     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
@@ -740,7 +736,7 @@ class CourseManageController extends BaseController
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:NoteService');
+        return $this->getServiceKernel()->createService('Note:CourseNoteService');
     }
 
     protected function getThreadService()
