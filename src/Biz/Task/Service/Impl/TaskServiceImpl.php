@@ -298,7 +298,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $activities = $this->getActivityService()->findActivities($activityIds);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskIds     = ArrayToolkit::column($toLearnTasks, 'id');
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
 
         array_walk($toLearnTasks, function (&$task) use ($activities, $taskResults) {
@@ -335,9 +335,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $minSeq      = $this->getTaskDao()->getMinSeqByCourseId($courseId);
             $toLearnTask = $this->getTaskDao()->getByCourseIdAndSeq($courseId, $minSeq);
         } else {
-            $taskIds     = ArrayToolkit::column($taskResults, 'courseTaskId');
-            $tasks       = $this->getTaskDao()->search(array('ids' => $taskIds, 'courseId' => $courseId), array('seq' => 'ASC'), 0, 1);
-            $toLearnTask = array_shift($tasks);
+            $latestTaskResult = array_shift($taskResults);
+            $latestLearnTask  = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
+            $tasks = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
+            $toLearnTask = array_pop($tasks);//如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
     }

@@ -72,9 +72,12 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return array(
             'orderbys'   => array('seq'),
             'conditions' => array(
+                'id = :id',
+                'id IN ( :ids )',
                 'courseId = :courseId',
-                'seq > :parentId_GT',
-                'seq < :parentId_LT'
+                'seq >= :seq_GE',
+                'seq > :seq_GT',
+                'seq < :seq_LT'
             )
         );
     }
