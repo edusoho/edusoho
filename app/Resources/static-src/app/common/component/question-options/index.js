@@ -4,15 +4,14 @@ import notify from 'common/notify';
 import postal from 'postal';
 import { numberConvertLetter } from '../../unit';
 
-function InitOptionData(dataSource,props,datas,validatorDatas,seq) {
-  let value = datas ? datas[props.inputValueName] : '';
+function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
   var obj = {
-    optionId:`question-option-${seq}`,
-    optionLabel: '选项'+ numberConvertLetter(seq),
-    inputValue: value,
-    checked: datas ? datas[props.checkedName] : false,
+    optionId:`question-option-${seq+1}`,
+    optionLabel: '选项'+ numberConvertLetter(seq+1),
+    inputValue: inputValue,
+    checked: checked,
   }
-  validatorDatas.Options[`question-option-${seq}`] = value.length > 0 ? 1 : 0,
+  validatorDatas.Options[`question-option-${seq+1}`] = inputValue.length > 0 ? 1 : 0,
   dataSource.push(obj);
 }
 
@@ -59,24 +58,39 @@ export default class QuestionOptions extends Component {
       dataSource:[],
       isValidator: false,
     }
-
     //验证的数据
     this.validatorDatas = {
       checkedNum: 0,
       Options: {}
     };
 
+    // if(dataAnswer[index]) {
+    //       console.log();
+    //       InitOptionData(this.state.dataSource,item,this.validatorDatas,index,true);
+    //     }else {
+    //       InitOptionData(this.state.dataSource,item,this.validatorDatas,index,false);
+    //     }
+
     const dataSource = this.props.dataSource;
+    const dataAnswer = this.props.dataAnswer;
     if(dataSource.length > 0) {
       dataSource.map((item,index)=>{
-        InitOptionData(this.state.dataSource,this.props,item,this.validatorDatas,index);
+        let checked = false;
+        for( let i = 0 ;i< dataAnswer.length;i++) {
+          if(index == dataAnswer[i]) {
+            checked = true;
+          }
+        }
+        InitOptionData(this.state.dataSource,item,this.validatorDatas,index,checked);
       })
     }else {
       for(let i = 1; i<= this.props.defaultNum;i++) {
-        InitOptionData(this.state.dataSource,this.props,null,this.validatorDatas,i);
+        InitOptionData(this.state.dataSource,'',this.validatorDatas,i,false);
       }
     }
     this.subscriptionMessage();
+
+    console.log(this.state.dataSource);
   }
 
   subscriptionMessage() {
@@ -134,7 +148,7 @@ export default class QuestionOptions extends Component {
       notify('danger', `选项最多${this.props.maxNum}个!`);
       return;
     }
-    InitOptionData(this.state.dataSource,this.props,null,this.validatorDatas,this.state.dataSource.length+1);
+    InitOptionData(this.state.dataSource,'',this.validatorDatas,this.state.dataSource.length+1,false);
     this.setState({
       dataSource:this.state.dataSource,
     });
@@ -183,15 +197,10 @@ export default class QuestionOptions extends Component {
   }
 }
 
-
 QuestionOptions.defaultProps = {
   defaultNum: 4, //默认选项个数
   maxNum: 10,//最多选项的个数
   minNum: 2,//最少选项的个数
   isRadio: false,//是否为单选
   minCheckedNum:1,//至少选择几个答案
-  inputValueName: 'value', //值的字段名
-  idName: 'id',//id的字段名
-  checkedName:'checked',//答案的字段名
 }
-
