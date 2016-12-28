@@ -4,11 +4,11 @@
     <li>
       <a href="/">首页</a>
     </li>
-    <li class="active">sdfdsf</li>
+    <li class="active">{{ courseSet.title }} </li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
-      <div class="course-detail-heading gray-darker text-24">数据结构PHP开发入门课程  暑期班A
+      <div class="course-detail-heading gray-darker text-24">{{ course.title }}  {{ courseSet.subtitle }}
       </div>
       <span class="item-icon-font">
           <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
@@ -63,7 +63,7 @@
           <div class="course-progress">
             <div class="cricle-progress" id="orderprogress-plan" data-percent="55.444444444444">
             </div>
-            <div class="cricle-progress" id="orderprogress" data-percent="44.444444444444">
+            <div class="cricle-progress" id="orderprogress" data-percent="{{ taskResultCount }}">
               <span class="percent"></span>
             </div>
           </div>
@@ -72,14 +72,14 @@
           <li class="mb10">
             <i class="es-icon es-icon-dot color-primary"></i>
             已完成
-            <span class="color-primary">3</span>
-            ／45个任务
+            <span class="color-primary">{{ taskResultCount }}</span>
+            ／{{ taskCount }}个任务
           </li>
-          <li class="mb20"
+          <li class="mb20">
           <i class="es-icon es-icon-dot color-warning"></i>
           计划完成5个任务，落后计划5%</li>
           <li class="pt20 mb10 progress-learn-time">学习有效期</li>
-          <li class="progress-learn-time">2015-08-09 ~ 2025-23-23</li>
+          <li class="progress-learn-time">{{ course.expiryStartDate|date('Y-m-d ') }} ~ {{ course.expiryEndDate|date('Y-m-d ') }}</li>
         </ul>
       </div>
       <div class="col-sm-6 course-detail-content">

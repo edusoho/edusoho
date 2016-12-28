@@ -37,7 +37,9 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
             'conditions' => array(
                 'status =:status',
                 'userId =:userId',
-                'activityId =:activityId'
+                'courseId =:courseId',
+                'activityId =:activityId',
+                'courseTaskId =: courseTaskId'
             )
         );
     }
