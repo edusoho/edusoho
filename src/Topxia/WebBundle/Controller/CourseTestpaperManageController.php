@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Question\Type\QuestionTypeFactory;
+use Biz\Question\Type\QuestionTypeFactory;
 
 class CourseTestpaperManageController extends BaseController
 {

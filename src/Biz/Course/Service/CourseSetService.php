@@ -42,10 +42,24 @@ interface CourseSetService
 
     public function deleteCourseSet($id);
 
+
     /**
      * @param integer $userId
      *
      * @return array[]
      */
     public function findTeachingCourseSetsByUserId($userId);
+
+    /**
+     * @param array $ids
+     *
+     * @return array[]
+     */
+    public function findPublicCourseSetsByIds(array $ids);
+
+    public function updateCourseSetStatistics($id, $fields);
+
+    public function publishCourseSet($id);
+
+    public function closeCourseSet($id);
 }

@@ -10,7 +10,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    echo bin2hex(\Topxia\Service\Util\Phpsec\Crypt\Random::string(8));
+ *    echo bin2hex(\Biz\Util\Phpsec\Crypt\Random::string(8));
  * ?>
  * </code>
  *
@@ -24,15 +24,15 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\AES;
-use Topxia\Service\Util\Phpsec\Crypt\DES;
-use Topxia\Service\Util\Phpsec\Crypt\RC4;
-use Topxia\Service\Util\Phpsec\Crypt\Base;
-use Topxia\Service\Util\Phpsec\Crypt\Twofish;
-use Topxia\Service\Util\Phpsec\Crypt\Blowfish;
-use Topxia\Service\Util\Phpsec\Crypt\TripleDES;
+use Biz\Util\Phpsec\Crypt\AES;
+use Biz\Util\Phpsec\Crypt\DES;
+use Biz\Util\Phpsec\Crypt\RC4;
+use Biz\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Twofish;
+use Biz\Util\Phpsec\Crypt\Blowfish;
+use Biz\Util\Phpsec\Crypt\TripleDES;
 
 /**
  * Pure-PHP Random Number Generator
@@ -194,22 +194,22 @@ class Random
             // http://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator#Designs_based_on_cryptographic_primitives
 
             switch (true) {
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\AES'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\AES'):
                     $crypto = new AES(Base::MODE_CTR);
                     break;
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\Twofish'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\Twofish'):
                     $crypto = new Twofish(Base::MODE_CTR);
                     break;
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\Blowfish'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\Blowfish'):
                     $crypto = new Blowfish(Base::MODE_CTR);
                     break;
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\TripleDES'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\TripleDES'):
                     $crypto = new TripleDES(Base::MODE_CTR);
                     break;
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\DES'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\DES'):
                     $crypto = new DES(Base::MODE_CTR);
                     break;
-                case class_exists('\Topxia\Service\Util\Phpsec\Crypt\RC4'):
+                case class_exists('\Biz\Util\Phpsec\Crypt\RC4'):
                     $crypto = new RC4();
                     break;
                 default:

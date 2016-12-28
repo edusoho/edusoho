@@ -96,5 +96,5 @@ interface MemberService
      *
      * @return array[]
      */
-    public function findTeachingMembersByUserId($userId);
+    public function findTeacherMembersByUserId($userId);
 }

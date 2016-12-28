@@ -9,7 +9,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -59,7 +58,8 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $fields = ArrayToolkit::parts($fields, array(
             'seq',
-            'categoryId'
+            'categoryId',
+            'number'
         ));
         return $this->getTaskDao()->update($id, $fields);
     }
@@ -106,13 +106,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $tasks;
     }
 
-    public function findUserTasksFetchActivityAndResultByCourseId($courseId)
+    public function findTasksFetchActivityAndResultByCourseId($courseId)
     {
-        $user = $this->getCurrentUser();
-        if (!$this->getCourseMemberService()->isCourseMember($courseId, $user->getId())) {
-            return array();
-        }
-
         $tasks = $this->findTasksFetchActivityByCourseId($courseId);
         if (empty($tasks)) {
             return array();

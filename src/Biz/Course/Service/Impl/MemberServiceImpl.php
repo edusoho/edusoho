@@ -13,7 +13,7 @@ use Biz\Note\Service\CourseNoteService;
 use Biz\Order\Service\OrderService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Topxia\Common\ArrayToolkit;
 
 /**
@@ -129,10 +129,15 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $courseMembers = $this->getMemberDao()->findCourseMembersByUserId($currentUser["id"]);
-
-        $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $condition     = array(
+            'userId'              => $currentUser["id"],
+            'role'                => 'student',
+            'deadlineNotified'    => 0,
+            'deadlineGreaterThan' => 0
+        );
+        $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
+        $courseIds     = ArrayToolkit::column($courseMembers, "courseId");
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
@@ -144,7 +149,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($courses as $key => $course) {
             $courseMember = $courseMembers[$course["id"]];
 
-            if ($course["expiryDay"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
+            if ($course["expiryDays"] > 0 && $currentTime < $courseMember["deadline"] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember["deadline"]) {
                 $shouldNotifyCourses[]       = $course;
                 $shouldNotifyCourseMembers[] = $courseMember;
             }
@@ -174,7 +179,9 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findMemberUserIdsByCourseId($courseId)
     {
-        return $this->getMemberDao()->findMemberUserIdsByCourseId($courseId);
+        $members = $this->getMemberDao()->findByCourseId($courseId);
+
+        return ArrayToolkit::column($members, 'userId');
     }
 
     public function updateCourseMember($id, $fields)
@@ -206,7 +213,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseStudents($courseId, $start, $limit)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
     }
 
     public function findCourseStudentsByCourseIds($courseIds)
@@ -216,12 +223,16 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function getCourseStudentCount($courseId)
     {
-        return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+        $conditions = array(
+            'courseId' => $courseId,
+            'role'     => 'student'
+        );
+        return $this->getMemberDao()->count($conditions);
     }
 
     protected function findCourseTeachers($courseId)
     {
-        return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher');
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
@@ -322,8 +333,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     public function cancelTeacherInAllCourses($userId)
     {
-        $count   = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
-        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, $count, false);
+        $members = $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher');
 
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
@@ -353,17 +363,17 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function deleteMemberByCourseIdAndRole($courseId, $role)
     {
-        return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId, $role);
+        return $this->getMemberDao()->deleteByCourseIdAndRole($courseId, $role);
     }
 
     public function deleteMemberByCourseId($courseId)
     {
-        return $this->getMemberDao()->deleteMembersByCourseId($courseId);
+        return $this->getMemberDao()->deleteByCourseId($courseId);
     }
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course')
     {
-        $courseIds = $this->getMemberDao()->findMembersByUserIdAndJoinType($userId, $joinedType);
+        $courseIds = $this->getMemberDao()->findByUserIdAndJoinType($userId, $joinedType);
         return ArrayToolkit::column($courseIds, 'courseId');
     }
 
@@ -402,7 +412,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->delete($member['id']);
         $this->dispatchEvent(
             'learning.quit',
-            new Event($course, array('userId' => $userId))
+            $course, array('userId' => $userId)
         );
 
         $this->getCourseDao()->update($courseId, array(
@@ -450,12 +460,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         //按照课程有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryDay'] > 0) {
+        if ($course['expiryDays'] > 0) {
             if ($course['expiryMode'] == 'days') {
-                $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+                $deadline = $course['expiryDays'] * 24 * 60 * 60 + time();
             }
             if ($course['expiryMode'] == 'date') {
-                $deadline = $course['expiryDay'];
+                $deadline = $course['expiryDays'];
             }
         }
 
@@ -494,6 +504,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->create($fields);
 
+
         $this->refreshMemberNoteNumber(
             $courseId, $userId
         );
@@ -513,10 +524,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
         }
 
-        $this->getCourseDao()->updateCourse($courseId, $fields);
+        $this->getCourseDao()->update($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new Event($course, array('userId' => $member['userId'], 'member' => $member))
+            $course, array('userId' => $member['userId'], 'member' => $member)
         );
         return $member;
     }
@@ -547,7 +558,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
-            new Event($course, array('userId' => $member['userId'], 'member' => $member))
+            $course, array('userId' => $member['userId'], 'member' => $member)
         );
     }
 
@@ -621,13 +632,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
         if (empty($courseIds) || count($courseIds) == 0) {
             return array();
         }
 
-        $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+        $courseMembers = $this->getMemberDao()->findByUserIdAndCourseIds($userId, $courseIds);
         return $courseMembers;
     }
 
@@ -648,7 +659,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         return array();
     }
-
 
     protected function _prepareConditions($conditions)
     {
@@ -728,9 +738,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return true;
     }
 
-    public function findTeachingMembersByUserId($userId)
+    public function findTeacherMembersByUserId($userId)
     {
-        return $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher', 0, PHP_INT_MAX);
+        return $this->getMemberDao()->findByUserIdAndRole($userId, 'teacher');
     }
 
 

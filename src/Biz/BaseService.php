@@ -58,12 +58,12 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      *
      * @return Event
      */
-    protected function dispatchEvent($eventName, $subject)
+    protected function dispatchEvent($eventName, $subject, $arguments=array())
     {
         if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new Event($subject);
+            $event = new Event($subject, $arguments);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);

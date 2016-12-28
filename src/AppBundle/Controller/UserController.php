@@ -107,8 +107,8 @@ class UserController extends BaseController
         $user                 = array_merge($user, $userProfile);
         $classrooms           = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -170,7 +170,7 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         if (empty($classroomIds)) {
@@ -258,10 +258,10 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
-            array('createdTime', "DESC"), 0, 1000
+            array('createdTime' => "DESC"), 0, 1000
         );
         $owners               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
-            array('createdTime', "DESC"), 0, 1000
+            array('createdTime' => "DESC"), 0, 1000
         );
         $members              = array_merge($admins, $owners);
         $groupIds             = ArrayToolkit::column($members, 'groupId');
@@ -273,7 +273,7 @@ class UserController extends BaseController
             20
         );
 
-        $members = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'member'), array('createdTime', "DESC"), $paginator->getOffsetCount(),
+        $members = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'member'), array('createdTime' => "DESC"), $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         $groupIds = ArrayToolkit::column($members, 'groupId');
@@ -306,7 +306,7 @@ class UserController extends BaseController
 
         if ($followings) {
             $followingIds          = ArrayToolkit::column($followings, 'id');
-            $followingUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followingIds), array('id', 'ASC'), 0, count($followingIds)), 'id');
+            $followingUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followingIds), array('id' => 'ASC'), 0, count($followingIds)), 'id');
         }
 
         $myfollowings = $this->_getUserFollowing();
@@ -341,7 +341,7 @@ class UserController extends BaseController
 
         if ($followers) {
             $followerIds          = ArrayToolkit::column($followers, 'id');
-            $followerUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followerIds), array('id', 'ASC'), 0, count($followerIds)), 'id');
+            $followerUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followerIds), array('id' => 'ASC'), 0, count($followerIds)), 'id');
         }
 
         return $this->render('user/friend.html.twig', array(
@@ -423,7 +423,7 @@ class UserController extends BaseController
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         }
 
-        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($userId);
+        $user['learningNum']  = $this->getCourseService()->findUserLeaningCourseCount($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
         $levels               = array();
@@ -563,7 +563,7 @@ class UserController extends BaseController
 
         $sets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('created' => 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

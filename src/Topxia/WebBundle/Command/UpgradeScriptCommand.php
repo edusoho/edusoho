@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;

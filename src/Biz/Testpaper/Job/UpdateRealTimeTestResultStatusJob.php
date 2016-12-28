@@ -2,7 +2,7 @@
 
 namespace Biz\Testpaper\Job;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 
 class UpdateRealTimeTestResultStatusJob implements Job

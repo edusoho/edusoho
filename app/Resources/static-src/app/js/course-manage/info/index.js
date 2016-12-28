@@ -90,6 +90,7 @@ $.validator.addMethod(
 $('#course-submit').click(function(evt) {
   if (validator.form()) {
     $(evt.currentTarget).button('loading');
+    console.log('ok');
     $form.submit();
   }
 });

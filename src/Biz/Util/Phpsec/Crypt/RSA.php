@@ -10,7 +10,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $rsa = new \Topxia\Service\Util\Phpsec\Crypt\RSA();
+ *    $rsa = new \Biz\Util\Phpsec\Crypt\RSA();
  *    extract($rsa->createKey());
  *
  *    $plaintext = 'terrafrost';
@@ -28,7 +28,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $rsa = new \Topxia\Service\Util\Phpsec\Crypt\RSA();
+ *    $rsa = new \Biz\Util\Phpsec\Crypt\RSA();
  *    extract($rsa->createKey());
  *
  *    $plaintext = 'terrafrost';
@@ -51,16 +51,16 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\AES;
-use Topxia\Service\Util\Phpsec\Crypt\DES;
-use Topxia\Service\Util\Phpsec\Crypt\RSA;
-use Topxia\Service\Util\Phpsec\Crypt\Base;
-use Topxia\Service\Util\Phpsec\Crypt\Hash;
-use Topxia\Service\Util\Phpsec\Crypt\Random;
-use Topxia\Service\Util\Phpsec\Crypt\TripleDES;
-use Topxia\Service\Util\Phpsec\Math\BigInteger;
+use Biz\Util\Phpsec\Crypt\AES;
+use Biz\Util\Phpsec\Crypt\DES;
+use Biz\Util\Phpsec\Crypt\RSA;
+use Biz\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Hash;
+use Biz\Util\Phpsec\Crypt\Random;
+use Biz\Util\Phpsec\Crypt\TripleDES;
+use Biz\Util\Phpsec\Math\BigInteger;
 
 /**
  * Pure-PHP PKCS#1 compliant implementation of RSA.
@@ -74,8 +74,8 @@ class RSA
 {
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::decrypt()
      */
     /**
      * Use {@link http://en.wikipedia.org/wiki/Optimal_Asymmetric_Encryption_Padding Optimal Asymmetric Encryption Padding}
@@ -83,8 +83,8 @@ class RSA
      *
      * Uses sha1 by default.
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setHash()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setMGFHash()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setHash()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setMGFHash()
      */
     const ENCRYPTION_OAEP = 1;
     /**
@@ -105,17 +105,17 @@ class RSA
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::sign()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::verify()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setHash()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::sign()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::verify()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setHash()
      */
     /**
      * Use the Probabilistic Signature Scheme for signing
      *
      * Uses sha1 by default.
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setSaltLength()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setMGFHash()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setSaltLength()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setMGFHash()
      */
     const SIGNATURE_PSS = 1;
     /**
@@ -129,7 +129,7 @@ class RSA
 
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::createKey()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::createKey()
      */
     /**
      * ASN1 Integer
@@ -155,7 +155,7 @@ class RSA
 
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::__construct()
      */
     /**
      * To use the pure-PHP implementation
@@ -171,8 +171,8 @@ class RSA
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::createKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setPrivateKeyFormat()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::createKey()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setPrivateKeyFormat()
      */
     /**
      * PKCS#1 formatted private key
@@ -196,13 +196,13 @@ class RSA
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::createKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::setPublicKeyFormat()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::createKey()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::setPublicKeyFormat()
      */
     /**
      * Raw public key
      *
-     * An array containing two \Topxia\Service\Util\Phpsec\Math\BigInteger objects.
+     * An array containing two \Biz\Util\Phpsec\Math\BigInteger objects.
      *
      * The exponent can be indexed with any of the following:
      *
@@ -287,7 +287,7 @@ class RSA
     /**
      * Modulus (ie. n)
      *
-     * @var \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @var \Biz\Util\Phpsec\Math\BigInteger
      * @access private
      */
     public $modulus;
@@ -295,7 +295,7 @@ class RSA
     /**
      * Modulus length
      *
-     * @var \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @var \Biz\Util\Phpsec\Math\BigInteger
      * @access private
      */
     public $k;
@@ -303,7 +303,7 @@ class RSA
     /**
      * Exponent (ie. e or d)
      *
-     * @var \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @var \Biz\Util\Phpsec\Math\BigInteger
      * @access private
      */
     public $exponent;
@@ -343,7 +343,7 @@ class RSA
     /**
      * Hash function
      *
-     * @var \Topxia\Service\Util\Phpsec\Crypt\Hash
+     * @var \Biz\Util\Phpsec\Crypt\Hash
      * @access private
      */
     public $hash;
@@ -367,7 +367,7 @@ class RSA
     /**
      * Hash function for the Mask Generation Function
      *
-     * @var \Topxia\Service\Util\Phpsec\Crypt\Hash
+     * @var \Biz\Util\Phpsec\Crypt\Hash
      * @access private
      */
     public $mgfHash;
@@ -420,7 +420,7 @@ class RSA
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::_start_element_handler()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::_start_element_handler()
      */
     public $components = array();
 
@@ -431,8 +431,8 @@ class RSA
      *
      * @var Mixed
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::_character_handler()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::_stop_element_handler()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::_character_handler()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::_stop_element_handler()
      */
     public $current;
 
@@ -442,7 +442,7 @@ class RSA
      * Set to null to use system configuration file.
      * @var Mixed
      * @Access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\RSA::createKey()
+     * @see \Biz\Util\Phpsec\Crypt\RSA::createKey()
      */
     public $configFile;
 
@@ -458,11 +458,11 @@ class RSA
      * The constructor
      *
      * If you want to make use of the openssl extension, you'll need to set the mode manually, yourself.  The reason
-     * \Topxia\Service\Util\Phpsec\Crypt\RSA doesn't do it is because OpenSSL doesn't fail gracefully.  openssl_pkey_new(), in particular, requires
+     * \Biz\Util\Phpsec\Crypt\RSA doesn't do it is because OpenSSL doesn't fail gracefully.  openssl_pkey_new(), in particular, requires
      * openssl.cnf be present somewhere and, unfortunately, the only real way to find out is too late.
      *
      * @access public
-     * @return \Topxia\Service\Util\Phpsec\Crypt\RSA
+     * @return \Biz\Util\Phpsec\Crypt\RSA
      */
     public function __construct()
     {
@@ -541,7 +541,7 @@ class RSA
      *  - 'privatekey': The private key.
      *  - 'publickey':  The public key.
      *  - 'partialkey': A partially computed key (if the execution time exceeded $timeout).
-     *                  Will need to be passed back to \Topxia\Service\Util\Phpsec\Crypt\RSA::createKey() as the third parameter for further processing.
+     *                  Will need to be passed back to \Biz\Util\Phpsec\Crypt\RSA::createKey() as the third parameter for further processing.
      *
      * @access public
      * @param optional Integer $bits
@@ -2084,7 +2084,7 @@ class RSA
      */
     public function setHash($hash)
     {
-        // \Topxia\Service\Util\Phpsec\Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
+        // \Biz\Util\Phpsec\Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
 
         switch ($hash) {
             case 'md2':
@@ -2115,7 +2115,7 @@ class RSA
      */
     public function setMGFHash($hash)
     {
-        // \Topxia\Service\Util\Phpsec\Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
+        // \Biz\Util\Phpsec\Crypt\Hash supports algorithms that PKCS#1 doesn't support.  md5-96 and sha1-96, for example.
 
         switch ($hash) {
             case 'md2':
@@ -2155,7 +2155,7 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-4.1 RFC3447#section-4.1}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger $x
+     * @param  \Biz\Util\Phpsec\Math\BigInteger $x
      * @param  Integer                                     $xLen
      * @return String
      */
@@ -2178,7 +2178,7 @@ class RSA
      *
      * @access private
      * @param  String                                        $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _os2ip($x)
     {
@@ -2191,8 +2191,8 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-5.1.1 RFC3447#section-5.1.2}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $x
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $x
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _exponentiate($x)
     {
@@ -2272,10 +2272,10 @@ class RSA
      * Returns $x->modPow($this->exponents[$i], $this->primes[$i])
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $x
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $r
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $x
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $r
      * @param  Integer                                       $i
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _blind($x, $r, $i)
     {
@@ -2324,8 +2324,8 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-5.1.1 RFC3447#section-5.1.1}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $m
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $m
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _rsaep($m)
     {
@@ -2343,8 +2343,8 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-5.1.2 RFC3447#section-5.1.2}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $c
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $c
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _rsadp($c)
     {
@@ -2362,8 +2362,8 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-5.2.1 RFC3447#section-5.2.1}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $m
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $m
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _rsasp1($m)
     {
@@ -2381,8 +2381,8 @@ class RSA
      * See {@link http://tools.ietf.org/html/rfc3447#section-5.2.2 RFC3447#section-5.2.2}.
      *
      * @access private
-     * @param  \Topxia\Service\Util\Phpsec\Math\BigInteger   $s
-     * @return \Topxia\Service\Util\Phpsec\Math\BigInteger
+     * @param  \Biz\Util\Phpsec\Math\BigInteger   $s
+     * @return \Biz\Util\Phpsec\Math\BigInteger
      */
     public function _rsavp1($s)
     {
@@ -2627,7 +2627,7 @@ class RSA
      * to be 2 regardless of which key is used.  For compatibility purposes, we'll just check to make sure the
      * second byte is 2 or less.  If it is, we'll accept the decrypted string as valid.
      *
-     * As a consequence of this, a private key encrypted ciphertext produced with \Topxia\Service\Util\Phpsec\Crypt\RSA may not decrypt
+     * As a consequence of this, a private key encrypted ciphertext produced with \Biz\Util\Phpsec\Crypt\RSA may not decrypt
      * with a strictly PKCS#1 v1.5 compliant RSA implementation.  Public key encrypted ciphertext's should but
      * not private key encrypted ciphertext's.
      *

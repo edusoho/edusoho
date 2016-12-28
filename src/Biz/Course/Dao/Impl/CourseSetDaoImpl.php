@@ -17,6 +17,10 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
     public function declares()
     {
         return array(
+            'conditions' => array(
+                'id IN ( :ids )',
+                'status =:status'
+            ),
             'serializes' => array(
                 'tags'      => 'delimiter',
                 'goals'     => 'delimiter',
@@ -24,10 +28,10 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys' => array(
-                'created'
+                'createdTime'
             ),
             'timestamps' => array(
-                'created', 'updated'
+                'createdTime', 'updatedTime'
             )
         );
     }

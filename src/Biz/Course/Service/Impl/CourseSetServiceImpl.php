@@ -5,9 +5,8 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
-use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -82,7 +81,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'type',
             'title'
         ));
-        $created = $this->getCourseSetDao()->create($courseSet);
+        $created   = $this->getCourseSetDao()->create($courseSet);
 
         // 同时创建默认的教学计划
         // XXX
@@ -129,7 +128,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             });
         }
         return $this->getCourseSetDao()->update($courseSet['id'], $fields);
@@ -172,11 +171,66 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
+
     public function findTeachingCourseSetsByUserId($userId)
     {
-        $courses = $this->getCourseService()->findTeachingCoursesSetByUserId($userId);
-        $setIds = ArrayToolkit::column($courses, 'courseSetId');
-        return $this->findCourseSetsByIds($setIds);
+        $courses = $this->getCourseService()->findTeachingCoursesByUserId($userId);
+        $setIds  = ArrayToolkit::column($courses, 'courseSetId');
+        return $this->findPublicCourseSetsByIds($setIds);
+    }
+
+    /**
+     * @param array $ids
+     *
+     * @return mixed
+     */
+    public function findPublicCourseSetsByIds(array $ids)
+    {
+        $conditions = array(
+            'ids'    => $ids,
+            'status' => 'published'
+        );
+        $count      = $this->countCourseSets($conditions);
+        return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), 0, $count);
+    }
+
+
+    public function updateCourseSetStatistics($id, $fields)
+    {
+        if (empty($fields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        $updateFields = array();
+        foreach ($fields as $field) {
+            if ($field === 'ratingNum') {
+                $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
+                $updateFields = array_merge($updateFields, $ratingFields);
+            }
+        }
+
+        if (empty($updateFields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        return $this->getCourseSetDao()->update($id, $updateFields);
+    }
+
+    public function publishCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        $this->dispatchEvent('course-set.publish', $courseSet);
+    }
+
+    public function closeCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if ($courseSet['status'] != 'published') {
+            throw $this->createAccessDeniedException('CourseSet has not bean published');
+        }
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        $this->dispatchEvent('course-set.closed', $courseSet);
     }
 
     protected function hasCourseSetManagerRole($courseSetId = 0)
@@ -217,6 +271,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getTagService()
     {
         return $this->biz->service('Taxonomy:TagService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->biz->service('Course:ReviewService');
     }
 
     protected function getFileService()

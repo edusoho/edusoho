@@ -5,9 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-use Topxia\Service\Quiz\Impl\QuestionSerialize;
-
-
 class MyQuestionController extends BaseController
 {
     public function favoriteQuestionAction(Request $request ,$id)

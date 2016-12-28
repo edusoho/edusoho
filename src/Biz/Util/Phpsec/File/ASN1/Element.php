@@ -14,12 +14,12 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\File\ASN1;
+namespace Biz\Util\Phpsec\File\ASN1;
 
 /**
  * ASN.1 Element
  *
- * Bypass normal encoding rules in Topxia\Service\Util\Phpsec\File\ASN1::encodeDER()
+ * Bypass normal encoding rules in Biz\Util\Phpsec\File\ASN1::encodeDER()
  *
  * @access  public
  * @package ASN1
@@ -41,7 +41,7 @@ class Element
      *
      * @access public
      * @param  String                                          $encoded
-     * @return \Topxia\Service\Util\Phpsec\File\ASN1\Element
+     * @return \Biz\Util\Phpsec\File\ASN1\Element
      */
     public function __construct($encoded)
     {

@@ -13,81 +13,29 @@ class CourseSetController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        list($courseSet, $course) = $this->getCourseSetAndCourse($request, $id);
-        return $this->render('course-set/overview.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
-        ));
-    }
-
-    public function notesAction(Request $request, $id)
-    {
-        list($courseSet, $course) = $this->getCourseSetAndCourse($request, $id);
-
-        if (empty($courseSet)) {
-            throw $this->createNotFoundException('找不到该课程');
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
 
-        $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
-        $users = ArrayToolkit::index($users, 'id');
-
-        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
-        $tasks = ArrayToolkit::index($tasks, 'id');
-
-        $currentUser = $this->getCurrentUser();
-        $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
-        $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
-        return $this->render('course-set/note/notes.html.twig', array(
-            'course'      => $course,
-            'courseSet'   => $courseSet,
-            'notes'       => $notes,
-            'users'       => $users,
-            'tasks'       => $tasks,
-            'likeNoteIds' => $likeNoteIds
-        ));
-    }
-
-    protected function getCourseSetAndCourse(Request $request, $id)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
-
-        $courseId = $request->query->get('courseId', 0);
-
-        if ($courseId > 0) {
-            $course = $this->getCourseService()->getCourse($courseId);
-        } else {
-            $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
-        }
-
-        return array($courseSet, $course);
+        return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
     }
 
     public function courseSetsBlockAction(array $courseSets, $view = 'list', $mode = 'default')
     {
         $userIds = array();
 
-        foreach ($courseSets as $index => $set) {
-            $sets[$index]['course'] = $this->getCourseService()->get($set['id']);
-        }
-        /*foreach ($sets as $key => $set) {
-            $userIds = array_merge($userIds, $set['teacherIds']);
+        $service = $this->getCourseService();
 
-            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
-            $courses[$key]['classroomCount'] = count($classroomIds);
-
-            if (count($classroomIds) > 0) {
-                $classroom                  = $this->getClassroomService()->getClassroom($classroomIds[0]);
-                $courses[$key]['classroom'] = $classroom;
-            }
-        }*/
+        $courseSets = array_map(function($set) use (&$userIds, $service) {
+            $set['course'] = $service->getFirstPublishedCourseByCourseSetId($set['id']);
+            $userIds = array_merge($userIds, $set['course']['teacherIds']);
+            return $set;
+        }, $courseSets);
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-        var_dump($courseSets);
-        exit();
-        return $this->render("course-set/block-{$view}.html.twig", array(
+
+        return $this->render("course/block-{$view}.html.twig", array(
             'courseSets' => $courseSets,
             'users'      => $users,
             'mode'       => $mode
@@ -108,21 +56,5 @@ class CourseSetController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return CourseNoteService
-     */
-    protected function getCourseNoteService()
-    {
-        return $this->createService('Note:CourseNoteService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

@@ -9,7 +9,7 @@
  * utilized scheme is DER or the "Distinguished Encoding Rules".  PEM's are base64 encoded
  * DER blobs.
  *
- * \Topxia\Service\Util\Phpsec\File\ASN1 decodes and encodes DER formatted messages and places them in a semantic context.
+ * \Biz\Util\Phpsec\File\ASN1 decodes and encodes DER formatted messages and places them in a semantic context.
  *
  * Uses the 1988 ASN.1 syntax.
  *
@@ -23,10 +23,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\File;
+namespace Biz\Util\Phpsec\File;
 
-use Topxia\Service\Util\Phpsec\Math\BigInteger;
-use Topxia\Service\Util\Phpsec\File\ASN1\Element;
+use Biz\Util\Phpsec\Math\BigInteger;
+use Biz\Util\Phpsec\File\ASN1\Element;
 
 /**
  * Pure-PHP ASN.1 Parser
@@ -128,8 +128,8 @@ class ASN1
      * @var Array
      * @access private
      * @link http://php.net/class.datetime
-     * @see \Topxia\Service\Util\Phpsec\File\ASN1::setTimeFormat()
-     * @see \Topxia\Service\Util\Phpsec\File\ASN1::asn1map()
+     * @see \Biz\Util\Phpsec\File\ASN1::setTimeFormat()
+     * @see \Biz\Util\Phpsec\File\ASN1::asn1map()
      */
     public $encoded;
 
@@ -140,14 +140,14 @@ class ASN1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\File\ASN1::_encode_der()
+     * @see \Biz\Util\Phpsec\File\ASN1::_encode_der()
      */
     public $filters;
 
     /**
      * Type mapping table for the ANY type.
      *
-     * Structured or unknown types are mapped to a \Topxia\Service\Util\Phpsec\File\ASN1\Element.
+     * Structured or unknown types are mapped to a \Biz\Util\Phpsec\File\ASN1\Element.
      * Unambiguous types get the direct mapping (int/real/bool).
      * Others are mapped as a choice, with an extra indexing level.
      *
@@ -1289,7 +1289,7 @@ class ASN1
     /**
      * Load filters
      *
-     * See \Topxia\Service\Util\Phpsec\File\X509, etc, for an example.
+     * See \Biz\Util\Phpsec\File\X509, etc, for an example.
      *
      * @access public
      * @param Array $filters

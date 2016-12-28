@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Service;
 
-
 interface CourseService
 {
     public function getCourse($id);
@@ -12,6 +11,8 @@ interface CourseService
     public function findCoursesByCourseSetId($courseSetId);
 
     public function getDefaultCourseByCourseSetId($courseSetId);
+
+    public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
     public function createCourse($course);
 
@@ -47,29 +48,36 @@ interface CourseService
 
     public function hasCourseManagerRole($courseId = 0);
 
+
     /**
      * @param integer $userId
      *
      * @return array[]
      */
-    public function findTeachingCoursesSetByUserId($userId);
+    public function findTeachingCoursesByUserId($userId);
 
     /**
-     * @param $courseId
-     * @param $fields
-     * @return mixed
+     * @param array $ids
+     *
+     * @return array[]
+     */
+    public function findPublicCoursesByIds(array $ids);
+
+    /**
      * @before becomeStudent
+     * @param  $courseId
+     * @param  $fields
+     * @return mixed
      */
     public function createCourseStudent($courseId, $fields);
 
     /**
-     * @param $courseId
-     * @param $userId
-     * @return mixed
      * @before removeStudent
+     * @param  $courseId
+     * @param  $userId
+     * @return mixed
      */
     public function removeCourseStudent($courseId, $userId);
-
 
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function findUserLeaningCourseCount($userId, $filters = array());
@@ -80,8 +88,7 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-
-   // public function findUserLearnCourses($userId, $start, $limit);
+    // public function findUserLearnCourses($userId, $start, $limit);
 
     //public function findUserLearnCourseCount($userId);
 
@@ -91,7 +98,4 @@ interface CourseService
     public function searchCourseCount($conditions);
 
     public function sortCourseItems($courseId, $ids);
-
-    public function waveNoteNum($courseId, $num);
 }
-

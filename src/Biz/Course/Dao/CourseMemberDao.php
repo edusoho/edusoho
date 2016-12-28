@@ -19,10 +19,6 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function getByCourseIdAndUserId($courseId, $userId);
 
-    public function findStudentsByCourseId($courseId);
-
-    public function findTeachersByCourseId($courseId);
-
     /**
      * 用来替代各种命名复杂的关联表的列表查询
      *
@@ -41,7 +37,7 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function countMemberFetchCourse($conditions);
 
-    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    public function findLearnedByCourseIdAndUserId($courseId, $userId);
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
@@ -57,39 +53,37 @@ interface CourseMemberDao extends GeneralDaoInterface
     /**
      * @param $userId
      * @param $role
+     * @return mixed
+     * @before findMembersByUserIdAndRole
+     */
+    public function findByUserIdAndRole($userId, $role);
+
+    /**
+     * @param $userId
+     * @param $role
      * @param $start
      * @param $limit
      * @param bool $onlyPublished
      * @return mixed
      * @before findMembersByUserIdAndRole
      */
-    public function findByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
-
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
-    public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true);
+    public function findByCourseIdAndRole($courseId, $role);
 
-    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true); //
-
-    public function findMembersByCourseIdAndRole($courseId, $role);
-
-    public function findMemberCountByCourseIdAndRole($courseId, $role);
-
-    public function findMembersByUserIdAndJoinType($userId, $joinedType);
+    public function findByUserIdAndJoinType($userId, $joinedType);
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit);
 
     public function updateMembers($conditions, $updateFields);
 
-    public function deleteMemberByCourseIdAndRole($courseId, $role);
+    public function deleteByCourseIdAndRole($courseId, $role);
 
-    public function findCourseMembersByUserId($userId);
+    public function deleteByCourseId($courseId);
 
-    public function deleteMembersByCourseId($courseId);
+    public function findByUserIdAndCourseIds($userId, $courseIds);
 
-    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+    public function findByCourseId($courseId);
 
-    public function findMemberUserIdsByCourseId($courseId);
-
-    public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true);
+    public function findByUserId($userId);
 }

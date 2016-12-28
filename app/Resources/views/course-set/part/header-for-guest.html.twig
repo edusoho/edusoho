@@ -1,0 +1,135 @@
+{% import "macro.html.twig" as web_macro %}
+{#<!-- 1、加入前 -->#}
+
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="{{ path('homepage') }}">首页</a>
+    </li>
+    <li class="active">{{ courseSet.title }}</li>
+  </ol>
+  <div class="es-section course-detail-section clearfix">
+    <div class="course-detail-top clearfix">
+      <span class="tags mrm">
+        <span class="tag-serialing"></span>
+      </span>
+      <span class="course-detail-heading gray-darker text-24">{{ course.title }}</span>
+      <span class="es-qrcode top" data-url="/course/2/qrcode">
+        <i class="es-icon es-icon-qrcode"></i>
+        <span class="qrcode-popover">
+          <img src="" alt="">
+          扫二维码继续学习二维码时效为半小时
+        </span>
+      </span>
+      <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
+      <ul class="course-operation clearfix ">
+        <li> <i class="es-icon es-icon-people"></i>
+          {{ course.studentNum }} 人
+        </li>
+        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
+          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+        <li id="favorite-btn" data-url="/course/2/favorite">
+          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+          </a>
+        </li>
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+              <i class="es-icon es-icon-weixin"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
+              <i class="es-icon es-icon-weibo"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
+              <i class="es-icon es-icon-qq"></i>
+            </a>
+            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
+              <i class="es-icon es-icon-qzone"></i>
+            </a>
+          </div>
+        </li>
+        <li class="pull-left">
+          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': courseSet.id}) }}" title="课程管理">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="course-detail-bottom">
+      <div class="course-detail-img">
+        {# 需要设置是否可以预览 #}
+        <a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover">
+          <i class="es-icon es-icon-playcircleoutline"></i>
+        </a>
+        {# end 需要设置是否可以预览 #}
+
+        <img class="img-responsive" src=" {% if courseSet.cover is empty%} /assets/img-course-set/default/course-set.png  {% else  %} {{ filepath(courseSet.cover.large) }} {% endif  %}"  alt="{{ course.title }} ">
+        <div class="course-detail-remask">
+          <i class="es-icon es-icon-people"></i>{{ course.studentNum }} 人加入学习
+          <div class="score pull-right">
+            {{ web_macro.star(course.rating) }}
+            {{ course.ratingNum }}
+          </div>
+        </div>
+
+      </div>
+      <div class="course-detail-info gray">
+        <div class="mb10">
+          <span class="course-detail-title">价格</span>
+          <!-- 折扣价 -->
+          <span class="gray-darker mrm">¥<span class="text-24 text-blod">75.00</span></span>
+          <!-- 原价 -->
+          <span class="original-price">¥<span class="price">{{ course.price }}</span></span>
+          <span class="tag-discount"><span class="discount-font">8折</span></span>
+        </div>
+        <div class="mb10">
+          <span class="course-detail-title">活动</span>
+          <span class="color-warning ">
+          <span class="text-blod mrl">双十二活动</span>
+          <i class="es-icon es-icon-alarmon mrm"></i>
+          22 时 53 分 44.12 秒</span>
+        </div>
+        <div class="course-detail-gray">
+          <div class="course-detail-nav mb10">
+            <span class="course-detail-title">教学计划</span>
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent ml5">
+              {% set current_course = course %}
+              {% for course in  courses %}
+                <li>
+                  <a {% if current_course.id == course.id %}class="active" {% endif %}
+                     href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="mbl">
+            <span class="course-detail-title">学习方式</span>
+            {% if course.expiryMode == 'days' %}
+              <span class="gray-dark mrl">随到随学</span>
+              <span class="gray-dark">{{ course.expiryDays }}天</span>
+            {% elseif course.expiryMode == 'date' %}
+              <span class="gray-dark mrl">周期开班</span>
+              <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }} - {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+            {% endif %}
+          </div>
+          <span class="course-detail-title">承诺服务</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content. ">疑</span>
+          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
+        </div>
+        <div class="text-right">
+          <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
+          <a class="btn btn-primary btn-lg" href="{{path('order_show', {targetId: course.id, targetType:'course'})}}">购买课程</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

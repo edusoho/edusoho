@@ -6,7 +6,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 
 class OldPluginRefreshCommand extends BaseCommand
 {
