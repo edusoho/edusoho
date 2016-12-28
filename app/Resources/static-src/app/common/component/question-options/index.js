@@ -6,12 +6,12 @@ import { numberConvertLetter } from '../../unit';
 
 function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
   var obj = {
-    optionId:`question-option-${seq+1}`,
-    optionLabel: '选项'+ numberConvertLetter(seq+1),
+    optionId:`question-option-${seq}`,
+    optionLabel: '选项'+ numberConvertLetter(seq),
     inputValue: inputValue,
     checked: checked,
   }
-  validatorDatas.Options[`question-option-${seq+1}`] = inputValue.length > 0 ? 1 : 0,
+  validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0,
   dataSource.push(obj);
 }
 
@@ -63,14 +63,6 @@ export default class QuestionOptions extends Component {
       checkedNum: 0,
       Options: {}
     };
-
-    // if(dataAnswer[index]) {
-    //       console.log();
-    //       InitOptionData(this.state.dataSource,item,this.validatorDatas,index,true);
-    //     }else {
-    //       InitOptionData(this.state.dataSource,item,this.validatorDatas,index,false);
-    //     }
-
     const dataSource = this.props.dataSource;
     const dataAnswer = this.props.dataAnswer;
     if(dataSource.length > 0) {
