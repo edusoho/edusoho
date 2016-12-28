@@ -53,6 +53,88 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->count($conditions);
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return integer
+     */
+    public function countUserLearnCourseSets($userId)
+    {
+        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
+        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        return count($courseSets);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array[]
+     */
+    public function searchUserLearnCourseSets($userId, $start, $limit)
+    {
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+
+        if(empty($ids)){
+            return array();
+        }
+
+        return $this->searchCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published'
+            ),
+            array(
+                'createdTime' => 'DESC'
+            ),
+            $start,
+            $limit
+        );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countUserTeachingCourseSets($userId)
+    {
+        $teachSets  = $this->findTeachingCourseSetsByUserId($userId);
+        return count($teachSets);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $start
+     * @param int $limit
+     *
+     * @return mixed
+     */
+    public function searchUserTeachingCourseSets($userId, $start, $limit)
+    {
+        $teachSets = $this->findTeachingCourseSetsByUserId($userId);
+
+        if(empty($teachSets)){
+            return array();
+        }
+
+        $conditions = array(
+            'ids' => ArrayToolkit::column($teachSets, 'id')
+        );
+
+        return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
+    }
+
+
+    public function findCourseSetsByCourseIds(array $courseIds)
+    {
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $sets = $this->findCourseSetsByIds(array_unique($courseSetIds));
+        return $sets;
+    }
 
     public function findCourseSetsByIds(array $ids)
     {
@@ -180,12 +262,29 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
+     * @param int $userId
+     *
+     * @return mixed
+     */
+    public function findLearnCourseSetsByUserId($userId)
+    {
+        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
+        $setIds  = ArrayToolkit::column($courses, 'courseSetId');
+        return $this->findPublicCourseSetsByIds($setIds);
+    }
+
+
+    /**
      * @param array $ids
      *
      * @return mixed
      */
     public function findPublicCourseSetsByIds(array $ids)
     {
+        if(empty($ids)){
+            return array();
+        }
+
         $conditions = array(
             'ids'    => $ids,
             'status' => 'published'

@@ -648,8 +648,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return mixed
+     */
+    public function findLearnCoursesByUserId($userId)
+    {
+        $members = $this->getMemberService()->findStudentMemberByUserId($userId);
+        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courses   = $this->findPublicCoursesByIds($courseIds);
+        return $courses;
+    }
+
     public function findPublicCoursesByIds(array $ids)
     {
+        if(empty($ids)){
+            return array();
+        }
+
         $conditions = array(
             'status'    => 'published',
             'courseIds' => $ids

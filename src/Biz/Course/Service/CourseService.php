@@ -57,6 +57,13 @@ interface CourseService
     public function findTeachingCoursesByUserId($userId);
 
     /**
+     * @param integer $userId
+     *
+     * @return array[]
+     */
+    public function findLearnCoursesByUserId($userId);
+
+    /**
      * @param array $ids
      *
      * @return array[]

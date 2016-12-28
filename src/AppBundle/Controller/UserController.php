@@ -526,44 +526,36 @@ class UserController extends BaseController
 
     protected function _learnAction($user)
     {
-
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
+            $this->getCourseSetService()->countUserLearnCourseSets($user['id']),
             20
         );
 
-        $courses = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
+        $courseSets = $this->getCourseSetService()->searchUserLearnCourseSets(
             $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        return $this->render('user/courses.html.twig', array(
-            'user'      => $user,
-            'courses'   => $courses,
-            'paginator' => $paginator,
-            'type'      => 'learn'
+        return $this->render('user/course-sets.html.twig', array(
+            'user'       => $user,
+            'courseSets' => $courseSets,
+            'paginator'  => $paginator,
+            'type'       => 'learn'
         ));
     }
 
     protected function _teachAction($user)
     {
-        $teachSets       = $this->getCourseSetService()->findTeachingCourseSetsByUserId($user['id']);
-        $setIds     = ArrayToolkit::column($teachSets, 'id');
-        $conditions = array(
-            'ids' => $setIds
-        );
-
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseSetService()->countCourseSets($conditions),
+            $this->getCourseSetService()->countUserTeachingCourseSets($user['id']),
             20
         );
 
-        $sets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            array('createdTime' => 'DESC'),
+        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+            $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

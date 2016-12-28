@@ -7,6 +7,45 @@ interface CourseSetService
     public function tryManageCourseSet($id);
 
     /**
+     * @param integer $userId
+     *
+     * @return integer
+     */
+    public function countUserLearnCourseSets($userId);
+
+    /**
+     * @param integer $userId
+     * @param integer $start
+     * @param integer $limit
+     *
+     * @return array[]
+     */
+    public function searchUserLearnCourseSets($userId, $start, $limit);
+
+    /**
+     * @param  integer $userId
+     *
+     * @return integer
+     */
+    public function countUserTeachingCourseSets($userId);
+
+    /**
+     * @param integer $userId
+     * @param integer $start
+     * @param integer $limit
+     *
+     * @return array[]
+     */
+    public function searchUserTeachingCourseSets($userId, $start, $limit);
+
+    /**
+     * @param integer[] $courseIds
+     *
+     * @return array[]
+     */
+    public function findCourseSetsByCourseIds(array $courseIds);
+
+    /**
      * @param array $ids
      *
      * @return array[]
@@ -49,6 +88,13 @@ interface CourseSetService
      * @return array[]
      */
     public function findTeachingCourseSetsByUserId($userId);
+
+    /**
+     * @param integer $userId
+     *
+     * @return array[]
+     */
+    public function findLearnCourseSetsByUserId($userId);
 
     /**
      * @param array $ids
