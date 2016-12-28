@@ -87,18 +87,10 @@ export default class QuestionOptions extends Component {
         this.validatorOptions(data);
       }
     });
-
-
-    //首先出发验证，
-    
-    //验证是否选择了合理个数的答案；
-    //验证每一项目是否为空；
-    //是否需要时候去显示验证效果；
   }
 
   publishMessage(isValidator) {
     console.log({'publishMessage':isValidator});
-
     postal.publish({
       channel : "manage-question",
       topic : "question-create-form-validator-end",
@@ -146,6 +138,7 @@ export default class QuestionOptions extends Component {
     this.setState({
       dataSource:this.state.dataSource,
     });
+    console.log({'dataSource':this.state.dataSource});
   }
 
   changeOptionChecked(value) {

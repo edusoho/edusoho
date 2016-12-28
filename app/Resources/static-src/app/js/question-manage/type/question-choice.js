@@ -1,7 +1,7 @@
 import QuestionFormBase from './form-base';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import QuestionOptions from '../../../common/widget/question-options';
+import QuestionOptions from '../../../common/component/question-options';
 import postal from 'postal';
 
 
