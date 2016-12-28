@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Biz\File\Service\UploadFileService;
-use Biz\OpenCourse\Service\OpenCourseService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\File\Service\UploadFileService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseFileManageController extends BaseController
@@ -25,9 +25,11 @@ class OpenCourseFileManageController extends BaseController
             20
         );
 
-        $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+        //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
+        // $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+        $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

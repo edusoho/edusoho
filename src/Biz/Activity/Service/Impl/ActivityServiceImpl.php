@@ -5,6 +5,7 @@ namespace Biz\Activity\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
@@ -83,6 +84,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
                 throw $this->createAccessDeniedException('无权创建教学活动');
             }
+
+            $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
+
             $activityConfig = $this->getActivityConfig($fields['mediaType']);
             $media          = $activityConfig->create($fields);
 
@@ -95,6 +99,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['createdTime'] = time();
 
             $activity = $this->getActivityDao()->create($fields);
+
+            if (!empty($materials)) {
+                $this->syncActivityMaterials($activity, $materials, 'create');
+            }
 
             $listener = $activityConfig->getListener('activity.created');
             if (!empty($listener)) {
@@ -115,6 +123,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
             throw $this->createAccessDeniedException('无权更新教学活动');
+        }
+
+        $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
+        if (!empty($materials)) {
+            $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
 
         $media          = array();
@@ -142,6 +155,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw $this->createAccessDeniedException('无权删除教学活动');
         }
 
+        $this->syncActivityMaterials($activity, array(), 'delete');
+
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
 
         $activityConfig->delete($activity['mediaId']);
@@ -154,6 +169,63 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity       = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
         return $activityConfig->isFinished($id);
+    }
+
+    protected function syncActivityMaterials($activity, $materials, $mode = 'create')
+    {
+        if ($mode === 'delete') {
+            $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
+            return;
+        }
+
+        if (empty($materials)) {
+            return;
+        }
+
+        switch ($mode) {
+            case 'create':
+                foreach ($materials as $id => $material) {
+                    $this->getMaterialService()->uploadMaterial($this->buildMaterial($material, $activity));
+                }
+                break;
+            case 'update':
+                $exists   = $this->getMaterialService()->searchMaterials(array('lessonId' => $activity['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+                $currents = array();
+                foreach ($materials as $id => $material) {
+                    $currents[] = $this->buildMaterial($material, $activity);
+                }
+                $dropMaterials   = array_diff_key($exists, $currents);
+                $addMaterials    = array_diff_key($currents, $exists);
+                $updateMaterials = array_intersect_key($exists, $currents);
+                foreach ($dropMaterials as $material) {
+                    $this->getMaterialService()->deleteMaterial($activity['fromCourseId'], $material['id']);
+                }
+                foreach ($addMaterials as $material) {
+                    $this->getMaterialService()->addMaterial($material, $material);
+                }
+                foreach ($updateMaterials as $material) {
+                    $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected function buildMaterial($material, $activity)
+    {
+        return array(
+            'fileId'      => intval($material['id']),
+            'courseId'    => $activity['fromCourseId'],
+            'courseSetId' => $activity['fromCourseSetId'],
+            'lessonId'    => $activity['id'],
+            'title'       => $material['name'],
+            'description' => $material['summary'],
+            'userId'      => $this->getCurrentUser()->offsetGet('id'),
+            'type'        => 'course',
+            'source'      => 'coursetask',
+            'copyId'      => 0 //$fields
+        );
     }
 
     protected function filterFields($fields)
@@ -177,6 +249,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return $fields;
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->biz->service('Course:MaterialService');
     }
 
     /**
