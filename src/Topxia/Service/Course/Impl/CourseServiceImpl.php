@@ -2906,6 +2906,38 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseLessonReplayDao()->findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
     }
 
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)
+    {
+        if (empty($userId) || empty($courseIds)) {
+            return array();
+        }
+
+        $courses = $this->findCoursesByIds($courseIds);
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'userId' => $userId
+        );
+        $count = $this->searchMemberCount($conditions);
+        $members = $this->searchMembers(
+            $conditions,
+            array('id', 'DESC'),
+            0,
+            $count
+        );
+
+        $learnProgress = array();
+        foreach ($members as $member) {
+            $learnProgress[] = array(
+                'courseId' => $member['courseId'],
+                'totalLesson' => $courses[$member['courseId']]['lessonNum'],
+                'learnedNum' => $member['learnedNum']
+            );
+        }
+
+        return $learnProgress;
+    }
+
     protected function isClassroomMember($course, $userId)
     {
         $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

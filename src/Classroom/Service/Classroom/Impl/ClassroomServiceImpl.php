@@ -1440,37 +1440,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields['learnedNum'] = $userLearnCount;
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
+
         return $this->updateMember($classroomMember['id'], $fields);
-    }
-
-    public function calculateClassroomCoursesLearnProgress($classroomId, $userId)
-    {
-        $courses            = $this->findActiveCoursesByClassroomId($classroomId);
-        $courses = ArrayToolkit::index($courses, 'id');
-        $courseIds          = ArrayToolkit::column($courses, 'id');
-        $conditions = array(
-            'userId' => $userId,
-            'courseIds' => $courseIds
-        );
-
-        $count = $this->getCourseService()->searchMemberCount($conditions);
-
-        $courseMembers = $this->getCourseService()->searchMembers(
-            $conditions,
-            array('id', 'DESC'),
-            0,
-            $count
-        );
-
-        $coursesLearnProgress = array();
-        foreach ($courseMembers as $courseMember) {
-            $coursesLearnProgress[] = array(
-                'courseId' => $courseMember['courseId'],
-                'totalLesson' => $courses[$courseMember['courseId']]['lessonNum'],
-                'learnedNum' => $courseMember['learnedNum']
-            );
-        }
-        return $coursesLearnProgress;
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)

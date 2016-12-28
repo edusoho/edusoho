@@ -128,7 +128,6 @@ interface ClassroomService
 
     public function findClassroomsByCourseId($courseId);
 
-    public function calculateClassroomCoursesLearnProgress($classroomId, $userId);
     /**
      * @FIXME 这个方法要纠正
      */
