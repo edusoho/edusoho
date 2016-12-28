@@ -17,7 +17,7 @@ class TestpaperForm{
     this.$form.on('click','[data-role="submit"]',event=>this._submit(event));
     this.$form.on('click','[name="mode"]',event=>this.changeMode(event));
     this.$form.on('click','[name="range"]',event=>this.changeRange(event));
-    
+    this.$form.on('blur','[data-role="count"]',event=>this.changeCount(event));
   }
 
   initScoreSlider(passScore,score) {
@@ -103,6 +103,14 @@ class TestpaperForm{
     });
   }
 
+  changeCount() {
+    let num = 0;
+    this.$form.find('[data-role="count"]').each(function(index,item){
+      num += parseInt($(item).val());
+    });
+    this.$form.find('[name="questioncount"]').val(num > 0 ? num : null);
+  }
+
   _initValidate() {
     this.validator = this.$form.validate({
       rules:{
@@ -123,9 +131,13 @@ class TestpaperForm{
         },
         range:{
           required:true
+        },
+        questioncount: {
+          required:true
         }
       },
       messages:{
+        questioncount:"请选择题目",
         name:"请输入试卷名称",
         description:"请输入试卷描述",
         mode:"请选择生成方式",
@@ -179,3 +191,5 @@ class TestpaperForm{
 }
 
 new TestpaperForm($('#testpaper-form'));
+
+
