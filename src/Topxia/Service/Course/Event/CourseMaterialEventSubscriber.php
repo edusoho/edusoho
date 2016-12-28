@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -158,7 +158,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
         $materials = $this->getMaterialService()->searchMaterials(
             array('fileId' => $file['id'], 'copyId' => 0),
-            array('createdTime', 'DESC'), 0, PHP_INT_MAX
+            array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
 
         if (!$materials) {

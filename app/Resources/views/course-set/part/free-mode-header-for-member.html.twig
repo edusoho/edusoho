@@ -53,7 +53,7 @@
       <div class="row">
         <div class="col-sm-3">
           <div class="course-progress">
-            <div class="cricle-progress" id="freeprogress" data-percent="44.444444444444">
+            <div class="cricle-progress" id="freeprogress" data-percent="{{ progress }}">
               <span class="percent"></span>
             </div>
           </div>
@@ -65,9 +65,9 @@
                 <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>
                 已完成
               </p>
-              <span class="color-primary">09</span>
+              <span class="color-primary">{{ taskResultCount }}</span>
               ／
-              <span class="mrl">24</span>
+              <span class="mrl">{{ taskCount }}</span>
               课时
             </li>
             <li>
@@ -75,7 +75,7 @@
                 <i class="es-icon es-icon-today mrm"></i>
                 学习有效期
               </p>
-              2016-0-28
+              {{ course.expiryDays }} 天
             </li>
             <li>
               <p class="mb20 color-gray">
