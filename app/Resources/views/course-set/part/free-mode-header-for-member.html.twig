@@ -1,21 +1,22 @@
+<!-- 2、加入后：自由式学习 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{path('homepage') }}">首页</a></li>
-    <li class="active">sdfdsf</li>
+    <li class="active">{{ courseSet.title }} </li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
-      <div class="course-detail-heading">{{ courseSet.title }} {{ course.title }}</div>
+      <div class="course-detail-heading gray-darker text-24">{{ course.title }}</div>
       <ul class="course-operation clearfix ">
-        <li class="mrl"><i class="es-icon es-icon-people"></i>
-          {{ memberCount }} 人
+        <li> <i class="es-icon es-icon-people"></i>
+          {{ course.studentNum }} 人
         </li>
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-          <a class="btn btn-default btn-xs " href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
           </a>
         </li>
         <li id="favorite-btn" data-url="/course/2/favorite">
-          <a class="btn btn-default btn-xs  " href="javascript:;">
+          <a class="btn btn-default btn-xs" href="javascript:;">
             <i class="es-icon es-icon-bookmarkoutline"></i>
           </a>
         </li>
@@ -25,12 +26,9 @@
             <i class="es-icon es-icon-share"></i>
           </a>
 
-          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神"
-               data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2"
-               data-picture="/assets/img/default/courseSet.png">
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
 
-            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin"
-               data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
               <i class="es-icon es-icon-weixin"></i>
             </a>
             <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
@@ -44,7 +42,7 @@
             </a>
           </div>
         </li>
-        <li>
+        <li class="pull-left">
           <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
             <i class="es-icon es-icon-setting"></i>
           </a>
@@ -63,7 +61,7 @@
         <div class="col-sm-7">
           <ul class="course-learn-list">
             <li>
-              <p class="mbs color-gray">
+              <p class="mb20 color-gray">
                 <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>
                 已完成
               </p>
@@ -73,17 +71,42 @@
               课时
             </li>
             <li>
-              <p class="mbs color-gray">
+              <p class="mb20 color-gray">
                 <i class="es-icon es-icon-today mrm"></i>
                 学习有效期
               </p>
               2016-0-28
             </li>
             <li>
-              <p class="mbs color-gray">
+              <p class="mb20 color-gray">
                 <i class="es-icon es-icon-book"></i>
                 下一课
               </p>
+              PS移动工具
+            </li>
+          </ul>
+          <ul class="course-learn-list-small">
+            <li>
+              <span class="mb20 color-gray">
+                <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>
+                已完成
+              </span>
+              <span class="color-primary ml10">09</span>
+              ／24</span>
+              课时
+            </li>
+            <li>
+              <span class="mb20 color-gray">
+                <i class="es-icon es-icon-today mr10"></i>
+                <span class="mr10">学习有效期</span>
+              2016-0-28
+              </span>
+            </li>
+            <li>
+              <span class="mb20 color-gray">
+                <i class="es-icon es-icon-book mr10"></i>
+                <span class="mr10">下一课</span>
+              </span>
               PS移动工具
             </li>
           </ul>
