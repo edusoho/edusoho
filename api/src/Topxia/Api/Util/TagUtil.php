@@ -3,7 +3,6 @@
 namespace Topxia\Api\Util;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\ArrayToolkit;
 
 class TagUtil
 {
