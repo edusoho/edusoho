@@ -10,7 +10,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH2('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH2('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -24,11 +24,11 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $key = new \Topxia\Service\Util\Phpsec\Crypt\RSA();
+ *    $key = new \Biz\Util\Phpsec\Crypt\RSA();
  *    //$key->setPassword('whatever');
  *    $key->loadKey(file_get_contents('privatekey'));
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH2('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH2('www.domain.tld');
  *    if (!$ssh->login('username', $key)) {
  *        exit('Login Failed');
  *    }
@@ -49,19 +49,19 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Net;
+namespace Biz\Util\Phpsec\Net;
 
-use Topxia\Service\Util\Phpsec\Crypt\RC4;
-use Topxia\Service\Util\Phpsec\Crypt\RSA;
-use Topxia\Service\Util\Phpsec\Crypt\Base;
-use Topxia\Service\Util\Phpsec\Crypt\Hash;
-use Topxia\Service\Util\Phpsec\Crypt\Random;
-use Topxia\Service\Util\Phpsec\Crypt\Twofish;
-use Topxia\Service\Util\Phpsec\Crypt\Blowfish;
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
-use Topxia\Service\Util\Phpsec\Crypt\TripleDES;
-use Topxia\Service\Util\Phpsec\Math\BigInteger; // Used to do Diffie-Hellman key exchange and DSA/RSA signature verification.
-use Topxia\Service\Util\Phpsec\System\SSH\Agent;
+use Biz\Util\Phpsec\Crypt\RC4;
+use Biz\Util\Phpsec\Crypt\RSA;
+use Biz\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Hash;
+use Biz\Util\Phpsec\Crypt\Random;
+use Biz\Util\Phpsec\Crypt\Twofish;
+use Biz\Util\Phpsec\Crypt\Blowfish;
+use Biz\Util\Phpsec\Crypt\Rijndael;
+use Biz\Util\Phpsec\Crypt\TripleDES;
+use Biz\Util\Phpsec\Math\BigInteger; // Used to do Diffie-Hellman key exchange and DSA/RSA signature verification.
+use Biz\Util\Phpsec\System\SSH\Agent;
 
 /**
  * Pure-PHP implementation of SSHv2.
@@ -76,7 +76,7 @@ class SSH2
     /**#@+
      * Execution Bitmap Masks
      *
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::bitmap
+     * @see \Biz\Util\Phpsec\Net\SSH2::bitmap
      * @access private
      */
     const MASK_CONSTRUCTOR   = 0x00000001;
@@ -99,8 +99,8 @@ class SSH2
      *     open request, and 'sender channel' is the channel number allocated by
      *     the other side.
      *
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
      * @access private
      */
     const CHANNEL_EXEC          = 0; // PuTTy uses 0x100
@@ -111,7 +111,7 @@ class SSH2
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLog()
      */
     /**
      * Returns the message numbers
@@ -133,7 +133,7 @@ class SSH2
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::read()
+     * @see \Biz\Util\Phpsec\Net\SSH2::read()
      */
     /**
      * Returns when a string matching $expect exactly is found
@@ -181,8 +181,8 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getErrors()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLastError()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getErrors()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLastError()
      */
     public $errors = array();
 
@@ -191,7 +191,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerIdentification()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerIdentification()
      */
     public $server_identifier = false;
 
@@ -200,7 +200,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getKexAlgorithims()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getKexAlgorithims()
      */
     public $kex_algorithms = false;
 
@@ -236,7 +236,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerHostKeyAlgorithms()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerHostKeyAlgorithms()
      */
     public $server_host_key_algorithms = false;
 
@@ -245,7 +245,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getEncryptionAlgorithmsClient2Server()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getEncryptionAlgorithmsClient2Server()
      */
     public $encryption_algorithms_client_to_server = false;
 
@@ -254,7 +254,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getEncryptionAlgorithmsServer2Client()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getEncryptionAlgorithmsServer2Client()
      */
     public $encryption_algorithms_server_to_client = false;
 
@@ -263,7 +263,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getMACAlgorithmsClient2Server()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getMACAlgorithmsClient2Server()
      */
     public $mac_algorithms_client_to_server = false;
 
@@ -272,7 +272,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getMACAlgorithmsServer2Client()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getMACAlgorithmsServer2Client()
      */
     public $mac_algorithms_server_to_client = false;
 
@@ -281,7 +281,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getCompressionAlgorithmsClient2Server()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getCompressionAlgorithmsClient2Server()
      */
     public $compression_algorithms_client_to_server = false;
 
@@ -290,7 +290,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getCompressionAlgorithmsServer2Client()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getCompressionAlgorithmsServer2Client()
      */
     public $compression_algorithms_server_to_client = false;
 
@@ -299,7 +299,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLanguagesServer2Client()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLanguagesServer2Client()
      */
     public $languages_server_to_client = false;
 
@@ -308,7 +308,7 @@ class SSH2
      *
      * @var mixed false or Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLanguagesClient2Server()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLanguagesClient2Server()
      */
     public $languages_client_to_server = false;
 
@@ -324,8 +324,8 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
      */
     public $encrypt_block_size = 8;
 
@@ -334,8 +334,8 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $decrypt_block_size = 8;
 
@@ -344,7 +344,7 @@ class SSH2
      *
      * @var Object
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $decrypt = false;
 
@@ -353,7 +353,7 @@ class SSH2
      *
      * @var Object
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
      */
     public $encrypt = false;
 
@@ -362,7 +362,7 @@ class SSH2
      *
      * @var Object
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
      */
     public $hmac_create = false;
 
@@ -371,7 +371,7 @@ class SSH2
      *
      * @var Object
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $hmac_check = false;
 
@@ -384,7 +384,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $hmac_size = false;
 
@@ -393,7 +393,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
      */
     public $server_public_host_key;
 
@@ -408,7 +408,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_key_exchange()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_key_exchange()
      */
     public $session_id = false;
 
@@ -419,7 +419,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_key_exchange()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_key_exchange()
      */
     public $exchange_hash = false;
 
@@ -428,7 +428,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
      */
     public $message_numbers = array();
 
@@ -437,7 +437,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
      */
     public $disconnect_reasons = array();
 
@@ -446,7 +446,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
      */
     public $channel_open_failure_reasons = array();
 
@@ -456,7 +456,7 @@ class SSH2
      * @var Array
      * @access private
      * @link http://tools.ietf.org/html/rfc4254#section-8
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
      */
     public $terminal_modes = array();
 
@@ -466,7 +466,7 @@ class SSH2
      * @var Array
      * @access private
      * @link http://tools.ietf.org/html/rfc4254#section-5.2
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
      */
     public $channel_extended_data_type_codes = array();
 
@@ -477,7 +477,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
      */
     public $send_seq_no = 0;
 
@@ -488,7 +488,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $get_seq_no = 0;
 
@@ -499,8 +499,8 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::exec()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::exec()
      */
     public $server_channels = array();
 
@@ -512,8 +512,8 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::exec()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::exec()
      */
     public $channel_buffers = array();
 
@@ -524,7 +524,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
      */
     public $channel_status = array();
 
@@ -535,7 +535,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
      */
     public $packet_size_client_to_server = array();
 
@@ -544,7 +544,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLog()
      */
     public $message_number_log = array();
 
@@ -553,7 +553,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getLog()
      */
     public $message_log = array();
 
@@ -564,8 +564,8 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::exec()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::exec()
      */
     public $window_size = 0x7FFFFFFF;
 
@@ -576,7 +576,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_channel_packet()
      */
     public $window_size_server_to_client = array();
 
@@ -587,7 +587,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
      */
     public $window_size_client_to_server = array();
 
@@ -598,7 +598,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
      */
     public $signature = '';
 
@@ -609,7 +609,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
      */
     public $signature_format = '';
 
@@ -618,7 +618,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::read()
+     * @see \Biz\Util\Phpsec\Net\SSH2::read()
      */
     public $interactiveBuffer = '';
 
@@ -629,8 +629,8 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      */
     public $log_size;
 
@@ -638,7 +638,7 @@ class SSH2
      * Timeout
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::setTimeout()
+     * @see \Biz\Util\Phpsec\Net\SSH2::setTimeout()
      */
     public $timeout;
 
@@ -646,7 +646,7 @@ class SSH2
      * Current Timeout
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet()
      */
     public $curTimeout;
 
@@ -655,7 +655,7 @@ class SSH2
      *
      * @var Resource
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_append_log()
      */
     public $realtime_log_file;
 
@@ -664,7 +664,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_append_log()
      */
     public $realtime_log_size;
 
@@ -673,7 +673,7 @@ class SSH2
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getServerPublicHostKey()
      */
     public $signature_validated = false;
 
@@ -681,7 +681,7 @@ class SSH2
      * Real-time log file wrap boolean
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_append_log()
      */
     public $realtime_log_wrap;
 
@@ -689,7 +689,7 @@ class SSH2
      * Flag to suppress stderr from output
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::enableQuietMode()
+     * @see \Biz\Util\Phpsec\Net\SSH2::enableQuietMode()
      */
     public $quiet_mode = false;
 
@@ -714,7 +714,7 @@ class SSH2
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::enablePTY()
+     * @see \Biz\Util\Phpsec\Net\SSH2::enablePTY()
      */
     public $request_pty = false;
 
@@ -747,7 +747,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_keyboard_interactive_process()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_keyboard_interactive_process()
      */
     public $last_interactive_response = '';
 
@@ -756,7 +756,7 @@ class SSH2
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_keyboard_interactive_process()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_keyboard_interactive_process()
      */
     public $keyboard_requests_responses = array();
 
@@ -768,8 +768,8 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_filter()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getBannerMessage()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_filter()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getBannerMessage()
      */
     public $banner_message = '';
 
@@ -778,7 +778,7 @@ class SSH2
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::isTimeout()
+     * @see \Biz\Util\Phpsec\Net\SSH2::isTimeout()
      */
     public $is_timeout = false;
 
@@ -787,7 +787,7 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_format_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_format_log()
      */
     public $log_boundary = ':';
 
@@ -796,7 +796,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_format_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_format_log()
      */
     public $log_long_width = 65;
 
@@ -805,7 +805,7 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_format_log()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_format_log()
      */
     public $log_short_width = 16;
 
@@ -814,8 +814,8 @@ class SSH2
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_connect()
      */
     public $host;
 
@@ -824,8 +824,8 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH2::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_connect()
      */
     public $port;
 
@@ -834,9 +834,9 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getWindowColumns()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::setWindowColumns()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::setWindowSize()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getWindowColumns()
+     * @see \Biz\Util\Phpsec\Net\SSH2::setWindowColumns()
+     * @see \Biz\Util\Phpsec\Net\SSH2::setWindowSize()
      */
     public $windowColumns = 80;
 
@@ -845,9 +845,9 @@ class SSH2
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::getWindowRows()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::setWindowRows()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::setWindowSize()
+     * @see \Biz\Util\Phpsec\Net\SSH2::getWindowRows()
+     * @see \Biz\Util\Phpsec\Net\SSH2::setWindowRows()
+     * @see \Biz\Util\Phpsec\Net\SSH2::setWindowSize()
      */
     public $windowRows = 24;
 
@@ -875,12 +875,12 @@ class SSH2
      * $host can either be a string, representing the host, or a stream resource.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::login()
+     * @see \Biz\Util\Phpsec\Net\SSH2::login()
      *
      * @param  Mixed                                  $host
      * @param  optional                               Integer $port
      * @param  optional                               Integer $timeout
-     * @return \Topxia\Service\Util\Phpsec\Net\SSH2
+     * @return \Biz\Util\Phpsec\Net\SSH2
      */
     public function __construct($host, $port = 22, $timeout = 10)
     {
@@ -1234,35 +1234,35 @@ class SSH2
                 );
             }
 
-            if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\RC4') === false) {
+            if (class_exists('\Biz\Util\Phpsec\Crypt\RC4') === false) {
                 $encryption_algorithms = array_diff(
                     $encryption_algorithms,
                     array('arcfour256', 'arcfour128', 'arcfour')
                 );
             }
 
-            if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\Rijndael') === false) {
+            if (class_exists('\Biz\Util\Phpsec\Crypt\Rijndael') === false) {
                 $encryption_algorithms = array_diff(
                     $encryption_algorithms,
                     array('aes128-ctr', 'aes192-ctr', 'aes256-ctr', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc')
                 );
             }
 
-            if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\Twofish') === false) {
+            if (class_exists('\Biz\Util\Phpsec\Crypt\Twofish') === false) {
                 $encryption_algorithms = array_diff(
                     $encryption_algorithms,
                     array('twofish128-ctr', 'twofish192-ctr', 'twofish256-ctr', 'twofish128-cbc', 'twofish192-cbc', 'twofish256-cbc', 'twofish-cbc')
                 );
             }
 
-            if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\Blowfish') === false) {
+            if (class_exists('\Biz\Util\Phpsec\Crypt\Blowfish') === false) {
                 $encryption_algorithms = array_diff(
                     $encryption_algorithms,
                     array('blowfish-ctr', 'blowfish-cbc')
                 );
             }
 
-            if (class_exists('\Topxia\Service\Util\Phpsec\Crypt\TripleDES') === false) {
+            if (class_exists('\Biz\Util\Phpsec\Crypt\TripleDES') === false) {
                 $encryption_algorithms = array_diff(
                     $encryption_algorithms,
                     array('3des-ctr', '3des-cbc')
@@ -1858,11 +1858,11 @@ class SSH2
 
     /**
      * Maps an encryption algorithm name to an instance of a subclass of
-     * \Topxia\Service\Util\Phpsec\Crypt\Base.
+     * \Biz\Util\Phpsec\Crypt\Base.
      *
      * @access private
      * @param  String $algorithm Name of the encryption algorithm
-     * @return Mixed  Instance of \Topxia\Service\Util\Phpsec\Crypt\Base or null for unknown
+     * @return Mixed  Instance of \Biz\Util\Phpsec\Crypt\Base or null for unknown
      */
     public function _encryption_algorithm_to_crypt_instance($algorithm)
     {
@@ -1904,7 +1904,7 @@ class SSH2
     /**
      * Login
      *
-     * The $password parameter can be a plaintext password, a \Topxia\Service\Util\Phpsec\Crypt\RSA object or an array
+     * The $password parameter can be a plaintext password, a \Biz\Util\Phpsec\Crypt\RSA object or an array
      *
      * @access public
      * @see _login
@@ -2295,7 +2295,7 @@ class SSH2
      *
      * @access private
      * @param  String                                       $username
-     * @param  \Topxia\Service\Util\Phpsec\System\SSH\Agent $agent
+     * @param  \Biz\Util\Phpsec\System\SSH\Agent $agent
      * @return Boolean
      */
     public function _ssh_agent_login($username, $agent)
@@ -2319,7 +2319,7 @@ class SSH2
      * @internal It might be worthwhile, at some point, to protect against {@link http://tools.ietf.org/html/rfc4251#section-9.3.9 traffic analysis}
      *           by sending dummy SSH_MSG_IGNORE messages.
      * @param  String                                $username
-     * @param  \Topxia\Service\Util\Phpsec\Crypt\RSA $password
+     * @param  \Biz\Util\Phpsec\Crypt\RSA $password
      * @return Boolean
      */
     public function _privatekey_login($username, $privatekey)
@@ -2448,7 +2448,7 @@ class SSH2
     /**
      * Execute Command
      *
-     * If $callback is set to false then \Topxia\Service\Util\Phpsec\Net\SSH2::_get_channel_packet(self::CHANNEL_EXEC) will need to be called manually.
+     * If $callback is set to false then \Biz\Util\Phpsec\Net\SSH2::_get_channel_packet(self::CHANNEL_EXEC) will need to be called manually.
      * In all likelihood, this is not a feature you want to be taking advantage of.
      *
      * @access public
@@ -2542,7 +2542,7 @@ class SSH2
         }
 
         // sending a pty-req SSH_MSG_CHANNEL_REQUEST message is unnecessary and, in fact, in most cases, slows things
-        // down.  the one place where it might be desirable is if you're doing something like \Topxia\Service\Util\Phpsec\Net\SSH2::exec('ping localhost &').
+        // down.  the one place where it might be desirable is if you're doing something like \Biz\Util\Phpsec\Net\SSH2::exec('ping localhost &').
         // with a pty-req SSH_MSG_CHANNEL_REQUEST, exec() will return immediately and the ping process will then
         // then immediately terminate.  without such a request exec() will loop indefinitely.  the ping process won't end but
         // neither will your script.
@@ -2607,8 +2607,8 @@ class SSH2
      * Creates an interactive shell
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::read()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::write()
+     * @see \Biz\Util\Phpsec\Net\SSH2::read()
+     * @see \Biz\Util\Phpsec\Net\SSH2::write()
      *
      * @return Boolean
      */
@@ -2716,8 +2716,8 @@ class SSH2
      * Return the channel to be used with read() / write()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::read()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::write()
+     * @see \Biz\Util\Phpsec\Net\SSH2::read()
+     * @see \Biz\Util\Phpsec\Net\SSH2::write()
      *
      * @return Integer
      */
@@ -2760,7 +2760,7 @@ class SSH2
      * if $mode == self::READ_REGEX, a regular expression.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::write()
+     * @see \Biz\Util\Phpsec\Net\SSH2::write()
      *
      * @param  String   $expect
      * @param  Integer  $mode
@@ -2812,7 +2812,7 @@ class SSH2
      * Inputs a command into an interactive shell.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::read()
+     * @see \Biz\Util\Phpsec\Net\SSH2::read()
      *
      * @param  String    $cmd
      * @return Boolean
@@ -2842,7 +2842,7 @@ class SSH2
      * if there's sufficient demand for such a feature.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::stopSubsystem()
+     * @see \Biz\Util\Phpsec\Net\SSH2::stopSubsystem()
      *
      * @param  String     $subsystem
      * @return Boolean
@@ -2908,7 +2908,7 @@ class SSH2
      * Stops a subsystem.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::startSubsystem()
+     * @see \Biz\Util\Phpsec\Net\SSH2::startSubsystem()
      *
      * @return Boolean
      */
@@ -2987,7 +2987,7 @@ class SSH2
      * See '6. Binary Packet Protocol' of rfc4253 for more info.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_send_binary_packet()
      *
      * @return String
      */
@@ -3088,7 +3088,7 @@ class SSH2
      * Because some binary packets need to be ignored...
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      *
      * @return String
      */
@@ -3247,8 +3247,8 @@ class SSH2
      * Returns whether Quiet Mode is enabled or not
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::enableQuietMode()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::disableQuietMode()
+     * @see \Biz\Util\Phpsec\Net\SSH2::enableQuietMode()
+     * @see \Biz\Util\Phpsec\Net\SSH2::disableQuietMode()
      *
      * @return boolean
      */
@@ -3281,8 +3281,8 @@ class SSH2
      * Returns whether request-pty is enabled or not
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::enablePTY()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::disablePTY()
+     * @see \Biz\Util\Phpsec\Net\SSH2::enablePTY()
+     * @see \Biz\Util\Phpsec\Net\SSH2::disablePTY()
      *
      * @return boolean
      */
@@ -3540,7 +3540,7 @@ class SSH2
      * See '6. Binary Packet Protocol' of rfc4253 for more info.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH2::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH2::_get_binary_packet()
      *
      * @param  String    $data
      * @param  optional  String  $logged
@@ -3733,7 +3733,7 @@ class SSH2
     /**
      * Closes and flushes a channel
      *
-     * \Topxia\Service\Util\Phpsec\Net\SSH2 doesn't properly close most channels.  For exec() channels are normally closed by the server
+     * \Biz\Util\Phpsec\Net\SSH2 doesn't properly close most channels.  For exec() channels are normally closed by the server
      * and for SFTP channels are presumably closed when the client disconnects.  This functions is intended
      * for SCP more than anything.
      *

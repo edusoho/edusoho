@@ -5,7 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
 

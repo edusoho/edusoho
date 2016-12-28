@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
