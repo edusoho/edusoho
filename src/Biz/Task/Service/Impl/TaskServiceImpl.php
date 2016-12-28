@@ -3,6 +3,7 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
@@ -241,7 +242,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task                  = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -279,6 +280,95 @@ class TaskServiceImpl extends BaseService implements TaskService
         });
         return $tasks;
     }
+
+    public function findToLearnTasksByCourseId($courseId)
+    {
+        list($course,) = $this->getCourseService()->tryTakeCourse($courseId);
+        $toLearnTasks = array();
+        if ($course['learnMode'] == 'freeMode') {
+            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
+        } elseif ($course['learnMode'] == 'lockMode') {
+            $toLearnTasks = $this->getToLearnTasksWithLockMode($courseId);
+        } else {
+            return $toLearnTasks;
+        }
+
+        $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
+
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+
+        array_walk($toLearnTasks, function (&$task) use ($activities, $taskResults) {
+            $task['activity'] = $activities[$task['activityId']];
+            foreach ($taskResults as $key => $result) {
+                if ($result['courseTaskId'] != $task['id']) {
+                    continue;
+                }
+                $task['result'] = $result;
+            }
+        });
+        return $toLearnTasks;
+    }
+
+    /**
+     *
+     * 自由式
+     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
+     * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
+     * 任务式
+     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第前三个作为任务，
+     * 2.如果不为空，则取关联的三个。
+     *
+     * 自由式和任务式的逻辑由任务策略完成
+     * @param $courseId
+     * @return array tasks
+     */
+
+
+    protected function getToLearnTaskWithFreeMode($courseId)
+    {
+        $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
+        if (empty($taskResults)) {
+            $minSeq      = $this->getTaskDao()->getMinSeqByCourseId($courseId);
+            $toLearnTask = $this->getTaskDao()->getByCourseIdAndSeq($courseId, $minSeq);
+        } else {
+            $taskIds     = ArrayToolkit::column($taskResults, 'courseTaskId');
+            $tasks       = $this->getTaskDao()->search(array('ids' => $taskIds, 'courseId' => $courseId), array('seq' => 'ASC'), 0, 1);
+            $toLearnTask = array_shift($tasks);
+        }
+        return $toLearnTask;
+    }
+
+
+    protected function getToLearnTasksWithLockMode($courseId)
+    {
+        $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
+
+        $toLearnTasks = array();
+        if (empty($taskResult)) {
+            $toLearnTasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, 3);
+        } else {
+            $taskCount = $this->countTasksByCourseId($courseId);
+            $tasks     = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
+
+            $previousTask = null;
+            foreach ($tasks as $task) {
+                if ($task['id'] == $taskResult['courseTaskId']) {
+                    $toLearnTasks[] = $task;
+                    $previousTask   = $task;
+                }
+                if ($previousTask && $task['seq'] > $previousTask['seq'] and count($toLearnTasks) < 3) {
+                    $toLearnTasks[] = $task;
+                    $previousTask   = $task;
+                }
+            }
+        }
+        return $toLearnTasks;
+    }
+
 
     public function trigger($id, $eventName, $data = array())
     {

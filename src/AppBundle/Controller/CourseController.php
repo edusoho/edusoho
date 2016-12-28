@@ -24,23 +24,29 @@ class CourseController extends CourseBaseController
 
     public function headerAction(Request $request, $id)
     {
+
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
 
-        $progress = round($taskResultCount / $taskCount, 2); //学习进度
         //学习进度
-        //下一个课时
+        $progress = round($taskResultCount / $taskCount, 2);
+
+        //待学习任务
+        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+
+
         return $this->render('course-set/header.html.twig', array(
-            'courseSet'        => $courseSet,
-            'courses'          => $courses,
-            'course'           => $course,
-            'member'           => $member,
-            'progress'         => $progress,
+            'courseSet'       => $courseSet,
+            'courses'         => $courses,
+            'course'          => $course,
+            'member'          => $member,
+            'progress'        => $progress,
             'taskCount'       => $taskCount,
-            'taskResultCount' => $taskResultCount
+            'taskResultCount' => $taskResultCount,
+            'toLearnTasks'    => $toLearnTasks
         ));
     }
 

@@ -19,4 +19,10 @@ interface TaskResultService
     public function getUserTaskResultByTaskId($courseTaskId);
 
     public function findUserProgressingTaskResultByActivityId($activityId);
+
+    public function findUserProgressingTaskResultByCourseId($courseId);
+
+    public function getUserLatestFinishedTaskResultByCourseId($courseId);
+
+    public function findUserTaskResultsByTaskIds($taskIds);
 }

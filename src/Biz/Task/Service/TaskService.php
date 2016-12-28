@@ -75,4 +75,19 @@ interface TaskService
 
     public function finishTaskResult($taskId);
 
+    /**
+     *
+     * 自由式
+     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
+     * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
+     * 任务式
+     * 1.获取所有的学完的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第前三个作为任务，
+     * 2.如果不为空，则取关联的三个。
+     *
+     * 自由式和任务式的逻辑由任务策略完成
+     * @param $courseId
+     * @return array tasks
+     */
+    public function findToLearnTasksByCourseId($courseId);
+
 }
