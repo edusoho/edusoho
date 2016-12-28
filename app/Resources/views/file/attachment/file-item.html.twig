@@ -1,6 +1,5 @@
 <div class="well well-sm">
-  <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px"
-       width="107px">
+  <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
   {{ attachment.file.filename }}
   {% if app.user.isLogin()|default(0) %}
     <button class="btn btn-link js-attachment-delete pull-right"
